@@ -71,12 +71,12 @@ public class BaseApplication extends Application implements IrrlichtBridge.Irrli
 
     @Override
     public float getScreenWidth() {
-        return DeviceUtils.getScreenWidth();
+        return Math.min(DeviceUtils.getScreenWidth(),DeviceUtils.getScreenHeight());
     }
 
     @Override
     public float getScreenHeight() {
-        return DeviceUtils.getScreenHeight();
+        return Math.max(DeviceUtils.getScreenWidth(),DeviceUtils.getScreenHeight());
     }
 
     @Override
