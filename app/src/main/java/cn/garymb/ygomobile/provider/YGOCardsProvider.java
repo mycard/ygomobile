@@ -112,8 +112,7 @@ public class YGOCardsProvider extends ContentProvider {
 		private void copyDataBase() throws IOException {
 
 			// Open your local db as the input stream
-			InputStream myInput = mContext.getResources().openRawResource(
-					R.raw.cards);
+			InputStream myInput = mContext.getAssets().open(DATABASE_NAME);
 			// Path to the just created empty db
 			String outFileName = mDataBasePath + DATABASE_NAME;
 			// Open the empty db as the output stream
