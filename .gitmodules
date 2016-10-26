@@ -1,0 +1,6 @@
+[submodule "Classes"]
+	path = Classes
+	url = https://github.com/247321453/ygomobile-jni.git
+[submodule "irrlicht"]
+	path = irrlicht
+	url = https://github.com/247321453/irrlicht.git
