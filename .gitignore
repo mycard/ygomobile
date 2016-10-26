@@ -41,3 +41,5 @@ captures/
 .idea/
 .externalNativeBuild/
 build/
+obj/
+/libcore/libs/armeabi/libYGOMobile.so

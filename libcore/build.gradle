@@ -15,11 +15,11 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-//    externalNativeBuild {
-//        ndkBuild {
-//            path file("jni/Android.mk")
-//        }
-//    }
+    externalNativeBuild {
+        ndkBuild {
+            path file("jni/Android.mk")
+        }
+    }
     buildTypes {
         release {
             minifyEnabled false
@@ -27,9 +27,9 @@ android {
         }
     }
     sourceSets{
-        main{
-            jniLibs.srcDirs 'jnilibs'
-        }
+//        main{
+//            jniLibs.srcDirs 'jnilibs'
+//        }
     }
 }
 
