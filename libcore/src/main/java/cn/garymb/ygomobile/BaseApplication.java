@@ -1,0 +1,89 @@
+package cn.garymb.ygomobile;
+
+import android.app.Application;
+import android.content.res.AssetManager;
+import android.media.AudioManager;
+import android.media.SoundPool;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+import cn.garymb.ygomobile.core.IrrlichtBridge;
+import cn.garymb.ygomobile.utils.DeviceUtils;
+
+
+public class BaseApplication extends Application implements IrrlichtBridge.IrrlichtApplication {
+    protected GameSettings settings;
+    private SoundPool mSoundEffectPool;
+    private Map<String, Integer> mSoundIdMap;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        GameSettings.init(getSettings());
+    }
+
+    protected GameSettings getSettings() {
+        if (settings == null) {
+            settings = new GameSettings(this);
+        }
+        return settings;
+    }
+
+    protected void initSoundEffectPool() {
+        mSoundEffectPool = new SoundPool(2, AudioManager.STREAM_MUSIC, 0);
+        AssetManager am = getAssets();
+        String[] sounds;
+        mSoundIdMap = new HashMap<String, Integer>();
+        try {
+            sounds = am.list("sound");
+            for (String sound : sounds) {
+                String path = "sound" + File.separator + sound;
+                mSoundIdMap
+                        .put(path, mSoundEffectPool.load(am.openFd(path), 1));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public String getCardImagePath() {
+        return settings.getCardImagePath();
+    }
+
+    @Override
+    public void setLastDeck(String name) {
+        settings.setLastDeck(name);
+    }
+
+    @Override
+    public String getFontPath() {
+        return settings.getFontPath();
+    }
+
+    @Override
+    public String getLastDeck() {
+        return settings.getLastDeck();
+    }
+
+    @Override
+    public float getScreenWidth() {
+        return DeviceUtils.getScreenWidth();
+    }
+
+    @Override
+    public float getScreenHeight() {
+        return DeviceUtils.getScreenHeight();
+    }
+
+    @Override
+    public void playSoundEffect(String path) {
+        Integer id = mSoundIdMap.get(path);
+        if (id != null) {
+            mSoundEffectPool.play(id, 0.5f, 0.5f, 2, 0, 1.0f);
+        }
+    }
+}
