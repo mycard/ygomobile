@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">YGOMobile</string>
+    <string name="check_res">Check Resources</string>
+    <string name="checking_res">Check ... </string>
+    <string name="check_things">Check %s ...</string>
+    <string name="core_config">Core Config</string>
 </resources>

@@ -28,7 +28,6 @@ import cn.garymb.ygodata.YGOGameOptions;
 import cn.garymb.ygomobile.controller.NetworkController;
 import cn.garymb.ygomobile.core.IrrlichtBridge;
 import cn.garymb.ygomobile.lib.R;
-import cn.garymb.ygomobile.utils.DeviceUtils;
 import cn.garymb.ygomobile.utils.SignUtils;
 import cn.garymb.ygomobile.widget.ComboBoxCompat;
 import cn.garymb.ygomobile.widget.EditWindowCompat;
@@ -97,11 +96,11 @@ public class YGOMobileActivity extends NativeActivity implements
 
     private void initPostion() {
         final Resources res = getResources();
-        sChainControlXPostion = (int) (CHAIN_CONTROL_PANEL_X_POSITION_LEFT_EDGE * DeviceUtils
+        sChainControlXPostion = (int) (CHAIN_CONTROL_PANEL_X_POSITION_LEFT_EDGE * settings
                 .getXScale());
-        sChainControlYPostion = (int) (DeviceUtils.getSmallerSize()
+        sChainControlYPostion = (int) (settings.getSmallerSize()
                 - CHAIN_CONTROL_PANEL_Y_REVERT_POSITION
-                * DeviceUtils.getYScale() - (res
+                * settings.getYScale() - (res
                 .getDimensionPixelSize(R.dimen.chain_control_button_height) * 2 + res
                 .getDimensionPixelSize(R.dimen.chain_control_margin)));
     }

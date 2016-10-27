@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import cn.garymb.ygomobile.core.IrrlichtBridge;
-import cn.garymb.ygomobile.utils.DeviceUtils;
 
 
 public class BaseApplication extends Application implements IrrlichtBridge.IrrlichtApplication {
@@ -71,12 +70,12 @@ public class BaseApplication extends Application implements IrrlichtBridge.Irrli
 
     @Override
     public float getScreenWidth() {
-        return Math.min(DeviceUtils.getScreenWidth(),DeviceUtils.getScreenHeight());
+        return settings.getScreenWidth();
     }
 
     @Override
     public float getScreenHeight() {
-        return Math.max(DeviceUtils.getScreenWidth(),DeviceUtils.getScreenHeight());
+        return settings.getScreenHeight();
     }
 
     @Override

@@ -15,19 +15,38 @@ public class GameSettings {
     public static String GAME_DIR = "ygocore";
     public static final String DEFAULT_FONT_NAME = "ygo.ttf";
     public static final String DATABASE_NAME = "cards.cdb";
-    public static final  String CORE_SKIN_PATH = "textures";
+    public static final String FONT_DIRECTORY = "fonts";
+    public static final String CORE_CONFIG_PATH = "core";
+    public static final String CORE_SKIN_PATH = "textures";
+    public static final String CORE_EXTRA_PATH = "extra";
+    public static final String CORE_DECK_PATH = "deck";
+    public static final String CORE_SINGLE_PATH = "single";
+    public static final String CORE_SCRIPTS_PATH = "scripts";
+    public static final String CORE_SCRIPTS_ZIP = "main.zip";
     protected Context context;
     private String ConfigVersion = "3.5";
+    private float mScreenHeight, mScreenWidth, mDensity;
 
     public GameSettings(Context context) {
         this.context = context;
+        mDensity = context.getResources().getDisplayMetrics().density;
+        mScreenHeight = context.getResources().getDisplayMetrics().heightPixels;
+        mScreenWidth = context.getResources().getDisplayMetrics().widthPixels;
     }
 
-    public static GameSettings init(GameSettings settings) {
+    static GameSettings init(GameSettings settings) {
         if (SETTINGS == null) {
             SETTINGS = settings;
         }
         return settings;
+    }
+
+    public float getXScale() {
+        return (mScreenHeight > mScreenWidth ? mScreenHeight : mScreenWidth) / 1024.0f;
+    }
+
+    public float getYScale() {
+        return (mScreenHeight > mScreenWidth ? mScreenWidth : mScreenHeight) / 640.0f;
     }
 
     public static GameSettings get() {
@@ -45,7 +64,8 @@ public class GameSettings {
     public int getCardQuality() {
         return 1;
     }
-    public String getCoreSkinPath(){
+
+    public String getCoreSkinPath() {
         return new File(getResourcePath(), CORE_SKIN_PATH).getAbsolutePath();
     }
 
@@ -82,6 +102,18 @@ public class GameSettings {
         } catch (Exception e) {
             return context.getFilesDir().getAbsolutePath();
         }
+    }
+
+    public float getSmallerSize() {
+        return mScreenHeight < mScreenWidth ? mScreenHeight : mScreenWidth;
+    }
+
+    public float getScreenWidth() {
+        return Math.min(mScreenWidth, mScreenHeight);
+    }
+
+    public float getScreenHeight() {
+        return Math.max(mScreenWidth, mScreenHeight);
     }
 
     /**

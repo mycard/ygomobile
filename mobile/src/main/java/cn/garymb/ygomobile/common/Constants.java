@@ -33,29 +33,11 @@ public interface Constants {
 
 	String OPENGL_PATH = "opengl";
 	String CARD_QUALITY_PATH = "card_quality";
-	
-	//Virual Help overlay handle ops
-	
-	int MODE_CANCEL_CHAIN_OPTIONS = 0;
-	int MODE_REFRESH_OPTION = 1;
-	int MODE_IGNORE_CHAIN_OPTION = 2;
-	int MODE_REACT_CHAIN_OPTION = 3;
-	
-	String FONT_DIRECTORY = "/fonts/";
-	String DEFAULT_FONT_NAME = "ygo.ttf";
-	String CARD_IMAGE_DIRECTORY = "/pics/";
+
 //	public static final String THUMBNAIL_IMAGE_DIRECTORY = "/thumbnail/";
-	
-	String CORE_CONFIG_PATH = "core";
-	
-	String CORE_SKIN_PATH = "textures";
-	
-	String CORE_EXTRA_PATH = "extra";
-	
-	String CORE_DECK_PATH = "deck";
-	
-	String CORE_SINGLE_PATH = "single";
-	
+
+	String ASSETS_PATH  = "/data/";
+
 	String CORE_SKIN_COVER = "bg.jpg";
 	String CORE_SKIN_CARD_BACK = "cover.jpg";
 	int[]  CORE_SKIN_COVER_SIZE = new int[]{1024, 640};
