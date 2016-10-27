@@ -10,9 +10,8 @@ import android.preference.PreferenceManager;
 import java.io.File;
 
 public class GameSettings {
-    private static GameSettings SETTINGS;
-    protected static final String PREF_LAST_YDK = "__last_ydk";
     public static String GAME_DIR = "ygocore";
+    protected static final String PREF_LAST_YDK = "__last_ydk";
     public static final String DEFAULT_FONT_NAME = "ygo.ttf";
     public static final String DATABASE_NAME = "cards.cdb";
     public static final String FONT_DIRECTORY = "fonts";
@@ -23,6 +22,7 @@ public class GameSettings {
     public static final String CORE_SINGLE_PATH = "single";
     public static final String CORE_SCRIPTS_PATH = "scripts";
     public static final String CORE_SCRIPTS_ZIP = "main.zip";
+    private static GameSettings SETTINGS;
     protected Context context;
     private String ConfigVersion = "3.5";
     private float mScreenHeight, mScreenWidth, mDensity;

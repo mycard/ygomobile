@@ -1,4 +1,4 @@
-package cn.garymb.ygomobile.common;
+package cn.garymb.ygomobile.utils;
 
 import android.content.Context;
 import android.content.res.Resources;

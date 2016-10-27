@@ -4,21 +4,25 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.util.Log;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 
 import cn.garymb.ygomobile.GameSettings;
 import cn.garymb.ygomobile.common.Constants;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.utils.IOUtils;
 
-public class ResCheckTask extends AsyncTask<Void, Integer, Integer> implements BaseChecker.IMessage {
+public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
     private static final String TAG = "ResCheckTask";
-
-    private GameSettings mApp;
+    public static final int ERROR_NONE = 0;
+    public static final int ERROR_CORE_CONFIG = -1;
+    public static final int ERROR_COPY = -2;
+    public static final int ERROR_CORE_CONFIG_LOST = -3;
+    protected int mError = ERROR_NONE;
+    private GameSettings mSettings;
     private Context mContext;
     private ResCheckListener mListener;
     private ProgressDialog dialog = null;
@@ -29,7 +33,7 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> implements B
         mContext = context;
         mListener = listener;
         handler = new Handler(context.getMainLooper());
-        mApp = GameSettings.get();
+        mSettings = GameSettings.get();
     }
 
     @Override
@@ -49,134 +53,122 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> implements B
         }
     }
 
-    @Override
-    public void setMessage(String msg) {
+    private void setMessage(String msg) {
         handler.post(() -> {
             dialog.setMessage(msg);
         });
     }
 
+    private String getDatapath(String path) {
+        if (path.startsWith(Constants.ASSETS_PATH)) {
+            return path;
+        }
+        if (path.startsWith("/")) {
+            path = path.substring(1);
+        }
+        return Constants.ASSETS_PATH + path;
+    }
+
     @Override
     protected Integer doInBackground(Void... params) {
         Log.d(TAG, "check start");
-        CoreConfigChecker coreConfigChecker = new CoreConfigChecker(mContext, this);
-        coreConfigChecker.start();
-        if (coreConfigChecker.getError() != BaseChecker.ERROR_NONE) {
-            return coreConfigChecker.getError();
-        }
-        boolean needsUpdate = coreConfigChecker.isNeedsUpdate();
-        Log.d(TAG, "check new deck");
-        int errror = checkAndCopyNewDeckFiles(needsUpdate);
-        if (errror != BaseChecker.ERROR_NONE) {
-            return errror;
-        }
-        Log.d(TAG, "check game skin");
-        errror = checkAndCopyGameSkin();
-        if (errror != BaseChecker.ERROR_NONE) {
-            return errror;
-        }
-        Log.d(TAG, "check extras");
-        errror = checkAndCopyExtraFiles();
-        if (errror != BaseChecker.ERROR_NONE) {
-            return errror;
-        }
-        Log.d(TAG, "check fonts");
-        errror = checkAndCopyFontsFiles();
-        if (errror != BaseChecker.ERROR_NONE) {
-            return errror;
-        }
-        Log.d(TAG, "check single");
-        errror = checkAndrCopyNewSingleFiles(needsUpdate);
-        if (errror != BaseChecker.ERROR_NONE) {
-            return errror;
-        }
-        Log.d(TAG, "check scripts");
-        errror = checkAndCopyScripts(needsUpdate);
-        if (errror != BaseChecker.ERROR_NONE) {
-            return errror;
-        }
-        Log.d(TAG, "check dbs");
-        errror = checkAndCopyDb(needsUpdate);
-        if (errror != BaseChecker.ERROR_NONE) {
-            return errror;
-        }
-        return BaseChecker.ERROR_NONE;
-    }
-
-    private int checkAndCopyDb(boolean isUpdateNeeded) {
-        File scriptDir = new File(mApp.getResourcePath());
-        File scriptFile = new File(scriptDir, GameSettings.DATABASE_NAME);
-        if (!scriptDir.exists()) {
-            scriptDir.mkdirs();
-        }
-        if (isUpdateNeeded || !scriptFile.exists()) {
-            InputStream in = null;
-            try {
-                in = mContext.getAssets().open(Constants.ASSETS_PATH + GameSettings.DATABASE_NAME);
-                IOUtils.copyToFile(in, scriptFile.getAbsolutePath());
-            } catch (IOException e) {
-                return BaseChecker.ERROR_COPY;
+        boolean needsUpdate = false;
+        //core config
+        setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.core_config)));
+        String newConfigVersion = null, currentConfigVersion = null;
+        File verPath = new File(mSettings.getResourcePath(), GameSettings.CORE_CONFIG_PATH);
+        if (!verPath.exists() || TextUtils.isEmpty(currentConfigVersion = getCurVersion(verPath))) {
+            //
+            setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.core_config)));
+            int error = copyCoreConfig(verPath.getAbsolutePath());
+            if (error != ERROR_NONE) {
+                return error;
+            }
+            needsUpdate = true;
+            currentConfigVersion = getCurVersion(verPath);
+            if (TextUtils.isEmpty(currentConfigVersion)) {
+                Log.e(TAG, "check core config currentConfigVersion is null");
+                return ERROR_CORE_CONFIG;
             }
         }
-        return BaseChecker.ERROR_NONE;
+        //check core config
+
+        try {
+            newConfigVersion = mContext.getAssets().list(getDatapath(GameSettings.CORE_CONFIG_PATH))[0];
+        } catch (IOException e) {
+            Log.e(TAG, "check core config", e);
+            return ERROR_CORE_CONFIG;
+        }
+        mSettings.setCoreConfigVersion(newConfigVersion);
+        needsUpdate = !currentConfigVersion.equals(newConfigVersion);
+
+        //res
+        try {
+            String resPath = mSettings.getResourcePath();
+            IOUtils.createNoMedia(resPath);
+            Log.d(TAG, "check new deck");
+            setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.new_deck)));
+            IOUtils.copyFilesFromAssets(mContext, getDatapath(GameSettings.CORE_DECK_PATH),
+                    new File(resPath, GameSettings.CORE_SINGLE_PATH).getAbsolutePath(), needsUpdate);
+            Log.d(TAG, "check game skin");
+            setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.game_skins)));
+            IOUtils.copyFilesFromAssets(mContext, getDatapath(GameSettings.CORE_SKIN_PATH),
+                    mSettings.getCoreSkinPath(), needsUpdate);
+            Log.d(TAG, "check extras");
+            setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.extras_images)));
+            IOUtils.copyFilesFromAssets(mContext, getDatapath(GameSettings.CORE_EXTRA_PATH),
+                    new File(resPath, GameSettings.CORE_EXTRA_PATH).getAbsolutePath(), needsUpdate);
+            Log.d(TAG, "check fonts");
+            setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.font_files)));
+            IOUtils.copyFilesFromAssets(mContext, getDatapath(GameSettings.FONT_DIRECTORY),
+                    new File(resPath, GameSettings.FONT_DIRECTORY).getAbsolutePath(), needsUpdate);
+            Log.d(TAG, "check single");
+            setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.single_lua)));
+            IOUtils.copyFilesFromAssets(mContext, getDatapath(GameSettings.CORE_SINGLE_PATH),
+                    new File(resPath, GameSettings.CORE_SINGLE_PATH).getAbsolutePath(), needsUpdate);
+            Log.d(TAG, "check scripts");
+            setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.scripts)));
+            IOUtils.copyFilesFromAssets(mContext, getDatapath(GameSettings.CORE_SCRIPTS_ZIP),
+                    new File(resPath, GameSettings.CORE_SCRIPTS_PATH).getAbsolutePath(), needsUpdate);
+            Log.d(TAG, "check cdb");
+            setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.cards_cdb)));
+            IOUtils.copyFilesFromAssets(mContext, getDatapath(GameSettings.DATABASE_NAME),
+                    resPath, needsUpdate);
+        } catch (Exception e) {
+            Log.e(TAG, "check", e);
+            return ERROR_COPY;
+        }
+        return ERROR_NONE;
     }
 
-    private int checkAndCopyScripts(boolean isUpdateNeeded) {
-        File scriptDir = new File(mApp.getResourcePath(), GameSettings.CORE_SCRIPTS_PATH);
-        File scriptFile = new File(scriptDir, GameSettings.CORE_SCRIPTS_ZIP);
-        if (!scriptDir.exists()) {
-            scriptDir.mkdirs();
+    private String getCurVersion(File verPath) {
+        if (!verPath.exists()) {
+            return null;
         }
-        if (isUpdateNeeded || !scriptFile.exists()) {
-            InputStream in = null;
-            try {
-                in = mContext.getAssets().open(Constants.ASSETS_PATH + GameSettings.CORE_SCRIPTS_ZIP);
-                IOUtils.copyToFile(in, scriptFile.getAbsolutePath());
-            } catch (IOException e) {
-                return BaseChecker.ERROR_COPY;
+        String[] files = verPath.list();
+        for (String file : files) {
+            File f = new File(file);
+            if (f.isDirectory()) {
+                return f.getName();
             }
         }
-        return BaseChecker.ERROR_NONE;
+        return null;
     }
 
-    private int checkAndrCopyNewSingleFiles(boolean isUpdateNeeded) {
-        return new FilesChecker(mContext, this, isUpdateNeeded)
-                .setPath(
-                        new File(mApp.getResourcePath(), GameSettings.CORE_SINGLE_PATH).getAbsolutePath(),
-                        GameSettings.CORE_SINGLE_PATH
-                ).start();
-    }
+    private int copyCoreConfig(String toPath) {
+        try {
+            String path = getDatapath(GameSettings.CORE_CONFIG_PATH);
 
-    private int checkAndCopyNewDeckFiles(boolean isUpdateNeeded) {
-        return new FilesChecker(mContext, this, isUpdateNeeded)
-                .setPath(
-                        new File(mApp.getResourcePath(), GameSettings.CORE_DECK_PATH).getAbsolutePath(),
-                        GameSettings.CORE_DECK_PATH
-                ).start();
-    }
-
-    private int checkAndCopyFontsFiles() {
-        return new FilesChecker(mContext, this, false)
-                .setPath(
-                        new File(mApp.getResourcePath(), GameSettings.FONT_DIRECTORY).getAbsolutePath(),
-                        GameSettings.FONT_DIRECTORY
-                ).start();
-    }
-
-    private int checkAndCopyExtraFiles() {
-        return new FilesChecker(mContext, this, false)
-                .setPath(
-                        new File(mApp.getResourcePath(), GameSettings.CORE_EXTRA_PATH).getAbsolutePath(),
-                        GameSettings.CORE_EXTRA_PATH
-                ).start();
-    }
-
-    private int checkAndCopyGameSkin() {
-        return new FilesChecker(mContext, this, false)
-                .setPath(
-                        mApp.getCoreSkinPath(),
-                        GameSettings.CORE_SKIN_PATH
-                ).start();
+            int count = IOUtils.copyFilesFromAssets(mContext, path, toPath, true);
+            if (count < 3) {
+                return ERROR_CORE_CONFIG_LOST;
+            }
+            return ERROR_NONE;
+        } catch (IOException e) {
+            Log.e(TAG, "copy", e);
+            mError = ERROR_COPY;
+            return ERROR_COPY;
+        }
     }
 
     public interface ResCheckListener {
