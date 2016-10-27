@@ -7,12 +7,13 @@ import android.os.Build;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import cn.garymb.ygomobile.YGOStarter;
 import cn.garymb.ygomobile.task.ResCheckTask;
 
 
-public class MainActivity extends Activity implements ResCheckTask.ResCheckListener {
+public class MainActivity extends Activity {
     private Dialog dlg;
 
     @Override
@@ -26,21 +27,25 @@ public class MainActivity extends Activity implements ResCheckTask.ResCheckListe
         button.setOnClickListener((v) -> {
             YGOStarter.startGame(MainActivity.this);
         });
+        button.setEnabled(false);
         layout.addView(button);
         //资源复制
-        checkResourceDownload();
+        checkResourceDownload((error) -> {
+            Toast.makeText(this, "check completed:" + error, Toast.LENGTH_SHORT).show();
+            if (error < 0) {
+                button.setEnabled(false);
+            } else {
+                button.setEnabled(true);
+            }
+        });
     }
 
-    private void checkResourceDownload() {
-        ResCheckTask task = new ResCheckTask(this, this);
+    private void checkResourceDownload(ResCheckTask.ResCheckListener listener) {
+        ResCheckTask task = new ResCheckTask(this, listener);
         if (Build.VERSION.SDK_INT >= 11) {
             task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         } else {
             task.execute();
         }
-    }
-
-    @Override
-    public void onResCheckFinished(int result) {
     }
 }

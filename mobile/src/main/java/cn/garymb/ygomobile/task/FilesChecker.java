@@ -2,6 +2,7 @@ package cn.garymb.ygomobile.task;
 
 
 import android.content.Context;
+import android.util.Log;
 
 import java.io.File;
 
@@ -43,11 +44,13 @@ class FilesChecker extends BaseChecker {
                     if (!dir.exists()) {
                         dir.mkdirs();
                     }
+                    Log.i(TAG, "copy:assets/" + file + "-->" + f);
                     IOUtils.copyToFile(mContext.getAssets().open(file), f.getAbsolutePath());
                 }
             }
 
         } catch (Exception e) {
+            Log.e(TAG, "copy", e);
             return ERROR_COPY;
         }
         return ERROR_NONE;

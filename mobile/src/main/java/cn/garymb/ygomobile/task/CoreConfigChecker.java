@@ -2,6 +2,7 @@ package cn.garymb.ygomobile.task;
 
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.Log;
 
 import java.io.File;
@@ -12,7 +13,6 @@ import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.utils.IOUtils;
 
 class CoreConfigChecker extends BaseChecker {
-    private static final String TAG = CoreConfigChecker.class.getSimpleName();
     private boolean needsUpdate;
 
     public CoreConfigChecker(Context context, IMessage message) {
@@ -24,26 +24,21 @@ class CoreConfigChecker extends BaseChecker {
         String newConfigVersion = null, currentConfigVersion = null;
         File verPath = new File(settings.getResourcePath(), GameSettings.CORE_CONFIG_PATH);
         IOUtils.createNoMedia(settings.getResourcePath());
-        if (!verPath.exists()) {
+        if (!verPath.exists() || TextUtils.isEmpty(currentConfigVersion = getCurVersion(verPath))) {
             //
             setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.core_config)));
-            int error= copyCoreConfig(settings.getResourcePath());
+            int error = copyCoreConfig(settings.getResourcePath());
             if (error != ERROR_NONE) {
                 return error;
             }
             needsUpdate = true;
-        }
-        //check core config
-        String[] files = verPath.list();
-        if (files.length == 0) {
-            return ERROR_CORE_CONFIG;
-        }
-        for (String file : files) {
-            File f = new File(file);
-            if (f.isDirectory()) {
-                currentConfigVersion = f.getName();
+            currentConfigVersion = getCurVersion(verPath);
+            if (TextUtils.isEmpty(currentConfigVersion)) {
+                return ERROR_CORE_CONFIG;
             }
         }
+        //check core config
+
         try {
             newConfigVersion = mContext.getAssets().list(getDatapath(GameSettings.CORE_CONFIG_PATH))[0];
         } catch (IOException e) {
@@ -52,6 +47,23 @@ class CoreConfigChecker extends BaseChecker {
         settings.setCoreConfigVersion(newConfigVersion);
         needsUpdate = !currentConfigVersion.equals(newConfigVersion);
         return ERROR_NONE;
+    }
+
+    private String getCurVersion(File verPath) {
+        if (!verPath.exists()) {
+            return null;
+        }
+        String[] files = verPath.list();
+        if (files == null || files.length == 0) {
+            return null;
+        }
+        for (String file : files) {
+            File f = new File(file);
+            if (f.isDirectory()) {
+                return f.getName();
+            }
+        }
+        return null;
     }
 
     public boolean isNeedsUpdate() {
@@ -72,11 +84,12 @@ class CoreConfigChecker extends BaseChecker {
                 if (!dir.exists()) {
                     dir.mkdirs();
                 }
-                Log.d(TAG, "copy:assets/" + file + "-->" + f);
+                Log.i(TAG, "copy:assets/" + file + "-->" + f);
                 IOUtils.copyToFile(mContext.getAssets().open(file), f.getAbsolutePath());
             }
             return ERROR_NONE;
         } catch (IOException e) {
+            Log.e(TAG, "copy", e);
             mError = ERROR_COPY;
             return ERROR_COPY;
         }

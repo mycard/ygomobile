@@ -77,7 +77,7 @@ public class GameSettings {
         options.mDBDir = getDataBasePath();
         options.mCoreConfigVersion = getCoreConfigVersion();
         options.mResourcePath = getResourcePath();
-        options.mExternalFilePath = getCompatExternalFilesDir();
+        options.mExternalFilePath = getResourcePath();
         options.mCardQuality = getCardQuality();
         options.mIsFontAntiAliasEnabled = true;
         options.mIsPendulumScaleEnabled = false;
@@ -94,14 +94,6 @@ public class GameSettings {
 
     public void setCoreConfigVersion(String configVersion) {
         ConfigVersion = configVersion;
-    }
-
-    public String getCompatExternalFilesDir() {
-        try {
-            return new File(context.getExternalCacheDir().getParent(), "files").getAbsolutePath();
-        } catch (Exception e) {
-            return context.getFilesDir().getAbsolutePath();
-        }
     }
 
     public float getSmallerSize() {

@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Handler;
+import android.util.Log;
 
 import java.io.File;
 import java.io.IOException;
@@ -57,36 +58,44 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> implements B
 
     @Override
     protected Integer doInBackground(Void... params) {
+        Log.d(TAG, "check start");
         CoreConfigChecker coreConfigChecker = new CoreConfigChecker(mContext, this);
         coreConfigChecker.start();
         if (coreConfigChecker.getError() != BaseChecker.ERROR_NONE) {
             return coreConfigChecker.getError();
         }
         boolean needsUpdate = coreConfigChecker.isNeedsUpdate();
+        Log.d(TAG, "check new deck");
         int errror = checkAndCopyNewDeckFiles(needsUpdate);
         if (errror != BaseChecker.ERROR_NONE) {
             return errror;
         }
+        Log.d(TAG, "check game skin");
         errror = checkAndCopyGameSkin();
         if (errror != BaseChecker.ERROR_NONE) {
             return errror;
         }
+        Log.d(TAG, "check extras");
         errror = checkAndCopyExtraFiles();
         if (errror != BaseChecker.ERROR_NONE) {
             return errror;
         }
+        Log.d(TAG, "check fonts");
         errror = checkAndCopyFontsFiles();
         if (errror != BaseChecker.ERROR_NONE) {
             return errror;
         }
+        Log.d(TAG, "check single");
         errror = checkAndrCopyNewSingleFiles(needsUpdate);
         if (errror != BaseChecker.ERROR_NONE) {
             return errror;
         }
+        Log.d(TAG, "check scripts");
         errror = checkAndCopyScripts(needsUpdate);
         if (errror != BaseChecker.ERROR_NONE) {
             return errror;
         }
+        Log.d(TAG, "check dbs");
         errror = checkAndCopyDb(needsUpdate);
         if (errror != BaseChecker.ERROR_NONE) {
             return errror;

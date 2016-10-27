@@ -7,6 +7,7 @@ import cn.garymb.ygomobile.GameSettings;
 import cn.garymb.ygomobile.common.Constants;
 
 abstract class BaseChecker {
+    protected static final String TAG = "checker";
     protected Context mContext;
     protected GameSettings settings;
     public static final int ERROR_NONE = 0;
