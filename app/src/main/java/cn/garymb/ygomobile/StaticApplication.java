@@ -1,6 +1,5 @@
 package cn.garymb.ygomobile;
 
-import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Application;
 import android.content.Context;
@@ -18,7 +17,6 @@ import android.media.SoundPool;
 import android.os.Build;
 import android.os.Environment;
 import android.preference.PreferenceManager;
-import android.text.TextUtils;
 import android.util.Pair;
 import android.view.Display;
 import android.view.WindowManager;
@@ -320,6 +318,7 @@ public class StaticApplication extends Application {
     }
 
     public void setFontList(Collection<? extends String> list) {
+        mFontsPath.clear();
         mFontsPath.addAll(list);
     }
 
