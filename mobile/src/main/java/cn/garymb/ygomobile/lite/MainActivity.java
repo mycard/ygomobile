@@ -31,9 +31,9 @@ public class MainActivity extends Activity {
         layout.addView(button);
         //资源复制
         checkResourceDownload((error) -> {
-            Toast.makeText(this, "check completed:" + error, Toast.LENGTH_SHORT).show();
             if (error < 0) {
                 button.setEnabled(false);
+                Toast.makeText(this, "check completed:" + error, Toast.LENGTH_SHORT).show();
             } else {
                 button.setEnabled(true);
             }

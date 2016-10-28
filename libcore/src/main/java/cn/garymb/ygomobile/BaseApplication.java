@@ -1,6 +1,7 @@
 package cn.garymb.ygomobile;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.res.AssetManager;
 import android.media.AudioManager;
 import android.media.SoundPool;
@@ -21,12 +22,21 @@ public class BaseApplication extends Application implements IrrlichtBridge.Irrli
     @Override
     public void onCreate() {
         super.onCreate();
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
         GameSettings.init(getSettings());
     }
 
     protected GameSettings getSettings() {
         if (settings == null) {
-            settings = new GameSettings(this);
+            synchronized (this) {
+                if (settings == null) {
+                    settings = new GameSettings(this);
+                }
+            }
         }
         return settings;
     }

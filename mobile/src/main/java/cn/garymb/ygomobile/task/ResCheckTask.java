@@ -87,7 +87,7 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
             needsUpdate = true;
             currentConfigVersion = getCurVersion(verPath);
             if (TextUtils.isEmpty(currentConfigVersion)) {
-                Log.e(TAG, "check core config currentConfigVersion is null");
+                Log.e(TAG, "check core config currentConfigVersion is null:" + verPath);
                 return ERROR_CORE_CONFIG;
             }
         }
@@ -143,13 +143,16 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
 
     private String getCurVersion(File verPath) {
         if (!verPath.exists()) {
+            Log.e(TAG, "check core config no exists " + verPath);
             return null;
         }
         String[] files = verPath.list();
         for (String file : files) {
-            File f = new File(file);
+            File f = new File(verPath, file);
             if (f.isDirectory()) {
                 return f.getName();
+            } else {
+                Log.e(TAG, "check core config is file " + f.getAbsolutePath());
             }
         }
         return null;

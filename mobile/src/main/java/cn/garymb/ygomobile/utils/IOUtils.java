@@ -80,9 +80,11 @@ public class IOUtils {
                     count += copyFilesFromAssets(context, path, join(toPath, file), update);
                 } else {
                     File f = new File(join(toPath, file));
-                    Log.i(TAG, "copy:" + path + "-->" + f.getAbsolutePath());
                     if (update || !f.exists()) {
+                        Log.i(TAG, "copy:" + path + "-->" + f.getAbsolutePath());
                         copyToFile(am.open(path), f.getAbsolutePath());
+                    }else{
+                        Log.i(TAG, "copy ignore:" + path + "-->" + f.getAbsolutePath());
                     }
                     count++;
                 }
