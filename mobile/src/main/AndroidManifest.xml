@@ -37,6 +37,7 @@
         </activity>
         <activity
             android:name="cn.garymb.ygomobile.YGOMobileActivity"
+            android:hardwareAccelerated="true"
             android:theme="@style/AppTheme.Game"
             tools:replace="android:theme"/>
         <activity android:name="cn.garymb.ygomobile.activities.SettingsActivity"/>

@@ -152,7 +152,7 @@ public class MainActivity extends AppCompatActivity implements
         initActionBar();
         checkResourceDownload();
         outFonts();
-        YGOStarter.initInfo(this);
+        YGOStarter.onCreated(this);
     }
 
     void outFonts() {
@@ -304,7 +304,7 @@ public class MainActivity extends AppCompatActivity implements
         mController.registerForActionSettings(mHandler);
         mController.registerForActionSupport(mHandler);
         super.onResume();
-       YGOStarter.onResume(this);
+       YGOStarter.onResumed(this);
     }
     @Override
     protected void onPause() {
@@ -328,6 +328,7 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     protected void onDestroy() {
+        YGOStarter.onDestroy(this);
         super.onDestroy();
     }
 

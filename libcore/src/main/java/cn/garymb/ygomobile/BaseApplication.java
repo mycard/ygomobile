@@ -3,10 +3,8 @@ package cn.garymb.ygomobile;
 import android.app.Application;
 import android.content.Context;
 import android.content.res.AssetManager;
-import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.SoundPool;
-import android.os.Build;
 
 import java.io.File;
 import java.io.IOException;
@@ -90,8 +88,28 @@ public class BaseApplication extends Application implements IrrlichtBridge.Irrli
     }
 
     @Override
+    public float getSmallerSize() {
+        return getScreenWidth();
+    }
+
+    @Override
+    public float getXScale() {
+        return getScreenHeight() / 1024.0f;
+    }
+
+    @Override
+    public float getYScale() {
+        return getScreenWidth() / 640.0f;
+    }
+
+    @Override
     public float getScreenHeight() {
         return settings.getScreenHeight();
+    }
+
+    @Override
+    public float getDensity() {
+        return settings.getDensity();
     }
 
     @Override

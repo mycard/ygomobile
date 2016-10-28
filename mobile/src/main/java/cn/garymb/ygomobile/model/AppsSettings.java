@@ -22,6 +22,7 @@ public class AppsSettings extends GameSettings {
     public NativeInitOptions getNativeInitOptions() {
         NativeInitOptions options = super.getNativeInitOptions();
 //        options.mCacheDir = context.getCacheDir().getAbsolutePath();
+        options.mOpenglVersion = 2;
         options.mIsSoundEffectEnabled = true;
         Log.i("Irrlicht", "" + options.toString());
         return options;

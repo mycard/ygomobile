@@ -71,8 +71,11 @@ public class IOUtils {
         if (files.length == 0) {
             //is file
             String file = getName(assets);
-            Log.i(TAG, "copy1:" + assets + "-->" + join(toPath, file));
-            copyToFile(am.open(assets), join(toPath, file));
+            String tofile = join(toPath, file);
+            if (update || !new File(tofile).exists()) {
+                Log.i(TAG, "copy1:" + assets + "-->" + tofile);
+                copyToFile(am.open(assets), tofile);
+            }
             return 1;
         } else {
             int count = 0;

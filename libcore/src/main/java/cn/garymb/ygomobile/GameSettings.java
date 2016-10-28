@@ -22,6 +22,10 @@ public class GameSettings {
     public static final String CORE_SCRIPTS_PATH = "scripts";
     public static final String CORE_REPLAY_PATH = "replay";
     public static final String CORE_SCRIPTS_ZIP = "main.zip";
+    public static final String CORE_SKIN_COVER = "bg.jpg";
+    public static final String CORE_SKIN_CARD_BACK = "cover.jpg";
+    public static final int[]  CORE_SKIN_COVER_SIZE = new int[]{1024, 640};
+    public static final int[]  CORE_SKIN_CARD_BACK_SIZE = new int[]{177, 254};
     private static GameSettings SETTINGS;
     protected Context context;
     private String ConfigVersion = "3.5";
@@ -42,11 +46,11 @@ public class GameSettings {
     }
 
     public float getXScale() {
-        return (mScreenHeight > mScreenWidth ? mScreenHeight : mScreenWidth) / 1024.0f;
+        return (float)getScreenHeight() / (float)CORE_SKIN_COVER_SIZE[0];
     }
 
     public float getYScale() {
-        return (mScreenHeight > mScreenWidth ? mScreenWidth : mScreenHeight) / 640.0f;
+        return (float)getScreenWidth() / (float)CORE_SKIN_COVER_SIZE[1];
     }
 
     public static GameSettings get() {
@@ -125,6 +129,10 @@ public class GameSettings {
 
     public String getCardImagePath() {
         return new File(getResourcePath(), "pics").getAbsolutePath();
+    }
+
+    public float getDensity() {
+        return mDensity;
     }
 
     public void setLastDeck(String name) {

@@ -20,7 +20,11 @@ public final class IrrlichtBridge {
 		float getScreenWidth();
 		float getScreenHeight();
 		void playSoundEffect(String path);
-	}
+        float getSmallerSize();
+        float getXScale();
+        float getYScale();
+        float getDensity();
+    }
 	public interface IrrlichtHost{
 		void toggleOverlayView(boolean isShow);
 		ByteBuffer getInitOptions();
