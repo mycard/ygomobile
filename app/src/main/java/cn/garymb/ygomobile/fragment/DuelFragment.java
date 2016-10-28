@@ -7,6 +7,7 @@ import java.util.List;
 import cn.garymb.ygodata.YGOGameOptions;
 import cn.garymb.ygomobile.R;
 import cn.garymb.ygomobile.YGOMobileActivity;
+import cn.garymb.ygomobile.YGOStarter;
 import cn.garymb.ygomobile.common.Constants;
 import cn.garymb.ygomobile.core.Controller;
 import cn.garymb.ygomobile.data.wrapper.IBaseJob;
@@ -237,10 +238,7 @@ public class DuelFragment extends BaseFragment {
 					options.mStartHand = target.startHand == -1 ? 5 : target.startHand;
 					options.mStartLP = target.startLp == -1 ? 8000 : target.startLp;
 				} 
-				Intent intent = new Intent(getActivity(), YGOMobileActivity.class);
-				intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-				intent.putExtra(YGOGameOptions.YGO_GAME_OPTIONS_BUNDLE_KEY, options);
-				startActivity(intent);
+				YGOStarter.startGame(getActivity(), options);
 			} else {
 				Toast.makeText(mActivity, getResources().getString(R.string.quick_join_error),
 						Toast.LENGTH_SHORT).show();

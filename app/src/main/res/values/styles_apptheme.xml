@@ -6,7 +6,9 @@
     <style name="MyListViewStyle" parent="@android:style/Widget.Holo.Light.ListView">
         <item name="android:listSelector">@drawable/list_selector</item>
     </style>
-
+    <style name="Game" parent="android:Theme.NoTitleBar.Fullscreen">
+        <item name="android:windowIsTranslucent">true</item>
+    </style>
     <style name="ButtonAppTheme" parent="android:Widget.Button">
         <item name="android:background">@drawable/apptheme_btn_default_holo_light</item>
         <item name="android:minHeight">48dip</item>

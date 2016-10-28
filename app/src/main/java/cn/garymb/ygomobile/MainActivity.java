@@ -1,50 +1,13 @@
 package cn.garymb.ygomobile;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import android.app.Activity;
 import android.app.AlertDialog;
-
-import com.avast.android.dialogs.iface.INegativeButtonDialogListener;
-import com.avast.android.dialogs.iface.IPositiveButtonDialogListener;
-import com.google.analytics.tracking.android.EasyTracker;
-
-import cn.garymb.ygomobile.controller.actionbar.ActionBarCreator;
-import cn.garymb.ygomobile.common.Constants;
-import cn.garymb.ygomobile.common.ImageCopyCheckTask;
-import cn.garymb.ygomobile.common.ResCheckTask;
-import cn.garymb.ygomobile.common.ImageCopyCheckTask.ImageCheckListener;
-import cn.garymb.ygomobile.common.ResCheckTask.ResCheckListener;
-import cn.garymb.ygomobile.controller.Controller;
-import cn.garymb.ygomobile.fragment.BaseFragment;
-import cn.garymb.ygomobile.fragment.CardDeckFragment;
-import cn.garymb.ygomobile.fragment.CardDetailFragment;
-import cn.garymb.ygomobile.fragment.CardWikiFragment;
-import cn.garymb.ygomobile.fragment.ServerListFragment;
-import cn.garymb.ygomobile.fragment.BaseFragment.OnActionBarChangeCallback;
-import cn.garymb.ygomobile.fragment.ProgressDlgFragment;
-import cn.garymb.ygomobile.model.Model;
-import cn.garymb.ygomobile.model.data.ResourcesConstants;
-import cn.garymb.ygomobile.setting.Settings;
-import cn.garymb.ygomobile.test.GameSettings;
-import cn.garymb.ygomobile.test.YGOStarter;
-import cn.garymb.ygomobile.ygo.YGOServerInfo;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -54,22 +17,53 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.Toolbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.Toast;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.avast.android.dialogs.iface.INegativeButtonDialogListener;
+import com.avast.android.dialogs.iface.IPositiveButtonDialogListener;
+import com.google.analytics.tracking.android.EasyTracker;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import cn.garymb.ygomobile.common.Constants;
+import cn.garymb.ygomobile.common.ImageCopyCheckTask;
+import cn.garymb.ygomobile.common.ImageCopyCheckTask.ImageCheckListener;
+import cn.garymb.ygomobile.common.ResCheckTask;
+import cn.garymb.ygomobile.common.ResCheckTask.ResCheckListener;
+import cn.garymb.ygomobile.controller.Controller;
+import cn.garymb.ygomobile.controller.actionbar.ActionBarCreator;
+import cn.garymb.ygomobile.fragment.BaseFragment;
+import cn.garymb.ygomobile.fragment.BaseFragment.OnActionBarChangeCallback;
+import cn.garymb.ygomobile.fragment.CardDeckFragment;
+import cn.garymb.ygomobile.fragment.CardDetailFragment;
+import cn.garymb.ygomobile.fragment.CardWikiFragment;
+import cn.garymb.ygomobile.fragment.ProgressDlgFragment;
+import cn.garymb.ygomobile.fragment.ServerListFragment;
+import cn.garymb.ygomobile.model.Model;
+import cn.garymb.ygomobile.model.data.ResourcesConstants;
+import cn.garymb.ygomobile.setting.Settings;
+import cn.garymb.ygomobile.ygo.YGOServerInfo;
 
 public class MainActivity extends AppCompatActivity implements
         OnActionBarChangeCallback, Handler.Callback, Constants,
@@ -158,6 +152,7 @@ public class MainActivity extends AppCompatActivity implements
         initActionBar();
         checkResourceDownload();
         outFonts();
+        YGOStarter.initInfo(this);
     }
 
     void outFonts() {
@@ -309,8 +304,8 @@ public class MainActivity extends AppCompatActivity implements
         mController.registerForActionSettings(mHandler);
         mController.registerForActionSupport(mHandler);
         super.onResume();
+       YGOStarter.onResume(this);
     }
-
     @Override
     protected void onPause() {
         mController.unregisterForActionCardImageDL(mHandler);
@@ -581,42 +576,5 @@ public class MainActivity extends AppCompatActivity implements
         //YGOStarter.startGame(this);
 //		runImageCheckTask();
 //		showImageDownloadStatus(getIntent());		
-    }
-
-    public static class MainActivityTest extends Activity {
-
-        @Override
-        protected void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
-            LinearLayout layout = new LinearLayout(this);
-            layout.setOrientation(LinearLayout.VERTICAL);
-            setContentView(layout);
-            Button button = new Button(this);
-            button.setText("start");
-            button.setOnClickListener((v) -> {
-                YGOStarter.startGame(MainActivityTest.this);
-            });
-            button.setEnabled(false);
-            layout.addView(button);
-            GameSettings.init(new GameSettings(this.getApplicationContext()));
-            //资源复制
-            checkResourceDownload((error) -> {
-                if (error < 0) {
-                    button.setEnabled(false);
-                    Toast.makeText(this, "check completed:" + error, Toast.LENGTH_SHORT).show();
-                } else {
-                    button.setEnabled(true);
-                }
-            });
-        }
-
-        private void checkResourceDownload(ResCheckListener listener) {
-            ResCheckTask task = new ResCheckTask(this, listener);
-            if (Build.VERSION.SDK_INT >= 11) {
-                task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-            } else {
-                task.execute();
-            }
-        }
     }
 }

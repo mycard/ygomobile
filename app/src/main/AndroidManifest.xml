@@ -81,7 +81,7 @@
             android:label="YGOMobile"
             android:launchMode="singleTask"
             android:screenOrientation="landscape"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:theme="@style/Game"
             android:windowSoftInputMode="adjustPan" >
             <meta-data
                 android:name="android.app.lib_name"

@@ -28,6 +28,7 @@ import android.widget.Button;
 import cn.garymb.ygodata.YGOGameOptions;
 import cn.garymb.ygomobile.R;
 import cn.garymb.ygomobile.YGOMobileActivity;
+import cn.garymb.ygomobile.YGOStarter;
 import cn.garymb.ygomobile.core.Controller;
 import cn.garymb.ygomobile.model.Model;
 import cn.garymb.ygomobile.model.data.ResourcesConstants;
@@ -236,7 +237,6 @@ public class CustomDialogFragment extends SimpleDialogFragment implements OnClic
 			case ResourcesConstants.DIALOG_MODE_CREATE_ROOM:
 			case ResourcesConstants.DIALOG_MODE_QUICK_JOIN:
 			case ResourcesConstants.DIALOG_MODE_JOIN_GAME: {
-				Intent intent = new Intent(getActivity(), YGOMobileActivity.class);
 				YGOGameOptions options = ((RoomDialogConfigController) mController).getGameOption() ;
 				if (mDialogMode == DIALOG_MODE_CREATE_ROOM) {
 					options.mServerAddr = Model.peekInstance().getMyCardServer().ipAddrString;
@@ -248,9 +248,7 @@ public class CustomDialogFragment extends SimpleDialogFragment implements OnClic
 					((DuelFragment)f).handleMessage(Message.obtain(null, getTargetRequestCode(), 0, 0, options));
 					return;
 				}
-				intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-				intent.putExtra(YGOGameOptions.YGO_GAME_OPTIONS_BUNDLE_KEY, options);
-				startActivity(intent);
+				YGOStarter.startGame(getActivity(), options);
 				break;
 			}
 			case ResourcesConstants.DIALOG_MODE_DONATE: {

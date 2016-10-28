@@ -4,6 +4,7 @@ import cn.garymb.ygodata.YGOGameOptions;
 import cn.garymb.ygomobile.R;
 import cn.garymb.ygomobile.StaticApplication;
 import cn.garymb.ygomobile.YGOMobileActivity;
+import cn.garymb.ygomobile.YGOStarter;
 import cn.garymb.ygomobile.common.Constants;
 import cn.garymb.ygomobile.controller.Controller;
 import cn.garymb.ygomobile.model.Model;
@@ -214,10 +215,7 @@ public class ServerListFragment extends BaseFragment implements
 			showDialog(bundle, this, REQUEST_CODE_SERVER);
 			break;
 		case Constants.ACTION_BAR_EVENT_TYPE_PLAY:
-			Intent intent = new Intent(getActivity(), YGOMobileActivity.class);
-			intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			startActivity(intent);
+			YGOStarter.startGame(getActivity(), null);
 			break;
 		default:
 			break;
@@ -242,10 +240,7 @@ public class ServerListFragment extends BaseFragment implements
 			options.mPort = info.port;
 			options.mName = info.userName;
 			options.mHostInfo = info.serverInfoString;
-			Intent intent = new Intent(getActivity(), YGOMobileActivity.class);
-			intent.putExtra(YGOGameOptions.YGO_GAME_OPTIONS_BUNDLE_KEY, options);
-			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-			startActivity(intent);
+			YGOStarter.startGame(getActivity(), options);
 		} else if (operationId == ServerOperationPanel.SERVER_OPERATION_EDIT) {
 			Bundle bundle = new Bundle();
 			bundle.putInt(ResourcesConstants.MODE_OPTIONS,
