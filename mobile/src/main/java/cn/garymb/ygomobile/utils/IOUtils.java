@@ -26,6 +26,9 @@ public class IOUtils {
         }
     }
 
+    public static boolean rename(String src,String to){
+        return new File(src).renameTo(new File(to));
+    }
     public static boolean isDirectory(Context context, String assets) {
         String[] files = new String[0];
         try {

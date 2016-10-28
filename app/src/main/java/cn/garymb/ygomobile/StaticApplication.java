@@ -317,6 +317,11 @@ public class StaticApplication extends Application {
         return mFontsPath;
     }
 
+    public void AddFontPath(String path){
+        if(!mFontsPath.contains(path)){
+            mFontsPath.add(path);
+        }
+    }
     public void setFontList(Collection<? extends String> list) {
         mFontsPath.clear();
         mFontsPath.addAll(list);

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- settings -->
+    <string name="settings_common">Common Settings</string>
+    <string name="settings_game">Game Settings</string>
+    <string name="settings_about">About</string>
+    <string name="settings_common_sub_common">Common</string>
+    <string name="settings_about_sub_about">About</string>
+    <string name="settings_common_card_image_network_pref">don\'t download images in 2/3G.</string>
+    <string name="settings_game_enable_sound_effect">Enable sound effect</string>
+    <string name="settings_game_screen_orientation">Lock screen in duel</string>
+    <string name="settings_game_font_antialias">Font antialias</string>
+    <string name="settings_game_laboratory">Laboratory</string>
+    <string name="settings_game_laboratory_des">Contains lately unstable features</string>
+    <string name="settings_game_lab_pendulum_scale">pendulum scale</string>
+    <string name="settings_game_lab_pendulum_scale_des">Show pendulum scale graphically</string>
+    <string name="settings_game_font_antialias_summary">Disable this option can increase the frame rate</string>
+    <string name="settings_about_author_pref">Author</string>
+    <string name="settings_about_proj_loc">Project link</string>
+    <string name="settings_about_version_pref">Version</string>
+    <string name="settings_about_opensource_pref">License</string>
+    <string name="settings_about_check_update">Check update</string>
+    <string name="settings_about_no_update">Lastest version already！</string>
+    <string name="settings_about_change_log">Change log</string>
+    <string name="settings_about_new_version">New version</string>
+    <string name="settings_game_card_quality">Card texture quality</string>
+    <string name="settings_game_card_path">Card Image path</string>
+    <string name="settings_game_font_name">Font list</string>
+    <string name="settings_game_res_path">Resource path</string>
+    <string name="settings_category_diy">DIY</string>
+    <string name="settings_game_diy_cover">Game Background</string>
+    <string name="settings_game_diy_card_back">Card back</string>
+    <string name="settings_game_diy_card_db">Use your own card database</string>
+    <string name="settings_game_reset_card_db">Reset card database</string>
+    <string name="settings_game_reset_card_db_confirm">Sure to reset card database？</string>
+    <string name="settings_game_reset_card_db_des">Use internal database</string>
+    <string name="settings_game_diy_card_db_des">User custom databse</string>
+    <string name="settings_game_diy_des">Current image：</string>
+    <string name="settings_game_immersive_mode_summary">Hide virtual navigation key in game</string>
+    <string name="settings_game_immersive_mode">Immersive Mode</string>
+    <string name="settings_about_feedback">Feed back</string>
+    <string name="settings_game_card_back">Card back</string>
+    <string name="settings_game_diy_history_des">History images：</string>
+    <string name="settings_game_cover">Background</string>
+    <string name="settings_about_project_address">https://github.com/garymabin/YGOMobile</string>
+    <string name="settings_game_opengl">OpenGL</string>
+    <string name="settings_author">garymabin@gmail.com\n24732145321453@qq.com</string>
+    <string-array name="opengl_version">
+        <item>OpenGL ES 1.X</item>
+        <item>OpenGL ES 2.0 fixed shaders</item>
+        <item>OpenGL ES 2.0 builtin shaders</item>
+    </string-array>
+    <string-array name="opengl_version_value">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+    <string-array name="card_quality">
+        <item>Speed</item>
+        <item>Quality</item>
+    </string-array>
+    <string-array name="card_quality_value">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+    <string name="reset_card_success">"Restore success，please restart app！"</string>
+    <string name="reset_card_failed">"Restore failed"</string>
+    <!-- settings -->
+</resources>

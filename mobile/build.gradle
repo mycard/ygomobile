@@ -11,6 +11,7 @@ android {
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
+        vectorDrawables.useSupportLibrary = true
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -23,7 +24,7 @@ android {
         }
     }
     sourceSets {
-        main{
+        main {
             assets.srcDirs = ['assets']
         }
     }
@@ -39,10 +40,12 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    //    compile 'com.soundcloud.android:android-crop:1.0.0@aar'
-    compile 'org.jdeferred:jdeferred-android-aar:1.2.4'
-    testCompile 'junit:junit:4.12'
     compile project(':libcore')
-    compile 'com.android.support:design:23.+'
-    compile 'com.android.support:appcompat-v7:23.+'
+    compile 'com.soundcloud.android:android-crop:1.0.0@aar'
+    compile 'org.jdeferred:jdeferred-android-aar:1.2.4'
+    compile 'com.android.support:design:23.4.0'
+    compile 'com.android.support:appcompat-v7:23.4.0'
+    compile 'com.android.support:support-v4:23.4.0'
+    compile 'com.android.support:support-vector-drawable:23.4.0'
+    testCompile 'junit:junit:4.12'
 }

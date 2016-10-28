@@ -96,6 +96,10 @@ public class GameSettings {
         ConfigVersion = configVersion;
     }
 
+    public void setResourcePath(String path) {
+
+    }
+
     public float getSmallerSize() {
         return mScreenHeight < mScreenWidth ? mScreenHeight : mScreenWidth;
     }

@@ -250,7 +250,7 @@ public class MainActivity extends AppCompatActivity implements
                 editor.putLong(PREF_KEY_VERSION_CHECK, pInfo.versionCode);
                 editor.commit();
             }
-        } catch (PackageManager.NameNotFoundException e) {
+        } catch (Exception e) {
             Log.e(TAG, "Error reading versionCode");
             e.printStackTrace();
         }

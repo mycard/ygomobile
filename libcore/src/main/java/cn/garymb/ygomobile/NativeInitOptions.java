@@ -9,13 +9,14 @@ public final class NativeInitOptions {
     private static final int BUFFER_MAX_SIZE = 8192;
 
     public int mOpenglVersion;
-
     public boolean mIsSoundEffectEnabled;
 
     public String mCacheDir;
 
+    /** 数据库 ${gamapath}/cards.cdb*/
     public String mDBDir;
 
+    /** 核心版本 ${gamapath}/${coreversion}/config/*.conf*/
     public String mCoreConfigVersion;
 
     public String mResourcePath;

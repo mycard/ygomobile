@@ -35,6 +35,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import static android.R.id.list;
+
 public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
 
     public static final int RES_ERR_NO_FONT_AVAIL = -1;
@@ -230,10 +232,9 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
 
     private boolean initFontList(String dir) {
         File systemFontDir = new File(dir);
-        ArrayList<String> fontsPath = new ArrayList<String>();
         String[] fonts = systemFontDir.list();
         for (String name : fonts) {
-            fontsPath.add(new File(systemFontDir, name).toString());
+            mApp.AddFontPath(new File(systemFontDir, name).toString());
         }
         // load extra font
         File extraDir = new File(mApp.getDefaultResPath() + Constants.FONT_DIRECTORY);
@@ -254,9 +255,10 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
                 currentFont = mSettingsPref.getString(Settings.KEY_PREF_GAME_FONT_NAME, fonts.length == 0 ? "" : new File(extraDir, fonts[0]).toString());
             }
             for (String name : fonts) {
-                fontsPath.add(new File(extraDir, name).toString());
+                mApp.AddFontPath(new File(extraDir, name).toString());
             }
-            for (String name : fontsPath) {
+            List<String> fontslist = mApp.getFontList();
+            for (String name : fontslist) {
                 if (currentFont.equals(name)) {
                     isFontHit = true;
                     break;
@@ -276,7 +278,6 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
                 requestDownloadExtraFont(extraDir);
             }
         }
-        mApp.setFontList(fontsPath);
         return true;
     }
 
