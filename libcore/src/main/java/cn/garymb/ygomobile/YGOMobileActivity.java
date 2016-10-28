@@ -10,8 +10,6 @@ import android.app.NativeActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,9 +18,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
-import android.view.SurfaceHolder;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
@@ -71,7 +67,9 @@ public class YGOMobileActivity extends NativeActivity implements
     private static int sChainControlXPostion = -1;
     private static int sChainControlYPostion = -1;
     private Handler handler = new Handler();
-
+    static{
+        System.loadLibrary("YGOMobile");
+    }
     @SuppressWarnings("WrongConstant")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,7 +125,7 @@ public class YGOMobileActivity extends NativeActivity implements
     }
 
     private void fullscreen() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && settings.isImmerSiveMode()) {
             getWindow().getDecorView().setSystemUiVisibility(windowsFlags);
         }
     }
