@@ -2,7 +2,6 @@
 <resources>
     <string name="app_name">YGOMobile</string>
     <string name="check_res">Check Resources</string>
-    <string name="checking_res">Check ... </string>
     <string name="check_things">Check %s ...</string>
     <string name="core_config">Core Config</string>
     <string name="new_deck">New Decks</string>

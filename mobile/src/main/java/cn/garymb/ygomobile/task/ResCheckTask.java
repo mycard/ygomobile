@@ -47,9 +47,7 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        dialog = ProgressDialog.show(mContext,
-                mContext.getString(R.string.check_res),
-                mContext.getString(R.string.checking_res));
+        dialog = ProgressDialog.show(mContext, null, mContext.getString(R.string.check_res));
     }
 
     @Override

@@ -15,3 +15,5 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+-keepclassmembers class * implements cn.garymb.ygomobile.core.IrrlichtBridge.* { public *;}
+-keepclassmembers class * implements android.os.Parcelable { public *;}

@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -25,6 +26,8 @@ public class MainActivity extends Activity {
         Button button = new Button(this);
         button.setText("start");
         button.setOnClickListener((v) -> {
+//            button.setVisibility(View.INVISIBLE);
+//            layout.setBackgroundResource(R.drawable.bg);
             YGOStarter.startGame(MainActivity.this);
         });
         button.setEnabled(false);
@@ -38,6 +41,11 @@ public class MainActivity extends Activity {
                 button.setEnabled(true);
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     private void checkResourceDownload(ResCheckTask.ResCheckListener listener) {

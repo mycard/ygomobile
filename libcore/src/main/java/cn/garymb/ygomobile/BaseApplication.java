@@ -3,8 +3,10 @@ package cn.garymb.ygomobile;
 import android.app.Application;
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.SoundPool;
+import android.os.Build;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,6 +24,7 @@ public class BaseApplication extends Application implements IrrlichtBridge.Irrli
     @Override
     public void onCreate() {
         super.onCreate();
+        initSoundEffectPool();
     }
 
     @Override
@@ -43,6 +46,7 @@ public class BaseApplication extends Application implements IrrlichtBridge.Irrli
         return settings;
     }
 
+    @SuppressWarnings("deprecation")
     protected void initSoundEffectPool() {
         mSoundEffectPool = new SoundPool(2, AudioManager.STREAM_MUSIC, 0);
         AssetManager am = getAssets();
