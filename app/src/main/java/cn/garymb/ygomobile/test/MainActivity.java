@@ -1,7 +1,6 @@
 package cn.garymb.ygomobile.test;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -27,6 +26,15 @@ public class MainActivity extends Activity {
         });
         button.setEnabled(false);
         layout.addView(button);
+        GameSettings.init(new GameSettings(this){
+            @Override
+            public NativeInitOptions getNativeInitOptions() {
+                NativeInitOptions options= super.getNativeInitOptions();
+//                options.mCacheDir = context.getCacheDir().getAbsolutePath();
+                Log.i("Irrlicht",""+options.toString());
+                return options;
+            }
+        });
         //资源复制
         checkResourceDownload((error) -> {
             if (error < 0) {
@@ -38,8 +46,8 @@ public class MainActivity extends Activity {
         });
     }
 
-    private void checkResourceDownload(ResCheckTask.ResCheckListener listener) {
-        ResCheckTask task = new ResCheckTask(this, listener);
+    private void checkResourceDownload(ResCheckTask2.ResCheckListener listener) {
+        ResCheckTask2 task = new ResCheckTask2(this, listener);
         if (Build.VERSION.SDK_INT >= 11) {
             task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         } else {

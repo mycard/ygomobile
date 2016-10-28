@@ -30,6 +30,12 @@ public class BaseApplication extends Application implements IrrlichtBridge.Irrli
         settings = GameSettings.init(getSettings());
     }
 
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+        mSoundEffectPool.release();
+    }
+
     protected GameSettings getSettings() {
         if (settings == null) {
             settings = new GameSettings(this);

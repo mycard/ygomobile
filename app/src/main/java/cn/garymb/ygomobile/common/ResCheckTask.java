@@ -36,11 +36,7 @@ import android.view.View;
 import android.widget.Toast;
 
 public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
-    public interface CallBack {
-        void onFinish();
-    }
 
-    private String SYSTEM_FONT_DIR = StaticApplication.get().getFontDirPath();
     public static final int RES_ERR_NO_FONT_AVAIL = -1;
 
     private static final int RES_CHECK_TYPE_MESSAGE_UPDATE = 1;
@@ -74,8 +70,7 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
     public ResCheckTask(Activity context, ResCheckListener listener) {
         mContext = context;
         mApp = StaticApplication.get();
-        mSettingsPref = PreferenceManager.getDefaultSharedPreferences(mApp);
-
+        mSettingsPref = PreferenceManager.getDefaultSharedPreferences(context);
         View content = mContext.getLayoutInflater().inflate(R.layout.image_dl_dialog, null);
         mProgressUpdateDialog = new ProgressUpdateDialog(mContext, null, content, null);
         mWaitDialog = new ProgressDialog(context);
@@ -122,7 +117,7 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
         }
         boolean needsUpdate = !currentConfigVersion.equals(newConfigVersion);
         publishProgress(RES_CHECK_TYPE_MESSAGE_UPDATE, R.string.updating_fonts);
-        initFontList();
+        initFontList(mApp.getFontDirPath());
         saveCoreConfigVersion(newConfigVersion);
         publishProgress(RES_CHECK_TYPE_MESSAGE_UPDATE, R.string.updating_decks);
         checkAndCopyNewDeckFiles(needsUpdate);
@@ -233,8 +228,8 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
 
     }
 
-    private boolean initFontList() {
-        File systemFontDir = new File(SYSTEM_FONT_DIR);
+    private boolean initFontList(String dir) {
+        File systemFontDir = new File(dir);
         ArrayList<String> fontsPath = new ArrayList<String>();
         String[] fonts = systemFontDir.list();
         for (String name : fonts) {

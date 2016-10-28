@@ -37,6 +37,12 @@ public class BaseApplication extends Application implements IrrlichtBridge.Irrli
         return settings;
     }
 
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+        mSoundEffectPool.release();
+    }
+
     protected void initSoundEffectPool() {
         mSoundEffectPool = new SoundPool(2, AudioManager.STREAM_MUSIC, 0);
         AssetManager am = getAssets();

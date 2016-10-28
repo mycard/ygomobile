@@ -1,6 +1,8 @@
 package cn.garymb.ygomobile.lite;
 
 
+import com.github.nativehandler.NativeCrashHandler;
+
 import cn.garymb.ygomobile.BaseApplication;
 import cn.garymb.ygomobile.GameSettings;
 

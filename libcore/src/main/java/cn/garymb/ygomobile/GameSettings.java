@@ -20,6 +20,7 @@ public class GameSettings {
     public static final String CORE_DECK_PATH = "deck";
     public static final String CORE_SINGLE_PATH = "single";
     public static final String CORE_SCRIPTS_PATH = "scripts";
+    public static final String CORE_REPLAY_PATH = "replay";
     public static final String CORE_SCRIPTS_ZIP = "main.zip";
     private static GameSettings SETTINGS;
     protected Context context;

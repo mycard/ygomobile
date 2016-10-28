@@ -67,8 +67,8 @@ public class IOUtils {
         }
         if (files.length == 0) {
             //is file
-            String file=getName(assets);
-            Log.i(TAG, "copy:" + assets + "-->" + join(toPath, file));
+            String file = getName(assets);
+            Log.i(TAG, "copy1:" + assets + "-->" + join(toPath, file));
             copyToFile(am.open(assets), join(toPath, file));
             return 1;
         } else {
@@ -81,9 +81,9 @@ public class IOUtils {
                 } else {
                     File f = new File(join(toPath, file));
                     if (update || !f.exists()) {
-                        Log.i(TAG, "copy:" + path + "-->" + f.getAbsolutePath());
+                        Log.i(TAG, "copy2:" + path + "-->" + f.getAbsolutePath());
                         copyToFile(am.open(path), f.getAbsolutePath());
-                    }else{
+                    } else {
                         Log.i(TAG, "copy ignore:" + path + "-->" + f.getAbsolutePath());
                     }
                     count++;
