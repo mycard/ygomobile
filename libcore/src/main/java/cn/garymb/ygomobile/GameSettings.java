@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.os.Environment;
-import android.preference.PreferenceManager;
 
 import java.io.File;
 
@@ -19,6 +18,7 @@ public class GameSettings {
     public static final String CORE_SKIN_PATH = "textures";
     public static final String CORE_DECK_PATH = "deck";
     public static final String CORE_SINGLE_PATH = "single";
+    public static final String CORE_IMAGE_PATH="pics";
     public static final String CORE_SCRIPTS_PATH = "scripts";
     public static final String CORE_REPLAY_PATH = "replay";
     public static final String CORE_SCRIPTS_ZIP = "main.zip";
@@ -30,9 +30,13 @@ public class GameSettings {
     protected Context context;
     private String ConfigVersion = "3.5";
     private float mScreenHeight, mScreenWidth, mDensity;
+    protected SharedPreferences sharedPreferences;
+    private final static String NAME = "ygocore.settings";
+    private final static String PREF_GAME_PATH = "game.path";
 
     public GameSettings(Context context) {
         this.context = context;
+        sharedPreferences = context.getSharedPreferences(NAME, Context.MODE_PRIVATE);
         mDensity = context.getResources().getDisplayMetrics().density;
         mScreenHeight = context.getResources().getDisplayMetrics().heightPixels;
         mScreenWidth = context.getResources().getDisplayMetrics().widthPixels;
@@ -101,7 +105,7 @@ public class GameSettings {
     }
 
     public void setResourcePath(String path) {
-
+        sharedPreferences.edit().putString(PREF_GAME_PATH, path).commit();
     }
 
     public float getSmallerSize() {
@@ -120,15 +124,17 @@ public class GameSettings {
      * 游戏资源目录
      */
     public String getResourcePath() {
+        String defPath;
         try {
-            return new File(Environment.getExternalStorageDirectory(), GAME_DIR).getAbsolutePath();
+            defPath= new File(Environment.getExternalStorageDirectory(), GAME_DIR).getAbsolutePath();
         } catch (Exception e) {
-            return new File(context.getFilesDir(), GAME_DIR).getAbsolutePath();
+            defPath= new File(context.getFilesDir(), GAME_DIR).getAbsolutePath();
         }
+        return sharedPreferences.getString(PREF_GAME_PATH, defPath);
     }
 
     public String getCardImagePath() {
-        return new File(getResourcePath(), "pics").getAbsolutePath();
+        return new File(getResourcePath(), CORE_IMAGE_PATH).getAbsolutePath();
     }
 
     public float getDensity() {
@@ -136,7 +142,7 @@ public class GameSettings {
     }
 
     public void setLastDeck(String name) {
-        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
+        SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(PREF_LAST_YDK, name);
         editor.commit();
     }
@@ -150,10 +156,10 @@ public class GameSettings {
     }
 
     public String getFontDirPath() {
-        return new File(getResourcePath(), "fonts").getAbsolutePath();
+        return new File(getResourcePath(), FONT_DIRECTORY).getAbsolutePath();
     }
 
     public String getLastDeck() {
-        return PreferenceManager.getDefaultSharedPreferences(context).getString(PREF_LAST_YDK, "new.ydk");
+        return sharedPreferences.getString(PREF_LAST_YDK, "new.ydk");
     }
 }

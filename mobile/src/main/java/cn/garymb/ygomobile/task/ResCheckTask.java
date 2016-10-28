@@ -2,7 +2,6 @@ package cn.garymb.ygomobile.task;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.res.AssetManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.os.AsyncTask;
@@ -11,16 +10,11 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 
 import cn.garymb.ygomobile.GameSettings;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.utils.IOUtils;
-
-import static cn.garymb.ygomobile.utils.IOUtils.join;
 
 public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
     private static final String TAG = "ResCheckTask";
@@ -195,10 +189,11 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
 
     private void checkDirs() {
         String[] dirs = {GameSettings.CORE_SCRIPTS_PATH,
-                         GameSettings.CORE_SINGLE_PATH,
-                         GameSettings.CORE_DECK_PATH,
-                         GameSettings.CORE_REPLAY_PATH,
-                         GameSettings.FONT_DIRECTORY
+                GameSettings.CORE_SINGLE_PATH,
+                GameSettings.CORE_DECK_PATH,
+                GameSettings.CORE_REPLAY_PATH,
+                GameSettings.FONT_DIRECTORY,
+                GameSettings.CORE_IMAGE_PATH
         };
         File dirFile = null;
         for (String dir : dirs) {

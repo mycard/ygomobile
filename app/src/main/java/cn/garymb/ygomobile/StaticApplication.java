@@ -60,8 +60,8 @@ import static org.acra.ReportField.USER_CRASH_DATE;
 
 @ReportsCrashes(formKey = "", // will not be used
         customReportContent = {APP_VERSION_NAME, ANDROID_VERSION, PHONE_MODEL,
-                               CUSTOM_DATA, STACK_TRACE, USER_CRASH_DATE, LOGCAT, BUILD,
-                               TOTAL_MEM_SIZE, DISPLAY, DUMPSYS_MEMINFO, DEVICE_FEATURES, ENVIRONMENT
+                CUSTOM_DATA, STACK_TRACE, USER_CRASH_DATE, LOGCAT, BUILD,
+                TOTAL_MEM_SIZE, DISPLAY, DUMPSYS_MEMINFO, DEVICE_FEATURES, ENVIRONMENT
         }, mailTo = "garymabin@gmail.com", includeDropBoxSystemTags = true, mode = ReportingInteractionMode.DIALOG, resDialogText = R.string.crashed, resDialogIcon = android.R.drawable.ic_dialog_info, // optional.
 // default
 // is
@@ -137,6 +137,7 @@ public class StaticApplication extends Application {
         CrashSender sender = new CrashSender(this);
         ACRA.getErrorReporter().setReportSender(sender);
         Controller.peekInstance();
+        GameSettings.init(new GameSettings(this));
 //		mHttpFactory = new ThreadSafeHttpClientFactory(this);
         sRootPair = Pair
                 .create(getResources().getString(R.string.root_dir), "/"/* "Environment.getExternalStorageDirectory().getPath()" */);
@@ -172,30 +173,6 @@ public class StaticApplication extends Application {
     public void onTerminate() {
         super.onTerminate();
         mSoundEffectPool.release();
-    }
-
-    private void initSoundEffectPool() {
-        mSoundEffectPool = new SoundPool(2, AudioManager.STREAM_MUSIC, 0);
-        AssetManager am = getAssets();
-        String[] sounds;
-        mSoundIdMap = new HashMap<String, Integer>();
-        try {
-            sounds = am.list("sound");
-            for (String sound : sounds) {
-                String path = "sound" + File.separator + sound;
-                mSoundIdMap
-                        .put(path, mSoundEffectPool.load(am.openFd(path), 1));
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void playSoundEffect(String path) {
-        Integer id = mSoundIdMap.get(path);
-        if (id != null) {
-            mSoundEffectPool.play(id, 0.5f, 0.5f, 2, 0, 1.0f);
-        }
     }
 
     /**
@@ -279,26 +256,15 @@ public class StaticApplication extends Application {
         return INSTANCE;
     }
 
+    public String getResourcePath() {
+        SharedPreferences sp = getSharedPreferences(Constants.PREF_FILE,
+                Context.MODE_PRIVATE);
+        return sp.getString(Constants.RESOURCE_PATH, getDefaultResPath());
+    }
+
     public String getDefaultImageCacheRootPath() {
         return Environment.getExternalStorageDirectory().getAbsolutePath()
                 + Constants.WORKING_DIRECTORY + Constants.CARD_IMAGE_DIRECTORY;
-    }
-
-    public String getCoreSkinPath() {
-        return getCacheDir() + File.separator
-                + Constants.CORE_SKIN_PATH;
-    }
-
-    public String getCoreConfigVersion() {
-        return mCoreConfigVersion;
-    }
-
-    public void setCoreConfigVersion(String ver) {
-        mCoreConfigVersion = ver;
-    }
-
-    public String getDefaultFontName() {
-        return Constants.DEFAULT_FONT_NAME;
     }
 
     public String getDefaultResPath() {
@@ -306,24 +272,8 @@ public class StaticApplication extends Application {
                 Constants.WORKING_DIRECTORY).getAbsolutePath();
     }
 
-    public String getResourcePath() {
-        SharedPreferences sp = getSharedPreferences(Constants.PREF_FILE,
-                Context.MODE_PRIVATE);
-        return sp.getString(Constants.RESOURCE_PATH, getDefaultResPath());
-    }
-
-    public ArrayList<String> getFontList() {
-        return mFontsPath;
-    }
-
-    public void AddFontPath(String path){
-        if(!mFontsPath.contains(path)){
-            mFontsPath.add(path);
-        }
-    }
-    public void setFontList(Collection<? extends String> list) {
-        mFontsPath.clear();
-        mFontsPath.addAll(list);
+    public String getDefaultFontName() {
+        return Constants.DEFAULT_FONT_NAME;
     }
 
     public void setResourcePath(String path) {
@@ -334,42 +284,32 @@ public class StaticApplication extends Application {
         editor.commit();
     }
 
-    public String getCardImagePath() {
-        return getResourcePath() + Constants.CARD_IMAGE_DIRECTORY;
-    }
-
-    public SharedPreferences getApplicationSettings() {
-        return mSettingsPref;
-    }
-
-    public boolean getMobileNetworkPref() {
-        return mSettingsPref.getBoolean(
-                Settings.KEY_PREF_COMMON_NOT_DOWNLOAD_VIA_GPRS, true);
-    }
-
-    public int getGameScreenOritation() {
-        boolean lockScreen = mSettingsPref.getBoolean(
-                Settings.KEY_PREF_GAME_SCREEN_ORIENTATION, true);
-        if (lockScreen) {
-            return ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
-        } else {
-            return ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE;
+    protected void initSoundEffectPool() {
+        mSoundEffectPool = new SoundPool(2, AudioManager.STREAM_MUSIC, 0);
+        AssetManager am = getAssets();
+        String[] sounds;
+        mSoundIdMap = new HashMap<String, Integer>();
+        try {
+            sounds = am.list("sound");
+            for (String sound : sounds) {
+                String path = "sound" + File.separator + sound;
+                mSoundIdMap
+                        .put(path, mSoundEffectPool.load(am.openFd(path), 1));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
-    public String getDataBasePath() {
-        return mDataBasePath;
+    public void playSoundEffect(String path) {
+        Integer id = mSoundIdMap.get(path);
+        if (id != null) {
+            mSoundEffectPool.play(id, 0.5f, 0.5f, 2, 0, 1.0f);
+        }
     }
 
-    public String getCompatExternalFilesDir() {
-//        File path = getExternalFilesDir(null);
-//        if (path != null) {
-//            String prefix = Environment.getExternalStorageDirectory().getPath();
-//            return path.toString().replace(prefix, "/mnt/sdcard");
-//        } else {
-//            return "/mnt/sdcard/android/data/cn.garymb.ygomobile/files/";
-//        }
-        return new File(getExternalCacheDir().getParentFile(), "files").getAbsolutePath();
+    public String getCardImagePath() {
+        return getResourcePath() + Constants.CARD_IMAGE_DIRECTORY;
     }
 
     public void setLastCheckTime(long time) {
@@ -384,18 +324,6 @@ public class StaticApplication extends Application {
         SharedPreferences sp = getSharedPreferences(Constants.PREF_FILE_COMMON,
                 Context.MODE_PRIVATE);
         return sp.getLong(Constants.PREF_KEY_UPDATE_CHECK, 0);
-    }
-
-    public String getFontPath() {
-        return mSettingsPref.getString(Settings.KEY_PREF_GAME_FONT_NAME, getFontDefault());
-    }
-
-    public String getFontDefault() {
-        return new File(getFontDirPath(), Constants.DEFAULT_FONT_NAME).getAbsolutePath();
-    }
-
-    public String getFontDirPath() {
-        return new File(OutPath, Constants.FONT_DIRECTORY).getAbsolutePath();
     }
 
     public String getLastDeck() {
@@ -419,6 +347,80 @@ public class StaticApplication extends Application {
 
     public float getScreenWidth() {
         return mScreenWidth;
+    }
+
+    public SharedPreferences getApplicationSettings() {
+        return mSettingsPref;
+    }
+
+    public boolean getMobileNetworkPref() {
+        return mSettingsPref.getBoolean(
+                Settings.KEY_PREF_COMMON_NOT_DOWNLOAD_VIA_GPRS, true);
+    }
+
+    public int getGameScreenOritation() {
+        boolean lockScreen = mSettingsPref.getBoolean(
+                Settings.KEY_PREF_GAME_SCREEN_ORIENTATION, true);
+        if (lockScreen) {
+            return ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
+        } else {
+            return ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE;
+        }
+    }
+
+    public String getCoreSkinPath() {
+        return getCacheDir() + File.separator
+                + Constants.CORE_SKIN_PATH;
+    }
+
+    public String getCoreConfigVersion() {
+        return mCoreConfigVersion;
+    }
+
+    public void setCoreConfigVersion(String ver) {
+        mCoreConfigVersion = ver;
+    }
+
+    public ArrayList<String> getFontList() {
+        return mFontsPath;
+    }
+
+    public void AddFontPath(String path) {
+        if (!mFontsPath.contains(path)) {
+            mFontsPath.add(path);
+        }
+    }
+
+    public void setFontList(Collection<? extends String> list) {
+        mFontsPath.clear();
+        mFontsPath.addAll(list);
+    }
+
+    public String getFontPath() {
+        return mSettingsPref.getString(Settings.KEY_PREF_GAME_FONT_NAME, getFontDefault());
+    }
+
+    public String getFontDefault() {
+        return new File(getFontDirPath(), Constants.DEFAULT_FONT_NAME).getAbsolutePath();
+    }
+
+    public String getFontDirPath() {
+        return new File(OutPath, Constants.FONT_DIRECTORY).getAbsolutePath();
+    }
+
+    public String getDataBasePath() {
+        return mDataBasePath;
+    }
+
+    public String getCompatExternalFilesDir() {
+//        File path = getExternalFilesDir(null);
+//        if (path != null) {
+//            String prefix = Environment.getExternalStorageDirectory().getPath();
+//            return path.toString().replace(prefix, "/mnt/sdcard");
+//        } else {
+//            return "/mnt/sdcard/android/data/cn.garymb.ygomobile/files/";
+//        }
+        return new File(getExternalCacheDir().getParentFile(), "files").getAbsolutePath();
     }
 
     public float getSmallerSize() {
