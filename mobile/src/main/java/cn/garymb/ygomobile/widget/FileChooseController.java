@@ -1,6 +1,5 @@
-package cn.garymb.ygomobile.widgets;
+package cn.garymb.ygomobile.widget;
 
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;

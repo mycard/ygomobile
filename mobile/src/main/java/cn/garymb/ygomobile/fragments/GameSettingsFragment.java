@@ -2,21 +2,14 @@ package cn.garymb.ygomobile.fragments;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources;
-import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
-import android.provider.MediaStore;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Toast;
@@ -24,13 +17,11 @@ import android.widget.Toast;
 import com.soundcloud.android.crop.Crop;
 
 import java.io.File;
-import java.util.ArrayList;
 
 import cn.garymb.ygomobile.GameSettings;
 import cn.garymb.ygomobile.model.Settings;
-import cn.garymb.ygomobile.widgets.BaseDialog;
-import cn.garymb.ygomobile.widgets.SimpleDialog;
-import cn.garymb.ygomobile.widgets.preference.MyBooleanValuePreference;
+import cn.garymb.ygomobile.widget.BaseDialog;
+import cn.garymb.ygomobile.widget.preference.MyBooleanValuePreference;
 import cn.garymb.ygomobile.lite.R;
 
 public class GameSettingsFragment extends EventDialogPreferenceFragment

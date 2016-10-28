@@ -39,11 +39,7 @@
             android:name="cn.garymb.ygomobile.YGOMobileActivity"
             android:theme="@style/AppTheme.Game"
             tools:replace="android:theme"/>
-        <activity
-            android:name="cn.garymb.ygomobile.activities.HomeActivity"
-            android:label="@string/title_activity_home"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
+        <activity android:name="cn.garymb.ygomobile.activities.SettingsActivity"/>
     </application>
 
 </manifest>

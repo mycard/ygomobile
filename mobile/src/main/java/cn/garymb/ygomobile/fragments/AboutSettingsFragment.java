@@ -9,12 +9,11 @@ import android.os.Message;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.webkit.WebView;
-import android.widget.Toast;
 
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.model.Settings;
-import cn.garymb.ygomobile.widgets.BaseDialog;
-import cn.garymb.ygomobile.widgets.WebViewDialog;
+import cn.garymb.ygomobile.widget.BaseDialog;
+import cn.garymb.ygomobile.widget.WebViewDialog;
 
 
 public class AboutSettingsFragment extends EventDialogPreferenceFragment

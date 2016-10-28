@@ -8,7 +8,6 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.Signature;
 import android.content.res.AssetManager;
 import android.graphics.Point;
@@ -153,7 +152,7 @@ public class StaticApplication extends Application {
                     getPackageName(), 0);
             mVersionCode = info.versionCode;
             mVersionName = info.versionName;
-        } catch (NameNotFoundException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         Controller.peekInstance();

@@ -1,4 +1,4 @@
-package cn.garymb.ygomobile.widgets;
+package cn.garymb.ygomobile.widget;
 
 import android.view.View;
 

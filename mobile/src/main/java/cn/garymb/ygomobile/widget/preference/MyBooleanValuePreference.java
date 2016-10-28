@@ -1,4 +1,4 @@
-package cn.garymb.ygomobile.widgets.preference;
+package cn.garymb.ygomobile.widget.preference;
 
 import android.content.Context;
 import android.content.res.TypedArray;

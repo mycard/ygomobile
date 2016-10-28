@@ -11,7 +11,7 @@ import android.preference.PreferenceFragment;
 import android.util.Log;
 import android.view.MenuItem;
 
-import cn.garymb.ygomobile.widgets.BaseDialog;
+import cn.garymb.ygomobile.widget.BaseDialog;
 
 
 abstract class EventDialogPreferenceFragment extends PreferenceFragment

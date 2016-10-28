@@ -10,6 +10,8 @@ import android.app.NativeActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -18,6 +20,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
+import android.view.SurfaceHolder;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
@@ -53,7 +56,6 @@ public class YGOMobileActivity extends NativeActivity implements
             | View.SYSTEM_UI_FLAG_FULLSCREEN
             | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
     private static final int CHAIN_CONTROL_PANEL_X_POSITION_LEFT_EDGE = 205;
-
     private static final int CHAIN_CONTROL_PANEL_Y_REVERT_POSITION = 100;
 
     protected final GameSettings settings = GameSettings.get();
@@ -105,7 +107,6 @@ public class YGOMobileActivity extends NativeActivity implements
                 .getDimensionPixelSize(R.dimen.chain_control_button_height) * 2 + res
                 .getDimensionPixelSize(R.dimen.chain_control_margin)));
     }
-
 
     @Override
     protected void onNewIntent(Intent intent) {
