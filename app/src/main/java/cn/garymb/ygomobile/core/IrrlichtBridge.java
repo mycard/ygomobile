@@ -13,6 +13,27 @@ import java.nio.ByteBuffer;
  *
  */
 public final class IrrlichtBridge {
+	public interface IrrlichtApplication {
+		String getCardImagePath();
+		void setLastDeck(String name);
+		String getFontPath();
+		String getLastDeck();
+		float getScreenWidth();
+		float getScreenHeight();
+		void playSoundEffect(String path);
+	}
+	public interface IrrlichtHost{
+		void toggleOverlayView(boolean isShow);
+		ByteBuffer getInitOptions();
+		ByteBuffer getNativeInitOptions();
+		void toggleIME(String hint, boolean isShow);
+		void showComboBoxCompat(String[] items, boolean isShow, int mode);
+		void performHapticFeedback();
+		/** 签名 */
+		byte[] performTrick();
+		int getLocalAddress();
+		void setNativeHandle(int nativeHandle);
+	}
 	public static int sNativeHandle;
 	
 	private static native void nativeInsertText(int handle, String text);

@@ -13,7 +13,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
  */
-package com.jawsware.core.share;
+package cn.garymb.ygomobile.widget.overlay;
 
 import android.content.Context;
 import android.graphics.PixelFormat;
@@ -25,7 +25,10 @@ import android.view.WindowManager;
 import android.widget.RelativeLayout;
 
 public abstract class OverlayView extends RelativeLayout {
-
+	public static final int MODE_CANCEL_CHAIN_OPTIONS = 0;
+	public static final int MODE_REFRESH_OPTION = 1;
+	public static final int MODE_IGNORE_CHAIN_OPTION = 2;
+	public static final int MODE_REACT_CHAIN_OPTION = 3;
 	protected WindowManager.LayoutParams layoutParams;
 
 	private int layoutResId;
@@ -38,7 +41,7 @@ public abstract class OverlayView extends RelativeLayout {
 
 		this.setLongClickable(true);
 
-		this.setOnLongClickListener(new View.OnLongClickListener() {
+		this.setOnLongClickListener(new OnLongClickListener() {
 
 			@Override
 			public boolean onLongClick(View v) {

@@ -114,10 +114,6 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
             setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.game_skins)));
             IOUtils.copyFilesFromAssets(mContext, getDatapath(GameSettings.CORE_SKIN_PATH),
                     mSettings.getCoreSkinPath(), needsUpdate);
-            Log.d(TAG, "check extras");
-            setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.extras_images)));
-            IOUtils.copyFilesFromAssets(mContext, getDatapath(GameSettings.CORE_EXTRA_PATH),
-                    new File(resPath, GameSettings.CORE_EXTRA_PATH).getAbsolutePath(), needsUpdate);
             Log.d(TAG, "check fonts");
             setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.font_files)));
             IOUtils.copyFilesFromAssets(mContext, getDatapath(GameSettings.FONT_DIRECTORY),

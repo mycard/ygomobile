@@ -9,8 +9,6 @@ import cn.garymb.ygomobile.R;
 import cn.garymb.ygomobile.common.Constants;
 import cn.garymb.ygomobile.widget.overlay.OverlayOvalView.OnDuelOptionsSelectListener;
 
-import com.jawsware.core.share.OverlayView;
-
 public class OverlayRectView extends OverlayView implements OnCheckedChangeListener {
 	
 	private ToggleButton mReactButton;

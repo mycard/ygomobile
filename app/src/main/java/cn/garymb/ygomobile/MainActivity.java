@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 
 import com.avast.android.dialogs.iface.INegativeButtonDialogListener;
@@ -23,7 +24,6 @@ import cn.garymb.ygomobile.common.ResCheckTask;
 import cn.garymb.ygomobile.common.ImageCopyCheckTask.ImageCheckListener;
 import cn.garymb.ygomobile.common.ResCheckTask.ResCheckListener;
 import cn.garymb.ygomobile.controller.Controller;
-import cn.garymb.ygomobile.core.IBaseTask;
 import cn.garymb.ygomobile.fragment.BaseFragment;
 import cn.garymb.ygomobile.fragment.CardDeckFragment;
 import cn.garymb.ygomobile.fragment.CardDetailFragment;
@@ -34,12 +34,11 @@ import cn.garymb.ygomobile.fragment.ProgressDlgFragment;
 import cn.garymb.ygomobile.model.Model;
 import cn.garymb.ygomobile.model.data.ResourcesConstants;
 import cn.garymb.ygomobile.setting.Settings;
+import cn.garymb.ygomobile.test.GameSettings;
+import cn.garymb.ygomobile.test.YGOStarter;
 import cn.garymb.ygomobile.ygo.YGOServerInfo;
 
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -48,7 +47,6 @@ import android.os.Build;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.IBinder;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -63,6 +61,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -582,5 +581,42 @@ public class MainActivity extends AppCompatActivity implements
         //YGOStarter.startGame(this);
 //		runImageCheckTask();
 //		showImageDownloadStatus(getIntent());		
+    }
+
+    public static class MainActivityTest extends Activity {
+
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            LinearLayout layout = new LinearLayout(this);
+            layout.setOrientation(LinearLayout.VERTICAL);
+            setContentView(layout);
+            Button button = new Button(this);
+            button.setText("start");
+            button.setOnClickListener((v) -> {
+                YGOStarter.startGame(MainActivityTest.this);
+            });
+            button.setEnabled(false);
+            layout.addView(button);
+            GameSettings.init(new GameSettings(this.getApplicationContext()));
+            //资源复制
+            checkResourceDownload((error) -> {
+                if (error < 0) {
+                    button.setEnabled(false);
+                    Toast.makeText(this, "check completed:" + error, Toast.LENGTH_SHORT).show();
+                } else {
+                    button.setEnabled(true);
+                }
+            });
+        }
+
+        private void checkResourceDownload(ResCheckListener listener) {
+            ResCheckTask task = new ResCheckTask(this, listener);
+            if (Build.VERSION.SDK_INT >= 11) {
+                task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            } else {
+                task.execute();
+            }
+        }
     }
 }

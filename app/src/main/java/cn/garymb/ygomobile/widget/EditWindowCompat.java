@@ -6,9 +6,7 @@
  */
 package cn.garymb.ygomobile.widget;
 
-import cn.garymb.ygomobile.R;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +15,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.PopupWindow;
 import android.widget.TextView.OnEditorActionListener;
+
+import cn.garymb.ygomobile.R;
 
 /**
  * @author mabin
@@ -30,7 +30,6 @@ public class EditWindowCompat extends PopupWindow {
 	private InputMethodManager mIM;
 	
 	public EditWindowCompat(Context context) {
-		// TODO Auto-generated constructor stub
 		super(context);
 		mContext = context;
 		mContentView = (ViewGroup) LayoutInflater.from(mContext).inflate(

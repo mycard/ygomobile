@@ -1,4 +1,4 @@
-package cn.garymb.ygomobile;
+package cn.garymb.ygomobile.test;
 
 
 import android.content.Context;
@@ -8,6 +8,8 @@ import android.os.Environment;
 import android.preference.PreferenceManager;
 
 import java.io.File;
+
+import cn.garymb.ygomobile.NativeInitOptions;
 
 public class GameSettings {
     public static String GAME_DIR = "ygocore";
@@ -33,7 +35,7 @@ public class GameSettings {
         mScreenWidth = context.getResources().getDisplayMetrics().widthPixels;
     }
 
-    static GameSettings init(GameSettings settings) {
+    public static GameSettings init(GameSettings settings) {
         if (SETTINGS == null) {
             SETTINGS = settings;
         }

@@ -1,36 +1,41 @@
 package cn.garymb.ygomobile;
 
+import android.content.SharedPreferences;
+import android.text.TextUtils;
+
 import java.nio.ByteBuffer;
 
 import cn.garymb.ygomobile.common.Constants;
 import cn.garymb.ygomobile.setting.Settings;
-import android.content.SharedPreferences;
-import android.text.TextUtils;
 
 public final class NativeInitOptions {
 	
 	private static final int BUFFER_MAX_SIZE = 8192;
 	
-	private int mOpenglVersion;
-	
-	private boolean mIsSoundEffectEnabled;
-	
-	private String mCacheDir;
-	
-	private String mDBDir;
-	
-	private String mCoreConfigVersion;
-	
-	private String mResourcePath;
-	
-	private String mExternalFilePath;
-	
-	private int mCardQuality;
-	
-	private boolean mIsFontAntiAliasEnabled;
-	
-	private boolean mIsPendulumScaleEnabled;
-	
+	public int mOpenglVersion;
+
+	public boolean mIsSoundEffectEnabled;
+
+	public String mCacheDir;
+
+	public String mDBDir;
+
+	public String mCoreConfigVersion;
+
+	public String mResourcePath;
+
+	public String mExternalFilePath;
+
+	public int mCardQuality;
+
+	public boolean mIsFontAntiAliasEnabled;
+
+	public boolean mIsPendulumScaleEnabled;
+
+	public NativeInitOptions(){
+
+	}
+
 	public static NativeInitOptions fromSettingsPref(final SharedPreferences pref) {
 		StaticApplication app = StaticApplication.get();
 		NativeInitOptions options = new NativeInitOptions();
@@ -52,9 +57,6 @@ public final class NativeInitOptions {
 		options.mIsPendulumScaleEnabled = pref.getBoolean(Settings.KEY_PREF_GAME_LAB_PENDULUM_SCALE, false);
 		return options;
 	}
-	
-	
-	
 	public ByteBuffer toNativeBuffer() {
 		ByteBuffer buffer = ByteBuffer.allocateDirect(BUFFER_MAX_SIZE);
 		putInt(buffer, mOpenglVersion);

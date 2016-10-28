@@ -27,16 +27,12 @@ public class BaseApplication extends Application implements IrrlichtBridge.Irrli
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
-        GameSettings.init(getSettings());
+        settings = GameSettings.init(getSettings());
     }
 
     protected GameSettings getSettings() {
         if (settings == null) {
-            synchronized (this) {
-                if (settings == null) {
-                    settings = new GameSettings(this);
-                }
-            }
+            settings = new GameSettings(this);
         }
         return settings;
     }

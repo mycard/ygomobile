@@ -18,10 +18,9 @@ package cn.garymb.ygomobile.widget.overlay;
 import android.content.Context;
 import android.view.View;
 import android.widget.TextView;
+
 import cn.garymb.ygomobile.R;
 import cn.garymb.ygomobile.common.Constants;
-
-import com.jawsware.core.share.OverlayView;
 
 public class OverlayOvalView extends OverlayView implements android.view.View.OnClickListener {
 
