@@ -71,8 +71,23 @@ public final class NativeInitOptions {
 		putInt(buffer, mIsPendulumScaleEnabled ? 1 : 0);
 		return buffer;
 	}
-	
-	
+
+	@Override
+	public String toString() {
+		return "NativeInitOptions{" +
+				"mOpenglVersion=" + mOpenglVersion +
+				", mIsSoundEffectEnabled=" + mIsSoundEffectEnabled +
+				", mCacheDir='" + mCacheDir + '\'' +
+				", mDBDir='" + mDBDir + '\'' +
+				", mCoreConfigVersion='" + mCoreConfigVersion + '\'' +
+				", mResourcePath='" + mResourcePath + '\'' +
+				", mExternalFilePath='" + mExternalFilePath + '\'' +
+				", mCardQuality=" + mCardQuality +
+				", mIsFontAntiAliasEnabled=" + mIsFontAntiAliasEnabled +
+				", mIsPendulumScaleEnabled=" + mIsPendulumScaleEnabled +
+				'}';
+	}
+
 	private void putString(ByteBuffer buffer, String str) {
 		if (TextUtils.isEmpty(str)) {
 			buffer.putInt(Integer.reverseBytes(0));

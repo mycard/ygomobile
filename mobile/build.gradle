@@ -7,8 +7,8 @@ android {
 
     defaultConfig {
         applicationId "cn.garymb.ygomobile.lite"
-        minSdkVersion 15
-        targetSdkVersion 21
+        minSdkVersion 14
+        targetSdkVersion 22
         versionCode 1
         versionName "1.0"
     }

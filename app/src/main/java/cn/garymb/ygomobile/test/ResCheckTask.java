@@ -1,4 +1,4 @@
-package cn.garymb.ygomobile.task;
+package cn.garymb.ygomobile.test;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -10,9 +10,7 @@ import android.util.Log;
 import java.io.File;
 import java.io.IOException;
 
-import cn.garymb.ygomobile.GameSettings;
-import cn.garymb.ygomobile.lite.R;
-import cn.garymb.ygomobile.utils.IOUtils;
+import cn.garymb.ygomobile.R;
 
 public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
     private static final String TAG = "ResCheckTask";

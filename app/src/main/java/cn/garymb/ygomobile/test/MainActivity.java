@@ -11,8 +11,6 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import cn.garymb.ygomobile.NativeInitOptions;
-import cn.garymb.ygomobile.common.ResCheckTask;
-
 
 public class MainActivity extends Activity {
 
@@ -29,15 +27,6 @@ public class MainActivity extends Activity {
         });
         button.setEnabled(false);
         layout.addView(button);
-        GameSettings.init(new GameSettings(this){
-            @Override
-            public NativeInitOptions getNativeInitOptions() {
-                NativeInitOptions options= super.getNativeInitOptions();
-//                options.mCacheDir = context.getCacheDir().getAbsolutePath();
-                Log.i("checker","options:"+options.toString());
-                return options;
-            }
-        });
         //资源复制
         checkResourceDownload((error) -> {
             if (error < 0) {
