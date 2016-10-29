@@ -21,6 +21,7 @@ public class GameSettings {
     public static final String CORE_SINGLE_PATH = "single";
     public static final String CORE_IMAGE_PATH = "pics";
     public static final String CORE_SCRIPTS_PATH = "scripts";
+    public static final String CORE_SCRIPT_PATH = "script";
     public static final String CORE_REPLAY_PATH = "replay";
     public static final String CORE_SCRIPTS_ZIP = "main.zip";
     public static final String CORE_SKIN_COVER = "bg.jpg";

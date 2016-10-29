@@ -78,7 +78,7 @@ public class ResCheckTask2 extends AsyncTask<Void, Integer, Integer> {
         //core config
         setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.core_config)));
         String newConfigVersion = null, currentConfigVersion = null;
-        File verPath = new File(mSettings.getResourcePath(), GameSettings.CORE_CONFIG_PATH);
+        File verPath = new File(mContext.getCacheDir(), GameSettings.CORE_CONFIG_PATH);
         if (!verPath.exists() || TextUtils.isEmpty(currentConfigVersion = getCurVersion(verPath))) {
             //
             setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.core_config)));
@@ -93,6 +93,7 @@ public class ResCheckTask2 extends AsyncTask<Void, Integer, Integer> {
                 return ERROR_CORE_CONFIG;
             }
         }
+        publishProgress(0, R.string.updating_dirs);
         //check core config
         try {
             newConfigVersion = mContext.getAssets().list(getDatapath(GameSettings.CORE_CONFIG_PATH))[0];
@@ -132,13 +133,13 @@ public class ResCheckTask2 extends AsyncTask<Void, Integer, Integer> {
             Log.d(TAG, "check cdb");
             setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.cards_cdb)));
             copyCdbFile(needsUpdate);
+//            DatabaseUtils.checkAndCopyFromInternalDatabase(mApp, mApp.getDataBasePath(), needsUpdate);
         } catch (Exception e) {
             Log.e(TAG, "check", e);
             return ERROR_COPY;
         }
         return ERROR_NONE;
     }
-
     void copyCdbFile(boolean needsUpdate) throws IOException {
         File dbFile = new File(mSettings.getDataBasePath(), GameSettings.DATABASE_NAME);
         boolean copyDb = true;
@@ -186,7 +187,7 @@ public class ResCheckTask2 extends AsyncTask<Void, Integer, Integer> {
     }
 
     private void checkDirs() {
-        String[] dirs = {GameSettings.CORE_SCRIPTS_PATH,
+        String[] dirs = {GameSettings.CORE_SCRIPT_PATH,
                 GameSettings.CORE_SINGLE_PATH,
                 GameSettings.CORE_DECK_PATH,
                 GameSettings.CORE_REPLAY_PATH,

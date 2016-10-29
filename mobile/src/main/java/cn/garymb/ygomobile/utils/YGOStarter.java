@@ -63,7 +63,7 @@ public class YGOStarter {
         if (activityShowInfo == null) {
             return;
         }
-        Log.i("checker", "show:" + activity);
+//        Log.i("checker", "show:" + activity);
         activityShowInfo.oldRequestedOrientation = activity.getRequestedOrientation();
         activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);//强制为横屏
         activityShowInfo.rootOld = activityShowInfo.mRoot.getBackground();
@@ -100,7 +100,7 @@ public class YGOStarter {
         if (activityShowInfo == null) {
             activityShowInfo = new ActivityShowInfo();
             Infos.put(activity, activityShowInfo);
-            Log.i("checker", "init:" + activity);
+//            Log.i("checker", "init:" + activity);
         }
         activityShowInfo.oldRequestedOrientation = activity.getRequestedOrientation();
         activityShowInfo.mRoot = activity.getWindow().getDecorView();
@@ -124,7 +124,7 @@ public class YGOStarter {
     }
     public static void onResumed(Activity activity) {
         ActivityShowInfo activityShowInfo = Infos.get(activity);
-        Log.i("checker", "resume:" + activity);
+//        Log.i("checker", "resume:" + activity);
         if (activityShowInfo == null) {
             return;
         }

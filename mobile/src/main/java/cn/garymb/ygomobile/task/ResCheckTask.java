@@ -103,8 +103,7 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
             return ERROR_CORE_CONFIG;
         }
         mSettings.setCoreConfigVersion(newConfigVersion);
-        needsUpdate = !currentConfigVersion.equals(newConfigVersion);
-
+        needsUpdate = needsUpdate || !currentConfigVersion.equals(newConfigVersion);
         //res
         try {
             String resPath = mSettings.getResourcePath();
@@ -112,6 +111,7 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
             checkDirs();
             Log.d(TAG, "check new deck");
             copyCoreConfig(verPath.getAbsolutePath());
+//            copyCoreConfig(new File(mSettings.getResourcePath(), GameSettings.CORE_CONFIG_PATH).getAbsolutePath());
             setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.new_deck)));
             IOUtils.copyFilesFromAssets(mContext, getDatapath(GameSettings.CORE_DECK_PATH),
                     new File(resPath, GameSettings.CORE_SINGLE_PATH).getAbsolutePath(), needsUpdate);
@@ -224,7 +224,6 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
     private int copyCoreConfig(String toPath) {
         try {
             String path = getDatapath(GameSettings.CORE_CONFIG_PATH);
-
             int count = IOUtils.copyFilesFromAssets(mContext, path, toPath, true);
             if (count < 3) {
                 return ERROR_CORE_CONFIG_LOST;
