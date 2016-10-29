@@ -3,7 +3,6 @@ package cn.garymb.ygomobile;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
 import android.os.Environment;
 
 import java.io.File;
@@ -18,14 +17,14 @@ public class GameSettings {
     public static final String CORE_SKIN_PATH = "textures";
     public static final String CORE_DECK_PATH = "deck";
     public static final String CORE_SINGLE_PATH = "single";
-    public static final String CORE_IMAGE_PATH="pics";
+    public static final String CORE_IMAGE_PATH = "pics";
     public static final String CORE_SCRIPTS_PATH = "scripts";
     public static final String CORE_REPLAY_PATH = "replay";
     public static final String CORE_SCRIPTS_ZIP = "main.zip";
     public static final String CORE_SKIN_COVER = "bg.jpg";
     public static final String CORE_SKIN_CARD_BACK = "cover.jpg";
-    public static final int[]  CORE_SKIN_COVER_SIZE = new int[]{1024, 640};
-    public static final int[]  CORE_SKIN_CARD_BACK_SIZE = new int[]{177, 254};
+    public static final int[] CORE_SKIN_COVER_SIZE = new int[]{1024, 640};
+    public static final int[] CORE_SKIN_CARD_BACK_SIZE = new int[]{177, 254};
     private static GameSettings SETTINGS;
     protected Context context;
     private String ConfigVersion = "3.5";
@@ -49,14 +48,6 @@ public class GameSettings {
         return settings;
     }
 
-    public float getXScale() {
-        return (float)getScreenHeight() / (float)CORE_SKIN_COVER_SIZE[0];
-    }
-
-    public float getYScale() {
-        return (float)getScreenWidth() / (float)CORE_SKIN_COVER_SIZE[1];
-    }
-
     public static GameSettings get() {
         return SETTINGS;
     }
@@ -65,9 +56,9 @@ public class GameSettings {
         return false;
     }
 
-    public int getGameScreenOritation() {
-        return ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
-    }
+//    public int getGameScreenOritation() {
+//        return ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
+//    }
 
     public int getCardQuality() {
         return 1;
@@ -113,11 +104,19 @@ public class GameSettings {
     }
 
     public float getScreenWidth() {
-        return Math.min(mScreenWidth, mScreenHeight);
+        return mScreenWidth;//Math.min(mScreenWidth, mScreenHeight);
+    }
+
+    public float getXScale() {
+        return (float) Math.max(mScreenWidth, mScreenHeight) / (float) CORE_SKIN_COVER_SIZE[0];
+    }
+
+    public float getYScale() {
+        return (float) Math.min(mScreenWidth, mScreenHeight) / (float) CORE_SKIN_COVER_SIZE[1];
     }
 
     public float getScreenHeight() {
-        return Math.max(mScreenWidth, mScreenHeight);
+        return mScreenHeight;//Math.max(mScreenWidth, mScreenHeight);
     }
 
     /**
@@ -126,9 +125,9 @@ public class GameSettings {
     public String getResourcePath() {
         String defPath;
         try {
-            defPath= new File(Environment.getExternalStorageDirectory(), GAME_DIR).getAbsolutePath();
+            defPath = new File(Environment.getExternalStorageDirectory(), GAME_DIR).getAbsolutePath();
         } catch (Exception e) {
-            defPath= new File(context.getFilesDir(), GAME_DIR).getAbsolutePath();
+            defPath = new File(context.getFilesDir(), GAME_DIR).getAbsolutePath();
         }
         return sharedPreferences.getString(PREF_GAME_PATH, defPath);
     }

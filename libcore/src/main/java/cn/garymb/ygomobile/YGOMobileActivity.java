@@ -10,7 +10,6 @@ import android.app.NativeActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.PowerManager;
@@ -45,12 +44,12 @@ public class YGOMobileActivity extends NativeActivity implements
         TextView.OnEditorActionListener,
         OverlayOvalView.OnDuelOptionsSelectListener {
     private static final String TAG = YGOMobileActivity.class.getSimpleName();
-    protected final int windowsFlags = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-            | View.SYSTEM_UI_FLAG_FULLSCREEN
-            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+//    protected final int windowsFlags = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+//            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+//            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+//            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+//            | View.SYSTEM_UI_FLAG_FULLSCREEN
+//            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
     private static final int CHAIN_CONTROL_PANEL_X_POSITION_LEFT_EDGE = 205;
     private static final int CHAIN_CONTROL_PANEL_Y_REVERT_POSITION = 100;
 
@@ -77,18 +76,18 @@ public class YGOMobileActivity extends NativeActivity implements
         if (sChainControlXPostion < 0) {
             initPostion();
         }
-        setRequestedOrientation(settings.getGameScreenOritation());
-        fullscreen();
-        final View decorView = getWindow().getDecorView();
-        decorView.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
-
-            @Override
-            public void onSystemUiVisibilityChange(int visibility) {
-                if ((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) {
-                    decorView.setSystemUiVisibility(windowsFlags);
-                }
-            }
-        });
+//        setRequestedOrientation(settings.getGameScreenOritation());
+//        fullscreen();
+//        final View decorView = getWindow().getDecorView();
+//        decorView.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
+//
+//            @Override
+//            public void onSystemUiVisibilityChange(int visibility) {
+//                if ((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) {
+//                    decorView.setSystemUiVisibility(windowsFlags);
+//                }
+//            }
+//        });
         initExtraView();
         mPM = (PowerManager) getSystemService(Context.POWER_SERVICE);
         mNetController = new NetworkController(getApplicationContext());
@@ -124,11 +123,11 @@ public class YGOMobileActivity extends NativeActivity implements
         }
     }
 
-    private void fullscreen() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && settings.isImmerSiveMode()) {
-            getWindow().getDecorView().setSystemUiVisibility(windowsFlags);
-        }
-    }
+//    private void fullscreen() {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && settings.isImmerSiveMode()) {
+//            getWindow().getDecorView().setSystemUiVisibility(windowsFlags);
+//        }
+//    }
 
     private void initExtraView() {
         mContentView = getWindow().getDecorView().findViewById(android.R.id.content);
@@ -147,7 +146,7 @@ public class YGOMobileActivity extends NativeActivity implements
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         if (hasFocus) {
-            fullscreen();
+//            fullscreen();
             mContentView.setHapticFeedbackEnabled(true);
         } else {
             mContentView.setHapticFeedbackEnabled(false);

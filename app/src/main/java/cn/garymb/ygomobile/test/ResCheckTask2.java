@@ -1,4 +1,4 @@
-package cn.garymb.ygomobile.task;
+package cn.garymb.ygomobile.test;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -12,11 +12,10 @@ import android.util.Log;
 import java.io.File;
 import java.io.IOException;
 
-import cn.garymb.ygomobile.GameSettings;
-import cn.garymb.ygomobile.lite.R;
-import cn.garymb.ygomobile.utils.IOUtils;
+import cn.garymb.ygomobile.R;
+import cn.garymb.ygomobile.StaticApplication;
 
-public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
+public class ResCheckTask2 extends AsyncTask<Void, Integer, Integer> {
     private static final String TAG = "ResCheckTask";
     public static final int ERROR_NONE = 0;
     public static final int ERROR_CORE_CONFIG = -1;
@@ -31,7 +30,7 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
     private Handler handler;
 
     @SuppressWarnings("deprecation")
-    public ResCheckTask(Context context, ResCheckListener listener) {
+    public ResCheckTask2(Context context, ResCheckListener listener) {
         mContext = context;
         mListener = listener;
         handler = new Handler(context.getMainLooper());
@@ -95,7 +94,6 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
             }
         }
         //check core config
-
         try {
             newConfigVersion = mContext.getAssets().list(getDatapath(GameSettings.CORE_CONFIG_PATH))[0];
         } catch (Exception e) {
@@ -103,8 +101,8 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
             return ERROR_CORE_CONFIG;
         }
         mSettings.setCoreConfigVersion(newConfigVersion);
-        needsUpdate = !currentConfigVersion.equals(newConfigVersion);
-
+        needsUpdate = needsUpdate || !currentConfigVersion.equals(newConfigVersion);
+        StaticApplication mApp = StaticApplication.get();
         //res
         try {
             String resPath = mSettings.getResourcePath();

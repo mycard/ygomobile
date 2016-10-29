@@ -1,4 +1,4 @@
-APP_ABI := armeabi armeabi-v7a
+APP_ABI := armeabi
 APP_PLATFORM := android-10
 APP_MODULES := YGOMobile
 NDK_TOOLCHAIN_VERSION=4.8

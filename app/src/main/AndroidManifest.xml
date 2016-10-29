@@ -51,6 +51,17 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".test.MainActivityTest"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:label="Test"
+            android:theme="@style/AppTheme" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
             android:name=".SettingsActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:exported="false"
@@ -77,7 +88,7 @@
                 android:value="YGOMobile" />
         </activity>
         <activity
-            android:name=".YGOMobileActivity2"
+            android:name=".test.YGOMobileActivity2"
             android:clearTaskOnLaunch="true"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:exported="true"

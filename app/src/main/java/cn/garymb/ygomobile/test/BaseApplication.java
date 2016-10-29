@@ -1,4 +1,4 @@
-package cn.garymb.ygomobile;
+package cn.garymb.ygomobile.test;
 
 import android.app.Application;
 import android.content.Context;

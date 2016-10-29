@@ -14,7 +14,6 @@ import cn.garymb.ygomobile.task.ResCheckTask;
 import cn.garymb.ygomobile.utils.VUiKit;
 import cn.garymb.ygomobile.utils.YGOStarter;
 
-
 public class MainActivity extends AppCompatActivity {
     private boolean enableStart;
 
