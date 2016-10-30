@@ -17,6 +17,7 @@ package cn.garymb.ygomobile.widget.overlay;
 
 import android.content.Context;
 import android.graphics.PixelFormat;
+import android.os.Build;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -65,7 +66,8 @@ public abstract class OverlayView extends RelativeLayout {
 		layoutParams = new WindowManager.LayoutParams(
 				WindowManager.LayoutParams.WRAP_CONTENT,
 				WindowManager.LayoutParams.WRAP_CONTENT,
-				WindowManager.LayoutParams.TYPE_PHONE,
+                Build.VERSION.SDK_INT>=19?
+                        WindowManager.LayoutParams.TYPE_TOAST:WindowManager.LayoutParams.TYPE_PHONE,
 				WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
 						| WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH
 						| WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
