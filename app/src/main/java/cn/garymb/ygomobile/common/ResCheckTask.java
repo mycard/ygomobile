@@ -1,9 +1,20 @@
 package cn.garymb.ygomobile.common;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
+import android.os.Build;
+import android.os.Handler;
+import android.preference.PreferenceManager;
+import android.util.Log;
+import android.view.View;
+import android.widget.Toast;
+
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import cn.garymb.ygomobile.R;
@@ -13,7 +24,6 @@ import cn.garymb.ygomobile.core.BaseTask.TaskStatusCallback;
 import cn.garymb.ygomobile.core.SimpleDownloadTask;
 import cn.garymb.ygomobile.data.wrapper.IBaseJob;
 import cn.garymb.ygomobile.data.wrapper.SimpleDownloadJob;
-
 import cn.garymb.ygomobile.model.data.ResourcesConstants;
 import cn.garymb.ygomobile.setting.Settings;
 import cn.garymb.ygomobile.utils.DatabaseUtils;
@@ -21,21 +31,6 @@ import cn.garymb.ygomobile.utils.FileOpsUtils;
 import cn.garymb.ygomobile.widget.ProgressUpdateDialog;
 import cn.garymb.ygomobile.widget.ProgressUpdateDialogController;
 import de.greenrobot.event.EventBus;
-
-import android.app.Activity;
-import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.os.AsyncTask;
-import android.os.Build;
-import android.os.Handler;
-import android.preference.PreferenceManager;
-import android.support.v4.app.FragmentManager;
-import android.util.Log;
-import android.view.View;
-import android.widget.Toast;
-
-import static android.R.id.list;
 
 public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
 
@@ -151,8 +146,8 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
     }
 
     private void checkAndCopyScripts(boolean isUpdateNeeded) {
-        File scriptDir = new File(mApp.getCompatExternalFilesDir(), "/scripts");
-        File scriptFile = new File(scriptDir, "main.zip");
+        File scriptDir = new File(mApp.getCompatExternalFilesDir());
+        File scriptFile = new File(scriptDir, Constants.CORE_SCRIPTS_ZIP);
         if (!scriptDir.exists()) {
             scriptDir.mkdirs();
         }
@@ -160,7 +155,7 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
             int assetcopycount = 0;
             while (assetcopycount++ < CORE_CONFIG_COPY_COUNT) {
                 try {
-                    FileOpsUtils.assetsCopy(mApp, "main.zip", scriptFile.toString(), false);
+                    FileOpsUtils.assetsCopy(mApp, Constants.CORE_SCRIPTS_ZIP, scriptFile.toString(), false);
                 } catch (IOException e) {
                     Log.w(TAG, "copy scripts failed, retry count = " + assetcopycount);
                     continue;

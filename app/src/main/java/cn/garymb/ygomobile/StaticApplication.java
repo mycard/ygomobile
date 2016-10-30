@@ -419,7 +419,7 @@ public class StaticApplication extends Application {
 //        } else {
 //            return "/mnt/sdcard/android/data/cn.garymb.ygomobile/files/";
 //        }
-        return new File(getExternalCacheDir().getParentFile(), "files").getAbsolutePath();
+        return getResourcePath();//new File(getExternalCacheDir().getParentFile(), "files").getAbsolutePath();
     }
 
     public float getSmallerSize() {

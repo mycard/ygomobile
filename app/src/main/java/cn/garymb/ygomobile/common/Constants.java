@@ -14,7 +14,7 @@ public interface Constants {
 	
 	/*change this will affect C++ code, be careful!*/
 	int COMPAT_GUI_MODE_CHECKBOXES_PANEL = 1;
-	
+   String CORE_SCRIPTS_ZIP = "scripts.zip";
 	
 	String CONFIG_FILE = "system.conf";
 	String CARD_DB_FILE = "cards.cdb";

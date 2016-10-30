@@ -1,9 +1,32 @@
 package cn.garymb.ygomobile.fragment.setting;
 
-import java.io.File;
-import java.util.ArrayList;
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.Fragment;
+import android.content.ActivityNotFoundException;
+import android.content.ContentResolver;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.res.Resources;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Build;
+import android.os.Bundle;
+import android.preference.ListPreference;
+import android.preference.Preference;
+import android.preference.Preference.OnPreferenceChangeListener;
+import android.preference.Preference.OnPreferenceClickListener;
+import android.provider.MediaStore;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Toast;
 
 import com.soundcloud.android.crop.Crop;
+
+import java.io.File;
+import java.util.ArrayList;
 
 import cn.garymb.ygomobile.R;
 import cn.garymb.ygomobile.StaticApplication;
@@ -25,307 +48,305 @@ import cn.garymb.ygomobile.widget.SimpleDialog;
 import cn.garymb.ygomobile.widget.filebrowser.FileBrowser;
 import cn.garymb.ygomobile.widget.preference.MyBooleanValuePreference;
 
-import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.content.ContentResolver;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.res.Resources;
-import android.database.Cursor;
-import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.Build;
-import android.os.Bundle;
-import android.preference.ListPreference;
-import android.preference.Preference;
-import android.preference.Preference.OnPreferenceChangeListener;
-import android.preference.Preference.OnPreferenceClickListener;
-import android.provider.MediaStore;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Toast;
+import static com.soundcloud.android.crop.Crop.REQUEST_CROP;
+import static com.soundcloud.android.crop.Crop.REQUEST_PICK;
 
 public class GameSettingsFragment extends EventDialogPreferenceFragment
-		implements OnPreferenceChangeListener, OnPreferenceClickListener,
-		OnClickListener, android.content.DialogInterface.OnClickListener,
-		ImageCopyListener, CardDBCopyListener, CardDBResetListener {
+        implements OnPreferenceChangeListener, OnPreferenceClickListener,
+        OnClickListener, android.content.DialogInterface.OnClickListener,
+        ImageCopyListener, CardDBCopyListener, CardDBResetListener {
 
-	private static final int DIALOG_TYPE_IMAGE_PREVIEW = 0;
-	private static final int DIALOG_TYPE_CARD_DB_DIY = 1;
-	private static final int DIALOG_TYPE_CARD_DB_RESET = 2;
+    private static final int DIALOG_TYPE_IMAGE_PREVIEW = 0;
+    private static final int DIALOG_TYPE_CARD_DB_DIY = 1;
+    private static final int DIALOG_TYPE_CARD_DB_RESET = 2;
 
-	private ListPreference mOGLESPreference;
+    private ListPreference mOGLESPreference;
 
-	private ListPreference mCardQualityPreference;
+    private ListPreference mCardQualityPreference;
 
-	private ListPreference mFontNamePreference;
+    private ListPreference mFontNamePreference;
 
-	private Preference mCoverDiyPreference;
+    private Preference mCoverDiyPreference;
 
-	private MyBooleanValuePreference mCardDBDiyPreference;
+    private MyBooleanValuePreference mCardDBDiyPreference;
 
-	private Preference mCardBackDiyPreference;
+    private Preference mCardBackDiyPreference;
 
-	private Preference mCardDBResetPreference;
-	
-	private Bundle mImageBundle;
+    private Preference mCardDBResetPreference;
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		addPreferencesFromResource(R.xml.preference_game);
-		if (savedInstanceState != null) {
-			mImageBundle = savedInstanceState.getParcelable("image_param");
-		}
-		mOGLESPreference = (ListPreference) findPreference(Settings.KEY_PREF_GAME_OGLES_CONFIG);
-		mOGLESPreference.setSummary(mOGLESPreference.getEntry());
-		mOGLESPreference.setOnPreferenceChangeListener(this);
+    private Bundle mImageBundle;
 
-		mCardQualityPreference = (ListPreference) findPreference(Settings.KEY_PREF_GAME_IMAGE_QUALITY);
-		mCardQualityPreference.setSummary(mCardQualityPreference.getEntry());
-		mCardQualityPreference.setOnPreferenceChangeListener(this);
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        addPreferencesFromResource(R.xml.preference_game);
+        if (savedInstanceState != null) {
+            mImageBundle = savedInstanceState.getParcelable("image_param");
+        }
+        mOGLESPreference = (ListPreference) findPreference(Settings.KEY_PREF_GAME_OGLES_CONFIG);
+        mOGLESPreference.setSummary(mOGLESPreference.getEntry());
+        mOGLESPreference.setOnPreferenceChangeListener(this);
 
-		mFontNamePreference = (ListPreference) findPreference(Settings.KEY_PREF_GAME_FONT_NAME);
+        mCardQualityPreference = (ListPreference) findPreference(Settings.KEY_PREF_GAME_IMAGE_QUALITY);
+        mCardQualityPreference.setSummary(mCardQualityPreference.getEntry());
+        mCardQualityPreference.setOnPreferenceChangeListener(this);
 
-		ArrayList<String> fontlist = StaticApplication.get()
-				.getFontList();
-		String[] entryList = new String[fontlist.size()];
-		int i = 0;
-		for (String path : fontlist) {
-			entryList[i++] = path.substring(
-					path.lastIndexOf(File.separator) + 1, path.length());
-		}
-		mFontNamePreference.setEntries(entryList);
-		mFontNamePreference.setEntryValues(fontlist.toArray(new String[fontlist
-				.size()]));
-		mFontNamePreference.setOnPreferenceChangeListener(this);
+        mFontNamePreference = (ListPreference) findPreference(Settings.KEY_PREF_GAME_FONT_NAME);
 
-		String currentPath = StaticApplication.get().getFontPath();
-		mFontNamePreference.setValue(currentPath);
-		mFontNamePreference.setSummary(mFontNamePreference.getEntry());
+        ArrayList<String> fontlist = StaticApplication.get()
+                .getFontList();
+        String[] entryList = new String[fontlist.size()];
+        int i = 0;
+        for (String path : fontlist) {
+            entryList[i++] = path.substring(
+                    path.lastIndexOf(File.separator) + 1, path.length());
+        }
+        mFontNamePreference.setEntries(entryList);
+        mFontNamePreference.setEntryValues(fontlist.toArray(new String[fontlist
+                .size()]));
+        mFontNamePreference.setOnPreferenceChangeListener(this);
 
-		mCoverDiyPreference = findPreference(Settings.KEY_PREF_GAME_DIY_COVER);
-		mCoverDiyPreference.setOnPreferenceClickListener(this);
+        String currentPath = StaticApplication.get().getFontPath();
+        mFontNamePreference.setValue(currentPath);
+        mFontNamePreference.setSummary(mFontNamePreference.getEntry());
 
-		mCardBackDiyPreference = findPreference(Settings.KEY_PREF_GAME_DIY_CARD_BACK);
-		mCardBackDiyPreference.setOnPreferenceClickListener(this);
+        mCoverDiyPreference = findPreference(Settings.KEY_PREF_GAME_DIY_COVER);
+        mCoverDiyPreference.setOnPreferenceClickListener(this);
 
-		mCardDBDiyPreference = (MyBooleanValuePreference) findPreference(Settings.KEY_PREF_GAME_DIY_CARD_DB);
-		mCardDBDiyPreference.setOnPreferenceClickListener(this);
+        mCardBackDiyPreference = findPreference(Settings.KEY_PREF_GAME_DIY_CARD_BACK);
+        mCardBackDiyPreference.setOnPreferenceClickListener(this);
 
-		mCardDBResetPreference = findPreference(Settings.KEY_PREF_GAME_RESET_CARD_DB);
-		mCardDBResetPreference.setOnPreferenceClickListener(this);
-	}
+        mCardDBDiyPreference = (MyBooleanValuePreference) findPreference(Settings.KEY_PREF_GAME_DIY_CARD_DB);
+        mCardDBDiyPreference.setOnPreferenceClickListener(this);
 
-	@Override
-	public boolean onPreferenceChange(Preference preference, Object newValue) {
-		if (preference.getKey().equals(Settings.KEY_PREF_GAME_OGLES_CONFIG)) {
-			mOGLESPreference.setValue((String) newValue);
-			mOGLESPreference.setSummary(mOGLESPreference.getEntry());
-		} else if (preference.getKey().equals(
-				Settings.KEY_PREF_GAME_IMAGE_QUALITY)) {
-			mCardQualityPreference.setValue((String) newValue);
-			mCardQualityPreference
-					.setSummary(mCardQualityPreference.getEntry());
-		} else if (preference.getKey().equals(Settings.KEY_PREF_GAME_FONT_NAME)) {
-			mFontNamePreference.setValue((String) newValue);
-			mFontNamePreference.setSummary(mFontNamePreference.getEntry());
-		}
-		return false;
-	}
+        mCardDBResetPreference = findPreference(Settings.KEY_PREF_GAME_RESET_CARD_DB);
+        mCardDBResetPreference.setOnPreferenceClickListener(this);
+    }
 
-	@Override
-	public void onSaveInstanceState(Bundle outState) {
-		super.onSaveInstanceState(outState);
-		outState.putBundle("image_param", mImageBundle);
-	}
+    @Override
+    public boolean onPreferenceChange(Preference preference, Object newValue) {
+        if (preference.getKey().equals(Settings.KEY_PREF_GAME_OGLES_CONFIG)) {
+            mOGLESPreference.setValue((String) newValue);
+            mOGLESPreference.setSummary(mOGLESPreference.getEntry());
+        } else if (preference.getKey().equals(
+                Settings.KEY_PREF_GAME_IMAGE_QUALITY)) {
+            mCardQualityPreference.setValue((String) newValue);
+            mCardQualityPreference
+                    .setSummary(mCardQualityPreference.getEntry());
+        } else if (preference.getKey().equals(Settings.KEY_PREF_GAME_FONT_NAME)) {
+            mFontNamePreference.setValue((String) newValue);
+            mFontNamePreference.setSummary(mFontNamePreference.getEntry());
+        }
+        return false;
+    }
 
-	@Override
-	public boolean onPreferenceClick(Preference preference) {
-		if (preference.getKey().equals(Settings.KEY_PREF_GAME_DIY_COVER)) {
-			Bundle bundle = new Bundle();
-			bundle.putString("url", StaticApplication.get()
-					.getCoreSkinPath()
-					+ File.separator
-					+ Constants.CORE_SKIN_COVER);
-			bundle.putInt("title_res", R.string.settings_game_cover);
-			bundle.putIntArray("orig_size", Constants.CORE_SKIN_COVER_SIZE);
-			bundle.putBoolean("force_resize", false);
-			mImageBundle = bundle;
-			showDialog(DIALOG_TYPE_IMAGE_PREVIEW, bundle);
-		} else if (preference.getKey().equals(
-				Settings.KEY_PREF_GAME_DIY_CARD_DB)) {
-			Bundle bundle = new Bundle();
-			bundle.putString("root", StaticApplication.get().getResourcePath());
-			bundle.putInt("mode", FileBrowser.BROWSE_MODE_FILES);
-			showDialog(DIALOG_TYPE_CARD_DB_DIY, bundle);
-		} else if (preference.getKey().equals(
-				Settings.KEY_PREF_GAME_DIY_CARD_BACK)) {
-			Bundle bundle = new Bundle();
-			bundle.putString("url", StaticApplication.get()
-					.getCoreSkinPath()
-					+ File.separator
-					+ Constants.CORE_SKIN_CARD_BACK);
-			bundle.putBoolean("force_resize", true);
-			bundle.putInt("title_res", R.string.settings_game_card_back);
-			bundle.putIntArray("orig_size", Constants.CORE_SKIN_CARD_BACK_SIZE);
-			mImageBundle = bundle;
-			showDialog(DIALOG_TYPE_IMAGE_PREVIEW, bundle);
-		} else if (preference.getKey().equals(
-				Settings.KEY_PREF_GAME_RESET_CARD_DB)) {
-			Bundle bundle = new Bundle();
-			bundle.putString(
-					"message",
-					getResources().getString(
-							R.string.settings_game_reset_card_db_confirm));
-			bundle.putString(
-					"title",
-					getResources().getString(
-							R.string.settings_game_reset_card_db));
-			showDialog(DIALOG_TYPE_CARD_DB_RESET, bundle);
-		}
-		return false;
-	}
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBundle("image_param", mImageBundle);
+    }
 
-	@Override
-	public void onClick(DialogInterface dialog, int which) {
-		if (which == DialogInterface.BUTTON_POSITIVE) {
-			if (dialog instanceof FileChooseDialog) {
-				String newUrl = ((FileChooseController) getDialog()
-						.getController()).getUrl();
-				CardDBCopyTask task = new CardDBCopyTask(getActivity());
-				task.setCardDBCopyListener(this);
-				if (Build.VERSION.SDK_INT >= 11) {
-					task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,
-							newUrl);
-				} else {
-					task.execute(newUrl);
-				}
-			} else if (dialog instanceof SimpleDialog) {
-				CardDBResetTask task = new CardDBResetTask(getActivity());
-				task.setCardDBResetListener(this);
-				if (Build.VERSION.SDK_INT >= 11) {
-					task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-				} else {
-					task.execute();
-				}
-			}
-		}
-	}
+    @Override
+    public boolean onPreferenceClick(Preference preference) {
+        if (preference.getKey().equals(Settings.KEY_PREF_GAME_DIY_COVER)) {
+            Bundle bundle = new Bundle();
+            bundle.putString("url", StaticApplication.get()
+                    .getCoreSkinPath()
+                    + File.separator
+                    + Constants.CORE_SKIN_COVER);
+            bundle.putInt("title_res", R.string.settings_game_cover);
+            bundle.putIntArray("orig_size", Constants.CORE_SKIN_COVER_SIZE);
+            bundle.putBoolean("force_resize", false);
+            mImageBundle = bundle;
+            showDialog(DIALOG_TYPE_IMAGE_PREVIEW, bundle);
+        } else if (preference.getKey().equals(
+                Settings.KEY_PREF_GAME_DIY_CARD_DB)) {
+            Bundle bundle = new Bundle();
+            bundle.putString("root", StaticApplication.get().getResourcePath());
+            bundle.putInt("mode", FileBrowser.BROWSE_MODE_FILES);
+            showDialog(DIALOG_TYPE_CARD_DB_DIY, bundle);
+        } else if (preference.getKey().equals(
+                Settings.KEY_PREF_GAME_DIY_CARD_BACK)) {
+            Bundle bundle = new Bundle();
+            bundle.putString("url", StaticApplication.get()
+                    .getCoreSkinPath()
+                    + File.separator
+                    + Constants.CORE_SKIN_CARD_BACK);
+            bundle.putBoolean("force_resize", true);
+            bundle.putInt("title_res", R.string.settings_game_card_back);
+            bundle.putIntArray("orig_size", Constants.CORE_SKIN_CARD_BACK_SIZE);
+            mImageBundle = bundle;
+            showDialog(DIALOG_TYPE_IMAGE_PREVIEW, bundle);
+        } else if (preference.getKey().equals(
+                Settings.KEY_PREF_GAME_RESET_CARD_DB)) {
+            Bundle bundle = new Bundle();
+            bundle.putString(
+                    "message",
+                    getResources().getString(
+                            R.string.settings_game_reset_card_db_confirm));
+            bundle.putString(
+                    "title",
+                    getResources().getString(
+                            R.string.settings_game_reset_card_db));
+            showDialog(DIALOG_TYPE_CARD_DB_RESET, bundle);
+        }
+        return false;
+    }
 
-	@Override
-	public void onClick(View v) {
-		dismissDialog();
-		Crop.pickImage(getActivity());
-	}
+    @Override
+    public void onClick(DialogInterface dialog, int which) {
+        if (which == DialogInterface.BUTTON_POSITIVE) {
+            if (dialog instanceof FileChooseDialog) {
+                String newUrl = ((FileChooseController) getDialog()
+                        .getController()).getUrl();
+                CardDBCopyTask task = new CardDBCopyTask(getActivity());
+                task.setCardDBCopyListener(this);
+                if (Build.VERSION.SDK_INT >= 11) {
+                    task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,
+                            newUrl);
+                } else {
+                    task.execute(newUrl);
+                }
+            } else if (dialog instanceof SimpleDialog) {
+                CardDBResetTask task = new CardDBResetTask(getActivity());
+                task.setCardDBResetListener(this);
+                if (Build.VERSION.SDK_INT >= 11) {
+                    task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                } else {
+                    task.execute();
+                }
+            }
+        }
+    }
 
-	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent result) {
-		if (requestCode == Crop.REQUEST_PICK
-				&& resultCode == Activity.RESULT_OK) {
-			beginCrop(result.getData(), mImageBundle);
-		} else if (requestCode == Crop.REQUEST_CROP) {
-			handleCrop(resultCode, result);
-		}
-	}
+    static void pickImage(Fragment fragment) {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT).setType("image/*");
+        try {
+            fragment.startActivityForResult(intent, REQUEST_PICK);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(fragment.getActivity(), com.soundcloud.android.crop.R.string.crop__pick_error, Toast.LENGTH_SHORT).show();
+        }
+    }
 
-	private void handleCrop(int resultCode, Intent result) {
-		if (resultCode == Activity.RESULT_OK) {
-			setNewImage(Crop.getOutput(result), result.getExtras());
-		} else if (resultCode == Crop.RESULT_ERROR) {
-			Toast.makeText(getActivity(), Crop.getError(result).getMessage(),
-					Toast.LENGTH_SHORT).show();
-		}
-	}
+    @Override
+    public void onClick(View v) {
+        dismissDialog();
+        pickImage(this);
+    }
 
-	private void beginCrop(Uri source, Bundle param) {
-		Uri outputUri = Uri.fromFile(new File(getActivity().getCacheDir(),
-				"cropped"));
-		int[] sizeArray = param.getIntArray("orig_size");
-		Crop.of(source,outputUri)
-				.withAspect(sizeArray[0], sizeArray[1])
-				.start(getActivity(), this);
-	}
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent result) {
+        if (requestCode == REQUEST_PICK
+                && resultCode == Activity.RESULT_OK) {
+            beginCrop(result.getData(), mImageBundle);
+        } else if (requestCode == REQUEST_CROP) {
+            handleCrop(resultCode, result);
+        }
+    }
 
-	private void setNewImage(Uri uri, Bundle param) {
-		String path = uri.toString();
-		if (path.startsWith(ImageItemInfoHelper.FILE_PREFIX)) {
-			path = FileOpsUtils.getFilePathFromUrl(path);
-		} else if (path.startsWith(ImageItemInfoHelper.MEIDA_PREFIX)) {
-			ContentResolver cr = StaticApplication.get()
-					.getContentResolver();
-			String[] projection = { MediaStore.MediaColumns.DATA };
-			Cursor cursor = cr.query(uri, projection, null, null, null);
-			if (cursor != null && cursor.moveToFirst()) {
-				path = cursor.getString(0);
-			} else {
-				if (cursor != null) {
-					cursor.close();
-				}
-			}
-		}
-		ImageResizeCopyTask task = new ImageResizeCopyTask(getActivity());
-		task.setImageCopyListener(this);
-		param.putString("src_url", path);
-		if (Build.VERSION.SDK_INT >= 11) {
-			task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, param);
-		} else {
-			task.execute(param);
-		}
-	}
+    private void handleCrop(int resultCode, Intent result) {
+        if (resultCode == Activity.RESULT_OK) {
+            setNewImage(Crop.getOutput(result), result.getExtras());
+        } else if (resultCode == Crop.RESULT_ERROR) {
+            Toast.makeText(getActivity(), Crop.getError(result).getMessage(),
+                    Toast.LENGTH_SHORT).show();
+        }
+    }
 
-	@SuppressLint("InflateParams") 
-	@Override
-	public BaseDialog onCreateDialog(int type, Bundle param) {
-		BaseDialog dlg = null;
-		if (type == DIALOG_TYPE_IMAGE_PREVIEW) {
-			View view = LayoutInflater.from(getActivity()).inflate(
-					R.layout.image_preview_content, null);
-			dlg = new ImagePreviewDialog(getActivity(), view, this, this, param);
-		} else if (type == DIALOG_TYPE_CARD_DB_DIY) {
-			View view = LayoutInflater.from(getActivity()).inflate(
-					R.layout.file_browser_layout, null);
-			dlg = new FileChooseDialog(getActivity(), view, this, param);
-		} else if (type == DIALOG_TYPE_CARD_DB_RESET) {
-			dlg = new SimpleDialog(getActivity(), this, null, param);
-		}
-		return dlg;
-	}
+    private Bundle mExtras;
 
-	@Override
-	public void onImageCopyFinished(Bundle dstPath) {
-		showDialog(DIALOG_TYPE_IMAGE_PREVIEW, dstPath);
-	}
+    private void beginCrop(Uri source, Bundle param) {
+        Uri outputUri = Uri.fromFile(new File(getActivity().getCacheDir(),
+                "cropped"));
+        int[] sizeArray = param.getIntArray("orig_size");
+        Crop crop = Crop.of(source, outputUri)
+                .withAspect(sizeArray[0], sizeArray[1]);
+        mExtras = param;
+        Intent intent = crop.getIntent(getActivity()).putExtras(param);
+        this.startActivityForResult(intent, REQUEST_CROP);
+    }
 
-	@Override
-	public void onCardDBCopyFinished(int result) {
-		final Resources res = getResources();
-		String errorMessage;
-		if (result == CardDBCopyTask.COPY_DB_TASK_FAILED) {
-			errorMessage = res.getString(R.string.loading_card_failed);
-			mCardDBDiyPreference.setChecked(false);
-		} else if (result == CardDBCopyTask.COPY_DB_TASK_FILE_NOT_EXIST) {
-			errorMessage = res.getString(R.string.loading_card_file_not_found);
-			mCardDBDiyPreference.setChecked(false);
-		} else {
-			errorMessage = res.getString(R.string.loading_card_success);
-			mCardDBDiyPreference.setChecked(true);
-		}
-		Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT).show();
-		mImageBundle = null;
-	}
+    private void setNewImage(Uri uri, Bundle param) {
+        String path = uri.toString();
+        if (path.startsWith(ImageItemInfoHelper.FILE_PREFIX)) {
+            path = FileOpsUtils.getFilePathFromUrl(path);
+        } else if (path.startsWith(ImageItemInfoHelper.MEIDA_PREFIX)) {
+            ContentResolver cr = StaticApplication.get()
+                    .getContentResolver();
+            String[] projection = {MediaStore.MediaColumns.DATA};
+            Cursor cursor = cr.query(uri, projection, null, null, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                path = cursor.getString(0);
+            } else {
+                if (cursor != null) {
+                    cursor.close();
+                }
+            }
+        }
+        ImageResizeCopyTask task = new ImageResizeCopyTask(getActivity());
+        task.setImageCopyListener(this);
+        param.putString("src_url", path);
+        if (mExtras != null) {
+            param.putAll(mExtras);
+        }
+        if (Build.VERSION.SDK_INT >= 11) {
+            task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, param);
+        } else {
+            task.execute(param);
+        }
+    }
 
-	@Override
-	public void onCardDBResetFinished(Boolean result) {
-		Toast.makeText(
-				getActivity(),
-				result ? getResources().getString(R.string.reset_card_success)
-						: getResources().getString(R.string.reset_card_failed),
-				Toast.LENGTH_SHORT).show();
-		if (result) {
-			mCardDBDiyPreference.setChecked(false);
-		}
-		mImageBundle = null;
-	}
+    @SuppressLint("InflateParams")
+    @Override
+    public BaseDialog onCreateDialog(int type, Bundle param) {
+        BaseDialog dlg = null;
+        if (type == DIALOG_TYPE_IMAGE_PREVIEW) {
+            View view = LayoutInflater.from(getActivity()).inflate(
+                    R.layout.image_preview_content, null);
+            dlg = new ImagePreviewDialog(getActivity(), view, this, this, param);
+        } else if (type == DIALOG_TYPE_CARD_DB_DIY) {
+            View view = LayoutInflater.from(getActivity()).inflate(
+                    R.layout.file_browser_layout, null);
+            dlg = new FileChooseDialog(getActivity(), view, this, param);
+        } else if (type == DIALOG_TYPE_CARD_DB_RESET) {
+            dlg = new SimpleDialog(getActivity(), this, null, param);
+        }
+        return dlg;
+    }
+
+    @Override
+    public void onImageCopyFinished(Bundle dstPath) {
+        showDialog(DIALOG_TYPE_IMAGE_PREVIEW, dstPath);
+    }
+
+    @Override
+    public void onCardDBCopyFinished(int result) {
+        final Resources res = getResources();
+        String errorMessage;
+        if (result == CardDBCopyTask.COPY_DB_TASK_FAILED) {
+            errorMessage = res.getString(R.string.loading_card_failed);
+            mCardDBDiyPreference.setChecked(false);
+        } else if (result == CardDBCopyTask.COPY_DB_TASK_FILE_NOT_EXIST) {
+            errorMessage = res.getString(R.string.loading_card_file_not_found);
+            mCardDBDiyPreference.setChecked(false);
+        } else {
+            errorMessage = res.getString(R.string.loading_card_success);
+            mCardDBDiyPreference.setChecked(true);
+        }
+        Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT).show();
+        mImageBundle = null;
+    }
+
+    @Override
+    public void onCardDBResetFinished(Boolean result) {
+        Toast.makeText(
+                getActivity(),
+                result ? getResources().getString(R.string.reset_card_success)
+                        : getResources().getString(R.string.reset_card_failed),
+                Toast.LENGTH_SHORT).show();
+        if (result) {
+            mCardDBDiyPreference.setChecked(false);
+        }
+        mImageBundle = null;
+    }
 }
