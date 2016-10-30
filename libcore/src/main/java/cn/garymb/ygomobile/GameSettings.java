@@ -18,9 +18,9 @@ public class GameSettings {
     public static final String CORE_DECK_PATH = "deck";
     public static final String CORE_SINGLE_PATH = "single";
     public static final String CORE_IMAGE_PATH = "pics";
-    public static final String CORE_SCRIPTS_PATH = "scripts";
+    public static final String CORE_SCRIPT_PATH="script";
     public static final String CORE_REPLAY_PATH = "replay";
-    public static final String CORE_SCRIPTS_ZIP = "main.zip";
+    public static final String CORE_SCRIPTS_ZIP = "scripts.zip";
     public static final String CORE_SKIN_COVER = "bg.jpg";
     public static final String CORE_SKIN_CARD_BACK = "cover.jpg";
     public static final int[] CORE_SKIN_COVER_SIZE = new int[]{1024, 640};

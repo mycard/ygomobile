@@ -130,7 +130,7 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
             Log.d(TAG, "check scripts");
             setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.scripts)));
             IOUtils.copyFilesFromAssets(mContext, getDatapath(GameSettings.CORE_SCRIPTS_ZIP),
-                    new File(resPath, GameSettings.CORE_SCRIPTS_PATH).getAbsolutePath(), needsUpdate);
+                    resPath, needsUpdate);
             Log.d(TAG, "check cdb");
             setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.cards_cdb)));
             copyCdbFile(needsUpdate);
@@ -188,7 +188,7 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
     }
 
     private void checkDirs() {
-        String[] dirs = {GameSettings.CORE_SCRIPTS_PATH,
+        String[] dirs = {GameSettings.CORE_SCRIPT_PATH,
                 GameSettings.CORE_SINGLE_PATH,
                 GameSettings.CORE_DECK_PATH,
                 GameSettings.CORE_REPLAY_PATH,
