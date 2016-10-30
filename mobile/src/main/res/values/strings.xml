@@ -13,6 +13,7 @@
     <string name="new_deck">New Decks</string>
     <string name="cards_cdb">cards.cdb</string>
     <string name="scripts">scripts</string>
+    <string name="images">images</string>
     <string name="single_lua">single files</string>
     <string name="font_files">font files</string>
     <string name="game_skins">skin files</string>

@@ -107,6 +107,15 @@ public class IOUtils {
         }
     }
 
+    public static boolean hasAssets(Context context,String name){
+        try {
+            context.getAssets().open(name);
+        } catch (IOException e) {
+            return false;
+        }
+        return true;
+    }
+
     public static void copyToFile(InputStream in, String file) {
         FileOutputStream outputStream = null;
         try {

@@ -128,12 +128,19 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
             IOUtils.copyFilesFromAssets(mContext, getDatapath(GameSettings.CORE_SINGLE_PATH),
                     new File(resPath, GameSettings.CORE_SINGLE_PATH).getAbsolutePath(), needsUpdate);
             Log.d(TAG, "check scripts");
-            setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.scripts)));
-            IOUtils.copyFilesFromAssets(mContext, getDatapath(GameSettings.CORE_SCRIPTS_ZIP),
-                    resPath, needsUpdate);
+            if(IOUtils.hasAssets(mContext, getDatapath(GameSettings.CORE_SCRIPTS_ZIP))) {
+                setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.scripts)));
+                IOUtils.copyFilesFromAssets(mContext, getDatapath(GameSettings.CORE_SCRIPTS_ZIP),
+                        resPath, needsUpdate);
+            }
             Log.d(TAG, "check cdb");
             setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.cards_cdb)));
             copyCdbFile(needsUpdate);
+            if(IOUtils.hasAssets(mContext, getDatapath(GameSettings.CORE_PICS_ZIP))){
+                setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.images)));
+                IOUtils.copyFilesFromAssets(mContext, getDatapath(GameSettings.CORE_PICS_ZIP),
+                        resPath, needsUpdate);
+            }
         } catch (Exception e) {
             Log.e(TAG, "check", e);
             return ERROR_COPY;
