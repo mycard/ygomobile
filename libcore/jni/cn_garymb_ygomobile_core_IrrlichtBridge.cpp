@@ -52,7 +52,58 @@ const static char secret_key[] = "O2zMfI3gqJYYJSAuCeUkH9J_vm5S_A4Yn8fhrjU3";
 		}
 	}
 }
-
+JNIEXPORT jbarray JNICALL Java_cn_garymb_ygomobile_core_IrrlichtBridge_nativeImage(
+		JNIEnv* env, jclass clazz, jstring filename) {
+	if (handle) {
+		const char* path = env->GetStringUTFChars(filename, NULL);
+		IrrlichtDevice* device = (IrrlichtDevice*) handle;
+		irr::io::IReadFile* file = device->getFileSystem()->createAndOpenFile(path);
+		if (file && file->getSize() > 0) {
+			BPGDecoderContext *img;
+			BPGImageInfo img_info_s, *img_info = &img_info_s;
+			int w, h, i, y,size, bufferIncrement, rowspan;
+			//加载文件
+			img = bpg_decoder_open();
+			u8* input = new u8[file->getSize()];
+			file->read(input, file->getSize());
+			if (bpg_decoder_decode(img, input, file->getSize()) < 0) {
+				return 0;
+			}
+			//解析信息
+			bpg_decoder_get_info(img, img_info);
+			w = img_info->width;
+			h = img_info->height;
+			size = w * y;
+			//*rgb_line的长度 rgb=3,argb=4
+			if (img_info->format == BPG_FORMAT_GRAY) 
+				rowspan = 1 * w;
+			else
+				rowspan = 3 * w;
+			u8* rgb_line = new u8[rowspan];
+			//输出到output
+			unsigned int outBufLen = rowspan * h;
+			u8* output = new u8[outBufLen];
+			bpg_decoder_start(img, BPG_OUTPUT_FORMAT_RGB24);
+			bufferIncrement = 0;
+			for (y = 0; y < h; y++) {
+				bpg_decoder_get_line(img, rgb_line);
+				for(i=0; i<rowspan;i++){
+					output[bufferIncrement + i] = rgb_line[i];
+				}
+				bufferIncrement += rowspan;
+			}
+			bpg_decoder_close(img);
+			delete [] rgb_line;
+			delete [] input;
+			jByteArray  jbarray = (*env)->NewByteArray(env, outBufLen);
+		    jbyte *jy=(jbyte*)output;  //BYTE强制转换成Jbyte；
+		    (*env)->SetByteArrayRegion(env,jbarray, 0, outBufLen, jy);            //将Jbyte 转换为jbarray数组
+		    (*env)->CallStaticVoidMethod(env,clazz, mid,jbarray);           //回调java方法
+			env->DeleteLocalRef(filename);
+			return jbarray;
+		}
+	}
+}
 /*
  * Class:     cn_garymb_ygomobile_core_IrrlichtBridge
  * Method:    nativeSetComboBoxSelection

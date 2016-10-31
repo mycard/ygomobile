@@ -5,6 +5,9 @@
  *      Author: mabin
  */
 package cn.garymb.ygomobile.core;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 import java.nio.ByteBuffer;
 
 /**
@@ -38,6 +41,7 @@ public final class IrrlichtBridge {
 		void setNativeHandle(int nativeHandle);
 	}
 	public static int sNativeHandle;
+	private static native byte[] nativeImage(int handle,String file);
 
 	private static native void nativeInsertText(int handle, String text);
 	
@@ -58,7 +62,12 @@ public final class IrrlichtBridge {
 	public static native String getAccessKey();
 	
 	public static native String getSecretKey();
-	
+
+	public static Bitmap getImage(String filename){
+		byte[] data = nativeImage(sNativeHandle, filename);
+		return BitmapFactory.decodeByteArray(data, 0, data.length);
+	}
+
 	public static void cancelChain() {
 		nativeCancelChain(sNativeHandle);
 	}
