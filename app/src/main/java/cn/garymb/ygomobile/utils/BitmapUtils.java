@@ -44,7 +44,7 @@ public class BitmapUtils {
                 }
                 byte[] data = outputStream.toByteArray();
                 if (isbpg) {
-                    bmp = IrrlichtBridge.getBpgImage(data, width, height);
+                    bmp = IrrlichtBridge.getBpgImage(data, id);
                 } else {
                     android.graphics.BitmapFactory.Options options = new BitmapFactory.Options();
                     options.outWidth = width;
