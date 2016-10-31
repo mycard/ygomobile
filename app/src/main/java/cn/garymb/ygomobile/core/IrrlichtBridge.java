@@ -8,8 +8,11 @@ package cn.garymb.ygomobile.core;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.util.Log;
 
+import java.io.ByteArrayInputStream;
+import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
@@ -98,14 +101,37 @@ public final class IrrlichtBridge {
         nativeInsertText(sNativeHandle, text);
     }
 
+    private static int byte2int(byte[] res) {
+        String str = String.format("%02x%02x%02x%02x", res[3], res[2], res[1], res[0]);
+        int rs= Integer.parseInt(str, 16);
+        return rs;
+    }
+
     public static Bitmap getBpgImage(byte[] bpg, int width, int height) {
-        byte[] data = nativeBpgImage(bpg);
-//        Log.i("kk", "zip image:"+(bpg==null?-1:bpg.length)+"/"+(data==null?-1:data.length));
-        int[] colors = new int[data.length];
-        for (int i = 0; i < data.length; i++) {
-            colors[i] = data[i];
+        try {
+            byte[] data = nativeBpgImage(bpg);
+            int start = 8;
+//            String header = String.format("%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x",
+//                    data[0], data[1], data[2], data[3],
+//                    data[4], data[5], data[6], data[7],
+//                    data[8], data[9], data[10], data[11],
+//                    data[12], data[13], data[14], data[15]);
+//            int head = byte2int(Arrays.copyOfRange(data, start, start + 4));
+            int w = byte2int(Arrays.copyOfRange(data, 0, 4));
+            int h = byte2int(Arrays.copyOfRange(data, 4, 8));
+            int prefix = start;
+            int len = data.length - prefix;
+            int[] colors = new int[len / 3];
+            for (int i = 0; i < colors.length; i++) {
+//                colors[i] = Color.rgb(data[prefix + i * 3 + 0], data[prefix + i * 3 + 1], data[prefix + i * 3 +2]);
+                int index = prefix + i * 3;
+                colors[i] = Color.rgb(data[index + 0], data[index + 1], data[index +2]);
+            }
+            return Bitmap.createBitmap(colors, w, h, Bitmap.Config.RGB_565);
+        } catch (Throwable e) {
+            Log.e("kk", "zip image", e);
+            return null;
         }
-        return Bitmap.createBitmap(colors, width, height, Bitmap.Config.RGB_565);
     }
 
     public static void setComboBoxSelection(int idx) {

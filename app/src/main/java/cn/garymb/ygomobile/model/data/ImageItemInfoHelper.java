@@ -41,6 +41,9 @@ public final class ImageItemInfoHelper {
     }
 
     public static boolean isImageExist(ImageItem item) {
+        if(Constants.DontCheckImageExist){
+            return true;
+        }
         if(Constants.UseBpgInZip) {
             File zip = new File(StaticApplication.get().getResourcePath(), Constants.CORE_PICS_ZIP);
             if (zip.exists()) {

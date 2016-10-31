@@ -78,10 +78,18 @@ JNIEXPORT jbyteArray JNICALL Java_cn_garymb_ygomobile_core_IrrlichtBridge_native
 		rowspan = 3 * w;
 	u8* rgb_line = new u8[rowspan];
 	//输出到output
-	unsigned int outBufLen = rowspan * h;
+	unsigned int outBufLen = rowspan * h+8;
 	u8* output = new u8[outBufLen];
+	output[0] = (byte)(w & 0xFF);  
+    output[1] = (byte)((w & 0xFF00) >> 8);  
+    output[2] = (byte)((w & 0xFF0000) >> 16);  
+    output[3] = (byte)((w >> 24) & 0xFF);  
+	output[4] = (byte)(h & 0xFF);  
+    output[5] = (byte)((h & 0xFF00) >> 8);  
+    output[6] = (byte)((h & 0xFF0000) >> 16);  
+    output[7] = (byte)((h >> 24) & 0xFF); 
 	bpg_decoder_start(img, BPG_OUTPUT_FORMAT_RGB24);
-	bufferIncrement = 0;
+	bufferIncrement = 8;
 	for (y = 0; y < h; y++) {
 		bpg_decoder_get_line(img, rgb_line);
 		for(i=0; i<rowspan;i++){

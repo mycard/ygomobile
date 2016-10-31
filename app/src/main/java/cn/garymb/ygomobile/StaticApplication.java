@@ -341,11 +341,11 @@ public class StaticApplication extends Application {
     }
 
     public float getScreenHeight() {
-        return mScreenHeight;
+        return Math.max(mScreenWidth, mScreenHeight);
     }
 
     public float getScreenWidth() {
-        return mScreenWidth;
+        return Math.min(mScreenWidth, mScreenHeight);
     }
 
     public SharedPreferences getApplicationSettings() {

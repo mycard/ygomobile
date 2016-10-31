@@ -43,16 +43,14 @@ public class ImageLoadManager implements Callback {
 					final ImageItem item = holder.getImageItem();
 					final String path = ImageItemInfoHelper.getImagePath(item);
                     Bitmap bmp = null;
-                    if(Constants.UseBpgInZip) {
+                    int[] resolution = new int[]{item.width, item.height};
+                    bmp = BitmapUtils.createNewBitmapAndCompressByFile(
+                            path, resolution, true);
+                    if(bmp == null) {
                         File zipfile = new File(StaticApplication.get().getResourcePath(), Constants.CORE_PICS_ZIP);
                         if (zipfile.exists()) {
                             bmp = BitmapUtils.getBitmap(zipfile, item.id, item.width, item.height);
                         }
-                    }
-                    if(bmp==null) {
-                        int[] resolution = new int[]{item.width, item.height};
-                        bmp = BitmapUtils.createNewBitmapAndCompressByFile(
-                                path, resolution, true);
                     }
 					if (bmp != null) {
 						holder.setBitmap(bmp);

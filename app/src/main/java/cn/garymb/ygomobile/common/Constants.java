@@ -5,8 +5,8 @@ package cn.garymb.ygomobile.common;
  *
  */
 public interface Constants {
-    boolean UseBpgInZip = false;
-	
+    boolean UseBpgInZip = true;
+	boolean DontCheckImageExist=true;
 	/*change this will affect C++ code, be careful!*/
 	String WORKING_DIRECTORY = "/ygocore/";
 	
