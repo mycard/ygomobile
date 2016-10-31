@@ -11,7 +11,9 @@ public class ImageItem {
 	public String urlSegment;
 	
 	public int width;
-	
+
+    public boolean inZip;
+
 	public int height;
 
 	public ImageItem(String id, int height, int width) {

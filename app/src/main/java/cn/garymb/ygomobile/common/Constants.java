@@ -5,13 +5,14 @@ package cn.garymb.ygomobile.common;
  *
  */
 public interface Constants {
+    boolean UseBpgInZip = false;
 	
 	/*change this will affect C++ code, be careful!*/
 	String WORKING_DIRECTORY = "/ygocore/";
 	
 	/*change this will affect C++ code, be careful!*/
 	int COMPAT_GUI_MODE_COMBOBOX = 0;
-	
+    String CORE_PICS_ZIP = "pics.zip";
 	/*change this will affect C++ code, be careful!*/
 	int COMPAT_GUI_MODE_CHECKBOXES_PANEL = 1;
    String CORE_SCRIPTS_ZIP = "scripts.zip";

@@ -15,33 +15,11 @@ import java.nio.ByteBuffer;
  *
  */
 public final class IrrlichtBridge {
-	public interface IrrlichtApplication {
-		String getCardImagePath();
-		void setLastDeck(String name);
-		String getFontPath();
-		String getLastDeck();
-		float getScreenWidth();
-		float getScreenHeight();
-		void playSoundEffect(String path);
-//        float getSmallerSize();
-//        float getXScale();
-//        float getYScale();
-//        float getDensity();
+    static{
+        System.loadLibrary("YGOMobile");
     }
-	public interface IrrlichtHost{
-		void toggleOverlayView(boolean isShow);
-		ByteBuffer getInitOptions();
-		ByteBuffer getNativeInitOptions();
-		void toggleIME(String hint, boolean isShow);
-		void showComboBoxCompat(String[] items, boolean isShow, int mode);
-		void performHapticFeedback();
-		/** 签名 */
-		byte[] performTrick();
-		int getLocalAddress();
-		void setNativeHandle(int nativeHandle);
-	}
 	public static int sNativeHandle;
-	private static native byte[] nativeImage(int handle,String file);
+	private static native byte[] nativeBpgImage(byte[] data);
 
 	private static native void nativeInsertText(int handle, String text);
 	
@@ -63,8 +41,8 @@ public final class IrrlichtBridge {
 	
 	public static native String getSecretKey();
 
-	public static Bitmap getImage(String filename){
-		byte[] data = nativeImage(sNativeHandle, filename);
+	public static Bitmap getBpgImage(byte[] bpg){
+		byte[] data = nativeBpgImage(bpg);
 		return BitmapFactory.decodeByteArray(data, 0, data.length);
 	}
 
@@ -99,4 +77,29 @@ public final class IrrlichtBridge {
 	public static void joinGame(ByteBuffer options, int length) {
 		nativeJoinGame(sNativeHandle, options, length);
 	}
+    public interface IrrlichtApplication {
+        String getCardImagePath();
+        void setLastDeck(String name);
+        String getFontPath();
+        String getLastDeck();
+        float getScreenWidth();
+        float getScreenHeight();
+        void playSoundEffect(String path);
+//        float getSmallerSize();
+//        float getXScale();
+//        float getYScale();
+//        float getDensity();
+    }
+    public interface IrrlichtHost{
+        void toggleOverlayView(boolean isShow);
+        ByteBuffer getInitOptions();
+        ByteBuffer getNativeInitOptions();
+        void toggleIME(String hint, boolean isShow);
+        void showComboBoxCompat(String[] items, boolean isShow, int mode);
+        void performHapticFeedback();
+        /** 签名 */
+        byte[] performTrick();
+        int getLocalAddress();
+        void setNativeHandle(int nativeHandle);
+    }
 }

@@ -1,26 +1,21 @@
 package cn.garymb.ygomobile.model;
 
+import android.graphics.Bitmap;
+import android.os.Message;
+import android.util.SparseArray;
+
 import java.util.HashSet;
-import java.util.Observer;
 import java.util.List;
 import java.util.Set;
 
-
 import cn.garymb.ygomobile.StaticApplication;
 import cn.garymb.ygomobile.common.Constants;
-import cn.garymb.ygomobile.core.IBaseTask;
-import cn.garymb.ygomobile.data.wrapper.BaseRequestJob;
 import cn.garymb.ygomobile.model.data.DataStore;
 import cn.garymb.ygomobile.model.data.ImageItem;
 import cn.garymb.ygomobile.provider.YGOImagesDataBaseHelper;
 import cn.garymb.ygomobile.ygo.YGOArrayStore;
 import cn.garymb.ygomobile.ygo.YGORoomInfo;
 import cn.garymb.ygomobile.ygo.YGOServerInfo;
-
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.os.Message;
-import android.util.SparseArray;
 
 
 public class Model {

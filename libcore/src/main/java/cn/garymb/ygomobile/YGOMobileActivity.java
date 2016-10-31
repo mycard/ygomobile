@@ -66,9 +66,7 @@ public class YGOMobileActivity extends NativeActivity implements
     private static int sChainControlXPostion = -1;
     private static int sChainControlYPostion = -1;
     private Handler handler = new Handler();
-    static{
-        System.loadLibrary("YGOMobile");
-    }
+
     @SuppressWarnings("WrongConstant")
     @Override
     protected void onCreate(Bundle savedInstanceState) {

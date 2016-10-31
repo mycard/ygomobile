@@ -1,19 +1,21 @@
 package cn.garymb.ygomobile.core.images;
 
+import android.graphics.Bitmap;
+import android.os.Handler;
+import android.os.Handler.Callback;
+import android.os.Message;
+
+import java.io.File;
 import java.util.Iterator;
 import java.util.LinkedList;
 
+import cn.garymb.ygomobile.StaticApplication;
 import cn.garymb.ygomobile.common.Constants;
 import cn.garymb.ygomobile.model.data.ImageItem;
 import cn.garymb.ygomobile.model.data.ImageItemInfoHelper;
 import cn.garymb.ygomobile.utils.BitmapLruCache;
 import cn.garymb.ygomobile.utils.BitmapUtils;
 import cn.garymb.ygomobile.utils.LruCache;
-
-import android.graphics.Bitmap;
-import android.os.Handler;
-import android.os.Handler.Callback;
-import android.os.Message;
 
 public class ImageLoadManager implements Callback {
 
@@ -40,12 +42,18 @@ public class ImageLoadManager implements Callback {
 					// TODO load bitmap
 					final ImageItem item = holder.getImageItem();
 					final String path = ImageItemInfoHelper.getImagePath(item);
-
-					int[] resolution = new int[] { item.width, item.height };
-
-					Bitmap bmp = BitmapUtils.createNewBitmapAndCompressByFile(
-							path, resolution, true);
-
+                    Bitmap bmp = null;
+                    if(Constants.UseBpgInZip) {
+                        File zipfile = new File(StaticApplication.get().getResourcePath(), Constants.CORE_PICS_ZIP);
+                        if (zipfile.exists()) {
+                            bmp = BitmapUtils.getBitmap(zipfile, item.id, item.width, item.height);
+                        }
+                    }
+                    if(bmp==null) {
+                        int[] resolution = new int[]{item.width, item.height};
+                        bmp = BitmapUtils.createNewBitmapAndCompressByFile(
+                                path, resolution, true);
+                    }
 					if (bmp != null) {
 						holder.setBitmap(bmp);
 						if (holder.getImageType() == Constants.IMAGE_TYPE_ORIGINAL) {
@@ -98,7 +106,7 @@ public class ImageLoadManager implements Callback {
 
 	/**
 	 * Try to get bitmap from local cache.
-	 * 
+	 *
 	 * @param holder
 	 * @return bitmap object if hit cache, null otherwise.
 	 */
@@ -118,7 +126,7 @@ public class ImageLoadManager implements Callback {
 
 	/**
 	 * Try to reove bitmap from local cache.
-	 * 
+	 *
 	 * @param id
 	 * @return bitmap object if hit cache, null otherwise.
 	 */
@@ -134,7 +142,7 @@ public class ImageLoadManager implements Callback {
 
 	/**
 	 * 添加一个加载Bitmap的任务
-	 * 
+	 *
 	 * @param holder
 	 * @param isPreload
 	 *            标示是否是预加载任务
@@ -192,7 +200,7 @@ public class ImageLoadManager implements Callback {
 
 	/**
 	 * 清除指定的Bitmap缓存
-	 * 
+	 *
 	 * @param type
 	 *            {@code IMAGE_TYPE_ORIGINAL} or {@code IMAGE_TYPE_THUMNAIL}
 	 */
@@ -206,7 +214,7 @@ public class ImageLoadManager implements Callback {
 
 	/**
 	 * 改变加载队列的优先级，将预加载队列提升为加载队列或加载队列降级为预加载队列。
-	 * 
+	 *
 	 * @param type
 	 *            {@code LOAD_TYPE_LOAD} or {@code LOAD_TYPE_PRELOAD}
 	 */
