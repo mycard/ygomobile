@@ -50,18 +50,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!--
-        <activity
-            android:name=".test.MainActivityTest"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="Test"
-            android:theme="@style/AppTheme" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>-->
         <activity
             android:name=".SettingsActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -76,20 +64,6 @@
         </activity>
         <activity
             android:name=".YGOMobileActivity"
-            android:clearTaskOnLaunch="true"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:exported="true"
-            android:label="YGOMobile"
-            android:launchMode="singleTask"
-            android:screenOrientation="landscape"
-            android:theme="@style/Game"
-            android:windowSoftInputMode="adjustPan" >
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="YGOMobile" />
-        </activity>
-        <activity
-            android:name=".test.YGOMobileActivity2"
             android:clearTaskOnLaunch="true"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:exported="true"

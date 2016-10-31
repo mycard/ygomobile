@@ -17,7 +17,6 @@ import java.util.HashMap;
 
 import cn.garymb.ygodata.YGOGameOptions;
 import cn.garymb.ygomobile.common.Constants;
-import cn.garymb.ygomobile.test.YGOMobileActivity2;
 import cn.garymb.ygomobile.utils.BitmapUtils;
 
 import static cn.garymb.ygomobile.common.Constants.CORE_SKIN_COVER_SIZE;
