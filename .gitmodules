@@ -4,3 +4,6 @@
 [submodule "irrlicht"]
 	path = irrlicht
 	url = https://code.csdn.net/a247321453/irrlicht-android.git
+[submodule "ocgcore/jni/ocgcore"]
+	path = ocgcore/jni/ocgcore
+	url = https://github.com/Fluorohydride/ygopro-core.git
