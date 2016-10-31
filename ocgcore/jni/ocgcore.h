@@ -19,9 +19,4 @@
 
 #define NELEM(x) ((int) (sizeof(x) / sizeof((x)[0])))
 
-#define NATIVE_METHOD(func_ptr, func_name, signature) { func_name, signature, reinterpret_cast<void*>(func_ptr) }
-
-#define JAVA_CLASS "cn.ygo.ocgcore/OcgCoreApi"
-
-#define ANDROID_L    21
 #endif //NDK_LOG_H

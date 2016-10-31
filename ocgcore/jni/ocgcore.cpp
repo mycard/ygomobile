@@ -3,39 +3,12 @@
 #include "ocgcore.h"
 #include "ocgcore/ocgapi.h"
 
-JavaVM *g_vm;
-jclass g_jclass;
-
-static JNINativeMethod gMethods[] = {
-};
-
-
-JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved) {
-    JNIEnv *env;
-    if (vm->GetEnv((void **) &env, JNI_VERSION_1_6) != JNI_OK) {
-        return JNI_ERR;
+extern "C" {
+    JNIEXPORT void JNICALL Java_cn_ygo_ocgcore_OcgCoreApi_init(JNIEnv *env, jclass clazz) {
+        set_script_reader((script_reader)default_script_reader);
     }
-    jclass javaClass = env->FindClass(JAVA_CLASS);
-    if (javaClass == NULL) {
-        LOGE("Ops: Unable to find hook class.");
-        return JNI_ERR;
-    }
-    if (env->RegisterNatives(javaClass, gMethods, NELEM(gMethods)) < 0) {
-        LOGE("Ops: Unable to register the native methods.");
-        return JNI_ERR;
-    }
-    g_vm = vm;
-    g_jclass = (jclass) env->NewGlobalRef(javaClass);
-    env->DeleteLocalRef(javaClass);
-    return JNI_VERSION_1_6;
-}
 
-
-JNIEXPORT void JNICALL JNI_OnUnload(JavaVM* vm, void* reserved) {
-    JNIEnv *env;
-    if (vm->GetEnv((void **) &env, JNI_VERSION_1_6) != JNI_OK) {
-        return;
+    JNIEXPORT jint JNICALL Java_cn_ygo_ocgcore_OcgCoreApi_create_duel(JNIEnv *env, jclass clazz, jlong seed){
+        return (jint) create_duel((jint) seed);
     }
-    env->DeleteGlobalRef((jobject)g_vm);
-    env->DeleteGlobalRef((jobject)g_jclass);
 }
