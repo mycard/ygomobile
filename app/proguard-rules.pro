@@ -15,3 +15,18 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+-keepclassmembers class * implements android.os.Parcelable{ *;}
+-keepclassmembers class * implements cn.garymb.ygomobile.core.** { *;}
+# okhttp
+-dontwarn com.squareup.okhttp.**
+-dontwarn java.nio.**
+-dontwarn org.codehaus.mojo.**
+-dontwarn org.acra.**
+-keep class com.squareup.okhttp.** { *;}
+-keep interface com.squareup.okhttp.** { *; }
+# eventbus
+-keep class de.greenrobot.event.** {*;}
+-keepclassmembers class ** {
+    public void onEvent*(**);
+    void onEvent*(**);
+}
