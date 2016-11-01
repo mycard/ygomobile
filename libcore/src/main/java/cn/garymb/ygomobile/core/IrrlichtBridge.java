@@ -19,7 +19,7 @@ public final class IrrlichtBridge {
         System.loadLibrary("YGOMobile");
     }
 	public static int sNativeHandle;
-	private static native byte[] nativeBpgImage(byte[] data);
+	public static native byte[] nativeBpgImage(byte[] data);
 
 	private static native void nativeInsertText(int handle, String text);
 	
