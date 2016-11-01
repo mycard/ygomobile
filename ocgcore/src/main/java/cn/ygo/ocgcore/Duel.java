@@ -1,25 +1,44 @@
 package cn.ygo.ocgcore;
 
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static cn.ygo.ocgcore.OcgCoreApi.*;
 
 public class Duel {
-    private int mPtr;
+    private long mPtr;
+    private static final Map<Long, Duel> sDuel = new HashMap<>();
 
-    public Duel(int intptr) {
+    private Duel(long intptr) {
         this.mPtr = intptr;
     }
 
-    public static Duel create(long seed) {
-        return new Duel(create_duel(seed));
+    public static Duel get(long intptr) {
+        Duel old = null;
+        synchronized (Duel.class) {
+            old = sDuel.get(Long.valueOf(intptr));
+            if (old == null) {
+                old = new Duel(intptr);
+                sDuel.put(Long.valueOf(intptr), old);
+            }
+        }
+        return old;
     }
 
-    public void start(int options) {
-        start_duel(mPtr, options);
+    public static Duel create(long seed) {
+        return get(createDuel(seed));
+    }
+
+    public void start(long options) {
+        startDuel(mPtr, options);
     }
 
     public void end() {
-        end_duel(mPtr);
+        endDuel(mPtr);
+        synchronized (Duel.class) {
+            sDuel.remove(Long.valueOf(mPtr));
+        }
     }
 
     public void setPlayerInfo(int playerid, int lp, int startcount, int drawcount) {

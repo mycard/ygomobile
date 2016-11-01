@@ -16,13 +16,13 @@ public class CardData extends Struct {
         super(buffer);
     }
 
-    public int Code;
-    public int Alias;
+    public long Code;
+    public long Alias;
     public long Setcode;
-    public int Type;
-    public int Level;
-    public int Attribute;
-    public int Race;
+    public long Type;
+    public long Level;
+    public long Attribute;
+    public long Race;
     public int Attack;
     public int Defense;
     public int LScale;

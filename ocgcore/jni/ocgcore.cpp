@@ -1,14 +1,79 @@
-#include<jni.h>
-#include <stdlib.h>
 #include "ocgcore.h"
-#include "ocgcore/ocgapi.h"
+#include "main.h"
 
 extern "C" {
-    JNIEXPORT void JNICALL Java_cn_ygo_ocgcore_OcgCoreApi_init(JNIEnv *env, jclass clazz) {
-        set_script_reader((script_reader)default_script_reader);
-    }
+JavaVM *g_vm;
+jclass g_jclass;
+JNIEnv *g_env;
 
-    JNIEXPORT jint JNICALL Java_cn_ygo_ocgcore_OcgCoreApi_create_duel(JNIEnv *env, jclass clazz, jlong seed){
-        return (jint) create_duel((jint) seed);
-    }
+JNIEnv* getJEnv(){
+    return g_env;
 }
+JavaVM* getJVM(){
+    return g_vm;
+}
+jclass getJClass(){
+    return g_jclass;
+}
+
+//函数声明
+/*
+V           void          void
+Z         jboolean      boolean
+I            jint            int
+J           jlong          long
+D         jdouble       double
+F          jfloat          float
+B          jbyte          byte
+C          jchar           char
+S          jshort         short
+ [Z     jbooleanArray      boolean[]
+[I        jintArray            int[]
+[F       jfloatArray         float[]
+[B      jbyteArray          byte[]
+[C      jcharArray          char[]
+[S      jshortArray         short[]
+[D     jdoubleArray       double[]
+[J        jlongArray          long[]
+ */
+static JNINativeMethod gMethods[] = {
+        NATIVE_METHOD((void *) jni_init,  "initCore",       "()V"),
+        NATIVE_METHOD((void *) jni_create_card,  "createCard",       "(JJJJJJJIIII)V"),
+        NATIVE_METHOD((void *) jni_create_duel,  "createDuel",       "(J)V"),
+        NATIVE_METHOD((void *) jni_start_duel,  "startDuel",       "(JJ)V"),
+        NATIVE_METHOD((void *) jni_end_duel,  "endDuel",       "(J)V"),
+        NATIVE_METHOD((void *) jni_process,  "process",       "(J)V"),
+};
+
+JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved) {
+    JNIEnv *env;
+    if (vm->GetEnv((void **) &env, JNI_VERSION_1_6) != JNI_OK) {
+        return JNI_ERR;
+    }
+    jclass javaClass = env->FindClass(JAVA_CLASS);
+    if (javaClass == NULL) {
+        LOGE("Ops: Unable to find hook class.");
+        return JNI_ERR;
+    }
+    if (env->RegisterNatives(javaClass, gMethods, NELEM(gMethods)) < 0) {
+        LOGE("Ops: Unable to register the native methods.");
+        return JNI_ERR;
+    }
+    g_env = env;
+    g_vm = vm;
+    g_jclass = (jclass) env->NewGlobalRef(javaClass);
+    env->DeleteLocalRef(javaClass);
+    return JNI_VERSION_1_6;
+}
+
+JNIEXPORT void JNICALL JNI_OnUnload(JavaVM *vm, void* reserved) {
+    JNIEnv *env;
+    if (vm->GetEnv((void **) &env, JNI_VERSION_1_6) != JNI_OK) {
+        return;
+    }
+    g_env = NULL;
+    env->DeleteGlobalRef((jobject)g_vm);
+    env->DeleteGlobalRef((jobject)g_jclass);
+}
+
+};
