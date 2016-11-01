@@ -58,7 +58,6 @@ public class FileBrowser extends ListView implements
 	public static final int DISPLAY_ALL = -1;
 	public static final int DISPLAY_FILE = 0;
 	public static final int DISPLAY_FOLDER = 1;
-
 	private boolean isBackResp;
 
 	private boolean isSort;
@@ -140,7 +139,9 @@ public class FileBrowser extends ListView implements
 				if (display == DISPLAY_ALL) {
 					fileList.add(file);
 				} else if (display == DISPLAY_FILE && file.isFile()) {
-					fileList.add(file);
+					if(file.getName().endsWith(".cdb")) {
+						fileList.add(file);
+					}
 				} else if (display == DISPLAY_FOLDER && file.isDirectory()) {
 					fileList.add(file);
 				}

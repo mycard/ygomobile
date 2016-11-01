@@ -83,7 +83,7 @@ public class RoomAdapter extends BaseAdapter {
 		}
 		YGORoomInfo info = mDataList.get(position);
 		ViewHolder holder = (ViewHolder) convertView.getTag();
-		holder.mCustomImage.setImageResource(R.drawable.logo);
+		holder.mCustomImage.setImageResource(R.drawable.ic_icon);
 		holder.mTitle.setText(info.name);
 		holder.mProperty
 				.setText(generatePropertyString(info));
