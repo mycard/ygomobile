@@ -71,7 +71,7 @@ public class OcgCoreApi {
 
     static native void endDuel(long pduel);
 
-    static native void set_player_info(long pduel, int playerid, int lp, int startcount, int drawcount);
+    static native void setPlayerInfo(long pduel, int playerid, int lp, int startcount, int drawcount);
 
     static native byte[] get_log_message(long pduel);
 
@@ -79,19 +79,19 @@ public class OcgCoreApi {
 
     static native int process(long pduel);
 
-    static native void new_card(long pduel, long code, int owner, int playerid, int location, int sequence, int position);
+    static native void newCard(long pduel, long code, int owner, int playerid, int location, int sequence, int position);
 
-    static native void new_tag_card(long pduel, long code, int owner, int location);
+    static native void newTagCard(long pduel, long code, int owner, int location);
 
     static native byte[] query_card(long pduel, int playerid, int location, int sequence, int query_flag, int use_cache);
 
-    static native int query_field_count(long pduel, int playerid, int location);
+    static native int queryFieldCount(long pduel, int playerid, int location);
 
     static native byte[] query_field_card(long pduel, int playerid, int location, int query_flag, int use_cache);
 
     static native byte[] query_field_info(long pduel);
 
-    static native void set_responsei(long pduel, int value);
+    static native void setResponseI(long pduel, int value);
 
     static native void set_responseb(long pduel, byte[] buf);
 

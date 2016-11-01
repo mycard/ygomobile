@@ -37,12 +37,19 @@ S          jshort         short
 [J        jlongArray          long[]
  */
 static JNINativeMethod gMethods[] = {
-        NATIVE_METHOD((void *) jni_init,  "initCore",       "()V"),
-        NATIVE_METHOD((void *) jni_create_card,  "createCard",       "(JJJJJJJIIII)V"),
-        NATIVE_METHOD((void *) jni_create_duel,  "createDuel",       "(J)V"),
-        NATIVE_METHOD((void *) jni_start_duel,  "startDuel",       "(JJ)V"),
-        NATIVE_METHOD((void *) jni_end_duel,  "endDuel",       "(J)V"),
-        NATIVE_METHOD((void *) jni_process,  "process",       "(J)V"),
+        NATIVE_METHOD((void *) jni_init,             "initCore",        "()V"),
+        NATIVE_METHOD((void *) jni_create_card,      "createCard",      "(JJJJJJJIIII)V"),
+        NATIVE_METHOD((void *) jni_create_duel,      "createDuel",      "(J)J"),
+        NATIVE_METHOD((void *) jni_start_duel,       "startDuel",       "(JJ)V"),
+        NATIVE_METHOD((void *) jni_end_duel,         "endDuel",         "(J)V"),
+        NATIVE_METHOD((void *) jni_process,          "process",         "(J)I"),
+        NATIVE_METHOD((void *) jni_set_player_info,  "setPlayerInfo",   "(JIIII)V"),
+        NATIVE_METHOD((void *) jni_set_responsei,    "setResponseI",    "(JI)V"),
+        NATIVE_METHOD((void *) jni_query_field_count,    "queryFieldCount",    "(JII)I"),
+        //void jni_new_card(JNIEnv *env, jclass jclazz,jlong pduel, jlong code, jint owner, jint playerid, jint location, jint sequence, jint position)
+        NATIVE_METHOD((void *) jni_new_card,    "newCard",    "(JJIIIII)V"),
+        //void jni_new_tag_card(JNIEnv *env, jclass jclazz,jlong pduel, jlong code, jint owner, jint location)
+        NATIVE_METHOD((void *) jni_new_tag_card,    "newTagCard",    "(JJII)V"),
 };
 
 JNIEXPORT jint JNICALL JNI_OnLoad(JavaVM *vm, void *reserved) {

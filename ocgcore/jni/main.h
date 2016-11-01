@@ -17,5 +17,10 @@ extern "C" {
     void jni_start_duel(JNIEnv *env, jclass jclazz,jlong pduel, jlong options);
     void jni_end_duel(JNIEnv *env, jclass jclazz,jlong pduel);
     jint jni_process(JNIEnv *env, jclass jclazz,jlong pduel);
+    void jni_set_player_info(JNIEnv *env, jclass jclazz,jlong pduel, jint playerid, jint lp, jint startcount, jint drawcount);
+    void jni_set_responsei(JNIEnv *env, jclass jclazz,jlong pduel, jint value);
+    jint jni_query_field_count(JNIEnv *env, jclass jclazz,jlong pduel, jint playerid, jint location);
+    void jni_new_card(JNIEnv *env, jclass jclazz,jlong pduel, jlong code, jint owner, jint playerid, jint location, jint sequence, jint position);
+    void jni_new_tag_card(JNIEnv *env, jclass jclazz,jlong pduel, jlong code, jint owner, jint location);
 };
 #endif //MAIN_H

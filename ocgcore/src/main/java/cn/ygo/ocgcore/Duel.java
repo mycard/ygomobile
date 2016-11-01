@@ -42,7 +42,7 @@ public class Duel {
     }
 
     public void setPlayerInfo(int playerid, int lp, int startcount, int drawcount) {
-        set_player_info(mPtr, playerid, lp, startcount, drawcount);
+        setPlayerInfo(mPtr, playerid, lp, startcount, drawcount);
     }
 
     public byte[] getLogMessage() {
@@ -58,11 +58,11 @@ public class Duel {
     }
 
     public void newCard(long code, int owner, int playerid, int location, int sequence, int position) {
-        new_card(mPtr, code, owner, playerid, location, sequence, position);
+        newCard(mPtr, code, owner, playerid, location, sequence, position);
     }
 
     public void newTagCard(long code, int owner, int location) {
-        new_tag_card(mPtr, code, owner, location);
+        newTagCard(mPtr, code, owner, location);
     }
 
     public byte[] queryCard(int playerid, int location, int sequence, int query_flag, int use_cache) {
@@ -70,7 +70,7 @@ public class Duel {
     }
 
     public int queryFieldCount(int playerid, int location) {
-        return query_field_count(mPtr, playerid, location);
+        return queryFieldCount(mPtr, playerid, location);
     }
 
     public byte[] queryFieldCard(int playerid, int location, int query_flag, int use_cache) {
@@ -82,7 +82,7 @@ public class Duel {
     }
 
     public void setResponsei(int value) {
-        set_responsei(mPtr, value);
+        setResponseI(mPtr, value);
     }
 
     public void setResponseb(byte[] buf) {

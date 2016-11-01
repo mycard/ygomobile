@@ -35,6 +35,21 @@ extern "C" {
     jint jni_process(JNIEnv *env, jclass jclazz,jlong pduel){
         return (jint)process((int64_t)pduel);
     }
+    void jni_set_player_info(JNIEnv *env, jclass jclazz,jlong pduel, jint playerid, jint lp, jint startcount, jint drawcount){
+        set_player_info((int64_t)pduel, playerid, lp,startcount,drawcount);
+    }
+    void jni_set_responsei(JNIEnv *env, jclass jclazz,jlong pduel, jint value){
+        set_responsei((int64_t)pduel, value);
+    }
+    jint jni_query_field_count(JNIEnv *env, jclass jclazz,jlong pduel, jint playerid, jint location){
+        return (jint)query_field_count((int64_t)pduel, playerid, location);
+    }
+    void jni_new_card(JNIEnv *env, jclass jclazz,jlong pduel, jlong code, jint owner, jint playerid, jint location, jint sequence, jint position){
+        new_card((int64_t)pduel, code, owner, playerid, location, sequence, position);
+    }
+    void jni_new_tag_card(JNIEnv *env, jclass jclazz,jlong pduel, jlong code, jint owner, jint location){
+        new_tag_card((int64_t)pduel, code, owner, location);
+    }
     /***
      * 返回内容，输出长度slen
      */
