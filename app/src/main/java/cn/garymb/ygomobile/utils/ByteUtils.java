@@ -21,8 +21,13 @@ public class ByteUtils {
     }
 
     public static int byte2uint(byte b) {
-        String str = String.format("%02x", b);
-        return Integer.parseInt(str, 16);
+        int i = b;
+        if (b < 0) {
+            i = 0xff +1+ b;
+        }
+        return i;
+//        String str = String.format("%02x", b);
+//        return Integer.parseInt(str, 16);
     }
 
     public static byte[] int2byte(int i) {
