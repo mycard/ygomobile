@@ -6,22 +6,52 @@ import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.PointF;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import cn.garymb.ygomobile.StaticApplication;
 import cn.garymb.ygomobile.core.IrrlichtBridge;
 
+import static cn.garymb.ygomobile.core.IrrlichtBridge.nativeBpgImage;
+import static cn.garymb.ygomobile.utils.ByteUtils.byte2int;
+import static cn.garymb.ygomobile.utils.ByteUtils.byte2uint;
+
 public class BitmapUtils {
+    public static Bitmap bytes2Bitmap(byte[] bpg, String id) {
+        try {
+            byte[] data = nativeBpgImage(bpg);
+            int start = 8;
+            int w = byte2int(Arrays.copyOfRange(data, 0, 4));
+            int h = byte2int(Arrays.copyOfRange(data, 4, 8));
+            if (w < 0 || h < 0) {
+                Log.e("kk", "zip image:w=" + w + ",h=" + h);
+                return null;
+            }
+            int index = 0;
+            int[] colors = new int[(data.length - start) / 3];
+            for (int i = 0; i < colors.length; i++) {
+                index = start + i * 3;
+                colors[i] = Color.rgb(byte2uint(data[index + 0]), byte2uint(data[index + 1]), byte2uint(data[index + 2]));
+            }
+            return Bitmap.createBitmap(colors, w, h, Bitmap.Config.RGB_565);
+        } catch (Throwable e) {
+            Log.e("kk", "zip image", e);
+            return null;
+        }
+    }
 
     public static Bitmap getBitmap(File zipFile, String id, int width, int height) {
         Bitmap bmp = null;
@@ -44,7 +74,7 @@ public class BitmapUtils {
                 }
                 byte[] data = outputStream.toByteArray();
                 if (isbpg) {
-                    bmp = IrrlichtBridge.getBpgImage(data, id);
+                    bmp = bytes2Bitmap(data, id);
                 } else {
                     android.graphics.BitmapFactory.Options options = new BitmapFactory.Options();
                     options.outWidth = width;
@@ -60,7 +90,7 @@ public class BitmapUtils {
 
     /**
      * Mix two Bitmap as one.
-     *
+     * <p>
      * where the second bitmap is painted.
      *
      * @return
