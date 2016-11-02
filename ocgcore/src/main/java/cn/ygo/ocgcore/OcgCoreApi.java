@@ -65,41 +65,43 @@ public class OcgCoreApi {
 
     private static native void initCore();
 
-    static native long createDuel(long seed);
+    public static native long createDuel(long seed);
 
-    static native void startDuel(long pduel, long options);
+    public static native void startDuel(long pduel, long options);
 
-    static native void endDuel(long pduel);
+    public static native void endDuel(long pduel);
 
-    static native void setPlayerInfo(long pduel, int playerid, int lp, int startcount, int drawcount);
+    public static native long getCardCode(long card);
 
-    static native byte[] get_log_message(long pduel);
+    public static native void setPlayerInfo(long pduel, int playerid, int lp, int startcount, int drawcount);
 
-    static native byte[] get_message(long pduel);
+    public static native byte[] getLogMessage(long pduel);
 
-    static native int process(long pduel);
+    public static native byte[] getMessage(long pduel);
 
-    static native void newCard(long pduel, long code, int owner, int playerid, int location, int sequence, int position);
+    public static native int process(long pduel);
 
-    static native void newTagCard(long pduel, long code, int owner, int location);
+    public static native void newCard(long pduel, long code, int owner, int playerid, int location, int sequence, int position);
 
-    static native byte[] query_card(long pduel, int playerid, int location, int sequence, int query_flag, int use_cache);
+    public static native void newTagCard(long pduel, long code, int owner, int location);
 
-    static native int queryFieldCount(long pduel, int playerid, int location);
+    public static native byte[] queryCard(long pduel, int playerid, int location, int sequence, int query_flag, int use_cache);
 
-    static native byte[] query_field_card(long pduel, int playerid, int location, int query_flag, int use_cache);
+    public static native int queryFieldCount(long pduel, int playerid, int location);
 
-    static native byte[] query_field_info(long pduel);
+    public static native byte[] queryFieldCard(long pduel, int playerid, int location, int query_flag, int use_cache);
 
-    static native void setResponseI(long pduel, int value);
+    public static native byte[] queryFieldInfo(long pduel);
 
-    static native void set_responseb(long pduel, byte[] buf);
+    public static native void setResponseI(long pduel, int value);
 
-    static native int preload_script(long pduel, String script);
+    public static native void setResponseB(long pduel, byte[] buf);
 
-    IFileReader reader;
-    ICardManager cardManager;
-    IMessager messager;
+    public static native int preloadScript(long pduel, char[] script);
+
+    private IFileReader reader;
+    private ICardManager cardManager;
+    private IMessager messager;
 
     public interface IFileReader {
         byte[] read(String name);

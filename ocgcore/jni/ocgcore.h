@@ -10,10 +10,11 @@
 #include "ocgcore/common.h"
 #include "ocgcore/card.h"
 #include "ocgcore/ocgapi.h"
+
 extern "C" {
-JavaVM* getJVM();
-jclass getJClass();
-JNIEnv* getJEnv();
+    JavaVM* getJavaVM();
+    jclass getJClass();
+    JNIEnv* getJNIEnv();
 };
 #define TAG "Ocgcore"
 

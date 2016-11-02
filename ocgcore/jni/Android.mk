@@ -13,6 +13,10 @@ ifeq ($(TARGET_ARCH_ABI),x86)
 LOCAL_CFLAGS += -fno-stack-protector
 endif
 
+ifeq ($(TARGET_ARCH_ABI),armeabi-v8a)
+LOCAL_CFLAGS += -D_ARM_X64
+endif
+
 ifeq ($(TARGET_ARCH_ABI), armeabi-v7a)
 LOCAL_CFLAGS += -mno-unaligned-access
 endif

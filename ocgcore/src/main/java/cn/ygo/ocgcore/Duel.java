@@ -46,11 +46,11 @@ public class Duel {
     }
 
     public byte[] getLogMessage() {
-        return get_log_message(mPtr);
+        return getLogMessage(mPtr);
     }
 
     public byte[] getMessage() {
-        return get_message(mPtr);
+        return getMessage(mPtr);
     }
 
     public int process() {
@@ -66,7 +66,7 @@ public class Duel {
     }
 
     public byte[] queryCard(int playerid, int location, int sequence, int query_flag, int use_cache) {
-        return query_card(mPtr, playerid, location, sequence, query_flag, use_cache);
+        return queryCard(mPtr, playerid, location, sequence, query_flag, use_cache);
     }
 
     public int queryFieldCount(int playerid, int location) {
@@ -74,11 +74,11 @@ public class Duel {
     }
 
     public byte[] queryFieldCard(int playerid, int location, int query_flag, int use_cache) {
-        return query_field_card(mPtr, playerid, location, query_flag, use_cache);
+        return queryFieldCard(mPtr, playerid, location, query_flag, use_cache);
     }
 
     public byte[] queryFieldInfo() {
-        return query_field_info(mPtr);
+        return queryFieldInfo(mPtr);
     }
 
     public void setResponsei(int value) {
@@ -86,10 +86,10 @@ public class Duel {
     }
 
     public void setResponseb(byte[] buf) {
-        set_responseb(mPtr, buf);
+        setResponseB(mPtr, buf);
     }
 
     public int preloadScript(String script) {
-        return preload_script(mPtr, script);
+        return preloadScript(mPtr, script);
     }
 }
