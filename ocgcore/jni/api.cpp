@@ -101,10 +101,10 @@ extern "C" {
         byte *buf=(byte*)jbarray;
         set_responseb((int64_t)pduel, buf);
     }
-    jint jni_preload_script(JNIEnv *env, jclass jclazz,jlong pduel, jcharArray script){
+    jint jni_preload_script(JNIEnv *env, jclass jclazz,jlong pduel, jbyteArray script){
         jsize len  = env->GetArrayLength(script);
-        jchar *jbarray = (jchar *)malloc(len * sizeof(jchar));
-        env->GetCharArrayRegion(script,0,len,jbarray);
+        jbyte *jbarray = (jbyte *)malloc(len * sizeof(jbyte));
+        env->GetByteArrayRegion(script, 0, len, jbarray);
         char *buf=(char*)jbarray;
         return preload_script((int64_t)pduel, buf, len);
     }

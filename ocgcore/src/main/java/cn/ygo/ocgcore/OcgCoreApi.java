@@ -9,9 +9,48 @@ public class OcgCoreApi {
 
     static final OcgCoreApi Core = new OcgCoreApi();
 
+    private IFileReader reader;
+    private ICardManager cardManager;
+    private IMessager messager;
+
+    public interface IFileReader {
+        int read(String name, byte[] buf);
+    }
+
+    public interface ICardManager {
+        CardData getCard(long code);
+    }
+
+    public interface IMessager {
+        int handle(Duel duel, long msgid);
+    }
+
+    /***
+     * 初始化
+     *
+     * @param reader      脚本读取
+     * @param cardManager 卡片管理
+     * @param messager    消息
+     */
+    public static void init(IFileReader reader, ICardManager cardManager, IMessager messager) {
+        if (reader == null) {
+            throw new NullPointerException("IFileReader is no null.");
+        }
+        if (cardManager == null) {
+            throw new NullPointerException("ICardManager is no null.");
+        }
+        if (messager == null) {
+            throw new NullPointerException("IMessager is no null.");
+        }
+        Core.reader = reader;
+        Core.cardManager = cardManager;
+        Core.messager = messager;
+        initCore();
+    }
+
     //回调
     @Keep
-    public static int readFile(String name,byte[] buf) {
+    public static int readFile(String name, byte[] buf) {
         return Core.reader.read(name, buf);
     }
 
@@ -45,32 +84,9 @@ public class OcgCoreApi {
         );
     }
 
-    /***
-     * 初始化
-     *
-     * @param reader      脚本读取
-     * @param cardManager 卡片管理
-     * @param messager    消息
-     */
-    public static void init(IFileReader reader, ICardManager cardManager, IMessager messager) {
-        if(reader == null){
-            throw new NullPointerException("IFileReader is no null.");
-        }
-        if(cardManager == null){
-            throw new NullPointerException("ICardManager is no null.");
-        }
-        if(messager == null){
-            throw new NullPointerException("IMessager is no null.");
-        }
-        Core.reader = reader;
-        Core.cardManager = cardManager;
-        Core.messager = messager;
-        initCore();
-    }
-
     private static native long createCard(long code, long alias, long setcode, long type, long level,
-                                         long attribute,
-                                         long race, int attack, int defense, int lscale, int rscale);
+                                          long attribute,
+                                          long race, int attack, int defense, int lscale, int rscale);
 
     private static native void initCore();
 
@@ -106,21 +122,5 @@ public class OcgCoreApi {
 
     public static native void setResponseB(long pduel, byte[] buf);
 
-    public static native int preloadScript(long pduel, char[] script);
-
-    private IFileReader reader;
-    private ICardManager cardManager;
-    private IMessager messager;
-
-    public interface IFileReader {
-        int read(String name,byte[] buf);
-    }
-
-    public interface ICardManager {
-        CardData getCard(long code);
-    }
-
-    public interface IMessager {
-        int handle(Duel duel, long msgid);
-    }
+    public static native int preloadScript(long pduel, byte[] script);
 }

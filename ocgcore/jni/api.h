@@ -36,7 +36,7 @@ extern "C" {
     jbyteArray jni_get_message(JNIEnv *env, jclass jclazz,jlong pduel);
     jbyteArray jni_query_field_info(JNIEnv *env, jclass jclazz,jlong pduel);
     void jni_set_responseb(JNIEnv *env, jclass jclazz,jlong pduel, jbyteArray byarray);
-    jint jni_preload_script(JNIEnv *env, jclass jclazz,jlong pduel, jcharArray script);
+    jint jni_preload_script(JNIEnv *env, jclass jclazz,jlong pduel, jbyteArray script);
     jbyteArray jni_query_field_card(JNIEnv *env, jclass jclazz,jlong pduel, jint playerid, jint location, jint query_flag, jint use_cache);
     jbyteArray jni_query_card(JNIEnv *env, jclass jclazz,jlong pduel, jint playerid, jint location, jint sequence, jint query_flag, jint use_cache);
 };

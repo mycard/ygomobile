@@ -2,6 +2,7 @@ package cn.ygo.ocgcore;
 
 import java.nio.Buffer;
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 
 import jni.Struct;
 
@@ -27,4 +28,44 @@ public class CardData extends Struct {
     public int Defense;
     public int LScale;
     public int RScale;
+
+    public String Name;
+    public String Desc;
+    public String[] Strs;
+
+    public String toShortString(){
+        return "CardData{" +
+                "Code=" + Code +
+                ", Alias=" + Alias +
+                ", Setcode=" + Setcode +
+                ", Type=" + Type +
+                ", Level=" + Level +
+                ", Attribute=" + Attribute +
+                ", Race=" + Race +
+                ", Attack=" + Attack +
+                ", Defense=" + Defense +
+                ", LScale=" + LScale +
+                ", RScale=" + RScale +
+                ", Name='" + Name+
+                '}';
+    }
+    @Override
+    public String toString() {
+        return "CardData{" +
+                "Code=" + Code +
+                ", Alias=" + Alias +
+                ", Setcode=" + Setcode +
+                ", Type=" + Type +
+                ", Level=" + Level +
+                ", Attribute=" + Attribute +
+                ", Race=" + Race +
+                ", Attack=" + Attack +
+                ", Defense=" + Defense +
+                ", LScale=" + LScale +
+                ", RScale=" + RScale +
+                ", Name='" + Name + '\'' +
+                ", Desc='" + Desc + '\'' +
+                ", Strs=" + Arrays.toString(Strs) +
+                '}';
+    }
 }
