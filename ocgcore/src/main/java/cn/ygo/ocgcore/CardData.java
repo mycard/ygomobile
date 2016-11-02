@@ -1,20 +1,10 @@
 package cn.ygo.ocgcore;
 
-import java.nio.Buffer;
-import java.nio.ByteBuffer;
 import java.util.Arrays;
 
-import jni.Struct;
-
-public class CardData extends Struct {
-    private static final int BUFFER_MAX_SIZE = 4 * 10 + 8;
+public class CardData {
 
     public CardData() {
-        super(ByteBuffer.allocateDirect(BUFFER_MAX_SIZE));
-    }
-
-    public CardData(Buffer buffer) {
-        super(buffer);
     }
 
     public long Code;
