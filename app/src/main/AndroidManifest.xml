@@ -14,7 +14,6 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.READ_LOGS" />
     <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
@@ -29,7 +28,8 @@
         android:icon="@drawable/ic_icon"
         android:label="@string/app_name"
         android:largeHeap="true"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme" 
+        android:logo="@drawable/ic_launcher">
         <meta-data
             android:name="UMENG_APPKEY"
             android:value="53f7eba3fd98c586180195e3" />
@@ -40,13 +40,12 @@
             android:name="UMENG_CHANNEL"
             android:value="Channel ID" />
         <activity
-            android:name=".MainActivity"
+            android:name="cn.garymb.ygomobile.LogoActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:label="@string/app_name"
             android:theme="@style/AppTheme" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
