@@ -31,7 +31,9 @@ public class Duel {
         }
         return old;
     }
-
+    public static Duel create() {
+        return create(MtRandom.random());
+    }
     public static Duel create(long seed) {
         return getOrCreate(Api.createDuel(seed));
     }

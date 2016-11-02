@@ -1,13 +1,17 @@
 package cn.ygo.ocgcore;
 
 
-public class MtRandom {
+class MtRandom {
     private static final int N = 624;
     private static final int M = 397;
-
+    private static final MtRandom RANDOM = new MtRandom();
     private int _current;
     private long _left = 1;
     private long[] _state = new long[N];
+
+    public static long random() {
+        return RANDOM.Rand();
+    }
 
     private MtRandom() {
         Init();

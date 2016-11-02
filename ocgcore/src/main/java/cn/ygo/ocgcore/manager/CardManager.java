@@ -1,4 +1,4 @@
-package cn.ygo.ocgcore;
+package cn.ygo.ocgcore.manager;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -6,7 +6,10 @@ import android.database.sqlite.SQLiteDatabase;
 import java.io.File;
 import java.util.HashMap;
 
-public class CardManager implements Api.ICardManager {
+import cn.ygo.ocgcore.Card;
+import cn.ygo.ocgcore.CardData;
+
+public class CardManager implements ICardManager {
     private String dbDir;
     private final HashMap<Long, Card> cardDataHashMap = new HashMap<>();
 

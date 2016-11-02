@@ -1,6 +1,8 @@
-package cn.ygo.ocgcore;
+package cn.ygo.ocgcore.manager;
 
-public class Messager implements Api.IMessager {
+import cn.ygo.ocgcore.Duel;
+
+public class Messager implements IMessager {
     @Override
     public int handle(Duel duel, long msgid) {
         duel.OnMessage(msgid);

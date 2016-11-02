@@ -1,12 +1,10 @@
-package cn.ygo.ocgcore;
-
-import android.content.Context;
+package cn.ygo.ocgcore.manager;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-public class FileReader implements Api.IFileReader {
+public class FileReader implements IFileReader {
     private String dir;
 
     public FileReader(String dir) {

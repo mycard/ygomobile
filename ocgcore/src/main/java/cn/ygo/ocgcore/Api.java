@@ -3,6 +3,13 @@ package cn.ygo.ocgcore;
 
 import java.io.File;
 
+import cn.ygo.ocgcore.manager.CardManager;
+import cn.ygo.ocgcore.manager.FileReader;
+import cn.ygo.ocgcore.manager.ICardManager;
+import cn.ygo.ocgcore.manager.IFileReader;
+import cn.ygo.ocgcore.manager.IMessager;
+import cn.ygo.ocgcore.manager.Messager;
+
 public class Api {
     static {
         System.loadLibrary("ocgcore");
@@ -13,19 +20,6 @@ public class Api {
     private IFileReader reader;
     private ICardManager cardManager;
     private IMessager messager;
-
-    public interface IFileReader {
-        int read(String name, byte[] buf);
-    }
-
-    public interface ICardManager {
-        CardData getCard(long code);
-        void loadCards();
-    }
-
-    public interface IMessager {
-        int handle(Duel duel, long msgid);
-    }
 
     /***
      * cdb在游戏根目录，脚本在script

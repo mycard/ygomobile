@@ -1,8 +1,6 @@
 package cn.ygo.ocgcore;
 
-import java.util.Arrays;
-
-public class CardData {
+class CardData {
 
     public CardData() {
     }
