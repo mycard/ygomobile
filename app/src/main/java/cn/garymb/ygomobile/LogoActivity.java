@@ -56,7 +56,7 @@ public class LogoActivity extends Activity {
 		viewGroup.addView(image);
 		setContentView(viewGroup);
 		
-		Toast.makeText(this, "喵~＞▽＜", 0).show();
+		Toast.makeText(this, "喵~＞▽＜", Toast.LENGTH_SHORT).show();
 	}
 	
 }
