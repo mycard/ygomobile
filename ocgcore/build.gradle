@@ -9,10 +9,20 @@ android {
         targetSdkVersion 21
         versionCode 1
         versionName "1.0"
+//
+//        ndk{
+//            moduleName = "ocgcore"
+//            ldLibs "log"
+//            stl = "gnustl_static"
+//            cFlags "-std=gnu++11 -fpermissive -Wno-error=format-security "+
+//                    "-fno-rtti -fno-exceptions -fstrict-aliasing " +
+//                    "-D_LUA_COMPAT_5_2"
+//            abiFilters "armeabi"//,"x86"
+//        }
     }
-    sourceSets{
-        main.jni.srcDirs = ['jni']
-    }
+//    sourceSets{
+//        main.jni.srcDirs = ['src/main/jni','src/main/jni/lua']
+//    }
     externalNativeBuild {
         ndkBuild {
             path file("jni/Android.mk")

@@ -25,7 +25,7 @@ public class LogoActivity extends Activity {
 		ImageView image = new ImageView(this);
 		image.setScaleType(ScaleType.FIT_XY);
 		image.setLayoutParams(new LinearLayout.LayoutParams(widhtAndHeight, widhtAndHeight));
-		image.setImageResource(R.drawable.ic_launcher);
+		image.setImageResource(R.drawable.ic_icon);
 		AlphaAnimation anim = new AlphaAnimation(0.1f, 1.0f);  
 		anim.setDuration(2000);  
 		image.setAnimation(anim); 

@@ -2,12 +2,12 @@ package cn.ygo.ocgcore;
 
 import android.support.annotation.Keep;
 
-public class OcgCoreApi {
+public class Api {
     static {
         System.loadLibrary("ocgcore");
     }
 
-    static final OcgCoreApi Core = new OcgCoreApi();
+    static final Api Core = new Api();
 
     private IFileReader reader;
     private ICardManager cardManager;
@@ -32,7 +32,7 @@ public class OcgCoreApi {
      * @param cardManager 卡片管理
      * @param messager    消息
      */
-    public static void init(IFileReader reader, ICardManager cardManager, IMessager messager) {
+    public static void initCore(IFileReader reader, ICardManager cardManager, IMessager messager) {
         if (reader == null) {
             throw new NullPointerException("IFileReader is no null.");
         }
@@ -45,7 +45,7 @@ public class OcgCoreApi {
         Core.reader = reader;
         Core.cardManager = cardManager;
         Core.messager = messager;
-        initCore();
+        init();
     }
 
     //回调
@@ -88,7 +88,7 @@ public class OcgCoreApi {
                                           long attribute,
                                           long race, int attack, int defense, int lscale, int rscale);
 
-    private static native void initCore();
+    private static native void init();
 
     public static native long createDuel(long seed);
 
