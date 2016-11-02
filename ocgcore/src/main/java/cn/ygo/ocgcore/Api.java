@@ -1,6 +1,7 @@
 package cn.ygo.ocgcore;
 
-import android.support.annotation.Keep;
+
+import java.io.File;
 
 public class Api {
     static {
@@ -19,10 +20,32 @@ public class Api {
 
     public interface ICardManager {
         CardData getCard(long code);
+        void loadCards();
     }
 
     public interface IMessager {
         int handle(Duel duel, long msgid);
+    }
+
+    /***
+     * cdb在游戏根目录，脚本在script
+     * @param ygocore 游戏目录
+     */
+    public static void initCore(String ygocore) {
+        initCore(new FileReader(new File(ygocore, "script").getAbsolutePath()),
+                new CardManager(ygocore),
+                new Messager());
+    }
+
+    /***
+     *
+     * @param scriptDir 脚本目录
+     * @param dbDir 数据库目录/文件
+     */
+    public static void initCore(String scriptDir,String dbDir) {
+        initCore(new FileReader(scriptDir),
+                new CardManager(dbDir),
+                new Messager());
     }
 
     /***
@@ -46,15 +69,14 @@ public class Api {
         Core.cardManager = cardManager;
         Core.messager = messager;
         init();
+        cardManager.loadCards();
     }
 
     //回调
-    @Keep
     public static int readFile(String name, byte[] buf) {
         return Core.reader.read(name, buf);
     }
-
-    @Keep
+    //回调
     public static long getCard(long code) {
         CardData cardData = Core.cardManager.getCard(code);
         if (cardData != null) {
@@ -62,12 +84,15 @@ public class Api {
         }
         return 0;
     }
-
-    @Keep
+    //回调
     public static int messageHandler(long duel, long msg) {
-        return Core.messager.handle(Duel.get(duel), msg);
+        Duel d = Duel.get(duel);
+        if (d != null) {
+            return Core.messager.handle(d, msg);
+        }
+        return -1;
     }
-
+    //回调
     private static long createCard(CardData cardData) {
         return createCard(
                 cardData.Code,
@@ -84,8 +109,8 @@ public class Api {
         );
     }
 
-    private static native long createCard(long code, long alias, long setcode, long type, long level,
-                                          long attribute,
+    private static native long createCard(long code, long alias, long setcode, long type, int level,
+                                          int attribute,
                                           long race, int attack, int defense, int lscale, int rscale);
 
     private static native void init();

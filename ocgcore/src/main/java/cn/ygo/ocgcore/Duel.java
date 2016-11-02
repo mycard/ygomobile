@@ -16,6 +16,14 @@ public class Duel {
         Duel old = null;
         synchronized (Duel.class) {
             old = sDuel.get(Long.valueOf(intptr));
+        }
+        return old;
+    }
+
+    public static Duel getOrCreate(long intptr) {
+        Duel old = null;
+        synchronized (Duel.class) {
+            old = sDuel.get(Long.valueOf(intptr));
             if (old == null) {
                 old = new Duel(intptr);
                 sDuel.put(Long.valueOf(intptr), old);
@@ -25,7 +33,7 @@ public class Duel {
     }
 
     public static Duel create(long seed) {
-        return get(Api.createDuel(seed));
+        return getOrCreate(Api.createDuel(seed));
     }
 
     public void start(long options) {
@@ -89,5 +97,9 @@ public class Duel {
 
     public int preloadScript(byte[] script) {
         return Api.preloadScript(mPtr, script);
+    }
+
+    public void OnMessage(long messageType) {
+
     }
 }

@@ -48,7 +48,7 @@ void Java_cn_ygo_ocgcore_Api_init(JNIEnv *env, jclass jclazz) {
 }
 jlong Java_cn_ygo_ocgcore_Api_createCard(JNIEnv *env, jclass jclazz,
                                          jlong code, jlong alias, jlong setcode, jlong type,
-                                         jlong level, jlong attribute,
+                                         jint level, jint attribute,
                                          jlong race, jint attack, jint defense, jint lscale,
                                          jint rscale
 ) {
