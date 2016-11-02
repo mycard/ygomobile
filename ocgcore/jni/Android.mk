@@ -23,8 +23,8 @@ endif
 LOCAL_C_INCLUDES := $(LOCAL_PATH)
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/lua
 
-LOCAL_SRC_FILES := ocgcore.cpp \
-                   main.cpp \
+LOCAL_SRC_FILES := core.cpp \
+                   api.cpp \
 				   lua/lapi.c \
 				   lua/lauxlib.c \
 				   lua/lbaselib.c \

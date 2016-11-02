@@ -11,8 +11,8 @@ public class OcgCoreApi {
 
     //回调
     @Keep
-    public static byte[] readFile(String name) {
-        return Core.reader.read(name);
+    public static int readFile(String name,byte[] buf) {
+        return Core.reader.read(name, buf);
     }
 
     @Keep
@@ -25,7 +25,7 @@ public class OcgCoreApi {
     }
 
     @Keep
-    public static int messageHandler(int duel, long msg) {
+    public static int messageHandler(long duel, long msg) {
         return Core.messager.handle(Duel.get(duel), msg);
     }
 
@@ -53,6 +53,15 @@ public class OcgCoreApi {
      * @param messager    消息
      */
     public static void init(IFileReader reader, ICardManager cardManager, IMessager messager) {
+        if(reader == null){
+            throw new NullPointerException("IFileReader is no null.");
+        }
+        if(cardManager == null){
+            throw new NullPointerException("ICardManager is no null.");
+        }
+        if(messager == null){
+            throw new NullPointerException("IMessager is no null.");
+        }
         Core.reader = reader;
         Core.cardManager = cardManager;
         Core.messager = messager;
@@ -104,7 +113,7 @@ public class OcgCoreApi {
     private IMessager messager;
 
     public interface IFileReader {
-        byte[] read(String name);
+        int read(String name,byte[] buf);
     }
 
     public interface ICardManager {

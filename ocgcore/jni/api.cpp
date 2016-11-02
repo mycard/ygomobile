@@ -1,9 +1,22 @@
-#include "main.h"
+#include "api.h"
 extern "C" {
+    jmethodID readFile;
+    jmethodID messageHandler;
+    jmethodID getCard;
+    jclass JClass;
+//byte[] readFile(String name);
+//int messageHandler(long duel,long msg);
+//long _data = getCard(long code);
+    JNIEnv *g_env;
     void jni_init(JNIEnv *env, jclass jclazz) {
+        g_env = env;
+        JClass = jclazz;
         set_script_reader(my_script_reader);
         set_card_reader(my_card_reader);
         set_message_handler(my_message_handler);
+        readFile = env->GetStaticMethodID(jclazz, "readFile","(Ljava/lang/String;)[B");
+        messageHandler = env->GetStaticMethodID(jclazz, "messageHandler","(JJ)I");
+        getCard = env->GetStaticMethodID(jclazz, "getCard","(J)J");
     }
     jlong jni_create_card(JNIEnv *env, jclass jclazz,
                      jlong code,jlong alias,jlong setcode,jlong type,jlong level,jlong attribute,
@@ -113,28 +126,27 @@ extern "C" {
         free(buf);
         return jbarray;
     }
-//JavaVM* getJavaVM();
-//jclass getJClass();
-//JNIEnv* getJNIEnv();
-//JAVA_CLASS
-    /***
-     * 返回内容，输出长度slen
-     */
+    //回调java
     byte *my_script_reader(const char *script_name, int *slen) {
         //script_name转jstring,调用java方法byte[] readFile(String name)，返回jintArray
         // 根据jintArray获取长度，jintArray转byte *
-        return 0;
+        jbyteArray buf = g_env->NewByteArray(MAX_SIZE);
+        jint len = g_env->CallStaticIntMethod(JClass, readFile, buf);
+        jbyte *jbarray = (jbyte *)malloc(len * sizeof(jbyte));
+        g_env->GetByteArrayRegion(buf, 0, len, jbarray);
+        return (byte*)jbarray;
     }
+    //回调java
     uint32 my_card_reader(uint32 code, card_data *data) {
-        //调用java方法
-        //int _data = getCard(long code);
-        //if(_data == 0)return 0;
-        //data = _data;
-        return code;
-    }
-    uint32 my_message_handler(void *pduel, uint32 message_type) {
-        //调用java方法
-        //int messageHandler(int duel,long msg);
+        data = (card_data *)g_env->CallStaticLongMethod(JClass, getCard, (jlong)code);
+        if(data){
+            return code;
+        }
         return 0;
+    }
+    //回调java
+    uint32 my_message_handler(void *pduel, uint32 message_type) {
+        jint rs = g_env->CallStaticIntMethod(JClass, messageHandler, (jlong)pduel, (jlong)message_type);
+        return (int32_t)rs;
     }
 };

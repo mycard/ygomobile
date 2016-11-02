@@ -3,7 +3,8 @@
 
 #define MSG_SIZE 256
 #define BUFF_SIZE 4096
-#include "ocgcore.h"
+#define MAX_SIZE 0x10000
+#include "core.h"
 
 #ifdef ARM_X64
 typedef int64_t c_ptr;

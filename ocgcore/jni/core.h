@@ -11,11 +11,6 @@
 #include "ocgcore/card.h"
 #include "ocgcore/ocgapi.h"
 
-extern "C" {
-    JavaVM* getJavaVM();
-    jclass getJClass();
-    JNIEnv* getJNIEnv();
-};
 #define TAG "Ocgcore"
 
 #define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG,  TAG, __VA_ARGS__)
