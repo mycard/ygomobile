@@ -1,4 +1,0 @@
-/build
-obj/
-.externalNativeBuild/
-libs/*/*.so
