@@ -29,7 +29,6 @@ import java.util.List;
  * Created by Administrator on 2016/1/29.
  */
 class BaseFileDialog extends AlertDialog {
-    protected TextView title;
     protected Context context;
     protected final DisplayMetrics metrics;
     protected String mCurPath = getStoragePath();
@@ -68,7 +67,6 @@ class BaseFileDialog extends AlertDialog {
     }
 
     protected void initView() {
-        title = createTitle();
         updateTitle();
         getFileAdapter();
         LinearLayout linearLayout = createMainLayout(context);
@@ -92,7 +90,6 @@ class BaseFileDialog extends AlertDialog {
                 }
             }
         });
-        setCustomTitle(title);
         setView(linearLayout);
     }
 
@@ -119,11 +116,6 @@ class BaseFileDialog extends AlertDialog {
 
     public File getSelectFile() {
         return mFileAdapter.selectFile;
-    }
-
-    protected TextView createTitle() {
-        TextView textView = createTextView(android.R.style.TextAppearance_DeviceDefault_DialogWindowTitle);
-        return textView;
     }
 
     @SuppressWarnings("deprecation")
@@ -190,23 +182,10 @@ class BaseFileDialog extends AlertDialog {
 
     public void updateTitle() {
         if (!TextUtils.isEmpty(mDefTitle)) {
-            title.setText(mDefTitle);
+            setTitle(mDefTitle);
         } else {
             String titleText = mCurPath;
-            int screenWidth = metrics.widthPixels;
-            int maxWidth = (int) (screenWidth * HEIGHT_P);
-            if (getTextWidth(titleText, title.getPaint()) > maxWidth) {
-                while (getTextWidth("..." + titleText, title.getPaint()) > maxWidth) {
-                    int start = titleText.indexOf("/", 2);
-                    if (start > 0)
-                        titleText = titleText.substring(start);
-                    else
-                        titleText = titleText.substring(2);
-                }
-                title.setText("..." + titleText);
-            } else {
-                title.setText(titleText);
-            }
+            setTitle(titleText);
         }
     }
 
