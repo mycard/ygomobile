@@ -165,7 +165,7 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
         }
     }
 
-    void doSomeTrickOnDatabase(String myPath)
+    public static void doSomeTrickOnDatabase(String myPath)
             throws SQLiteException {
         SQLiteDatabase db = null;
         db = SQLiteDatabase.openDatabase(myPath, null,

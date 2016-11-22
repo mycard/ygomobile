@@ -66,12 +66,6 @@
             android:persistent="true"
             android:summary="@string/settings_game_diy_card_db_des"
             android:title="@string/settings_game_diy_card_db"/>
-
-        <Preference
-            android:key="settings_reset_card_db"
-            android:persistent="true"
-            android:summary="@string/settings_game_reset_card_db_des"
-            android:title="@string/settings_game_reset_card_db"/>
     </PreferenceCategory>
 
 </PreferenceScreen>

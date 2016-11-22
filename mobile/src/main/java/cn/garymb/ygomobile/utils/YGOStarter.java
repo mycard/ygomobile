@@ -22,7 +22,7 @@ import cn.garymb.ygomobile.YGOMobileActivity;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.settings.AppsSettings;
 
-import static cn.garymb.ygomobile.Constants.CORE_SKIN_COVER_SIZE;
+import static cn.garymb.ygomobile.Constants.CORE_SKIN_BG_SIZE;
 
 
 public class YGOStarter {
@@ -72,7 +72,7 @@ public class YGOStarter {
         activityShowInfo.mContentView.setVisibility(View.INVISIBLE);
         //读取当前的背景图，如果卡的话，可以考虑缓存bitmap
         String bgfile = new File(AppsSettings.get().getCoreSkinPath(), Constants.CORE_SKIN_COVER).getAbsolutePath();
-        Bitmap bmp = BitmapUtils.createNewBitmapAndCompressByFile(bgfile, CORE_SKIN_COVER_SIZE ,false);
+        Bitmap bmp = BitmapUtils.createNewBitmapAndCompressByFile(bgfile, CORE_SKIN_BG_SIZE,false);
         if(bmp ==null){
             activityShowInfo.mRoot.setBackgroundResource(R.drawable.bg);
         }else {

@@ -1,12 +1,15 @@
 package cn.garymb.ygomobile;
 
 
+import android.support.v7.app.AppCompatDelegate;
+
 import cn.garymb.ygomobile.settings.AppsSettings;
 
 public class App extends GameApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         AppsSettings.init(this);
     }
 

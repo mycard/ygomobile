@@ -1,8 +1,6 @@
 package cn.garymb.ygomobile.settings;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Environment;
 import android.util.Log;
 
@@ -55,11 +53,11 @@ public class AppsSettings {
     }
 
     public float getXScale() {
-        return getScreenHeight() / (float) Constants.CORE_SKIN_COVER_SIZE[0];
+        return getScreenHeight() / (float) Constants.CORE_SKIN_BG_SIZE[0];
     }
 
     public float getYScale() {
-        return getScreenWidth() / (float) Constants.CORE_SKIN_COVER_SIZE[1];
+        return getScreenWidth() / (float) Constants.CORE_SKIN_BG_SIZE[1];
     }
 
     public float getScreenHeight() {

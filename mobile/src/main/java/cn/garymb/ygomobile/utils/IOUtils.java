@@ -12,6 +12,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.zip.Deflater;
 
 public class IOUtils {
     private static final String TAG = "ioUtils";
@@ -23,6 +24,22 @@ public class IOUtils {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    public static void delete(File file){
+        if(file==null||!file.exists())return;
+
+        if(file.isFile()){
+            file.delete();
+        }else{
+            File[] files=file.listFiles();
+            if(files!=null){
+                for(File f:files){
+                    delete(f);
+                }
+            }
+            file.delete();
         }
     }
 
