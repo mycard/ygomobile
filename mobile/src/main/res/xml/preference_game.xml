@@ -5,11 +5,11 @@
         <Preference
             android:key="pref_key_core_version"
             android:persistent="true"
-            android:title="@string/settings_game_core_version" />
+            android:title="@string/settings_game_core_version"/>
         <Preference
             android:key="pref_key_game_res_path"
             android:persistent="true"
-            android:title="@string/settings_game_res_path" />
+            android:title="@string/settings_game_res_path"/>
         <CheckBoxPreference
             android:key="pref_key_game_sound_effect"
             android:persistent="true"
@@ -53,14 +53,14 @@
             android:title="@string/settings_game_font_name"/>
 
         <Preference
-            android:key="settings_game_diy_cover"
-            android:persistent="true"
-            android:title="@string/settings_game_diy_cover"/>
-        <Preference
-            android:key="settings_game_diy_card_back"
+            android:key="settings_game_diy_card_cover"
             android:persistent="true"
             android:title="@string/settings_game_diy_card_back"/>
 
+        <Preference
+            android:key="settings_game_diy_card_bg"
+            android:persistent="true"
+            android:title="@string/settings_game_diy_cover"/>
         <CheckBoxPreference
             android:key="settings_game_diy_card_db"
             android:persistent="true"

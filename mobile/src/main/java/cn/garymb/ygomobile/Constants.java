@@ -26,8 +26,8 @@ public interface Constants {
     boolean PREF_DEF_LOCK_SCREEN = true;
     String PREF_IMMERSIVE_MODE = "pref_key_immersive_mode";
     boolean PREF_DEF_IMMERSIVE_MODE = true;
-    String SETTINGS_COVER = "settings_game_diy_cover";
-    String SETTINGS_CARD_BG="settings_game_diy_card_back";
+    String SETTINGS_COVER = "settings_game_diy_card_cover";
+    String SETTINGS_CARD_BG="settings_game_diy_card_bg";
     String SETTINGS_DIY_CDB="settings_game_diy_card_db";
     String SETTING_RESET_CDB="settings_reset_card_db";
 
