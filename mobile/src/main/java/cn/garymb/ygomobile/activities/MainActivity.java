@@ -4,13 +4,12 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
 
 import cn.garymb.ygomobile.lite.R;
-import cn.garymb.ygomobile.task.ResCheckTask;
+import cn.garymb.ygomobile.core.ResCheckTask;
 import cn.garymb.ygomobile.utils.VUiKit;
 import cn.garymb.ygomobile.utils.YGOStarter;
 

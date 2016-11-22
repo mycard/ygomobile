@@ -6,7 +6,6 @@
     <string name="settings_about">About</string>
     <string name="settings_common_sub_common">Common</string>
     <string name="settings_about_sub_about">About</string>
-    <string name="settings_common_card_image_network_pref">don\'t download images in 2/3G.</string>
     <string name="settings_game_enable_sound_effect">Enable sound effect</string>
     <string name="settings_game_screen_orientation">Lock screen in duel</string>
     <string name="settings_game_font_antialias">Font antialias</string>
@@ -26,10 +25,11 @@
     <string name="settings_game_card_quality">Card texture quality</string>
     <string name="settings_game_card_path">Card Image path</string>
     <string name="settings_game_font_name">Font list</string>
-    <string name="settings_game_res_path">Resource path</string>
+    <string name="settings_game_res_path">Game path</string>
+    <string name="settings_game_core_version">Game Core Version</string>
     <string name="settings_category_diy">DIY</string>
     <string name="settings_game_diy_cover">Game Background</string>
-    <string name="settings_game_diy_card_back">Card back</string>
+    <string name="settings_game_diy_card_back">Card Cover</string>
     <string name="settings_game_diy_card_db">Use your own card database</string>
     <string name="settings_game_reset_card_db">Reset card database</string>
     <string name="settings_game_reset_card_db_confirm">Sure to reset card database？</string>
@@ -42,7 +42,7 @@
     <string name="settings_game_card_back">Card back</string>
     <string name="settings_game_diy_history_des">History images：</string>
     <string name="settings_game_cover">Background</string>
-    <string name="settings_about_project_address">https://github.com/garymabin/YGOMobile</string>
+    <string name="settings_about_project_address">https://code.csdn.net/a247321453/ygomobile.git</string>
     <string name="settings_game_opengl">OpenGL</string>
     <string name="settings_author">garymabin@gmail.com\n24732145321453@qq.com</string>
     <string-array name="opengl_version">

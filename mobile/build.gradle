@@ -2,8 +2,8 @@ apply plugin: 'com.android.application'
 apply plugin: 'me.tatarka.retrolambda'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.3"
+    compileSdkVersion 24
+    buildToolsVersion "24"
 
     defaultConfig {
         applicationId "cn.garymb.ygomobile.lite"
@@ -41,11 +41,8 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile project(':libcore')
-    compile 'com.soundcloud.android:android-crop:1.0.0@aar'
     compile 'org.jdeferred:jdeferred-android-aar:1.2.4'
-    compile 'com.android.support:design:23.4.0'
-    compile 'com.android.support:appcompat-v7:23.4.0'
-    compile 'com.android.support:support-v4:23.4.0'
-    compile 'com.android.support:support-vector-drawable:23.4.0'
+    compile 'com.android.support:design:24.+'
+    compile 'com.android.support:appcompat-v7:24.+'
     testCompile 'junit:junit:4.12'
 }

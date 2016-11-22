@@ -1,63 +1,72 @@
 package cn.garymb.ygomobile;
 
 
-import android.content.ContextWrapper;
+import cn.garymb.ygomobile.settings.AppsSettings;
 
-import java.io.File;
-import java.lang.reflect.Field;
-
-import cn.garymb.ygomobile.model.AppsSettings;
-
-public class App extends BaseApplication {
+public class App extends GameApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-//        updataAppOutCacheDir();
+        AppsSettings.init(this);
     }
-    boolean updataAppOutCacheDir() {
-        String OutPath = getSettings().getResourcePath();
-        String contextImplFieldName = "mBase";
-        String cacheDirFieleName = "mCacheDir";
-        String contextImplClassPath = "android.app.ContextImpl";
-        File newFile = new File(OutPath);
 
-        //修改cache路径
-        Class classType = ContextWrapper.class;
-        Field[] fields = classType.getDeclaredFields();
-        Object object = null;
-        for (Field f : fields) {
-            f.setAccessible(true);
-            if (f.getName().equals(contextImplFieldName)) {
-                try {
-                    object = f.get(this);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    return false;
-                }
-            }
-        }
-
-        if (!newFile.exists())
-            newFile.mkdirs();
-
-        //修改mCacheDir变量
-        try {
-            classType = Class.forName(contextImplClassPath);
-            fields = classType.getDeclaredFields();
-            for (Field f : fields) {
-                f.setAccessible(true);
-                if (f.getName().equals(cacheDirFieleName)) {
-                    f.set(object, new File(OutPath));
-                    return true;
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
     @Override
-    protected GameSettings getSettings() {
-        return new AppsSettings(this);
+    public NativeInitOptions getNativeInitOptions() {
+        return AppsSettings.get().getNativeInitOptions();
+    }
+
+    @Override
+    public float getSmallerSize() {
+        return AppsSettings.get().getSmallerSize();
+    }
+
+    @Override
+    public float getXScale() {
+        return AppsSettings.get().getXScale();
+    }
+
+    @Override
+    public float getYScale() {
+        return AppsSettings.get().getYScale();
+    }
+
+    @Override
+    public String getCardImagePath() {
+        return AppsSettings.get().getCardImagePath();
+    }
+
+    @Override
+    public void setLastDeck(String name) {
+        AppsSettings.get().setLastDeck(name);
+    }
+
+    @Override
+    public String getFontPath() {
+        return AppsSettings.get().getFontPath();
+    }
+
+    @Override
+    public String getLastDeck() {
+        return AppsSettings.get().getLastDeck();
+    }
+
+    @Override
+    public float getScreenWidth() {
+        return AppsSettings.get().getScreenWidth();
+    }
+
+    @Override
+    public boolean isLockSreenOrientation() {
+        return AppsSettings.get().isLockSreenOrientation();
+    }
+
+    @Override
+    public boolean isImmerSiveMode() {
+        return AppsSettings.get().isImmerSiveMode();
+    }
+
+    @Override
+    public float getScreenHeight() {
+        return AppsSettings.get().getScreenHeight();
     }
 }

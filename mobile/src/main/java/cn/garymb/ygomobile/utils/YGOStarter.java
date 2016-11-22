@@ -10,18 +10,20 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 
+import java.io.File;
 import java.util.HashMap;
 
 import cn.garymb.ygodata.YGOGameOptions;
-import cn.garymb.ygomobile.GameSettings;
+import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.YGOMobileActivity;
 import cn.garymb.ygomobile.lite.R;
+import cn.garymb.ygomobile.settings.AppsSettings;
 
-import static cn.garymb.ygomobile.GameSettings.CORE_SKIN_COVER_SIZE;
+import static cn.garymb.ygomobile.Constants.CORE_SKIN_COVER_SIZE;
+
 
 public class YGOStarter {
 
@@ -69,7 +71,7 @@ public class YGOStarter {
         activityShowInfo.rootOld = activityShowInfo.mRoot.getBackground();
         activityShowInfo.mContentView.setVisibility(View.INVISIBLE);
         //读取当前的背景图，如果卡的话，可以考虑缓存bitmap
-        String bgfile = GameSettings.get().getCoreSkinPath()+"/"+ GameSettings.CORE_SKIN_COVER;
+        String bgfile = new File(AppsSettings.get().getCoreSkinPath(), Constants.CORE_SKIN_COVER).getAbsolutePath();
         Bitmap bmp = BitmapUtils.createNewBitmapAndCompressByFile(bgfile, CORE_SKIN_COVER_SIZE ,false);
         if(bmp ==null){
             activityShowInfo.mRoot.setBackgroundResource(R.drawable.bg);

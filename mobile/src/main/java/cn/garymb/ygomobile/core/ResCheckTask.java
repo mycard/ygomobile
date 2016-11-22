@@ -1,4 +1,4 @@
-package cn.garymb.ygomobile.task;
+package cn.garymb.ygomobile.core;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -12,8 +12,9 @@ import android.util.Log;
 import java.io.File;
 import java.io.IOException;
 
-import cn.garymb.ygomobile.GameSettings;
+import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.lite.R;
+import cn.garymb.ygomobile.settings.AppsSettings;
 import cn.garymb.ygomobile.utils.IOUtils;
 
 public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
@@ -24,7 +25,7 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
     public static final int ERROR_CORE_CONFIG_LOST = -3;
     protected int mError = ERROR_NONE;
     private static final String ASSETS_PATH = "data/";
-    private GameSettings mSettings;
+    private AppsSettings mSettings;
     private Context mContext;
     private ResCheckListener mListener;
     private ProgressDialog dialog = null;
@@ -35,7 +36,7 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
         mContext = context;
         mListener = listener;
         handler = new Handler(context.getMainLooper());
-        mSettings = GameSettings.get();
+        mSettings = AppsSettings.get();
     }
 
     @Override
@@ -79,7 +80,7 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
         //core config
         setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.core_config)));
         String newConfigVersion = null, currentConfigVersion = null;
-        File verPath = new File(mSettings.getResourcePath(), GameSettings.CORE_CONFIG_PATH);
+        File verPath = new File(mSettings.getResourcePath(), Constants.CORE_CONFIG_PATH);
         if (!verPath.exists() || TextUtils.isEmpty(currentConfigVersion = getCurVersion(verPath))) {
             //
             setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.core_config)));
@@ -97,7 +98,7 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
         //check core config
 
         try {
-            newConfigVersion = mContext.getAssets().list(getDatapath(GameSettings.CORE_CONFIG_PATH))[0];
+            newConfigVersion = mContext.getAssets().list(getDatapath(Constants.CORE_CONFIG_PATH))[0];
         } catch (Exception e) {
             Log.e(TAG, "check core config", e);
             return ERROR_CORE_CONFIG;
@@ -113,32 +114,32 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
             copyCoreConfig(verPath.getAbsolutePath());
 //            copyCoreConfig(new File(mSettings.getResourcePath(), GameSettings.CORE_CONFIG_PATH).getAbsolutePath());
             setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.new_deck)));
-            IOUtils.copyFilesFromAssets(mContext, getDatapath(GameSettings.CORE_DECK_PATH),
-                    new File(resPath, GameSettings.CORE_SINGLE_PATH).getAbsolutePath(), needsUpdate);
+            IOUtils.copyFilesFromAssets(mContext, getDatapath(Constants.CORE_DECK_PATH),
+                    new File(resPath, Constants.CORE_SINGLE_PATH).getAbsolutePath(), needsUpdate);
             Log.d(TAG, "check game skin");
             setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.game_skins)));
-            IOUtils.copyFilesFromAssets(mContext, getDatapath(GameSettings.CORE_SKIN_PATH),
+            IOUtils.copyFilesFromAssets(mContext, getDatapath(Constants.CORE_SKIN_PATH),
                     mSettings.getCoreSkinPath(), needsUpdate);
             Log.d(TAG, "check fonts");
             setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.font_files)));
-            IOUtils.copyFilesFromAssets(mContext, getDatapath(GameSettings.FONT_DIRECTORY),
-                    new File(resPath, GameSettings.FONT_DIRECTORY).getAbsolutePath(), needsUpdate);
+            IOUtils.copyFilesFromAssets(mContext, getDatapath(Constants.FONT_DIRECTORY),
+                    mSettings.getFontDirPath(), needsUpdate);
             Log.d(TAG, "check single");
             setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.single_lua)));
-            IOUtils.copyFilesFromAssets(mContext, getDatapath(GameSettings.CORE_SINGLE_PATH),
-                    new File(resPath, GameSettings.CORE_SINGLE_PATH).getAbsolutePath(), needsUpdate);
+            IOUtils.copyFilesFromAssets(mContext, getDatapath(Constants.CORE_SINGLE_PATH),
+                    new File(resPath, Constants.CORE_SINGLE_PATH).getAbsolutePath(), needsUpdate);
             Log.d(TAG, "check scripts");
-            if(IOUtils.hasAssets(mContext, getDatapath(GameSettings.CORE_SCRIPTS_ZIP))) {
+            if(IOUtils.hasAssets(mContext, getDatapath(Constants.CORE_SCRIPTS_ZIP))) {
                 setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.scripts)));
-                IOUtils.copyFilesFromAssets(mContext, getDatapath(GameSettings.CORE_SCRIPTS_ZIP),
+                IOUtils.copyFilesFromAssets(mContext, getDatapath(Constants.CORE_SCRIPTS_ZIP),
                         resPath, needsUpdate);
             }
             Log.d(TAG, "check cdb");
             setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.cards_cdb)));
             copyCdbFile(needsUpdate);
-            if(IOUtils.hasAssets(mContext, getDatapath(GameSettings.CORE_PICS_ZIP))){
+            if(IOUtils.hasAssets(mContext, getDatapath(Constants.CORE_PICS_ZIP))){
                 setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.images)));
-                IOUtils.copyFilesFromAssets(mContext, getDatapath(GameSettings.CORE_PICS_ZIP),
+                IOUtils.copyFilesFromAssets(mContext, getDatapath(Constants.CORE_PICS_ZIP),
                         resPath, needsUpdate);
             }
         } catch (Exception e) {
@@ -149,7 +150,7 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
     }
 
     void copyCdbFile(boolean needsUpdate) throws IOException {
-        File dbFile = new File(mSettings.getDataBasePath(), GameSettings.DATABASE_NAME);
+        File dbFile = new File(mSettings.getDataBasePath(), Constants.DATABASE_NAME);
         boolean copyDb = true;
         if (dbFile.exists()) {
             copyDb = false;
@@ -159,7 +160,7 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
             }
         }
         if (copyDb) {
-            IOUtils.copyFilesFromAssets(mContext, getDatapath(GameSettings.DATABASE_NAME), mSettings.getDataBasePath(), needsUpdate);
+            IOUtils.copyFilesFromAssets(mContext, getDatapath(Constants.DATABASE_NAME), mSettings.getDataBasePath(), needsUpdate);
             doSomeTrickOnDatabase(dbFile.getAbsolutePath());
         }
     }
@@ -195,12 +196,12 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
     }
 
     private void checkDirs() {
-        String[] dirs = {GameSettings.CORE_SCRIPT_PATH,
-                GameSettings.CORE_SINGLE_PATH,
-                GameSettings.CORE_DECK_PATH,
-                GameSettings.CORE_REPLAY_PATH,
-                GameSettings.FONT_DIRECTORY,
-                GameSettings.CORE_IMAGE_PATH
+        String[] dirs = {Constants.CORE_SCRIPT_PATH,
+                         Constants.CORE_SINGLE_PATH,
+                         Constants.CORE_DECK_PATH,
+                         Constants.CORE_REPLAY_PATH,
+                         Constants.FONT_DIRECTORY,
+                         Constants.CORE_IMAGE_PATH
         };
         File dirFile = null;
         for (String dir : dirs) {
@@ -230,7 +231,7 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
 
     private int copyCoreConfig(String toPath) {
         try {
-            String path = getDatapath(GameSettings.CORE_CONFIG_PATH);
+            String path = getDatapath(Constants.CORE_CONFIG_PATH);
             int count = IOUtils.copyFilesFromAssets(mContext, path, toPath, true);
             if (count < 3) {
                 return ERROR_CORE_CONFIG_LOST;

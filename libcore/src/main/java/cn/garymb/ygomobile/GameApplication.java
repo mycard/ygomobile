@@ -14,8 +14,7 @@ import java.util.Map;
 import cn.garymb.ygomobile.core.IrrlichtBridge;
 
 
-public class BaseApplication extends Application implements IrrlichtBridge.IrrlichtApplication {
-    protected GameSettings settings;
+public abstract class GameApplication extends Application implements IrrlichtBridge.IrrlichtApplication {
     private SoundPool mSoundEffectPool;
     private Map<String, Integer> mSoundIdMap;
 
@@ -28,20 +27,12 @@ public class BaseApplication extends Application implements IrrlichtBridge.Irrli
     @Override
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
-        settings = GameSettings.init(getSettings());
     }
 
     @Override
     public void onTerminate() {
         super.onTerminate();
         mSoundEffectPool.release();
-    }
-
-    protected GameSettings getSettings() {
-        if (settings == null) {
-            settings = new GameSettings(this);
-        }
-        return settings;
     }
 
     @SuppressWarnings("deprecation")
@@ -62,35 +53,20 @@ public class BaseApplication extends Application implements IrrlichtBridge.Irrli
         }
     }
 
-    @Override
-    public String getCardImagePath() {
-        return settings.getCardImagePath();
-    }
+    public abstract NativeInitOptions getNativeInitOptions();
 
-    @Override
-    public void setLastDeck(String name) {
-        settings.setLastDeck(name);
-    }
+    public abstract float getSmallerSize();
 
-    @Override
-    public String getFontPath() {
-        return settings.getFontPath();
-    }
+    public abstract float getXScale();
 
-    @Override
-    public String getLastDeck() {
-        return settings.getLastDeck();
-    }
+    public abstract float getYScale();
 
-    @Override
-    public float getScreenWidth() {
-        return settings.getScreenWidth();
-    }
+    public abstract boolean isLockSreenOrientation();
 
-    @Override
-    public float getScreenHeight() {
-        return settings.getScreenHeight();
-    }
+    /***
+     * 隐藏底部导航栏
+     */
+    public abstract boolean isImmerSiveMode();
 
     @Override
     public void playSoundEffect(String path) {
