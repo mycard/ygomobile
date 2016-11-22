@@ -11,7 +11,7 @@
         <Preference
             android:key="pref_key_game_res_path"
             android:persistent="true"
-            android:title="@string/settings_game_res_path" />
-    </PreferenceCategory>
+    android:title="@string/settings_game_res_path" />
+</PreferenceCategory>
 
 </PreferenceScreen>

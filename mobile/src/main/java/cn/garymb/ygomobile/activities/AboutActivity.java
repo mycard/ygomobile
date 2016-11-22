@@ -4,10 +4,10 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 
 import cn.garymb.ygomobile.Constants;
-import cn.garymb.ygomobile.settings.SettingFragment;
+import cn.garymb.ygomobile.settings.AboutFragment;
 
-public class SettingsActivity extends BaseActivity {
-    private SettingFragment mSettingFragment;
+public class AboutActivity extends BaseActivity {
+    private AboutFragment mFragment;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -16,7 +16,7 @@ public class SettingsActivity extends BaseActivity {
         if(getIntent().hasExtra(Constants.SETTINGS_CATEGORY)){
             type = getIntent().getIntExtra(Constants.SETTINGS_CATEGORY, 0);
         }
-        mSettingFragment = new SettingFragment().initCategory(type);
-        getFragmentManager().beginTransaction().replace(android.R.id.content, mSettingFragment).commit();
+        mFragment = new AboutFragment();
+        getFragmentManager().beginTransaction().replace(android.R.id.content, mFragment).commit();
     }
 }

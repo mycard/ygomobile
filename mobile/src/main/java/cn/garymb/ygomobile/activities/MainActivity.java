@@ -14,12 +14,13 @@ import cn.garymb.ygomobile.task.ResCheckTask;
 import cn.garymb.ygomobile.utils.VUiKit;
 import cn.garymb.ygomobile.utils.YGOStarter;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
     private boolean enableStart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setExitAnimEnable(false);
         LinearLayout layout = new LinearLayout(this);
         layout.setOrientation(LinearLayout.VERTICAL);
         setContentView(layout);
@@ -55,8 +56,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_about:
-
+            case R.id.action_about: {
+                Intent intent = new Intent(this, AboutActivity.class);
+                startActivity(intent);
+            }
                 break;
             case R.id.action_game:
                 if (enableStart) {
@@ -65,10 +68,10 @@ public class MainActivity extends AppCompatActivity {
                     VUiKit.show(this, R.string.dont_start_game);
                 }
                 break;
-            case R.id.action_settings:
+            case R.id.action_settings: {
                 Intent intent = new Intent(this, SettingsActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
+            }
                 break;
         }
         return super.onOptionsItemSelected(item);

@@ -33,14 +33,14 @@
             android:key="pref_key_game_lab_pendulum_scale"
             android:summary="@string/settings_game_lab_pendulum_scale_des"
             android:title="@string/settings_game_lab_pendulum_scale"/>
-        <cn.garymb.ygomobile.widget.preference.MyListPreference
+        <ListPreference
             android:defaultValue="@integer/default_ogles_config"
             android:entries="@array/opengl_version"
             android:entryValues="@array/opengl_version_value"
             android:key="pref_key_game_ogles_config"
             android:persistent="true"
             android:title="@string/settings_game_opengl"/>
-        <cn.garymb.ygomobile.widget.preference.MyListPreference
+        <ListPreference
             android:defaultValue="@integer/default_card_quality_config"
             android:entries="@array/card_quality"
             android:entryValues="@array/card_quality_value"
@@ -50,7 +50,7 @@
 
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/settings_category_diy">
-        <cn.garymb.ygomobile.widget.preference.MyListPreference
+        <ListPreference
             android:key="pref_key_game_font_name"
             android:persistent="true"
             android:title="@string/settings_game_font_name"/>
@@ -64,7 +64,7 @@
             android:persistent="true"
             android:title="@string/settings_game_diy_card_back"/>
 
-        <cn.garymb.ygomobile.widget.preference.MyBooleanValuePreference
+        <CheckBoxPreference
             android:defaultValue="false"
             android:key="settings_game_diy_card_db"
             android:persistent="true"
