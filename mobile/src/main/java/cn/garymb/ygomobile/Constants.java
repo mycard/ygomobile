@@ -7,7 +7,7 @@ public interface Constants {
     String PREF_DEF_GAME_DIR = "ygocore";
 
 
-    String PREF_GAME_VERSION = "pref_core_version";
+    String PREF_GAME_VERSION = "pref_key_core_version";
     String PREF_DEF_GAME_VERSION = "3.5";
     String PREF_IMAGE_QUALITY = "pref_key_game_image_quality";
     int PREF_DEF_IMAGE_QUALITY = 1;
@@ -26,6 +26,10 @@ public interface Constants {
     boolean PREF_DEF_LOCK_SCREEN = true;
     String PREF_IMMERSIVE_MODE = "pref_key_immersive_mode";
     boolean PREF_DEF_IMMERSIVE_MODE = true;
+    String SETTINGS_COVER = "settings_game_diy_cover";
+    String SETTINGS_CARD_BG="settings_game_diy_card_back";
+    String SETTINGS_DIY_CDB="settings_game_diy_card_db";
+    String SETTING_RESET_CDB="settings_reset_card_db";
 
     String DEFAULT_FONT_NAME = "ygo.ttf";
     String DATABASE_NAME = "cards.cdb";
@@ -39,8 +43,8 @@ public interface Constants {
     String CORE_REPLAY_PATH = "replay";
     String CORE_SCRIPTS_ZIP = "scripts.zip";
     String CORE_PICS_ZIP = "pics.zip";
-    String CORE_SKIN_COVER = "bg.jpg";
-    String CORE_SKIN_CARD_BACK = "cover.jpg";
+    String CORE_SKIN_COVER = "cover.jpg";
+    String CORE_SKIN_BG = "bg.jpg";
     int[] CORE_SKIN_COVER_SIZE = new int[]{1024, 640};
     int[] CORE_SKIN_CARD_BACK_SIZE = new int[]{177, 254};
 }

@@ -119,14 +119,18 @@ public class AppsSettings {
      * opengl版本
      */
     public int getOpenglVersion() {
-        return mSharedPreferences.getInt(Constants.PREF_OPENGL_VERSION, Constants.PREF_DEF_OPENGL_VERSION);
+        try {
+            return Integer.valueOf(mSharedPreferences.getString(Constants.PREF_OPENGL_VERSION, "" + Constants.PREF_DEF_OPENGL_VERSION));
+        }catch (Exception e){
+            return  Constants.PREF_DEF_OPENGL_VERSION;
+        }
     }
 
     /***
      * opengl版本
      */
     public void setOpenglVersion(int openglVersion) {
-        mSharedPreferences.putInt(Constants.PREF_OPENGL_VERSION, openglVersion);
+        mSharedPreferences.putString(Constants.PREF_OPENGL_VERSION, ""+openglVersion);
     }
 
     /***
@@ -161,14 +165,18 @@ public class AppsSettings {
      * 图片质量
      */
     public int getCardQuality() {
-        return mSharedPreferences.getInt(Constants.PREF_IMAGE_QUALITY, Constants.PREF_DEF_IMAGE_QUALITY);
+        try {
+            return Integer.valueOf(mSharedPreferences.getString(Constants.PREF_IMAGE_QUALITY, "" + Constants.PREF_DEF_IMAGE_QUALITY));
+        }catch (Exception e){
+            return Constants.PREF_DEF_IMAGE_QUALITY;
+        }
     }
 
     /***
      * 图片质量
      */
     public void setCardQuality(int quality) {
-        mSharedPreferences.putInt(Constants.PREF_IMAGE_QUALITY, quality);
+        mSharedPreferences.putString(Constants.PREF_IMAGE_QUALITY, ""+quality);
     }
 
     /***

@@ -47,7 +47,7 @@
 
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/settings_category_diy">
-        <ListPreference
+        <Preference
             android:key="pref_key_game_font_name"
             android:persistent="true"
             android:title="@string/settings_game_font_name"/>
