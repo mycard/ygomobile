@@ -19,6 +19,7 @@ abstract class BasePreferenceFragment extends PreferenceFragment implements Pref
         , Preference.OnPreferenceChangeListener {
     @Override
     public boolean onPreferenceChange(Preference preference, Object value) {
+        if (value == null) return false;
         String stringValue;
         if (value instanceof String) {
             stringValue = (String) value;
@@ -62,9 +63,9 @@ abstract class BasePreferenceFragment extends PreferenceFragment implements Pref
                 }
             }
 
-        }else if(preference instanceof CheckBoxPreference){
-            CheckBoxPreference checkBoxPreference = (CheckBoxPreference)preference;
-            checkBoxPreference.setChecked((Boolean)value);
+        } else if (preference instanceof CheckBoxPreference) {
+            CheckBoxPreference checkBoxPreference = (CheckBoxPreference) preference;
+            checkBoxPreference.setChecked((Boolean) value);
         } else {
             // For all other preferences, set the summary to the value's
             // simple string representation.
@@ -89,6 +90,9 @@ abstract class BasePreferenceFragment extends PreferenceFragment implements Pref
     }
 
     protected Object getValue(String key, Object defValue, boolean isbool) {
+        if (mSharedPreferences == null) {
+            return null;
+        }
         Object value = null;
         if (isbool) {
             boolean def = defValue == null ? false : (Boolean) defValue;

@@ -23,8 +23,8 @@
             android:persistent="true"
             android:title="@string/settings_about_check_update" />
         <Preference
-            android:key="pref_key_feed_back"
-            android:title="@string/settings_about_feedback"/>
+            android:key="pref_key_change_log"
+            android:title="@string/settings_about_change_log"/>
     </PreferenceCategory>
 
 </PreferenceScreen>
