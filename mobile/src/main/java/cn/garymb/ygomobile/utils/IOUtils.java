@@ -122,6 +122,7 @@ public class IOUtils {
                     count += copyFilesFromAssets(context, path, join(toPath, file), update);
                 } else {
                     File f = new File(join(toPath, file));
+                    createFolder(f);
                     if (update || !f.exists()) {
                         Log.i(TAG, "copy2:" + path + "-->" + f.getAbsolutePath());
                         copyToFile(am.open(path), f.getAbsolutePath());

@@ -2,7 +2,9 @@ package cn.garymb.ygomobile;
 
 
 import android.support.v7.app.AppCompatDelegate;
+import android.util.Log;
 
+import cn.garymb.ygomobile.lite.BuildConfig;
 import cn.garymb.ygomobile.settings.AppsSettings;
 
 public class App extends GameApplication {
@@ -15,7 +17,8 @@ public class App extends GameApplication {
 
     @Override
     public NativeInitOptions getNativeInitOptions() {
-        return AppsSettings.get().getNativeInitOptions();
+        NativeInitOptions options= AppsSettings.get().getNativeInitOptions();
+        return options;
     }
 
     @Override

@@ -79,8 +79,8 @@ public class AppsSettings {
         options.mIsPendulumScaleEnabled = isPendulumScale();
         options.mIsSoundEffectEnabled = isSoundEffect();
         options.mOpenglVersion = getOpenglVersion();
-        if (BuildConfig.DEBUG) {
-            Log.i("checker", "" + options.toString());
+        if(BuildConfig.DEBUG) {
+            Log.i("Irrlicht", "option=" + options);
         }
         return options;
     }

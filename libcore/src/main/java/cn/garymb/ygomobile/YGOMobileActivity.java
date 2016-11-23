@@ -71,17 +71,17 @@ public class YGOMobileActivity extends NativeActivity implements
     @SuppressWarnings("WrongConstant")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if(getApplication() instanceof GameApplication) {
+        if (getApplication() instanceof GameApplication) {
             mApp = (GameApplication) getApplication();
-        }else{
+        } else {
             finish();
             return;
         }
+        super.onCreate(savedInstanceState);
         if (sChainControlXPostion < 0) {
             initPostion();
         }
-        if(mApp.isLockSreenOrientation()) {
+        if (mApp.isLockSreenOrientation()) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         }
         initExtraView();
@@ -89,6 +89,7 @@ public class YGOMobileActivity extends NativeActivity implements
         mNetController = new NetworkController(getApplicationContext());
         handleExternalCommand(getIntent());
     }
+
     private void initPostion() {
         final Resources res = getResources();
         sChainControlXPostion = (int) (CHAIN_CONTROL_PANEL_X_POSITION_LEFT_EDGE * mApp
@@ -231,7 +232,6 @@ public class YGOMobileActivity extends NativeActivity implements
     @Override
     public ByteBuffer getNativeInitOptions() {
         NativeInitOptions options = mApp.getNativeInitOptions();
-        Log.d(TAG, "options:" + options);
         return options.toNativeBuffer();
     }
 
