@@ -3,6 +3,7 @@ package cn.garymb.ygomobile.utils;
 
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.os.Build;
 import android.util.Log;
 import android.text.TextUtils;
 
@@ -12,7 +13,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.zip.Deflater;
+import java.util.zip.ZipFile;
 
 public class IOUtils {
     private static final String TAG = "ioUtils";
@@ -26,16 +27,25 @@ public class IOUtils {
             }
         }
     }
+    public static void closeZip(ZipFile closeable) {
+        if (closeable == null) return;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            try {
+                closeable.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    public static void delete(File file) {
+        if (file == null || !file.exists()) return;
 
-    public static void delete(File file){
-        if(file==null||!file.exists())return;
-
-        if(file.isFile()){
+        if (file.isFile()) {
             file.delete();
-        }else{
-            File[] files=file.listFiles();
-            if(files!=null){
-                for(File f:files){
+        } else {
+            File[] files = file.listFiles();
+            if (files != null) {
+                for (File f : files) {
                     delete(f);
                 }
             }
@@ -43,9 +53,10 @@ public class IOUtils {
         }
     }
 
-    public static boolean rename(String src,String to){
+    public static boolean rename(String src, String to) {
         return new File(src).renameTo(new File(to));
     }
+
     public static boolean isDirectory(Context context, String assets) {
         String[] files = new String[0];
         try {
@@ -80,6 +91,10 @@ public class IOUtils {
     }
 
     public static int copyFilesFromAssets(Context context, String assets, String toPath, boolean update) throws IOException {
+        return copyFilesFromAssets(context, assets, toPath, update, true);
+    }
+
+    public static int copyFilesFromAssets(Context context, String assets, String toPath, boolean update, boolean sub) throws IOException {
         AssetManager am = context.getAssets();
         String[] files = am.list(assets);
         if (files == null) {
@@ -88,18 +103,22 @@ public class IOUtils {
         if (files.length == 0) {
             //is file
             String file = getName(assets);
-            String tofile = join(toPath, file);
-            if (update || !new File(tofile).exists()) {
+            File tofile = new File(toPath, file);
+            if (update || !tofile.exists()) {
                 Log.i(TAG, "copy1:" + assets + "-->" + tofile);
-                copyToFile(am.open(assets), tofile);
+                createFolder(tofile);
+                copyToFile(am.open(assets), tofile.getAbsolutePath());
             }
             return 1;
         } else {
             int count = 0;
+            File toDir = new File(toPath);
+            createFolder(toDir);
             for (String file : files) {
                 String path = join(assets, file);
                 if (isDirectory(context, path)) {
                     Log.i(TAG, "copy dir:" + path + "-->" + join(toPath, file));
+                    createFolder(new File(toPath, file));
                     count += copyFilesFromAssets(context, path, join(toPath, file), update);
                 } else {
                     File f = new File(join(toPath, file));
@@ -116,6 +135,17 @@ public class IOUtils {
         }
     }
 
+    public static void createFolder(File file) {
+        if(file.isDirectory()){
+            file.mkdirs();
+            return;
+        }
+        File dir = file.getParentFile();
+        if (dir != null && !dir.exists()) {
+            dir.mkdirs();
+        }
+    }
+
     public static void copy(InputStream in, OutputStream out) throws IOException {
         byte[] cache = new byte[1024 * 8];
         int len;
@@ -124,7 +154,7 @@ public class IOUtils {
         }
     }
 
-    public static boolean hasAssets(Context context,String name){
+    public static boolean hasAssets(Context context, String name) {
         try {
             context.getAssets().open(name);
         } catch (IOException e) {
@@ -136,10 +166,10 @@ public class IOUtils {
     public static void copyToFile(InputStream in, String file) {
         FileOutputStream outputStream = null;
         try {
-            File dir = new File(file).getParentFile();
-            if (dir != null && !dir.exists()) {
-                dir.mkdirs();
-            }
+//            File dir = new File(file).getParentFile();
+//            if (dir != null && !dir.exists()) {
+//                dir.mkdirs();
+//            }
             outputStream = new FileOutputStream(file);
             copy(in, outputStream);
         } catch (Exception e) {
@@ -152,9 +182,7 @@ public class IOUtils {
 
     public static boolean createNoMedia(String path) {
         File file = new File(path);
-        if (!file.exists()) {
-            file.mkdirs();
-        }
+        createFolder(file);
         if (file.isDirectory()) {
             //
             File n = new File(file, ".nomedia");

@@ -60,7 +60,7 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
         });
     }
 
-    private String getDatapath(String path) {
+    public static String getDatapath(String path) {
         if (TextUtils.isEmpty(ASSETS_PATH)) {
             return path;
         }
@@ -119,7 +119,7 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
             Log.d(TAG, "check game skin");
             setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.game_skins)));
             IOUtils.copyFilesFromAssets(mContext, getDatapath(Constants.CORE_SKIN_PATH),
-                    mSettings.getCoreSkinPath(), needsUpdate);
+                    mSettings.getCoreSkinPath(), needsUpdate, mSettings.isPendulumScale());
             Log.d(TAG, "check fonts");
             setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.font_files)));
             IOUtils.copyFilesFromAssets(mContext, getDatapath(Constants.FONT_DIRECTORY),
@@ -129,7 +129,7 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
             IOUtils.copyFilesFromAssets(mContext, getDatapath(Constants.CORE_SINGLE_PATH),
                     new File(resPath, Constants.CORE_SINGLE_PATH).getAbsolutePath(), needsUpdate);
             Log.d(TAG, "check scripts");
-            if(IOUtils.hasAssets(mContext, getDatapath(Constants.CORE_SCRIPTS_ZIP))) {
+            if (IOUtils.hasAssets(mContext, getDatapath(Constants.CORE_SCRIPTS_ZIP))) {
                 setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.scripts)));
                 IOUtils.copyFilesFromAssets(mContext, getDatapath(Constants.CORE_SCRIPTS_ZIP),
                         resPath, needsUpdate);
@@ -137,7 +137,7 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
             Log.d(TAG, "check cdb");
             setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.cards_cdb)));
             copyCdbFile(needsUpdate);
-            if(IOUtils.hasAssets(mContext, getDatapath(Constants.CORE_PICS_ZIP))){
+            if (IOUtils.hasAssets(mContext, getDatapath(Constants.CORE_PICS_ZIP))) {
                 setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.images)));
                 IOUtils.copyFilesFromAssets(mContext, getDatapath(Constants.CORE_PICS_ZIP),
                         resPath, needsUpdate);

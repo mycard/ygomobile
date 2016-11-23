@@ -120,7 +120,7 @@ public class YGOMobileActivity extends NativeActivity implements
 
     private void fullscreen() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && mApp.isImmerSiveMode()) {
-            getWindow().getDecorView().setSystemUiVisibility(windowsFlags);
+//            getWindow().getDecorView().setSystemUiVisibility(windowsFlags);
         }
     }
 

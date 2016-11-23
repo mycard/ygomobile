@@ -11,7 +11,7 @@
     <string name="settings_game_font_antialias">Font antialias</string>
     <string name="settings_game_laboratory">Laboratory</string>
     <string name="settings_game_laboratory_des">Contains lately unstable features</string>
-    <string name="settings_game_lab_pendulum_scale">pendulum scale</string>
+    <string name="settings_game_lab_pendulum_scale">Pendulum Scale Images</string>
     <string name="settings_game_lab_pendulum_scale_des">Show pendulum scale graphically</string>
     <string name="settings_game_font_antialias_summary">Disable this option can increase the frame rate</string>
     <string name="settings_about_author_pref">Author</string>

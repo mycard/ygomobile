@@ -19,7 +19,7 @@ public interface Constants {
     String PREF_OPENGL_VERSION = "pref_key_game_ogles_config";
     int PREF_DEF_OPENGL_VERSION = 1;
     String PREF_PENDULUM_SCALE = "pref_key_game_lab_pendulum_scale";
-    boolean PREF_DEF_PENDULUM_SCALE = true;
+    boolean PREF_DEF_PENDULUM_SCALE = false;
     String PREF_SOUND_EFFECT = "pref_key_game_sound_effect";
     boolean PREF_DEF_SOUND_EFFECT = true;
     String PREF_LOCK_SCREEN = "pref_key_game_screen_orientation";
@@ -34,7 +34,7 @@ public interface Constants {
     String FONT_DIRECTORY = "fonts";
     String CORE_CONFIG_PATH = "core";
     String CORE_SKIN_PATH = "textures";
-    String CORE_SKIN_PENDLUM_PATH = CORE_SKIN_PATH + "/extra";
+    String CORE_SKIN_PENDULUM_PATH = CORE_SKIN_PATH + "/extra";
     String CORE_DECK_PATH = "deck";
     String CORE_SINGLE_PATH = "single";
     String CORE_IMAGE_PATH = "pics";
@@ -46,6 +46,10 @@ public interface Constants {
     String CORE_SKIN_BG = "bg.jpg";
     int[] CORE_SKIN_BG_SIZE = new int[]{1024, 640};
     int[] CORE_SKIN_CARD_COVER_SIZE = new int[]{177, 254};
-    int REQUEST_CHOOSE_IMG = 0x1000 + 0x20;
+
     int REQUEST_CUT_IMG = 0x1000 + 0x10;
+    int REQUEST_CHOOSE_FILE = 0x1000 + 0x20;
+    int REQUEST_CHOOSE_IMG = 0x1000 + 0x21;
+    int REQUEST_CHOOSE_TTF = 0x1000 + 0x22;
+    int REQUEST_CHOOSE_CDB = 0x1000 + 0x23;
 }

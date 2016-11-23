@@ -17,11 +17,16 @@
     <string name="single_lua">single files</string>
     <string name="font_files">font files</string>
     <string name="game_skins">skin files</string>
+    <string name="coping_pendulum_image">Coping pendulum image</string>
     <string name="dialog_select_font">Select a font file</string>
+    <string name="dialog_select_image">Select a iamge</string>
     <string name="dialog_select_database">Select a databse file</string>
     <string name="copy_databse">copying databse</string>
+    <string name="card_cover">Card Cover</string>
+    <string name="game_bg">Game Background</string>
     <string name="no_find_image_selector">no find image selector</string>
     <string name="no_find_image_cutor">no find image cutor</string>
+    <string name="no_find_file_selectotr">no find file selector</string>
     <string name="title_activity_settings2">Settings</string>
     <string name="help">Help</string>
     <string name="create_folder">New folder</string>

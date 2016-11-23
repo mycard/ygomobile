@@ -71,8 +71,8 @@ public class YGOStarter {
         activityShowInfo.rootOld = activityShowInfo.mRoot.getBackground();
         activityShowInfo.mContentView.setVisibility(View.INVISIBLE);
         //读取当前的背景图，如果卡的话，可以考虑缓存bitmap
-        String bgfile = new File(AppsSettings.get().getCoreSkinPath(), Constants.CORE_SKIN_COVER).getAbsolutePath();
-        Bitmap bmp = BitmapUtils.createNewBitmapAndCompressByFile(bgfile, CORE_SKIN_BG_SIZE,false);
+        String bgfile = new File(AppsSettings.get().getCoreSkinPath(), Constants.CORE_SKIN_BG).getAbsolutePath();
+        Bitmap bmp = BitmapUtil.getBitmapFromFile(bgfile, CORE_SKIN_BG_SIZE[0], CORE_SKIN_BG_SIZE[1]);
         if(bmp ==null){
             activityShowInfo.mRoot.setBackgroundResource(R.drawable.bg);
         }else {
