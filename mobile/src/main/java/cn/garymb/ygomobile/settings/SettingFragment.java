@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.ViewGroup;
@@ -180,12 +181,14 @@ public class SettingFragment extends PreferenceFragmentPlus {
             File db = new File(mSettings.getResourcePath(), Constants.DATABASE_NAME);
             InputStream in = null;
             try {
-                if (db.exists()) {
-                    db.delete();
+                if(!TextUtils.equals(file, db.getAbsolutePath())){
+                    if (db.exists()) {
+                        db.delete();
+                    }
+                    in = new FileInputStream(file);
+                    //复制
+                    IOUtils.copyToFile(in, db.getAbsolutePath());
                 }
-                in = new FileInputStream(file);
-                //复制
-                IOUtils.copyToFile(in, db.getAbsolutePath());
                 //处理数据
                 ResCheckTask.doSomeTrickOnDatabase(db.getAbsolutePath());
                 return true;
