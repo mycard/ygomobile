@@ -1,4 +1,4 @@
-package cn.garymb.ygomobile.settings;
+package cn.garymb.ygomobile.plus;
 
 import android.content.Intent;
 import android.content.SharedPreferences;

@@ -1,4 +1,4 @@
-package cn.garymb.ygomobile.utils;
+package cn.garymb.ygomobile.core;
 
 
 import android.app.Activity;
@@ -21,6 +21,7 @@ import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.YGOMobileActivity;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.settings.AppsSettings;
+import cn.garymb.ygomobile.utils.BitmapUtil;
 
 import static cn.garymb.ygomobile.Constants.CORE_SKIN_BG_SIZE;
 

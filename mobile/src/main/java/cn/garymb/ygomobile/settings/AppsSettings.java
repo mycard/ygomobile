@@ -9,7 +9,7 @@ import java.io.File;
 import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.NativeInitOptions;
 import cn.garymb.ygomobile.lite.BuildConfig;
-import cn.garymb.ygomobile.utils.SharedPreferencesPlus;
+import cn.garymb.ygomobile.plus.PreferenceFragmentPlus;
 
 import static cn.garymb.ygomobile.Constants.PREF_DEF_IMMERSIVE_MODE;
 import static cn.garymb.ygomobile.Constants.PREF_IMMERSIVE_MODE;
@@ -18,7 +18,7 @@ import static cn.garymb.ygomobile.Constants.PREF_LOCK_SCREEN;
 public class AppsSettings {
     private static AppsSettings sAppsSettings;
     private Context context;
-    private SharedPreferencesPlus mSharedPreferences;
+    private PreferenceFragmentPlus.SharedPreferencesPlus mSharedPreferences;
     private float mScreenHeight, mScreenWidth, mDensity;
 
     public static void init(Context context) {
@@ -33,14 +33,14 @@ public class AppsSettings {
 
     private AppsSettings(Context context) {
         this.context = context;
-        mSharedPreferences = SharedPreferencesPlus.create(context, context.getPackageName() + ".settings");
+        mSharedPreferences = PreferenceFragmentPlus.SharedPreferencesPlus.create(context, context.getPackageName() + ".settings");
         mSharedPreferences.setAutoSave(true);
         mDensity = context.getResources().getDisplayMetrics().density;
         mScreenHeight = context.getResources().getDisplayMetrics().heightPixels;
         mScreenWidth = context.getResources().getDisplayMetrics().widthPixels;
     }
 
-    public SharedPreferencesPlus getSharedPreferences() {
+    public PreferenceFragmentPlus.SharedPreferencesPlus getSharedPreferences() {
         return mSharedPreferences;
     }
 

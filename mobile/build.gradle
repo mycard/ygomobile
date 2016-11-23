@@ -26,6 +26,7 @@ android {
     sourceSets {
         main {
             assets.srcDirs = ['assets']
+            java.srcDirs = ['src/main/java','../xml2object/xml2object/src/main/java']
         }
     }
     packagingOptions {

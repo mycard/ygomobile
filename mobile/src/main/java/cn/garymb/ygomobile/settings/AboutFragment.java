@@ -6,15 +6,14 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.Preference;
-import android.preference.PreferenceManager;
 import android.view.Gravity;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 
 import cn.garymb.ygomobile.lite.R;
-import cn.garymb.ygomobile.utils.VUiKit;
+import cn.garymb.ygomobile.plus.PreferenceFragmentPlus;
+import cn.garymb.ygomobile.plus.VUiKit;
 
 public class AboutFragment extends PreferenceFragmentPlus {
     @Override

@@ -29,6 +29,8 @@ public interface Constants {
     String SETTINGS_COVER = "settings_game_diy_card_cover";
     String SETTINGS_CARD_BG = "settings_game_diy_card_bg";
 
+    String ASSET_SERVER_LIST="serverlist.xml";
+
     String DEFAULT_FONT_NAME = "ygo.ttf";
     String DATABASE_NAME = "cards.cdb";
     String FONT_DIRECTORY = "fonts";

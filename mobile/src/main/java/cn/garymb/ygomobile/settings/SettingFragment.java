@@ -24,9 +24,10 @@ import java.io.InputStream;
 import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.core.ResCheckTask;
 import cn.garymb.ygomobile.lite.R;
+import cn.garymb.ygomobile.plus.PreferenceFragmentPlus;
 import cn.garymb.ygomobile.utils.BitmapUtil;
 import cn.garymb.ygomobile.utils.IOUtils;
-import cn.garymb.ygomobile.utils.VUiKit;
+import cn.garymb.ygomobile.plus.VUiKit;
 
 import static cn.garymb.ygomobile.Constants.*;
 import static cn.garymb.ygomobile.core.ResCheckTask.getDatapath;

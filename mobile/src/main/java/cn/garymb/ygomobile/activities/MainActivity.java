@@ -5,27 +5,46 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.view.GravityCompat;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.Toast;
 
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
+
+import cn.garymb.ygomobile.adapters.ServerListAdapater;
+import cn.garymb.ygomobile.bean.ServerInfo;
+import cn.garymb.ygomobile.bean.ServerList;
+import cn.garymb.ygomobile.lite.BuildConfig;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.core.ResCheckTask;
-import cn.garymb.ygomobile.utils.VUiKit;
-import cn.garymb.ygomobile.utils.YGOStarter;
+import cn.garymb.ygomobile.plus.VUiKit;
+import cn.garymb.ygomobile.core.YGOStarter;
+import cn.garymb.ygomobile.utils.IOUtils;
+import cn.garymb.ygomobile.utils.XmlUtils;
 
-public class MainActivity extends BaseActivity {
+import static cn.garymb.ygomobile.Constants.ASSET_SERVER_LIST;
+
+public class MainActivity extends BaseActivity implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
     private boolean enableStart;
+    private ListView mListView;
+    private ServerListAdapater mServerListAdapater;
+    private ServerList mServerList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setExitAnimEnable(false);
-        LinearLayout layout = new LinearLayout(this);
-        layout.setOrientation(LinearLayout.VERTICAL);
-        setContentView(layout);
+        setContentView(R.layout.activity_main);
+        mServerListAdapater = new ServerListAdapater(this);
+        mListView = (ListView) findViewById(R.id.list_server);
+        mListView.setAdapter(mServerListAdapater);
         //资源复制
         checkResourceDownload((error) -> {
             if (error < 0) {
@@ -35,6 +54,47 @@ public class MainActivity extends BaseActivity {
             }
         });
         YGOStarter.onCreated(this);
+        loadData();
+    }
+
+    private void loadData() {
+        VUiKit.defer().when(() -> {
+//            ServerList test=new ServerList();
+//            List<ServerInfo> serverInfoList=new ArrayList<ServerInfo>();
+//            ServerInfo serverInfo=new ServerInfo();
+//            serverInfo.setName("test");
+//            serverInfo.setServerAddr("127.0.0.1");
+//            serverInfoList.add(serverInfo);
+//            test.setServerInfoList(serverInfoList);
+//            if (BuildConfig.DEBUG) {
+//                Log.i("kk", "list=" + XmlUtils.get().toXml(test));
+//            }
+            InputStream in = getAssets().open(ASSET_SERVER_LIST);
+            ServerList list = XmlUtils.get().getObject(ServerList.class, in);
+            IOUtils.close(in);
+            return list;
+        }).fail((e) -> {
+
+        }).done((list) -> {
+            if (list != null) {
+                if (BuildConfig.DEBUG) {
+                    Log.i("kk", "list=" + list);
+                }
+                mServerList = list;
+                mServerListAdapater.addAll(list.getServerInfoList());
+                mServerListAdapater.notifyDataSetChanged();
+            }
+        });
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+    }
+
+    @Override
+    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+        return false;
     }
 
     @Override
@@ -76,13 +136,13 @@ public class MainActivity extends BaseActivity {
             }
             break;
             case R.id.action_quit: {
-                AlertDialog.Builder builder=new AlertDialog.Builder(this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 builder.setTitle(R.string.quit_tip);
-                builder.setNegativeButton(android.R.string.ok, (dlg,s)->{
+                builder.setNegativeButton(android.R.string.ok, (dlg, s) -> {
                     dlg.dismiss();
                     finish();
                 });
-                builder.setNeutralButton(android.R.string.cancel, (dlg,s)->{
+                builder.setNeutralButton(android.R.string.cancel, (dlg, s) -> {
                     dlg.dismiss();
                 });
                 builder.show();

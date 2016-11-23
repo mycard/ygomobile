@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<servers>
+    <server>
+        <player-name>YGOMobile</player-name>
+        <name>233正式服务器</name>
+        <ip>118.178.111.167</ip>
+        <port>233</port>
+    </server>
+    <server>
+        <player-name>YGOMobile</player-name>
+        <name>233人机练习</name>
+        <ip>118.178.111.167</ip>
+        <port>9999</port>
+    </server>
+    <server>
+        <player-name>YGOMobile</player-name>
+        <name>233先行卡</name>
+        <ip>118.178.111.167</ip>
+        <port>23333</port>
+    </server>
+    <server>
+        <player-name>YGOMobile</player-name>
+        <name>C萌约战</name>
+        <ip>120.24.169.252</ip>
+        <port>23333</port>
+    </server>
+</servers>

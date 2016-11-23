@@ -65,6 +65,13 @@
     <string name="settings_game_opengl">OpenGL</string>
     <string name="settings_author">garymabin@gmail.com\n24732145321453@qq.com</string>
     <string name="restart_app">"Please restart app！"</string>
+    <string name="server_name">server name</string>
+    <string name="server_display_name">Server</string>
+    <string name="server_user">User:</string>
+    <string name="server_room">Room:</string>
+    <string name="server_port">Port:</string>
+    <string name="server_pwd">Pwd:</string>
+    <string name="server_user_pwd">Pwd:</string>
     <string-array name="opengl_version">
         <item>OpenGL ES 1.X</item>
         <item>OpenGL ES 2.0 fixed shaders</item>
