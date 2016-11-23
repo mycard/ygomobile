@@ -13,6 +13,7 @@ import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -198,10 +199,12 @@ public class SettingFragment extends PreferenceFragmentPlus {
             dlg.dismiss();
             mSettings.setUseExtraCards(false);
             checkBoxPreference.setChecked(false);
+            Toast.makeText(getActivity(), R.string.restart_app, Toast.LENGTH_SHORT).show();
         }).done((ok) -> {
             dlg.dismiss();
             checkBoxPreference.setChecked(ok);
             mSettings.setUseExtraCards(ok);
+            Toast.makeText(getActivity(), R.string.restart_app, Toast.LENGTH_SHORT).show();
         });
     }
 

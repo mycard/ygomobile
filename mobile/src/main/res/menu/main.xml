@@ -10,9 +10,10 @@
         android:id="@+id/action_settings"
         android:title="@string/action_settings"/>
     <item
-        android:id="@+id/action_checkupdate"
-        android:title="@string/action_checkupdate"/>
-    <item
         android:id="@+id/action_about"
         android:title="@string/action_about"/>
+
+    <item
+        android:id="@+id/action_quit"
+        android:title="@string/quit"/>
 </menu>

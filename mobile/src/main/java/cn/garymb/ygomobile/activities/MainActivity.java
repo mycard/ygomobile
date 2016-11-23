@@ -1,12 +1,15 @@
 package cn.garymb.ygomobile.activities;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.view.GravityCompat;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.core.ResCheckTask;
@@ -59,7 +62,7 @@ public class MainActivity extends BaseActivity {
                 Intent intent = new Intent(this, AboutActivity.class);
                 startActivity(intent);
             }
-                break;
+            break;
             case R.id.action_game:
                 if (enableStart) {
                     YGOStarter.startGame(this, null);
@@ -71,7 +74,20 @@ public class MainActivity extends BaseActivity {
                 Intent intent = new Intent(this, SettingsActivity.class);
                 startActivity(intent);
             }
-                break;
+            break;
+            case R.id.action_quit: {
+                AlertDialog.Builder builder=new AlertDialog.Builder(this);
+                builder.setTitle(R.string.quit_tip);
+                builder.setNegativeButton(android.R.string.ok, (dlg,s)->{
+                    dlg.dismiss();
+                    finish();
+                });
+                builder.setNeutralButton(android.R.string.cancel, (dlg,s)->{
+                    dlg.dismiss();
+                });
+                builder.show();
+            }
+            break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -84,4 +100,17 @@ public class MainActivity extends BaseActivity {
             task.execute();
         }
     }
+
+    long exitLasttime = 0;
+
+    @Override
+    public void onBackPressed() {
+        if (System.currentTimeMillis() - exitLasttime <= 3000) {
+            super.onBackPressed();
+        } else {
+            Toast.makeText(this, R.string.back_tip, Toast.LENGTH_SHORT).show();
+            exitLasttime = System.currentTimeMillis();
+        }
+    }
+
 }

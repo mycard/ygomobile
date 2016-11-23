@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory android:title="@string/app_name">
+    <PreferenceCategory android:title="@string/settings_game">
         <Preference
             android:key="pref_key_core_version"
             android:persistent="true"
@@ -26,11 +26,9 @@
         <CheckBoxPreference
             android:key="pref_key_immersive_mode"
             android:persistent="true"
-            android:summary="@string/settings_game_immersive_mode_summary"
             android:title="@string/settings_game_immersive_mode"/>
         <CheckBoxPreference
             android:key="pref_key_game_lab_pendulum_scale"
-            android:summary="@string/settings_game_lab_pendulum_scale_des"
             android:title="@string/settings_game_lab_pendulum_scale"/>
         <ListPreference
             android:entries="@array/opengl_version"
@@ -64,7 +62,6 @@
         <CheckBoxPreference
             android:key="settings_game_diy_card_db"
             android:persistent="true"
-            android:summary="@string/settings_game_diy_card_db_des"
             android:title="@string/settings_game_diy_card_db"/>
     </PreferenceCategory>
 

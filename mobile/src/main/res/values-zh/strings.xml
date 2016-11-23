@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">YGOMobile</string>
+    <string name="action_settings">設置</string>
+    <string name="action_game">啟動遊戲</string>
+    <string name="action_about">關於</string>
+    <string name="dont_start_game">無法啟動遊戲</string>
+    <!-- check -->
+    <string name="check_res">檢查資源</string>
+    <string name="check_things">檢查 %s ...</string>
+    <string name="core_config">遊戲核心</string>
+    <string name="new_deck">新卡组</string>
+    <string name="cards_cdb">數據庫</string>
+    <string name="scripts">腳本</string>
+    <string name="images">圖片</string>
+    <string name="single_lua">殘局文件</string>
+    <string name="font_files">字體文件</string>
+    <string name="game_skins">皮膚文件</string>
+    <string name="coping_pendulum_image">複製搖擺圖片</string>
+    <string name="dialog_select_font">請選擇一個字體文件</string>
+    <string name="dialog_select_image">請選擇一張圖片</string>
+    <string name="dialog_select_database">請選擇一個數據庫</string>
+    <string name="copy_databse">複製數據庫中</string>
+    <string name="card_cover">卡片背面</string>
+    <string name="game_bg">遊戲背景</string>
+    <string name="no_find_file_selectotr">沒有找到文件選擇器</string>
+    <string name="no_find_image_selector">没有找到图片選擇器</string>
+    <string name="help">幫助</string>
+    <string name="settings">設置</string>
+    <string name="quit">退出</string>
+    <string name="quit_tip">退出遊戲?</string>
+    <string name="back_tip">请再按一次返回鍵退出</string>
+    <string name="string_help_text">當前應用缺少必要權限。\n請點擊 設置-權限 打开權限。</string>
+    <!-- settings -->
+    <string name="settings_about">關於</string>
+    <string name="settings_about_sub_about">關於</string>
+    <string name="settings_game_enable_sound_effect">啟用遊戲音效</string>
+    <string name="settings_game_screen_orientation">遊戲橫屏鎖定</string>
+    <string name="settings_game_font_antialias">字體抗鋸齒</string>
+    <string name="settings_game_lab_pendulum_scale">搖擺數字圖片</string>
+    <string name="settings_game_font_antialias_summary">禁用字體抗鋸齒可以提升幀數</string>
+    <string name="settings_about_author_pref">作者</string>
+    <string name="settings_about_proj_loc">項目鏈接</string>
+    <string name="settings_about_version_pref">版本</string>
+    <string name="settings_about_opensource_pref">聲明</string>
+    <string name="settings_about_check_update">檢查更新</string>
+    <string name="settings_about_change_log">更新日誌</string>
+    <string name="settings_game_card_quality">遊戲圖片質量</string>
+    <string name="settings_game_font_name">遊戲字體</string>
+    <string name="settings_game_res_path">遊戲目錄</string>
+    <string name="settings_game">遊戲設置</string>
+    <string name="settings_game_core_version">遊戲核心</string>
+    <string name="settings_category_diy">DIY</string>
+    <string name="settings_game_diy_cover">遊戲背景</string>
+    <string name="settings_game_diy_card_back">卡片背面</string>
+    <string name="settings_game_diy_card_db">使用自定義數據庫</string>
+    <string name="settings_game_immersive_mode">在遊戲隱藏虛擬鍵盤</string>
+    <string name="settings_about_project_address">https://code.csdn.net/a247321453/ygomobile.git</string>
+    <string name="settings_game_opengl">OpenGL</string>
+    <string name="settings_author">garymabin@gmail.com\n24732145321453@qq.com</string>
+    <string name="restart_app">請重啟本應用</string>
+    <string-array name="opengl_version">
+        <item>OpenGL ES 1.X</item>
+        <item>OpenGL ES 2.0 fixed shaders</item>
+        <item>OpenGL ES 2.0 builtin shaders</item>
+    </string-array>
+    <string-array name="card_quality">
+        <item>低</item>
+        <item>高</item>
+    </string-array>
+    <!-- settings -->
+</resources>

@@ -25,14 +25,54 @@
     <string name="card_cover">Card Cover</string>
     <string name="game_bg">Game Background</string>
     <string name="no_find_image_selector">no find image selector</string>
-    <string name="no_find_image_cutor">no find image cutor</string>
     <string name="no_find_file_selectotr">no find file selector</string>
-    <string name="title_activity_settings2">Settings</string>
     <string name="help">Help</string>
-    <string name="create_folder">New folder</string>
     <string name="settings">Settings</string>
     <string name="quit">Quit</string>
     <string name="quit_tip">Quit app?</string>
+    <string name="back_tip">Press back key again to exit.</string>
     <string name="string_help_text">The current application lacks the necessary permissions. \n
         please click Settings - permissions - open the required permissions.</string>
+
+    <!-- settings -->
+    <string name="settings_about">About</string>
+    <string name="settings_about_sub_about">About</string>
+    <string name="settings_game_enable_sound_effect">Enable sound effect</string>
+    <string name="settings_game_screen_orientation">Lock screen in duel</string>
+    <string name="settings_game_font_antialias">Font antialias</string>
+    <string name="settings_game_lab_pendulum_scale">Pendulum Scale Images</string>
+    <string name="settings_game_lab_pendulum_scale_des">Show pendulum scale graphically</string>
+    <string name="settings_game_font_antialias_summary">Disable this option can increase the frame rate</string>
+    <string name="settings_about_author_pref">Author</string>
+    <string name="settings_about_proj_loc">Project link</string>
+    <string name="settings_about_version_pref">Version</string>
+    <string name="settings_about_opensource_pref">License</string>
+    <string name="settings_about_check_update">Check update</string>
+    <string name="settings_about_change_log">Change log</string>
+    <string name="settings_game_card_quality">Card texture quality</string>
+    <string name="settings_game_font_name">Game Font</string>
+    <string name="settings_game">Game Settings</string>
+    <string name="settings_game_res_path">Game path</string>
+    <string name="settings_game_core_version">Game Core Version</string>
+    <string name="settings_category_diy">DIY</string>
+    <string name="settings_game_diy_cover">Game Background</string>
+    <string name="settings_game_diy_card_back">Card Cover</string>
+    <string name="settings_game_diy_card_db">Use your own card database</string>
+    <string name="settings_game_diy_card_db_des">User custom databse</string>
+    <string name="settings_game_immersive_mode_summary">Hide virtual navigation key in game</string>
+    <string name="settings_game_immersive_mode">Immersive Mode</string>
+    <string name="settings_about_project_address">https://code.csdn.net/a247321453/ygomobile.git</string>
+    <string name="settings_game_opengl">OpenGL</string>
+    <string name="settings_author">garymabin@gmail.com\n24732145321453@qq.com</string>
+    <string name="restart_app">"Please restart app！"</string>
+    <string-array name="opengl_version">
+        <item>OpenGL ES 1.X</item>
+        <item>OpenGL ES 2.0 fixed shaders</item>
+        <item>OpenGL ES 2.0 builtin shaders</item>
+    </string-array>
+    <string-array name="card_quality">
+        <item>Speed</item>
+        <item>Quality</item>
+    </string-array>
+    <!-- settings -->
 </resources>
