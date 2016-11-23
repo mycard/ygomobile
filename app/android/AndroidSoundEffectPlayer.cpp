@@ -169,5 +169,93 @@ void AndroidSoundEffectPlayer::doDestroyEffect() {
 				AP_TYPE_ASSET);
 	}
 }
+ void AndroidSoundEffectPlayer::doMenuBGM() {
+	if (m_isEnabled) {
 
+	}
+}
+
+ void AndroidSoundEffectPlayer::doDeckBgm() {
+	if (m_isEnabled) {
+
+	}
+}
+
+ void AndroidSoundEffectPlayer::doSaveDeck() {
+	if (m_isEnabled) {
+
+	}
+}
+
+ void AndroidSoundEffectPlayer::doDelete() {
+	if (m_isEnabled) {
+
+	}
+}
+
+ void AndroidSoundEffectPlayer::doLeave() {
+	if (m_isEnabled) {
+
+	}
+}
+
+ void AndroidSoundEffectPlayer::doReady() {
+	if (m_isEnabled) {
+
+	}
+}
+
+ void AndroidSoundEffectPlayer::doUnReady() {
+	if (m_isEnabled) {
+
+	}
+}
+
+ void AndroidSoundEffectPlayer::doPlayerExit() {
+	if (m_isEnabled) {
+
+	}
+}
+
+ void AndroidSoundEffectPlayer::doOpeningBGM() {
+	if (m_isEnabled) {
+
+	}
+}
+
+ void AndroidSoundEffectPlayer::doDisadvantageBgm() {
+	if (m_isEnabled) {
+
+	}
+}
+
+ void AndroidSoundEffectPlayer::doAdvantageBgm() {
+	if (m_isEnabled) {
+
+	}
+}
+
+ void AndroidSoundEffectPlayer::doWinBgm() {
+	if (m_isEnabled) {
+
+	}
+}
+
+ void AndroidSoundEffectPlayer::doLoseBgm() {
+	if (m_isEnabled) {
+
+	}
+}
+
+ void AndroidSoundEffectPlayer::doStartGame() {
+	if (m_isEnabled) {
+
+	}
+}
+
+ void AndroidSoundEffectPlayer::doPressButton() {
+	if (m_isEnabled) {
+
+	}
+}
 } /* namespace ygo */
