@@ -4,6 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 
 public class NativeCrashHandler {
+    static{
+        System.loadLibrary("YGOMobile");
+    }
     private Context ctx;
 
     private void makeCrashReport(String reason, StackTraceElement[] stack, int threadID)
