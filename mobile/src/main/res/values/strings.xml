@@ -86,5 +86,7 @@
     <string name="server_user_pwd">Password:</string>
     <string name="edit">Edit</string>
     <string name="save">Save</string>
+    <string name="must_info">must info</string>
     <string name="server_is_exist">the server is exist</string>
+    <string name="server_info_error">server info is bad.</string>
 </resources>

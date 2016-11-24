@@ -27,6 +27,7 @@ import static cn.garymb.ygomobile.Constants.CORE_SKIN_BG_SIZE;
 
 
 public class YGOStarter {
+    private static Bitmap mLogo;
 
     private static void setFullScreen(Activity activity, ActivityShowInfo activityShowInfo) {
         activity.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -73,11 +74,11 @@ public class YGOStarter {
         activityShowInfo.mContentView.setVisibility(View.INVISIBLE);
         //读取当前的背景图，如果卡的话，可以考虑缓存bitmap
         String bgfile = new File(AppsSettings.get().getCoreSkinPath(), Constants.CORE_SKIN_BG).getAbsolutePath();
-        Bitmap bmp = BitmapUtil.getBitmapFromFile(bgfile, CORE_SKIN_BG_SIZE[0], CORE_SKIN_BG_SIZE[1]);
-        if(bmp ==null){
+        mLogo = BitmapUtil.getBitmapFromFile(bgfile, CORE_SKIN_BG_SIZE[0], CORE_SKIN_BG_SIZE[1]);
+        if(mLogo ==null){
             activityShowInfo.mRoot.setBackgroundResource(R.drawable.bg);
         }else {
-            Drawable bg = new BitmapDrawable(activity.getResources(), bmp);
+            Drawable bg = new BitmapDrawable(activity.getResources(), mLogo);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 activityShowInfo.mRoot.setBackground(bg);
             } else {
@@ -88,6 +89,7 @@ public class YGOStarter {
     }
 
     private static void hideLoadingBg(Activity activity, ActivityShowInfo activityShowInfo) {
+        BitmapUtil.destroy(mLogo);
         activity.setRequestedOrientation(activityShowInfo.oldRequestedOrientation);
         activityShowInfo.mContentView.setVisibility(View.VISIBLE);
         if (Build.VERSION.SDK_INT >= 16) {

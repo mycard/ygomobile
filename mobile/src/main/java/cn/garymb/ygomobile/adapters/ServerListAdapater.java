@@ -1,8 +1,10 @@
 package cn.garymb.ygomobile.adapters;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -15,8 +17,10 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import cn.garymb.ygodata.YGOGameOptions;
 import cn.garymb.ygomobile.bean.ServerInfo;
 import cn.garymb.ygomobile.bean.ServerList;
+import cn.garymb.ygomobile.core.YGOStarter;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.plus.BaseAdapterPlus;
 import cn.garymb.ygomobile.plus.VUiKit;
@@ -27,9 +31,11 @@ import static cn.garymb.ygomobile.Constants.ASSET_SERVER_LIST;
 
 public class ServerListAdapater extends BaseAdapterPlus<ServerInfo> implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
     private final File xmlFile;
+    private Activity mActivity;
 
-    public ServerListAdapater(Context context) {
+    public ServerListAdapater(Activity context) {
         super(context);
+        mActivity = context;
         xmlFile = new File(context.getFilesDir(), "server_list.xml");
     }
 
@@ -41,7 +47,13 @@ public class ServerListAdapater extends BaseAdapterPlus<ServerInfo> implements A
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         ServerInfo serverInfo = getItem(position);
         if (serverInfo != null) {
-            //TODO 显示信息
+            //TODO 显示信息/直接进入游戏？
+            YGOGameOptions options = new YGOGameOptions();
+            options.mServerAddr = serverInfo.getServerAddr();
+            options.mUserName = serverInfo.getPlayerName();
+            options.mPort = serverInfo.getPort();
+            options.mUserPassword = serverInfo.getPassword();
+            YGOStarter.startGame(mActivity, options);
         }
     }
 
@@ -112,6 +124,12 @@ public class ServerListAdapater extends BaseAdapterPlus<ServerInfo> implements A
             info.setName("" + editViewHolder.serverName.getText());
             info.setServerAddr("" + editViewHolder.serverIp.getText());
             info.setPlayerName("" + editViewHolder.userName.getText());
+            if (TextUtils.isEmpty(info.getName())
+                    || TextUtils.isEmpty(info.getServerAddr())
+                    || TextUtils.isEmpty(editViewHolder.serverPort.getText())) {
+                Toast.makeText(getContext(), R.string.server_is_exist, Toast.LENGTH_SHORT).show();
+                return;
+            }
             info.setPort(Integer.valueOf("" + editViewHolder.serverPort.getText()));
             info.setPassword("" + editViewHolder.userPassword.getText());
 

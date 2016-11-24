@@ -79,4 +79,7 @@
     <string name="server_user_pwd">密码:</string>
     <string name="edit">编辑</string>
     <string name="save">保存</string>
+    <string name="must_info">必填信息</string>
+    <string name="server_is_exist">服务器信息已经存在！</string>
+    <string name="server_info_error">服务器信息填写错误</string>
 </resources>

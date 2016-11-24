@@ -27,15 +27,18 @@ public class BitmapUtil {
         MAX_BITMAP = (dm.widthPixels * dm.heightPixels) / 5 * 4;
     }
 
+    public static void destroy(Bitmap bitmap) {
+        if (bitmap != null && !bitmap.isRecycled())
+            bitmap.recycle();
+        bitmap = null;
+    }
+
     public static void destroy(Drawable drawable) {
         if (drawable != null) {
             drawable.setCallback(null);
             if (drawable instanceof BitmapDrawable) {
                 BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
-                Bitmap bitmap = bitmapDrawable.getBitmap();
-                if (bitmap != null && !bitmap.isRecycled())
-                    bitmap.recycle();
-                bitmap = null;
+                destroy(bitmapDrawable.getBitmap());
             }
             drawable = null;
         }
@@ -109,7 +112,7 @@ public class BitmapUtil {
         InputStream inputStream = null;
         Bitmap bmp = null;
         try {
-            if(!new File(path).exists()){
+            if (!new File(path).exists()) {
                 return null;
             }
             inputStream = new FileInputStream(path);
@@ -138,9 +141,9 @@ public class BitmapUtil {
         try {
             BitmapFactory.Options options = new BitmapFactory.Options();
             if (dstW * dstH >= MAX_BITMAP) {
-                if(dstH>0) {
+                if (dstH > 0) {
                     options.inSampleSize = (int) ((srcH / dstH + srcW / dstW) / 2.0f);
-                }else{
+                } else {
                     options.inSampleSize = (int) (srcW / dstW);
                 }
             }
