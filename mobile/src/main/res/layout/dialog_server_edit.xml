@@ -51,13 +51,14 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="3">
+                android:layout_weight="1">
 
                 <TextView
                     android:id="@+id/textView"
                     android:layout_width="@dimen/label_width_middle"
                     android:layout_height="wrap_content"
                     android:text="@string/server_ip"
+                    android:layout_gravity="center_vertical"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                     android:textColor="@color/colorAccent"/>
 
@@ -73,7 +74,6 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
-
                 <TextView
                     android:layout_width="@dimen/label_width_50dp"
                     android:layout_height="wrap_content"
@@ -87,8 +87,7 @@
                     android:layout_height="wrap_content"
                     android:digits="1234567890"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:text="0"
-                    android:hint="@string/must_info"/>
+                    android:text="0"/>
             </LinearLayout>
         </LinearLayout>
 
