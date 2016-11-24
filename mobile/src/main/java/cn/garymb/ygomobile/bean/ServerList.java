@@ -13,6 +13,10 @@ public class ServerList {
 
     }
 
+    public ServerList(List<ServerInfo> serverInfoList) {
+        mServerInfoList = serverInfoList;
+    }
+
     public List<ServerInfo> getServerInfoList() {
         return mServerInfoList;
     }

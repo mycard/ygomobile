@@ -19,6 +19,10 @@ public abstract class BaseAdapterPlus<T> extends BaseAdapter {
         mLayoutInflater = LayoutInflater.from(context);
     }
 
+    public Context getContext() {
+        return context;
+    }
+
     public void add(T item) {
         if (item != null) {
             mItems.add(item);

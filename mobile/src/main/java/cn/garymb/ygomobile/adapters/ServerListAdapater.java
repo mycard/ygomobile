@@ -1,32 +1,47 @@
 package cn.garymb.ygomobile.adapters;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 import cn.garymb.ygomobile.bean.ServerInfo;
+import cn.garymb.ygomobile.bean.ServerList;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.plus.BaseAdapterPlus;
+import cn.garymb.ygomobile.plus.VUiKit;
+import cn.garymb.ygomobile.utils.IOUtils;
+import cn.garymb.ygomobile.utils.XmlUtils;
+
+import static cn.garymb.ygomobile.Constants.ASSET_SERVER_LIST;
 
 public class ServerListAdapater extends BaseAdapterPlus<ServerInfo> implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
+    private final File xmlFile;
+
     public ServerListAdapater(Context context) {
         super(context);
+        xmlFile = new File(context.getFilesDir(), "server_list.xml");
     }
 
     public void addServer() {
-        //TODO 显示编辑对话框，完成则是添加
+        showDialog(null, -1);
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         ServerInfo serverInfo = getItem(position);
         if (serverInfo != null) {
-            //TODO 显示信息? ip:port
+            //TODO 显示信息
         }
     }
 
@@ -34,9 +49,92 @@ public class ServerListAdapater extends BaseAdapterPlus<ServerInfo> implements A
     public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
         ServerInfo serverInfo = getItem(position);
         if (serverInfo != null) {
-            //TODO 编辑信息? ip:port
+            showDialog(serverInfo, position);
+            return true;
         }
         return false;
+    }
+
+    public void loadData() {
+        VUiKit.defer().when(() -> {
+            InputStream in = null;
+            if (xmlFile.exists()) {
+                in = new FileInputStream(xmlFile);
+            } else {
+                in = getContext().getAssets().open(ASSET_SERVER_LIST);
+            }
+            ServerList list = null;
+            try {
+                list = XmlUtils.get().getObject(ServerList.class, in);
+            } catch (Exception e) {
+
+            } finally {
+                IOUtils.close(in);
+            }
+            return list;
+        }).done((list) -> {
+            if (list != null) {
+                addAll(list.getServerInfoList());
+                notifyDataSetChanged();
+            }
+        });
+    }
+
+    private void showDialog(ServerInfo serverInfo, int position) {
+        final boolean isAdd = position < 0;
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        View view = mLayoutInflater.inflate(R.layout.dialog_server_edit, null);
+        EditViewHolder editViewHolder = new EditViewHolder(view);
+//        if (isAdd) {
+//            builder.setTitle(R.string.action_add_server);
+//        } else {
+//            builder.setTitle(R.string.edit);
+//        }
+        builder.setView(view);
+//        builder.setCancelable(false);
+        final Dialog dialog = builder.show();
+        if (serverInfo != null) {
+            editViewHolder.serverName.setText(serverInfo.getName());
+            editViewHolder.serverIp.setText(serverInfo.getServerAddr());
+            editViewHolder.userName.setText(serverInfo.getPlayerName());
+            editViewHolder.serverPort.setText(String.valueOf(serverInfo.getPort()));
+            editViewHolder.userPassword.setText(serverInfo.getPassword());
+        }
+        editViewHolder.save.setOnClickListener((v) -> {
+            //保存
+            ServerInfo info;
+
+            if (!isAdd) {
+                info = getItem(position);
+            } else {
+                info = new ServerInfo();
+            }
+            info.setName("" + editViewHolder.serverName.getText());
+            info.setServerAddr("" + editViewHolder.serverIp.getText());
+            info.setPlayerName("" + editViewHolder.userName.getText());
+            info.setPort(Integer.valueOf("" + editViewHolder.serverPort.getText()));
+            info.setPassword("" + editViewHolder.userPassword.getText());
+
+            if (isAdd && exist(info)) {
+                //已经存在
+                Toast.makeText(getContext(), R.string.server_is_exist, Toast.LENGTH_SHORT).show();
+                return;
+            }
+            OutputStream outputStream = null;
+            try {
+                outputStream = new FileOutputStream(xmlFile);
+                XmlUtils.get().saveXml(new ServerList(mItems), outputStream);
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                IOUtils.close(outputStream);
+            }
+            notifyDataSetChanged();
+            dialog.dismiss();
+        });
+        editViewHolder.close.setOnClickListener((v) -> {
+            dialog.dismiss();
+        });
     }
 
 
@@ -54,6 +152,9 @@ public class ServerListAdapater extends BaseAdapterPlus<ServerInfo> implements A
         holder.serverIp.setText(item.getServerAddr());
         holder.userName.setText(item.getPlayerName());
         holder.serverPort.setText(String.valueOf(item.getPort()));
+        holder.edit.setOnClickListener((v) -> {
+            showDialog(item, position);
+        });
     }
 
     static class ViewHolder {
@@ -61,7 +162,7 @@ public class ServerListAdapater extends BaseAdapterPlus<ServerInfo> implements A
         TextView userName;
         TextView serverIp;
         TextView serverPort;
-        TextView userPassword;
+        View edit;
 
         ViewHolder(View view) {
             view.setTag(view.getId(), this);
@@ -69,11 +170,24 @@ public class ServerListAdapater extends BaseAdapterPlus<ServerInfo> implements A
             serverIp = (TextView) view.findViewById(R.id.text_ip);
             serverPort = (TextView) view.findViewById(R.id.text_port);
             userName = (TextView) view.findViewById(R.id.text_player);
-            userPassword = (TextView) view.findViewById(R.id.text_player_pwd);
+            edit = view.findViewById(R.id.btn_edit);
         }
 
         static ViewHolder from(View view) {
             return (ViewHolder) view.getTag(view.getId());
+        }
+    }
+
+    static class EditViewHolder extends ViewHolder {
+        View close;
+        View save;
+        TextView userPassword;
+
+        EditViewHolder(View view) {
+            super(view);
+            close = view.findViewById(R.id.btn_close);
+            save = view.findViewById(R.id.btn_save);
+            userPassword = (TextView) view.findViewById(R.id.text_player_pwd);
         }
     }
 }

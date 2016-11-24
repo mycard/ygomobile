@@ -35,7 +35,6 @@ public class MainActivity extends BaseActivity{
     private boolean enableStart;
     private ListView mListView;
     private ServerListAdapater mServerListAdapater;
-    private ServerList mServerList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,24 +56,7 @@ public class MainActivity extends BaseActivity{
         });
         YGOStarter.onCreated(this);
         //加载服务器列表
-        loadData();
-    }
-
-    private void loadData() {
-        VUiKit.defer().when(() -> {
-            InputStream in = getAssets().open(ASSET_SERVER_LIST);
-            ServerList list = XmlUtils.get().getObject(ServerList.class, in);
-            IOUtils.close(in);
-            return list;
-        }).fail((e) -> {
-
-        }).done((list) -> {
-            if (list != null) {
-                mServerList = list;
-                mServerListAdapater.addAll(list.getServerInfoList());
-                mServerListAdapater.notifyDataSetChanged();
-            }
-        });
+        mServerListAdapater.loadData();
     }
 
     @Override

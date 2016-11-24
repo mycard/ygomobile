@@ -78,4 +78,6 @@
     <string name="server_room_pwd">密码:</string>
     <string name="server_user_pwd">密码:</string>
     <string name="edit">编辑</string>
+    <string name="save">保存</string>
+    <string name="server_is_exist">服务器信息已经存在！</string>
 </resources>

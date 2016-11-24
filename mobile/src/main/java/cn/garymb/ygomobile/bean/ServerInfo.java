@@ -13,6 +13,8 @@ public class ServerInfo {
 
     @XmlElement("player-name")
     private String playerName;
+    @XmlElement("password")
+    private String password;
 
     public ServerInfo() {
 
@@ -56,6 +58,13 @@ public class ServerInfo {
         this.playerName = playerName;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -65,7 +74,9 @@ public class ServerInfo {
         ServerInfo that = (ServerInfo) o;
 
         if (port != that.port) return false;
-        return serverAddr != null ? serverAddr.equals(that.serverAddr) : that.serverAddr == null;
+        if (serverAddr != null ? !serverAddr.equals(that.serverAddr) : that.serverAddr != null)
+            return false;
+        return playerName != null ? playerName.equals(that.playerName) : that.playerName == null;
 
     }
 
@@ -73,6 +84,7 @@ public class ServerInfo {
     public int hashCode() {
         int result = serverAddr != null ? serverAddr.hashCode() : 0;
         result = 31 * result + port;
+        result = 31 * result + (playerName != null ? playerName.hashCode() : 0);
         return result;
     }
 
@@ -83,6 +95,7 @@ public class ServerInfo {
                 ", serverAddr='" + serverAddr + '\'' +
                 ", port=" + port +
                 ", playerName='" + playerName + '\'' +
+                ", password='" + password + '\'' +
                 '}';
     }
 }
