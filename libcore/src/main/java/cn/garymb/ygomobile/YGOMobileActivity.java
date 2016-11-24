@@ -23,6 +23,8 @@ import android.view.View;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.github.nativehandler.NativeCrashHandler;
+
 import java.nio.ByteBuffer;
 
 import cn.garymb.ygodata.YGOGameOptions;
@@ -67,6 +69,7 @@ public class YGOMobileActivity extends NativeActivity implements
     private static int sChainControlYPostion = -1;
     private GameApplication mApp;
     private Handler handler = new Handler();
+    private NativeCrashHandler mNativeCrashHandler;
 
     @SuppressWarnings("WrongConstant")
     @Override
@@ -77,6 +80,8 @@ public class YGOMobileActivity extends NativeActivity implements
             finish();
             return;
         }
+        mNativeCrashHandler = new NativeCrashHandler();
+        mNativeCrashHandler.registerForNativeCrash(this);
         super.onCreate(savedInstanceState);
         if (sChainControlXPostion < 0) {
             initPostion();
@@ -88,6 +93,12 @@ public class YGOMobileActivity extends NativeActivity implements
         mPM = (PowerManager) getSystemService(Context.POWER_SERVICE);
         mNetController = new NetworkController(getApplicationContext());
         handleExternalCommand(getIntent());
+    }
+
+    @Override
+    protected void onDestroy() {
+        mNativeCrashHandler.unregisterForNativeCrash();
+        super.onDestroy();
     }
 
     private void initPostion() {
