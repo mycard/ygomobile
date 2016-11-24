@@ -161,7 +161,6 @@ public class SettingFragment extends PreferenceFragmentPlus {
         layoutParams.gravity = Gravity.CENTER_HORIZONTAL;
         frameLayout.addView(imageView, layoutParams);
         builder.setView(frameLayout);
-        builder.setCancelable(false);
         builder.setNegativeButton(R.string.settings, (dlg, s) -> {
             showImageCropChooser(preference, getString(R.string.dialog_select_image), outFile,
                     isJpeg, outWidth, outHeight);

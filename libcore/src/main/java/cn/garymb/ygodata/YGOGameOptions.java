@@ -16,14 +16,16 @@ public class YGOGameOptions implements Parcelable {
 	public static final int MAX_BYTE_BUFFER_SIZE = 8192;
 	
 	public String mServerAddr;
-	
-	public String mName;
+
+	//用户名字
+	public String mUserName;
 	
 	public String mRoomName;
 	
 	public String mRoomPasswd;
-	
-	public String mHostInfo;
+
+	//用户密码
+	public String mUserPassword;
 	
 	public int mPort;
 	
@@ -64,10 +66,10 @@ public class YGOGameOptions implements Parcelable {
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
 		dest.writeString(mServerAddr);
-		dest.writeString(mName);
+		dest.writeString(mUserName);
 		dest.writeString(mRoomName);
 		dest.writeString(mRoomPasswd);
-		dest.writeString(mHostInfo);
+		dest.writeString(mUserPassword);
 		dest.writeInt(mPort);
 		dest.writeInt(mMode);
 		dest.writeInt(isCompleteOptions ? 1 : 0);
@@ -86,10 +88,10 @@ public class YGOGameOptions implements Parcelable {
 		public YGOGameOptions createFromParcel(Parcel source) {
 			YGOGameOptions options = new YGOGameOptions();
 			options.mServerAddr = source.readString();
-			options.mName = source.readString();
+			options.mUserName = source.readString();
 			options.mRoomName = source.readString();
 			options.mRoomPasswd = source.readString();
-			options.mHostInfo = source.readString();
+			options.mUserPassword = source.readString();
 			options.mPort = source.readInt();
 			options.mMode = source.readInt();
 			options.isCompleteOptions = source.readInt() == 1;
@@ -115,7 +117,7 @@ public class YGOGameOptions implements Parcelable {
 		append(", port: ").append(mPort).
 		append(", roomName: ").append(mRoomName == null ? "(unspecified)" : mRoomName.toString()).
 		append(", roomPassword: ").append(mRoomPasswd == null ? "(unspecified)" : mRoomPasswd.toString()).
-		append(", userName: ").append(mName == null ? "(unspecified)" : mName.toString()).
+		append(", userName: ").append(mUserName == null ? "(unspecified)" : mUserName.toString()).
 		append(", mode: ").append(mMode).
 		append(", isCompleteRequest").append(isCompleteOptions).
 		append(", rule: ").append(mRule).
@@ -131,10 +133,10 @@ public class YGOGameOptions implements Parcelable {
 	public ByteBuffer toByteBuffer() {
 		ByteBuffer buffer = ByteBuffer.allocateDirect(MAX_BYTE_BUFFER_SIZE);
 		putString(buffer, mServerAddr);
-		putString(buffer, mName);
+		putString(buffer, mUserName);
 		putString(buffer, mRoomName);
 		putString(buffer, mRoomPasswd);
-		putString(buffer, mHostInfo);
+		putString(buffer, mUserPassword);
 		buffer.putInt(Integer.reverseBytes(mPort));
 		buffer.putInt(Integer.reverseBytes(mMode));
 		buffer.putInt(Integer.reverseBytes(isCompleteOptions ? 1 : 0));

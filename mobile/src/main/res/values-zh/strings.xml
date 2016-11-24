@@ -7,7 +7,7 @@
     <string name="dont_start_game">無法啟動遊戲</string>
     <!-- check -->
     <string name="check_res">檢查資源</string>
-    <string name="check_things">檢查 %s ...</string>
+    <string name="check_things">檢查%s ...</string>
     <string name="core_config">遊戲核心</string>
     <string name="new_deck">新卡组</string>
     <string name="cards_cdb">數據庫</string>
@@ -23,6 +23,7 @@
     <string name="copy_databse">複製數據庫中</string>
     <string name="card_cover">卡片背面</string>
     <string name="game_bg">遊戲背景</string>
+    <string name="action_add_server">添加服務器</string>
     <string name="no_find_file_selectotr">沒有找到文件選擇器</string>
     <string name="no_find_image_selector">没有找到图片選擇器</string>
     <string name="help">幫助</string>
@@ -69,4 +70,12 @@
         <item>高</item>
     </string-array>
     <!-- settings -->
+    <string name="server_name">服务器:</string>
+    <string name="server_ip">IP地址:</string>
+    <string name="server_user">用户:</string>
+    <string name="server_room_name">房间名:</string>
+    <string name="server_port">端口:</string>
+    <string name="server_room_pwd">密码:</string>
+    <string name="server_user_pwd">密码:</string>
+    <string name="edit">编辑</string>
 </resources>

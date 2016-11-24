@@ -22,7 +22,8 @@ public class YGOGameOptions implements Parcelable {
 	public String mRoomName;
 	
 	public String mRoomPasswd;
-	
+
+	//用户密码
 	public String mHostInfo;
 	
 	public int mPort;

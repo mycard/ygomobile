@@ -7,7 +7,7 @@
     <string name="dont_start_game">无法启动游戏</string>
     <!-- check -->
     <string name="check_res">检查资源</string>
-    <string name="check_things">检查 %s ...</string>
+    <string name="check_things">检查%s ...</string>
     <string name="core_config">游戏核心</string>
     <string name="new_deck">新卡组</string>
     <string name="cards_cdb">数据库</string>
@@ -23,6 +23,7 @@
     <string name="copy_databse">复制数据库中</string>
     <string name="card_cover">卡片背面</string>
     <string name="game_bg">游戏背景</string>
+    <string name="action_add_server">添加服务器</string>
     <string name="no_find_file_selectotr">没有找到文件选择器</string>
     <string name="no_find_image_selector">没有找到图片选择器</string>
     <string name="help">帮助</string>
@@ -49,7 +50,7 @@
     <string name="settings_game_font_name">游戏字体</string>
     <string name="settings_game_res_path">游戏目录</string>
     <string name="settings_game_core_version">游戏核心</string>
-    <string name="settings_category_diy">DIY</string>
+    <string name="settings_category_diy">自定义</string>
     <string name="settings_game">游戏设置</string>
     <string name="settings_game_diy_cover">游戏背景</string>
     <string name="settings_game_diy_card_back">卡片背面</string>
@@ -69,4 +70,12 @@
         <item>高</item>
     </string-array>
     <!-- settings -->
+    <string name="server_name">服务器:</string>
+    <string name="server_ip">IP地址:</string>
+    <string name="server_user">用户:</string>
+    <string name="server_room_name">房间名:</string>
+    <string name="server_port">端口:</string>
+    <string name="server_room_pwd">密码:</string>
+    <string name="server_user_pwd">密码:</string>
+    <string name="edit">编辑</string>
 </resources>

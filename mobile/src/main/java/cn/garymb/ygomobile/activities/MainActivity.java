@@ -31,7 +31,7 @@ import cn.garymb.ygomobile.utils.XmlUtils;
 
 import static cn.garymb.ygomobile.Constants.ASSET_SERVER_LIST;
 
-public class MainActivity extends BaseActivity implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
+public class MainActivity extends BaseActivity{
     private boolean enableStart;
     private ListView mListView;
     private ServerListAdapater mServerListAdapater;
@@ -40,11 +40,13 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemClic
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setExitAnimEnable(false);
         setContentView(R.layout.activity_main);
-        mServerListAdapater = new ServerListAdapater(this);
+        setExitAnimEnable(false);
         mListView = (ListView) findViewById(R.id.list_server);
+        mServerListAdapater = new ServerListAdapater(this);
         mListView.setAdapter(mServerListAdapater);
+        mListView.setOnItemClickListener(mServerListAdapater);
+        mListView.setOnItemLongClickListener(mServerListAdapater);
         //资源复制
         checkResourceDownload((error) -> {
             if (error < 0) {
@@ -54,21 +56,12 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemClic
             }
         });
         YGOStarter.onCreated(this);
+        //加载服务器列表
         loadData();
     }
 
     private void loadData() {
         VUiKit.defer().when(() -> {
-//            ServerList test=new ServerList();
-//            List<ServerInfo> serverInfoList=new ArrayList<ServerInfo>();
-//            ServerInfo serverInfo=new ServerInfo();
-//            serverInfo.setName("test");
-//            serverInfo.setServerAddr("127.0.0.1");
-//            serverInfoList.add(serverInfo);
-//            test.setServerInfoList(serverInfoList);
-//            if (BuildConfig.DEBUG) {
-//                Log.i("kk", "list=" + XmlUtils.get().toXml(test));
-//            }
             InputStream in = getAssets().open(ASSET_SERVER_LIST);
             ServerList list = XmlUtils.get().getObject(ServerList.class, in);
             IOUtils.close(in);
@@ -77,24 +70,11 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemClic
 
         }).done((list) -> {
             if (list != null) {
-                if (BuildConfig.DEBUG) {
-                    Log.i("kk", "list=" + list);
-                }
                 mServerList = list;
                 mServerListAdapater.addAll(list.getServerInfoList());
                 mServerListAdapater.notifyDataSetChanged();
             }
         });
-    }
-
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-    }
-
-    @Override
-    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-        return false;
     }
 
     @Override
@@ -148,6 +128,9 @@ public class MainActivity extends BaseActivity implements AdapterView.OnItemClic
                 builder.show();
             }
             break;
+            case R.id.action_add_server:
+                mServerListAdapater.addServer();
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

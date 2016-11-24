@@ -14,15 +14,6 @@ public class ServerInfo {
     @XmlElement("player-name")
     private String playerName;
 
-    @XmlElement("room-name")
-    private String roomName;
-
-    @XmlElement("room-passwd")
-    private String roomPasswd;
-
-    @XmlElement("host-info")
-    private String hostInfo;
-
     public ServerInfo() {
 
     }
@@ -57,14 +48,6 @@ public class ServerInfo {
         this.port = port;
     }
 
-    public String getRoomName() {
-        return roomName;
-    }
-
-    public void setRoomName(String roomName) {
-        this.roomName = roomName;
-    }
-
     public String getPlayerName() {
         return playerName;
     }
@@ -73,21 +56,6 @@ public class ServerInfo {
         this.playerName = playerName;
     }
 
-    public String getRoomPasswd() {
-        return roomPasswd;
-    }
-
-    public void setRoomPasswd(String roomPasswd) {
-        this.roomPasswd = roomPasswd;
-    }
-
-    public String getHostInfo() {
-        return hostInfo;
-    }
-
-    public void setHostInfo(String hostInfo) {
-        this.hostInfo = hostInfo;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -115,9 +83,6 @@ public class ServerInfo {
                 ", serverAddr='" + serverAddr + '\'' +
                 ", port=" + port +
                 ", playerName='" + playerName + '\'' +
-                ", roomName='" + roomName + '\'' +
-                ", roomPasswd='" + roomPasswd + '\'' +
-                ", hostInfo='" + hostInfo + '\'' +
                 '}';
     }
 }

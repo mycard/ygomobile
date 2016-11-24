@@ -7,6 +7,10 @@
         android:title="@string/action_game"
         app:showAsAction="always"/>
     <item
+        android:id="@+id/action_add_server"
+        android:icon="@drawable/ic_add_white"
+        android:title="@string/action_add_server"/>
+    <item
         android:id="@+id/action_settings"
         android:title="@string/action_settings"/>
     <item
