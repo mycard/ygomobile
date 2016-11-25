@@ -1,6 +1,9 @@
 package cn.garymb.ygomobile;
 
+import cn.garymb.ygomobile.lite.BuildConfig;
+
 public interface Constants {
+    boolean DEBUG = BuildConfig.DEBUG;
     String PREF_LAST_YDK = "pref_last_ydk";
     String PREF_DEF_LAST_YDK = "new.ydk";
     String PREF_GAME_PATH = "pref_key_game_res_path";
@@ -29,7 +32,7 @@ public interface Constants {
     String SETTINGS_COVER = "settings_game_diy_card_cover";
     String SETTINGS_CARD_BG = "settings_game_diy_card_bg";
 
-    String ASSET_SERVER_LIST="serverlist.xml";
+    String ASSET_SERVER_LIST = "serverlist.xml";
 
     String DEFAULT_FONT_NAME = "ygo.ttf";
     String DATABASE_NAME = "cards.cdb";
@@ -48,6 +51,7 @@ public interface Constants {
     String CORE_SKIN_BG = "bg.jpg";
     int[] CORE_SKIN_BG_SIZE = new int[]{1024, 640};
     int[] CORE_SKIN_CARD_COVER_SIZE = new int[]{177, 254};
+    String[] IMAGE_EX = new String[]{".jpg", ".png", ".bpg"};
 
     int REQUEST_CUT_IMG = 0x1000 + 0x10;
     int REQUEST_CHOOSE_FILE = 0x1000 + 0x20;

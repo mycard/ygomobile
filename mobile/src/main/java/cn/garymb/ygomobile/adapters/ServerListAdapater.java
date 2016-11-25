@@ -19,6 +19,7 @@ import java.io.OutputStream;
 import cn.garymb.ygodata.YGOGameOptions;
 import cn.garymb.ygomobile.bean.ServerInfo;
 import cn.garymb.ygomobile.bean.ServerList;
+import cn.garymb.ygomobile.core.IDataLoader;
 import cn.garymb.ygomobile.core.YGOStarter;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.plus.BaseAdapterPlus;
@@ -28,7 +29,9 @@ import cn.garymb.ygomobile.utils.XmlUtils;
 
 import static cn.garymb.ygomobile.Constants.ASSET_SERVER_LIST;
 
-public class ServerListAdapater extends BaseAdapterPlus<ServerInfo> implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
+public class ServerListAdapater extends BaseAdapterPlus<ServerInfo> implements
+        IDataLoader,
+        AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
     private final File xmlFile;
     private Activity mActivity;
 
@@ -66,6 +69,7 @@ public class ServerListAdapater extends BaseAdapterPlus<ServerInfo> implements A
         return false;
     }
 
+    @Override
     public void loadData() {
         VUiKit.defer().when(() -> {
             InputStream in = null;

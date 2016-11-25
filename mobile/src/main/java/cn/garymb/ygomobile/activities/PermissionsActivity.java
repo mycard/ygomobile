@@ -184,7 +184,6 @@ class PermissionsChecker {
     public boolean lacksPermissions(String... permissions) {
         for (String permission : permissions) {
             if (lacksPermission(permission)) {
-                Log.e("lacksPermissions", mContext.getPackageName() + ":" + permission);
                 return true;
             }
         }

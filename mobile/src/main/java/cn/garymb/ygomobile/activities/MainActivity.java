@@ -21,6 +21,7 @@ import java.util.List;
 import cn.garymb.ygomobile.adapters.ServerListAdapater;
 import cn.garymb.ygomobile.bean.ServerInfo;
 import cn.garymb.ygomobile.bean.ServerList;
+import cn.garymb.ygomobile.core.CardSelector;
 import cn.garymb.ygomobile.lite.BuildConfig;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.core.ResCheckTask;

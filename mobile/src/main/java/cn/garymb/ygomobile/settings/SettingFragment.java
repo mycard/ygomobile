@@ -16,6 +16,8 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -135,7 +137,8 @@ public class SettingFragment extends PreferenceFragmentPlus {
     @Override
     protected void onChooseFileOk(Preference preference, String file) {
         String key = preference.getKey();
-        Log.i("kk", "onChooseFileOk:" + key + ",file=" + file);
+        if (Constants.DEBUG)
+            Log.i("kk", "onChooseFileOk:" + key + ",file=" + file);
         if (SETTINGS_COVER.equals(key) || SETTINGS_CARD_BG.equals(key)) {
             super.onChooseFileOk(preference, file);
             onPreferenceClick(preference);
@@ -150,7 +153,7 @@ public class SettingFragment extends PreferenceFragmentPlus {
     private void showImageDialog(Preference preference, String title, String outFile, boolean isJpeg, int outWidth, int outHeight) {
         int width = getResources().getDisplayMetrics().widthPixels;
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        ImageView imageView = new ImageView(getActivity());
+        final ImageView imageView = new ImageView(getActivity());
         FrameLayout frameLayout = new FrameLayout(getActivity());
         imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
         builder.setTitle(title);
@@ -162,7 +165,6 @@ public class SettingFragment extends PreferenceFragmentPlus {
         layoutParams.gravity = Gravity.CENTER_HORIZONTAL;
         frameLayout.addView(imageView, layoutParams);
         builder.setView(frameLayout);
-        final Bitmap bmp = ImageLoader.loadImage(outFile, width, -1);
         builder.setNegativeButton(R.string.settings, (dlg, s) -> {
             showImageCropChooser(preference, getString(R.string.dialog_select_image), outFile,
                     isJpeg, outWidth, outHeight);
@@ -172,10 +174,10 @@ public class SettingFragment extends PreferenceFragmentPlus {
             dlg.dismiss();
         });
         builder.setOnCancelListener((dlg) -> {
-            BitmapUtil.destroy(bmp);
+            BitmapUtil.destroy(imageView.getDrawable());
         });
         builder.show();
-        imageView.setImageBitmap(bmp);
+        Glide.with(this).load(new File(outFile)).into(imageView);
     }
 
     private void copyDataBase(Preference preference, String file) {

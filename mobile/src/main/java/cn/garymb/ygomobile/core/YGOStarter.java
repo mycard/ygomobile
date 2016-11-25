@@ -5,13 +5,17 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.ViewTarget;
 
 import java.io.File;
 import java.util.HashMap;
@@ -20,10 +24,9 @@ import cn.garymb.ygodata.YGOGameOptions;
 import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.YGOMobileActivity;
 import cn.garymb.ygomobile.lite.R;
+import cn.garymb.ygomobile.plus.ViewTargetPlus;
 import cn.garymb.ygomobile.settings.AppsSettings;
 import cn.garymb.ygomobile.utils.BitmapUtil;
-
-import static cn.garymb.ygomobile.Constants.CORE_SKIN_BG_SIZE;
 
 
 public class YGOStarter {
@@ -73,25 +76,16 @@ public class YGOStarter {
         activityShowInfo.rootOld = activityShowInfo.mRoot.getBackground();
         activityShowInfo.mContentView.setVisibility(View.INVISIBLE);
         //读取当前的背景图，如果卡的话，可以考虑缓存bitmap
-        String bgfile = new File(AppsSettings.get().getCoreSkinPath(), Constants.CORE_SKIN_BG).getAbsolutePath();
-        if (mLogo == null || mLogo.isRecycled()) {
-            mLogo = ImageLoader.loadImage(bgfile, CORE_SKIN_BG_SIZE[0], CORE_SKIN_BG_SIZE[1]);
-        }
-        if (mLogo == null || mLogo.isRecycled()) {
-            activityShowInfo.mRoot.setBackgroundResource(R.drawable.bg);
+        File bgfile = new File(AppsSettings.get().getCoreSkinPath(), Constants.CORE_SKIN_BG);
+        if (bgfile.exists()) {
+            Glide.with(activity).load(bgfile).into(activityShowInfo.mViewTarget);
         } else {
-            Drawable bg = new BitmapDrawable(activity.getResources(), mLogo);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                activityShowInfo.mRoot.setBackground(bg);
-            } else {
-                activityShowInfo.mRoot.setBackgroundDrawable(bg);
-            }
+            Glide.with(activity).load(R.drawable.bg).into(activityShowInfo.mViewTarget);
         }
         setFullScreen(activity, activityShowInfo);
     }
 
     private static void hideLoadingBg(Activity activity, ActivityShowInfo activityShowInfo) {
-        BitmapUtil.destroy(mLogo);
         mLogo = null;
         activity.setRequestedOrientation(activityShowInfo.oldRequestedOrientation);
         activityShowInfo.mContentView.setVisibility(View.VISIBLE);
@@ -112,6 +106,7 @@ public class YGOStarter {
         }
         activityShowInfo.oldRequestedOrientation = activity.getRequestedOrientation();
         activityShowInfo.mRoot = activity.getWindow().getDecorView();
+        activityShowInfo.mViewTarget = new ViewTargetPlus(activityShowInfo.mRoot);
         activityShowInfo.mContentView = activityShowInfo.mRoot.findViewById(android.R.id.content);
         activityShowInfo.rootOld = activityShowInfo.mRoot.getBackground();
         if (activity instanceof AppCompatActivity) {
@@ -158,6 +153,7 @@ public class YGOStarter {
 
     private static class ActivityShowInfo {
         View mRoot;
+        ViewTarget mViewTarget;
         boolean hasSupperbar;
         boolean hasBar;
         View mContentView;

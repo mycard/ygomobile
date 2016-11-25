@@ -20,12 +20,14 @@ public class CardData implements Parcelable{
     public int Defense;
     public int LScale;
     public int RScale;
+    public long Category;
     public String dbFile;
 
     @Override
     public String toString() {
         return "CardData{" +
                 "Code=" + Code +
+                ", Ot=" + Ot +
                 ", Alias=" + Alias +
                 ", Setcode=" + Setcode +
                 ", Type=" + Type +
@@ -36,6 +38,8 @@ public class CardData implements Parcelable{
                 ", Defense=" + Defense +
                 ", LScale=" + LScale +
                 ", RScale=" + RScale +
+                ", Category=" + Category +
+                ", dbFile='" + dbFile + '\'' +
                 '}';
     }
 
@@ -58,6 +62,7 @@ public class CardData implements Parcelable{
         dest.writeInt(this.Defense);
         dest.writeInt(this.LScale);
         dest.writeInt(this.RScale);
+        dest.writeLong(this.Category);
         dest.writeString(this.dbFile);
     }
 
@@ -74,6 +79,7 @@ public class CardData implements Parcelable{
         this.Defense = in.readInt();
         this.LScale = in.readInt();
         this.RScale = in.readInt();
+        this.Category = in.readLong();
         this.dbFile = in.readString();
     }
 

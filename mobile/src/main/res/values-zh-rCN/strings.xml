@@ -85,4 +85,6 @@
     <string name="card_search">卡片搜索</string>
     <string name="deck_manager">卡组编辑</string>
     <string name="search">搜索</string>
+    <string name="search_open">选择卡片过滤条件</string>
+    <string name="search_close">关闭</string>
 </resources>

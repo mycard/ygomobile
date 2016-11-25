@@ -92,4 +92,6 @@
     <string name="card_search">Card Search</string>
     <string name="deck_manager">Deck Manager</string>
     <string name="search">Search</string>
+    <string name="search_open">Select card options</string>
+    <string name="search_close">close card options</string>
 </resources>

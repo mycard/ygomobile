@@ -8,7 +8,7 @@ import java.util.Arrays;
 
 import cn.ygo.ocgcore.enums.CardType;
 
-public class Card extends CardData implements Parcelable{
+public class Card extends CardData implements Parcelable {
 
     public String Name;
     public String Desc;
@@ -19,19 +19,22 @@ public class Card extends CardData implements Parcelable{
     }
 
     public Card(CardData cardData) {
-        this.Code = cardData.Code;
-        this.Alias = cardData.Alias;
-        this.Setcode = cardData.Setcode;
-        this.Type = cardData.Type;
-        this.Level = cardData.Level;
-        this.Attribute = cardData.Attribute;
-        this.Race = cardData.Race;
-        this.Attack = cardData.Attack;
-        this.Defense = cardData.Defense;
-        this.LScale = cardData.LScale;
-        this.RScale = cardData.RScale;
-        this.dbFile = cardData.dbFile;
-        this.Strs = new String[0x10];
+        super();
+        if(cardData!=null) {
+            this.Code = cardData.Code;
+            this.Alias = cardData.Alias;
+            this.Setcode = cardData.Setcode;
+            this.Type = cardData.Type;
+            this.Level = cardData.Level;
+            this.Attribute = cardData.Attribute;
+            this.Race = cardData.Race;
+            this.Attack = cardData.Attack;
+            this.Defense = cardData.Defense;
+            this.LScale = cardData.LScale;
+            this.RScale = cardData.RScale;
+            this.dbFile = cardData.dbFile;
+            this.Category = cardData.Category;
+        }
     }
 
     public boolean isType(CardType type) {
@@ -82,15 +85,4 @@ public class Card extends CardData implements Parcelable{
         this.Strs = in.createStringArray();
     }
 
-    public static final Creator<Card> CREATOR = new Creator<Card>() {
-        @Override
-        public Card createFromParcel(Parcel source) {
-            return new Card(source);
-        }
-
-        @Override
-        public Card[] newArray(int size) {
-            return new Card[size];
-        }
-    };
 }

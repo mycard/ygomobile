@@ -75,7 +75,8 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
 
     @Override
     protected Integer doInBackground(Void... params) {
-        Log.d(TAG, "check start");
+        if (Constants.DEBUG)
+            Log.d(TAG, "check start");
         boolean needsUpdate = false;
         //core config
         setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.core_config)));
@@ -91,7 +92,8 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
             needsUpdate = true;
             currentConfigVersion = getCurVersion(verPath);
             if (TextUtils.isEmpty(currentConfigVersion)) {
-                Log.e(TAG, "check core config currentConfigVersion is null:" + verPath);
+                if (Constants.DEBUG)
+                    Log.e(TAG, "check core config currentConfigVersion is null:" + verPath);
                 return ERROR_CORE_CONFIG;
             }
         }
@@ -100,7 +102,8 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
         try {
             newConfigVersion = mContext.getAssets().list(getDatapath(Constants.CORE_CONFIG_PATH))[0];
         } catch (Exception e) {
-            Log.e(TAG, "check core config", e);
+            if (Constants.DEBUG)
+                Log.e(TAG, "check core config", e);
             return ERROR_CORE_CONFIG;
         }
         mSettings.setCoreConfigVersion(newConfigVersion);
@@ -110,31 +113,25 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
             String resPath = mSettings.getResourcePath();
             IOUtils.createNoMedia(resPath);
             checkDirs();
-            Log.d(TAG, "check new deck");
             copyCoreConfig(verPath.getAbsolutePath());
 //            copyCoreConfig(new File(mSettings.getResourcePath(), GameSettings.CORE_CONFIG_PATH).getAbsolutePath());
             setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.new_deck)));
             IOUtils.copyFilesFromAssets(mContext, getDatapath(Constants.CORE_DECK_PATH),
                     new File(resPath, Constants.CORE_SINGLE_PATH).getAbsolutePath(), needsUpdate);
-            Log.d(TAG, "check game skin");
             setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.game_skins)));
             IOUtils.copyFilesFromAssets(mContext, getDatapath(Constants.CORE_SKIN_PATH),
                     mSettings.getCoreSkinPath(), needsUpdate, mSettings.isPendulumScale());
-            Log.d(TAG, "check fonts");
             setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.font_files)));
             IOUtils.copyFilesFromAssets(mContext, getDatapath(Constants.FONT_DIRECTORY),
                     mSettings.getFontDirPath(), needsUpdate);
-            Log.d(TAG, "check single");
             setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.single_lua)));
             IOUtils.copyFilesFromAssets(mContext, getDatapath(Constants.CORE_SINGLE_PATH),
                     new File(resPath, Constants.CORE_SINGLE_PATH).getAbsolutePath(), needsUpdate);
-            Log.d(TAG, "check scripts");
             if (IOUtils.hasAssets(mContext, getDatapath(Constants.CORE_SCRIPTS_ZIP))) {
                 setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.scripts)));
                 IOUtils.copyFilesFromAssets(mContext, getDatapath(Constants.CORE_SCRIPTS_ZIP),
                         resPath, needsUpdate);
             }
-            Log.d(TAG, "check cdb");
             setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.cards_cdb)));
             copyCdbFile(needsUpdate);
             if (IOUtils.hasAssets(mContext, getDatapath(Constants.CORE_PICS_ZIP))) {
@@ -143,7 +140,8 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
                         resPath, needsUpdate);
             }
         } catch (Exception e) {
-            Log.e(TAG, "check", e);
+            if (Constants.DEBUG)
+                Log.e(TAG, "check", e);
             return ERROR_COPY;
         }
         return ERROR_NONE;
@@ -173,17 +171,17 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
         try {
             db.beginTransaction();
             db.execSQL("ALTER TABLE datas RENAME TO datas_backup;");
-            db.execSQL("CREATE TABLE datas (_id integer PRIMARY KEY, ot integer, alias integer, setcode integer, type integer,"
+            db.execSQL("CREATE TABLE datas (id integer PRIMARY KEY, ot integer, alias integer, setcode integer, type integer,"
                     + " atk integer, def integer, level integer, race integer, attribute integer, category integer);");
-            db.execSQL("INSERT INTO datas (_id, ot, alias, setcode, type, atk, def, level, race, attribute, category) "
+            db.execSQL("INSERT INTO datas (id, ot, alias, setcode, type, atk, def, level, race, attribute, category) "
                     + "SELECT id, ot, alias, setcode, type, atk, def, level, race, attribute, category FROM datas_backup;");
             db.execSQL("DROP TABLE datas_backup;");
             db.execSQL("ALTER TABLE texts RENAME TO texts_backup;");
-            db.execSQL("CREATE TABLE texts (_id integer PRIMARY KEY, name varchar(128), desc varchar(1024),"
+            db.execSQL("CREATE TABLE texts (id integer PRIMARY KEY, name varchar(128), desc varchar(1024),"
                     + " str1 varchar(256), str2 varchar(256), str3 varchar(256), str4 varchar(256), str5 varchar(256),"
                     + " str6 varchar(256), str7 varchar(256), str8 varchar(256), str9 varchar(256), str10 varchar(256),"
                     + " str11 varchar(256), str12 varchar(256), str13 varchar(256), str14 varchar(256), str15 varchar(256), str16 varchar(256));");
-            db.execSQL("INSERT INTO texts (_id, name, desc, str1, str2, str3, str4, str5, str6, str7, str8, str9, str10, str11, str12, str13, str14, str15, str16)"
+            db.execSQL("INSERT INTO texts (id, name, desc, str1, str2, str3, str4, str5, str6, str7, str8, str9, str10, str11, str12, str13, str14, str15, str16)"
                     + " SELECT id, name, desc, str1, str2, str3, str4, str5, str6, str7, str8, str9, str10, str11, str12, str13, str14, str15, str16 FROM texts_backup;");
             db.execSQL("DROP TABLE texts_backup;");
             db.setTransactionSuccessful();
@@ -238,7 +236,8 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
             }
             return ERROR_NONE;
         } catch (IOException e) {
-            Log.e(TAG, "copy", e);
+            if (Constants.DEBUG)
+                Log.e(TAG, "copy", e);
             mError = ERROR_COPY;
             return ERROR_COPY;
         }

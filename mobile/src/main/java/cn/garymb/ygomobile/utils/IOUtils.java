@@ -15,6 +15,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.zip.ZipFile;
 
+import cn.garymb.ygomobile.Constants;
+
 public class IOUtils {
     private static final String TAG = "ioUtils";
 
@@ -27,6 +29,7 @@ public class IOUtils {
             }
         }
     }
+
     public static void closeZip(ZipFile closeable) {
         if (closeable == null) return;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -37,6 +40,7 @@ public class IOUtils {
             }
         }
     }
+
     public static void delete(File file) {
         if (file == null || !file.exists()) return;
 
@@ -105,7 +109,8 @@ public class IOUtils {
             String file = getName(assets);
             File tofile = new File(toPath, file);
             if (update || !tofile.exists()) {
-                Log.i(TAG, "copy1:" + assets + "-->" + tofile);
+                if (Constants.DEBUG)
+                    Log.i(TAG, "copy1:" + assets + "-->" + tofile);
                 createFolder(tofile);
                 copyToFile(am.open(assets), tofile.getAbsolutePath());
             }
@@ -117,17 +122,20 @@ public class IOUtils {
             for (String file : files) {
                 String path = join(assets, file);
                 if (isDirectory(context, path)) {
-                    Log.i(TAG, "copy dir:" + path + "-->" + join(toPath, file));
+                    if (Constants.DEBUG)
+                        Log.i(TAG, "copy dir:" + path + "-->" + join(toPath, file));
                     createFolder(new File(toPath, file));
                     count += copyFilesFromAssets(context, path, join(toPath, file), update);
                 } else {
                     File f = new File(join(toPath, file));
                     createFolder(f);
                     if (update || !f.exists()) {
-                        Log.i(TAG, "copy2:" + path + "-->" + f.getAbsolutePath());
+                        if (Constants.DEBUG)
+                            Log.d(TAG, "copy2:" + path + "-->" + f.getAbsolutePath());
                         copyToFile(am.open(path), f.getAbsolutePath());
                     } else {
-                        Log.i(TAG, "copy ignore:" + path + "-->" + f.getAbsolutePath());
+                        if (Constants.DEBUG)
+                            Log.d(TAG, "copy ignore:" + path + "-->" + f.getAbsolutePath());
                     }
                     count++;
                 }
@@ -137,7 +145,7 @@ public class IOUtils {
     }
 
     public static void createFolder(File file) {
-        if(file.isDirectory()){
+        if (file.isDirectory()) {
             file.mkdirs();
             return;
         }
