@@ -113,6 +113,12 @@ public class MainActivity extends BaseActivity{
             case R.id.action_add_server:
                 mServerListAdapater.addServer();
                 break;
+            case R.id.action_card_search:
+                startActivity(new Intent(this, CardSearchActivity.class));
+                break;
+            case R.id.action_deck_manager:
+                startActivity(new Intent(this, DeckManagerActivity.class));
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

@@ -3,7 +3,6 @@ package cn.garymb.ygomobile.adapters;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Context;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -158,7 +157,7 @@ public class ServerListAdapater extends BaseAdapterPlus<ServerInfo> implements A
 
     @Override
     protected View createView(int position, ViewGroup parent) {
-        View view = mLayoutInflater.inflate(R.layout.dialog_server_info, parent, false);
+        View view = mLayoutInflater.inflate(R.layout.item_server_info, parent, false);
         new ViewHolder(view);
         return view;
     }

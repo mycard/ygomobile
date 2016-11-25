@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import cn.garymb.ygomobile.Constants;
+import cn.garymb.ygomobile.core.ImageLoader;
 import cn.garymb.ygomobile.core.ResCheckTask;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.plus.PreferenceFragmentPlus;
@@ -114,7 +115,7 @@ public class SettingFragment extends PreferenceFragmentPlus {
         } else if (SETTINGS_CARD_BG.equals(key)) {
             //显示图片对话框？
             String outFile = new File(mSettings.getCoreSkinPath(), Constants.CORE_SKIN_BG).getAbsolutePath();
-            showImageDialog(preference, getString(R.string.game_bg),outFile, true, Constants.CORE_SKIN_BG_SIZE[0], Constants.CORE_SKIN_BG_SIZE[1]);
+            showImageDialog(preference, getString(R.string.game_bg), outFile, true, Constants.CORE_SKIN_BG_SIZE[0], Constants.CORE_SKIN_BG_SIZE[1]);
         } else if (PREF_USE_EXTRA_CARD_CARDS.equals(key)) {
             CheckBoxPreference checkBoxPreference = (CheckBoxPreference) preference;
             if (checkBoxPreference.isChecked()) {
@@ -134,8 +135,8 @@ public class SettingFragment extends PreferenceFragmentPlus {
     @Override
     protected void onChooseFileOk(Preference preference, String file) {
         String key = preference.getKey();
-        Log.i("kk", "onChooseFileOk:"+key+",file="+file);
-        if (SETTINGS_COVER.equals(key)||SETTINGS_CARD_BG.equals(key)) {
+        Log.i("kk", "onChooseFileOk:" + key + ",file=" + file);
+        if (SETTINGS_COVER.equals(key) || SETTINGS_CARD_BG.equals(key)) {
             super.onChooseFileOk(preference, file);
             onPreferenceClick(preference);
         }
@@ -146,14 +147,14 @@ public class SettingFragment extends PreferenceFragmentPlus {
         }
     }
 
-    private void showImageDialog(Preference preference, String title,String outFile,boolean isJpeg,int outWidth,int outHeight) {
+    private void showImageDialog(Preference preference, String title, String outFile, boolean isJpeg, int outWidth, int outHeight) {
         int width = getResources().getDisplayMetrics().widthPixels;
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         ImageView imageView = new ImageView(getActivity());
-        FrameLayout frameLayout=new FrameLayout(getActivity());
+        FrameLayout frameLayout = new FrameLayout(getActivity());
         imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
         builder.setTitle(title);
-        FrameLayout.LayoutParams layoutParams=new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutParams.topMargin = VUiKit.dpToPx(10);
         layoutParams.leftMargin = VUiKit.dpToPx(10);
@@ -161,6 +162,7 @@ public class SettingFragment extends PreferenceFragmentPlus {
         layoutParams.gravity = Gravity.CENTER_HORIZONTAL;
         frameLayout.addView(imageView, layoutParams);
         builder.setView(frameLayout);
+        final Bitmap bmp = ImageLoader.loadImage(outFile, width, -1);
         builder.setNegativeButton(R.string.settings, (dlg, s) -> {
             showImageCropChooser(preference, getString(R.string.dialog_select_image), outFile,
                     isJpeg, outWidth, outHeight);
@@ -169,8 +171,10 @@ public class SettingFragment extends PreferenceFragmentPlus {
         builder.setNeutralButton(android.R.string.cancel, (dlg, s) -> {
             dlg.dismiss();
         });
+        builder.setOnCancelListener((dlg) -> {
+            BitmapUtil.destroy(bmp);
+        });
         builder.show();
-        Bitmap bmp = BitmapUtil.getBitmapFromFile(outFile, width, -1);
         imageView.setImageBitmap(bmp);
     }
 
@@ -181,7 +185,7 @@ public class SettingFragment extends PreferenceFragmentPlus {
             File db = new File(mSettings.getResourcePath(), Constants.DATABASE_NAME);
             InputStream in = null;
             try {
-                if(!TextUtils.equals(file, db.getAbsolutePath())){
+                if (!TextUtils.equals(file, db.getAbsolutePath())) {
                     if (db.exists()) {
                         db.delete();
                     }

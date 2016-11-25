@@ -74,10 +74,12 @@ public class YGOStarter {
         activityShowInfo.mContentView.setVisibility(View.INVISIBLE);
         //读取当前的背景图，如果卡的话，可以考虑缓存bitmap
         String bgfile = new File(AppsSettings.get().getCoreSkinPath(), Constants.CORE_SKIN_BG).getAbsolutePath();
-        mLogo = BitmapUtil.getBitmapFromFile(bgfile, CORE_SKIN_BG_SIZE[0], CORE_SKIN_BG_SIZE[1]);
-        if(mLogo ==null){
+        if (mLogo == null || mLogo.isRecycled()) {
+            mLogo = ImageLoader.loadImage(bgfile, CORE_SKIN_BG_SIZE[0], CORE_SKIN_BG_SIZE[1]);
+        }
+        if (mLogo == null || mLogo.isRecycled()) {
             activityShowInfo.mRoot.setBackgroundResource(R.drawable.bg);
-        }else {
+        } else {
             Drawable bg = new BitmapDrawable(activity.getResources(), mLogo);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 activityShowInfo.mRoot.setBackground(bg);
@@ -90,6 +92,7 @@ public class YGOStarter {
 
     private static void hideLoadingBg(Activity activity, ActivityShowInfo activityShowInfo) {
         BitmapUtil.destroy(mLogo);
+        mLogo = null;
         activity.setRequestedOrientation(activityShowInfo.oldRequestedOrientation);
         activityShowInfo.mContentView.setVisibility(View.VISIBLE);
         if (Build.VERSION.SDK_INT >= 16) {
@@ -124,9 +127,11 @@ public class YGOStarter {
         }
         return activityShowInfo;
     }
+
     public static void onDestroy(Activity activity) {
         Infos.remove(activity);
     }
+
     public static void onResumed(Activity activity) {
         ActivityShowInfo activityShowInfo = Infos.get(activity);
 //        Log.i("checker", "resume:" + activity);

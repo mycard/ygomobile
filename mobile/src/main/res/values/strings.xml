@@ -89,4 +89,7 @@
     <string name="must_info">must info</string>
     <string name="server_is_exist">the server is exist</string>
     <string name="server_info_error">server info is bad.</string>
+    <string name="card_search">Card Search</string>
+    <string name="deck_manager">Deck Manager</string>
+    <string name="search">Search</string>
 </resources>
