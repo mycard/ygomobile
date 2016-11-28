@@ -79,7 +79,7 @@
     <string name="server_user_pwd">密码:</string>
     <string name="edit">编辑</string>
     <string name="save">保存</string>
-    <string name="must_info">必填信息</string>
+    <string name="must_info">必填</string>
     <string name="server_is_exist">服务器信息已经存在！</string>
     <string name="server_info_error">服务器信息填写错误</string>
     <string name="card_search">卡片搜索</string>
@@ -87,4 +87,18 @@
     <string name="search">搜索</string>
     <string name="search_open">选择卡片过滤条件</string>
     <string name="search_close">关闭</string>
+    <string name="reset">重置</string>
+    <string name="hit_keyword1">关键词1</string>
+    <string name="hit_keyword2">关键词2</string>
+    <string name="hit_atk">ATK</string>
+    <string name="hit_def">DEF</string>
+    <string name="label_race">种族</string>
+    <string name="label_ot">专属</string>
+    <string name="label_limit">限制</string>
+    <string name="label_type">卡片类型</string>
+    <string name="label_set">卡片系列</string>
+    <string name="label_level">星数</string>
+    <string name="label_attr">属性</string>
+    <string name="label_category">效果分类</string>
+    <string name="searching">读取中</string>
 </resources>

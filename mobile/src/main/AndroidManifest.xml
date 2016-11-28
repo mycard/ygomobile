@@ -55,10 +55,6 @@
             android:name="cn.garymb.ygomobile.activities.DeckManagerActivity"
             android:label="@string/deck_manager"
             android:theme="@style/AppTheme"/>
-        <activity
-            android:name="cn.garymb.ygomobile.activities.CardInfoActivity"
-            android:label="@string/deck_manager"
-            android:theme="@style/AppTheme"/>
     </application>
 
 </manifest>

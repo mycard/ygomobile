@@ -94,4 +94,18 @@
     <string name="search">Search</string>
     <string name="search_open">Select card options</string>
     <string name="search_close">close card options</string>
+    <string name="hit_keyword1">prefix word</string>
+    <string name="hit_keyword2">suffix word</string>
+    <string name="hit_atk">ATK</string>
+    <string name="hit_def">DEF</string>
+    <string name="reset">Reset</string>
+    <string name="label_race">Race</string>
+    <string name="label_ot">Exclusive</string>
+    <string name="label_limit">Limit List</string>
+    <string name="label_type">Card Type</string>
+    <string name="label_set">Card Set</string>
+    <string name="label_level">Level/Rank</string>
+    <string name="label_attr">Attribute</string>
+    <string name="label_category">Category</string>
+    <string name="searching">Search Cards</string>
 </resources>

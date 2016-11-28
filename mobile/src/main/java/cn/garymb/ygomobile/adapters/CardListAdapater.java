@@ -1,49 +1,95 @@
 package cn.garymb.ygomobile.adapters;
 
+import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
-
-import com.bumptech.glide.Glide;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.garymb.ygomobile.Constants;
-import cn.garymb.ygomobile.activities.CardInfoActivity;
 import cn.garymb.ygomobile.bean.CardInfo;
+import cn.garymb.ygomobile.core.ICardLoader;
 import cn.garymb.ygomobile.core.IDataLoader;
+import cn.garymb.ygomobile.core.ILoadCallBack;
 import cn.garymb.ygomobile.core.ImageLoader;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.plus.BaseAdapterPlus;
 import cn.garymb.ygomobile.plus.VUiKit;
 import cn.garymb.ygomobile.settings.AppsSettings;
-import cn.garymb.ygomobile.utils.BitmapUtil;
-import cn.garymb.ygomobile.utils.IOUtils;
-import cn.ygo.ocgcore.Card;
+import cn.garymb.ygomobile.ui.CardDialog;
+import cn.ygo.ocgcore.StringManager;
 import cn.ygo.ocgcore.enums.CardType;
 
 public class CardListAdapater extends BaseAdapterPlus<CardInfo> implements
-        IDataLoader,
-        AdapterView.OnItemClickListener {
-    private volatile SQLiteDatabase db;
+        ICardLoader,
+        AdapterView.OnItemClickListener, ListView.OnScrollListener {
+    private SQLiteDatabase db;
+    private StringManager mStringManager;
+    private AppsSettings mAppsSettings;
+    private boolean isScroll = false;
+    private ILoadCallBack mILoadCallBack;
 
     public CardListAdapater(Context context) {
         super(context);
+        mStringManager = StringManager.get();
+        mAppsSettings = AppsSettings.get();
+    }
+
+    public void setILoadCallBack(ILoadCallBack ILoadCallBack) {
+        mILoadCallBack = ILoadCallBack;
     }
 
     @Override
     public void loadData() {
+        loadData(CardInfo.SQL_BASE + " limit 100;");
+    }
+
+    @Override
+    public void onScrollStateChanged(AbsListView view, int scrollState) {
+        switch (scrollState) {
+            case SCROLL_STATE_IDLE:
+                isScroll = false;
+                break;
+            case SCROLL_STATE_TOUCH_SCROLL:
+                isScroll = true;
+                break;
+            case SCROLL_STATE_FLING:
+                isScroll = false;
+                break;
+        }
+    }
+
+    @Override
+    public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
+    }
+
+    @Override
+    public void loadString() {
+        if (!mStringManager.isLoad()) {
+            File stringfile = new File(mAppsSettings.getResourcePath(), String.format(Constants.CORE_STRING_PATH, mAppsSettings.getCoreConfigVersion()));
+            mStringManager.loadFile(stringfile.getAbsolutePath());
+        }
+    }
+
+    private void loadData(String sql) {
+//        Log.i("kk", "sql=" + sql);
+        loadString();
         if (db == null) {
-            File file = new File(AppsSettings.get().getDataBasePath(), Constants.DATABASE_NAME);
+            File file = new File(mAppsSettings.getDataBasePath(), Constants.DATABASE_NAME);
             if (file.exists()) {
                 try {
                     db = SQLiteDatabase.openOrCreateDatabase(file, null);
@@ -56,50 +102,110 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> implements
             }
         }
         if (db != null && db.isOpen()) {
+            ProgressDialog wait = ProgressDialog.show(context, null, context.getString(R.string.searching));
             VUiKit.defer().when(() -> {
                 Cursor reader = null;
                 try {
-                    reader = db.rawQuery(CardInfo.SQL_BASE + " limit 100", null);
+                    reader = db.rawQuery(sql, null);
                 } catch (Exception e) {
-                    try {
-                        reader = db.rawQuery(CardInfo.SQL_BASE2 + " limit 100", null);
-                    } catch (Exception e2) {
-
-                    }
                 }
                 List<CardInfo> tmp = new ArrayList<CardInfo>();
                 if (reader != null) {
                     if (reader.moveToFirst()) {
                         while (reader.moveToNext()) {
-                            tmp.add(new CardInfo(reader));
+                            CardInfo cardInfo = new CardInfo(reader);
+                            cardInfo.getAllTypeString(mStringManager);
+                            tmp.add(cardInfo);
                         }
                     }
                     reader.close();
                 }
                 return tmp;
+            }).fail((e) -> {
+                wait.dismiss();
+                if (mILoadCallBack != null) {
+                    mILoadCallBack.onLoad(false);
+                }
             }).done((tmp) -> {
+                wait.dismiss();
                 mItems.clear();
                 mItems.addAll(tmp);
                 if (Constants.DEBUG)
                     Log.d("kk", "find card count=" + tmp.size());
                 notifyDataSetChanged();
+                if (mILoadCallBack != null) {
+                    mILoadCallBack.onLoad(true);
+                }
             });
         } else {
             Log.w("kk", "open db fail");
         }
     }
 
-    public void search(CardInfo cardInfo) {
-
+    /***
+     * @param prefixWord 前缀
+     * @param suffixWord 后缀
+     * @param types      类型
+     * @param attribute  属性
+     * @param level      等级
+     * @param atk        攻击
+     * @param def        等级
+     * @param setcode    系列
+     * @param category   分类
+     * @param ot         ot
+     */
+    @Override
+    public void search(String prefixWord, String suffixWord,
+                       long attribute, long level, String atk, String def, long setcode, long category, long ot, long... types) {
+        StringBuilder stringBuilder = new StringBuilder(CardInfo.SQL_BASE);
+        if (!TextUtils.isEmpty(prefixWord) && !TextUtils.isEmpty(suffixWord)) {
+            stringBuilder.append(" and name like '%");
+            stringBuilder.append(prefixWord);
+            stringBuilder.append("%");
+            stringBuilder.append(suffixWord);
+            stringBuilder.append("%' ");
+        } else if (!TextUtils.isEmpty(prefixWord)) {
+            stringBuilder.append(" and name like '%");
+            stringBuilder.append(prefixWord);
+            stringBuilder.append("%' ");
+        } else if (!TextUtils.isEmpty(suffixWord)) {
+            stringBuilder.append(" and name like '%");
+            stringBuilder.append(suffixWord);
+            stringBuilder.append("%' ");
+        }
+        if (attribute != 0) {
+            stringBuilder.append(" and attribute=" + attribute);
+        }
+        if (level != 0) {
+            stringBuilder.append(" and (level &" + level + ") =" + level);
+        }
+        if (!TextUtils.isEmpty(atk)) {
+            stringBuilder.append(" and atk=" + (TextUtils.isDigitsOnly(atk) ? atk : -2));
+        }
+        if (!TextUtils.isEmpty(def)) {
+            stringBuilder.append(" and def=" + (TextUtils.isDigitsOnly(def) ? def : -2));
+        }
+        if (ot > 0) {
+            stringBuilder.append(" and ot=" + ot);
+        }
+        for (long type : types) {
+            stringBuilder.append(" and (type & " + type + ") =" + type);
+        }
+        if (setcode != 0) {
+            stringBuilder.append(" and (setcode &" + setcode + ") =" + setcode);
+        }
+        if (category != 0) {
+            stringBuilder.append(" and (category &" + category + ") =" + category);
+        }
+        loadData(stringBuilder.toString());
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         CardInfo cardInfo = getItem(position);
         if (cardInfo != null) {
-            context.startActivity(
-                    new Intent(context, CardInfoActivity.class)
-                            .putExtra(CardInfo.TAG, cardInfo));
+            CardDialog cardDialog = new CardDialog(context, cardInfo);
+            cardDialog.show();
         }
     }
 
@@ -112,8 +218,10 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> implements
 
     @Override
     protected void attach(View view, CardInfo item, int position) {
-        ViewHolder holder = ViewHolder.from(view);
-        ImageLoader.bindImage(context, holder.cardImage, item.Code);
+        ViewHolder holder = (ViewHolder) view.getTag(view.getId());
+//        if (!isScroll) {
+        ImageLoader.get().bindImage(context, holder.cardImage, item.Code);
+//        }
         holder.cardName.setText(item.Name);
         if (item.isType(CardType.Monster)) {
             holder.cardLevel.setVisibility(View.VISIBLE);
@@ -132,10 +240,10 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> implements
             holder.layout_atkdef.setVisibility(View.GONE);
         }
         //卡片类型
-        holder.cardType.setText(item.getAllTypeString(context));
+        holder.cardType.setText(item.getAllTypeString(mStringManager));
     }
 
-    static class ViewHolder {
+    class ViewHolder {
         ImageView cardImage;
         TextView cardName;
         TextView cardLevel;
@@ -155,10 +263,8 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> implements
             cardLevel = (TextView) view.findViewById(R.id.card_level);
             layout_atkdef = view.findViewById(R.id.layout_atkdef);
             view_bar = view.findViewById(R.id.view_bar);
-        }
-
-        static ViewHolder from(View view) {
-            return (ViewHolder) view.getTag(view.getId());
+//            File outFile = new File(AppsSettings.get().getCoreSkinPath(), Constants.CORE_SKIN_COVER);
+//            Glide.with(context).load(outFile).into(cardImage);
         }
     }
 }

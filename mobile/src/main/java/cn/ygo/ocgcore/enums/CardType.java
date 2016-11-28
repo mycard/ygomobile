@@ -1,19 +1,19 @@
 package cn.ygo.ocgcore.enums;
 
 public enum CardType {
-    Monster(0x1),
-    Spell(0x2),
-    Trap(0x4),
+    None(0),
     Normal(0x10),
     Effect(0x20),
     Fusion(0x40),
     Ritual(0x80),
-    TrapMonster(0x100),
+    Synchro(0x2000),
+    Pendulum(0x1000000L),
+    Xyz(0x800000),
     Spirit(0x200),
     Union(0x400),
     Dual(0x800),
     Tuner(0x1000),
-    Synchro(0x2000),
+
     Token(0x4000),
     QuickPlay(0x10000),
     Continuous(0x20000),
@@ -22,11 +22,14 @@ public enum CardType {
     Counter(0x100000),
     Flip(0x200000),
     Toon(0x400000),
-    Xyz(0x8000000);
 
-    private int value = 0;
+    Monster(0x1),
+    Spell(0x2),
+    TrapMonster(0x100),
+    Trap(0x4);
+    private long value = 0;
 
-    private CardType(int value) {
+    private CardType(long value) {
         this.value = value;
     }
 
@@ -40,7 +43,7 @@ public enum CardType {
         return null;
     }
 
-    public int value() {
+    public long value() {
         return this.value;
     }
 }

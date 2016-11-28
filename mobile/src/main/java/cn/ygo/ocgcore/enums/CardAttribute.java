@@ -1,6 +1,7 @@
 package cn.ygo.ocgcore.enums;
 
 public enum CardAttribute {
+    None(0),
     Earth(0x01),
     Water(0x02),
     Fire(0x04),

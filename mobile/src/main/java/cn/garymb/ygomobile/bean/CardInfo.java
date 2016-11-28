@@ -4,25 +4,29 @@ import android.content.Context;
 import android.database.Cursor;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.text.TextUtils;
 import android.util.Log;
 
+import cn.garymb.ygomobile.Constants;
 import cn.ygo.ocgcore.Card;
+import cn.ygo.ocgcore.StringManager;
+import cn.ygo.ocgcore.enums.CardType;
 
-public class CardInfo extends Card implements Parcelable{
+public class CardInfo extends Card implements Parcelable {
     public static final String TAG = "CardInfo";
     public static final String SQL_DATA_BASE = "select * from datas";
     public static final String SQL_BASE;
 
-    public static final String SQL_BASE2;
+    private String mTypeString;
 
     static {
-        StringBuilder stringBuilder = new StringBuilder(",ot,alias,setcode,type,level,race,attribute,atk,def,category");
+        StringBuilder stringBuilder = new StringBuilder("select datas._id,ot,alias,setcode,type,level,race,attribute,atk,def,category");
         stringBuilder.append(",texts.name,texts.desc");
         for (int i = 1; i <= 0x10; i++) {
             stringBuilder.append(",texts.str" + i);
         }
-        SQL_BASE = "select datas.id" + stringBuilder.toString() + " from datas, texts  where datas.id = texts.id ";
-        SQL_BASE2 = "select datas._id" + stringBuilder.toString() + " from datas, texts  where datas._id = texts._id ";
+        stringBuilder.append(" from datas, texts  where datas._id = texts._id ");
+        SQL_BASE = stringBuilder.toString();
     }
 
     /***
@@ -56,8 +60,31 @@ public class CardInfo extends Card implements Parcelable{
         }
     }
 
-    public String getAllTypeString(Context context) {
-        return "0x"+String.format("%X", Type);
+    public String getAllTypeString(StringManager stringManager) {
+        if(!TextUtils.isEmpty(mTypeString)){
+            return mTypeString;
+        }
+        StringBuilder stringBuilder = new StringBuilder();
+        CardType[] cardTypes = CardType.values();
+        boolean isFrst = true;
+        for (CardType type : cardTypes) {
+            if (isType(type)) {
+                if (!isFrst) {
+                    stringBuilder.append("|");
+                } else {
+                    isFrst = false;
+                }
+                String str = stringManager.getTypeString(type.value());
+                if (TextUtils.isEmpty(str)) {
+                    stringBuilder.append("0x");
+                    stringBuilder.append(String.format("%X", type.value()));
+                } else {
+                    stringBuilder.append(str);
+                }
+            }
+        }
+        mTypeString= stringBuilder.toString();
+        return mTypeString;
     }
 
     public CardInfo() {

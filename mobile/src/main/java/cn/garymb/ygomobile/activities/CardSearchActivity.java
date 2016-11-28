@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 
+import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.adapters.CardListAdapater;
 import cn.garymb.ygomobile.core.CardSelector;
 import cn.garymb.ygomobile.lite.R;
@@ -32,7 +33,7 @@ public class CardSearchActivity extends BaseActivity implements NavigationView.O
         mCardListAdapater = new CardListAdapater(this);
         mListView.setAdapter(mCardListAdapater);
         mListView.setOnItemClickListener(mCardListAdapater);
-
+        mListView.setOnScrollListener(mCardListAdapater);
         mDrawerlayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, mDrawerlayout, R.string.search_open, R.string.search_close);
@@ -41,9 +42,12 @@ public class CardSearchActivity extends BaseActivity implements NavigationView.O
         toggle.syncState();
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        mCardSelector = new CardSelector(navigationView, mCardListAdapater);
-
-        mCardListAdapater.loadData();
+        mCardSelector = new CardSelector(mDrawerlayout,navigationView.getHeaderView(0), mCardListAdapater,(ok)->{
+            mCardListAdapater.loadData();
+        });
+        mCardListAdapater.setILoadCallBack((ok)->{
+            mCardSelector.onSearchOk();
+        });
     }
 
     @Override
@@ -58,19 +62,28 @@ public class CardSearchActivity extends BaseActivity implements NavigationView.O
     }
 
     @Override
+    public void onBackPressed() {
+        if (mDrawerlayout.isDrawerOpen(Constants.CARD_SEARCH_GRAVITY)) {
+            mDrawerlayout.closeDrawer(Constants.CARD_SEARCH_GRAVITY);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_search:
                 //弹条件对话框
-                if (mDrawerlayout.isDrawerOpen(Gravity.RIGHT)) {
-                    mDrawerlayout.closeDrawer(Gravity.RIGHT);
+                if (mDrawerlayout.isDrawerOpen(Constants.CARD_SEARCH_GRAVITY)) {
+                    mDrawerlayout.closeDrawer(Constants.CARD_SEARCH_GRAVITY);
                 } else {
-                    mDrawerlayout.openDrawer(Gravity.RIGHT);
+                    mDrawerlayout.openDrawer(Constants.CARD_SEARCH_GRAVITY);
                 }
                 break;
             case android.R.id.home:
-                if (mDrawerlayout.isDrawerOpen(Gravity.RIGHT)) {
-                    mDrawerlayout.closeDrawer(Gravity.RIGHT);
+                if (mDrawerlayout.isDrawerOpen(Constants.CARD_SEARCH_GRAVITY)) {
+                    mDrawerlayout.closeDrawer(Constants.CARD_SEARCH_GRAVITY);
                     return true;
                 }
                 break;

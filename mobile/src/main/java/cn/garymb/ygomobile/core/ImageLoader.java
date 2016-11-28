@@ -13,6 +13,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.zip.ZipEntry;
@@ -28,7 +29,14 @@ import static cn.garymb.ygomobile.Constants.CORE_SKIN_BG_SIZE;
 
 public class ImageLoader {
 
-    private static Bitmap loadImage(String path, int w, int h) {
+    private static ImageLoader sImageLoader = new ImageLoader();
+    private ZipFile mZipFile;
+
+    public static ImageLoader get() {
+        return sImageLoader;
+    }
+
+    private Bitmap loadImage(String path, int w, int h) {
         File file = new File(path);
         if (file.exists()) {
             return BitmapUtil.getBitmapFromFile(file.getAbsolutePath(), CORE_SKIN_BG_SIZE[0], CORE_SKIN_BG_SIZE[1]);
@@ -36,7 +44,7 @@ public class ImageLoader {
         return null;
     }
 
-    public static void bindImage(Context context, ImageView imageview, long code) {
+    public void bindImage(Context context, ImageView imageview, long code) {
         String name = Constants.CORE_IMAGE_PATH + "/" + code;
         String path = AppsSettings.get().getResourcePath();
         File zip = new File(path, Constants.CORE_PICS_ZIP);
@@ -53,39 +61,66 @@ public class ImageLoader {
             }
         }
         if (zip.exists()) {
-            File cache = null;
-            ZipFile zipFile = null;
-            String file = zip.getAbsolutePath();
+            ZipEntry entry = null;
             InputStream inputStream = null;
-            OutputStream outputStream = null;
+            ByteArrayOutputStream outputStream=null;
             try {
-                zipFile = new ZipFile(file);
-                ZipEntry entry = null;
+                if (mZipFile == null) {
+                    mZipFile = new ZipFile(zip);
+                }
                 for (String ex : Constants.IMAGE_EX) {
-                    entry = zipFile.getEntry(name + ex);
+                    entry = mZipFile.getEntry(name + ex);
                     if (entry != null) {
-                        inputStream = zipFile.getInputStream(entry);
-                        cache = new File(context.getCacheDir(), name + ex);
-                        IOUtils.createFolder(cache);
-                        if(!cache.exists()){
-                            cache.createNewFile();
-                        }
-                        outputStream = new FileOutputStream(cache);
+                        inputStream = mZipFile.getInputStream(entry);
+                        outputStream = new ByteArrayOutputStream();
+//                        cache = new File(context.getCacheDir(), name + ex);
+//                        IOUtils.createFolder(cache);
+//                        if (!cache.exists()) {
+//                            cache.createNewFile();
+//                        }
+//                        outputStream = new FileOutputStream(cache);
                         IOUtils.copy(inputStream, outputStream);
-                        break;
+                        Glide.with(context).load(outputStream.toByteArray()).into(imageview);
                     }
                 }
-            } catch (Exception e) {
+            } catch (IOException e) {
                 e.printStackTrace();
-            } finally {
-                IOUtils.close(outputStream);
+            }finally {
                 IOUtils.close(inputStream);
-                IOUtils.closeZip(zipFile);
             }
-            if (cache == null) {
-                cache = new File(AppsSettings.get().getCoreSkinPath(), Constants.CORE_SKIN_COVER);
-            }
-            Glide.with(context).load(cache).into(imageview);
+//            File cache = null;
+//            ZipFile zipFile = null;
+//            String file = zip.getAbsolutePath();
+//            InputStream inputStream = null;
+//            OutputStream outputStream = null;
+//            try {
+//                zipFile = new ZipFile(file);
+//                ZipEntry entry = null;
+//                for (String ex : Constants.IMAGE_EX) {
+//                    entry = zipFile.getEntry(name + ex);
+//                    if (entry != null) {
+//                        inputStream = zipFile.getInputStream(entry);
+//                        cache = new File(context.getCacheDir(), name + ex);
+//                        IOUtils.createFolder(cache);
+//                        if (!cache.exists()) {
+//                            cache.createNewFile();
+//                        }
+//                        outputStream = new FileOutputStream(cache);
+//                        IOUtils.copy(inputStream, outputStream);
+//                        break;
+//                    }
+//                }
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            } finally {
+//                IOUtils.close(outputStream);
+//                IOUtils.close(inputStream);
+//                IOUtils.closeZip(zipFile);
+//            }
+//            if (cache == null) {
+//                cache = new File(AppsSettings.get().getCoreSkinPath(), Constants.CORE_SKIN_COVER);
+//            }
+//            Glide.with(context).load(cache).into(imageview);
         }
     }
 }

@@ -1,5 +1,7 @@
 package cn.garymb.ygomobile;
 
+import android.view.Gravity;
+
 import cn.garymb.ygomobile.lite.BuildConfig;
 
 public interface Constants {
@@ -38,6 +40,8 @@ public interface Constants {
     String DATABASE_NAME = "cards.cdb";
     String FONT_DIRECTORY = "fonts";
     String CORE_CONFIG_PATH = "core";
+    String CORE_STRING_PATH = "core/%s/config/strings.conf";
+    String CORE_LIMIT_PATH = "core/%s/config/lflist.conf";
     String CORE_SKIN_PATH = "textures";
     String CORE_SKIN_PENDULUM_PATH = CORE_SKIN_PATH + "/extra";
     String CORE_DECK_PATH = "deck";
@@ -58,4 +62,14 @@ public interface Constants {
     int REQUEST_CHOOSE_IMG = 0x1000 + 0x21;
     int REQUEST_CHOOSE_TTF = 0x1000 + 0x22;
     int REQUEST_CHOOSE_CDB = 0x1000 + 0x23;
+
+    int STRING_TYPE_START = 1050;
+
+    int STRING_ATTRIBUTE_START = 1010;
+    int STRING_RACE_START = 1020;
+
+    int CARD_SEARCH_GRAVITY = Gravity.RIGHT;
+    int STRING_LIMIT_START = 1316;
+    int STRING_CATEGORY_START = 1100;
+    int STRING_CATEGORY_END = 1131;
 }

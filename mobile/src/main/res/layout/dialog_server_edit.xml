@@ -41,7 +41,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:hint="@string/must_info"
-                android:lines="1"
+                android:singleLine="true"
+                android:maxLines="1"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
         </LinearLayout>
 
@@ -70,7 +71,8 @@
                     android:layout_height="wrap_content"
                     android:digits="1234567890."
                     android:hint="@string/must_info"
-                    android:lines="1"
+                    android:singleLine="true"
+                    android:maxLines="1"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
             </LinearLayout>
 
@@ -90,7 +92,8 @@
                     android:layout_width="@dimen/label_width_50dp"
                     android:layout_height="wrap_content"
                     android:digits="1234567890"
-                    android:lines="1"
+                    android:maxLines="1"
+                    android:singleLine="true"
                     android:text="0"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
             </LinearLayout>
@@ -114,7 +117,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:hint="@string/must_info"
-                android:lines="1"
+                android:singleLine="true"
+                android:maxLines="1"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
         </LinearLayout>
 
@@ -127,8 +131,9 @@
             <TextView
                 android:layout_width="@dimen/label_width_middle"
                 android:layout_height="wrap_content"
-                android:lines="1"
+                android:maxLines="1"
                 android:text="@string/server_user_pwd"
+                android:singleLine="true"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
 
             <EditText
@@ -136,7 +141,8 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:lines="1"
+                android:maxLines="1"
+                android:singleLine="true"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 tools:text="123456"/>
         </LinearLayout>

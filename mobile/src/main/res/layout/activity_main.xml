@@ -9,7 +9,10 @@
     <ListView
         android:id="@+id/list_server"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="10dp"
+        android:layout_height="match_parent"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="5dp"
+        android:padding="5dp"
+        android:layout_marginBottom="10dp"
         android:scrollbars="none"/>
 </LinearLayout>

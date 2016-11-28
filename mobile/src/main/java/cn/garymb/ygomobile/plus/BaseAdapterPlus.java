@@ -5,11 +5,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.SpinnerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class BaseAdapterPlus<T> extends BaseAdapter {
+public abstract class BaseAdapterPlus<T> extends BaseAdapter implements SpinnerAdapter {
     protected Context context;
     protected LayoutInflater mLayoutInflater;
     protected final List<T> mItems = new ArrayList<T>();
@@ -32,7 +33,10 @@ public abstract class BaseAdapterPlus<T> extends BaseAdapter {
     public void clear() {
         mItems.clear();
     }
-
+    public void set(List<T> items) {
+        clear();
+        addAll(items);
+    }
     public void addAll(List<T> items) {
         if (items != null) {
             mItems.addAll(items);
@@ -72,7 +76,17 @@ public abstract class BaseAdapterPlus<T> extends BaseAdapter {
         return convertView;
     }
 
-    protected abstract View createView(int position,ViewGroup parent);
+    @Override
+    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+        if(convertView == null){
+            convertView = createView(position, parent);
+        }
+        T t = getItem(position);
+        attach(convertView, t, position);
+        return convertView;
+    }
+
+    protected abstract View createView(int position, ViewGroup parent);
 
     protected abstract void attach(View view, T item,int position);
 

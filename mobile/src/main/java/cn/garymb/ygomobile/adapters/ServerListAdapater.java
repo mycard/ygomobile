@@ -44,7 +44,6 @@ public class ServerListAdapater extends BaseAdapterPlus<ServerInfo> implements
     public void addServer() {
         showDialog(null, -1);
     }
-
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         ServerInfo serverInfo = getItem(position);
