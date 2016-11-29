@@ -11,6 +11,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
@@ -72,16 +73,16 @@ public class YGOStarter {
         }
 //        Log.i("checker", "show:" + activity);
         activityShowInfo.oldRequestedOrientation = activity.getRequestedOrientation();
-        activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);//强制为横屏
         activityShowInfo.rootOld = activityShowInfo.mRoot.getBackground();
         activityShowInfo.mContentView.setVisibility(View.INVISIBLE);
         //读取当前的背景图，如果卡的话，可以考虑缓存bitmap
         File bgfile = new File(AppsSettings.get().getCoreSkinPath(), Constants.CORE_SKIN_BG);
         if (bgfile.exists()) {
-            Glide.with(activity).load(bgfile).into(activityShowInfo.mViewTarget);
+            Glide.with(activity.getApplicationContext()).load(bgfile).into(activityShowInfo.mViewTarget);
         } else {
-            Glide.with(activity).load(R.drawable.bg).into(activityShowInfo.mViewTarget);
+            Glide.with(activity.getApplicationContext()).load(R.drawable.bg).into(activityShowInfo.mViewTarget);
         }
+        activity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);//强制为横屏
         setFullScreen(activity, activityShowInfo);
     }
 
@@ -141,6 +142,7 @@ public class YGOStarter {
 
     public static void startGame(Activity activity, YGOGameOptions options) {
         showLoadingBg(activity);
+        Toast.makeText(activity, R.string.load_game, Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(activity, YGOMobileActivity.class);
         if (options != null) {
             intent.putExtra(YGOGameOptions.YGO_GAME_OPTIONS_BUNDLE_KEY, options);

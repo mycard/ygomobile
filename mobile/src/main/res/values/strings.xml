@@ -84,7 +84,7 @@
     <string name="server_port">Port:</string>
     <string name="server_room_pwd">Password:</string>
     <string name="server_user_pwd">Password:</string>
-    <string name="edit">Edit</string>
+    <string name="server_info_edit">Server Info Edit</string>
     <string name="save">Save</string>
     <string name="must_info">must info</string>
     <string name="server_is_exist">the server is exist</string>
@@ -110,4 +110,5 @@
     <string name="searching">Search Cards</string>
     <string name="card_faq">FAQ</string>
     <string name="no_webbrowser">No web browser</string>
+    <string name="load_game">loading game</string>
 </resources>

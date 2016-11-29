@@ -93,6 +93,11 @@ public class CardDetail {
                 star += "★";
             }
             level.setText(star);
+            if(cardInfo.isType(CardType.Xyz)){
+                level.setTextColor(mContext.getResources().getColor(R.color.star_rank));
+            }else{
+                level.setTextColor(mContext.getResources().getColor(R.color.star));
+            }
             cardAtk.setText((cardInfo.Attack < 0 ? "?" : String.valueOf(cardInfo.Attack)));
             cardDef.setText((cardInfo.Defense < 0 ? "?" : String.valueOf(cardInfo.Defense)));
             race.setText(stringManager.getRaceString(cardInfo.Race));

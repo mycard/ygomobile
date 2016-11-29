@@ -44,6 +44,7 @@ public class ServerListAdapater extends BaseAdapterPlus<ServerInfo> implements
     public void addServer() {
         showDialog(null, -1);
     }
+
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         ServerInfo serverInfo = getItem(position);
@@ -140,6 +141,11 @@ public class ServerListAdapater extends BaseAdapterPlus<ServerInfo> implements
                 Toast.makeText(getContext(), R.string.server_is_exist, Toast.LENGTH_SHORT).show();
                 return;
             }
+            if (isAdd) {
+                editViewHolder.title.setText(R.string.action_add_server);
+            } else {
+                editViewHolder.title.setText(R.string.server_info_edit);
+            }
             OutputStream outputStream = null;
             try {
                 outputStream = new FileOutputStream(xmlFile);
@@ -202,9 +208,11 @@ public class ServerListAdapater extends BaseAdapterPlus<ServerInfo> implements
         View close;
         View save;
         TextView userPassword;
+        TextView title;
 
         EditViewHolder(View view) {
             super(view);
+            title = (TextView) view.findViewById(R.id.title);
             close = view.findViewById(R.id.btn_close);
             save = view.findViewById(R.id.btn_save);
             userPassword = (TextView) view.findViewById(R.id.text_player_pwd);
