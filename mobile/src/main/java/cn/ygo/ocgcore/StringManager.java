@@ -7,11 +7,11 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 import cn.garymb.ygomobile.Constants;
+import cn.garymb.ygomobile.settings.AppsSettings;
 import cn.garymb.ygomobile.utils.IOUtils;
 
 public class StringManager {
@@ -32,6 +32,12 @@ public class StringManager {
 
     public boolean isLoad() {
         return isLoad;
+    }
+
+    public boolean load() {
+        File stringfile = new File(AppsSettings.get().getResourcePath(),
+                String.format(Constants.CORE_STRING_PATH, AppsSettings.get().getCoreConfigVersion()));
+        return loadFile(stringfile.getAbsolutePath());
     }
 
     public boolean loadFile(String path) {
@@ -99,7 +105,7 @@ public class StringManager {
     }
 
     public String getLimitString(long value) {
-        String str = getSystemString((int)(Constants.STRING_LIMIT_START + value));
+        String str = getSystemString((int) (Constants.STRING_LIMIT_START + value));
         Log.d("kk", value + "=" + str);
         return str;
     }

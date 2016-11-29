@@ -61,7 +61,7 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> implements
 
     @Override
     public void loadData(ILoadCallBack loadCallBack) {
-        loadData(CardInfo.SQL_BASE + " limit " + Constants.DEFAULT_CARD_COUNT + ";", 0, null, LimitType.None, loadCallBack);
+        loadData(CardInfo.SQL_BASE + " limit " + Constants.DEFAULT_CARD_COUNT + ";", 0, loadCallBack);
     }
 
     @Override
@@ -86,20 +86,20 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> implements
     @Override
     public void loadString() {
         if (!mStringManager.isLoad()) {
-            File stringfile = new File(mAppsSettings.getResourcePath(), String.format(Constants.CORE_STRING_PATH, mAppsSettings.getCoreConfigVersion()));
-            mStringManager.loadFile(stringfile.getAbsolutePath());
+//            File stringfile = new File(mAppsSettings.getResourcePath(), String.format(Constants.CORE_STRING_PATH, mAppsSettings.getCoreConfigVersion()));
+            mStringManager.load();//loadFile(stringfile.getAbsolutePath());
         }
     }
 
     @Override
     public void loadLimitList() {
         if (!mLimitManager.isLoad()) {
-            File stringfile = new File(mAppsSettings.getResourcePath(), String.format(Constants.CORE_LIMIT_PATH, mAppsSettings.getCoreConfigVersion()));
-            mLimitManager.loadFile(stringfile.getAbsolutePath());
+//            File stringfile = new File(mAppsSettings.getResourcePath(), String.format(Constants.CORE_LIMIT_PATH, mAppsSettings.getCoreConfigVersion()));
+            mLimitManager.load();//loadFile(stringfile.getAbsolutePath());
         }
     }
 
-    private synchronized void loadData(String sql, long setcode, LimitList limitList, LimitType limiytype, ILoadCallBack loadCallBack) {
+    private synchronized void loadData(String sql, long setcode, ILoadCallBack loadCallBack) {
         Log.v("kk", "sql=" + sql);
         if (db == null) {
             File file = new File(mAppsSettings.getDataBasePath(), Constants.DATABASE_NAME);
@@ -130,11 +130,6 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> implements
                         Log.d("kk", "find card count=" + reader.getCount());
                         do {
                             CardInfo cardInfo = new CardInfo(reader);
-                            if (limitList != null) {
-                                if (!limitList.check(cardInfo.Code, limiytype)) {
-                                    continue;
-                                }
-                            }
                             if (setcode > 0) {
                                 if (!cardInfo.isSetCode(setcode)) {
                                     continue;
@@ -235,7 +230,16 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> implements
         LimitList limitList = mLimitManager.getLimit((int) limitlist);
         LimitType cardLimitType = LimitType.valueOf(limit);
         if (limitList != null) {
-            List<Long> ids = limitList.getCodeList();
+            List<Long> ids;
+            if(cardLimitType==LimitType.Forbidden){
+                ids= limitList.forbidden;
+            }else if(cardLimitType==LimitType.Limit){
+                ids= limitList.limit;
+            }else if(cardLimitType==LimitType.SemiLimit){
+                ids= limitList.semiLimit;
+            }else{
+                ids= limitList.getCodeList();
+            }
             stringBuilder.append(" and " + CardInfo.COL_ID + " in (");
             int i = 0;
             for (Long id : ids) {
@@ -247,7 +251,7 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> implements
             }
             stringBuilder.append(")");
         }
-        loadData(stringBuilder.toString(), setcode, limitList, cardLimitType, null);
+        loadData(stringBuilder.toString(), setcode, null);
     }
 
     @Override

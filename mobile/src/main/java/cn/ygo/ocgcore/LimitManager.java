@@ -8,6 +8,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import cn.garymb.ygomobile.Constants;
+import cn.garymb.ygomobile.settings.AppsSettings;
 import cn.garymb.ygomobile.utils.IOUtils;
 
 public class LimitManager {
@@ -36,6 +38,11 @@ public class LimitManager {
         return mListMap.get(Integer.valueOf(pos));
     }
 
+    public boolean load() {
+        File stringfile = new File(AppsSettings.get().getResourcePath(),
+                String.format(Constants.CORE_LIMIT_PATH, AppsSettings.get().getCoreConfigVersion()));
+        return loadFile(stringfile.getAbsolutePath());
+    }
     public boolean loadFile(String path) {
         if (path == null || path.length() == 0) {
             return false;
