@@ -32,6 +32,7 @@ public class CardDetail {
     private View view;
     private View close;
     private View faq;
+    private View lb_race;
     private TextView cardcode;
 
     public interface OnClickListener {
@@ -58,6 +59,7 @@ public class CardDetail {
         view_bar = bind(R.id.view_bar);
         race = bind(R.id.card_race);
         setname = bind(R.id.card_setname);
+        lb_race=bind(R.id.lb_race);
     }
 
     public View getView() {
@@ -88,6 +90,7 @@ public class CardDetail {
             atkdeflayout2.setVisibility(View.VISIBLE);
             view_bar.setVisibility(View.VISIBLE);
             race.setVisibility(View.VISIBLE);
+            lb_race.setVisibility(View.VISIBLE);
             String star = "";
             for (int i = 0; i < cardInfo.Level; i++) {
                 star += "★";
@@ -103,6 +106,7 @@ public class CardDetail {
             race.setText(stringManager.getRaceString(cardInfo.Race));
         } else {
             race.setVisibility(View.GONE);
+            lb_race.setVisibility(View.GONE);
             view_bar.setVisibility(View.GONE);
             level.setVisibility(View.GONE);
             atkdeflayout1.setVisibility(View.GONE);

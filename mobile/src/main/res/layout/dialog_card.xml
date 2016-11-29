@@ -102,22 +102,6 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/label_race"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-                        android:textColor="@color/colorPrimary"/>
-
-                    <TextView
-                        android:id="@+id/card_race"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:maxLines="1"
-                        android:singleLine="true"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                        tools:text="Test"/>
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
                         android:text="@string/label_type"
                         android:textAppearance="@style/TextAppearance.AppCompat.Caption"
                         android:textColor="@color/colorPrimary"/>
@@ -143,6 +127,22 @@
                         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                         tools:text="Test"/>
 
+                    <TextView
+                        android:id="@+id/lb_race"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/label_race"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+                        android:textColor="@color/colorPrimary"/>
+
+                    <TextView
+                        android:id="@+id/card_race"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                        tools:text="Test"/>
                     <View
                         android:id="@+id/view_bar"
                         android:layout_width="match_parent"
