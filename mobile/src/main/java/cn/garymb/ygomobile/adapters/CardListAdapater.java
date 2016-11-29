@@ -33,7 +33,10 @@ import cn.garymb.ygomobile.plus.BaseAdapterPlus;
 import cn.garymb.ygomobile.plus.VUiKit;
 import cn.garymb.ygomobile.settings.AppsSettings;
 import cn.garymb.ygomobile.core.CardDetail;
+import cn.ygo.ocgcore.LimitList;
+import cn.ygo.ocgcore.LimitManager;
 import cn.ygo.ocgcore.StringManager;
+import cn.ygo.ocgcore.enums.LimitType;
 import cn.ygo.ocgcore.enums.CardType;
 
 public class CardListAdapater extends BaseAdapterPlus<CardInfo> implements
@@ -43,11 +46,13 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> implements
     private StringManager mStringManager;
     private AppsSettings mAppsSettings;
     private ILoadCallBack mILoadCallBack;
+    private LimitManager mLimitManager;
 
     public CardListAdapater(Context context) {
         super(context);
         mStringManager = StringManager.get();
         mAppsSettings = AppsSettings.get();
+        mLimitManager = LimitManager.get();
     }
 
     public void setILoadCallBack(ILoadCallBack ILoadCallBack) {
@@ -56,7 +61,7 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> implements
 
     @Override
     public void loadData() {
-        loadData(CardInfo.SQL_BASE + " limit " + Constants.DEFAULT_CARD_COUNT + ";", 0);
+        loadData(CardInfo.SQL_BASE + " limit " + Constants.DEFAULT_CARD_COUNT + ";", 0, null, LimitType.None);
     }
 
     @Override
@@ -86,8 +91,16 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> implements
         }
     }
 
-    private void loadData(String sql, long setcode) {
-        Log.i("kk", "sql=" + sql);
+    @Override
+    public void loadLimitList() {
+        if (!mLimitManager.isLoad()) {
+            File stringfile = new File(mAppsSettings.getResourcePath(), String.format(Constants.CORE_LIMIT_PATH, mAppsSettings.getCoreConfigVersion()));
+            mLimitManager.loadFile(stringfile.getAbsolutePath());
+        }
+    }
+
+    private synchronized void loadData(String sql, long setcode, LimitList limitList, LimitType limiytype) {
+        Log.v("kk", "sql=" + sql);
         loadString();
         if (db == null) {
             File file = new File(mAppsSettings.getDataBasePath(), Constants.DATABASE_NAME);
@@ -113,15 +126,20 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> implements
                 List<CardInfo> tmp = new ArrayList<CardInfo>();
                 if (reader != null) {
                     if (reader.moveToFirst()) {
+                        Log.d("kk", "find card count=" + reader.getCount());
                         do {
                             CardInfo cardInfo = new CardInfo(reader);
-                            if(setcode>0){
-                                if(cardInfo.isSetCode(setcode)){
-                                    tmp.add(cardInfo);
+                            if (limitList != null) {
+                                if (!limitList.check(cardInfo.Code, limiytype)) {
+                                    continue;
                                 }
-                            }else{
-                                tmp.add(cardInfo);
                             }
+                            if (setcode > 0) {
+                                if (!cardInfo.isSetCode(setcode)) {
+                                    continue;
+                                }
+                            }
+                            tmp.add(cardInfo);
 
                         } while (reader.moveToNext());
                     }
@@ -163,7 +181,7 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> implements
      */
     @Override
     public void search(String prefixWord, String suffixWord,
-                       long attribute, long level, long race,long limitlist,long limit, String atk, String def, long setcode, long category, long ot, long... types) {
+                       long attribute, long level, long race, long limitlist, long limit, String atk, String def, long setcode, long category, long ot, long... types) {
         StringBuilder stringBuilder = new StringBuilder(CardInfo.SQL_BASE);
         if (!TextUtils.isEmpty(prefixWord) && !TextUtils.isEmpty(suffixWord)) {
             stringBuilder.append(" and name like '%");
@@ -206,7 +224,23 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> implements
         if (race != 0) {
             stringBuilder.append(" and race=" + race);
         }
-        loadData(stringBuilder.toString(),setcode);
+
+        LimitList limitList = mLimitManager.getLimit((int) limitlist);
+        LimitType cardLimitType = LimitType.valueOf(limit);
+        if (limitList != null) {
+            List<Long> ids = limitList.getCodeList();
+            stringBuilder.append(" and " + CardInfo.COL_ID + " in (");
+            int i = 0;
+            for (Long id : ids) {
+                if (i != 0) {
+                    stringBuilder.append(",");
+                }
+                stringBuilder.append(id);
+                i++;
+            }
+            stringBuilder.append(")");
+        }
+        loadData(stringBuilder.toString(), setcode, limitList, cardLimitType);
     }
 
     @Override

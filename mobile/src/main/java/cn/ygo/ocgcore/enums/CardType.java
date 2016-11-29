@@ -34,7 +34,7 @@ public enum CardType {
         this.value = value;
     }
 
-    public static CardType valueOf(int value) {
+    public static CardType valueOf(long value) {
         CardType[] attributes = CardType.values();
         for (CardType attribute : attributes) {
             if (attribute.value() == value) {

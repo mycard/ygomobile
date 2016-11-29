@@ -2,7 +2,6 @@ package cn.garymb.ygomobile.core;
 
 import android.content.Context;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -11,9 +10,8 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -23,10 +21,12 @@ import cn.garymb.ygomobile.core.loader.ILoadCallBack;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.plus.BaseAdapterPlus;
 import cn.garymb.ygomobile.plus.VUiKit;
+import cn.ygo.ocgcore.LimitList;
+import cn.ygo.ocgcore.LimitManager;
 import cn.ygo.ocgcore.StringManager;
 import cn.ygo.ocgcore.enums.CardAttribute;
 import cn.ygo.ocgcore.enums.CardCategory;
-import cn.ygo.ocgcore.enums.CardLimit;
+import cn.ygo.ocgcore.enums.LimitType;
 import cn.ygo.ocgcore.enums.CardOt;
 import cn.ygo.ocgcore.enums.CardRace;
 import cn.ygo.ocgcore.enums.CardType;
@@ -57,6 +57,7 @@ public class CardSelector implements View.OnClickListener {
     private DrawerLayout drawerlayout;
     private Context mContext;
     private StringManager mStringManager;
+    private LimitManager mLimitManager;
 
     public CardSelector(DrawerLayout drawerlayout, View view, ICardLoader dataLoader, ILoadCallBack callBack) {
         this.view = view;
@@ -64,6 +65,7 @@ public class CardSelector implements View.OnClickListener {
         this.dataLoader = dataLoader;
         this.drawerlayout = drawerlayout;
         mStringManager = StringManager.get();
+        mLimitManager = LimitManager.get();
         prefixWord = findViewById(R.id.edt_word1);
         suffixWord = findViewById(R.id.edt_word2);
         otSpinner = findViewById(R.id.sp_ot);
@@ -86,6 +88,7 @@ public class CardSelector implements View.OnClickListener {
         resetButton.setOnClickListener(this);
         VUiKit.defer().when(() -> {
             dataLoader.loadString();
+            dataLoader.loadLimitList();
         }).fail((e) -> {
             if (callBack != null) {
                 callBack.onLoad(true);
@@ -109,6 +112,22 @@ public class CardSelector implements View.OnClickListener {
             initCategorySpinners(categorySpinner);
             if (callBack != null) {
                 callBack.onLoad(true);
+            }
+        });
+        limitListSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                long value = sel(limitListSpinner);
+                if(value==0){
+                    limitSpinner.setVisibility(View.INVISIBLE);
+                }else{
+                    limitSpinner.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
             }
         });
         typeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -162,10 +181,10 @@ public class CardSelector implements View.OnClickListener {
     }
 
     private void initLimitSpinners(Spinner spinner) {
-        CardLimit[] eitems = CardLimit.values();
+        LimitType[] eitems = LimitType.values();
         List<SpItem> items = new ArrayList<>();
-        for (CardLimit item : eitems) {
-            int val = item.ordinal();
+        for (LimitType item : eitems) {
+            long val = item.value();
             if (val == 0) {
                 items.add(new SpItem(val, getString(R.string.label_limit)));
             } else {
@@ -179,7 +198,12 @@ public class CardSelector implements View.OnClickListener {
 
     private void initLimitListSpinners(Spinner spinner) {
         List<SpItem> items = new ArrayList<>();
+        Collection<Integer> ids = mLimitManager.getLists();
         items.add(new SpItem(0, getString(R.string.label_limitlist)));
+        for (Integer id : ids) {
+            LimitList list = mLimitManager.getLimit(id);
+            items.add(new SpItem(id, list.getName()));
+        }
         SpAdapter adapter = new SpAdapter(mContext);
         adapter.set(items);
         spinner.setAdapter(adapter);

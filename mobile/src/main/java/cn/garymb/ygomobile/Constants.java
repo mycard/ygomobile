@@ -72,7 +72,7 @@ public interface Constants {
     int STRING_RACE_START = 1020;
 
     int CARD_SEARCH_GRAVITY = Gravity.RIGHT;
-    int STRING_LIMIT_START = 1316;
+    int STRING_LIMIT_START = 1315;
     int STRING_CATEGORY_START = 1100;
     int STRING_CATEGORY_END = 1131;
     int DEFAULT_CARD_COUNT = 500;

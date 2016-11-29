@@ -16,14 +16,16 @@ public class CardInfo extends Card implements Parcelable {
     public static final String TAG = "CardInfo";
     public static final String SQL_DATA_BASE = "select * from datas";
     public static final String SQL_BASE;
+    private static final String _ID = "_id";
+    public static final String COL_ID = "datas." + _ID;
 
     static {
-        StringBuilder stringBuilder = new StringBuilder("select datas._id,ot,alias,setcode,type,level,race,attribute,atk,def,category");
+        StringBuilder stringBuilder = new StringBuilder("select datas." + _ID + ",ot,alias,setcode,type,level,race,attribute,atk,def,category");
         stringBuilder.append(",texts.name,texts.desc");
         for (int i = 1; i <= 0x10; i++) {
             stringBuilder.append(",texts.str" + i);
         }
-        stringBuilder.append(" from datas, texts  where datas._id = texts._id ");
+        stringBuilder.append(" from datas, texts  where datas." + _ID + " = texts." + _ID + " ");
         SQL_BASE = stringBuilder.toString();
     }
 

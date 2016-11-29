@@ -1,6 +1,7 @@
 package cn.ygo.ocgcore;
 
 import android.text.TextUtils;
+import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -52,7 +53,7 @@ public class StringManager {
             BufferedReader reader = new BufferedReader(in);
             String line = null;
             while ((line = reader.readLine()) != null) {
-                if (!line.startsWith(PRE_SYSTEM) && !line.startsWith(PRE_SETNAME)) {
+                if (line.startsWith("#") || (!line.startsWith(PRE_SYSTEM) && !line.startsWith(PRE_SETNAME))) {
                     continue;
                 }
                 String[] words = line.split("[\t| ]+");
@@ -98,7 +99,9 @@ public class StringManager {
     }
 
     public String getLimitString(long value) {
-        return getSystemString(Constants.STRING_LIMIT_START, value);
+        String str = getSystemString((int)(Constants.STRING_LIMIT_START + value));
+        Log.d("kk", value + "=" + str);
+        return str;
     }
 
     public String getTypeString(long value) {
@@ -110,8 +113,8 @@ public class StringManager {
     }
 
     public String getRaceString(long value) {
-        String race= getSystemString(Constants.STRING_RACE_START, value);
-        if(TextUtils.isEmpty(race)){
+        String race = getSystemString(Constants.STRING_RACE_START, value);
+        if (TextUtils.isEmpty(race)) {
             return String.format("0x%X", value);
         }
         return race;
