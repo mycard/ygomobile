@@ -1,12 +1,10 @@
-package cn.garymb.ygomobile.ui;
+package cn.garymb.ygomobile.core;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
 
 import cn.garymb.ygomobile.bean.CardInfo;
 import cn.garymb.ygomobile.core.loader.ImageLoader;
@@ -33,7 +31,8 @@ public class CardDetail {
     private View view_bar;
     private View view;
     private View close;
-    private View link;
+    private View faq;
+    private TextView cardcode;
 
     public interface OnClickListener {
         void onOpenUrl(CardInfo cardInfo);
@@ -48,9 +47,10 @@ public class CardDetail {
         name = bind(R.id.text_name);
         desc = bind(R.id.text_desc);
         close = bind(R.id.btn_close);
-        link = bind(R.id.btn_link);
+        cardcode = bind(R.id.card_code);
         level = bind(R.id.card_level);
         type = bind(R.id.card_type);
+        faq = bind(R.id.btn_faq);
         cardAtk = bind(R.id.card_atk);
         cardDef = bind(R.id.card_def);
         atkdeflayout1 = bind(R.id.layout_atkdef1);
@@ -68,12 +68,18 @@ public class CardDetail {
         ImageLoader.get().bindImage(mContext, cardImage, cardInfo.Code);
         name.setText(cardInfo.Name);
         desc.setText(cardInfo.Desc);
-        type.setText(cardInfo.getAllTypeString(stringManager,"\n"));
+        cardcode.setText(String.format("%08d", cardInfo.Code));
+        type.setText(cardInfo.getAllTypeString(stringManager).replace("/", "\n"));
         long[] sets = cardInfo.getSetCode();
         setname.setText("");
+        int index = 0;
         for (long set : sets) {
             if (set > 0) {
-                setname.append("" + stringManager.getSetName(set) + "\n");
+                setname.append("" + stringManager.getSetName(set));
+                if (index == 0) {
+                    setname.append("\n");
+                }
+                index++;
             }
         }
         if (cardInfo.isType(CardType.Monster)) {
@@ -102,7 +108,7 @@ public class CardDetail {
                 listener.onClose();
             }
         });
-        link.setOnClickListener((v) -> {
+        faq.setOnClickListener((v) -> {
             if (listener != null) {
                 listener.onOpenUrl(cardInfo);
             }

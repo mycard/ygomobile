@@ -108,4 +108,6 @@
     <string name="label_attr">Attribute</string>
     <string name="label_category">Category</string>
     <string name="searching">Search Cards</string>
+    <string name="card_faq">FAQ</string>
+    <string name="no_webbrowser">No web browser</string>
 </resources>

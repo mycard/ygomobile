@@ -75,4 +75,6 @@ public interface Constants {
     int STRING_LIMIT_START = 1316;
     int STRING_CATEGORY_START = 1100;
     int STRING_CATEGORY_END = 1131;
+    int DEFAULT_CARD_COUNT = 500;
+    String WIKI_SEARCH_URL = "http://www.ourocg.cn/S.aspx?key=";
 }

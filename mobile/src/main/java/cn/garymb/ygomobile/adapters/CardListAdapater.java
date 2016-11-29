@@ -4,8 +4,10 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -15,6 +17,7 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -29,7 +32,7 @@ import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.plus.BaseAdapterPlus;
 import cn.garymb.ygomobile.plus.VUiKit;
 import cn.garymb.ygomobile.settings.AppsSettings;
-import cn.garymb.ygomobile.ui.CardDetail;
+import cn.garymb.ygomobile.core.CardDetail;
 import cn.ygo.ocgcore.StringManager;
 import cn.ygo.ocgcore.enums.CardType;
 
@@ -53,7 +56,7 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> implements
 
     @Override
     public void loadData() {
-        loadData(CardInfo.SQL_BASE + " limit 100;");
+        loadData(CardInfo.SQL_BASE + " limit "+Constants.DEFAULT_CARD_COUNT+";");
     }
 
     @Override
@@ -208,7 +211,15 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> implements
             cardDetail.bind(cardInfo, mStringManager, new CardDetail.OnClickListener() {
                 @Override
                 public void onOpenUrl(CardInfo cardInfo) {
-
+                    //ourocg
+                    String uri = Constants.WIKI_SEARCH_URL + String.format("%08d", cardInfo.Code);
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    try {
+                        context.startActivity(intent);
+                    } catch (Exception e) {
+                        Toast.makeText(context, R.string.no_webbrowser, Toast.LENGTH_SHORT).show();
+                    }
                 }
 
                 @Override
@@ -250,7 +261,7 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> implements
             holder.layout_atkdef.setVisibility(View.GONE);
         }
         //卡片类型
-        holder.cardType.setText(item.getAllTypeString(mStringManager, "|"));
+        holder.cardType.setText(item.getAllTypeString(mStringManager));
     }
 
     class ViewHolder {

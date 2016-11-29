@@ -9,6 +9,7 @@ public enum CardType {
     Synchro(0x2000),
     Pendulum(0x1000000L),
     Xyz(0x800000),
+
     Spirit(0x200),
     Union(0x400),
     Dual(0x800),
@@ -21,7 +22,6 @@ public enum CardType {
     Equip(0x40000),
     Field(0x80000),
     Counter(0x100000),
-
 
     Monster(0x1),
     Spell(0x2),

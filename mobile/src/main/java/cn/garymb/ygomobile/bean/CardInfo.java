@@ -58,23 +58,41 @@ public class CardInfo extends Card implements Parcelable {
         }
     }
 
-    public String getAllTypeString(StringManager stringManager,String sp) {
+    public String getAllTypeString(StringManager stringManager) {
         StringBuilder stringBuilder = new StringBuilder();
         CardType[] cardTypes = CardType.values();
         boolean isFrst = true;
-        for (CardType type : cardTypes) {
-            if (isType(type)) {
-                if (!isFrst) {
-                    stringBuilder.append(sp);
-                } else {
-                    isFrst = false;
+        if (isType(CardType.Spell)) {
+            for (CardType type : cardTypes) {
+                if (isType(type) && type != CardType.Spell) {
+                    stringBuilder.append(stringManager.getTypeString(type.value()));
+                    break;
                 }
-                String str = stringManager.getTypeString(type.value());
-                if (TextUtils.isEmpty(str)) {
-                    stringBuilder.append("0x");
-                    stringBuilder.append(String.format("%X", type.value()));
-                } else {
-                    stringBuilder.append(str);
+            }
+            stringBuilder.append(stringManager.getTypeString(CardType.Spell.value()));
+        } else if (isType(CardType.Trap)) {
+            for (CardType type : cardTypes) {
+                if (isType(type) && type != CardType.Trap) {
+                    stringBuilder.append(stringManager.getTypeString(type.value()));
+                }
+                break;
+            }
+            stringBuilder.append(stringManager.getTypeString(CardType.Trap.value()));
+        } else {
+            for (CardType type : cardTypes) {
+                if (isType(type)) {
+                    if (!isFrst) {
+                        stringBuilder.append("/");
+                    } else {
+                        isFrst = false;
+                    }
+                    String str = stringManager.getTypeString(type.value());
+                    if (TextUtils.isEmpty(str)) {
+                        stringBuilder.append("0x");
+                        stringBuilder.append(String.format("%X", type.value()));
+                    } else {
+                        stringBuilder.append(str);
+                    }
                 }
             }
         }
