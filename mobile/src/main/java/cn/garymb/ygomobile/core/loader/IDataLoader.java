@@ -1,5 +1,5 @@
 package cn.garymb.ygomobile.core.loader;
 
 public interface IDataLoader {
-    void loadData();
+    void loadData(ILoadCallBack callBack);
 }

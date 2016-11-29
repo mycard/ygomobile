@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,14 +30,17 @@ import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.core.ResCheckTask;
 import cn.garymb.ygomobile.plus.VUiKit;
 import cn.garymb.ygomobile.core.YGOStarter;
+import cn.garymb.ygomobile.settings.AppsSettings;
 import cn.garymb.ygomobile.utils.IOUtils;
 import cn.garymb.ygomobile.utils.XmlUtils;
+import cn.ygo.ocgcore.LimitManager;
 
 import static cn.garymb.ygomobile.Constants.ASSET_SERVER_LIST;
 
 public class MainActivity extends BaseActivity {
     private boolean enableStart;
     private ListView mListView;
+    private AppsSettings mAppsSettings;
     private ServerListAdapater mServerListAdapater;
 
     @Override
@@ -44,6 +48,7 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setExitAnimEnable(false);
+        mAppsSettings = AppsSettings.get();
         mListView = (ListView) findViewById(R.id.list_server);
         mServerListAdapater = new ServerListAdapater(this);
         mListView.setAdapter(mServerListAdapater);
@@ -59,7 +64,7 @@ public class MainActivity extends BaseActivity {
         });
         YGOStarter.onCreated(this);
         //加载服务器列表
-        mServerListAdapater.loadData();
+        mServerListAdapater.loadData(null);
     }
 
     @Override

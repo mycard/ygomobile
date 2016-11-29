@@ -60,8 +60,8 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> implements
     }
 
     @Override
-    public void loadData() {
-        loadData(CardInfo.SQL_BASE + " limit " + Constants.DEFAULT_CARD_COUNT + ";", 0, null, LimitType.None);
+    public void loadData(ILoadCallBack loadCallBack) {
+        loadData(CardInfo.SQL_BASE + " limit " + Constants.DEFAULT_CARD_COUNT + ";", 0, null, LimitType.None, loadCallBack);
     }
 
     @Override
@@ -99,9 +99,8 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> implements
         }
     }
 
-    private synchronized void loadData(String sql, long setcode, LimitList limitList, LimitType limiytype) {
+    private synchronized void loadData(String sql, long setcode, LimitList limitList, LimitType limiytype, ILoadCallBack loadCallBack) {
         Log.v("kk", "sql=" + sql);
-        loadString();
         if (db == null) {
             File file = new File(mAppsSettings.getDataBasePath(), Constants.DATABASE_NAME);
             if (file.exists()) {
@@ -118,6 +117,8 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> implements
         if (db != null && db.isOpen()) {
             ProgressDialog wait = ProgressDialog.show(context, null, context.getString(R.string.searching));
             VUiKit.defer().when(() -> {
+                loadString();
+                loadLimitList();
                 Cursor reader = null;
                 try {
                     reader = db.rawQuery(sql, null);
@@ -147,11 +148,17 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> implements
                 }
                 return tmp;
             }).fail((e) -> {
+                if (loadCallBack != null) {
+                    loadCallBack.onLoad(false);
+                }
                 wait.dismiss();
                 if (mILoadCallBack != null) {
                     mILoadCallBack.onLoad(false);
                 }
             }).done((tmp) -> {
+                if (loadCallBack != null) {
+                    loadCallBack.onLoad(true);
+                }
                 wait.dismiss();
                 mItems.clear();
                 mItems.addAll(tmp);
@@ -240,7 +247,7 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> implements
             }
             stringBuilder.append(")");
         }
-        loadData(stringBuilder.toString(), setcode, limitList, cardLimitType);
+        loadData(stringBuilder.toString(), setcode, limitList, cardLimitType, null);
     }
 
     @Override

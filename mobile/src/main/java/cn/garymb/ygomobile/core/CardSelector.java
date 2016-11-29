@@ -59,7 +59,7 @@ public class CardSelector implements View.OnClickListener {
     private StringManager mStringManager;
     private LimitManager mLimitManager;
 
-    public CardSelector(DrawerLayout drawerlayout, View view, ICardLoader dataLoader, ILoadCallBack callBack) {
+    public CardSelector(DrawerLayout drawerlayout, View view, ICardLoader dataLoader) {
         this.view = view;
         this.mContext = view.getContext();
         this.dataLoader = dataLoader;
@@ -86,34 +86,6 @@ public class CardSelector implements View.OnClickListener {
         layout_monster = findViewById(R.id.layout_monster);
         searchButton.setOnClickListener(this);
         resetButton.setOnClickListener(this);
-        VUiKit.defer().when(() -> {
-            dataLoader.loadString();
-            dataLoader.loadLimitList();
-        }).fail((e) -> {
-            if (callBack != null) {
-                callBack.onLoad(true);
-            }
-        }).done((res) -> {
-            initOtSpinners(otSpinner);
-            initLimitSpinners(limitSpinner);
-            initLimitListSpinners(limitListSpinner);
-            initTypeSpinners(typeSpinner, new CardType[]{CardType.None, CardType.Monster, CardType.Spell, CardType.Trap});
-            initTypeSpinners(typeMonsterSpinner, new CardType[]{CardType.None, CardType.Normal, CardType.Effect, CardType.Fusion, CardType.Ritual,
-                                                                CardType.Synchro, CardType.Pendulum, CardType.Xyz, CardType.Spirit, CardType.Union,
-                                                                CardType.Dual, CardType.Tuner, CardType.Flip, CardType.Toon, CardType.Token
-            });
-            initTypeSpinners(typeSTSpinner, new CardType[]{CardType.None, CardType.QuickPlay,
-                                                           CardType.Continuous, CardType.Equip, CardType.Field, CardType.Counter
-            });
-            initLevelSpinners(levelSpinner);
-            initAttributes(attributeSpinner);
-            initRaceSpinners(raceSpinner);
-            initSetNameSpinners(setcodeSpinner);
-            initCategorySpinners(categorySpinner);
-            if (callBack != null) {
-                callBack.onLoad(true);
-            }
-        });
         limitListSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -156,6 +128,25 @@ public class CardSelector implements View.OnClickListener {
 
             }
         });
+    }
+
+    public void initItems(){
+        initOtSpinners(otSpinner);
+        initLimitSpinners(limitSpinner);
+        initLimitListSpinners(limitListSpinner);
+        initTypeSpinners(typeSpinner, new CardType[]{CardType.None, CardType.Monster, CardType.Spell, CardType.Trap});
+        initTypeSpinners(typeMonsterSpinner, new CardType[]{CardType.None, CardType.Normal, CardType.Effect, CardType.Fusion, CardType.Ritual,
+                                                            CardType.Synchro, CardType.Pendulum, CardType.Xyz, CardType.Spirit, CardType.Union,
+                                                            CardType.Dual, CardType.Tuner, CardType.Flip, CardType.Toon, CardType.Token
+        });
+        initTypeSpinners(typeSTSpinner, new CardType[]{CardType.None, CardType.QuickPlay,
+                                                       CardType.Continuous, CardType.Equip, CardType.Field, CardType.Counter
+        });
+        initLevelSpinners(levelSpinner);
+        initAttributes(attributeSpinner);
+        initRaceSpinners(raceSpinner);
+        initSetNameSpinners(setcodeSpinner);
+        initCategorySpinners(categorySpinner);
     }
 
     private <T extends View> T findViewById(int id) {

@@ -21,6 +21,7 @@ import cn.garymb.ygomobile.bean.ServerInfo;
 import cn.garymb.ygomobile.bean.ServerList;
 import cn.garymb.ygomobile.core.loader.IDataLoader;
 import cn.garymb.ygomobile.core.YGOStarter;
+import cn.garymb.ygomobile.core.loader.ILoadCallBack;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.plus.BaseAdapterPlus;
 import cn.garymb.ygomobile.plus.VUiKit;
@@ -70,7 +71,7 @@ public class ServerListAdapater extends BaseAdapterPlus<ServerInfo> implements
     }
 
     @Override
-    public void loadData() {
+    public void loadData(ILoadCallBack callBack) {
         VUiKit.defer().when(() -> {
             InputStream in = null;
             if (xmlFile.exists()) {
@@ -88,6 +89,9 @@ public class ServerListAdapater extends BaseAdapterPlus<ServerInfo> implements
             }
             return list;
         }).done((list) -> {
+            if (callBack != null) {
+                callBack.onLoad(list != null);
+            }
             if (list != null) {
                 addAll(list.getServerInfoList());
                 notifyDataSetChanged();

@@ -20,7 +20,7 @@ public class StringManager {
     private final Map<Integer, String> mSystem = new HashMap<>();
     private final Map<Long, String> mSetname = new HashMap<>();
     private static StringManager sStringManager = new StringManager();
-    private boolean isLoad = false;
+    private volatile boolean isLoad = false;
 
     private StringManager() {
 
@@ -34,7 +34,7 @@ public class StringManager {
         return isLoad;
     }
 
-    public synchronized boolean loadFile(String path) {
+    public boolean loadFile(String path) {
         if (path == null || path.length() == 0) {
             return false;
         }

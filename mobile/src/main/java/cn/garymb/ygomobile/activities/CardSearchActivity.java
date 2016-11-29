@@ -23,6 +23,7 @@ public class CardSearchActivity extends BaseActivity implements NavigationView.O
     private CardListAdapater mCardListAdapater;
     private DrawerLayout mDrawerlayout;
     private CardSelector mCardSelector;
+    private boolean isLoad =false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,11 +43,13 @@ public class CardSearchActivity extends BaseActivity implements NavigationView.O
         toggle.syncState();
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        mCardSelector = new CardSelector(mDrawerlayout,navigationView.getHeaderView(0), mCardListAdapater,(ok)->{
-            mCardListAdapater.loadData();
-        });
+        mCardSelector = new CardSelector(mDrawerlayout,navigationView.getHeaderView(0), mCardListAdapater);
         mCardListAdapater.setILoadCallBack((ok)->{
             mCardSelector.onSearchOk();
+        });
+        mCardListAdapater.loadData((ok)->{
+            isLoad = ok;
+            mCardSelector.initItems();
         });
     }
 
@@ -77,7 +80,7 @@ public class CardSearchActivity extends BaseActivity implements NavigationView.O
                 //弹条件对话框
                 if (mDrawerlayout.isDrawerOpen(Constants.CARD_SEARCH_GRAVITY)) {
                     mDrawerlayout.closeDrawer(Constants.CARD_SEARCH_GRAVITY);
-                } else {
+                } else if(isLoad){
                     mDrawerlayout.openDrawer(Constants.CARD_SEARCH_GRAVITY);
                 }
                 break;

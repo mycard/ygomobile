@@ -9,13 +9,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import cn.garymb.ygomobile.utils.IOUtils;
-import cn.ygo.ocgcore.enums.LimitType;
 
 public class LimitManager {
     private static LimitManager sManager = new LimitManager();
     private Map<Integer, LimitList> mListMap = new HashMap<>();
 
-    private boolean isLoad = false;
+    private volatile boolean isLoad = false;
 
     private LimitManager() {
 
@@ -37,7 +36,7 @@ public class LimitManager {
         return mListMap.get(Integer.valueOf(pos));
     }
 
-    public synchronized boolean loadFile(String path) {
+    public boolean loadFile(String path) {
         if (path == null || path.length() == 0) {
             return false;
         }

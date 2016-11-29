@@ -94,7 +94,7 @@
     <string name="hit_def">DEF</string>
     <string name="label_race">种族</string>
     <string name="label_ot">专属</string>
-    <string name="label_limit">限制数量</string>
+    <string name="label_limit">限制类型</string>
     <string name="label_limitlist">禁卡表</string>
     <string name="label_type">卡片类型</string>
     <string name="label_set">卡片系列</string>
