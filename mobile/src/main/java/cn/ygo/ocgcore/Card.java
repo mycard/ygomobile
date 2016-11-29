@@ -9,7 +9,7 @@ import java.util.Arrays;
 import cn.ygo.ocgcore.enums.CardType;
 
 public class Card extends CardData implements Parcelable {
-
+    public static final int SETCODE_MAX = 4;
     public String Name;
     public String Desc;
     public String[] Strs;
@@ -20,7 +20,7 @@ public class Card extends CardData implements Parcelable {
 
     public Card(CardData cardData) {
         super();
-        if(cardData!=null) {
+        if (cardData != null) {
             this.Code = cardData.Code;
             this.Alias = cardData.Alias;
             this.Setcode = cardData.Setcode;
@@ -43,6 +43,25 @@ public class Card extends CardData implements Parcelable {
 
     public boolean isExtraCard() {
         return (isType(CardType.Fusion) || isType(CardType.Synchro) || isType(CardType.Xyz));
+    }
+
+    public long[] getSetCode() {
+        long[] setcodes = new long[SETCODE_MAX];
+        for (int i = 0, k = 0; i < SETCODE_MAX; k += 0x10, i++) {
+            setcodes[i] = (Setcode >> k) & 0xffff;
+        }
+        return setcodes;
+    }
+
+    public void setSetCode(long[] setcodes) {
+        int i = 0;
+        this.Setcode = 0;
+        if (setcodes != null) {
+            for (long sc : setcodes) {
+                this.Setcode += (sc << i);
+                i += 0x10;
+            }
+        }
     }
 
     @Override
@@ -85,4 +104,15 @@ public class Card extends CardData implements Parcelable {
         this.Strs = in.createStringArray();
     }
 
+    public static final Creator<Card> CREATOR = new Creator<Card>() {
+        @Override
+        public Card createFromParcel(Parcel source) {
+            return new Card(source);
+        }
+
+        @Override
+        public Card[] newArray(int size) {
+            return new Card[size];
+        }
+    };
 }

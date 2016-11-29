@@ -1,5 +1,7 @@
 package cn.garymb.ygomobile.adapters;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.database.Cursor;
@@ -14,8 +16,6 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +29,7 @@ import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.plus.BaseAdapterPlus;
 import cn.garymb.ygomobile.plus.VUiKit;
 import cn.garymb.ygomobile.settings.AppsSettings;
-import cn.garymb.ygomobile.ui.CardDialog;
+import cn.garymb.ygomobile.ui.CardDetail;
 import cn.ygo.ocgcore.StringManager;
 import cn.ygo.ocgcore.enums.CardType;
 
@@ -112,7 +112,6 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> implements
                     if (reader.moveToFirst()) {
                         do {
                             CardInfo cardInfo = new CardInfo(reader);
-                            cardInfo.getAllTypeString(mStringManager);
                             tmp.add(cardInfo);
                         } while (reader.moveToNext());
                     }
@@ -202,8 +201,21 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> implements
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         CardInfo cardInfo = getItem(position);
         if (cardInfo != null) {
-            CardDialog cardDialog = new CardDialog(context, cardInfo);
-            cardDialog.show();
+            CardDetail cardDetail = new CardDetail(context);
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+            builder.setView(cardDetail.getView());
+            final Dialog dialog = builder.show();
+            cardDetail.bind(cardInfo, mStringManager, new CardDetail.OnClickListener() {
+                @Override
+                public void onOpenUrl(CardInfo cardInfo) {
+
+                }
+
+                @Override
+                public void onClose() {
+                    dialog.dismiss();
+                }
+            });
         }
     }
 
@@ -238,7 +250,7 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> implements
             holder.layout_atkdef.setVisibility(View.GONE);
         }
         //卡片类型
-        holder.cardType.setText(item.getAllTypeString(mStringManager));
+        holder.cardType.setText(item.getAllTypeString(mStringManager, "|"));
     }
 
     class ViewHolder {

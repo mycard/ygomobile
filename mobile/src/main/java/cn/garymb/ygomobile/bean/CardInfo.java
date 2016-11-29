@@ -17,8 +17,6 @@ public class CardInfo extends Card implements Parcelable {
     public static final String SQL_DATA_BASE = "select * from datas";
     public static final String SQL_BASE;
 
-    private String mTypeString;
-
     static {
         StringBuilder stringBuilder = new StringBuilder("select datas._id,ot,alias,setcode,type,level,race,attribute,atk,def,category");
         stringBuilder.append(",texts.name,texts.desc");
@@ -60,17 +58,14 @@ public class CardInfo extends Card implements Parcelable {
         }
     }
 
-    public String getAllTypeString(StringManager stringManager) {
-        if(!TextUtils.isEmpty(mTypeString)){
-            return mTypeString;
-        }
+    public String getAllTypeString(StringManager stringManager,String sp) {
         StringBuilder stringBuilder = new StringBuilder();
         CardType[] cardTypes = CardType.values();
         boolean isFrst = true;
         for (CardType type : cardTypes) {
             if (isType(type)) {
                 if (!isFrst) {
-                    stringBuilder.append("|");
+                    stringBuilder.append(sp);
                 } else {
                     isFrst = false;
                 }
@@ -83,8 +78,7 @@ public class CardInfo extends Card implements Parcelable {
                 }
             }
         }
-        mTypeString= stringBuilder.toString();
-        return mTypeString;
+        return stringBuilder.toString();
     }
 
     public CardInfo() {

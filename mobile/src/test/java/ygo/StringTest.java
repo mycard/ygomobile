@@ -7,7 +7,6 @@ import cn.ygo.ocgcore.StringManager;
 import cn.ygo.ocgcore.enums.CardType;
 
 public class StringTest {
-
     @Test
     public void test() {
         StringManager stringManager = StringManager.get();

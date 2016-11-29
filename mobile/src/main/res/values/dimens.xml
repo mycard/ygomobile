@@ -12,4 +12,7 @@
     <dimen name="button_width">80dp</dimen>
     <dimen name="card_small_width">66dp</dimen>
     <dimen name="card_small_height">84dp</dimen>
+    <dimen name="card_width">177dp</dimen>
+    <dimen name="card_height">256dp</dimen>
+    <dimen name="card_desc_height">140dp</dimen>
 </resources>

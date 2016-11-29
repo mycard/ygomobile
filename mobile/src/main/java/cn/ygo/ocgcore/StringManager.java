@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -53,13 +54,14 @@ public class StringManager {
                     continue;
                 }
                 String[] words = line.split("[\t| ]+");
-//                System.out.println(Arrays.toString(words));
+//
                 if (words.length >= 3) {
                     if (PRE_SETNAME.equals(words[0])) {
+//                        System.out.println(Arrays.toString(words));
                         //setcode
                         mSetname.put(toNumber(words[1]), words[2]);
                     } else {
-                        mSystem.put((int)toNumber(words[1]), words[2]);
+                        mSystem.put((int) toNumber(words[1]), words[2]);
                     }
                 }
             }
@@ -92,9 +94,11 @@ public class StringManager {
     public String getSystemString(int start, long value) {
         return getSystemString(start + value2Index(value));
     }
+
     public String getLimitString(long value) {
         return getSystemString(Constants.STRING_LIMIT_START, value);
     }
+
     public String getTypeString(long value) {
         return getSystemString(Constants.STRING_TYPE_START, value);
     }
@@ -106,6 +110,7 @@ public class StringManager {
     public String getRaceString(long value) {
         return getSystemString(Constants.STRING_RACE_START, value);
     }
+
     public String getCategoryString(long value) {
         return getSystemString(Constants.STRING_CATEGORY_START, value);
     }
@@ -132,7 +137,7 @@ public class StringManager {
         long i = 0;
         try {
             if (str.startsWith("0x")) {
-                i = Long.parseLong(str, 0x10);
+                i = Long.parseLong(str.replace("0x", ""), 0x10);
             } else {
                 i = Long.parseLong(str);
             }
