@@ -1,4 +1,4 @@
-package cn.garymb.ygomobile.core.images;
+package cn.garymb.ygomobile.core.loader;
 
 import android.graphics.Bitmap;
 import android.os.Handler;

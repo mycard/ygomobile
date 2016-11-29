@@ -4,10 +4,14 @@ package cn.garymb.ygomobile;
 import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.GlideBuilder;
+
 import cn.garymb.ygomobile.lite.BuildConfig;
 import cn.garymb.ygomobile.settings.AppsSettings;
 
 public class App extends GameApplication {
+
     @Override
     public void onCreate() {
         super.onCreate();

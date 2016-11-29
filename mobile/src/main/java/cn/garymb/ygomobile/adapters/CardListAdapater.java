@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -15,16 +14,17 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.bean.CardInfo;
-import cn.garymb.ygomobile.core.ICardLoader;
-import cn.garymb.ygomobile.core.IDataLoader;
-import cn.garymb.ygomobile.core.ILoadCallBack;
-import cn.garymb.ygomobile.core.ImageLoader;
+import cn.garymb.ygomobile.core.loader.ICardLoader;
+import cn.garymb.ygomobile.core.loader.ILoadCallBack;
+import cn.garymb.ygomobile.core.loader.ImageLoader;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.plus.BaseAdapterPlus;
 import cn.garymb.ygomobile.plus.VUiKit;
@@ -39,7 +39,6 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> implements
     private SQLiteDatabase db;
     private StringManager mStringManager;
     private AppsSettings mAppsSettings;
-    private boolean isScroll = false;
     private ILoadCallBack mILoadCallBack;
 
     public CardListAdapater(Context context) {
@@ -61,13 +60,12 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> implements
     public void onScrollStateChanged(AbsListView view, int scrollState) {
         switch (scrollState) {
             case SCROLL_STATE_IDLE:
-                isScroll = false;
                 break;
             case SCROLL_STATE_TOUCH_SCROLL:
-                isScroll = true;
+//                Glide.with(context).pauseRequests();
                 break;
             case SCROLL_STATE_FLING:
-                isScroll = false;
+//                Glide.with(context).resumeRequests();
                 break;
         }
     }
@@ -112,11 +110,11 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> implements
                 List<CardInfo> tmp = new ArrayList<CardInfo>();
                 if (reader != null) {
                     if (reader.moveToFirst()) {
-                        while (reader.moveToNext()) {
+                        do {
                             CardInfo cardInfo = new CardInfo(reader);
                             cardInfo.getAllTypeString(mStringManager);
                             tmp.add(cardInfo);
-                        }
+                        } while (reader.moveToNext());
                     }
                     reader.close();
                 }
@@ -131,7 +129,7 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> implements
                 mItems.clear();
                 mItems.addAll(tmp);
                 if (Constants.DEBUG)
-                    Log.d("kk", "find card count=" + tmp.size());
+                    Log.v("kk", "find card count=" + tmp.size());
                 notifyDataSetChanged();
                 if (mILoadCallBack != null) {
                     mILoadCallBack.onLoad(true);
@@ -263,8 +261,8 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> implements
             cardLevel = (TextView) view.findViewById(R.id.card_level);
             layout_atkdef = view.findViewById(R.id.layout_atkdef);
             view_bar = view.findViewById(R.id.view_bar);
-//            File outFile = new File(AppsSettings.get().getCoreSkinPath(), Constants.CORE_SKIN_COVER);
-//            Glide.with(context).load(outFile).into(cardImage);
+            File outFile = new File(AppsSettings.get().getCoreSkinPath(), Constants.CORE_SKIN_COVER);
+            ImageLoader.get().bind(context, outFile, cardImage, outFile.getName().endsWith(Constants.BPG), 0);
         }
     }
 }

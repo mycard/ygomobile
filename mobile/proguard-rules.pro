@@ -17,3 +17,6 @@
 #}
 -keepclassmembers class * implements cn.garymb.ygomobile.core.IrrlichtBridge.* { public *;}
 -keepclassmembers class * implements android.os.Parcelable { public *;}
+-keep class * implements com.bumptech.glide.module.GlideModule{
+    *;
+}

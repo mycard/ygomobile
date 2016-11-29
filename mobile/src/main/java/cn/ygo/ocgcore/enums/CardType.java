@@ -13,20 +13,21 @@ public enum CardType {
     Union(0x400),
     Dual(0x800),
     Tuner(0x1000),
+    Flip(0x200000),
+    Toon(0x400000),
 
-    Token(0x4000),
     QuickPlay(0x10000),
     Continuous(0x20000),
     Equip(0x40000),
     Field(0x80000),
     Counter(0x100000),
-    Flip(0x200000),
-    Toon(0x400000),
+
 
     Monster(0x1),
     Spell(0x2),
     TrapMonster(0x100),
-    Trap(0x4);
+    Trap(0x4),
+    Token(0x4000);
     private long value = 0;
 
     private CardType(long value) {

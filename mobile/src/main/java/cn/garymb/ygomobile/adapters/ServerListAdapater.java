@@ -19,7 +19,7 @@ import java.io.OutputStream;
 import cn.garymb.ygodata.YGOGameOptions;
 import cn.garymb.ygomobile.bean.ServerInfo;
 import cn.garymb.ygomobile.bean.ServerList;
-import cn.garymb.ygomobile.core.IDataLoader;
+import cn.garymb.ygomobile.core.loader.IDataLoader;
 import cn.garymb.ygomobile.core.YGOStarter;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.plus.BaseAdapterPlus;

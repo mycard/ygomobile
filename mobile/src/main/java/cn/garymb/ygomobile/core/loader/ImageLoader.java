@@ -1,26 +1,29 @@
-package cn.garymb.ygomobile.core;
+package cn.garymb.ygomobile.core.loader;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Picture;
 import android.util.Log;
-import android.view.View;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.ResourceDecoder;
+import com.bumptech.glide.load.engine.Resource;
+import com.bumptech.glide.load.engine.bitmap_recycle.LruBitmapPool;
+import com.bumptech.glide.load.model.ImageVideoWrapper;
+import com.bumptech.glide.load.resource.bitmap.BitmapResource;
+import com.bumptech.glide.load.resource.gifbitmap.GifBitmapWrapper;
+import com.bumptech.glide.load.resource.gifbitmap.GifBitmapWrapperResource;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import cn.garymb.ygomobile.App;
 import cn.garymb.ygomobile.Constants;
+import cn.garymb.ygomobile.core.IrrlichtBridge;
+import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.settings.AppsSettings;
 import cn.garymb.ygomobile.utils.BitmapUtil;
 import cn.garymb.ygomobile.utils.IOUtils;
@@ -31,6 +34,32 @@ public class ImageLoader {
 
     private static ImageLoader sImageLoader = new ImageLoader();
     private ZipFile mZipFile;
+    private LruBitmapPool mLruBitmapPool;
+
+    private ImageLoader() {
+        mLruBitmapPool = new LruBitmapPool(100);
+    }
+
+    private class BpgResourceDecoder implements ResourceDecoder<ImageVideoWrapper, GifBitmapWrapper> {
+        String id;
+        private BpgResourceDecoder(String id) {
+            this.id = id;
+        }
+
+        @Override
+        public Resource<GifBitmapWrapper> decode(ImageVideoWrapper source, int width, int height) throws IOException {
+//            Log.i("kk", "decode source:"+source);
+            Bitmap bitmap = IrrlichtBridge.getBpgImage(source.getStream(), Bitmap.Config.RGB_565);
+//            Log.i("kk", "decode bitmap:"+bitmap);
+            BitmapResource resource = new BitmapResource(bitmap, mLruBitmapPool);
+            return new GifBitmapWrapperResource(new GifBitmapWrapper(resource, null));
+        }
+
+        @Override
+        public String getId() {
+            return id;
+        }
+    }
 
     public static ImageLoader get() {
         return sImageLoader;
@@ -44,26 +73,44 @@ public class ImageLoader {
         return null;
     }
 
+    public void bind(Context context, byte[] data, ImageView imageview, boolean isbpg,long code) {
+        if (isbpg) {
+            Glide.with(context).load(data).decoder(new BpgResourceDecoder("bpg@"+code)).into(imageview);
+        } else {
+            Glide.with(context).load(data).into(imageview);
+        }
+    }
+
+    public void bind(Context context, final File file, ImageView imageview, boolean isbpg,long code) {
+        try {
+            if (isbpg) {
+                Glide.with(context).load(file).decoder(new BpgResourceDecoder("bpg@"+code)).into(imageview);
+            } else {
+                Glide.with(context).load(file).into(imageview);
+            }
+        } catch (Exception e) {
+            Log.e("kk", "bind", e);
+        }
+    }
+
     public void bindImage(Context context, ImageView imageview, long code) {
         String name = Constants.CORE_IMAGE_PATH + "/" + code;
         String path = AppsSettings.get().getResourcePath();
         File zip = new File(path, Constants.CORE_PICS_ZIP);
         for (String ex : Constants.IMAGE_EX) {
             File file = new File(AppsSettings.get().getResourcePath(), name + ex);
-            if (file.exists()) {
-                Glide.with(context).load(file).into(imageview);
-                return;
+            if (!file.exists()) {
+                file = new File(context.getCacheDir(), name + ex);
             }
-            file = new File(context.getCacheDir(), name + ex);
             if (file.exists()) {
-                Glide.with(context).load(file).into(imageview);
+                bind(context, file, imageview, Constants.BPG.equals(ex), code);
                 return;
             }
         }
         if (zip.exists()) {
             ZipEntry entry = null;
             InputStream inputStream = null;
-            ByteArrayOutputStream outputStream=null;
+            ByteArrayOutputStream outputStream = null;
             try {
                 if (mZipFile == null) {
                     mZipFile = new ZipFile(zip);
@@ -73,19 +120,13 @@ public class ImageLoader {
                     if (entry != null) {
                         inputStream = mZipFile.getInputStream(entry);
                         outputStream = new ByteArrayOutputStream();
-//                        cache = new File(context.getCacheDir(), name + ex);
-//                        IOUtils.createFolder(cache);
-//                        if (!cache.exists()) {
-//                            cache.createNewFile();
-//                        }
-//                        outputStream = new FileOutputStream(cache);
                         IOUtils.copy(inputStream, outputStream);
-                        Glide.with(context).load(outputStream.toByteArray()).into(imageview);
+                        bind(context, outputStream.toByteArray(), imageview, Constants.BPG.equals(ex), code);
                     }
                 }
             } catch (IOException e) {
                 e.printStackTrace();
-            }finally {
+            } finally {
                 IOUtils.close(inputStream);
             }
 //            File cache = null;

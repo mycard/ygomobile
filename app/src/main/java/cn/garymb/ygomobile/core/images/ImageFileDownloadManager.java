@@ -1,4 +1,4 @@
-package cn.garymb.ygomobile.core.images;
+package cn.garymb.ygomobile.core.loader;
 
 import java.util.Iterator;
 import java.util.LinkedList;

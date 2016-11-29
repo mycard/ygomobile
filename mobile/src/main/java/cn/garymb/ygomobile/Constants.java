@@ -55,7 +55,10 @@ public interface Constants {
     String CORE_SKIN_BG = "bg.jpg";
     int[] CORE_SKIN_BG_SIZE = new int[]{1024, 640};
     int[] CORE_SKIN_CARD_COVER_SIZE = new int[]{177, 254};
-    String[] IMAGE_EX = new String[]{".jpg", ".png", ".bpg"};
+    boolean SUPPORT_BPG = true;
+    String BPG = ".bpg";
+    String[] IMAGE_EX = SUPPORT_BPG ? new String[]{".bpg", ".jpg", ".png"}
+            : new String[]{".jpg", ".png"};
 
     int REQUEST_CUT_IMG = 0x1000 + 0x10;
     int REQUEST_CHOOSE_FILE = 0x1000 + 0x20;

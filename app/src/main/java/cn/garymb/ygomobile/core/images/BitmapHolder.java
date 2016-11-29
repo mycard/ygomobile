@@ -1,4 +1,4 @@
-package cn.garymb.ygomobile.core.images;
+package cn.garymb.ygomobile.core.loader;
 
 import java.lang.ref.Reference;
 import java.lang.ref.SoftReference;

@@ -3,7 +3,6 @@ package cn.garymb.ygomobile.settings;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
@@ -24,7 +23,6 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import cn.garymb.ygomobile.Constants;
-import cn.garymb.ygomobile.core.ImageLoader;
 import cn.garymb.ygomobile.core.ResCheckTask;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.plus.PreferenceFragmentPlus;

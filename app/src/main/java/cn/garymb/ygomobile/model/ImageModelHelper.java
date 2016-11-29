@@ -7,12 +7,12 @@ import java.util.Map;
 
 import cn.garymb.ygomobile.common.Constants;
 import cn.garymb.ygomobile.controller.Controller;
-import cn.garymb.ygomobile.core.images.BitmapHolder;
-import cn.garymb.ygomobile.core.images.ImageFileDownloadManager;
-import cn.garymb.ygomobile.core.images.ImageFileDownloadTaskHolder;
-import cn.garymb.ygomobile.core.images.ImageFileDownloadedCallback;
-import cn.garymb.ygomobile.core.images.ImageLoadManager;
-import cn.garymb.ygomobile.core.images.ImageLoadedCallback;
+import cn.garymb.ygomobile.core.loader.BitmapHolder;
+import cn.garymb.ygomobile.core.loader.ImageFileDownloadManager;
+import cn.garymb.ygomobile.core.loader.ImageFileDownloadTaskHolder;
+import cn.garymb.ygomobile.core.loader.ImageFileDownloadedCallback;
+import cn.garymb.ygomobile.core.loader.ImageLoadManager;
+import cn.garymb.ygomobile.core.loader.ImageLoadedCallback;
 import cn.garymb.ygomobile.model.data.ImageItem;
 
 import android.graphics.Bitmap;
