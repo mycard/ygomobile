@@ -1,5 +1,7 @@
 package cn.ygo.ocgcore;
 
+import android.text.TextUtils;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -108,7 +110,11 @@ public class StringManager {
     }
 
     public String getRaceString(long value) {
-        return getSystemString(Constants.STRING_RACE_START, value);
+        String race= getSystemString(Constants.STRING_RACE_START, value);
+        if(TextUtils.isEmpty(race)){
+            return String.format("0x%X", value);
+        }
+        return race;
     }
 
     public String getCategoryString(long value) {

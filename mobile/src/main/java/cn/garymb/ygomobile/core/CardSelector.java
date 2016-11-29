@@ -2,6 +2,7 @@ package cn.garymb.ygomobile.core;
 
 import android.content.Context;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -10,7 +11,9 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -33,7 +36,8 @@ public class CardSelector implements View.OnClickListener {
     private EditText prefixWord;
     private EditText suffixWord;
     private Spinner otSpinner;
-    //    private Spinner limitSpinner;
+    private Spinner limitSpinner;
+    private Spinner limitListSpinner;
     private Spinner typeSpinner;
     private Spinner typeMonsterSpinner;
     private Spinner typeSTSpinner;
@@ -63,7 +67,8 @@ public class CardSelector implements View.OnClickListener {
         prefixWord = findViewById(R.id.edt_word1);
         suffixWord = findViewById(R.id.edt_word2);
         otSpinner = findViewById(R.id.sp_ot);
-//        limitSpinner = findViewById(R.id.sp_limit);
+        limitSpinner = findViewById(R.id.sp_limit);
+        limitListSpinner = findViewById(R.id.sp_limit_list);
         typeSpinner = findViewById(R.id.sp_type1);
         typeMonsterSpinner = findViewById(R.id.sp_type2);
         typeSTSpinner = findViewById(R.id.sp_type3);
@@ -87,11 +92,12 @@ public class CardSelector implements View.OnClickListener {
             }
         }).done((res) -> {
             initOtSpinners(otSpinner);
-//            initLimitSpinners(limitSpinner);
-            initTypeSpinners(typeSpinner, new CardType[]{CardType.None, CardType.Monster, CardType.Spell, CardType.Trap, CardType.Token});
+            initLimitSpinners(limitSpinner);
+            initLimitListSpinners(limitListSpinner);
+            initTypeSpinners(typeSpinner, new CardType[]{CardType.None, CardType.Monster, CardType.Spell, CardType.Trap});
             initTypeSpinners(typeMonsterSpinner, new CardType[]{CardType.None, CardType.Normal, CardType.Effect, CardType.Fusion, CardType.Ritual,
                                                                 CardType.Synchro, CardType.Pendulum, CardType.Xyz, CardType.Spirit, CardType.Union,
-                                                                CardType.Dual, CardType.Tuner, CardType.Flip, CardType.Toon
+                                                                CardType.Dual, CardType.Tuner, CardType.Flip, CardType.Toon, CardType.Token
             });
             initTypeSpinners(typeSTSpinner, new CardType[]{CardType.None, CardType.QuickPlay,
                                                            CardType.Continuous, CardType.Equip, CardType.Field, CardType.Counter
@@ -171,6 +177,13 @@ public class CardSelector implements View.OnClickListener {
         spinner.setAdapter(adapter);
     }
 
+    private void initLimitListSpinners(Spinner spinner) {
+        List<SpItem> items = new ArrayList<>();
+        items.add(new SpItem(0, getString(R.string.label_limitlist)));
+        SpAdapter adapter = new SpAdapter(mContext);
+        adapter.set(items);
+        spinner.setAdapter(adapter);
+    }
 
     private void initLevelSpinners(Spinner spinner) {
         List<SpItem> items = new ArrayList<>();
@@ -337,13 +350,14 @@ public class CardSelector implements View.OnClickListener {
                 drawerlayout.closeDrawer(Constants.CARD_SEARCH_GRAVITY);
             }
             dataLoader.search(text(prefixWord), text(suffixWord), sel(attributeSpinner)
-                    , sel(levelSpinner), text(atkText), text(defText), sel(setcodeSpinner)
+                    , sel(levelSpinner), sel(raceSpinner), sel(limitListSpinner), sel(limitSpinner), text(atkText), text(defText), sel(setcodeSpinner)
                     , sel(categorySpinner), sel(otSpinner), sel(typeSpinner), sel(typeMonsterSpinner), sel(typeSTSpinner));
         } else if (v == resetButton) {
             prefixWord.setText(null);
             suffixWord.setText(null);
             reset(otSpinner);
-//            reset(limitSpinner);
+            reset(limitSpinner);
+            reset(limitListSpinner);
             reset(typeSpinner);
             reset(typeSTSpinner);
             reset(setcodeSpinner);

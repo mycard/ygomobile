@@ -60,8 +60,8 @@ public class YGOMobileActivity extends NativeActivity implements
     protected ComboBoxCompat mGlobalComboBox;
     protected EditWindowCompat mGlobalEditText;
     protected PowerManager mPM;
-    private OverlayRectView mChainOverlayView;
-    private OverlayOvalView mOverlayView;
+    //    private OverlayRectView mChainOverlayView;
+//    private OverlayOvalView mOverlayView;
     private NetworkController mNetController;
     private volatile boolean mOverlayShowRequest = false;
     private volatile int mCompatGUIMode;
@@ -144,10 +144,10 @@ public class YGOMobileActivity extends NativeActivity implements
         mGlobalEditText.setEditActionListener(this);
         mGlobalEditText.setOnDismissListener(this);
 
-        mChainOverlayView = new OverlayRectView(this);
-        mOverlayView = new OverlayOvalView(this);
-        mChainOverlayView.setDuelOpsListener(this);
-        mOverlayView.setDuelOpsListener(this);
+//        mChainOverlayView = new OverlayRectView(this);
+//        mOverlayView = new OverlayOvalView(this);
+//        mChainOverlayView.setDuelOpsListener(this);
+//        mOverlayView.setDuelOpsListener(this);
     }
 
     @Override
@@ -164,8 +164,8 @@ public class YGOMobileActivity extends NativeActivity implements
     @Override
     public void onDismiss() {
         if (mOverlayShowRequest) {
-            mOverlayView.show();
-            mChainOverlayView.show();
+//            mOverlayView.show();
+//            mChainOverlayView.show();
         }
     }
 
@@ -222,17 +222,26 @@ public class YGOMobileActivity extends NativeActivity implements
     public void toggleOverlayView(boolean isShow) {
         if (mOverlayShowRequest != isShow) {
             handler.post(() -> {
-                mOverlayShowRequest = isShow;
-                if (isShow) {
-                    mOverlayView.showAtScreen(0, 0);
-                    mChainOverlayView.showAtScreen(sChainControlXPostion,
-                            sChainControlYPostion);
-                } else {
-                    mOverlayView.removeFromScreen();
-                    mChainOverlayView.removeFromScreen();
-                }
+//                mOverlayShowRequest = isShow;
+//                if (isShow) {
+//                    mOverlayView.showAtScreen(0, 0);
+//                    mChainOverlayView.showAtScreen(sChainControlXPostion,
+//                            sChainControlYPostion);
+//                } else {
+//                    mOverlayView.removeFromScreen();
+//                    mChainOverlayView.removeFromScreen();
+//                }
             });
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+//                if (mOverlayShowRequest) {
+//                    mOverlayView.hide();
+//                    mChainOverlayView.hide();
+//                }
     }
 
     @Override
@@ -250,10 +259,10 @@ public class YGOMobileActivity extends NativeActivity implements
     public void toggleIME(String hint, boolean isShow) {
         handler.post(() -> {
             if (isShow) {
-                if (mOverlayShowRequest) {
-                    mOverlayView.hide();
-                    mChainOverlayView.hide();
-                }
+//                if (mOverlayShowRequest) {
+//                    mOverlayView.hide();
+//                    mChainOverlayView.hide();
+//                }
                 mGlobalEditText.fillContent(hint);
                 mGlobalEditText.showAtLocation(mContentView,
                         Gravity.BOTTOM, 0, 0);

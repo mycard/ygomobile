@@ -32,7 +32,10 @@
             android:maxLines="1"
             android:singleLine="true"/>
     </android.support.design.widget.TextInputLayout>
-
+    <android.support.v7.widget.AppCompatSpinner
+        android:id="@+id/sp_ot"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/label_width_small"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -40,7 +43,7 @@
         android:orientation="horizontal">
 
         <android.support.v7.widget.AppCompatSpinner
-            android:id="@+id/sp_ot"
+            android:id="@+id/sp_limit_list"
             android:layout_width="0dp"
             android:layout_height="@dimen/label_width_small"
             android:layout_weight="1"/>
@@ -50,26 +53,18 @@
             android:layout_width="0dp"
             android:layout_height="@dimen/label_width_small"
             android:layout_weight="1"
-            android:visibility="invisible"/>
+            android:visibility="visible"/>
     </LinearLayout>
 
-    <LinearLayout
+    <android.support.v7.widget.AppCompatSpinner
+        android:id="@+id/sp_setcode"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_height="@dimen/label_width_small"/>
 
-        <android.support.v7.widget.AppCompatSpinner
-            android:id="@+id/sp_setcode"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/label_width_small"
-            android:layout_weight="1"/>
-
-        <android.support.v7.widget.AppCompatSpinner
-            android:id="@+id/sp_category"
-            android:layout_width="0dp"
-            android:layout_height="@dimen/label_width_small"
-            android:layout_weight="1"/>
-    </LinearLayout>
+    <android.support.v7.widget.AppCompatSpinner
+        android:id="@+id/sp_category"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/label_width_small"/>
 
     <LinearLayout
         android:layout_width="match_parent"

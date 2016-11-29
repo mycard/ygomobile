@@ -2,6 +2,7 @@ package cn.garymb.ygomobile.activities;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.adapters.ServerListAdapater;
 import cn.garymb.ygomobile.bean.ServerInfo;
 import cn.garymb.ygomobile.bean.ServerList;
@@ -32,7 +34,7 @@ import cn.garymb.ygomobile.utils.XmlUtils;
 
 import static cn.garymb.ygomobile.Constants.ASSET_SERVER_LIST;
 
-public class MainActivity extends BaseActivity{
+public class MainActivity extends BaseActivity {
     private boolean enableStart;
     private ListView mListView;
     private ServerListAdapater mServerListAdapater;
@@ -120,6 +122,16 @@ public class MainActivity extends BaseActivity{
             case R.id.action_deck_manager:
                 startActivity(new Intent(this, DeckManagerActivity.class));
                 break;
+            case R.id.action_help: {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.URL_HELP));
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                try {
+                    startActivity(intent);
+                } catch (Exception e) {
+                    Toast.makeText(this, R.string.no_webbrowser, Toast.LENGTH_SHORT).show();
+                }
+            }
+            break;
         }
         return super.onOptionsItemSelected(item);
     }

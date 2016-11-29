@@ -64,6 +64,16 @@ public class Card extends CardData implements Parcelable {
         }
     }
 
+    public boolean isSetCode(long _setcode){
+        long[] setcodes=getSetCode();
+        for(long setcode:setcodes){
+            if(setcode==_setcode){
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     public String toString() {
         return "Card{" +

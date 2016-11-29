@@ -56,7 +56,7 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> implements
 
     @Override
     public void loadData() {
-        loadData(CardInfo.SQL_BASE + " limit "+Constants.DEFAULT_CARD_COUNT+";");
+        loadData(CardInfo.SQL_BASE + " limit " + Constants.DEFAULT_CARD_COUNT + ";", 0);
     }
 
     @Override
@@ -86,8 +86,8 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> implements
         }
     }
 
-    private void loadData(String sql) {
-//        Log.i("kk", "sql=" + sql);
+    private void loadData(String sql, long setcode) {
+        Log.i("kk", "sql=" + sql);
         loadString();
         if (db == null) {
             File file = new File(mAppsSettings.getDataBasePath(), Constants.DATABASE_NAME);
@@ -115,7 +115,14 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> implements
                     if (reader.moveToFirst()) {
                         do {
                             CardInfo cardInfo = new CardInfo(reader);
-                            tmp.add(cardInfo);
+                            if(setcode>0){
+                                if(cardInfo.isSetCode(setcode)){
+                                    tmp.add(cardInfo);
+                                }
+                            }else{
+                                tmp.add(cardInfo);
+                            }
+
                         } while (reader.moveToNext());
                     }
                     reader.close();
@@ -156,7 +163,7 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> implements
      */
     @Override
     public void search(String prefixWord, String suffixWord,
-                       long attribute, long level, String atk, String def, long setcode, long category, long ot, long... types) {
+                       long attribute, long level, long race,long limitlist,long limit, String atk, String def, long setcode, long category, long ot, long... types) {
         StringBuilder stringBuilder = new StringBuilder(CardInfo.SQL_BASE);
         if (!TextUtils.isEmpty(prefixWord) && !TextUtils.isEmpty(suffixWord)) {
             stringBuilder.append(" and name like '%");
@@ -189,15 +196,17 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> implements
             stringBuilder.append(" and ot=" + ot);
         }
         for (long type : types) {
-            stringBuilder.append(" and (type & " + type + ") =" + type);
-        }
-        if (setcode != 0) {
-            stringBuilder.append(" and (setcode &" + setcode + ") =" + setcode);
+            if (type > 0) {
+                stringBuilder.append(" and (type & " + type + ") =" + type);
+            }
         }
         if (category != 0) {
             stringBuilder.append(" and (category &" + category + ") =" + category);
         }
-        loadData(stringBuilder.toString());
+        if (race != 0) {
+            stringBuilder.append(" and race=" + race);
+        }
+        loadData(stringBuilder.toString(),setcode);
     }
 
     @Override

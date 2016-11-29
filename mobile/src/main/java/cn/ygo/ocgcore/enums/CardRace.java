@@ -3,6 +3,7 @@ package cn.ygo.ocgcore.enums;
 public enum CardRace {
     None(0),
     Warrior(0x1),
+    BestWarrior(0x8000),
     SpellCaster(0x2),
     Fairy(0x4),
     Fiend(0x8),
@@ -17,13 +18,14 @@ public enum CardRace {
     Thunder(0x1000),
     Dragon(0x2000),
     Beast(0x4000),
-    BestWarrior(0x8000),
     Dinosaur(0x10000),
     Fish(0x20000),
     SeaSerpent(0x40000),
     Reptile(0x80000),
     Psycho(0x100000),
-    DivineBeast(0x200000);
+    DivineBeast(0x200000),
+    Creatorgod(0x400000),
+    Wyrm(0x800000);
 
     private long value = 0;
 
