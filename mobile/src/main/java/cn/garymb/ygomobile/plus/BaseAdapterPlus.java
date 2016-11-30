@@ -33,10 +33,12 @@ public abstract class BaseAdapterPlus<T> extends BaseAdapter implements SpinnerA
     public void clear() {
         mItems.clear();
     }
+
     public void set(List<T> items) {
         clear();
         addAll(items);
     }
+
     public void addAll(List<T> items) {
         if (items != null) {
             mItems.addAll(items);
@@ -61,6 +63,10 @@ public abstract class BaseAdapterPlus<T> extends BaseAdapter implements SpinnerA
         return null;
     }
 
+    public final T getItemById(long id){
+        return getItem((int)id);
+    }
+
     @Override
     public long getItemId(int position) {
         return position;
@@ -68,7 +74,7 @@ public abstract class BaseAdapterPlus<T> extends BaseAdapter implements SpinnerA
 
     @Override
     public final View getView(int position, View convertView, ViewGroup parent) {
-        if(convertView == null){
+        if (convertView == null) {
             convertView = createView(position, parent);
         }
         T t = getItem(position);
@@ -78,7 +84,7 @@ public abstract class BaseAdapterPlus<T> extends BaseAdapter implements SpinnerA
 
     @Override
     public View getDropDownView(int position, View convertView, ViewGroup parent) {
-        if(convertView == null){
+        if (convertView == null) {
             convertView = createView(position, parent);
         }
         T t = getItem(position);
@@ -88,6 +94,19 @@ public abstract class BaseAdapterPlus<T> extends BaseAdapter implements SpinnerA
 
     protected abstract View createView(int position, ViewGroup parent);
 
-    protected abstract void attach(View view, T item,int position);
+    protected abstract void attach(View view, T item, int position);
 
+    public static class BaseViewHolder {
+        protected View view;
+        protected Context context;
+
+        public BaseViewHolder(View view) {
+            this.view = view;
+            this.context = view.getContext();
+        }
+
+        protected <T extends View> T findViewById(int id) {
+            return (T) view.findViewById(id);
+        }
+    }
 }

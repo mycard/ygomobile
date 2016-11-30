@@ -187,7 +187,7 @@ public class ServerListAdapater extends BaseAdapterPlus<ServerInfo> implements
         });
     }
 
-    static class ViewHolder {
+    static class ViewHolder extends BaseViewHolder {
         TextView serverName;
         TextView userName;
         TextView serverIp;
@@ -195,12 +195,13 @@ public class ServerListAdapater extends BaseAdapterPlus<ServerInfo> implements
         View edit;
 
         ViewHolder(View view) {
+            super(view);
             view.setTag(view.getId(), this);
-            serverName = (TextView) view.findViewById(R.id.server_name);
-            serverIp = (TextView) view.findViewById(R.id.text_ip);
-            serverPort = (TextView) view.findViewById(R.id.text_port);
-            userName = (TextView) view.findViewById(R.id.text_player);
-            edit = view.findViewById(R.id.btn_edit);
+            serverName = findViewById(R.id.server_name);
+            serverIp = findViewById(R.id.text_ip);
+            serverPort = findViewById(R.id.text_port);
+            userName = findViewById(R.id.text_player);
+            edit = findViewById(R.id.btn_edit);
         }
 
         static ViewHolder from(View view) {
@@ -216,10 +217,10 @@ public class ServerListAdapater extends BaseAdapterPlus<ServerInfo> implements
 
         EditViewHolder(View view) {
             super(view);
-            title = (TextView) view.findViewById(R.id.title);
-            close = view.findViewById(R.id.btn_close);
-            save = view.findViewById(R.id.btn_save);
-            userPassword = (TextView) view.findViewById(R.id.text_player_pwd);
+            title = findViewById(R.id.title);
+            close = findViewById(R.id.btn_close);
+            save = findViewById(R.id.btn_save);
+            userPassword = findViewById(R.id.text_player_pwd);
         }
     }
 }

@@ -26,10 +26,15 @@
     <string name="action_add_server">添加服務器</string>
     <string name="no_find_file_selectotr">沒有找到文件選擇器</string>
     <string name="no_find_image_selector">没有找到图片選擇器</string>
+    <string name="no_find_image_cutor">没有找到裁剪工具</string>
     <string name="help">幫助</string>
     <string name="settings">設置</string>
     <string name="quit">退出</string>
     <string name="quit_tip">退出遊戲?</string>
+    <string name="last_path">上一级目录</string>
+    <string name="create_folder">新建文件夹</string>
+    <string name="intpu_name">输入文件名</string>
+    <string name="the_name_is_folder">当前文件名是个文件夹</string>
     <string name="back_tip">请再按一次返回鍵退出</string>
     <string name="string_help_text">當前應用缺少必要權限。\n請點擊 設置-權限 打开權限。</string>
     <!-- settings -->

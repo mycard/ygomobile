@@ -16,6 +16,8 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.signature.StringSignature;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -105,7 +107,7 @@ public class SettingFragment extends PreferenceFragmentPlus {
         String key = preference.getKey();
         if (PREF_GAME_FONT.equals(key)) {
             //选择ttf字体文件，保存
-            showFileChooser(preference, "*/*.ttf", getString(R.string.dialog_select_font));
+            showFileChooser(preference, "*.ttf", mSettings.getFontDirPath(), getString(R.string.dialog_select_font));
         } else if (SETTINGS_COVER.equals(key)) {
             //显示图片对话框？
             String outFile = new File(mSettings.getCoreSkinPath(), Constants.CORE_SKIN_COVER).getAbsolutePath();
@@ -119,7 +121,7 @@ public class SettingFragment extends PreferenceFragmentPlus {
         } else if (PREF_USE_EXTRA_CARD_CARDS.equals(key)) {
             CheckBoxPreference checkBoxPreference = (CheckBoxPreference) preference;
             if (checkBoxPreference.isChecked()) {
-                showFileChooser(checkBoxPreference, "*/*.cdb", getString(R.string.dialog_select_database));
+                showFileChooser(checkBoxPreference, "*.cdb", mSettings.getResourcePath(), getString(R.string.dialog_select_database));
             } else {
                 mSettings.setUseExtraCards(false);
             }
@@ -175,7 +177,13 @@ public class SettingFragment extends PreferenceFragmentPlus {
             BitmapUtil.destroy(imageView.getDrawable());
         });
         builder.show();
-        Glide.with(this).load(new File(outFile)).into(imageView);
+        File img = new File(outFile);
+        if (img.exists()) {
+            Glide.with(this).load(img).signature(new StringSignature(img.getName() + img.lastModified()))
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .override(outWidth, outHeight)
+                    .into(imageView);
+        }
     }
 
     private void copyDataBase(Preference preference, String file) {

@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.preference.Preference;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 import android.widget.Toast;
 
 import java.io.File;
@@ -15,6 +16,8 @@ import java.util.Map;
 import java.util.Set;
 
 import cn.garymb.ygomobile.Constants;
+import cn.garymb.ygomobile.file.FileActivity;
+import cn.garymb.ygomobile.file.FileOpenType;
 import cn.garymb.ygomobile.lite.R;
 
 import static cn.garymb.ygomobile.Constants.REQUEST_CHOOSE_FILE;
@@ -22,7 +25,19 @@ import static cn.garymb.ygomobile.Constants.REQUEST_CHOOSE_IMG;
 
 public abstract class PreferenceFragmentPlus extends BasePreferenceFragment {
     private Preference curPreference;
-    private String mOutFile;
+    private CurImageInfo mCurImageInfo;
+
+    private class CurImageInfo {
+        public String mOutFile;
+        public String mCurTitle;
+        public boolean mJpeg;
+        public int width;
+        public int height;
+
+        public CurImageInfo() {
+
+        }
+    }
 
     protected void onChooseFileOk(Preference preference, String file) {
         onPreferenceChange(preference, file);
@@ -36,47 +51,88 @@ public abstract class PreferenceFragmentPlus extends BasePreferenceFragment {
      * @param preference
      * @param type       *\/*
      */
-    protected void showFileChooser(Preference preference, String type, String title) {
+    protected void showFileChooser(Preference preference, String type, String defPath, String title) {
         curPreference = preference;
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-//        intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.setType(type);
-        try {
-            startActivityForResult(Intent.createChooser(intent, title),
-                    REQUEST_CHOOSE_FILE);
-        } catch (android.content.ActivityNotFoundException ex) {
-            Toast.makeText(getActivity(), R.string.no_find_file_selectotr, Toast.LENGTH_SHORT)
-                    .show();
-            onChooseFileFail(preference);
-        }
+        Intent intent = FileActivity.getIntent(getActivity(), title, type, defPath, false, FileOpenType.SelectFile);
+        startActivityForResult(intent, REQUEST_CHOOSE_FILE);
+//
+//        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+////        intent.addCategory(Intent.CATEGORY_OPENABLE);
+//        intent.setType(type);
+//        try {
+//            startActivityForResult(intent,
+//                    REQUEST_CHOOSE_FILE);
+//        } catch (android.content.ActivityNotFoundException ex) {
+//            Toast.makeText(getActivity(), R.string.no_find_file_selectotr, Toast.LENGTH_SHORT)
+//                    .show();
+//            onChooseFileFail(preference);
+//        }
     }
 
     /***
      */
     protected void showImageCropChooser(Preference preference, String title, String outFile, boolean isJpeg, int width, int height) {
-        mOutFile = outFile;
+        mCurImageInfo = new CurImageInfo();
+        mCurImageInfo.mOutFile = outFile;
+        mCurImageInfo.mJpeg = isJpeg;
+        mCurImageInfo.width = width;
+        mCurImageInfo.height = height;
+        mCurImageInfo.mCurTitle = title;
         curPreference = preference;
-        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-//        intent.addCategory(Intent.CATEGORY_OPENABLE);
-        intent.setType("image/*");
+        String defPath = new File(outFile).getParent();
+        Intent intent = FileActivity.getIntent(getActivity(), title, "*.[jpg|png|bmp]", defPath, false, FileOpenType.SelectFile);
+        startActivityForResult(intent, REQUEST_CHOOSE_IMG);
+
+//        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+////        intent.addCategory(Intent.CATEGORY_OPENABLE);
+//        intent.setType("image/*");
+////        intent.putExtra("crop", "true");
+////        intent.putExtra("aspectX", width);
+////        intent.putExtra("aspectY", height);
+////        intent.putExtra("outputX", width);
+////        intent.putExtra("outputY", height);
+////        intent.putExtra("scale", true);
+////        intent.putExtra("scaleUpIfNeeded", true);// 黑边
+////        intent.putExtra("return-data", false);
+////        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(outFile)));
+////        intent.putExtra("outputFormat", isJpeg ? Bitmap.CompressFormat.JPEG.toString() : Bitmap.CompressFormat.PNG.toString());
+////        intent.putExtra("noFaceDetection", true); // no face detection
+//        try {
+//            startActivityForResult(intent, REQUEST_CHOOSE_IMG);
+//        } catch (android.content.ActivityNotFoundException ex) {
+//            Toast.makeText(getActivity(), R.string.no_find_file_selectotr, Toast.LENGTH_SHORT)
+//                    .show();
+//            onChooseFileFail(preference);
+//        }
+    }
+
+    protected void openPhotoCut(Preference preference, Uri srcfile, CurImageInfo info) {
+        // 裁剪图片
+        if (srcfile == null || info == null) {
+            onChooseFileFail(preference);
+            return;
+        }
+        File file = new File(info.mOutFile);
+        Uri saveimgUri = Uri.fromFile(file);
+        Intent intent = new Intent("com.android.camera.action.CROP");
+        intent.setDataAndType(srcfile, "image/*");
+        // 下面这个crop=true是设置在开启的Intent中设置显示的VIEW可裁剪
         intent.putExtra("crop", "true");
-        intent.putExtra("aspectX", width);
-        intent.putExtra("aspectY", height);
-        intent.putExtra("outputX", width);
-        intent.putExtra("outputY", height);
-        intent.putExtra("scale", true);
+        // aspectX aspectY 是宽高的比例
+        intent.putExtra("aspectX", info.width);
+        intent.putExtra("aspectY", info.height);
+        // outputX outputY 是裁剪图片宽高
+        intent.putExtra("outputX", info.width);
+        intent.putExtra("outputY", info.height);
+        intent.putExtra("scale", true);// 黑边
         intent.putExtra("scaleUpIfNeeded", true);// 黑边
         intent.putExtra("return-data", false);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(outFile)));
-        intent.putExtra("outputFormat", isJpeg ? Bitmap.CompressFormat.JPEG.toString() : Bitmap.CompressFormat.PNG.toString());
-        intent.putExtra("noFaceDetection", true); // no face detection
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, saveimgUri);
+        intent.putExtra("outputFormat", info.mJpeg ? Bitmap.CompressFormat.JPEG.toString() : Bitmap.CompressFormat.PNG.toString());
         try {
-            startActivityForResult(Intent.createChooser(intent, title),
-                    REQUEST_CHOOSE_IMG);
-        } catch (android.content.ActivityNotFoundException ex) {
-            Toast.makeText(getActivity(), R.string.no_find_file_selectotr, Toast.LENGTH_SHORT)
-                    .show();
-            onChooseFileFail(preference);
+            startActivityForResult(Intent.createChooser(intent, info.mCurTitle), Constants.REQUEST_CUT_IMG);
+        } catch (Exception e) {
+            Toast.makeText(getActivity(), R.string.no_find_image_cutor, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -85,7 +141,15 @@ public abstract class PreferenceFragmentPlus extends BasePreferenceFragment {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == Constants.REQUEST_CHOOSE_IMG) {
             if (resultCode == Activity.RESULT_OK) {
-                onChooseFileOk(curPreference, mOutFile);
+                Uri file = data.getData();
+//                onChooseFileOk(curPreference, mOutFile);
+                openPhotoCut(curPreference, file, mCurImageInfo);
+            } else {
+                onChooseFileFail(curPreference);
+            }
+        } else if (requestCode == Constants.REQUEST_CUT_IMG) {// 裁剪完图片
+            if (resultCode == Activity.RESULT_OK && mCurImageInfo != null) {
+                onChooseFileOk(curPreference, mCurImageInfo.mOutFile);
             } else {
                 onChooseFileFail(curPreference);
             }
@@ -94,8 +158,8 @@ public abstract class PreferenceFragmentPlus extends BasePreferenceFragment {
             if (data != null) {
                 Uri uri = data.getData();
                 if (uri != null) {
-                    File file =new File(uri.getPath());
-                    if(file.exists()) {
+                    File file = new File(uri.getPath());
+                    if (file.exists()) {
                         onChooseFileOk(curPreference, file.getAbsolutePath());
                         return;
                     }
@@ -136,13 +200,13 @@ public abstract class PreferenceFragmentPlus extends BasePreferenceFragment {
             this.autoSave = autoSave;
         }
 
-        public Editor edit(){
+        public Editor edit() {
             return mSharedPreferences.edit();
         }
 
         public void putString(String key, String value) {
-            Editor editor  = edit().putString(key, value);
-            if(autoSave) {
+            Editor editor = edit().putString(key, value);
+            if (autoSave) {
                 if (isMultiProess) {
                     editor.commit();
                 } else {
@@ -152,8 +216,8 @@ public abstract class PreferenceFragmentPlus extends BasePreferenceFragment {
         }
 
         public void putStringSet(String key, Set<String> values) {
-            Editor editor  = edit().putStringSet(key, values);
-            if(autoSave) {
+            Editor editor = edit().putStringSet(key, values);
+            if (autoSave) {
                 if (isMultiProess) {
                     editor.commit();
                 } else {
@@ -163,8 +227,8 @@ public abstract class PreferenceFragmentPlus extends BasePreferenceFragment {
         }
 
         public void putInt(String key, int value) {
-            Editor editor  = edit().putInt(key, value);
-            if(autoSave) {
+            Editor editor = edit().putInt(key, value);
+            if (autoSave) {
                 if (isMultiProess) {
                     editor.commit();
                 } else {
@@ -174,8 +238,8 @@ public abstract class PreferenceFragmentPlus extends BasePreferenceFragment {
         }
 
         public void putLong(String key, long value) {
-            Editor editor  = edit().putLong(key, value);
-            if(autoSave) {
+            Editor editor = edit().putLong(key, value);
+            if (autoSave) {
                 if (isMultiProess) {
                     editor.commit();
                 } else {
@@ -185,8 +249,8 @@ public abstract class PreferenceFragmentPlus extends BasePreferenceFragment {
         }
 
         public void putFloat(String key, float value) {
-            Editor editor  = edit().putFloat(key, value);
-            if(autoSave) {
+            Editor editor = edit().putFloat(key, value);
+            if (autoSave) {
                 if (isMultiProess) {
                     editor.commit();
                 } else {
@@ -196,8 +260,8 @@ public abstract class PreferenceFragmentPlus extends BasePreferenceFragment {
         }
 
         public void putBoolean(String key, boolean value) {
-            Editor editor  = edit().putBoolean(key, value);
-            if(autoSave) {
+            Editor editor = edit().putBoolean(key, value);
+            if (autoSave) {
                 if (isMultiProess) {
                     editor.commit();
                 } else {
@@ -207,8 +271,8 @@ public abstract class PreferenceFragmentPlus extends BasePreferenceFragment {
         }
 
         public void remove(String key) {
-            Editor editor  = edit().remove(key);
-            if(autoSave) {
+            Editor editor = edit().remove(key);
+            if (autoSave) {
                 if (isMultiProess) {
                     editor.commit();
                 } else {
@@ -218,8 +282,8 @@ public abstract class PreferenceFragmentPlus extends BasePreferenceFragment {
         }
 
         public void clear() {
-            Editor editor  = edit().clear();
-            if(autoSave) {
+            Editor editor = edit().clear();
+            if (autoSave) {
                 if (isMultiProess) {
                     editor.commit();
                 } else {
@@ -245,7 +309,7 @@ public abstract class PreferenceFragmentPlus extends BasePreferenceFragment {
 
         @Override
         public int getInt(String key, int defValue) {
-            return  mSharedPreferences.getInt(key, defValue);
+            return mSharedPreferences.getInt(key, defValue);
         }
 
         @Override
@@ -260,7 +324,7 @@ public abstract class PreferenceFragmentPlus extends BasePreferenceFragment {
 
         @Override
         public boolean getBoolean(String key, boolean defValue) {
-            return  mSharedPreferences.getBoolean(key, defValue);
+            return mSharedPreferences.getBoolean(key, defValue);
         }
 
         @Override

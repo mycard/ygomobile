@@ -60,6 +60,8 @@ public interface Constants {
     String[] IMAGE_EX = SUPPORT_BPG ? new String[]{".bpg", ".jpg", ".png"}
             : new String[]{".jpg", ".png"};
 
+    String[] FILE_IMAGE_EX = new String[]{".bmp", ".jpg", ".png", ".gif"};
+
     int REQUEST_CUT_IMG = 0x1000 + 0x10;
     int REQUEST_CHOOSE_FILE = 0x1000 + 0x20;
     int REQUEST_CHOOSE_IMG = 0x1000 + 0x21;

@@ -9,13 +9,14 @@ import android.widget.TextView;
 import cn.garymb.ygomobile.bean.CardInfo;
 import cn.garymb.ygomobile.core.loader.ImageLoader;
 import cn.garymb.ygomobile.lite.R;
+import cn.garymb.ygomobile.plus.BaseAdapterPlus;
 import cn.ygo.ocgcore.StringManager;
 import cn.ygo.ocgcore.enums.CardType;
 
 /***
  * 卡片详情
  */
-public class CardDetail {
+public class CardDetail extends BaseAdapterPlus.BaseViewHolder {
     private ImageView cardImage;
     private TextView name;
     private TextView desc;
@@ -25,11 +26,9 @@ public class CardDetail {
     private TextView cardAtk;
     private TextView cardDef;
     private TextView setname;
-    private Context mContext;
     private View atkdeflayout1;
     private View atkdeflayout2;
     private View view_bar;
-    private View view;
     private View close;
     private View faq;
     private View lb_race;
@@ -42,8 +41,7 @@ public class CardDetail {
     }
 
     public CardDetail(Context context) {
-        this.mContext = context;
-        this.view = LayoutInflater.from(context).inflate(R.layout.dialog_card, null);
+        super(LayoutInflater.from(context).inflate(R.layout.dialog_card, null));
         cardImage = bind(R.id.card_image);
         name = bind(R.id.text_name);
         desc = bind(R.id.text_desc);
@@ -67,7 +65,7 @@ public class CardDetail {
     }
 
     public void bind(CardInfo cardInfo, StringManager stringManager, final OnClickListener listener) {
-        ImageLoader.get().bindImage(mContext, cardImage, cardInfo.Code);
+        ImageLoader.get().bindImage(context, cardImage, cardInfo.Code);
         name.setText(cardInfo.Name);
         desc.setText(cardInfo.Desc);
         cardcode.setText(String.format("%08d", cardInfo.Code));
@@ -97,9 +95,9 @@ public class CardDetail {
             }
             level.setText(star);
             if(cardInfo.isType(CardType.Xyz)){
-                level.setTextColor(mContext.getResources().getColor(R.color.star_rank));
+                level.setTextColor(context.getResources().getColor(R.color.star_rank));
             }else{
-                level.setTextColor(mContext.getResources().getColor(R.color.star));
+                level.setTextColor(context.getResources().getColor(R.color.star));
             }
             cardAtk.setText((cardInfo.Attack < 0 ? "?" : String.valueOf(cardInfo.Attack)));
             cardDef.setText((cardInfo.Defense < 0 ? "?" : String.valueOf(cardInfo.Defense)));
@@ -126,6 +124,6 @@ public class CardDetail {
 
 
     private <T extends View> T bind(int id) {
-        return (T) view.findViewById(id);
+        return (T) findViewById(id);
     }
 }

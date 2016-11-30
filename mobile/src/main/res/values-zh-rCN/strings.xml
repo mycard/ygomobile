@@ -26,6 +26,7 @@
     <string name="action_add_server">添加服务器</string>
     <string name="no_find_file_selectotr">没有找到文件选择器</string>
     <string name="no_find_image_selector">没有找到图片选择器</string>
+    <string name="no_find_image_cutor">没有找到裁剪工具</string>
     <string name="help">帮助</string>
     <string name="settings">设置</string>
     <string name="quit">退出</string>

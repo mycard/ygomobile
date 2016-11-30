@@ -19,6 +19,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -68,12 +70,13 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> implements
     public void onScrollStateChanged(AbsListView view, int scrollState) {
         switch (scrollState) {
             case SCROLL_STATE_IDLE:
+                Glide.with(context).resumeRequests();
                 break;
             case SCROLL_STATE_TOUCH_SCROLL:
-//                Glide.with(context).pauseRequests();
+                Glide.with(context).pauseRequests();
                 break;
             case SCROLL_STATE_FLING:
-//                Glide.with(context).resumeRequests();
+                Glide.with(context).resumeRequests();
                 break;
         }
     }
@@ -231,14 +234,14 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> implements
         LimitType cardLimitType = LimitType.valueOf(limit);
         if (limitList != null) {
             List<Long> ids;
-            if(cardLimitType==LimitType.Forbidden){
-                ids= limitList.forbidden;
-            }else if(cardLimitType==LimitType.Limit){
-                ids= limitList.limit;
-            }else if(cardLimitType==LimitType.SemiLimit){
-                ids= limitList.semiLimit;
-            }else{
-                ids= limitList.getCodeList();
+            if (cardLimitType == LimitType.Forbidden) {
+                ids = limitList.forbidden;
+            } else if (cardLimitType == LimitType.Limit) {
+                ids = limitList.limit;
+            } else if (cardLimitType == LimitType.SemiLimit) {
+                ids = limitList.semiLimit;
+            } else {
+                ids = limitList.getCodeList();
             }
             stringBuilder.append(" and " + CardInfo.COL_ID + " in (");
             int i = 0;
@@ -318,7 +321,7 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> implements
         holder.cardType.setText(item.getAllTypeString(mStringManager));
     }
 
-    class ViewHolder {
+    class ViewHolder extends BaseViewHolder {
         ImageView cardImage;
         TextView cardName;
         TextView cardLevel;
@@ -329,15 +332,16 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> implements
         View view_bar;
 
         ViewHolder(View view) {
+            super(view);
             view.setTag(view.getId(), this);
-            cardImage = (ImageView) view.findViewById(R.id.card_image);
-            cardName = (TextView) view.findViewById(R.id.card_name);
-            cardType = (TextView) view.findViewById(R.id.card_type);
-            cardAtk = (TextView) view.findViewById(R.id.card_atk);
-            cardDef = (TextView) view.findViewById(R.id.card_def);
-            cardLevel = (TextView) view.findViewById(R.id.card_level);
-            layout_atkdef = view.findViewById(R.id.layout_atkdef);
-            view_bar = view.findViewById(R.id.view_bar);
+            cardImage = findViewById(R.id.card_image);
+            cardName = findViewById(R.id.card_name);
+            cardType = findViewById(R.id.card_type);
+            cardAtk = findViewById(R.id.card_atk);
+            cardDef = findViewById(R.id.card_def);
+            cardLevel = findViewById(R.id.card_level);
+            layout_atkdef = findViewById(R.id.layout_atkdef);
+            view_bar = findViewById(R.id.view_bar);
             File outFile = new File(AppsSettings.get().getCoreSkinPath(), Constants.CORE_SKIN_COVER);
             ImageLoader.get().bind(context, outFile, cardImage, outFile.getName().endsWith(Constants.BPG), 0);
         }

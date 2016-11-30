@@ -11,7 +11,7 @@ import android.view.MenuItem;
 
 import cn.garymb.ygomobile.lite.R;
 
-class BaseActivity extends AppCompatActivity {
+public class BaseActivity extends AppCompatActivity {
     private final static int REQUEST_PERMISSIONS = 0x1000 + 1;
     private boolean mExitAnim = true;
     private boolean mEnterAnim = true;

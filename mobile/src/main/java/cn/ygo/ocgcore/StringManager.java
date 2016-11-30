@@ -105,9 +105,9 @@ public class StringManager {
     }
 
     public String getLimitString(long value) {
-        String str = getSystemString((int) (Constants.STRING_LIMIT_START + value));
-        Log.d("kk", value + "=" + str);
-        return str;
+//        String str =
+//        Log.d("kk", value + "=" + str);
+        return getSystemString((int) (Constants.STRING_LIMIT_START + value));
     }
 
     public String getTypeString(long value) {
