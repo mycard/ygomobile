@@ -2,6 +2,7 @@ package cn.garymb.ygomobile.core;
 
 import android.content.Context;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -32,7 +34,7 @@ import cn.ygo.ocgcore.enums.CardOt;
 import cn.ygo.ocgcore.enums.CardRace;
 import cn.ygo.ocgcore.enums.CardType;
 
-public class CardSearcher implements View.OnClickListener,ILoadCallBack{
+public class CardSearcher implements View.OnClickListener, ILoadCallBack {
 
     private EditText prefixWord;
     private EditText suffixWord;
@@ -200,7 +202,7 @@ public class CardSearcher implements View.OnClickListener,ILoadCallBack{
 
     private void initLimitListSpinners(Spinner spinner) {
         List<SpItem> items = new ArrayList<>();
-        Collection<Integer> ids = mLimitManager.getLists();
+        List<Integer> ids = mLimitManager.getLists();
         items.add(new SpItem(0, getString(R.string.label_limitlist)));
         for (Integer id : ids) {
             LimitList list = mLimitManager.getLimit(id);
@@ -384,18 +386,18 @@ public class CardSearcher implements View.OnClickListener,ILoadCallBack{
         }
     }
 
-    protected void onSearch(){
+    protected void onSearch() {
         if (drawerlayout.isDrawerOpen(Constants.CARD_SEARCH_GRAVITY)) {
             drawerlayout.closeDrawer(Constants.CARD_SEARCH_GRAVITY);
         }
         search();
     }
 
-    public void onOpen(){
+    public void onOpen() {
 
     }
 
-    protected void search(){
+    protected void search() {
         if (dataLoader != null) {
             dataLoader.search(text(prefixWord), text(suffixWord), sel(attributeSpinner)
                     , sel(levelSpinner), sel(raceSpinner), sel(limitListSpinner), sel(limitSpinner), text(atkText), text(defText), sel(setcodeSpinner)

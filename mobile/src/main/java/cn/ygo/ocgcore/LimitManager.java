@@ -4,8 +4,12 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import cn.garymb.ygomobile.Constants;
@@ -30,8 +34,13 @@ public class LimitManager {
         return sManager;
     }
 
-    public Collection<Integer> getLists() {
-        return mListMap.keySet();
+    public List<Integer> getLists() {
+        List<Integer> ids=new ArrayList<>();
+        ids.addAll(mListMap.keySet());
+        Collections.sort(ids, (o1, o2) -> {
+            return o1 - o2;
+        });
+        return  ids;
     }
 
     public LimitList getLimit(int pos) {
@@ -43,6 +52,7 @@ public class LimitManager {
                 String.format(Constants.CORE_LIMIT_PATH, AppsSettings.get().getCoreConfigVersion()));
         return loadFile(stringfile.getAbsolutePath());
     }
+
     public boolean loadFile(String path) {
         if (path == null || path.length() == 0) {
             return false;
@@ -55,6 +65,7 @@ public class LimitManager {
         isLoad = false;
         InputStreamReader in = null;
         FileInputStream inputStream = null;
+        List<LimitList> limitListList = new ArrayList<>();
         try {
             inputStream = new FileInputStream(file);
             in = new InputStreamReader(inputStream, "utf-8");
@@ -70,7 +81,7 @@ public class LimitManager {
                 if (line.startsWith("!")) {
                     name = line.substring(1);
                     if (tmp != null) {
-                        mListMap.put(Integer.valueOf(index), tmp);
+                        mListMap.put(index, tmp);
                     }
                     index++;
                     tmp = new LimitList(name);
@@ -100,6 +111,25 @@ public class LimitManager {
             IOUtils.close(inputStream);
             IOUtils.close(in);
         }
+//        Collections.sort(limitListList, (o1, o2) -> {
+//            if (o1.getName() == null || o2.getName() == null) {
+//                return 0;
+//            }
+//            String date1 = o1.getName().split("\\b")[0];
+//            String date2 = o2.getName().split("\\b")[0];
+//
+//            String[] dates1 = date1.split("\\.");
+//            String[] dates2 = date2.split("\\.");
+//            if( == 0){
+//                return
+//            }
+//            return date2.compareTo(date1);
+//        });
+//        int i = 0;
+//        for (LimitList limitList : limitListList) {
+//            i++;
+//            mListMap.put(Integer.valueOf(i), limitList);
+//        }
         isLoad = true;
         return true;
     }
