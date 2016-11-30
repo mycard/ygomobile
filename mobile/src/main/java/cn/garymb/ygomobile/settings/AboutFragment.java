@@ -14,6 +14,7 @@ import android.widget.FrameLayout;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.plus.PreferenceFragmentPlus;
 import cn.garymb.ygomobile.plus.VUiKit;
+import cn.garymb.ygomobile.plus.WebViewPlus;
 
 public class AboutFragment extends PreferenceFragmentPlus {
     @Override
@@ -52,18 +53,7 @@ public class AboutFragment extends PreferenceFragmentPlus {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(title);
         FrameLayout frameLayout = new FrameLayout(getActivity());
-        WebView webView = new WebView(getActivity());
-        webView.getSettings().setJavaScriptEnabled(true);
-        webView.getSettings().setLoadsImagesAutomatically(true);
-        webView.getSettings().setUseWideViewPort(true);
-        webView.getSettings().setLoadWithOverviewMode(true);
-        webView.getSettings().setSupportZoom(true);
-        webView.getSettings().setDisplayZoomControls(false);
-        webView.getSettings().setBuiltInZoomControls(true);
-        webView.getSettings().setSupportMultipleWindows(false);
-        webView.getSettings().setEnableSmoothTransition(true);
-        webView.getSettings().setJavaScriptCanOpenWindowsAutomatically(true);
-        webView.setScrollBarStyle(WebView.SCROLLBARS_OUTSIDE_OVERLAY);
+        WebView webView = new WebViewPlus(getActivity());
         builder.setTitle(title);
         FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);

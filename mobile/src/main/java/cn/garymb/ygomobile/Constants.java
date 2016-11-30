@@ -65,8 +65,6 @@ public interface Constants {
     int REQUEST_CUT_IMG = 0x1000 + 0x10;
     int REQUEST_CHOOSE_FILE = 0x1000 + 0x20;
     int REQUEST_CHOOSE_IMG = 0x1000 + 0x21;
-    int REQUEST_CHOOSE_TTF = 0x1000 + 0x22;
-    int REQUEST_CHOOSE_CDB = 0x1000 + 0x23;
 
     int STRING_TYPE_START = 1050;
 
@@ -76,8 +74,7 @@ public interface Constants {
     int CARD_SEARCH_GRAVITY = Gravity.RIGHT;
     int STRING_LIMIT_START = 1315;
     int STRING_CATEGORY_START = 1100;
-    int STRING_CATEGORY_END = 1131;
     int DEFAULT_CARD_COUNT = 500;
-    String URL_HELP = "http://www.jianshu.com/p/a43f5d951a250";
+    String URL_HELP = "http://www.jianshu.com/p/a43f5d951a25";
     String WIKI_SEARCH_URL = "http://www.ourocg.cn/S.aspx?key=";
 }

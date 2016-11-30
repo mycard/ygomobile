@@ -1,4 +1,4 @@
-package cn.garymb.ygomobile.file;
+package cn.garymb.ygomobile.plus.file;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -29,6 +29,7 @@ import cn.garymb.ygomobile.plus.VUiKit;
 public class FileActivity extends BaseActivity implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener
         , FileAdapter.OnPathChangedListener {
     private ListView mListView;
+    private TextView lastPath;
     private Intent mIntent;
     private ImageButton newFolderButton;
     private ImageButton saveFileButton;
@@ -43,26 +44,49 @@ public class FileActivity extends BaseActivity implements AdapterView.OnItemClic
         if (doIntent(getIntent())) {
             super.onCreate(savedInstanceState);
             enableBackHome();
-            mListView = new ListView(this);
-            footView = new LinearLayout(this);
-            footView.setOrientation(LinearLayout.HORIZONTAL);
-            initFoot();
+            LinearLayout layout = new LinearLayout(this);
+            layout.setOrientation(LinearLayout.VERTICAL);
+            initViews();
 //            mListView.addFooterView(footView, null, false);
-            mListView.addHeaderView(footView, null, false);
-            mFileAdapter = new FileAdapter(this);
+//            mListView.addHeaderView(footView, null, false);
+//            mListView.addHeaderView(lastPath, null, false);
             mListView.setAdapter(mFileAdapter);
-            mFileAdapter.setShowPath(false);
             mFileAdapter.setOnPathChangedListener(this);
             mListView.setOnItemClickListener(this);
             mListView.setOnItemLongClickListener(this);
-            setContentView(mListView);
+            layout.addView(footView);
+            layout.addView(lastPath);
+            layout.addView(mListView);
+            setContentView(layout);
             updateUI();
         } else {
             finish();
         }
     }
 
-    private void initFoot() {
+    private void initViews() {
+
+        mFileAdapter = new FileAdapter(this);
+        mListView = new ListView(this);
+        footView = new LinearLayout(this);
+        footView.setOrientation(LinearLayout.HORIZONTAL);
+        lastPath = new TextView(this);
+        lastPath.setPadding(VUiKit.dpToPx(8), 0, 0, 0);
+        lastPath.setSingleLine();
+        lastPath.setGravity(Gravity.CENTER_VERTICAL);
+        lastPath.setMinHeight((int) getResources().getDimension(R.dimen.item_height));
+//        lastPath.setTextColor(getResources().getColor(R.color.colorPrimary));
+        lastPath.setText(R.string.last_path);
+        lastPath.setOnClickListener((v) -> {
+            File path = mFileAdapter.getCurPath();
+            File dir = path == null ? null : path.getParentFile();
+            if (dir != null) {
+                if (mFileAdapter.setPath(dir.getAbsolutePath())) {
+                    mFileAdapter.loadFiles();
+                }
+            }
+        });
+
         newFolderButton = new ImageButton(this);
         newFolderButton.setPadding(VUiKit.dpToPx(4), 0, 0, VUiKit.dpToPx(8));
         newFolderButton.setScaleType(ImageView.ScaleType.FIT_CENTER);

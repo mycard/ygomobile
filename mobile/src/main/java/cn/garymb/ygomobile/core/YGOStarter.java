@@ -14,9 +14,11 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.ViewTarget;
+import com.bumptech.glide.signature.StringSignature;
 
 import java.io.File;
 import java.util.HashMap;
@@ -78,7 +80,10 @@ public class YGOStarter {
         //读取当前的背景图，如果卡的话，可以考虑缓存bitmap
         File bgfile = new File(AppsSettings.get().getCoreSkinPath(), Constants.CORE_SKIN_BG);
         if (bgfile.exists()) {
-            Glide.with(activity.getApplicationContext()).load(bgfile).into(activityShowInfo.mViewTarget);
+            Glide.with(activity.getApplicationContext()).load(bgfile)
+                    .signature(new StringSignature(bgfile.getName() + bgfile.lastModified()))
+                    .diskCacheStrategy(DiskCacheStrategy.NONE)
+                    .into(activityShowInfo.mViewTarget);
         } else {
             Glide.with(activity.getApplicationContext()).load(R.drawable.bg).into(activityShowInfo.mViewTarget);
         }

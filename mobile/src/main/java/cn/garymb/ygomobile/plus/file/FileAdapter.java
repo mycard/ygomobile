@@ -1,4 +1,4 @@
-package cn.garymb.ygomobile.file;
+package cn.garymb.ygomobile.plus.file;
 
 import android.content.Context;
 import android.os.Environment;
@@ -32,7 +32,6 @@ class FileAdapter extends BaseAdapterPlus<File> {
         void onChanged(File path);
     }
 
-    private boolean showPath = true;
     private boolean mFolder = false;
     private boolean mShowHide = false;
     private boolean isMultiSelect = false;
@@ -59,10 +58,6 @@ class FileAdapter extends BaseAdapterPlus<File> {
             path = "/mnt/sdcard/";
         }
         return path;
-    }
-
-    public void setShowPath(boolean showPath) {
-        this.showPath = showPath;
     }
 
     public File getCurPath() {
@@ -166,18 +161,15 @@ class FileAdapter extends BaseAdapterPlus<File> {
             });
             List<File> filesList = new ArrayList<File>();
             List<File> pathsList = new ArrayList<File>();
-            if (showPath) {
-                pathsList.add(mCurPath);
-            }
-            File pfile = mCurPath.getParentFile();
-            if (pfile != null) {
-                if (rootPath != null && pfile.getAbsolutePath().length() < rootPath.length()) {
-                    mParent = mCurPath;
-                } else {
-                    mParent = pfile;
-                }
-                pathsList.add(mParent);
-            }
+//            File pfile = mCurPath.getParentFile();
+//            if (pfile != null) {
+//                if (rootPath != null && pfile.getAbsolutePath().length() < rootPath.length()) {
+//                    mParent = mCurPath;
+//                } else {
+//                    mParent = pfile;
+//                }
+//                pathsList.add(mParent);
+//            }
             if (files != null) {
                 for (File f : files) {
                     if (f.isDirectory()) {
@@ -224,34 +216,25 @@ class FileAdapter extends BaseAdapterPlus<File> {
         } else {
             viewHolder.checkBox.setVisibility(View.GONE);
         }
-        if (showPath && position == 0) {
-            viewHolder.name.setText(item.getPath());
-            viewHolder.icon.setVisibility(View.GONE);
-        } else if (position == (showPath ? 1 : 0)) {
-            viewHolder.icon.setImageBitmap(null);
-            viewHolder.icon.setVisibility(View.GONE);
-            viewHolder.name.setText(R.string.last_path);
-        } else {
-            String name = item.getName().toLowerCase(Locale.US);
-            boolean isimage = false;
-            for (String ex : Constants.FILE_IMAGE_EX) {
-                if (name.endsWith(ex)) {
-                    isimage = true;
-                    break;
-                }
+        String name = item.getName().toLowerCase(Locale.US);
+        boolean isimage = false;
+        for (String ex : Constants.FILE_IMAGE_EX) {
+            if (name.endsWith(ex)) {
+                isimage = true;
+                break;
             }
-            if (!item.isDirectory()) {
-                if (isimage) {
-                    Glide.with(context).load(item).into(viewHolder.icon);
-                } else {
-                    viewHolder.icon.setImageResource(R.drawable.ic_insert_drive_file);
-                }
-            } else {
-                viewHolder.icon.setImageResource(R.drawable.ic_folder_open);
-            }
-            viewHolder.icon.setVisibility(View.VISIBLE);
-            viewHolder.name.setText(item.getName());
         }
+        if (!item.isDirectory()) {
+            if (isimage) {
+                Glide.with(context).load(item).into(viewHolder.icon);
+            } else {
+                viewHolder.icon.setImageResource(R.drawable.ic_insert_drive_file);
+            }
+        } else {
+            viewHolder.icon.setImageResource(R.drawable.ic_folder_open);
+        }
+        viewHolder.icon.setVisibility(View.VISIBLE);
+        viewHolder.name.setText(item.getName());
     }
 
     private class ViewHolder {

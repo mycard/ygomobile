@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.garymb.ygomobile.Constants;
+import cn.garymb.ygomobile.activities.WebActivity;
 import cn.garymb.ygomobile.bean.CardInfo;
 import cn.garymb.ygomobile.core.loader.ICardLoader;
 import cn.garymb.ygomobile.core.loader.ILoadCallBack;
@@ -270,13 +271,14 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> implements
                 public void onOpenUrl(CardInfo cardInfo) {
                     //ourocg
                     String uri = Constants.WIKI_SEARCH_URL + String.format("%08d", cardInfo.Code);
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    try {
-                        context.startActivity(intent);
-                    } catch (Exception e) {
-                        Toast.makeText(context, R.string.no_webbrowser, Toast.LENGTH_SHORT).show();
-                    }
+                    WebActivity.open(getContext(), cardInfo.Name, uri);
+//                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+//                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                    try {
+//                        context.startActivity(intent);
+//                    } catch (Exception e) {
+//                        Toast.makeText(context, R.string.no_webbrowser, Toast.LENGTH_SHORT).show();
+//                    }
                 }
 
                 @Override

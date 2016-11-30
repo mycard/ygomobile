@@ -8,7 +8,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.preference.Preference;
 import android.provider.MediaStore;
-import android.text.TextUtils;
 import android.widget.Toast;
 
 import java.io.File;
@@ -16,9 +15,9 @@ import java.util.Map;
 import java.util.Set;
 
 import cn.garymb.ygomobile.Constants;
-import cn.garymb.ygomobile.file.FileActivity;
-import cn.garymb.ygomobile.file.FileOpenType;
 import cn.garymb.ygomobile.lite.R;
+import cn.garymb.ygomobile.plus.file.FileActivity;
+import cn.garymb.ygomobile.plus.file.FileOpenType;
 
 import static cn.garymb.ygomobile.Constants.REQUEST_CHOOSE_FILE;
 import static cn.garymb.ygomobile.Constants.REQUEST_CHOOSE_IMG;

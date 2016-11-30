@@ -128,13 +128,14 @@ public class MainActivity extends BaseActivity {
                 startActivity(new Intent(this, DeckManagerActivity.class));
                 break;
             case R.id.action_help: {
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.URL_HELP));
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                try {
-                    startActivity(intent);
-                } catch (Exception e) {
-                    Toast.makeText(this, R.string.no_webbrowser, Toast.LENGTH_SHORT).show();
-                }
+                WebActivity.open(this, getString(R.string.help), Constants.URL_HELP);
+//                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.URL_HELP));
+//                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                try {
+//                    startActivity(intent);
+//                } catch (Exception e) {
+//                    Toast.makeText(this, R.string.no_webbrowser, Toast.LENGTH_SHORT).show();
+//                }
             }
             break;
         }

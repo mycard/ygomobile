@@ -1,4 +1,4 @@
-package cn.garymb.ygomobile.file;
+package cn.garymb.ygomobile.plus.file;
 
 import android.os.Parcel;
 import android.os.Parcelable;
