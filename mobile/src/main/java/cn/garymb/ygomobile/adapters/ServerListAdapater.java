@@ -35,6 +35,7 @@ public class ServerListAdapater extends BaseAdapterPlus<ServerInfo> implements
         AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener {
     private final File xmlFile;
     private Activity mActivity;
+    private ILoadCallBack loadCallBack;
 
     public ServerListAdapater(Activity context) {
         super(context);
@@ -44,6 +45,16 @@ public class ServerListAdapater extends BaseAdapterPlus<ServerInfo> implements
 
     public void addServer() {
         showDialog(null, -1);
+    }
+
+    @Override
+    public void setCallBack(ILoadCallBack loadCallBack) {
+        this.loadCallBack = loadCallBack;
+    }
+
+    @Override
+    public ILoadCallBack getCallBack() {
+        return loadCallBack;
     }
 
     @Override
@@ -71,7 +82,7 @@ public class ServerListAdapater extends BaseAdapterPlus<ServerInfo> implements
     }
 
     @Override
-    public void loadData(ILoadCallBack callBack) {
+    public void loadData() {
         VUiKit.defer().when(() -> {
             InputStream in = null;
             if (xmlFile.exists()) {
@@ -89,8 +100,8 @@ public class ServerListAdapater extends BaseAdapterPlus<ServerInfo> implements
             }
             return list;
         }).done((list) -> {
-            if (callBack != null) {
-                callBack.onLoad(list != null);
+            if (loadCallBack != null) {
+                loadCallBack.onLoad(list != null);
             }
             if (list != null) {
                 addAll(list.getServerInfoList());

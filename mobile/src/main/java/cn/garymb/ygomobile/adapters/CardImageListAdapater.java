@@ -4,10 +4,8 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -17,7 +15,6 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
@@ -28,6 +25,7 @@ import java.util.List;
 import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.activities.WebActivity;
 import cn.garymb.ygomobile.bean.CardInfo;
+import cn.garymb.ygomobile.core.CardDetail;
 import cn.garymb.ygomobile.core.loader.ICardLoader;
 import cn.garymb.ygomobile.core.loader.ILoadCallBack;
 import cn.garymb.ygomobile.core.loader.ImageLoader;
@@ -35,14 +33,13 @@ import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.plus.BaseAdapterPlus;
 import cn.garymb.ygomobile.plus.VUiKit;
 import cn.garymb.ygomobile.settings.AppsSettings;
-import cn.garymb.ygomobile.core.CardDetail;
 import cn.ygo.ocgcore.LimitList;
 import cn.ygo.ocgcore.LimitManager;
 import cn.ygo.ocgcore.StringManager;
-import cn.ygo.ocgcore.enums.LimitType;
 import cn.ygo.ocgcore.enums.CardType;
+import cn.ygo.ocgcore.enums.LimitType;
 
-public class CardListAdapater extends BaseAdapterPlus<CardInfo> implements
+public class CardImageListAdapater extends BaseAdapterPlus<CardInfo> implements
         ICardLoader,
         AdapterView.OnItemClickListener, ListView.OnScrollListener {
     private SQLiteDatabase db;
@@ -51,7 +48,7 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> implements
     private LimitManager mLimitManager;
     private ILoadCallBack loadCallBack;
 
-    public CardListAdapater(Context context) {
+    public CardImageListAdapater(Context context) {
         super(context);
         mStringManager = StringManager.get();
         mAppsSettings = AppsSettings.get();

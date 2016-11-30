@@ -2,46 +2,29 @@ package cn.garymb.ygomobile.activities;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import java.io.File;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-
 import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.adapters.ServerListAdapater;
-import cn.garymb.ygomobile.bean.ServerInfo;
-import cn.garymb.ygomobile.bean.ServerList;
-import cn.garymb.ygomobile.core.CardSelector;
-import cn.garymb.ygomobile.lite.BuildConfig;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.core.ResCheckTask;
 import cn.garymb.ygomobile.plus.VUiKit;
 import cn.garymb.ygomobile.core.YGOStarter;
 import cn.garymb.ygomobile.settings.AppsSettings;
-import cn.garymb.ygomobile.utils.IOUtils;
-import cn.garymb.ygomobile.utils.XmlUtils;
-import cn.ygo.ocgcore.LimitManager;
-
-import static cn.garymb.ygomobile.Constants.ASSET_SERVER_LIST;
 
 public class MainActivity extends BaseActivity {
     private boolean enableStart;
     private ListView mListView;
     private AppsSettings mAppsSettings;
     private ServerListAdapater mServerListAdapater;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +47,7 @@ public class MainActivity extends BaseActivity {
         });
         YGOStarter.onCreated(this);
         //加载服务器列表
-        mServerListAdapater.loadData(null);
+        mServerListAdapater.loadData();
     }
 
     @Override

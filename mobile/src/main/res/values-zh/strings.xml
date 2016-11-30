@@ -110,4 +110,8 @@
     <string name="card_faq">调整</string>
     <string name="no_webbrowser">没有安装浏览器</string>
     <string name="load_game">启动游戏中</string>
+
+    <string name="tab_search">搜索</string>
+    <string name="tab_result">列表</string>
+    <string name="tab_manager">管理</string>
 </resources>

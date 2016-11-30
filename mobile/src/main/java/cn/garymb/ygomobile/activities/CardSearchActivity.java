@@ -4,26 +4,24 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
 
 import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.adapters.CardListAdapater;
-import cn.garymb.ygomobile.core.CardSelector;
+import cn.garymb.ygomobile.core.CardSearcher;
+import cn.garymb.ygomobile.core.loader.ILoadCallBack;
 import cn.garymb.ygomobile.lite.R;
 
-public class CardSearchActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class CardSearchActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener, ILoadCallBack {
     private ListView mListView;
     private CardListAdapater mCardListAdapater;
     private DrawerLayout mDrawerlayout;
-    private CardSelector mCardSelector;
-    private boolean isLoad =false;
+    private CardSearcher mCardSelector;
+    private boolean isLoad = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,14 +41,20 @@ public class CardSearchActivity extends BaseActivity implements NavigationView.O
         toggle.syncState();
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-        mCardSelector = new CardSelector(mDrawerlayout,navigationView.getHeaderView(0), mCardListAdapater);
-        mCardListAdapater.setILoadCallBack((ok)->{
-            mCardSelector.onSearchOk();
-        });
-        mCardListAdapater.loadData((ok)->{
+        mCardSelector = new CardSearcher(mDrawerlayout, navigationView.getHeaderView(0));
+        mCardSelector.setDataLoader(mCardListAdapater);
+        mCardListAdapater.setCallBack(this);
+        mCardListAdapater.loadData();
+    }
+
+    @Override
+    public void onLoad(boolean ok) {
+        if (isLoad) {
+            mCardSelector.onLoad(ok);
+        } else {
             isLoad = ok;
             mCardSelector.initItems();
-        });
+        }
     }
 
     @Override
@@ -80,8 +84,9 @@ public class CardSearchActivity extends BaseActivity implements NavigationView.O
                 //弹条件对话框
                 if (mDrawerlayout.isDrawerOpen(Constants.CARD_SEARCH_GRAVITY)) {
                     mDrawerlayout.closeDrawer(Constants.CARD_SEARCH_GRAVITY);
-                } else if(isLoad){
+                } else if (isLoad) {
                     mDrawerlayout.openDrawer(Constants.CARD_SEARCH_GRAVITY);
+                    mCardSelector.onOpen();
                 }
                 break;
             case android.R.id.home:

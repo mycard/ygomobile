@@ -8,6 +8,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.MenuItem;
+import android.view.View;
 
 import cn.garymb.ygomobile.lite.R;
 
@@ -24,6 +25,9 @@ public class BaseActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         startPermissionsActivity();
+    }
+    protected <T extends View> T bind(int id) {
+        return (T) findViewById(id);
     }
 
     public void setEnterAnimEnable(boolean disableEnterAnim) {

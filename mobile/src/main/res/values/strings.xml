@@ -35,6 +35,9 @@
     <string name="last_path">Last Folder</string>
     <string name="create_folder">New Folder</string>
     <string name="intpu_name">Input name</string>
+    <string name="tab_search">Search</string>
+    <string name="tab_result">Result</string>
+    <string name="tab_manager">Deck</string>
     <string name="the_name_is_folder">this name is folder</string>
     <string name="back_tip">Press back key again to exit.</string>
     <string name="string_help_text">The current application lacks the necessary permissions. \n
