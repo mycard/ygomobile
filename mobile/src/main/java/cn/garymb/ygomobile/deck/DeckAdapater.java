@@ -43,6 +43,11 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
         mHeight = mWidth * Constants.CORE_SKIN_CARD_COVER_SIZE[1] / Constants.CORE_SKIN_CARD_COVER_SIZE[0];
     }
 
+    @Override
+    public void notifyItemChanged(int src, int target) {
+    super.notifyItemChanged();
+    }
+
     public void setDeck(DeckInfo deck) {
         this.mDeck = deck;
         mItems.clear();

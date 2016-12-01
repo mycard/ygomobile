@@ -1,12 +1,15 @@
 package cn.garymb.ygomobile.activities;
 
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -57,7 +60,8 @@ public class DeckManagerActivity extends BaseActivity implements ILoadCallBack, 
         mRecyclerView = bind(R.id.grid_deck);
         mRecyclerView.setAdapter((mDeckAdapater = new DeckAdapater(this, mRecyclerView)));
         mRecyclerView.setLayoutManager(new DeckLayoutManager(this, Constants.DECK_WIDTH_COUNT));
-
+        ItemTouchHelper touchHelper = new ItemTouchHelper(mCallback);
+        touchHelper.attachToRecyclerView(mRecyclerView);
 //        View head = mNavigationView.getHeaderView(0);
         mListView = (ListView) findViewById(R.id.list_cards);
         mCardListAdapater = new CardListAdapater(this);
@@ -95,6 +99,63 @@ public class DeckManagerActivity extends BaseActivity implements ILoadCallBack, 
         toggle.syncState();
     }
 
+    private int color(int id) {
+        return getResources().getColor(id);
+    }
+
+    private ItemTouchHelper.Callback mCallback = new ItemTouchHelper.Callback() {
+        Drawable bg = null;
+
+        @Override
+        public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+            super.clearView(recyclerView, viewHolder);
+            viewHolder.itemView.setBackgroundDrawable(bg);
+        }
+
+        @Override
+        public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
+            super.onSelectedChanged(viewHolder, actionState);
+            if (actionState != ItemTouchHelper.ACTION_STATE_IDLE) {
+                bg = viewHolder.itemView.getBackground();
+                viewHolder.itemView.setBackgroundColor(color(R.color.bg));
+            }
+        }
+
+        @Override
+        public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+            int dragFlags;
+            if (recyclerView.getLayoutManager() instanceof GridLayoutManager) {
+                dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.RIGHT | ItemTouchHelper.LEFT;
+            } else {
+                dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
+            }
+            int swipeFlags = ItemTouchHelper.START | ItemTouchHelper.END;
+            return makeMovementFlags(dragFlags, swipeFlags);
+        }
+
+        @Override
+        public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+            int left = viewHolder.getAdapterPosition();
+            int right = target.getAdapterPosition();
+            if (DeckItemUtils.isLabel(left) || DeckItemUtils.isLabel(right)) {
+                return false;
+            }
+            if(DeckItemUtils.isExtra(left) && !DeckItemUtils.isExtra(right)){
+                return false;
+            }
+            if(DeckItemUtils.isExtra(right)){
+                return false;
+            }
+            // mDeckAdapater.notifyItemChanged(left, right);
+            return false;
+        }
+
+        @Override
+        public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+
+        }
+    };
+
     private void showSearch(boolean autoclose) {
         if (mDrawerlayout.isDrawerOpen(Gravity.LEFT)) {
             mDrawerlayout.closeDrawer(Gravity.LEFT);
@@ -110,7 +171,7 @@ public class DeckManagerActivity extends BaseActivity implements ILoadCallBack, 
         if (mDrawerlayout.isDrawerOpen(Constants.CARD_SEARCH_GRAVITY)) {
             mDrawerlayout.closeDrawer(Constants.CARD_SEARCH_GRAVITY);
         }
-        if (autoclose &&mDrawerlayout.isDrawerOpen(Gravity.LEFT)) {
+        if (autoclose && mDrawerlayout.isDrawerOpen(Gravity.LEFT)) {
             mDrawerlayout.closeDrawer(Gravity.LEFT);
         } else if (isLoad) {
             mDrawerlayout.openDrawer(Gravity.LEFT);

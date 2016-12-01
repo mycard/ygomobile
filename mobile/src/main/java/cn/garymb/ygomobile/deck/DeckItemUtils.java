@@ -216,5 +216,20 @@ public class DeckItemUtils {
         }
         return mItems;
     }
+    public static boolean isMain(int pos) {
+        return pos >= DeckItem.MainStart && pos <= DeckItem.MainEnd;
+    }
+    public static boolean isExtra(int pos) {
+        return pos >= DeckItem.ExtraStart && pos <= DeckItem.ExtraEnd;
+    }
+    public static boolean isSide(int pos) {
+        return pos >= DeckItem.SideStart && pos <= DeckItem.SideEnd;
+    }
 
+    public static boolean isLabel(int position) {
+        if (position == DeckItem.MainLabel || position == DeckItem.SideLabel || position == DeckItem.ExtraLabel) {
+            return true;
+        }
+        return false;
+    }
 }
