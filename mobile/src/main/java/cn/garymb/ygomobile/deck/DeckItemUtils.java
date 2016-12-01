@@ -93,11 +93,12 @@ public class DeckItemUtils {
                         type = DeckItemType.MainCard;
                     } else if (line.startsWith("#extra")) {
                         type = DeckItemType.ExtraCard;
-                    } else if (line.startsWith("!side")) {
-                        type = DeckItemType.SideCard;
                     } else {
                         continue;
                     }
+                }
+                if (line.startsWith("!side")) {
+                    type = DeckItemType.SideCard;
                 }
                 try {
                     long id = Long.parseLong(line);
@@ -166,7 +167,7 @@ public class DeckItemUtils {
         return tmp;
     }
 
-    public static List<DeckItem> makeItems(Context context,DeckInfo mDeck) {
+    public static List<DeckItem> makeItems(Context context, DeckInfo mDeck) {
         final List<DeckItem> mItems = new ArrayList<>();
         mItems.clear();
         if (mDeck != null) {
@@ -198,7 +199,7 @@ public class DeckItemUtils {
                     mItems.add(new DeckItem());
                 }
             }
-            List<CardInfo> side = mDeck.getExtraCards();
+            List<CardInfo> side = mDeck.getSideCards();
             mItems.add(new DeckItem(context.getResources().getString(R.string.deck_side), 0));
             if (side == null) {
                 for (int i = 0; i < Constants.DECK_SIDE_COUNT; i++) {
