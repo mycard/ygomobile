@@ -6,7 +6,6 @@
               android:padding="10dp">
 
     <LinearLayout
-        android:id="@+id/layout_search"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -189,14 +188,4 @@
                 android:textColor="@android:color/white"/>
         </FrameLayout>
     </LinearLayout>
-
-    <ListView
-        android:id="@+id/list_cards"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="4dp"
-        android:padding="5dp"
-        android:scrollbars="none"/>
 </LinearLayout>

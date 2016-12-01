@@ -10,10 +10,15 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ListView;
 
 import java.io.File;
 
 import cn.garymb.ygomobile.Constants;
+import cn.garymb.ygomobile.adapters.CardListAdapater;
+import cn.garymb.ygomobile.core.CardSearcher;
+import cn.garymb.ygomobile.core.loader.ILoadCallBack;
 import cn.garymb.ygomobile.deck.DeckAdapater;
 import cn.garymb.ygomobile.deck.DeckInfo;
 import cn.garymb.ygomobile.deck.DeckItemUtils;
@@ -25,7 +30,7 @@ import cn.ygo.ocgcore.LimitList;
 import cn.ygo.ocgcore.LimitManager;
 import cn.ygo.ocgcore.StringManager;
 
-public class DeckManagerActivity extends BaseActivity {
+public class DeckManagerActivity extends BaseActivity implements ILoadCallBack {
     private DrawerLayout mDrawerlayout;
     private NavigationView mNavigationView;
     private SQLiteDatabase mCDB;
@@ -37,6 +42,10 @@ public class DeckManagerActivity extends BaseActivity {
     private RecyclerView mRecyclerView;
     private DeckAdapater mDeckAdapater;
     private AppsSettings mSettings = AppsSettings.get();
+    private ListView mListView;
+    private CardSearcher mCardSelector;
+    private CardListAdapater mCardListAdapater;
+    private boolean isLoad;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,6 +57,26 @@ public class DeckManagerActivity extends BaseActivity {
         mRecyclerView = bind(R.id.grid_deck);
         mRecyclerView.setAdapter((mDeckAdapater = new DeckAdapater(this, mRecyclerView)));
         mRecyclerView.setLayoutManager(new DeckLayoutManager(this, Constants.DECK_WIDTH_COUNT));
+
+        View head = mNavigationView.getHeaderView(0);
+        final View searchView = head.findViewById(R.id.layout_search);
+        mListView = (ListView) head.findViewById(R.id.list_cards);
+        head.findViewById(R.id.tab_search).setOnClickListener((v) -> {
+            searchView.setVisibility(View.VISIBLE);
+            mListView.setVisibility(View.GONE);
+        });
+        head.findViewById(R.id.tab_result).setOnClickListener((v) -> {
+            searchView.setVisibility(View.GONE);
+            mListView.setVisibility(View.VISIBLE);
+        });
+        mCardListAdapater = new CardListAdapater(this);
+        mListView.setAdapter(mCardListAdapater);
+        mListView.setOnItemClickListener(mCardListAdapater);
+        mListView.setOnScrollListener(mCardListAdapater);
+        mCardSelector = new CardSearcher(mDrawerlayout, head);
+        mCardSelector.setDataLoader(mCardListAdapater);
+        mCardListAdapater.setCallBack(this);
+        mCardListAdapater.loadData();
 
         VUiKit.defer().when(() -> {
             if (!mStringManager.isLoad()) {
@@ -85,6 +114,16 @@ public class DeckManagerActivity extends BaseActivity {
         mDrawerlayout.setDrawerListener(toggle);
         toggle.syncState();
 //        test();
+    }
+
+    @Override
+    public void onLoad(boolean ok) {
+        if (isLoad) {
+            mCardSelector.onLoad(ok);
+        } else {
+            isLoad = ok;
+            mCardSelector.initItems();
+        }
     }
 
     private boolean openDb() {
@@ -126,7 +165,7 @@ public class DeckManagerActivity extends BaseActivity {
                 //弹条件对话框
                 if (mDrawerlayout.isDrawerOpen(Constants.CARD_SEARCH_GRAVITY)) {
                     mDrawerlayout.closeDrawer(Constants.CARD_SEARCH_GRAVITY);
-                } else {
+                } else if (isLoad) {
                     mDrawerlayout.openDrawer(Constants.CARD_SEARCH_GRAVITY);
                 }
                 break;
@@ -135,6 +174,16 @@ public class DeckManagerActivity extends BaseActivity {
                     mDrawerlayout.closeDrawer(Constants.CARD_SEARCH_GRAVITY);
                     return true;
                 }
+                break;
+            case R.id.action_deck_list:
+                break;
+            case R.id.action_new_deck:
+                break;
+            case R.id.action_rename:
+                break;
+            case R.id.action_delete:
+                break;
+            case R.id.action_save:
                 break;
         }
         return super.onOptionsItemSelected(item);

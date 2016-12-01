@@ -1,19 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:app="http://schemas.android.com/apk/res-auto"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             android:orientation="vertical">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
 
-    <include
-        layout="@layout/nav_card_search"/>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:orientation="horizontal">
 
-    <ListView
-        android:id="@+id/list_cards"
+        <Button
+            android:id="@+id/tab_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="search"/>
+
+        <Button
+            android:id="@+id/tab_result"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="result"/>
+    </LinearLayout>
+
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="4dp"
-        android:padding="5dp"
-        android:scrollbars="none"/>
-</FrameLayout>
+        android:layout_height="match_parent">
+
+        <include
+            android:id="@+id/layout_search"
+            layout="@layout/nav_card_search"/>
+
+        <ListView
+            android:id="@+id/list_cards"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="4dp"
+            android:padding="5dp"
+            android:scrollbars="none"
+            android:visibility="gone"/>
+    </FrameLayout>
+</LinearLayout>
