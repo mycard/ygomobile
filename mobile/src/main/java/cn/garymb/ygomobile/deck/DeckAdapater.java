@@ -29,6 +29,7 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
     private int mHeight;
     private int Padding = 1;
     private RecyclerView recyclerView;
+    private int mDragPosition = -1;
 
     public DeckAdapater(Context context, RecyclerView recyclerView) {
         this.context = context;
@@ -74,8 +75,12 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
                 makeHeight();
             }
 //            holder.cardImage.setLayoutParams(new RelativeLayout.LayoutParams(holder.cardImage.getMeasuredWidth(), mHeight));
-            holder.cardImage.setVisibility(View.VISIBLE);
             holder.textlayout.setVisibility(View.GONE);
+            if (position == mDragPosition) {
+                holder.cardImage.setVisibility(View.GONE);
+            } else {
+                holder.cardImage.setVisibility(View.VISIBLE);
+            }
             if (item.getType() == DeckItemType.Space) {
                 holder.setSize(mHeight);
                 holder.cardImage.setImageDrawable(null);
@@ -104,6 +109,15 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
                 }
             }
         }
+    }
+
+    public int getDragPosition() {
+        return mDragPosition;
+    }
+
+    public void setDragPosition(int dragPosition) {
+        mDragPosition = dragPosition;
+        notifyDataSetChanged();
     }
 
     @Override
