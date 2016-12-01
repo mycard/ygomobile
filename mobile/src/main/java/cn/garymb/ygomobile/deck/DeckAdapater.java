@@ -60,8 +60,8 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
         if (item.getType() == DeckItemType.Label) {
             holder.cardImage.setVisibility(View.GONE);
             holder.rightImage.setVisibility(View.GONE);
-            holder.labelText.setVisibility(View.VISIBLE);
             holder.labelText.setText(item.getText());
+            holder.textlayout.setVisibility(View.VISIBLE);
             if (item.getColor() != 0) {
                 holder.labelText.setTextColor(item.getColor());
             }
@@ -75,7 +75,7 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
             }
 //            holder.cardImage.setLayoutParams(new RelativeLayout.LayoutParams(holder.cardImage.getMeasuredWidth(), mHeight));
             holder.cardImage.setVisibility(View.VISIBLE);
-            holder.labelText.setVisibility(View.GONE);
+            holder.textlayout.setVisibility(View.GONE);
             if (item.getType() == DeckItemType.Space) {
                 holder.setSize(mHeight);
                 holder.cardImage.setImageDrawable(null);

@@ -21,11 +21,21 @@
         android:visibility="visible"
         tools:src="@drawable/ic_close_black_24dp"/>
 
-    <TextView
-        android:id="@+id/label"
+    <LinearLayout
+        android:id="@+id/layout_label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-        android:visibility="gone"/>
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/label"
+            android:background="@color/colorPrimaryLight"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="5dp"
+            android:gravity="center_vertical"
+            android:textColor="@color/white"
+            android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+            tools:text="name"/>
+    </LinearLayout>
 </RelativeLayout>

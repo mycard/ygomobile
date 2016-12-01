@@ -22,6 +22,7 @@ public class DeckViewHolder extends RecyclerView.ViewHolder {
         cardImage = findViewById(R.id.card_image);
         rightImage = findViewById(R.id.right_top);
         labelText = findViewById(R.id.label);
+        textlayout = findViewById(R.id.layout_label);
     }
 
     public void setSize(int height) {
@@ -42,6 +43,7 @@ public class DeckViewHolder extends RecyclerView.ViewHolder {
     }
 
     private final View view;
+    public final View textlayout;
     public final TextView labelText;
     public final ImageView cardImage;
     public final ImageView rightImage;
