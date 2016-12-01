@@ -129,4 +129,5 @@
     <string name="deck_main">Main</string>
     <string name="deck_extra">Extra</string>
     <string name="deck_side">Side</string>
+    <string name="card_result">Cards List</string>
 </resources>

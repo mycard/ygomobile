@@ -16,7 +16,7 @@ import cn.garymb.ygomobile.core.CardSearcher;
 import cn.garymb.ygomobile.core.loader.ILoadCallBack;
 import cn.garymb.ygomobile.lite.R;
 
-public class CardSearchActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener, ILoadCallBack {
+public class CardSearchActivity extends BaseActivity implements ILoadCallBack,CardSearcher.Callback {
     private ListView mListView;
     private CardListAdapater mCardListAdapater;
     private DrawerLayout mDrawerlayout;
@@ -39,10 +39,9 @@ public class CardSearchActivity extends BaseActivity implements NavigationView.O
         toggle.setDrawerIndicatorEnabled(false);
         mDrawerlayout.setDrawerListener(toggle);
         toggle.syncState();
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-        mCardSelector = new CardSearcher(mDrawerlayout, navigationView.getHeaderView(0));
+        mCardSelector = new CardSearcher(findViewById(R.id.nav_view));
         mCardSelector.setDataLoader(mCardListAdapater);
+        mCardSelector.setCallback(this);
         mCardListAdapater.setCallBack(this);
         mCardListAdapater.loadData();
     }
@@ -58,9 +57,17 @@ public class CardSearchActivity extends BaseActivity implements NavigationView.O
     }
 
     @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        return false;
+    public void onSearch() {
+        if (mDrawerlayout.isDrawerOpen(Constants.CARD_SEARCH_GRAVITY)) {
+            mDrawerlayout.closeDrawer(Constants.CARD_SEARCH_GRAVITY);
+        }
     }
+
+    @Override
+    public void onReset() {
+
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -86,7 +93,6 @@ public class CardSearchActivity extends BaseActivity implements NavigationView.O
                     mDrawerlayout.closeDrawer(Constants.CARD_SEARCH_GRAVITY);
                 } else if (isLoad) {
                     mDrawerlayout.openDrawer(Constants.CARD_SEARCH_GRAVITY);
-                    mCardSelector.onOpen();
                 }
                 break;
             case android.R.id.home:

@@ -8,6 +8,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,9 +31,8 @@ import cn.ygo.ocgcore.LimitList;
 import cn.ygo.ocgcore.LimitManager;
 import cn.ygo.ocgcore.StringManager;
 
-public class DeckManagerActivity extends BaseActivity implements ILoadCallBack {
+public class DeckManagerActivity extends BaseActivity implements ILoadCallBack, CardSearcher.Callback {
     private DrawerLayout mDrawerlayout;
-    private NavigationView mNavigationView;
     private SQLiteDatabase mCDB;
     //    private CardsLineView[] mMainCards;
 //    private CardsLineView mExtraCards;
@@ -53,28 +53,20 @@ public class DeckManagerActivity extends BaseActivity implements ILoadCallBack {
         enableBackHome();
         setContentView(R.layout.activity_deckmanager);
         mDrawerlayout = bind(R.id.drawer_layout);
-        mNavigationView = bind(R.id.nav_view);
+//      NavigationView  mNavigationView = bind(R.id.nav_view);
         mRecyclerView = bind(R.id.grid_deck);
         mRecyclerView.setAdapter((mDeckAdapater = new DeckAdapater(this, mRecyclerView)));
         mRecyclerView.setLayoutManager(new DeckLayoutManager(this, Constants.DECK_WIDTH_COUNT));
 
-        View head = mNavigationView.getHeaderView(0);
-        final View searchView = head.findViewById(R.id.layout_search);
-        mListView = (ListView) head.findViewById(R.id.list_cards);
-        head.findViewById(R.id.tab_search).setOnClickListener((v) -> {
-            searchView.setVisibility(View.VISIBLE);
-            mListView.setVisibility(View.GONE);
-        });
-        head.findViewById(R.id.tab_result).setOnClickListener((v) -> {
-            searchView.setVisibility(View.GONE);
-            mListView.setVisibility(View.VISIBLE);
-        });
+//        View head = mNavigationView.getHeaderView(0);
+        mListView = (ListView) findViewById(R.id.list_cards);
         mCardListAdapater = new CardListAdapater(this);
         mListView.setAdapter(mCardListAdapater);
         mListView.setOnItemClickListener(mCardListAdapater);
         mListView.setOnScrollListener(mCardListAdapater);
-        mCardSelector = new CardSearcher(mDrawerlayout, head);
+        mCardSelector = new CardSearcher(bind(R.id.nav_view_list));
         mCardSelector.setDataLoader(mCardListAdapater);
+        mCardSelector.setCallback(this);
         mCardListAdapater.setCallBack(this);
         mCardListAdapater.loadData();
 
@@ -96,24 +88,43 @@ public class DeckManagerActivity extends BaseActivity implements ILoadCallBack {
             mDeckAdapater.setDeck(rs);
             mDeckAdapater.notifyDataSetChanged();
         });
-//        mOtherCards = bind(R.id.deck_other);
-//        mExtraCards = bind(R.id.deck_extras);
-//        mOtherCards.setMaxSize(15);
-//        mExtraCards.setMaxSize(15);
-//        mMainCards = new CardsLineView[]{
-//                bind(R.id.deck_main1),
-//                bind(R.id.deck_main2),
-//                bind(R.id.deck_main3),
-//                bind(R.id.deck_main4),
-//                bind(R.id.deck_main5),
-//                bind(R.id.deck_main6),
-//                };
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, mDrawerlayout, R.string.search_open, R.string.search_close);
         toggle.setDrawerIndicatorEnabled(false);
-        mDrawerlayout.setDrawerListener(toggle);
+        mDrawerlayout.addDrawerListener(toggle);
         toggle.syncState();
-//        test();
+    }
+
+    private void showSearch(boolean autoclose) {
+        if (mDrawerlayout.isDrawerOpen(Gravity.LEFT)) {
+            mDrawerlayout.closeDrawer(Gravity.LEFT);
+        }
+        if (autoclose && mDrawerlayout.isDrawerOpen(Constants.CARD_SEARCH_GRAVITY)) {
+            mDrawerlayout.closeDrawer(Constants.CARD_SEARCH_GRAVITY);
+        } else if (isLoad) {
+            mDrawerlayout.openDrawer(Constants.CARD_SEARCH_GRAVITY);
+        }
+    }
+
+    private void showResult(boolean autoclose) {
+        if (mDrawerlayout.isDrawerOpen(Constants.CARD_SEARCH_GRAVITY)) {
+            mDrawerlayout.closeDrawer(Constants.CARD_SEARCH_GRAVITY);
+        }
+        if (autoclose &&mDrawerlayout.isDrawerOpen(Gravity.LEFT)) {
+            mDrawerlayout.closeDrawer(Gravity.LEFT);
+        } else if (isLoad) {
+            mDrawerlayout.openDrawer(Gravity.LEFT);
+        }
+    }
+
+    @Override
+    public void onSearch() {
+        showResult(false);
+    }
+
+    @Override
+    public void onReset() {
+
     }
 
     @Override
@@ -163,15 +174,18 @@ public class DeckManagerActivity extends BaseActivity implements ILoadCallBack {
         switch (item.getItemId()) {
             case R.id.action_search:
                 //弹条件对话框
-                if (mDrawerlayout.isDrawerOpen(Constants.CARD_SEARCH_GRAVITY)) {
-                    mDrawerlayout.closeDrawer(Constants.CARD_SEARCH_GRAVITY);
-                } else if (isLoad) {
-                    mDrawerlayout.openDrawer(Constants.CARD_SEARCH_GRAVITY);
-                }
+                showSearch(true);
+                break;
+            case R.id.action_card_list:
+                showResult(true);
                 break;
             case android.R.id.home:
                 if (mDrawerlayout.isDrawerOpen(Constants.CARD_SEARCH_GRAVITY)) {
                     mDrawerlayout.closeDrawer(Constants.CARD_SEARCH_GRAVITY);
+                    return true;
+                }
+                if (mDrawerlayout.isDrawerOpen(Gravity.LEFT)) {
+                    mDrawerlayout.closeDrawer(Gravity.LEFT);
                     return true;
                 }
                 break;

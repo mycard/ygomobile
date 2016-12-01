@@ -31,6 +31,11 @@ import cn.ygo.ocgcore.enums.CardRace;
 import cn.ygo.ocgcore.enums.CardType;
 
 public class CardSearcher implements View.OnClickListener, ILoadCallBack {
+    public interface Callback {
+        void onSearch();
+
+        void onReset();
+    }
 
     private EditText prefixWord;
     private EditText suffixWord;
@@ -53,20 +58,19 @@ public class CardSearcher implements View.OnClickListener, ILoadCallBack {
     private View view;
     private View layout_monster;
     private ICardLoader dataLoader;
-    private DrawerLayout drawerlayout;
     private Context mContext;
     protected StringManager mStringManager;
     protected LimitManager mLimitManager;
     protected AppsSettings mSettings;
+    private Callback mCallback;
 
     public void setDataLoader(ICardLoader dataLoader) {
         this.dataLoader = dataLoader;
     }
 
-    public CardSearcher(DrawerLayout drawerlayout, View view) {
+    public CardSearcher(View view) {
         this.view = view;
         this.mContext = view.getContext();
-        this.drawerlayout = drawerlayout;
         this.mSettings = AppsSettings.get();
         mStringManager = StringManager.get();
         mLimitManager = LimitManager.get();
@@ -132,6 +136,10 @@ public class CardSearcher implements View.OnClickListener, ILoadCallBack {
 
             }
         });
+    }
+
+    public void setCallback(Callback callback) {
+        mCallback = callback;
     }
 
     @Override
@@ -367,7 +375,7 @@ public class CardSearcher implements View.OnClickListener, ILoadCallBack {
     @Override
     public void onClick(View v) {
         if (v == searchButton) {
-            onSearch();
+            search();
         } else if (v == resetButton) {
             prefixWord.setText(null);
             suffixWord.setText(null);
@@ -379,21 +387,16 @@ public class CardSearcher implements View.OnClickListener, ILoadCallBack {
             reset(setcodeSpinner);
             reset(categorySpinner);
             resetMonster();
+            if (mCallback != null) {
+                mCallback.onReset();
+            }
         }
-    }
-
-    protected void onSearch() {
-        if (drawerlayout.isDrawerOpen(Constants.CARD_SEARCH_GRAVITY)) {
-            drawerlayout.closeDrawer(Constants.CARD_SEARCH_GRAVITY);
-        }
-        search();
-    }
-
-    public void onOpen() {
-
     }
 
     protected void search() {
+        if (mCallback != null) {
+            mCallback.onSearch();
+        }
         if (dataLoader != null) {
             dataLoader.search(text(prefixWord), text(suffixWord), sel(attributeSpinner)
                     , sel(levelSpinner), sel(raceSpinner), sel(limitListSpinner), sel(limitSpinner), text(atkText), text(defText), sel(setcodeSpinner)

@@ -22,11 +22,15 @@
             android:scrollbars="none"/>
     </LinearLayout>
 
-    <android.support.design.widget.NavigationView
-        android:id="@+id/nav_view"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="right"
-        android:scrollbars="none"
-        app:headerLayout="@layout/nav_card_search"/>
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/nav_view"
+            layout="@layout/nav_card_search"/>
+    </LinearLayout>
 </android.support.v4.widget.DrawerLayout>
