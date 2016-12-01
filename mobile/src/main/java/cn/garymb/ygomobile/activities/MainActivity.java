@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.view.ViewPager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
@@ -18,6 +17,7 @@ import cn.garymb.ygomobile.core.ResCheckTask;
 import cn.garymb.ygomobile.plus.VUiKit;
 import cn.garymb.ygomobile.core.YGOStarter;
 import cn.garymb.ygomobile.settings.AppsSettings;
+import cn.garymb.ygomobile.settings.SettingsActivity;
 
 public class MainActivity extends BaseActivity {
     private boolean enableStart;

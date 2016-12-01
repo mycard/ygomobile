@@ -9,7 +9,7 @@
     <string name="check_res">檢查資源</string>
     <string name="check_things">檢查%s ...</string>
     <string name="core_config">遊戲核心</string>
-    <string name="new_deck">新卡组</string>
+    <string name="tip_new_deck">新卡组</string>
     <string name="cards_cdb">數據庫</string>
     <string name="scripts">腳本</string>
     <string name="images">圖片</string>
@@ -114,4 +114,7 @@
     <string name="tab_search">搜索</string>
     <string name="tab_result">列表</string>
     <string name="tab_manager">管理</string>
+    <string name="deck_main">主卡组</string>
+    <string name="deck_extra">额外卡组</string>
+    <string name="deck_side">副卡组</string>
 </resources>

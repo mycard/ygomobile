@@ -11,6 +11,7 @@ import cn.garymb.ygomobile.Constants;
 import cn.ygo.ocgcore.Card;
 import cn.ygo.ocgcore.StringManager;
 import cn.ygo.ocgcore.enums.CardType;
+import cn.ygo.ocgcore.enums.LimitType;
 
 public class CardInfo extends Card implements Parcelable {
     public static final String TAG = "CardInfo";
@@ -18,6 +19,7 @@ public class CardInfo extends Card implements Parcelable {
     public static final String SQL_BASE;
     private static final String _ID = "_id";
     public static final String COL_ID = "datas." + _ID;
+    private LimitType mLimitType = LimitType.None;
 
     static {
         StringBuilder stringBuilder = new StringBuilder("select datas." + _ID + ",ot,alias,setcode,type,level,race,attribute,atk,def,category");
@@ -29,12 +31,19 @@ public class CardInfo extends Card implements Parcelable {
         SQL_BASE = stringBuilder.toString();
     }
 
+    public CardInfo(long id, String name) {
+        this();
+        this.Code = id;
+        this.Name = name;
+    }
+
     /***
      * select * from datas,texts where datas.id =texts.id and datas.id = code;
      *
      * @link cn.garymb.ygomobile.bean.CardInfo.SQL_BASE
      */
     public CardInfo(Cursor reader) {
+        this();
         this.Code = reader.getLong(0);
         this.Ot = reader.getInt(1);
         this.Alias = reader.getInt(2);
@@ -58,6 +67,14 @@ public class CardInfo extends Card implements Parcelable {
         } catch (Exception e) {
             Log.e("kk", "read text", e);
         }
+    }
+
+    public LimitType getLimitType() {
+        return mLimitType;
+    }
+
+    public void setLimitType(LimitType limitType) {
+        mLimitType = limitType;
     }
 
     public String getAllTypeString(StringManager stringManager) {

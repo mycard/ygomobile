@@ -2,7 +2,6 @@ package cn.garymb.ygomobile.core;
 
 import android.content.Context;
 import android.support.v4.widget.DrawerLayout;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -12,8 +11,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -22,7 +19,6 @@ import cn.garymb.ygomobile.core.loader.ICardLoader;
 import cn.garymb.ygomobile.core.loader.ILoadCallBack;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.plus.BaseAdapterPlus;
-import cn.garymb.ygomobile.plus.VUiKit;
 import cn.garymb.ygomobile.settings.AppsSettings;
 import cn.ygo.ocgcore.LimitList;
 import cn.ygo.ocgcore.LimitManager;
@@ -205,7 +201,7 @@ public class CardSearcher implements View.OnClickListener, ILoadCallBack {
         List<Integer> ids = mLimitManager.getLists();
         items.add(new SpItem(0, getString(R.string.label_limitlist)));
         for (Integer id : ids) {
-            LimitList list = mLimitManager.getLimit(id);
+            LimitList list = mLimitManager.getLimitFromIndex(id);
             items.add(new SpItem(id, list.getName()));
         }
         SpAdapter adapter = new SpAdapter(mContext);

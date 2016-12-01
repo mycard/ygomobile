@@ -1,5 +1,7 @@
 package cn.garymb.ygomobile.utils;
 
+import android.content.Context;
+import android.content.res.AssetManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -83,6 +85,26 @@ public class BitmapUtil {
         return options;
     }
 
+    public static Bitmap getBitmapFormAssets(Context context, String name, int w, int h) {
+        InputStream inputStream = null;
+        Bitmap bitmap = null;
+        AssetManager assetManager = context.getAssets();
+        try {
+            inputStream = assetManager.open(name);
+            BitmapFactory.Options options = getImageInfo(inputStream);
+            inputStream.close();
+            inputStream = assetManager.open(name);
+            bitmap = BitmapUtil.getBitmapByStream(inputStream, options.outWidth, options.outHeight, w, h);
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+
+        } finally {
+            IOUtils.close(inputStream);
+        }
+        return bitmap;
+    }
+
     public static Bitmap getBitmapFormZip(String file, String name, int w, int h) {
         ZipFile zipFile = null;
         InputStream inputStream = null;
@@ -141,11 +163,7 @@ public class BitmapUtil {
         try {
             BitmapFactory.Options options = new BitmapFactory.Options();
             if (dstW * dstH >= MAX_BITMAP) {
-                if (dstH > 0) {
-                    options.inSampleSize = (int) ((srcH / dstH + srcW / dstW) / 2.0f);
-                } else {
-                    options.inSampleSize = (int) (srcW / dstW);
-                }
+                options.inSampleSize = (int) ((srcH / dstH + srcW / dstW) / 2.0f);
             }
             options.inPurgeable = true;
             options.inInputShareable = true;

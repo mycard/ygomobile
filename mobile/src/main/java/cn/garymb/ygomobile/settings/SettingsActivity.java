@@ -1,8 +1,9 @@
-package cn.garymb.ygomobile.activities;
+package cn.garymb.ygomobile.settings;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
+import cn.garymb.ygomobile.activities.BaseActivity;
 import cn.garymb.ygomobile.settings.SettingFragment;
 
 public class SettingsActivity extends BaseActivity {

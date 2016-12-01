@@ -45,7 +45,7 @@
             android:label="@string/settings_about"
             android:theme="@style/AppTheme"/>
         <activity
-            android:name="cn.garymb.ygomobile.activities.SettingsActivity"
+            android:name="cn.garymb.ygomobile.settings.SettingsActivity"
             android:label="@string/settings"
             android:theme="@style/AppTheme"/>
         <activity
@@ -55,7 +55,7 @@
         <activity
             android:name="cn.garymb.ygomobile.activities.DeckManagerActivity"
             android:label="@string/deck_manager"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme"/>
         <activity
             android:name="cn.garymb.ygomobile.plus.file.FileActivity"
             android:theme="@style/AppTheme"/>

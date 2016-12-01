@@ -4,10 +4,8 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -17,7 +15,6 @@ import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
@@ -231,7 +228,7 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> implements
             stringBuilder.append(" and race=" + race);
         }
 
-        LimitList limitList = mLimitManager.getLimit((int) limitlist);
+        LimitList limitList = mLimitManager.getLimitFromIndex((int) limitlist);
         LimitType cardLimitType = LimitType.valueOf(limit);
         if (limitList != null) {
             List<Long> ids;

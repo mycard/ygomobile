@@ -34,6 +34,9 @@ public class LimitManager {
         return sManager;
     }
 
+    public int getCount(){
+        return mListMap.size();
+    }
     public List<Integer> getLists() {
         List<Integer> ids=new ArrayList<>();
         ids.addAll(mListMap.keySet());
@@ -42,8 +45,10 @@ public class LimitManager {
         });
         return  ids;
     }
-
-    public LimitList getLimit(int pos) {
+    public LimitList getLimit(int postion) {
+        return mListMap.get(getLists().get(postion));
+    }
+    public LimitList getLimitFromIndex(int pos) {
         return mListMap.get(Integer.valueOf(pos));
     }
 

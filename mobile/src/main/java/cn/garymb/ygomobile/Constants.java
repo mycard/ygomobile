@@ -33,9 +33,9 @@ public interface Constants {
     boolean PREF_DEF_IMMERSIVE_MODE = true;
     String SETTINGS_COVER = "settings_game_diy_card_cover";
     String SETTINGS_CARD_BG = "settings_game_diy_card_bg";
-
+    String ASSETS_PATH = "data/";
     String ASSET_SERVER_LIST = "serverlist.xml";
-
+    String ASSET_LIMIT_PNG = ASSETS_PATH + "textures/lim.png";
     String DEFAULT_FONT_NAME = "ygo.ttf";
     String DATABASE_NAME = "cards.cdb";
     String FONT_DIRECTORY = "fonts";
@@ -75,6 +75,10 @@ public interface Constants {
     int STRING_LIMIT_START = 1315;
     int STRING_CATEGORY_START = 1100;
     int DEFAULT_CARD_COUNT = 500;
+    int DECK_WIDTH_COUNT = 10;
+    int DECK_SIZE_MAX = 60;
+    int DECK_EXTRA_COUNT = (15 / DECK_WIDTH_COUNT * DECK_WIDTH_COUNT < 15) ? DECK_WIDTH_COUNT * 2 : DECK_WIDTH_COUNT;
+    int DECK_SIDE_COUNT = DECK_EXTRA_COUNT;
     String URL_HELP = "http://www.jianshu.com/p/a43f5d951a25";
     String WIKI_SEARCH_URL = "http://www.ourocg.cn/S.aspx?key=";
 }

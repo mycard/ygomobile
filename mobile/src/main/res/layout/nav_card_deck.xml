@@ -5,15 +5,15 @@
              android:layout_height="match_parent"
              android:orientation="vertical">
 
-    <android.support.design.widget.TabLayout
-        android:id="@+id/tabs"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:tabSelectedTextColor="@color/colorAccent"
-        app:tabTextColor="@color/colorPrimary"/>
+    <include
+        layout="@layout/nav_card_search"/>
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/viewpager"
+    <ListView
+        android:id="@+id/list_cards"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="4dp"
+        android:padding="5dp"
+        android:scrollbars="none"/>
 </FrameLayout>

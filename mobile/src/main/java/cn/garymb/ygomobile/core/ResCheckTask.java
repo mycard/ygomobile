@@ -17,6 +17,8 @@ import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.settings.AppsSettings;
 import cn.garymb.ygomobile.utils.IOUtils;
 
+import static cn.garymb.ygomobile.Constants.ASSETS_PATH;
+
 public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
     private static final String TAG = "ResCheckTask";
     public static final int ERROR_NONE = 0;
@@ -24,7 +26,6 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
     public static final int ERROR_COPY = -2;
     public static final int ERROR_CORE_CONFIG_LOST = -3;
     protected int mError = ERROR_NONE;
-    private static final String ASSETS_PATH = "data/";
     private AppsSettings mSettings;
     private Context mContext;
     private ResCheckListener mListener;
@@ -115,7 +116,7 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
             checkDirs();
             copyCoreConfig(verPath.getAbsolutePath());
 //            copyCoreConfig(new File(mSettings.getResourcePath(), GameSettings.CORE_CONFIG_PATH).getAbsolutePath());
-            setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.new_deck)));
+            setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.tip_new_deck)));
             IOUtils.copyFilesFromAssets(mContext, getDatapath(Constants.CORE_DECK_PATH),
                     new File(resPath, Constants.CORE_SINGLE_PATH).getAbsolutePath(), needsUpdate);
             setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.game_skins)));

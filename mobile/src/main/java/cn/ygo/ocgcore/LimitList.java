@@ -46,6 +46,10 @@ public class LimitList {
         }
     }
 
+    public boolean isSemiLimit(Long id) {
+        return semiLimit.contains(id);
+    }
+
     public void addLimit(Long id) {
         if (!limit.contains(id)) {
             limit.add(id);
@@ -53,11 +57,23 @@ public class LimitList {
         }
     }
 
+    public boolean has(Long id) {
+        return allList.contains(id);
+    }
+
+    public boolean isLimit(Long id) {
+        return limit.contains(id);
+    }
+
     public void addForbidden(Long id) {
         if (!forbidden.contains(id)) {
             forbidden.add(id);
             allList.add(id);
         }
+    }
+
+    public boolean isForbidden(Long id) {
+        return forbidden.contains(id);
     }
 
     public List<Long> getCodeList() {

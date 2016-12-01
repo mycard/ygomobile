@@ -9,7 +9,7 @@
     <string name="check_res">检查资源</string>
     <string name="check_things">检查%s ...</string>
     <string name="core_config">游戏核心</string>
-    <string name="new_deck">新卡组</string>
+    <string name="tip_new_deck">新卡组</string>
     <string name="cards_cdb">数据库</string>
     <string name="scripts">脚本</string>
     <string name="images">图片</string>

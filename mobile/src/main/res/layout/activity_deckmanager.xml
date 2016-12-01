@@ -1,20 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:app="http://schemas.android.com/apk/res-auto"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical">
+<android.support.v4.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:openDrawer="right">
 
-    <android.support.design.widget.TabLayout
-        android:id="@+id/tabs"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/title_height"
-        app:tabSelectedTextColor="@color/white"
-        android:background="@color/colorPrimary"
-        app:tabTextColor="@color/white"/>
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/viewpager"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
-</LinearLayout>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/grid_deck"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </LinearLayout>
+
+    <android.support.design.widget.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="right"
+        android:scrollbars="none"
+        app:headerLayout="@layout/nav_card_deck"/>
+</android.support.v4.widget.DrawerLayout>

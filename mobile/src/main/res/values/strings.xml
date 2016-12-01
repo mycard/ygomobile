@@ -11,7 +11,7 @@
     <string name="check_res">Check Resources</string>
     <string name="check_things">Check %s ...</string>
     <string name="core_config">Core Config</string>
-    <string name="new_deck">New Decks</string>
+    <string name="tip_new_deck">New Decks</string>
     <string name="cards_cdb">cards.cdb</string>
     <string name="scripts">scripts</string>
     <string name="images">images</string>
@@ -120,4 +120,13 @@
     <string name="card_faq">FAQ</string>
     <string name="no_webbrowser">No web browser</string>
     <string name="load_game">loading game</string>
+    <string name="new_deck">New Deck</string>
+    <string name="rename_deck">Rename Deck</string>
+    <string name="delete_deck">Delete Deck</string>
+    <string name="save_deck">Save Deck</string>
+    <string name="deck_list">Deck List</string>
+    <string name="edit_deck">Edit</string>
+    <string name="deck_main">Main</string>
+    <string name="deck_extra">Extra</string>
+    <string name="deck_side">Side</string>
 </resources>
