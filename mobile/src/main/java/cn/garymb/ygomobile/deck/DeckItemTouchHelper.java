@@ -9,14 +9,17 @@ import android.util.Log;
 
 import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.lite.R;
+import cn.ygo.ocgcore.Card;
 
 public class DeckItemTouchHelper extends ItemTouchHelper.Callback {
-    Drawable bg = null;
+    private Drawable bg = null;
     private Context context;
     private DeckAdapater deckAdapater;
+    private DeckDrager mDeckDrager;
 
     public DeckItemTouchHelper(Context context, DeckAdapater deckAdapater) {
         this.context = context;
+        this.mDeckDrager=new DeckDrager(deckAdapater);
         this.deckAdapater = deckAdapater;
     }
 
@@ -68,7 +71,7 @@ public class DeckItemTouchHelper extends ItemTouchHelper.Callback {
             if ((id - DeckItem.ExtraStart) >= deckAdapater.getExtraCount()) {
                 return makeMovementFlags(0, 0);
             }
-        } else {
+        } else if (id > DeckItem.MainStart) {
             if ((id - DeckItem.MainStart) >= deckAdapater.getMainCount()) {
                 return makeMovementFlags(0, 0);
             }
@@ -92,49 +95,58 @@ public class DeckItemTouchHelper extends ItemTouchHelper.Callback {
                 if (deckAdapater.getSideCount() >= (Constants.DECK_SIDE_MAX + 1)) {
                     return false;
                 }
-                deckAdapater.moveMainToSide(left, right);
+                mDeckDrager.moveMainToSide(left, right);
                 return true;
             }
             if (DeckItemUtils.isMain(right)) {
-                deckAdapater.moveMain(left, right);
+                mDeckDrager.moveMain(left, right);
                 return true;
             }
-        }
-        if (DeckItemUtils.isSide(left)) {
+        }else if (DeckItemUtils.isSide(left)) {
             if (DeckItemUtils.isMain(right)) {
                 if (deckAdapater.getMainCount() >= Constants.DECK_MAIN_MAX) {
-                    Log.i("kk", "move main max");
                     return false;
                 }
                 //判断类型
-                deckAdapater.moveSideToMain(left, right);
+                if (viewHolder instanceof DeckViewHolder) {
+                    DeckViewHolder deckViewHolder = (DeckViewHolder) viewHolder;
+                    if (Card.isExtraCard(deckViewHolder.getCardType())) {
+                        return false;
+                    }
+                }
+                mDeckDrager.moveSideToMain(left, right);
                 return true;
             }
             if (DeckItemUtils.isExtra(right)) {
                 if (deckAdapater.getExtraCount() >= Constants.DECK_EXTRA_MAX) {
-                    Log.i("kk", "move extra max:"+deckAdapater.getExtraCount());
+                    Log.i("kk", "move extra max:" + deckAdapater.getExtraCount());
                     return false;
                 }
+                if (viewHolder instanceof DeckViewHolder) {
+                    DeckViewHolder deckViewHolder = (DeckViewHolder) viewHolder;
+                    if (!Card.isExtraCard(deckViewHolder.getCardType())) {
+                        return false;
+                    }
+                }
                 //判断类型
-                deckAdapater.moveSideToExtra(left, right);
+                mDeckDrager.moveSideToExtra(left, right);
                 return true;
             }
             if (DeckItemUtils.isSide(right)) {
-                deckAdapater.moveSide(left, right);
+                mDeckDrager.moveSide(left, right);
                 return true;
             }
-            Log.i("kk", "move extra fail " + left + "->" + right);
-        }
-        if (DeckItemUtils.isExtra(left)) {
+            Log.i("kk", "move side fail " + left + "->" + right);
+        }else if (DeckItemUtils.isExtra(left)) {
             if (DeckItemUtils.isSide(right)) {
                 if (deckAdapater.getSideCount() >= (Constants.DECK_SIDE_MAX + 1)) {
                     return false;
                 }
-                deckAdapater.moveExtraToSide(left, right);
+                mDeckDrager.moveExtraToSide(left, right);
                 return true;
             }
             if (DeckItemUtils.isExtra(right)) {
-                deckAdapater.moveExtra(left, right);
+                mDeckDrager.moveExtra(left, right);
                 return true;
             }
         }
@@ -144,6 +156,6 @@ public class DeckItemTouchHelper extends ItemTouchHelper.Callback {
 
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-        Log.i("kk", "onSwiped id= " + viewHolder.getAdapterPosition() + ",direction=" + direction);
+//        Log.i("kk", "onSwiped id= " + viewHolder.getAdapterPosition() + ",direction=" + direction);
     }
 }

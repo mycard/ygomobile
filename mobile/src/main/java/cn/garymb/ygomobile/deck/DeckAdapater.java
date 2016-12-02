@@ -21,8 +21,8 @@ import cn.ygo.ocgcore.enums.LimitType;
 
 
 public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
-    private final List<DeckItem> mItems = new ArrayList<>();
-    private DeckInfo mDeck = new DeckInfo();
+    final List<DeckItem> mItems = new ArrayList<>();
+    DeckInfo mDeck = new DeckInfo();
     private Context context;
     private LayoutInflater mLayoutInflater;
     private ImageTop mImageTop;
@@ -42,7 +42,11 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
     private void makeHeight() {
         mFullWidth = recyclerView.getMeasuredWidth() - recyclerView.getPaddingRight() - recyclerView.getPaddingLeft();
         mWidth = mFullWidth / Constants.DECK_WIDTH_COUNT - 2 * Padding;
-        mHeight = mWidth * Constants.CORE_SKIN_CARD_COVER_SIZE[1] / Constants.CORE_SKIN_CARD_COVER_SIZE[0];
+        mHeight = scaleHeight(mWidth);
+    }
+
+    private int scaleHeight(int width) {
+        return width * Constants.CORE_SKIN_CARD_COVER_SIZE[1] / Constants.CORE_SKIN_CARD_COVER_SIZE[0];
     }
 
     @Override
@@ -91,149 +95,6 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
         return new DeckViewHolder(view);
     }
 
-    public void moveMain(int src, int to) {
-        if (mDeck == null || mDeck.getMainCards() == null) {
-            return;
-        }
-        int left = src - DeckItem.MainStart;
-        int right = to - DeckItem.MainStart;
-        Log.i("kk", "move main " + left + "->" + right);
-        int count = getMainCount();
-        if (left >= count && right >= count) {
-            return;
-        }
-        if (left >= count) {
-            left = count - 1;
-        }
-        if (right >= count) {
-            right = count - 1;
-        }
-        Collections.swap(mDeck.getMainCards(), left, right);
-        Collections.swap(mItems, DeckItem.MainStart + left, DeckItem.MainStart + right);
-        notifyItemMoved(DeckItem.MainStart + left, DeckItem.MainStart + right);
-//        loadData();
-//        notifyDataSetChanged();
-    }
-
-    public void moveSide(int src, int to) {
-        if (mDeck == null || mDeck.getSideCards() == null) {
-            return;
-        }
-        int left = src - DeckItem.SideStart;
-        int right = to - DeckItem.SideStart;
-        Log.i("kk", "move side " + left + "->" + right);
-        int count = getSideCount();
-        if (left >= count && right >= count) {
-            return;
-        }
-        if (left >= count) {
-            left = count - 1;
-        }
-        if (right >= count) {
-            right = count - 1;
-        }
-        Collections.swap(mDeck.getSideCards(), left, right);
-        Collections.swap(mItems, DeckItem.SideStart + left, DeckItem.SideStart + right);
-        notifyItemMoved(DeckItem.SideStart + left, DeckItem.SideStart + right);
-    }
-
-    public void moveExtra(int src, int to) {
-        if (mDeck == null || mDeck.getExtraCards() == null) {
-            return;
-        }
-        int left = src - DeckItem.ExtraStart;
-        int right = to - DeckItem.ExtraStart;
-        Log.i("kk", "move extra " + left + "->" + right);
-        int count = getExtraCount();
-        if (left >= count && right >= count) {
-            return;
-        }
-        if (left >= count) {
-            left = count - 1;
-        }
-        if (right >= count) {
-            right = count - 1;
-        }
-        Collections.swap(mDeck.getExtraCards(), left, right);
-        Collections.swap(mItems, DeckItem.ExtraStart + left, DeckItem.ExtraStart + right);
-        notifyItemMoved(DeckItem.ExtraStart + left, DeckItem.ExtraStart + right);
-    }
-    public void moveSideToExtra(int src, int to) {
-        int left = src - DeckItem.SideStart;
-        int right = to - DeckItem.ExtraStart;
-        int maincount = getExtraCount();
-        if (right >= maincount) {
-            right = maincount - 1;
-        }
-        CardInfo cardInfo = mDeck.getSideCards().remove(left);
-        mDeck.getMainCards().add(right, cardInfo);
-//        Collections.swap(mDeck.getExtraCards(), left, right);
-        Collections.swap(mItems, DeckItem.SideStart + left, DeckItem.ExtraStart + right);
-        //多出一个空白
-        notifyItemMoved(DeckItem.SideStart + left, DeckItem.ExtraStart + right);
-        DeckItem deckItem = mItems.remove(DeckItem.ExtraEnd);
-        notifyItemRemoved(DeckItem.ExtraEnd);
-        mItems.add(DeckItem.SideEnd, new DeckItem());
-        notifyItemInserted(DeckItem.SideEnd);
-    }
-
-    public void moveExtraToSide(int src, int to) {
-        int left = src - DeckItem.ExtraStart;
-        int right = to - DeckItem.SideStart;
-        int maincount = getSideCount();
-        if (right >= maincount) {
-            right = maincount - 1;
-        }
-        //
-        CardInfo cardInfo = mDeck.getExtraCards().remove(left);
-        mDeck.getSideCards().add(right, cardInfo);
-        Collections.swap(mItems, DeckItem.ExtraStart + left, DeckItem.SideStart + right);
-        notifyItemMoved(DeckItem.ExtraStart + left, DeckItem.SideStart + right);
-        //多出一个空白
-        DeckItem deckItem = mItems.remove(DeckItem.SideEnd);
-        mItems.add(DeckItem.ExtraEnd, new DeckItem());
-        notifyItemRemoved(DeckItem.SideEnd);
-        notifyItemInserted(DeckItem.ExtraEnd);
-    }
-
-    public void moveSideToMain(int src, int to) {
-        int left = src - DeckItem.SideStart;
-        int right = to - DeckItem.MainStart;
-        int maincount = getMainCount();
-        if (right >= maincount) {
-            right = maincount - 1;
-        }
-        CardInfo cardInfo = mDeck.getSideCards().remove(left);
-        mDeck.getMainCards().add(right, cardInfo);
-//        Collections.swap(mDeck.getExtraCards(), left, right);
-        Collections.swap(mItems, DeckItem.SideStart + left, DeckItem.MainStart + right);
-        //多出一个空白
-        notifyItemMoved(DeckItem.SideStart + left, DeckItem.MainStart + right);
-        DeckItem deckItem = mItems.remove(DeckItem.MainEnd);
-        notifyItemRemoved(DeckItem.MainEnd);
-        mItems.add(DeckItem.SideEnd, new DeckItem());
-        notifyItemInserted(DeckItem.SideEnd);
-    }
-
-    public void moveMainToSide(int src, int to) {
-        int left = src - DeckItem.MainStart;
-        int right = to - DeckItem.SideStart;
-        int maincount = getSideCount();
-        if (right >= maincount) {
-            right = maincount - 1;
-        }
-        //
-        CardInfo cardInfo = mDeck.getMainCards().remove(left);
-        mDeck.getSideCards().add(right, cardInfo);
-        Collections.swap(mItems, DeckItem.MainStart + left, DeckItem.SideStart + right);
-        notifyItemMoved(DeckItem.MainStart + left, DeckItem.SideStart + right);
-        //多出一个空白
-        DeckItem deckItem = mItems.remove(DeckItem.SideEnd);
-        mItems.add(DeckItem.MainEnd, new DeckItem());
-        notifyItemRemoved(DeckItem.SideEnd);
-        notifyItemInserted(DeckItem.MainEnd);
-    }
-
     @Override
     public void onBindViewHolder(DeckViewHolder holder, int position) {
         DeckItem item = mItems.get(position);
@@ -249,6 +110,10 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
         } else {
             if (holder.cardImage.getMeasuredHeight() > 0) {
                 mHeight = holder.cardImage.getMeasuredHeight();
+                mWidth = holder.cardImage.getMeasuredWidth();
+                if (mHeight <= 0 && mWidth >= 0) {
+                    mHeight = scaleHeight(mWidth);
+                }
             }
             if (mHeight <= 0) {
                 makeHeight();
@@ -268,6 +133,7 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
             } else {
                 CardInfo cardInfo = item.getCardInfo();
                 if (cardInfo != null) {
+                    holder.setCardType(cardInfo.Type);
                     if (mImageTop == null) {
                         mImageTop = new ImageTop(context);
                     }

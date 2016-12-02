@@ -38,9 +38,6 @@ import cn.ygo.ocgcore.StringManager;
 public class DeckManagerActivity extends BaseActivity implements ILoadCallBack, CardSearcher.Callback {
     private DrawerLayout mDrawerlayout;
     private SQLiteDatabase mCDB;
-    //    private CardsLineView[] mMainCards;
-//    private CardsLineView mExtraCards;
-//    private CardsLineView mOtherCards;
     private StringManager mStringManager = StringManager.get();
     private LimitManager mLimitManager = LimitManager.get();
     private RecyclerView mRecyclerView;

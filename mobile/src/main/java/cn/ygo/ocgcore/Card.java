@@ -37,8 +37,16 @@ public class Card extends CardData implements Parcelable {
         }
     }
 
+    public static boolean isType(long Type, CardType type) {
+        return ((Type & type.value()) != 0);
+    }
+
     public boolean isType(CardType type) {
         return ((Type & type.value()) != 0);
+    }
+
+    public static boolean isExtraCard(long Type) {
+        return (isType(Type, CardType.Fusion) || isType(Type, CardType.Synchro) || isType(Type, CardType.Xyz));
     }
 
     public boolean isExtraCard() {
@@ -64,10 +72,10 @@ public class Card extends CardData implements Parcelable {
         }
     }
 
-    public boolean isSetCode(long _setcode){
-        long[] setcodes=getSetCode();
-        for(long setcode:setcodes){
-            if(setcode==_setcode){
+    public boolean isSetCode(long _setcode) {
+        long[] setcodes = getSetCode();
+        for (long setcode : setcodes) {
+            if (setcode == _setcode) {
                 return true;
             }
         }

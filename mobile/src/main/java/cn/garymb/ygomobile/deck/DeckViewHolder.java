@@ -12,9 +12,10 @@ import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.core.loader.ImageLoader;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.settings.AppsSettings;
+import cn.ygo.ocgcore.enums.CardType;
 
-public class DeckViewHolder extends RecyclerView.ViewHolder {
-
+class DeckViewHolder extends RecyclerView.ViewHolder {
+    private long mCardType;
     public DeckViewHolder(View view) {
         super(view);
         this.view = view;
@@ -23,6 +24,14 @@ public class DeckViewHolder extends RecyclerView.ViewHolder {
         rightImage = findViewById(R.id.right_top);
         labelText = findViewById(R.id.label);
         textlayout = findViewById(R.id.layout_label);
+    }
+
+    public long getCardType() {
+        return mCardType;
+    }
+
+    public void setCardType(long cardType) {
+        mCardType = cardType;
     }
 
     public void setSize(int height) {
