@@ -118,4 +118,5 @@
     <string name="deck_extra">额外卡组</string>
     <string name="deck_side">副卡组</string>
     <string name="card_result">卡片列表</string>
+    <string name="unsort">打乱</string>
 </resources>

@@ -1,73 +1,89 @@
 package cn.garymb.ygomobile.activities;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListView;
+
+import com.bumptech.glide.Glide;
+
+import java.io.File;
+import java.util.List;
 
 import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.adapters.CardListAdapater;
+import cn.garymb.ygomobile.bean.CardInfo;
+import cn.garymb.ygomobile.core.CardDetail;
 import cn.garymb.ygomobile.core.CardSearcher;
 import cn.garymb.ygomobile.core.loader.ILoadCallBack;
 import cn.garymb.ygomobile.lite.R;
+import cn.garymb.ygomobile.plus.VUiKit;
+import cn.garymb.ygomobile.settings.AppsSettings;
 
-public class CardSearchActivity extends BaseActivity implements ILoadCallBack,CardSearcher.Callback {
-    private ListView mListView;
-    private CardListAdapater mCardListAdapater;
-    private DrawerLayout mDrawerlayout;
-    private CardSearcher mCardSelector;
-    private boolean isLoad = false;
+public class CardSearchActivity extends BaseCardsAcitivity {
+    private CardDetail mCardDetail;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        enableBackHome();
-        setContentView(R.layout.activity_search);
-        mListView = (ListView) findViewById(R.id.list_cards);
-        mCardListAdapater = new CardListAdapater(this);
-        mListView.setAdapter(mCardListAdapater);
-        mListView.setOnItemClickListener(mCardListAdapater);
-        mListView.setOnScrollListener(mCardListAdapater);
-        mDrawerlayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, mDrawerlayout, R.string.search_open, R.string.search_close);
-        toggle.setDrawerIndicatorEnabled(false);
-        mDrawerlayout.setDrawerListener(toggle);
-        toggle.syncState();
-        mCardSelector = new CardSearcher(findViewById(R.id.nav_view));
-        mCardSelector.setDataLoader(mCardListAdapater);
-        mCardSelector.setCallback(this);
-        mCardListAdapater.setCallBack(this);
-        mCardListAdapater.loadData();
     }
 
     @Override
-    public void onLoad(boolean ok) {
-        if (isLoad) {
-            mCardSelector.onLoad(ok);
-        } else {
-            isLoad = ok;
-            mCardSelector.initItems();
+    protected View getMainView() {
+        if (mCardDetail == null) {
+            mCardDetail = new CardDetail(this);
+            mCardDetail.hideClose();
+            File outFile = new File(AppsSettings.get().getCoreSkinPath(), Constants.CORE_SKIN_COVER);
+            Glide.with(this).load(outFile).into(mCardDetail.getCardImage());
         }
+        return mCardDetail.getView();
     }
 
     @Override
-    public void onSearch() {
-        if (mDrawerlayout.isDrawerOpen(Constants.CARD_SEARCH_GRAVITY)) {
-            mDrawerlayout.closeDrawer(Constants.CARD_SEARCH_GRAVITY);
+    protected void onCardClick(CardInfo cardInfo, int pos) {
+        if (mDrawerlayout.isDrawerOpen(Gravity.LEFT)) {
+            mDrawerlayout.closeDrawer(Gravity.LEFT);
         }
+        mCardDetail.bind(cardInfo, mStringManager, new CardDetail.OnClickListener() {
+            @Override
+            public void onOpenUrl(CardInfo cardInfo) {
+                String uri = Constants.WIKI_SEARCH_URL + String.format("%08d", cardInfo.Code);
+                WebActivity.open(getContext(), cardInfo.Name, uri);
+            }
+
+            @Override
+            public void onClose() {
+            }
+        });
     }
 
     @Override
-    public void onReset() {
+    protected void onCardLongClick(View view, CardInfo cardInfo, int pos) {
 
     }
 
+    @Override
+    public void onSearchStart() {
+    }
+
+    @Override
+    public void onSearchResult(List<CardInfo> cardInfos) {
+        super.onSearchResult(cardInfos);
+        showResult(false);
+    }
+
+    @Override
+    protected void onInit() {
+        super.onInit();
+        VUiKit.defer().when(()->{
+           mCardLoader.loadData();
+        });
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -76,28 +92,22 @@ public class CardSearchActivity extends BaseActivity implements ILoadCallBack,Ca
     }
 
     @Override
-    public void onBackPressed() {
-        if (mDrawerlayout.isDrawerOpen(Constants.CARD_SEARCH_GRAVITY)) {
-            mDrawerlayout.closeDrawer(Constants.CARD_SEARCH_GRAVITY);
-        } else {
-            super.onBackPressed();
-        }
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_search:
                 //弹条件对话框
-                if (mDrawerlayout.isDrawerOpen(Constants.CARD_SEARCH_GRAVITY)) {
-                    mDrawerlayout.closeDrawer(Constants.CARD_SEARCH_GRAVITY);
-                } else if (isLoad) {
-                    mDrawerlayout.openDrawer(Constants.CARD_SEARCH_GRAVITY);
-                }
+                showSearch(true);
+                break;
+            case R.id.action_card_list:
+                showResult(true);
                 break;
             case android.R.id.home:
                 if (mDrawerlayout.isDrawerOpen(Constants.CARD_SEARCH_GRAVITY)) {
                     mDrawerlayout.closeDrawer(Constants.CARD_SEARCH_GRAVITY);
+                    return true;
+                }
+                if (mDrawerlayout.isDrawerOpen(Gravity.LEFT)) {
+                    mDrawerlayout.closeDrawer(Gravity.LEFT);
                     return true;
                 }
                 break;

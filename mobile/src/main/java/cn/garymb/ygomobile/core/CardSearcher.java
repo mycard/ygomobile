@@ -1,7 +1,6 @@
 package cn.garymb.ygomobile.core;
 
 import android.content.Context;
-import android.support.v4.widget.DrawerLayout;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -14,9 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.core.loader.ICardLoader;
-import cn.garymb.ygomobile.core.loader.ILoadCallBack;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.plus.BaseAdapterPlus;
 import cn.garymb.ygomobile.settings.AppsSettings;
@@ -30,13 +27,7 @@ import cn.ygo.ocgcore.enums.CardOt;
 import cn.ygo.ocgcore.enums.CardRace;
 import cn.ygo.ocgcore.enums.CardType;
 
-public class CardSearcher implements View.OnClickListener, ILoadCallBack {
-    public interface Callback {
-        void onSearch();
-
-        void onReset();
-    }
-
+public class CardSearcher implements View.OnClickListener {
     private EditText prefixWord;
     private EditText suffixWord;
     private Spinner otSpinner;
@@ -62,15 +53,11 @@ public class CardSearcher implements View.OnClickListener, ILoadCallBack {
     protected StringManager mStringManager;
     protected LimitManager mLimitManager;
     protected AppsSettings mSettings;
-    private Callback mCallback;
 
-    public void setDataLoader(ICardLoader dataLoader) {
-        this.dataLoader = dataLoader;
-    }
-
-    public CardSearcher(View view) {
+    public CardSearcher(View view,ICardLoader dataLoader) {
         this.view = view;
         this.mContext = view.getContext();
+        this.dataLoader = dataLoader;
         this.mSettings = AppsSettings.get();
         mStringManager = StringManager.get();
         mLimitManager = LimitManager.get();
@@ -97,7 +84,7 @@ public class CardSearcher implements View.OnClickListener, ILoadCallBack {
         limitListSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                long value = sel(limitListSpinner);
+                long value = getSelect(limitListSpinner);
                 if (value == 0) {
                     limitSpinner.setVisibility(View.INVISIBLE);
                 } else {
@@ -113,7 +100,7 @@ public class CardSearcher implements View.OnClickListener, ILoadCallBack {
         typeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                long value = sel(typeSpinner);
+                long value = getSelect(typeSpinner);
                 if (value == 0) {
                     layout_monster.setVisibility(View.INVISIBLE);
                     typeMonsterSpinner.setVisibility(View.GONE);
@@ -136,15 +123,6 @@ public class CardSearcher implements View.OnClickListener, ILoadCallBack {
 
             }
         });
-    }
-
-    public void setCallback(Callback callback) {
-        mCallback = callback;
-    }
-
-    @Override
-    public void onLoad(boolean ok) {
-
     }
 
     public void initItems() {
@@ -309,7 +287,7 @@ public class CardSearcher implements View.OnClickListener, ILoadCallBack {
         spinner.setAdapter(adapter);
     }
 
-    protected void reset(Spinner spinner) {
+    private void reset(Spinner spinner) {
         if (spinner.getCount() > 0) {
             spinner.setSelection(0);
         }
@@ -323,7 +301,7 @@ public class CardSearcher implements View.OnClickListener, ILoadCallBack {
         return charSequence.toString();
     }
 
-    protected long sel(Spinner spinner) {
+    private long getSelect(Spinner spinner) {
         if (spinner.getCount() > 0) {
             Object item = spinner.getSelectedItem();
             if (item != null && item instanceof SpItem) {
@@ -334,7 +312,7 @@ public class CardSearcher implements View.OnClickListener, ILoadCallBack {
         return 0;
     }
 
-    protected class SpItem {
+    private class SpItem {
         public long value;
         public String text;
 
@@ -349,7 +327,7 @@ public class CardSearcher implements View.OnClickListener, ILoadCallBack {
         }
     }
 
-    protected class SpAdapter extends BaseAdapterPlus<SpItem> {
+    private class SpAdapter extends BaseAdapterPlus<SpItem> {
         public SpAdapter(Context context) {
             super(context);
         }
@@ -377,34 +355,35 @@ public class CardSearcher implements View.OnClickListener, ILoadCallBack {
         if (v == searchButton) {
             search();
         } else if (v == resetButton) {
-            prefixWord.setText(null);
-            suffixWord.setText(null);
-            reset(otSpinner);
-            reset(limitSpinner);
-            reset(limitListSpinner);
-            reset(typeSpinner);
-            reset(typeSTSpinner);
-            reset(setcodeSpinner);
-            reset(categorySpinner);
-            resetMonster();
-            if (mCallback != null) {
-                mCallback.onReset();
-            }
+            resetAll();
         }
     }
 
-    protected void search() {
-        if (mCallback != null) {
-            mCallback.onSearch();
-        }
+    private void search() {
         if (dataLoader != null) {
-            dataLoader.search(text(prefixWord), text(suffixWord), sel(attributeSpinner)
-                    , sel(levelSpinner), sel(raceSpinner), sel(limitListSpinner), sel(limitSpinner), text(atkText), text(defText), sel(setcodeSpinner)
-                    , sel(categorySpinner), sel(otSpinner), sel(typeSpinner), sel(typeMonsterSpinner), sel(typeSTSpinner));
+            dataLoader.search(text(prefixWord), text(suffixWord), getSelect(attributeSpinner)
+                    , getSelect(levelSpinner), getSelect(raceSpinner), getSelect(limitListSpinner), getSelect(limitSpinner), text(atkText), text(defText), getSelect(setcodeSpinner)
+                    , getSelect(categorySpinner), getSelect(otSpinner), getSelect(typeSpinner), getSelect(typeMonsterSpinner), getSelect(typeSTSpinner));
         }
     }
 
-    protected void resetMonster() {
+    private void resetAll(){
+        if (dataLoader != null) {
+            dataLoader.onReset();
+        }
+        prefixWord.setText(null);
+        suffixWord.setText(null);
+        reset(otSpinner);
+        reset(limitSpinner);
+        reset(limitListSpinner);
+        reset(typeSpinner);
+        reset(typeSTSpinner);
+        reset(setcodeSpinner);
+        reset(categorySpinner);
+        resetMonster();
+    }
+
+    private void resetMonster() {
         reset(typeMonsterSpinner);
         reset(raceSpinner);
         reset(levelSpinner);

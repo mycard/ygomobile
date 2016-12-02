@@ -13,6 +13,7 @@ import com.bumptech.glide.load.model.ImageVideoWrapper;
 import com.bumptech.glide.load.resource.bitmap.BitmapResource;
 import com.bumptech.glide.load.resource.gifbitmap.GifBitmapWrapper;
 import com.bumptech.glide.load.resource.gifbitmap.GifBitmapWrapperResource;
+import com.bumptech.glide.signature.StringSignature;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -84,9 +85,11 @@ public class ImageLoader {
     public void bind(Context context, final File file, ImageView imageview, boolean isbpg,long code) {
         try {
             if (isbpg) {
-                Glide.with(context).load(file).decoder(new BpgResourceDecoder("bpg@"+code)).into(imageview);
+                Glide.with(context).load(file).signature(new StringSignature(file.getName() + file.lastModified()))
+                        .decoder(new BpgResourceDecoder("bpg@"+code)).into(imageview);
             } else {
-                Glide.with(context).load(file).into(imageview);
+                Glide.with(context).load(file).signature(new StringSignature(file.getName() + file.lastModified()))
+                        .into(imageview);
             }
         } catch (Exception e) {
             Log.e("kk", "bind", e);

@@ -18,6 +18,7 @@ import java.util.List;
 
 import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.bean.CardInfo;
+import cn.garymb.ygomobile.core.CardLoader;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.utils.IOUtils;
 import cn.ygo.ocgcore.LimitList;
@@ -65,12 +66,12 @@ public class DeckItemUtils {
 
     }
 
-    public static DeckInfo readDeck(SQLiteDatabase db, File file, LimitList limitList) {
+    public static DeckInfo readDeck(CardLoader cardLoader, File file, LimitList limitList) {
         DeckInfo deckInfo = null;
         FileInputStream inputStream = null;
         try {
             inputStream = new FileInputStream(file);
-            deckInfo = readDeck(db, inputStream, limitList);
+            deckInfo = readDeck(cardLoader, inputStream, limitList);
         } catch (Exception e) {
 
         } finally {
@@ -79,7 +80,7 @@ public class DeckItemUtils {
         return deckInfo;
     }
 
-    public static DeckInfo readDeck(SQLiteDatabase db, InputStream inputStream, LimitList limitList) throws IOException {
+    public static DeckInfo readDeck(CardLoader cardLoader, InputStream inputStream, LimitList limitList) throws IOException {
         List<Long> main = new ArrayList<>();
         List<Long> extra = new ArrayList<>();
         List<Long> side = new ArrayList<>();
@@ -121,52 +122,10 @@ public class DeckItemUtils {
             IOUtils.close(in);
         }
         DeckInfo deckInfo = new DeckInfo();
-        deckInfo.setMainCards(readCards(db, main, limitList));
-        deckInfo.setExtraCards(readCards(db, extra, limitList));
-        deckInfo.setSideCards(readCards(db, side, limitList));
+        deckInfo.setMainCards(cardLoader.readCards(main, limitList));
+        deckInfo.setExtraCards(cardLoader.readCards(extra, limitList));
+        deckInfo.setSideCards(cardLoader.readCards(side, limitList));
         return deckInfo;
-    }
-
-    public static List<CardInfo> readCards(SQLiteDatabase db, List<Long> ids, LimitList limitList) {
-        StringBuilder stringBuilder = new StringBuilder(CardInfo.SQL_BASE);
-        stringBuilder.append(" and " + CardInfo.COL_ID + " in (");
-        int i = 0;
-        for (Long id : ids) {
-            if (i != 0) {
-                stringBuilder.append(",");
-            }
-            stringBuilder.append(id);
-            i++;
-        }
-        stringBuilder.append(")");
-        String sql = stringBuilder.toString();
-        Cursor reader = null;
-        try {
-            reader = db.rawQuery(sql, null);
-        } catch (Exception e) {
-        }
-        List<CardInfo> tmp = new ArrayList<CardInfo>();
-        if (reader != null) {
-            if (reader.moveToFirst()) {
-//                Log.d("kk", "find card count=" + reader.getCount());
-                do {
-                    CardInfo cardInfo = new CardInfo(reader);
-                    if (limitList != null) {
-                        if (limitList.isForbidden(cardInfo.Code)) {
-                            cardInfo.setLimitType(LimitType.Forbidden);
-                        } else if (limitList.isLimit(cardInfo.Code)) {
-                            cardInfo.setLimitType(LimitType.Limit);
-                        } else if (limitList.isSemiLimit(cardInfo.Code)) {
-                            cardInfo.setLimitType(LimitType.SemiLimit);
-                        }
-                    }
-                    tmp.add(cardInfo);
-
-                } while (reader.moveToNext());
-            }
-            reader.close();
-        }
-        return tmp;
     }
 
     public static List<DeckItem> makeItems(Context context, DeckInfo mDeck) {
@@ -187,7 +146,7 @@ public class DeckItemUtils {
                     mItems.add(new DeckItem());
                 }
             }
-            if(DeckItem.SeacondIsSide){
+            if (DeckItem.SeacondIsSide) {
                 List<CardInfo> side = mDeck.getSideCards();
                 mItems.add(new DeckItem(context.getResources().getString(R.string.deck_side), 0));
                 if (side == null) {
@@ -217,7 +176,7 @@ public class DeckItemUtils {
                     mItems.add(new DeckItem());
                 }
             }
-            if(!DeckItem.SeacondIsSide){
+            if (!DeckItem.SeacondIsSide) {
                 List<CardInfo> side = mDeck.getSideCards();
                 mItems.add(new DeckItem(context.getResources().getString(R.string.deck_side), 0));
                 if (side == null) {

@@ -1,5 +1,6 @@
 package cn.garymb.ygomobile.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -26,6 +27,11 @@ public class BaseActivity extends AppCompatActivity {
         super.onResume();
         startPermissionsActivity();
     }
+
+    public Context getContext() {
+        return this;
+    }
+
     protected <T extends View> T bind(int id) {
         return (T) findViewById(id);
     }

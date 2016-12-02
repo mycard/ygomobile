@@ -57,7 +57,15 @@ public class CardDetail extends BaseAdapterPlus.BaseViewHolder {
         view_bar = bind(R.id.view_bar);
         race = bind(R.id.card_race);
         setname = bind(R.id.card_setname);
-        lb_race=bind(R.id.lb_race);
+        lb_race = bind(R.id.lb_race);
+    }
+
+    public ImageView getCardImage() {
+        return cardImage;
+    }
+
+    public void hideClose() {
+        close.setVisibility(View.GONE);
     }
 
     public View getView() {
@@ -94,9 +102,9 @@ public class CardDetail extends BaseAdapterPlus.BaseViewHolder {
                 star += "★";
             }
             level.setText(star);
-            if(cardInfo.isType(CardType.Xyz)){
+            if (cardInfo.isType(CardType.Xyz)) {
                 level.setTextColor(context.getResources().getColor(R.color.star_rank));
-            }else{
+            } else {
                 level.setTextColor(context.getResources().getColor(R.color.star));
             }
             cardAtk.setText((cardInfo.Attack < 0 ? "?" : String.valueOf(cardInfo.Attack)));
