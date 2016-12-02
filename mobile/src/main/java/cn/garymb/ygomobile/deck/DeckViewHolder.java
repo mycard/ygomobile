@@ -16,6 +16,7 @@ import cn.ygo.ocgcore.enums.CardType;
 
 class DeckViewHolder extends RecyclerView.ViewHolder {
     private long mCardType;
+    private DeckItemType mItemType;
     public DeckViewHolder(View view) {
         super(view);
         this.view = view;
@@ -24,6 +25,14 @@ class DeckViewHolder extends RecyclerView.ViewHolder {
         rightImage = findViewById(R.id.right_top);
         labelText = findViewById(R.id.label);
         textlayout = findViewById(R.id.layout_label);
+    }
+
+    public DeckItemType getItemType() {
+        return mItemType;
+    }
+
+    public void setItemType(DeckItemType itemType) {
+        mItemType = itemType;
     }
 
     public long getCardType() {

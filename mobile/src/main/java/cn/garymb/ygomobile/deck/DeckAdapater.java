@@ -22,10 +22,13 @@ import cn.ygo.ocgcore.enums.LimitType;
 
 public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
     final List<DeckItem> mItems = new ArrayList<>();
-    DeckInfo mDeck = new DeckInfo();
+    private DeckInfo mDeck = new DeckInfo();
     private Context context;
     private LayoutInflater mLayoutInflater;
     private ImageTop mImageTop;
+    private int mMainCount;
+    private int mExtraCount;
+    private int mSideCount;
     private int mFullWidth;
     private int mWidth;
     private int mHeight;
@@ -49,6 +52,69 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
         return width * Constants.CORE_SKIN_CARD_COVER_SIZE[1] / Constants.CORE_SKIN_CARD_COVER_SIZE[0];
     }
 
+    public List<CardInfo> getMainCards() {
+        return mDeck != null ? mDeck.getMainCards() : null;
+    }
+
+    public List<CardInfo> getExtraCards() {
+        return mDeck != null ? mDeck.getExtraCards() : null;
+    }
+
+    public List<CardInfo> getSideCards() {
+        return mDeck != null ? mDeck.getSideCards() : null;
+    }
+
+    public CardInfo removeMain(int pos) {
+        List<CardInfo> list = getMainCards();
+        if (list != null && pos >= 0 && pos <= list.size()) {
+            mMainCount--;
+            return list.remove(pos);
+        }
+        return null;
+    }
+
+    public CardInfo removeSide(int pos) {
+        List<CardInfo> list = getSideCards();
+        if (list != null && pos >= 0 && pos <= list.size()) {
+            mSideCount--;
+            return list.remove(pos);
+        }
+        return null;
+    }
+
+    public CardInfo removeExtra(int pos) {
+        List<CardInfo> list = getExtraCards();
+        if (list != null && pos >= 0 && pos <= list.size()) {
+            mExtraCount--;
+            return list.remove(pos);
+        }
+        return null;
+    }
+
+    public void addMain(int pos, CardInfo cardInfo) {
+        List<CardInfo> list = getMainCards();
+        if (list != null && mMainCount < Constants.DECK_MAIN_MAX) {
+            list.add(pos, cardInfo);
+            mMainCount++;
+        }
+    }
+
+    public void addExtra(int pos, CardInfo cardInfo) {
+        List<CardInfo> list = getExtraCards();
+        if (list != null && mExtraCount < Constants.DECK_EXTRA_MAX) {
+            list.add(pos, cardInfo);
+            mExtraCount++;
+        }
+    }
+
+    public void addSide(int pos, CardInfo cardInfo) {
+        List<CardInfo> list = getSideCards();
+        if (list != null && mSideCount < Constants.DECK_SIDE_MAX) {
+            list.add(pos, cardInfo);
+            mSideCount++;
+        }
+    }
+
     @Override
     public long getItemId(int position) {
         return position;
@@ -59,24 +125,15 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
     }
 
     public int getMainCount() {
-        if (mDeck == null || mDeck.getMainCards() == null) {
-            return 0;
-        }
-        return mDeck.getMainCards().size();
+        return mMainCount;
     }
 
     public int getExtraCount() {
-        if (mDeck == null || mDeck.getExtraCards() == null) {
-            return 0;
-        }
-        return mDeck.getExtraCards().size();
+        return mExtraCount;
     }
 
     public int getSideCount() {
-        if (mDeck == null || mDeck.getSideCards() == null) {
-            return 0;
-        }
-        return mDeck.getSideCards().size();
+        return mSideCount;
     }
 
     public void setDeck(DeckInfo deck) {
@@ -84,7 +141,18 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
         loadData();
     }
 
+    public DeckInfo getDeck(){
+        return mDeck;
+    }
+
+    private <T> int length(List<T> list) {
+        return list == null ? 0 : list.size();
+    }
+
     private void loadData() {
+        mMainCount = length(mDeck.getMainCards());
+        mExtraCount = length(mDeck.getExtraCards());
+        mSideCount = length(mDeck.getSideCards());
         mItems.clear();
         mItems.addAll(DeckItemUtils.makeItems(context, mDeck));
     }
@@ -98,6 +166,7 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
     @Override
     public void onBindViewHolder(DeckViewHolder holder, int position) {
         DeckItem item = mItems.get(position);
+        holder.setItemType(item.getType());
         if (item.getType() == DeckItemType.Label) {
             holder.cardImage.setVisibility(View.GONE);
             holder.rightImage.setVisibility(View.GONE);
@@ -126,6 +195,7 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
                 holder.cardImage.setVisibility(View.VISIBLE);
             }
             if (item.getType() == DeckItemType.Space) {
+                holder.setCardType(0);
                 holder.setSize(mHeight);
                 holder.cardImage.setImageDrawable(null);
 //                holder.useDefault();
@@ -149,6 +219,7 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
                     }
                     ImageLoader.get().bindImage(context, holder.cardImage, cardInfo.Code);
                 } else {
+                    holder.setCardType(0);
                     holder.rightImage.setVisibility(View.GONE);
                     holder.useDefault();
                 }

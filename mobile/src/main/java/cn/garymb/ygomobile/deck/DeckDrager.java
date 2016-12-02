@@ -2,6 +2,7 @@ package cn.garymb.ygomobile.deck;
 
 import java.util.Collections;
 
+import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.bean.CardInfo;
 
 class DeckDrager {
@@ -12,9 +13,6 @@ class DeckDrager {
     }
 
     public void moveMain(int src, int to) {
-        if (deckAdapater.mDeck == null || deckAdapater.mDeck.getMainCards() == null) {
-            return;
-        }
         int left = src - DeckItem.MainStart;
         int right = to - DeckItem.MainStart;
         int count = deckAdapater.getMainCount();
@@ -27,7 +25,7 @@ class DeckDrager {
         if (right >= count) {
             right = count - 1;
         }
-        Collections.swap(deckAdapater.mDeck.getMainCards(), left, right);
+        Collections.swap(deckAdapater.getMainCards(), left, right);
         Collections.swap(deckAdapater.mItems, DeckItem.MainStart + left, DeckItem.MainStart + right);
         deckAdapater.notifyItemMoved(DeckItem.MainStart + left, DeckItem.MainStart + right);
 //        loadData();
@@ -35,9 +33,6 @@ class DeckDrager {
     }
 
     public void moveSide(int src, int to) {
-        if (deckAdapater.mDeck == null || deckAdapater.mDeck.getSideCards() == null) {
-            return;
-        }
         int left = src - DeckItem.SideStart;
         int right = to - DeckItem.SideStart;
         int count = deckAdapater.getSideCount();
@@ -50,15 +45,12 @@ class DeckDrager {
         if (right >= count) {
             right = count - 1;
         }
-        Collections.swap(deckAdapater.mDeck.getSideCards(), left, right);
+        Collections.swap(deckAdapater.getSideCards(), left, right);
         Collections.swap(deckAdapater.mItems, DeckItem.SideStart + left, DeckItem.SideStart + right);
         deckAdapater.notifyItemMoved(DeckItem.SideStart + left, DeckItem.SideStart + right);
     }
 
     public void moveExtra(int src, int to) {
-        if (deckAdapater.mDeck == null || deckAdapater.mDeck.getExtraCards() == null) {
-            return;
-        }
         int left = src - DeckItem.ExtraStart;
         int right = to - DeckItem.ExtraStart;
         int count = deckAdapater.getExtraCount();
@@ -72,7 +64,7 @@ class DeckDrager {
         if (right >= count) {
             right = count - 1;
         }
-        Collections.swap(deckAdapater.mDeck.getExtraCards(), left, right);
+        Collections.swap(deckAdapater.getExtraCards(), left, right);
         Collections.swap(deckAdapater.mItems, DeckItem.ExtraStart + left, DeckItem.ExtraStart + right);
         deckAdapater.notifyItemMoved(DeckItem.ExtraStart + left, DeckItem.ExtraStart + right);
     }
@@ -84,14 +76,14 @@ class DeckDrager {
         if (right >= maincount) {
             right = maincount;
         }
-        CardInfo cardInfo = deckAdapater.mDeck.getSideCards().remove(left);
-        deckAdapater.mDeck.getExtraCards().add(right, cardInfo);
+        CardInfo cardInfo = deckAdapater.removeSide(left);
+        deckAdapater.addExtra(right, cardInfo);
 //        Collections.swap(mDeck.getExtraCards(), left, right);
         Collections.swap(deckAdapater.mItems, DeckItem.SideStart + left, DeckItem.ExtraStart + right);
         //多出一个空白
         deckAdapater.notifyItemMoved(DeckItem.SideStart + left, DeckItem.ExtraStart + right);
         DeckItem deckItem = deckAdapater.mItems.remove(DeckItem.ExtraEnd);
-        deckAdapater.mItems.add(DeckItem.SideEnd, deckItem);
+        deckAdapater.mItems.add(DeckItem.SideEnd, new DeckItem());
         deckAdapater.notifyItemRemoved(DeckItem.ExtraEnd);
         deckAdapater.notifyItemInserted(DeckItem.SideEnd);
     }
@@ -101,16 +93,16 @@ class DeckDrager {
         int right = to - DeckItem.SideStart;
         int maincount = deckAdapater.getSideCount();
         if (right >= maincount) {
-            right = maincount - 1;
+            right = maincount;
         }
         //
-        CardInfo cardInfo = deckAdapater.mDeck.getExtraCards().remove(left);
-        deckAdapater.mDeck.getSideCards().add(right, cardInfo);
+        CardInfo cardInfo = deckAdapater.removeExtra(left);
+        deckAdapater.addSide(right, cardInfo);
         Collections.swap(deckAdapater.mItems, DeckItem.ExtraStart + left, DeckItem.SideStart + right);
         deckAdapater.notifyItemMoved(DeckItem.ExtraStart + left, DeckItem.SideStart + right);
         //多出一个空白
         DeckItem deckItem = deckAdapater.mItems.remove(DeckItem.SideEnd);
-        deckAdapater.mItems.add(DeckItem.ExtraEnd, deckItem);
+        deckAdapater.mItems.add(DeckItem.ExtraEnd, new DeckItem());
         deckAdapater.notifyItemRemoved(DeckItem.SideEnd);
         deckAdapater.notifyItemInserted(DeckItem.ExtraEnd);
     }
@@ -122,15 +114,33 @@ class DeckDrager {
         if (right >= maincount) {
             right = maincount;
         }
-        CardInfo cardInfo = deckAdapater.mDeck.getSideCards().remove(left);
-        deckAdapater.mDeck.getMainCards().add(right, cardInfo);
 //        Collections.swap(mDeck.getExtraCards(), left, right);
         Collections.swap(deckAdapater.mItems, DeckItem.SideStart + left, DeckItem.MainStart + right);
         //多出一个空白
         deckAdapater.notifyItemMoved(DeckItem.SideStart + left, DeckItem.MainStart + right);
-        DeckItem deckItem = deckAdapater.mItems.remove(DeckItem.MainEnd);
-        deckAdapater.mItems.add(DeckItem.SideEnd, deckItem);
-        deckAdapater.notifyItemRemoved(DeckItem.MainEnd);
+        CardInfo cardInfo = deckAdapater.removeSide(left);
+        if (cardInfo != null) {
+            deckAdapater.addMain(right, cardInfo);
+        }
+        int end = (deckAdapater.getMainCount() < Constants.DECK_MAIN_MAX) ? DeckItem.MainEnd : DeckItem.MainEnd + 1;
+        DeckItem deckItem = deckAdapater.mItems.remove(end);
+        deckAdapater.mItems.add(DeckItem.SideEnd, new DeckItem());
+        deckAdapater.notifyItemRemoved(end);
+        deckAdapater.notifyItemInserted(DeckItem.SideEnd);
+    }
+
+    public void removeMainEnd(){
+        int end = (deckAdapater.getMainCount() < Constants.DECK_MAIN_MAX) ? DeckItem.MainEnd : DeckItem.MainEnd + 1;
+        DeckItem deckItem = deckAdapater.mItems.remove(end);
+        deckAdapater.mItems.add(DeckItem.SideEnd, new DeckItem());
+        deckAdapater.notifyItemRemoved(end);
+        deckAdapater.notifyItemInserted(DeckItem.SideEnd);
+    }
+
+    public void removeExtraEnd(){
+        DeckItem deckItem = deckAdapater.mItems.remove(DeckItem.ExtraEnd);
+        deckAdapater.mItems.add(DeckItem.SideEnd, new DeckItem());
+        deckAdapater.notifyItemRemoved(DeckItem.ExtraEnd);
         deckAdapater.notifyItemInserted(DeckItem.SideEnd);
     }
 
@@ -141,14 +151,16 @@ class DeckDrager {
         if (right >= maincount) {
             right = maincount - 1;
         }
-        //
-        CardInfo cardInfo = deckAdapater.mDeck.getMainCards().remove(left);
-        deckAdapater.mDeck.getSideCards().add(right, cardInfo);
         Collections.swap(deckAdapater.mItems, DeckItem.MainStart + left, DeckItem.SideStart + right);
         deckAdapater.notifyItemMoved(DeckItem.MainStart + left, DeckItem.SideStart + right);
         //多出一个空白
+        //
+        CardInfo cardInfo = deckAdapater.removeMain(left);
+        if (cardInfo != null) {
+            deckAdapater.addSide(right, cardInfo);
+        }
         DeckItem deckItem = deckAdapater.mItems.remove(DeckItem.SideEnd);
-        deckAdapater.mItems.add(DeckItem.MainEnd, deckItem);
+        deckAdapater.mItems.add(DeckItem.MainEnd, new DeckItem());
         deckAdapater.notifyItemRemoved(DeckItem.SideEnd);
         deckAdapater.notifyItemInserted(DeckItem.MainEnd);
     }

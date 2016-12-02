@@ -187,6 +187,22 @@ public class DeckItemUtils {
                     mItems.add(new DeckItem());
                 }
             }
+            if(DeckItem.SeacondIsSide){
+                List<CardInfo> side = mDeck.getSideCards();
+                mItems.add(new DeckItem(context.getResources().getString(R.string.deck_side), 0));
+                if (side == null) {
+                    for (int i = 0; i < Constants.DECK_SIDE_COUNT; i++) {
+                        mItems.add(new DeckItem());
+                    }
+                } else {
+                    for (CardInfo card : side) {
+                        mItems.add(new DeckItem(card, DeckItemType.SideCard));
+                    }
+                    for (int i = side.size(); i < Constants.DECK_SIDE_COUNT; i++) {
+                        mItems.add(new DeckItem());
+                    }
+                }
+            }
             List<CardInfo> extra = mDeck.getExtraCards();
             mItems.add(new DeckItem(context.getResources().getString(R.string.deck_extra), 0));
             if (extra == null) {
@@ -201,18 +217,20 @@ public class DeckItemUtils {
                     mItems.add(new DeckItem());
                 }
             }
-            List<CardInfo> side = mDeck.getSideCards();
-            mItems.add(new DeckItem(context.getResources().getString(R.string.deck_side), 0));
-            if (side == null) {
-                for (int i = 0; i < Constants.DECK_SIDE_COUNT; i++) {
-                    mItems.add(new DeckItem());
-                }
-            } else {
-                for (CardInfo card : side) {
-                    mItems.add(new DeckItem(card, DeckItemType.SideCard));
-                }
-                for (int i = side.size(); i < Constants.DECK_SIDE_COUNT; i++) {
-                    mItems.add(new DeckItem());
+            if(!DeckItem.SeacondIsSide){
+                List<CardInfo> side = mDeck.getSideCards();
+                mItems.add(new DeckItem(context.getResources().getString(R.string.deck_side), 0));
+                if (side == null) {
+                    for (int i = 0; i < Constants.DECK_SIDE_COUNT; i++) {
+                        mItems.add(new DeckItem());
+                    }
+                } else {
+                    for (CardInfo card : side) {
+                        mItems.add(new DeckItem(card, DeckItemType.SideCard));
+                    }
+                    for (int i = side.size(); i < Constants.DECK_SIDE_COUNT; i++) {
+                        mItems.add(new DeckItem());
+                    }
                 }
             }
         }
