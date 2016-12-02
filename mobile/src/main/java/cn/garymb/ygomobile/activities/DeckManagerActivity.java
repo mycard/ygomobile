@@ -83,7 +83,7 @@ public class DeckManagerActivity extends BaseActivity implements ILoadCallBack, 
                 mLimitManager.load();
             }
             if (openDb()) {
-                File file = new File(mSettings.getResourcePath(), Constants.CORE_DECK_PATH + "/2016-10-1forbidden list.ydk");
+                File file = new File(mSettings.getResourcePath(), Constants.CORE_DECK_PATH + "/911+YA02.ydk");
                 LimitList limitList = mLimitManager.getCount() > 0 ? mLimitManager.getLimit(0) : null;
                 return DeckItemUtils.readDeck(mCDB, file, limitList);
             } else {

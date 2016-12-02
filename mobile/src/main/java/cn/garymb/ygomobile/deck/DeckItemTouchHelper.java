@@ -87,34 +87,56 @@ public class DeckItemTouchHelper extends ItemTouchHelper.Callback {
     public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
         int left = viewHolder.getAdapterPosition();
         int right = target.getAdapterPosition();
-        if (DeckItemUtils.isLabel(left) || DeckItemUtils.isLabel(right)) {
-            return false;
-        }
-        if (DeckItemUtils.isExtra(left) && DeckItemUtils.isExtra(right)) {
-            deckAdapater.moveExtra(left, right);
-            return true;
-        }
-        if (DeckItemUtils.isSide(left) && DeckItemUtils.isSide(right)) {
-            deckAdapater.moveSide(left, right);
-            return true;
-        }
-        if (DeckItemUtils.isMain(left) && DeckItemUtils.isMain(right)) {
-            deckAdapater.moveMain(left, right);
-            return true;
-        }
-        if (DeckItemUtils.isMain(left) && DeckItemUtils.isSide(right)) {
-            if (deckAdapater.getSideCount() >= Constants.DECK_SIDE_MAX) {
-                return false;
+        if (DeckItemUtils.isMain(left)) {
+            if (DeckItemUtils.isSide(right)) {
+                if (deckAdapater.getSideCount() >= (Constants.DECK_SIDE_MAX + 1)) {
+                    return false;
+                }
+                deckAdapater.moveMainToSide(left, right);
+                return true;
             }
-            deckAdapater.moveMainToSide(left, right);
-            return true;
-        }
-        if (DeckItemUtils.isSide(left) && DeckItemUtils.isMain(right)) {
-            if (deckAdapater.getMainCount() >= Constants.DECK_MAIN_MAX) {
-                return false;
+            if (DeckItemUtils.isMain(right)) {
+                deckAdapater.moveMain(left, right);
+                return true;
             }
-            deckAdapater.moveSideToMain(left, right);
-            return true;
+        }
+        if (DeckItemUtils.isSide(left)) {
+            if (DeckItemUtils.isMain(right)) {
+                if (deckAdapater.getMainCount() >= Constants.DECK_MAIN_MAX) {
+                    Log.i("kk", "move main max");
+                    return false;
+                }
+                //判断类型
+                deckAdapater.moveSideToMain(left, right);
+                return true;
+            }
+            if (DeckItemUtils.isExtra(right)) {
+                if (deckAdapater.getExtraCount() >= Constants.DECK_EXTRA_MAX) {
+                    Log.i("kk", "move extra max:"+deckAdapater.getExtraCount());
+                    return false;
+                }
+                //判断类型
+                deckAdapater.moveSideToExtra(left, right);
+                return true;
+            }
+            if (DeckItemUtils.isSide(right)) {
+                deckAdapater.moveSide(left, right);
+                return true;
+            }
+            Log.i("kk", "move extra fail " + left + "->" + right);
+        }
+        if (DeckItemUtils.isExtra(left)) {
+            if (DeckItemUtils.isSide(right)) {
+                if (deckAdapater.getSideCount() >= (Constants.DECK_SIDE_MAX + 1)) {
+                    return false;
+                }
+                deckAdapater.moveExtraToSide(left, right);
+                return true;
+            }
+            if (DeckItemUtils.isExtra(right)) {
+                deckAdapater.moveExtra(left, right);
+                return true;
+            }
         }
         // mDeckAdapater.notifyItemChanged(left, right);
         return false;

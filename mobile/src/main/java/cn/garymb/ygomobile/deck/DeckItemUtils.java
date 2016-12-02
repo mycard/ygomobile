@@ -35,21 +35,24 @@ public class DeckItemUtils {
             writer.write("#main\n".toCharArray());
             if (deckInfo.getMainCards() != null) {
                 List<CardInfo> items = deckInfo.getMainCards();
-                for (CardInfo cardInfo : items) {
+                for (int i = 0; i < Constants.DECK_MAIN_MAX && i < items.size(); i++) {
+                    CardInfo cardInfo = items.get(i);
                     writer.write((cardInfo.Code + "\n").toCharArray());
                 }
             }
             writer.write("#extra\n".toCharArray());
             if (deckInfo.getExtraCards() != null) {
                 List<CardInfo> items = deckInfo.getExtraCards();
-                for (CardInfo cardInfo : items) {
+                for (int i = 0; i < Constants.DECK_EXTRA_MAX && i < items.size(); i++) {
+                    CardInfo cardInfo = items.get(i);
                     writer.write((cardInfo.Code + "\n").toCharArray());
                 }
             }
             writer.write("!side\n".toCharArray());
             if (deckInfo.getSideCards() != null) {
                 List<CardInfo> items = deckInfo.getSideCards();
-                for (CardInfo cardInfo : items) {
+                for (int i = 0; i < Constants.DECK_SIDE_MAX && i < items.size(); i++) {
+                    CardInfo cardInfo = items.get(i);
                     writer.write((cardInfo.Code + "\n").toCharArray());
                 }
             }
@@ -215,12 +218,15 @@ public class DeckItemUtils {
         }
         return mItems;
     }
+
     public static boolean isMain(int pos) {
         return pos >= DeckItem.MainStart && pos <= DeckItem.MainEnd;
     }
+
     public static boolean isExtra(int pos) {
         return pos >= DeckItem.ExtraStart && pos <= DeckItem.ExtraEnd;
     }
+
     public static boolean isSide(int pos) {
         return pos >= DeckItem.SideStart && pos <= DeckItem.SideEnd;
     }
