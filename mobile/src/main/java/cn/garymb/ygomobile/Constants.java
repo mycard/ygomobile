@@ -76,8 +76,10 @@ public interface Constants {
     int STRING_CATEGORY_START = 1100;
     int DEFAULT_CARD_COUNT = 500;
     int DECK_WIDTH_COUNT = 10;
-    int DECK_SIZE_MAX = 60;
-    int DECK_EXTRA_COUNT = (15 / DECK_WIDTH_COUNT * DECK_WIDTH_COUNT < 15) ? DECK_WIDTH_COUNT * 2 : DECK_WIDTH_COUNT;
+    int DECK_MAIN_MAX = 60;
+    int DECK_EXTRA_MAX = 15;
+    int DECK_SIDE_MAX = 15;
+    int DECK_EXTRA_COUNT = (DECK_SIDE_MAX / DECK_WIDTH_COUNT * DECK_WIDTH_COUNT < DECK_SIDE_MAX) ? DECK_WIDTH_COUNT * 2 : DECK_WIDTH_COUNT;
     int DECK_SIDE_COUNT = DECK_EXTRA_COUNT;
     String URL_HELP = "http://www.jianshu.com/p/a43f5d951a25";
     String WIKI_SEARCH_URL = "http://www.ourocg.cn/S.aspx?key=";

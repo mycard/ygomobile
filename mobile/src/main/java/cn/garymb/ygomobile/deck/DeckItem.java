@@ -6,7 +6,7 @@ import cn.garymb.ygomobile.bean.CardInfo;
 public class DeckItem {
     public final static int MainLabel = 0;
     public final static int MainStart = MainLabel + 1;
-    public final static int MainEnd = MainStart + Constants.DECK_SIZE_MAX - 1;
+    public final static int MainEnd = MainStart + Constants.DECK_MAIN_MAX - 1;
     public final static int ExtraLabel = MainEnd + 1;
     public final static int ExtraStart = ExtraLabel + 1;
     public final static int ExtraEnd = ExtraStart + Constants.DECK_EXTRA_COUNT - 1;

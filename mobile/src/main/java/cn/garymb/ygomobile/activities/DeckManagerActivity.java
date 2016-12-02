@@ -25,6 +25,7 @@ import cn.garymb.ygomobile.core.CardSearcher;
 import cn.garymb.ygomobile.core.loader.ILoadCallBack;
 import cn.garymb.ygomobile.deck.DeckAdapater;
 import cn.garymb.ygomobile.deck.DeckInfo;
+import cn.garymb.ygomobile.deck.DeckItemTouchHelper;
 import cn.garymb.ygomobile.deck.DeckItemUtils;
 import cn.garymb.ygomobile.deck.DeckLayoutManager;
 import cn.garymb.ygomobile.lite.R;
@@ -60,7 +61,7 @@ public class DeckManagerActivity extends BaseActivity implements ILoadCallBack, 
         mRecyclerView = bind(R.id.grid_deck);
         mRecyclerView.setAdapter((mDeckAdapater = new DeckAdapater(this, mRecyclerView)));
         mRecyclerView.setLayoutManager(new DeckLayoutManager(this, Constants.DECK_WIDTH_COUNT));
-        ItemTouchHelper touchHelper = new ItemTouchHelper(mCallback);
+        ItemTouchHelper touchHelper = new ItemTouchHelper(new DeckItemTouchHelper(this, mDeckAdapater));
         touchHelper.attachToRecyclerView(mRecyclerView);
 //        View head = mNavigationView.getHeaderView(0);
         mListView = (ListView) findViewById(R.id.list_cards);
@@ -98,63 +99,6 @@ public class DeckManagerActivity extends BaseActivity implements ILoadCallBack, 
         mDrawerlayout.addDrawerListener(toggle);
         toggle.syncState();
     }
-
-    private int color(int id) {
-        return getResources().getColor(id);
-    }
-
-    private ItemTouchHelper.Callback mCallback = new ItemTouchHelper.Callback() {
-        Drawable bg = null;
-
-        @Override
-        public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-            super.clearView(recyclerView, viewHolder);
-            viewHolder.itemView.setBackgroundDrawable(bg);
-        }
-
-        @Override
-        public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
-            super.onSelectedChanged(viewHolder, actionState);
-            if (actionState != ItemTouchHelper.ACTION_STATE_IDLE) {
-                bg = viewHolder.itemView.getBackground();
-                viewHolder.itemView.setBackgroundColor(color(R.color.bg));
-            }
-        }
-
-        @Override
-        public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-            int dragFlags;
-            if (recyclerView.getLayoutManager() instanceof GridLayoutManager) {
-                dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.RIGHT | ItemTouchHelper.LEFT;
-            } else {
-                dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
-            }
-            int swipeFlags = ItemTouchHelper.START | ItemTouchHelper.END;
-            return makeMovementFlags(dragFlags, swipeFlags);
-        }
-
-        @Override
-        public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
-            int left = viewHolder.getAdapterPosition();
-            int right = target.getAdapterPosition();
-            if (DeckItemUtils.isLabel(left) || DeckItemUtils.isLabel(right)) {
-                return false;
-            }
-            if(DeckItemUtils.isExtra(left) && !DeckItemUtils.isExtra(right)){
-                return false;
-            }
-            if(DeckItemUtils.isExtra(right)){
-                return false;
-            }
-            // mDeckAdapater.notifyItemChanged(left, right);
-            return false;
-        }
-
-        @Override
-        public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-
-        }
-    };
 
     private void showSearch(boolean autoclose) {
         if (mDrawerlayout.isDrawerOpen(Gravity.LEFT)) {

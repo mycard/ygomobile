@@ -3,12 +3,14 @@ package cn.garymb.ygomobile.deck;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import cn.garymb.ygomobile.Constants;
@@ -44,20 +46,124 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
     }
 
     @Override
-    public void notifyItemChanged(int src, int target) {
-    super.notifyItemChanged();
+    public long getItemId(int position) {
+        return position;
+    }
+
+    public DeckItem getItem(int position) {
+        return mItems.get(position);
+    }
+
+    public int getMainCount() {
+        if (mDeck == null || mDeck.getMainCards() == null) {
+            return 0;
+        }
+        return mDeck.getMainCards().size();
+    }
+
+    public int getExtraCount() {
+        if (mDeck == null || mDeck.getExtraCards() == null) {
+            return 0;
+        }
+        return mDeck.getExtraCards().size();
+    }
+
+    public int getSideCount() {
+        if (mDeck == null || mDeck.getSideCards() == null) {
+            return 0;
+        }
+        return mDeck.getSideCards().size();
     }
 
     public void setDeck(DeckInfo deck) {
         this.mDeck = deck;
+        loadData();
+    }
+
+    private void loadData() {
         mItems.clear();
-        mItems.addAll(DeckItemUtils.makeItems(context, deck));
+        mItems.addAll(DeckItemUtils.makeItems(context, mDeck));
     }
 
     @Override
     public DeckViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = mLayoutInflater.inflate(R.layout.card_image, parent, false);
         return new DeckViewHolder(view);
+    }
+
+    public void moveMain(int src, int to) {
+        if (mDeck == null || mDeck.getMainCards() == null) {
+            return;
+        }
+        int left = src - DeckItem.MainStart;
+        int right = to - DeckItem.MainStart;
+        Log.i("kk", "move main " + left + "->" + right);
+        int count = getMainCount();
+        if (left >= count && right >= count) {
+            return;
+        }
+        if (left >= count) {
+            left = count - 1;
+        }
+        if (right >= count) {
+            right = count - 1;
+        }
+        Collections.swap(mDeck.getMainCards(), left, right);
+        Collections.swap(mItems, DeckItem.MainStart+left, DeckItem.MainStart+right);
+        notifyItemMoved(DeckItem.MainStart+left, DeckItem.MainStart+right);
+//        loadData();
+//        notifyDataSetChanged();
+    }
+    public void moveSide(int src, int to) {
+        if (mDeck == null || mDeck.getSideCards() == null) {
+            return;
+        }
+        int left = src - DeckItem.SideStart;
+        int right = to - DeckItem.SideStart;
+        Log.i("kk", "move side " + left + "->" + right);
+        int count = getSideCount();
+        if (left >= count && right >= count) {
+            return;
+        }
+        if (left >= count) {
+            left = count - 1;
+        }
+        if (right >= count) {
+            right = count - 1;
+        }
+        Collections.swap(mDeck.getSideCards(), left, right);
+        Collections.swap(mItems, DeckItem.SideStart+left, DeckItem.SideStart+right);
+        notifyItemMoved(DeckItem.SideStart+left, DeckItem.SideStart+right);
+    }
+
+    public void moveExtra(int src, int to) {
+        if (mDeck == null || mDeck.getExtraCards() == null) {
+            return;
+        }
+        int left = src - DeckItem.ExtraStart;
+        int right = to - DeckItem.ExtraStart;
+        Log.i("kk", "move extra " + left + "->" + right);
+        int count = getExtraCount();
+        if (left >= count && right >= count) {
+            return;
+        }
+        if (left >= count) {
+            left = count - 1;
+        }
+        if (right >= count) {
+            right = count - 1;
+        }
+        Collections.swap(mDeck.getExtraCards(), left, right);
+        Collections.swap(mItems, DeckItem.ExtraStart+left, DeckItem.ExtraStart+right);
+        notifyItemMoved(DeckItem.ExtraStart+left, DeckItem.ExtraStart+right);
+    }
+
+    public void moveSideToMain(int src, int to) {
+        notifyItemChanged(src, to);
+    }
+
+    public void moveMainToSide(int src, int to) {
+        notifyItemChanged(src, to);
     }
 
     @Override

@@ -3,7 +3,6 @@ package cn.garymb.ygomobile.deck;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -146,7 +145,7 @@ public class DeckItemUtils {
         List<CardInfo> tmp = new ArrayList<CardInfo>();
         if (reader != null) {
             if (reader.moveToFirst()) {
-                Log.d("kk", "find card count=" + reader.getCount());
+//                Log.d("kk", "find card count=" + reader.getCount());
                 do {
                     CardInfo cardInfo = new CardInfo(reader);
                     if (limitList != null) {
@@ -174,14 +173,14 @@ public class DeckItemUtils {
             mItems.add(new DeckItem(context.getResources().getString(R.string.deck_main), 0));
             List<CardInfo> main = mDeck.getMainCards();
             if (main == null) {
-                for (int i = 0; i < Constants.DECK_SIZE_MAX; i++) {
+                for (int i = 0; i < Constants.DECK_MAIN_MAX; i++) {
                     mItems.add(new DeckItem());
                 }
             } else {
                 for (CardInfo card : main) {
                     mItems.add(new DeckItem(card, DeckItemType.MainCard));
                 }
-                for (int i = main.size(); i < Constants.DECK_SIZE_MAX; i++) {
+                for (int i = main.size(); i < Constants.DECK_MAIN_MAX; i++) {
                     mItems.add(new DeckItem());
                 }
             }
