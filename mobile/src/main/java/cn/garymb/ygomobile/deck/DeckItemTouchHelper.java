@@ -14,6 +14,7 @@ import cn.garymb.ygomobile.lite.R;
 import cn.ygo.ocgcore.Card;
 
 import static android.support.v7.widget.helper.ItemTouchHelper.ACTION_STATE_DRAG;
+import static android.support.v7.widget.helper.ItemTouchHelper.ACTION_STATE_IDLE;
 
 public class DeckItemTouchHelper extends ItemTouchHelper.Callback {
     private Drawable bg = null;
@@ -69,7 +70,10 @@ public class DeckItemTouchHelper extends ItemTouchHelper.Callback {
         int id = viewHolder.getAdapterPosition();
         if (viewHolder instanceof DeckViewHolder) {
             DeckViewHolder deckholder = (DeckViewHolder) viewHolder;
-            if (deckholder.getItemType() == DeckItemType.Space || deckholder.getItemType() == DeckItemType.Label) {
+            if (deckholder.getItemType() == DeckItemType.Space
+                    || deckholder.getItemType() == DeckItemType.MainLabel
+                    || deckholder.getItemType() == DeckItemType.SideLabel
+                    || deckholder.getItemType() == DeckItemType.ExtraLabel) {
                 Log.d("kk", "move is label or space " + id);
                 return makeMovementFlags(0, 0);
             }
@@ -100,6 +104,8 @@ public class DeckItemTouchHelper extends ItemTouchHelper.Callback {
             mSelectId = viewHolder.getAdapterPosition();
             DeckViewHolder deckViewHolder = (DeckViewHolder) viewHolder;
             isExtra = Card.isExtraCard(deckViewHolder.getCardType());
+        } else if (actionState == ACTION_STATE_IDLE) {
+//            deckAdapater.notifyDataSetChanged();
         }
     }
 

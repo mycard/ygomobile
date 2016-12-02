@@ -86,6 +86,9 @@ class DeckDrager {
         deckAdapater.mItems.add(DeckItem.SideEnd, new DeckItem());
         deckAdapater.notifyItemRemoved(DeckItem.ExtraEnd);
         deckAdapater.notifyItemInserted(DeckItem.SideEnd);
+
+//        deckAdapater.notifyItemChanged(DeckItem.ExtraLabel);
+//        deckAdapater.notifyItemChanged(DeckItem.SideLabel);
     }
 
     public void moveExtraToSide(int src, int to) {
@@ -105,6 +108,9 @@ class DeckDrager {
         deckAdapater.mItems.add(DeckItem.ExtraEnd, new DeckItem());
         deckAdapater.notifyItemRemoved(DeckItem.SideEnd);
         deckAdapater.notifyItemInserted(DeckItem.ExtraEnd);
+
+//        deckAdapater.notifyItemChanged(DeckItem.ExtraLabel);
+//        deckAdapater.notifyItemChanged(DeckItem.SideLabel);
     }
 
     public void moveSideToMain(int src, int to) {
@@ -127,22 +133,25 @@ class DeckDrager {
         deckAdapater.mItems.add(DeckItem.SideEnd, new DeckItem());
         deckAdapater.notifyItemRemoved(end);
         deckAdapater.notifyItemInserted(DeckItem.SideEnd);
+
+//        deckAdapater.notifyItemChanged(DeckItem.SideLabel);
+        deckAdapater.notifyItemChanged(DeckItem.MainLabel);
     }
 
-    public void removeMainEnd(){
-        int end = (deckAdapater.getMainCount() < Constants.DECK_MAIN_MAX) ? DeckItem.MainEnd : DeckItem.MainEnd + 1;
-        DeckItem deckItem = deckAdapater.mItems.remove(end);
-        deckAdapater.mItems.add(DeckItem.SideEnd, new DeckItem());
-        deckAdapater.notifyItemRemoved(end);
-        deckAdapater.notifyItemInserted(DeckItem.SideEnd);
-    }
-
-    public void removeExtraEnd(){
-        DeckItem deckItem = deckAdapater.mItems.remove(DeckItem.ExtraEnd);
-        deckAdapater.mItems.add(DeckItem.SideEnd, new DeckItem());
-        deckAdapater.notifyItemRemoved(DeckItem.ExtraEnd);
-        deckAdapater.notifyItemInserted(DeckItem.SideEnd);
-    }
+//    public void removeMainEnd(){
+//        int end = (deckAdapater.getMainCount() < Constants.DECK_MAIN_MAX) ? DeckItem.MainEnd : DeckItem.MainEnd + 1;
+//        DeckItem deckItem = deckAdapater.mItems.remove(end);
+//        deckAdapater.mItems.add(DeckItem.SideEnd, new DeckItem());
+//        deckAdapater.notifyItemRemoved(end);
+//        deckAdapater.notifyItemInserted(DeckItem.SideEnd);
+//    }
+//
+//    public void removeExtraEnd(){
+//        DeckItem deckItem = deckAdapater.mItems.remove(DeckItem.ExtraEnd);
+//        deckAdapater.mItems.add(DeckItem.SideEnd, new DeckItem());
+//        deckAdapater.notifyItemRemoved(DeckItem.ExtraEnd);
+//        deckAdapater.notifyItemInserted(DeckItem.SideEnd);
+//    }
 
     public void moveMainToSide(int src, int to) {
         int left = src - DeckItem.MainStart;
@@ -160,8 +169,12 @@ class DeckDrager {
             deckAdapater.addSide(right, cardInfo);
         }
         DeckItem deckItem = deckAdapater.mItems.remove(DeckItem.SideEnd);
+
         deckAdapater.mItems.add(DeckItem.MainEnd, new DeckItem());
         deckAdapater.notifyItemRemoved(DeckItem.SideEnd);
         deckAdapater.notifyItemInserted(DeckItem.MainEnd);
+
+// deckAdapater.notifyItemChanged(DeckItem.SideLabel);
+        deckAdapater.notifyItemChanged(DeckItem.MainLabel);
     }
 }

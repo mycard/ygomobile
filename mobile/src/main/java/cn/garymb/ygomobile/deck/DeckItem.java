@@ -44,8 +44,6 @@ public class DeckItem {
 
     private DeckItemType mType;
     private CardInfo mCardInfo;
-    private String mText;
-    private int mColor;
 
     public DeckItem() {
         mType = DeckItemType.Space;
@@ -56,18 +54,8 @@ public class DeckItem {
         mCardInfo = cardInfo;
     }
 
-    public DeckItem(String name, int color) {
-        mType = DeckItemType.Label;
-        mText = name;
-        mColor = color;
-    }
-
-    public String getText() {
-        return mText;
-    }
-
-    public int getColor() {
-        return mColor;
+    public DeckItem(DeckItemType type) {
+        this.mType = type;
     }
 
     public CardInfo getCardInfo() {

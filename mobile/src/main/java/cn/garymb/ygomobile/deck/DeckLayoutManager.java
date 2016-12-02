@@ -3,8 +3,6 @@ package cn.garymb.ygomobile.deck;
 import android.content.Context;
 import android.support.v7.widget.GridLayoutManager;
 
-import cn.garymb.ygomobile.Constants;
-
 public class DeckLayoutManager extends GridLayoutManager {
     private Context context;
 

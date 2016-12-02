@@ -13,6 +13,7 @@ import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.bean.CardInfo;
 import cn.garymb.ygomobile.core.loader.ImageLoader;
 import cn.garymb.ygomobile.lite.R;
+import cn.ygo.ocgcore.enums.CardType;
 import cn.ygo.ocgcore.enums.LimitType;
 
 
@@ -22,9 +23,21 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
     private Context context;
     private LayoutInflater mLayoutInflater;
     private ImageTop mImageTop;
+
     private int mMainCount;
     private int mExtraCount;
     private int mSideCount;
+
+    private int mMainMonsterCount;
+    private int mMainSpellCount;
+    private int mMainTrapCount;
+    private int mExtraFusionCount;
+    private int mExtraXyzCount;
+    private int mExtraSynchroCount;
+    private int mSideMonsterCount;
+    private int mSideSpellCount;
+    private int mSideTrapCount;
+
     private int mFullWidth;
     private int mWidth;
     private int mHeight;
@@ -64,7 +77,15 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
         List<CardInfo> list = getMainCards();
         if (list != null && pos >= 0 && pos <= list.size()) {
             mMainCount--;
-            return list.remove(pos);
+            CardInfo cardInfo = list.remove(pos);
+            if (cardInfo.isType(CardType.Monster)) {
+                mMainMonsterCount--;
+            } else if (cardInfo.isType(CardType.Spell)) {
+                mMainSpellCount--;
+            } else if (cardInfo.isType(CardType.Trap)) {
+                mMainTrapCount--;
+            }
+            return cardInfo;
         }
         return null;
     }
@@ -73,7 +94,15 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
         List<CardInfo> list = getSideCards();
         if (list != null && pos >= 0 && pos <= list.size()) {
             mSideCount--;
-            return list.remove(pos);
+            CardInfo cardInfo = list.remove(pos);
+            if (cardInfo.isType(CardType.Monster)) {
+                mSideMonsterCount--;
+            } else if (cardInfo.isType(CardType.Spell)) {
+                mSideSpellCount--;
+            } else if (cardInfo.isType(CardType.Trap)) {
+                mSideTrapCount--;
+            }
+            return cardInfo;
         }
         return null;
     }
@@ -82,15 +111,57 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
         List<CardInfo> list = getExtraCards();
         if (list != null && pos >= 0 && pos <= list.size()) {
             mExtraCount--;
-            return list.remove(pos);
+            CardInfo cardInfo = list.remove(pos);
+            if (cardInfo.isType(CardType.Fusion)) {
+                mExtraFusionCount--;
+            } else if (cardInfo.isType(CardType.Synchro)) {
+                mExtraSynchroCount--;
+            } else if (cardInfo.isType(CardType.Xyz)) {
+                mExtraFusionCount--;
+            }
+            return cardInfo;
         }
         return null;
+    }
+
+    public void addCount(CardInfo cardInfo, DeckItemType type) {
+        if (cardInfo == null) return;
+        switch (type) {
+            case MainCard:
+                if (cardInfo.isType(CardType.Monster)) {
+                    mMainMonsterCount++;
+                } else if (cardInfo.isType(CardType.Spell)) {
+                    mMainSpellCount++;
+                } else if (cardInfo.isType(CardType.Trap)) {
+                    mMainTrapCount++;
+                }
+                break;
+            case ExtraCard:
+                if (cardInfo.isType(CardType.Fusion)) {
+                    mExtraFusionCount++;
+                } else if (cardInfo.isType(CardType.Synchro)) {
+                    mExtraSynchroCount++;
+                } else if (cardInfo.isType(CardType.Xyz)) {
+                    mExtraFusionCount++;
+                }
+                break;
+            case SideCard:
+                if (cardInfo.isType(CardType.Monster)) {
+                    mSideMonsterCount++;
+                } else if (cardInfo.isType(CardType.Spell)) {
+                    mSideSpellCount++;
+                } else if (cardInfo.isType(CardType.Trap)) {
+                    mSideTrapCount++;
+                }
+                break;
+        }
     }
 
     public void addMain(int pos, CardInfo cardInfo) {
         List<CardInfo> list = getMainCards();
         if (list != null && mMainCount < Constants.DECK_MAIN_MAX) {
             list.add(pos, cardInfo);
+            addCount(cardInfo, DeckItemType.MainCard);
             mMainCount++;
         }
     }
@@ -99,6 +170,7 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
         List<CardInfo> list = getExtraCards();
         if (list != null && mExtraCount < Constants.DECK_EXTRA_MAX) {
             list.add(pos, cardInfo);
+            addCount(cardInfo, DeckItemType.ExtraCard);
             mExtraCount++;
         }
     }
@@ -107,6 +179,7 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
         List<CardInfo> list = getSideCards();
         if (list != null && mSideCount < Constants.DECK_SIDE_MAX) {
             list.add(pos, cardInfo);
+            addCount(cardInfo, DeckItemType.SideCard);
             mSideCount++;
         }
     }
@@ -137,7 +210,7 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
         loadData();
     }
 
-    public DeckInfo getDeck(){
+    public DeckInfo getDeck() {
         return mDeck;
     }
 
@@ -150,7 +223,7 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
         mExtraCount = length(mDeck.getExtraCards());
         mSideCount = length(mDeck.getSideCards());
         mItems.clear();
-        mItems.addAll(DeckItemUtils.makeItems(context, mDeck));
+        mItems.addAll(DeckItemUtils.makeItems(mDeck, this));
     }
 
     @Override
@@ -159,19 +232,41 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
         return new DeckViewHolder(view);
     }
 
+    private String getString(int id, Object... args) {
+        return context.getString(id, args);
+    }
+
+    private String getMainString() {
+        return getString(R.string.deck_main, mMainCount, mMainMonsterCount, mMainSpellCount, mMainTrapCount);
+    }
+
+    private String getExtraString() {
+        return getString(R.string.deck_extra, mExtraCount, mExtraFusionCount, mExtraSynchroCount, mExtraXyzCount);
+    }
+
+    private String getSideString() {
+        return getString(R.string.deck_side, mSideCount, mSideMonsterCount, mSideSpellCount, mSideTrapCount);
+    }
+
+
     @Override
     public void onBindViewHolder(DeckViewHolder holder, int position) {
         DeckItem item = mItems.get(position);
         holder.setItemType(item.getType());
-        if (item.getType() == DeckItemType.Label) {
+        if (item.getType() == DeckItemType.MainLabel || item.getType() == DeckItemType.SideLabel
+                || item.getType() == DeckItemType.ExtraLabel) {
             holder.cardImage.setVisibility(View.GONE);
             holder.rightImage.setVisibility(View.GONE);
-            holder.labelText.setText(item.getText());
-            holder.textlayout.setVisibility(View.VISIBLE);
-            if (item.getColor() != 0) {
-                holder.labelText.setTextColor(item.getColor());
+
+            if (item.getType() == DeckItemType.MainLabel) {
+                holder.labelText.setText(getMainString());
+            } else if (item.getType() == DeckItemType.SideLabel) {
+                holder.labelText.setText(getSideString());
+            } else if (item.getType() == DeckItemType.ExtraLabel) {
+                holder.labelText.setText(getExtraString());
             }
-//            holder.labelText.setLayoutParams(new RelativeLayout.LayoutParams(mFullWidth, mHeight));
+
+            holder.textlayout.setVisibility(View.VISIBLE);
         } else {
             if (holder.cardImage.getMeasuredHeight() > 0) {
                 mHeight = holder.cardImage.getMeasuredHeight();
