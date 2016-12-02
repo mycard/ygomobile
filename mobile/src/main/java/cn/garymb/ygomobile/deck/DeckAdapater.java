@@ -1,16 +1,12 @@
 package cn.garymb.ygomobile.deck;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import cn.garymb.ygomobile.Constants;
@@ -159,7 +155,7 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
 
     @Override
     public DeckViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = mLayoutInflater.inflate(R.layout.card_image, parent, false);
+        View view = mLayoutInflater.inflate(R.layout.item_deck_card, parent, false);
         return new DeckViewHolder(view);
     }
 

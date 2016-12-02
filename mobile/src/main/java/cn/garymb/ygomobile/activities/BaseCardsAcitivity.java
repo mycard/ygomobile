@@ -66,6 +66,9 @@ abstract class BaseCardsAcitivity extends BaseActivity implements CardLoader.Cal
                 mLimitManager.load();//loadFile(stringfile.getAbsolutePath());
             }
             mCardLoader.openDb();
+            if(mLimitManager.getCount()>0){
+                mCardLoader.setLimitList(mLimitManager.getLimitFromIndex(0));
+            }
         }).done((rs) -> {
             onInit();
         });

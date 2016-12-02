@@ -28,6 +28,7 @@ import cn.garymb.ygomobile.bean.CardInfo;
 import cn.garymb.ygomobile.core.loader.ICardLoader;
 import cn.garymb.ygomobile.core.loader.ILoadCallBack;
 import cn.garymb.ygomobile.core.loader.ImageLoader;
+import cn.garymb.ygomobile.deck.ImageTop;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.plus.BaseAdapterPlus;
 import cn.garymb.ygomobile.plus.VUiKit;
@@ -41,6 +42,7 @@ import cn.ygo.ocgcore.enums.CardType;
 
 public class CardListAdapater extends BaseAdapterPlus<CardInfo> {
     private StringManager mStringManager;
+    private ImageTop mImageTop;
 
     public CardListAdapater(Context context) {
         super(context);
@@ -49,7 +51,7 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> {
 
     @Override
     protected View createView(int position, ViewGroup parent) {
-        View view = mLayoutInflater.inflate(R.layout.item_card, parent, false);
+        View view = mLayoutInflater.inflate(R.layout.item_list_card, parent, false);
         new ViewHolder(view);
         return view;
     }
@@ -77,6 +79,19 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> {
             holder.cardLevel.setVisibility(View.GONE);
             holder.layout_atkdef.setVisibility(View.GONE);
         }
+        if (mImageTop == null) {
+            mImageTop = new ImageTop(context);
+        }
+        holder.rightImage.setVisibility(View.VISIBLE);
+        if (item.getLimitType() == LimitType.Forbidden) {
+            holder.rightImage.setImageBitmap(mImageTop.forbidden);
+        } else if (item.getLimitType() == LimitType.Limit) {
+            holder.rightImage.setImageBitmap(mImageTop.limit);
+        } else if (item.getLimitType() == LimitType.SemiLimit) {
+            holder.rightImage.setImageBitmap(mImageTop.semiLimit);
+        } else {
+            holder.rightImage.setVisibility(View.GONE);
+        }
         //卡片类型
         holder.cardType.setText(item.getAllTypeString(mStringManager));
     }
@@ -88,6 +103,7 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> {
         TextView cardType;
         TextView cardAtk;
         TextView cardDef;
+        ImageView rightImage;
         View layout_atkdef;
         View view_bar;
 
@@ -102,6 +118,7 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> {
             cardLevel = findViewById(R.id.card_level);
             layout_atkdef = findViewById(R.id.layout_atkdef);
             view_bar = findViewById(R.id.view_bar);
+            rightImage=findViewById(R.id.right_top);
             File outFile = new File(AppsSettings.get().getCoreSkinPath(), Constants.CORE_SKIN_COVER);
             ImageLoader.get().bind(context, outFile, cardImage, outFile.getName().endsWith(Constants.BPG), 0);
         }

@@ -29,6 +29,7 @@ public class CardLoader implements ICardLoader {
     private SQLiteDatabase db;
     private CallBack mCallBack;
     private String defSQL = CardInfo.SQL_BASE + " limit " + Constants.DEFAULT_CARD_COUNT + ";";
+    private LimitList mLimitList;
 
     public interface CallBack {
         void onSearchStart();
@@ -40,6 +41,10 @@ public class CardLoader implements ICardLoader {
 
     public CardLoader(Context context) {
         this.context = context;
+    }
+
+    public void setLimitList(LimitList limitList) {
+        mLimitList = limitList;
     }
 
     public List<CardInfo> readCards(List<Long> ids, LimitList limitList) {
@@ -117,10 +122,10 @@ public class CardLoader implements ICardLoader {
     }
 
     public void loadData() {
-        loadData(defSQL, 0);
+        loadData(defSQL, 0, mLimitList);
     }
 
-    private void loadData(String sql, long setcode) {
+    private void loadData(String sql, long setcode, LimitList limitList) {
         if (!isOpen()) {
             return;
         }
@@ -142,6 +147,15 @@ public class CardLoader implements ICardLoader {
                         if (setcode > 0) {
                             if (!cardInfo.isSetCode(setcode)) {
                                 continue;
+                            }
+                        }
+                        if (limitList != null) {
+                            if (limitList.isForbidden(cardInfo.Code)) {
+                                cardInfo.setLimitType(LimitType.Forbidden);
+                            } else if (limitList.isLimit(cardInfo.Code)) {
+                                cardInfo.setLimitType(LimitType.Limit);
+                            } else if (limitList.isSemiLimit(cardInfo.Code)) {
+                                cardInfo.setLimitType(LimitType.SemiLimit);
                             }
                         }
                         tmp.add(cardInfo);
@@ -244,6 +258,6 @@ public class CardLoader implements ICardLoader {
             }
             stringBuilder.append(")");
         }
-        loadData(stringBuilder.toString(), setcode);
+        loadData(stringBuilder.toString(), setcode, (limitList == null ? mLimitList : limitList));
     }
 }

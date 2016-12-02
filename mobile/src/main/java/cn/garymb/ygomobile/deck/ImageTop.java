@@ -7,16 +7,16 @@ import cn.garymb.ygomobile.utils.BitmapUtil;
 
 import static cn.garymb.ygomobile.Constants.ASSET_LIMIT_PNG;
 
-class ImageTop {
-    final Bitmap forbidden;
-    final Bitmap limit;
-    final Bitmap semiLimit;
+public class ImageTop {
+    public final Bitmap forbidden;
+    public final Bitmap limit;
+    public final Bitmap semiLimit;
 
-    ImageTop(Context context) {
+    public ImageTop(Context context) {
         this(BitmapUtil.getBitmapFormAssets(context, ASSET_LIMIT_PNG, 0, 0));
     }
 
-    ImageTop(Bitmap img) {
+    public ImageTop(Bitmap img) {
         if (img != null) {
             int width = img.getWidth();
             int height = img.getHeight();
@@ -31,7 +31,7 @@ class ImageTop {
         BitmapUtil.destroy(img);
     }
 
-    void clear() {
+    public void clear() {
         BitmapUtil.destroy(forbidden);
         BitmapUtil.destroy(limit);
         BitmapUtil.destroy(semiLimit);

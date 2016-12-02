@@ -125,6 +125,11 @@ public class CardSearcher implements View.OnClickListener {
         });
     }
 
+    public void hideLimit(){
+        limitSpinner.setVisibility(View.GONE);
+        limitListSpinner.setVisibility(View.GONE);
+    }
+
     public void initItems() {
         initOtSpinners(otSpinner);
         initLimitSpinners(limitSpinner);

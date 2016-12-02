@@ -41,7 +41,7 @@ public class CardDetail extends BaseAdapterPlus.BaseViewHolder {
     }
 
     public CardDetail(Context context) {
-        super(LayoutInflater.from(context).inflate(R.layout.dialog_card, null));
+        super(LayoutInflater.from(context).inflate(R.layout.dialog_cardinfo, null));
         cardImage = bind(R.id.card_image);
         name = bind(R.id.text_name);
         desc = bind(R.id.text_desc);
