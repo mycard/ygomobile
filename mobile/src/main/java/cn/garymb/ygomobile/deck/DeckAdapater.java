@@ -1,10 +1,6 @@
 package cn.garymb.ygomobile.deck;
 
 import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,8 +15,6 @@ import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.bean.CardInfo;
 import cn.garymb.ygomobile.core.loader.ImageLoader;
 import cn.garymb.ygomobile.lite.R;
-import cn.ygo.ocgcore.Card;
-import cn.ygo.ocgcore.LimitList;
 import cn.ygo.ocgcore.enums.CardType;
 import cn.ygo.ocgcore.enums.LimitType;
 
@@ -290,6 +284,17 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
         mMainCount = length(mDeck.getMainCards());
         mExtraCount = length(mDeck.getExtraCards());
         mSideCount = length(mDeck.getSideCards());
+        mCount.clear();
+        mMainMonsterCount = 0;
+        mMainSpellCount = 0;
+        mMainTrapCount = 0;
+        mExtraFusionCount = 0;
+        mExtraXyzCount = 0;
+        mExtraSynchroCount = 0;
+        mSideMonsterCount = 0;
+        mSideSpellCount = 0;
+        mSideTrapCount = 0;
+
         mItems.clear();
         mItems.addAll(DeckItemUtils.makeItems(mDeck, this));
     }

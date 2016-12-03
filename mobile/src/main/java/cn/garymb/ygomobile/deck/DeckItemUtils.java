@@ -1,10 +1,5 @@
 package cn.garymb.ygomobile.deck;
 
-import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -20,14 +15,12 @@ import java.util.List;
 import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.bean.CardInfo;
 import cn.garymb.ygomobile.core.CardLoader;
-import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.utils.IOUtils;
 import cn.ygo.ocgcore.LimitList;
-import cn.ygo.ocgcore.enums.LimitType;
 
 public class DeckItemUtils {
 
-    public static void save(DeckInfo deckInfo, String file) throws IOException {
+    public static void save(DeckInfo deckInfo, File file) throws IOException {
         FileOutputStream outputStream = null;
         OutputStreamWriter writer = null;
         try {

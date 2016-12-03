@@ -2,13 +2,10 @@ package cn.garymb.ygomobile.activities;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ListView;
 
 import com.bumptech.glide.Glide;
 
@@ -16,14 +13,12 @@ import java.io.File;
 import java.util.List;
 
 import cn.garymb.ygomobile.Constants;
-import cn.garymb.ygomobile.adapters.CardListAdapater;
 import cn.garymb.ygomobile.bean.CardInfo;
 import cn.garymb.ygomobile.core.CardDetail;
-import cn.garymb.ygomobile.core.CardSearcher;
-import cn.garymb.ygomobile.core.loader.ILoadCallBack;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.plus.VUiKit;
 import cn.garymb.ygomobile.settings.AppsSettings;
+import cn.ygo.ocgcore.LimitList;
 
 public class CardSearchActivity extends BaseCardsAcitivity {
     private CardDetail mCardDetail;
@@ -73,7 +68,7 @@ public class CardSearchActivity extends BaseCardsAcitivity {
     }
 
     @Override
-    public void onSearchStart() {
+    public void onSearchStart(LimitList limitList) {
     }
 
     @Override

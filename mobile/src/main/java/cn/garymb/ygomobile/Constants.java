@@ -53,6 +53,7 @@ public interface Constants {
     String CORE_PICS_ZIP = "pics.zip";
     String CORE_SKIN_COVER = "cover.jpg";
     String CORE_SKIN_BG = "bg.jpg";
+    String YDK_FILE_EX = ".ydk";
     int[] CORE_SKIN_BG_SIZE = new int[]{1024, 640};
     int[] CORE_SKIN_CARD_COVER_SIZE = new int[]{177, 254};
     boolean SUPPORT_BPG = true;

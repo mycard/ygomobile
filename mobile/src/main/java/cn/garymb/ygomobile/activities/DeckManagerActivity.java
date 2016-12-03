@@ -2,28 +2,36 @@ package cn.garymb.ygomobile.activities;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.os.Debug;
-import android.support.annotation.IntegerRes;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
+import android.text.InputType;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.bean.CardInfo;
 import cn.garymb.ygomobile.core.CardDetail;
 import cn.garymb.ygomobile.deck.DeckAdapater;
+import cn.garymb.ygomobile.deck.DeckInfo;
 import cn.garymb.ygomobile.deck.DeckItem;
 import cn.garymb.ygomobile.deck.DeckItemTouchHelper;
 import cn.garymb.ygomobile.deck.DeckItemType;
@@ -32,14 +40,19 @@ import cn.garymb.ygomobile.deck.DeckLayoutManager;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.plus.RecyclerViewItemListener;
 import cn.garymb.ygomobile.plus.VUiKit;
+import cn.garymb.ygomobile.plus.spinner.SimpleSpinnerAdapter;
+import cn.garymb.ygomobile.plus.spinner.SimpleSpinnerItem;
 import cn.garymb.ygomobile.settings.AppsSettings;
 import cn.ygo.ocgcore.LimitList;
+
+import static cn.garymb.ygomobile.Constants.YDK_FILE_EX;
 
 public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerViewItemListener.OnItemListener {
     private RecyclerView mRecyclerView;
     private DeckAdapater mDeckAdapater;
     private AppsSettings mSettings = AppsSettings.get();
     private LimitList mLimitList;
+    private File mYdkFile;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,22 +71,41 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
     @Override
     protected void onInit() {
         super.onInit();
-        mLimitList = mLimitManager.getCount() > 0 ? mLimitManager.getLimit(0) : null;
+        setLimitList(mLimitManager.getCount() > 0 ? mLimitManager.getLimit(0) : null);
         File file = new File(mSettings.getResourcePath(), Constants.CORE_DECK_PATH + "/911+YA02.ydk");
         loadDeck(file);
     }
 
+    private void setLimitList(LimitList limitList) {
+        mLimitList = limitList;
+        mCardLoader.setLimitList(mLimitList);
+    }
+
     private void loadDeck(File file) {
         VUiKit.defer().when(() -> {
+            if (file == null) {
+                return new DeckInfo();
+            }
             if (mCardLoader.isOpen()) {
                 return DeckItemUtils.readDeck(mCardLoader, file, mLimitList);
             } else {
-                return null;
+                return new DeckInfo();
             }
         }).done((rs) -> {
+            mYdkFile = file;
+            if (file != null) {
+                setTitle(mYdkFile.getName());
+            } else {
+                setTitle(R.string.noname);
+            }
             mDeckAdapater.setDeck(rs);
             mDeckAdapater.notifyDataSetChanged();
         });
+    }
+
+    @Override
+    public void onSearchStart(LimitList limitList) {
+
     }
 
     @Override
@@ -92,10 +124,6 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
     @Override
     protected void onCardLongClick(View view, CardInfo cardInfo, int pos) {
 
-    }
-
-    @Override
-    public void onSearchStart() {
     }
 
     @Override
@@ -219,19 +247,174 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
                     return true;
                 }
                 break;
-            case R.id.action_manager:
+            case R.id.action_save:
+                if (mYdkFile == null) {
+                    inputDeckName();
+                } else {
+                    save();
+                }
+                break;
+            case R.id.action_rename:
+                inputDeckName();
+                break;
+            case R.id.action_deck_new:
+                loadDeck(null);
+                break;
+            case R.id.action_delete_deck: {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle(R.string.question);
+                builder.setMessage(R.string.question_delete_deck);
+                builder.setNegativeButton(android.R.string.ok, (dlg, rs) -> {
+                    if (mYdkFile != null && mYdkFile.exists()) {
+                        mYdkFile.delete();
+                    }
+                    dlg.dismiss();
+                    loadDeck(null);
+                });
+                builder.setNeutralButton(android.R.string.cancel, (dlg, rs) -> {
+                    dlg.dismiss();
+                });
+                builder.show();
+            }
+            break;
+            case R.id.action_manager: {
                 //显示对话框:
+
                 //选择禁卡表
                 //卡组列表
-                //重命名
-                //新建
-                //删除
-                break;
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle(R.string.question);
+                LinearLayout linearLayout = new LinearLayout(this);
+                linearLayout.setOrientation(LinearLayout.VERTICAL);
+                Spinner ydks = new Spinner(this);
+                linearLayout.addView(ydks, getItemLayoutParams());
+                Spinner limits = new Spinner(this);
+                linearLayout.addView(limits, getItemLayoutParams());
+                builder.setView(linearLayout);
+                builder.setNegativeButton(android.R.string.ok, (dlg, rs) -> {
+                    LimitList limitList = getSelectLimitList(limits);
+                    setLimitList(limitList);
+                    File file = getSelectDeck(ydks);
+                    if (file != null) {
+                        dlg.dismiss();
+                        loadDeck(file);
+                    }
+                });
+                builder.setNeutralButton(android.R.string.cancel, (dlg, rs) -> {
+                    dlg.dismiss();
+                });
+                builder.show();
+            }
+            break;
             case R.id.action_unsort:
                 //打乱
                 mDeckAdapater.notifyDataSetChanged();
                 break;
         }
+
         return super.onOptionsItemSelected(item);
+
+    }
+
+    private ViewGroup.LayoutParams getItemLayoutParams() {
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, (int) getResources().getDimension(R.dimen.item_height));
+        lp.gravity = Gravity.CENTER_VERTICAL;
+        lp.leftMargin = 10;
+        lp.rightMargin = 10;
+        return lp;
+    }
+
+    private File getSelectDeck(Spinner spinner) {
+        Object o = SimpleSpinnerAdapter.getSelectTag(spinner);
+        if (o != null && o instanceof File) {
+            return (File) o;
+        }
+        return null;
+    }
+
+    private LimitList getSelectLimitList(Spinner spinner) {
+        int val = (int) SimpleSpinnerAdapter.getSelect(spinner);
+        if (val > 0) {
+            return mLimitManager.getLimitFromIndex(val);
+        }
+        return null;
+    }
+
+    private void initDecksListSpinners(Spinner spinner) {
+        File dir = new File(mSettings.getResourcePath(), Constants.CORE_DECK_PATH);
+        File[] files = dir.listFiles((file, s) -> {
+            return s.toLowerCase(Locale.US).endsWith(Constants.YDK_FILE_EX);
+        });
+        List<SimpleSpinnerItem> items = new ArrayList<>();
+        if (files != null) {
+            int index = 0;
+            for (File file : files) {
+                items.add(new SimpleSpinnerItem(index++, file.getName()).setTag(file));
+            }
+        }
+        SimpleSpinnerAdapter adapter = new SimpleSpinnerAdapter(this);
+        adapter.set(items);
+        spinner.setAdapter(adapter);
+    }
+
+    private void initLimitListSpinners(Spinner spinner) {
+        List<SimpleSpinnerItem> items = new ArrayList<>();
+        List<Integer> ids = mLimitManager.getLists();
+        items.add(new SimpleSpinnerItem(0, getString(R.string.label_limitlist)));
+        for (Integer id : ids) {
+            LimitList list = mLimitManager.getLimitFromIndex(id);
+            items.add(new SimpleSpinnerItem(id, list.getName()));
+        }
+        SimpleSpinnerAdapter adapter = new SimpleSpinnerAdapter(this);
+        adapter.set(items);
+        spinner.setAdapter(adapter);
+    }
+
+    private void inputDeckName() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("input deck name");
+        EditText editText = new EditText(this);
+        editText.setGravity(Gravity.TOP | Gravity.LEFT);
+        editText.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+        editText.setSingleLine();
+        builder.setView(editText);
+        builder.setNegativeButton(android.R.string.ok, (dlg, s) -> {
+            CharSequence name = editText.getText();
+            if (TextUtils.isEmpty(name)) {
+                String filename = String.valueOf(name);
+                if (!filename.endsWith(YDK_FILE_EX)) {
+                    filename += YDK_FILE_EX;
+                }
+                File ydk = new File(mSettings.getResourcePath(), Constants.CORE_DECK_PATH + "/" + filename);
+                if (mYdkFile != null && mYdkFile.exists()) {
+                    mYdkFile.renameTo(ydk);
+                    mYdkFile = ydk;
+                } else {
+                    mYdkFile = ydk;
+                    save();
+                }
+            } else {
+                dlg.dismiss();
+            }
+        });
+        builder.setNeutralButton(android.R.string.cancel, (dlg, s) -> {
+            dlg.dismiss();
+        });
+        builder.show();
+    }
+
+    private void save() {
+        ProgressDialog dlg = ProgressDialog.show(this, null, getString(R.string.saving_deck));
+        VUiKit.defer().when(() -> {
+            try {
+                DeckItemUtils.save(mDeckAdapater.getDeck(), mYdkFile);
+                return true;
+            } catch (IOException e) {
+                return false;
+            }
+        }).done((rs) -> {
+            dlg.dismiss();
+        });
     }
 }

@@ -20,6 +20,7 @@ import cn.garymb.ygomobile.plus.VUiKit;
 import cn.garymb.ygomobile.settings.AppsSettings;
 import cn.ygo.ocgcore.LimitList;
 import cn.ygo.ocgcore.LimitManager;
+import cn.ygo.ocgcore.enums.CardType;
 import cn.ygo.ocgcore.enums.LimitType;
 
 public class CardLoader implements ICardLoader {
@@ -33,7 +34,7 @@ public class CardLoader implements ICardLoader {
     private LimitList mLimitList;
 
     public interface CallBack {
-        void onSearchStart();
+        void onSearchStart(LimitList limitList);
 
         void onSearchResult(List<CardInfo> cardInfos);
 
@@ -67,7 +68,7 @@ public class CardLoader implements ICardLoader {
             reader = db.rawQuery(sql, null);
         } catch (Exception e) {
         }
-        HashMap<Long, CardInfo> map=new HashMap<>();
+        HashMap<Long, CardInfo> map = new HashMap<>();
         if (reader != null) {
             if (reader.moveToFirst()) {
 //                Log.d("kk", "find card count=" + reader.getCount());
@@ -130,8 +131,9 @@ public class CardLoader implements ICardLoader {
         if (!isOpen()) {
             return;
         }
+        mLimitList = limitList;
         if (mCallBack != null) {
-            mCallBack.onSearchStart();
+            mCallBack.onSearchStart(limitList);
         }
         ProgressDialog wait = ProgressDialog.show(context, null, context.getString(R.string.searching));
         VUiKit.defer().when(() -> {
@@ -223,9 +225,23 @@ public class CardLoader implements ICardLoader {
         if (ot > 0) {
             stringBuilder.append(" and ot=" + ot);
         }
-        for (long type : types) {
-            if (type > 0) {
-                stringBuilder.append(" and (type & " + type + ") =" + type);
+        if (types.length > 0) {
+            //通常魔法
+            boolean st = false;
+            if (types[0] == CardType.Spell.value() || types[0] == CardType.Trap.value()) {
+                if (types.length > 1) {
+                    if (types[1] == CardType.Normal.value()) {
+                        stringBuilder.append(" and type = " + types[0]);
+                        st = true;
+                    }
+                }
+            }
+            if (!st) {
+                for (long type : types) {
+                    if (type > 0) {
+                        stringBuilder.append(" and (type & " + type + ") =" + type);
+                    }
+                }
             }
         }
         if (category != 0) {

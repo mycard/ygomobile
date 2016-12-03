@@ -2,12 +2,10 @@ package cn.garymb.ygomobile.core;
 
 import android.content.Context;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,17 +13,18 @@ import java.util.Map;
 
 import cn.garymb.ygomobile.core.loader.ICardLoader;
 import cn.garymb.ygomobile.lite.R;
-import cn.garymb.ygomobile.plus.BaseAdapterPlus;
+import cn.garymb.ygomobile.plus.spinner.SimpleSpinnerAdapter;
+import cn.garymb.ygomobile.plus.spinner.SimpleSpinnerItem;
 import cn.garymb.ygomobile.settings.AppsSettings;
 import cn.ygo.ocgcore.LimitList;
 import cn.ygo.ocgcore.LimitManager;
 import cn.ygo.ocgcore.StringManager;
 import cn.ygo.ocgcore.enums.CardAttribute;
 import cn.ygo.ocgcore.enums.CardCategory;
-import cn.ygo.ocgcore.enums.LimitType;
 import cn.ygo.ocgcore.enums.CardOt;
 import cn.ygo.ocgcore.enums.CardRace;
 import cn.ygo.ocgcore.enums.CardType;
+import cn.ygo.ocgcore.enums.LimitType;
 
 public class CardSearcher implements View.OnClickListener {
     private EditText prefixWord;
@@ -54,7 +53,7 @@ public class CardSearcher implements View.OnClickListener {
     protected LimitManager mLimitManager;
     protected AppsSettings mSettings;
 
-    public CardSearcher(View view,ICardLoader dataLoader) {
+    public CardSearcher(View view, ICardLoader dataLoader) {
         this.view = view;
         this.mContext = view.getContext();
         this.dataLoader = dataLoader;
@@ -125,7 +124,7 @@ public class CardSearcher implements View.OnClickListener {
         });
     }
 
-    public void hideLimit(){
+    public void hideLimit() {
         limitSpinner.setVisibility(View.GONE);
         limitListSpinner.setVisibility(View.GONE);
     }
@@ -136,11 +135,11 @@ public class CardSearcher implements View.OnClickListener {
         initLimitListSpinners(limitListSpinner);
         initTypeSpinners(typeSpinner, new CardType[]{CardType.None, CardType.Monster, CardType.Spell, CardType.Trap});
         initTypeSpinners(typeMonsterSpinner, new CardType[]{CardType.None, CardType.Normal, CardType.Effect, CardType.Fusion, CardType.Ritual,
-                                                            CardType.Synchro, CardType.Pendulum, CardType.Xyz, CardType.Spirit, CardType.Union,
-                                                            CardType.Dual, CardType.Tuner, CardType.Flip, CardType.Toon, CardType.Token
+                CardType.Synchro, CardType.Pendulum, CardType.Xyz, CardType.Spirit, CardType.Union,
+                CardType.Dual, CardType.Tuner, CardType.Flip, CardType.Toon, CardType.Token
         });
-        initTypeSpinners(typeSTSpinner, new CardType[]{CardType.None, CardType.QuickPlay,
-                                                       CardType.Continuous, CardType.Equip, CardType.Field, CardType.Counter
+        initTypeSpinners(typeSTSpinner, new CardType[]{CardType.None, CardType.Normal, CardType.QuickPlay,
+                CardType.Continuous, CardType.Equip, CardType.Field, CardType.Counter
         });
         initLevelSpinners(levelSpinner);
         initAttributes(attributeSpinner);
@@ -155,14 +154,14 @@ public class CardSearcher implements View.OnClickListener {
 
     private void initOtSpinners(Spinner spinner) {
         CardOt[] ots = CardOt.values();
-        List<SpItem> items = new ArrayList<>();
-        items.add(new SpItem(0, getString(R.string.label_ot)));
+        List<SimpleSpinnerItem> items = new ArrayList<>();
+        items.add(new SimpleSpinnerItem(0, getString(R.string.label_ot)));
         for (CardOt item : ots) {
             if (item.ordinal() != 0) {
-                items.add(new SpItem(item.ordinal(), item.toString()));
+                items.add(new SimpleSpinnerItem(item.ordinal(), item.toString()));
             }
         }
-        SpAdapter adapter = new SpAdapter(mContext);
+        SimpleSpinnerAdapter adapter = new SimpleSpinnerAdapter(mContext);
         adapter.set(items);
         spinner.setAdapter(adapter);
     }
@@ -173,55 +172,55 @@ public class CardSearcher implements View.OnClickListener {
 
     private void initLimitSpinners(Spinner spinner) {
         LimitType[] eitems = LimitType.values();
-        List<SpItem> items = new ArrayList<>();
+        List<SimpleSpinnerItem> items = new ArrayList<>();
         for (LimitType item : eitems) {
             long val = item.value();
             if (val == 0) {
-                items.add(new SpItem(val, getString(R.string.label_limit)));
+                items.add(new SimpleSpinnerItem(val, getString(R.string.label_limit)));
             } else {
-                items.add(new SpItem(val, mStringManager.getLimitString(val)));
+                items.add(new SimpleSpinnerItem(val, mStringManager.getLimitString(val)));
             }
         }
-        SpAdapter adapter = new SpAdapter(mContext);
+        SimpleSpinnerAdapter adapter = new SimpleSpinnerAdapter(mContext);
         adapter.set(items);
         spinner.setAdapter(adapter);
     }
 
     private void initLimitListSpinners(Spinner spinner) {
-        List<SpItem> items = new ArrayList<>();
+        List<SimpleSpinnerItem> items = new ArrayList<>();
         List<Integer> ids = mLimitManager.getLists();
-        items.add(new SpItem(0, getString(R.string.label_limitlist)));
+        items.add(new SimpleSpinnerItem(0, getString(R.string.label_limitlist)));
         for (Integer id : ids) {
             LimitList list = mLimitManager.getLimitFromIndex(id);
-            items.add(new SpItem(id, list.getName()));
+            items.add(new SimpleSpinnerItem(id, list.getName()));
         }
-        SpAdapter adapter = new SpAdapter(mContext);
+        SimpleSpinnerAdapter adapter = new SimpleSpinnerAdapter(mContext);
         adapter.set(items);
         spinner.setAdapter(adapter);
     }
 
     private void initLevelSpinners(Spinner spinner) {
-        List<SpItem> items = new ArrayList<>();
+        List<SimpleSpinnerItem> items = new ArrayList<>();
         for (int i = 0; i <= 13; i++) {
             if (i == 0) {
-                items.add(new SpItem(i, getString(R.string.label_level)));
+                items.add(new SimpleSpinnerItem(i, getString(R.string.label_level)));
             } else {
-                items.add(new SpItem(i, "" + i));
+                items.add(new SimpleSpinnerItem(i, "" + i));
             }
         }
-        SpAdapter adapter = new SpAdapter(mContext);
+        SimpleSpinnerAdapter adapter = new SimpleSpinnerAdapter(mContext);
         adapter.set(items);
         spinner.setAdapter(adapter);
     }
 
     private void initSetNameSpinners(Spinner spinner) {
         Map<Long, String> setnames = mStringManager.getSetname();
-        List<SpItem> items = new ArrayList<>();
-        items.add(new SpItem(0, getString(R.string.label_set)));
+        List<SimpleSpinnerItem> items = new ArrayList<>();
+        items.add(new SimpleSpinnerItem(0, getString(R.string.label_set)));
         for (Map.Entry<Long, String> item : setnames.entrySet()) {
-            items.add(new SpItem(item.getKey(), item.getValue()));
+            items.add(new SimpleSpinnerItem(item.getKey(), item.getValue()));
         }
-        SpAdapter adapter = new SpAdapter(mContext);
+        SimpleSpinnerAdapter adapter = new SimpleSpinnerAdapter(mContext);
         adapter.set(items);
         spinner.setAdapter(adapter);
     }
@@ -230,64 +229,64 @@ public class CardSearcher implements View.OnClickListener {
         if (eitems == null) {
             eitems = CardType.values();
         }
-        List<SpItem> items = new ArrayList<>();
+        List<SimpleSpinnerItem> items = new ArrayList<>();
         for (CardType item : eitems) {
             long val = item.value();
             if (val == 0) {
-                items.add(new SpItem(val, getString(R.string.label_type)));
+                items.add(new SimpleSpinnerItem(val, getString(R.string.label_type)));
             } else {
-                items.add(new SpItem(val, mStringManager.getTypeString(val)));
+                items.add(new SimpleSpinnerItem(val, mStringManager.getTypeString(val)));
             }
         }
-        SpAdapter adapter = new SpAdapter(mContext);
+        SimpleSpinnerAdapter adapter = new SimpleSpinnerAdapter(mContext);
         adapter.set(items);
         spinner.setAdapter(adapter);
     }
 
     private void initAttributes(Spinner spinner) {
         CardAttribute[] attributes = CardAttribute.values();
-        List<SpItem> items = new ArrayList<>();
+        List<SimpleSpinnerItem> items = new ArrayList<>();
         for (CardAttribute item : attributes) {
             long val = item.value();
             if (val == 0) {
-                items.add(new SpItem(val, getString(R.string.label_attr)));
+                items.add(new SimpleSpinnerItem(val, getString(R.string.label_attr)));
             } else {
-                items.add(new SpItem(val, mStringManager.getAttributeString(val)));
+                items.add(new SimpleSpinnerItem(val, mStringManager.getAttributeString(val)));
             }
         }
-        SpAdapter adapter = new SpAdapter(mContext);
+        SimpleSpinnerAdapter adapter = new SimpleSpinnerAdapter(mContext);
         adapter.set(items);
         spinner.setAdapter(adapter);
     }
 
     private void initRaceSpinners(Spinner spinner) {
         CardRace[] attributes = CardRace.values();
-        List<SpItem> items = new ArrayList<>();
+        List<SimpleSpinnerItem> items = new ArrayList<>();
         for (CardRace item : attributes) {
             long val = item.value();
             if (val == 0) {
-                items.add(new SpItem(val, mContext.getString(R.string.label_race)));
+                items.add(new SimpleSpinnerItem(val, mContext.getString(R.string.label_race)));
             } else {
-                items.add(new SpItem(val, mStringManager.getRaceString(val)));
+                items.add(new SimpleSpinnerItem(val, mStringManager.getRaceString(val)));
             }
         }
-        SpAdapter adapter = new SpAdapter(mContext);
+        SimpleSpinnerAdapter adapter = new SimpleSpinnerAdapter(mContext);
         adapter.set(items);
         spinner.setAdapter(adapter);
     }
 
     private void initCategorySpinners(Spinner spinner) {
         CardCategory[] attributes = CardCategory.values();
-        List<SpItem> items = new ArrayList<>();
+        List<SimpleSpinnerItem> items = new ArrayList<>();
         for (CardCategory item : attributes) {
             long val = item.value();
             if (val == 0) {
-                items.add(new SpItem(val, mContext.getString(R.string.label_category)));
+                items.add(new SimpleSpinnerItem(val, mContext.getString(R.string.label_category)));
             } else {
-                items.add(new SpItem(val, mStringManager.getCategoryString(val)));
+                items.add(new SimpleSpinnerItem(val, mStringManager.getCategoryString(val)));
             }
         }
-        SpAdapter adapter = new SpAdapter(mContext);
+        SimpleSpinnerAdapter adapter = new SimpleSpinnerAdapter(mContext);
         adapter.set(items);
         spinner.setAdapter(adapter);
     }
@@ -298,6 +297,10 @@ public class CardSearcher implements View.OnClickListener {
         }
     }
 
+    private long getSelect(Spinner spinner) {
+        return SimpleSpinnerAdapter.getSelect(spinner);
+    }
+
     protected String text(EditText editText) {
         CharSequence charSequence = editText.getText();
         if (charSequence == null) {
@@ -305,56 +308,7 @@ public class CardSearcher implements View.OnClickListener {
         }
         return charSequence.toString();
     }
-
-    private long getSelect(Spinner spinner) {
-        if (spinner.getCount() > 0) {
-            Object item = spinner.getSelectedItem();
-            if (item != null && item instanceof SpItem) {
-                SpItem spItem = (SpItem) item;
-                return spItem.value;
-            }
-        }
-        return 0;
-    }
-
-    private class SpItem {
-        public long value;
-        public String text;
-
-        public SpItem(long value, String text) {
-            this.value = value;
-            this.text = text;
-        }
-
-        @Override
-        public String toString() {
-            return text;
-        }
-    }
-
-    private class SpAdapter extends BaseAdapterPlus<SpItem> {
-        public SpAdapter(Context context) {
-            super(context);
-        }
-
-        @Override
-        protected View createView(int position, ViewGroup parent) {
-            View view = mLayoutInflater.inflate(android.R.layout.simple_list_item_1, null);
-            TextView textView = (TextView) view.findViewById(android.R.id.text1);
-            textView.setTextColor(context.getResources().getColor(R.color.colorPrimaryDark));
-            view.setTag(textView);
-            return view;
-        }
-
-        @Override
-        protected void attach(View view, SpItem item, int position) {
-            TextView textView = (TextView) view.getTag();
-            if (item != null) {
-                textView.setText(item.toString());
-            }
-        }
-    }
-
+    
     @Override
     public void onClick(View v) {
         if (v == searchButton) {
@@ -372,7 +326,7 @@ public class CardSearcher implements View.OnClickListener {
         }
     }
 
-    private void resetAll(){
+    private void resetAll() {
         if (dataLoader != null) {
             dataLoader.onReset();
         }
