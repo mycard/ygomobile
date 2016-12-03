@@ -132,6 +132,7 @@
     <string name="deck_side" formatted="false">Side:%d  Monster:%d Spell:%d Trap:%d</string>
     <string name="card_result">Cards List</string>
     <string name="unsort">Unsort</string>
+    <string name="loading">loading..."</string>
     <string name="saving_deck">Saving deck..."</string>
     <string name="question">Question</string>
     <string name="question_delete_deck">delete this deck?</string>

@@ -28,7 +28,7 @@ public class CardLoader implements ICardLoader {
     private LimitManager mLimitManager = LimitManager.get();
     private AppsSettings mSettings = AppsSettings.get();
     private Context context;
-    private SQLiteDatabase db;
+    private volatile SQLiteDatabase db;
     private CallBack mCallBack;
     private String defSQL = CardInfo.SQL_BASE + " limit " + Constants.DEFAULT_CARD_COUNT + ";";
     private LimitList mLimitList;
@@ -50,7 +50,10 @@ public class CardLoader implements ICardLoader {
     }
 
     public HashMap<Long, CardInfo> readCards(List<Long> ids, LimitList limitList) {
-        if (!isOpen()) return null;
+        if (!isOpen()) {
+            Log.w("kk", "not open");
+            return null;
+        }
         StringBuilder stringBuilder = new StringBuilder(CardInfo.SQL_BASE);
         stringBuilder.append(" and " + CardInfo.COL_ID + " in (");
         int i = 0;
@@ -67,11 +70,12 @@ public class CardLoader implements ICardLoader {
         try {
             reader = db.rawQuery(sql, null);
         } catch (Exception e) {
+            Log.e("kk", "read "+sql, e);
         }
         HashMap<Long, CardInfo> map = new HashMap<>();
         if (reader != null) {
             if (reader.moveToFirst()) {
-//                Log.d("kk", "find card count=" + reader.getCount());
+                Log.i("kk", "find card count=" + reader.getCount());
                 do {
                     CardInfo cardInfo = new CardInfo(reader);
                     if (limitList != null) {
@@ -83,11 +87,16 @@ public class CardLoader implements ICardLoader {
                             cardInfo.setLimitType(LimitType.SemiLimit);
                         }
                     }
+//                    Log.i("kk", "read card " + cardInfo);
                     map.put(cardInfo.Code, cardInfo);
 
                 } while (reader.moveToNext());
+            }else{
+                Log.i("kk", "find card count 0");
             }
             reader.close();
+        }else{
+            Log.w("kk", "find no card ");
         }
         return map;
     }

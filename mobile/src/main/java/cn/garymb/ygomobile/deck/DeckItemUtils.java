@@ -1,5 +1,8 @@
 package cn.garymb.ygomobile.deck;
 
+import android.text.TextUtils;
+import android.util.Log;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -20,10 +23,17 @@ import cn.ygo.ocgcore.LimitList;
 
 public class DeckItemUtils {
 
-    public static void save(DeckInfo deckInfo, File file) throws IOException {
+    public static boolean save(DeckInfo deckInfo, File file) {
         FileOutputStream outputStream = null;
         OutputStreamWriter writer = null;
         try {
+            if(file==null||!file.exists()){
+                return false;
+            }
+            if(file.exists()){
+                file.delete();
+            }
+            file.createNewFile();
             outputStream = new FileOutputStream(file);
             writer = new OutputStreamWriter(outputStream, "utf-8");
             writer.write("#created by ygomobile\n".toCharArray());
@@ -51,13 +61,16 @@ public class DeckItemUtils {
                     writer.write((cardInfo.Code + "\n").toCharArray());
                 }
             }
+            writer.flush();
+            outputStream.flush();
         } catch (IOException e) {
-            throw e;
+            e.printStackTrace();
+            return false;
         } finally {
             IOUtils.close(writer);
             IOUtils.close(outputStream);
         }
-
+        return true;
     }
 
     public static DeckInfo readDeck(CardLoader cardLoader, File file, LimitList limitList) {
@@ -67,14 +80,14 @@ public class DeckItemUtils {
             inputStream = new FileInputStream(file);
             deckInfo = readDeck(cardLoader, inputStream, limitList);
         } catch (Exception e) {
-
+            Log.e("kk", "read 1", e);
         } finally {
             IOUtils.close(inputStream);
         }
         return deckInfo;
     }
 
-    public static DeckInfo readDeck(CardLoader cardLoader, InputStream inputStream, LimitList limitList) throws IOException {
+    public static DeckInfo readDeck(CardLoader cardLoader, InputStream inputStream, LimitList limitList) {
         List<Long> main = new ArrayList<>();
         List<Long> extra = new ArrayList<>();
         List<Long> side = new ArrayList<>();
@@ -91,49 +104,50 @@ public class DeckItemUtils {
                         type = DeckItemType.MainCard;
                     } else if (line.startsWith("#extra")) {
                         type = DeckItemType.ExtraCard;
-                    } else {
-                        continue;
                     }
+                    continue;
                 }
                 if (line.startsWith("!side")) {
                     type = DeckItemType.SideCard;
+                    continue;
                 }
-                try {
-                    long id = Long.parseLong(line);
-                    if (type == DeckItemType.MainCard && main.size() < Constants.DECK_MAIN_MAX) {
-                        Integer i = mIds.get(id);
-                        if (i == null) {
-                            mIds.put(id, 1);
-                            main.add(id);
-                        } else if (i < Constants.CARD_MAX_COUNT) {
-                            mIds.put(id, i + 1);
-                            main.add(id);
-                        }
-                    } else if (type == DeckItemType.ExtraCard && extra.size() < Constants.DECK_EXTRA_MAX) {
-                        Integer i = mIds.get(id);
-                        if (i == null) {
-                            mIds.put(id, 1);
-                            extra.add(id);
-                        } else if (i < Constants.CARD_MAX_COUNT) {
-                            mIds.put(id, i + 1);
-                            extra.add(id);
-                        }
-                    } else if (type == DeckItemType.SideCard && side.size() < Constants.DECK_SIDE_MAX) {
-                        Integer i = mIds.get(id);
-                        if (i == null) {
-                            mIds.put(id, 1);
-                            side.add(id);
-                        } else if (i < Constants.CARD_MAX_COUNT) {
-                            mIds.put(id, i + 1);
-                            side.add(id);
-                        }
+                line = line.trim();
+                if (!TextUtils.isDigitsOnly(line)) {
+                    Log.w("kk", "read not number " + line);
+                    continue;
+                }
+                long id = Long.parseLong(line);
+                if (type == DeckItemType.MainCard && main.size() < Constants.DECK_MAIN_MAX) {
+                    Integer i = mIds.get(id);
+                    if (i == null) {
+                        mIds.put(id, 1);
+                        main.add(id);
+                    } else if (i < Constants.CARD_MAX_COUNT) {
+                        mIds.put(id, i + 1);
+                        main.add(id);
                     }
-                } catch (Exception e) {
-
+                } else if (type == DeckItemType.ExtraCard && extra.size() < Constants.DECK_EXTRA_MAX) {
+                    Integer i = mIds.get(id);
+                    if (i == null) {
+                        mIds.put(id, 1);
+                        extra.add(id);
+                    } else if (i < Constants.CARD_MAX_COUNT) {
+                        mIds.put(id, i + 1);
+                        extra.add(id);
+                    }
+                } else if (type == DeckItemType.SideCard && side.size() < Constants.DECK_SIDE_MAX) {
+                    Integer i = mIds.get(id);
+                    if (i == null) {
+                        mIds.put(id, 1);
+                        side.add(id);
+                    } else if (i < Constants.CARD_MAX_COUNT) {
+                        mIds.put(id, i + 1);
+                        side.add(id);
+                    }
                 }
             }
         } catch (IOException e) {
-            throw e;
+            Log.e("kk", "read 2", e);
         } finally {
             IOUtils.close(in);
         }
@@ -167,7 +181,6 @@ public class DeckItemUtils {
 
     public static List<DeckItem> makeItems(DeckInfo mDeck, DeckAdapater adapater) {
         final List<DeckItem> mItems = new ArrayList<>();
-        mItems.clear();
         if (mDeck != null) {
             mItems.add(new DeckItem(DeckItemType.MainLabel));
             List<CardInfo> main = mDeck.getMainCards();

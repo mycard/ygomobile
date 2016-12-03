@@ -1,5 +1,6 @@
 package cn.garymb.ygomobile.activities;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.DrawerLayout;
@@ -58,6 +59,7 @@ abstract class BaseCardsAcitivity extends BaseActivity implements CardLoader.Cal
         mCardLoader.setCallBack(this);
         mCardSelector = new CardSearcher(bind(R.id.nav_view_list), mCardLoader);
         setListeners();
+        ProgressDialog dlg = ProgressDialog.show(this, null, getString(R.string.loading));
         VUiKit.defer().when(() -> {
             if (!mStringManager.isLoad()) {
                 mStringManager.load();//loadFile(stringfile.getAbsolutePath());
@@ -65,11 +67,12 @@ abstract class BaseCardsAcitivity extends BaseActivity implements CardLoader.Cal
             if (!mLimitManager.isLoad()) {
                 mLimitManager.load();//loadFile(stringfile.getAbsolutePath());
             }
-            mCardLoader.openDb();
             if(mLimitManager.getCount()>0){
                 mCardLoader.setLimitList(mLimitManager.getLimitFromIndex(0));
             }
+            mCardLoader.openDb();
         }).done((rs) -> {
+            dlg.dismiss();
             onInit();
         });
     }

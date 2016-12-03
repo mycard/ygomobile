@@ -175,8 +175,7 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
             mItems.add(id, new DeckItem(cardInfo, type));
             notifyItemChanged(DeckItem.MainEnd);
             notifyItemChanged(id);
-            addCount(cardInfo, type);
-            pushCount(cardInfo);
+            addMain(-1, cardInfo);
             return true;
         }
         if (type == DeckItemType.ExtraCard) {
@@ -188,8 +187,7 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
             mItems.add(id, new DeckItem(cardInfo, type));
             notifyItemChanged(DeckItem.ExtraEnd);
             notifyItemChanged(id);
-            addCount(cardInfo, type);
-            pushCount(cardInfo);
+            addExtra(-1, cardInfo);
             return true;
         }
         if (type == DeckItemType.SideCard) {
@@ -201,8 +199,7 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
             mItems.add(id, new DeckItem(cardInfo, type));
             notifyItemChanged(DeckItem.SideEnd);
             notifyItemChanged(id);
-            addCount(cardInfo, type);
-            pushCount(cardInfo);
+            addSide(-1, cardInfo);
             return true;
         }
         return false;
@@ -220,7 +217,11 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
     void addMain(int pos, CardInfo cardInfo) {
         List<CardInfo> list = getMainCards();
         if (list != null && mMainCount < Constants.DECK_MAIN_MAX) {
-            list.add(pos, cardInfo);
+            if (pos >= 0) {
+                list.add(pos, cardInfo);
+            } else {
+                list.add(cardInfo);
+            }
             addCount(cardInfo, DeckItemType.MainCard);
             mMainCount++;
         }
@@ -229,7 +230,11 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
     void addExtra(int pos, CardInfo cardInfo) {
         List<CardInfo> list = getExtraCards();
         if (list != null && mExtraCount < Constants.DECK_EXTRA_MAX) {
-            list.add(pos, cardInfo);
+            if (pos >= 0) {
+                list.add(pos, cardInfo);
+            } else {
+                list.add(cardInfo);
+            }
             addCount(cardInfo, DeckItemType.ExtraCard);
             mExtraCount++;
         }
@@ -238,7 +243,11 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
     void addSide(int pos, CardInfo cardInfo) {
         List<CardInfo> list = getSideCards();
         if (list != null) {
-            list.add(pos, cardInfo);
+            if (pos >= 0) {
+                list.add(pos, cardInfo);
+            } else {
+                list.add(cardInfo);
+            }
             addCount(cardInfo, DeckItemType.SideCard);
             mSideCount++;
         }
@@ -268,7 +277,7 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
     public void setDeck(DeckInfo deck) {
         this.mDeck = deck;
         if (deck != null) {
-            loadData();
+            loadData(deck);
         }
     }
 
@@ -280,11 +289,11 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
         return list == null ? 0 : list.size();
     }
 
-    private void loadData() {
-        mMainCount = length(mDeck.getMainCards());
-        mExtraCount = length(mDeck.getExtraCards());
-        mSideCount = length(mDeck.getSideCards());
+    private void loadData(DeckInfo deck) {
         mCount.clear();
+        mMainCount = length(deck.getMainCards());
+        mExtraCount = length(deck.getExtraCards());
+        mSideCount = length(deck.getSideCards());
         mMainMonsterCount = 0;
         mMainSpellCount = 0;
         mMainTrapCount = 0;
@@ -294,9 +303,8 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
         mSideMonsterCount = 0;
         mSideSpellCount = 0;
         mSideTrapCount = 0;
-
         mItems.clear();
-        mItems.addAll(DeckItemUtils.makeItems(mDeck, this));
+        mItems.addAll(DeckItemUtils.makeItems(deck, this));
     }
 
     @Override
@@ -359,14 +367,13 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
             } else {
                 holder.cardImage.setVisibility(View.VISIBLE);
             }
+            holder.setSize(mHeight);
             if (item.getType() == DeckItemType.Space) {
                 holder.setCardType(0);
-                holder.setSize(mHeight);
-                holder.cardImage.setImageDrawable(null);
+                holder.cardImage.setVisibility(View.INVISIBLE);
 //                holder.useDefault();
                 holder.rightImage.setVisibility(View.GONE);
             } else {
-                holder.setSize(mHeight);
                 CardInfo cardInfo = item.getCardInfo();
                 if (cardInfo != null) {
                     holder.setCardType(cardInfo.Type);
@@ -383,6 +390,7 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
                     } else {
                         holder.rightImage.setVisibility(View.GONE);
                     }
+                    holder.useDefault();
                     ImageLoader.get().bindImage(context, holder.cardImage, cardInfo.Code);
                 } else {
                     holder.setCardType(0);

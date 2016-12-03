@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,7 +22,6 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -72,7 +72,7 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
     protected void onInit() {
         super.onInit();
         setLimitList(mLimitManager.getCount() > 0 ? mLimitManager.getLimit(0) : null);
-        File file = new File(mSettings.getResourcePath(), Constants.CORE_DECK_PATH + "/911+YA02.ydk");
+        File file = new File(mSettings.getResourcePath(), Constants.CORE_DECK_PATH + "/" + mSettings.getLastDeck());
         loadDeck(file);
     }
 
@@ -86,14 +86,14 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
             if (file == null) {
                 return new DeckInfo();
             }
-            if (mCardLoader.isOpen()) {
+            if (mCardLoader.isOpen() && file.exists()) {
                 return DeckItemUtils.readDeck(mCardLoader, file, mLimitList);
             } else {
                 return new DeckInfo();
             }
         }).done((rs) -> {
             mYdkFile = file;
-            if (file != null) {
+            if (file != null && file.exists()) {
                 setTitle(mYdkFile.getName());
             } else {
                 setTitle(R.string.noname);
@@ -182,18 +182,18 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
                 @Override
                 public void onAddCard(CardInfo cardInfo) {
                     Map<Long, Integer> mCount = mDeckAdapater.getCardCount();
-                    if (mLimitList.isForbidden(cardInfo.Code)) {
+                    if (mLimitList!=null&&mLimitList.isForbidden(cardInfo.Code)) {
                         Toast.makeText(DeckManagerActivity.this, "add fail max :0", Toast.LENGTH_SHORT).show();
                         return;
                     }
                     Integer count = mCount.get(Long.valueOf(cardInfo.Code));
                     if (count != null) {
-                        if (mLimitList.isLimit(cardInfo.Code)) {
+                        if (mLimitList!=null&&mLimitList.isLimit(cardInfo.Code)) {
                             if (count >= 1) {
                                 Toast.makeText(DeckManagerActivity.this, "add fail max :1", Toast.LENGTH_SHORT).show();
                                 return;
                             }
-                        } else if (mLimitList.isSemiLimit(cardInfo.Code)) {
+                        } else if (mLimitList!=null&&mLimitList.isSemiLimit(cardInfo.Code)) {
                             if (count >= 2) {
                                 Toast.makeText(DeckManagerActivity.this, "add fail max :2", Toast.LENGTH_SHORT).show();
                                 return;
@@ -287,9 +287,11 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
                 LinearLayout linearLayout = new LinearLayout(this);
                 linearLayout.setOrientation(LinearLayout.VERTICAL);
                 Spinner ydks = new Spinner(this);
-                linearLayout.addView(ydks, getItemLayoutParams());
+                initDecksListSpinners(ydks);
                 Spinner limits = new Spinner(this);
+                initLimitListSpinners(limits);
                 linearLayout.addView(limits, getItemLayoutParams());
+                linearLayout.addView(ydks, getItemLayoutParams());
                 builder.setView(linearLayout);
                 builder.setNegativeButton(android.R.string.ok, (dlg, rs) -> {
                     LimitList limitList = getSelectLimitList(limits);
@@ -361,7 +363,6 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
     private void initLimitListSpinners(Spinner spinner) {
         List<SimpleSpinnerItem> items = new ArrayList<>();
         List<Integer> ids = mLimitManager.getLists();
-        items.add(new SimpleSpinnerItem(0, getString(R.string.label_limitlist)));
         for (Integer id : ids) {
             LimitList list = mLimitManager.getLimitFromIndex(id);
             items.add(new SimpleSpinnerItem(id, list.getName()));
@@ -407,14 +408,11 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
     private void save() {
         ProgressDialog dlg = ProgressDialog.show(this, null, getString(R.string.saving_deck));
         VUiKit.defer().when(() -> {
-            try {
-                DeckItemUtils.save(mDeckAdapater.getDeck(), mYdkFile);
-                return true;
-            } catch (IOException e) {
-                return false;
-            }
+            Log.i("kk", "save "+mYdkFile);
+            return DeckItemUtils.save(mDeckAdapater.getDeck(), mYdkFile);
         }).done((rs) -> {
             dlg.dismiss();
+            Toast.makeText(this, "save " + rs, Toast.LENGTH_SHORT).show();
         });
     }
 }

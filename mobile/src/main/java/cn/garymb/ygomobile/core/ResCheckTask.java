@@ -116,18 +116,26 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
             checkDirs();
             copyCoreConfig(verPath.getAbsolutePath());
 //            copyCoreConfig(new File(mSettings.getResourcePath(), GameSettings.CORE_CONFIG_PATH).getAbsolutePath());
-            setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.tip_new_deck)));
-            IOUtils.copyFilesFromAssets(mContext, getDatapath(Constants.CORE_DECK_PATH),
-                    new File(resPath, Constants.CORE_DECK_PATH).getAbsolutePath(), needsUpdate);
-            setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.game_skins)));
-            IOUtils.copyFilesFromAssets(mContext, getDatapath(Constants.CORE_SKIN_PATH),
-                    mSettings.getCoreSkinPath(), needsUpdate, mSettings.isPendulumScale());
-            setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.font_files)));
-            IOUtils.copyFilesFromAssets(mContext, getDatapath(Constants.FONT_DIRECTORY),
-                    mSettings.getFontDirPath(), needsUpdate);
-            setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.single_lua)));
-            IOUtils.copyFilesFromAssets(mContext, getDatapath(Constants.CORE_SINGLE_PATH),
-                    new File(resPath, Constants.CORE_SINGLE_PATH).getAbsolutePath(), needsUpdate);
+            if(needsUpdate) {
+                setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.tip_new_deck)));
+                IOUtils.copyFilesFromAssets(mContext, getDatapath(Constants.CORE_DECK_PATH),
+                        new File(resPath, Constants.CORE_DECK_PATH).getAbsolutePath(), needsUpdate);
+            }
+            if(needsUpdate) {
+                setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.game_skins)));
+                IOUtils.copyFilesFromAssets(mContext, getDatapath(Constants.CORE_SKIN_PATH),
+                        mSettings.getCoreSkinPath(), needsUpdate, mSettings.isPendulumScale());
+            }
+            if(needsUpdate) {
+                setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.font_files)));
+                IOUtils.copyFilesFromAssets(mContext, getDatapath(Constants.FONT_DIRECTORY),
+                        mSettings.getFontDirPath(), needsUpdate);
+            }
+            if(needsUpdate) {
+                setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.single_lua)));
+                IOUtils.copyFilesFromAssets(mContext, getDatapath(Constants.CORE_SINGLE_PATH),
+                        new File(resPath, Constants.CORE_SINGLE_PATH).getAbsolutePath(), needsUpdate);
+            }
             if (IOUtils.hasAssets(mContext, getDatapath(Constants.CORE_SCRIPTS_ZIP))) {
                 setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.scripts)));
                 IOUtils.copyFilesFromAssets(mContext, getDatapath(Constants.CORE_SCRIPTS_ZIP),
@@ -170,6 +178,13 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
         db = SQLiteDatabase.openDatabase(myPath, null,
                 SQLiteDatabase.OPEN_READWRITE);
         try {
+            db.rawQuery("select * from datas where datas._id = 0;", null);
+            db.close();
+            return;
+        } catch (Exception e) {
+
+        }
+        try {
             db.beginTransaction();
             db.execSQL("ALTER TABLE datas RENAME TO datas_backup;");
             db.execSQL("CREATE TABLE datas (_id integer PRIMARY KEY, ot integer, alias integer, setcode integer, type integer,"
@@ -196,11 +211,11 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
 
     private void checkDirs() {
         String[] dirs = {Constants.CORE_SCRIPT_PATH,
-                         Constants.CORE_SINGLE_PATH,
-                         Constants.CORE_DECK_PATH,
-                         Constants.CORE_REPLAY_PATH,
-                         Constants.FONT_DIRECTORY,
-                         Constants.CORE_IMAGE_PATH
+                Constants.CORE_SINGLE_PATH,
+                Constants.CORE_DECK_PATH,
+                Constants.CORE_REPLAY_PATH,
+                Constants.FONT_DIRECTORY,
+                Constants.CORE_IMAGE_PATH
         };
         File dirFile = null;
         for (String dir : dirs) {
