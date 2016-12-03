@@ -82,6 +82,10 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
         return mDeck != null ? mDeck.getSideCards() : null;
     }
 
+    public Map<Long, Integer> getCardCount() {
+        return mCount;
+    }
+
     CardInfo removeMain(int pos) {
         List<CardInfo> list = getMainCards();
         if (list != null && pos >= 0 && pos <= list.size()) {
@@ -167,31 +171,16 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
         }
     }
 
-    public boolean AddCard(CardInfo cardInfo, LimitList limitList, DeckItemType type) {
-        if (limitList.isForbidden(cardInfo.Code)) {
-            return false;
-        }
-        Integer count = mCount.get(Long.valueOf(cardInfo.Code));
-        if (count != null) {
-            if (limitList.isLimit(cardInfo.Code)) {
-                if (count >= 1) {
-                    return false;
-                }
-            } else if (limitList.isSemiLimit(cardInfo.Code)) {
-                if (count >= 2) {
-                    return false;
-                }
-            } else if (count >= Constants.CARD_MAX_COUNT) {
-                return false;
-            }
-        }
+    public boolean AddCard(CardInfo cardInfo, DeckItemType type) {
         if (type == DeckItemType.MainCard) {
             if (getMainCount() >= Constants.DECK_MAIN_MAX) {
                 return false;
             }
+            int id = DeckItem.MainStart + getMainCount();
             mItems.remove(DeckItem.MainEnd);
-            mItems.add(DeckItem.MainStart + getMainCount(), new DeckItem(cardInfo, type));
+            mItems.add(id, new DeckItem(cardInfo, type));
             notifyItemChanged(DeckItem.MainEnd);
+            notifyItemChanged(id);
             addCount(cardInfo, type);
             pushCount(cardInfo);
             return true;
@@ -200,9 +189,11 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
             if (getExtraCount() >= Constants.DECK_EXTRA_MAX) {
                 return false;
             }
+            int id = DeckItem.ExtraStart + getExtraCount();
             mItems.remove(DeckItem.ExtraEnd);
-            mItems.add(DeckItem.ExtraStart + getExtraCount(), new DeckItem(cardInfo, type));
+            mItems.add(id, new DeckItem(cardInfo, type));
             notifyItemChanged(DeckItem.ExtraEnd);
+            notifyItemChanged(id);
             addCount(cardInfo, type);
             pushCount(cardInfo);
             return true;
@@ -211,9 +202,11 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
             if (getSideCount() >= Constants.DECK_SIDE_MAX) {
                 return false;
             }
+            int id = DeckItem.SideStart + getSideCount();
             mItems.remove(DeckItem.SideEnd);
-            mItems.add(DeckItem.SideStart + getSideCount(), new DeckItem(cardInfo, type));
+            mItems.add(id, new DeckItem(cardInfo, type));
             notifyItemChanged(DeckItem.SideEnd);
+            notifyItemChanged(id);
             addCount(cardInfo, type);
             pushCount(cardInfo);
             return true;

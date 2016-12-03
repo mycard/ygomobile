@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.os.Debug;
+import android.support.annotation.IntegerRes;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.RecyclerView;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.util.List;
+import java.util.Map;
 
 import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.bean.CardInfo;
@@ -151,20 +153,45 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
 
                 @Override
                 public void onAddCard(CardInfo cardInfo) {
+                    Map<Long, Integer> mCount = mDeckAdapater.getCardCount();
+                    if (mLimitList.isForbidden(cardInfo.Code)) {
+                        Toast.makeText(DeckManagerActivity.this, "add fail max :0", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                    Integer count = mCount.get(Long.valueOf(cardInfo.Code));
+                    if (count != null) {
+                        if (mLimitList.isLimit(cardInfo.Code)) {
+                            if (count >= 1) {
+                                Toast.makeText(DeckManagerActivity.this, "add fail max :1", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                        } else if (mLimitList.isSemiLimit(cardInfo.Code)) {
+                            if (count >= 2) {
+                                Toast.makeText(DeckManagerActivity.this, "add fail max :2", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                        } else if (count >= Constants.CARD_MAX_COUNT) {
+                            Toast.makeText(DeckManagerActivity.this, "add fail max :3", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                    }
+                    boolean rs = false;
                     if (isEdit) {
-                        boolean rs = false;
                         if (DeckItemUtils.isMain(pos)) {
-                            rs = mDeckAdapater.AddCard(cardInfo, mLimitList, DeckItemType.MainCard);
+                            rs = mDeckAdapater.AddCard(cardInfo, DeckItemType.MainCard);
                         } else if (DeckItemUtils.isExtra(pos)) {
-                            rs = mDeckAdapater.AddCard(cardInfo, mLimitList, DeckItemType.ExtraCard);
+                            rs = mDeckAdapater.AddCard(cardInfo, DeckItemType.ExtraCard);
                         } else if (DeckItemUtils.isSide(pos)) {
-                            rs = mDeckAdapater.AddCard(cardInfo, mLimitList, DeckItemType.SideCard);
+                            rs = mDeckAdapater.AddCard(cardInfo, DeckItemType.SideCard);
                         }
-                        if (!rs) {
-                            Toast.makeText(DeckManagerActivity.this, "add fail", Toast.LENGTH_SHORT).show();
-                        }else{
-                            Toast.makeText(DeckManagerActivity.this, "add ok", Toast.LENGTH_SHORT).show();
-                        }
+                    } else {
+                        //弹框问是主卡组，还是副卡组
+                        //弹框问是额外，还是副卡组
+                    }
+                    if (!rs) {
+                        Toast.makeText(DeckManagerActivity.this, "add fail", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(DeckManagerActivity.this, "add ok", Toast.LENGTH_SHORT).show();
                     }
 //                    mDeckAdapater.AddCard(cardInfo, DeckItemType.MainCard);
                 }
