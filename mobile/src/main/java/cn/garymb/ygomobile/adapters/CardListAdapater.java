@@ -118,9 +118,9 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> {
             cardLevel = findViewById(R.id.card_level);
             layout_atkdef = findViewById(R.id.layout_atkdef);
             view_bar = findViewById(R.id.view_bar);
-            rightImage=findViewById(R.id.right_top);
+            rightImage = findViewById(R.id.right_top);
             File outFile = new File(AppsSettings.get().getCoreSkinPath(), Constants.CORE_SKIN_COVER);
-            ImageLoader.get().bind(context, outFile, cardImage, outFile.getName().endsWith(Constants.BPG), 0);
+            ImageLoader.get().bind(context, outFile, cardImage, outFile.getName().endsWith(Constants.BPG), 0, null);
         }
     }
 }

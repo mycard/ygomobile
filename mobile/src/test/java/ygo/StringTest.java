@@ -7,6 +7,17 @@ import cn.ygo.ocgcore.StringManager;
 import cn.ygo.ocgcore.enums.CardType;
 
 public class StringTest {
+    int MASK = 0x1000;
+
+    @Test
+    public void testMask() {
+        int i = 1;
+        i = i | MASK;
+        System.out.println(i);
+        i ^= MASK;
+        System.out.println(i);
+    }
+
     @Test
     public void test() {
         StringManager stringManager = StringManager.get();

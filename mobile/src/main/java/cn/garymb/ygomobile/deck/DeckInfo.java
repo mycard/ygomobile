@@ -14,6 +14,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import cn.garymb.ygomobile.bean.CardInfo;
@@ -21,24 +22,46 @@ import cn.garymb.ygomobile.utils.IOUtils;
 import cn.ygo.ocgcore.LimitList;
 
 public class DeckInfo {
-    private List<CardInfo> mainCards;
-    private List<CardInfo> extraCards;
-    private List<CardInfo> sideCards;
+    private final List<CardInfo> mainCards;
+    private final List<CardInfo> extraCards;
+    private final List<CardInfo> sideCards;
 
     public DeckInfo() {
-
+        mainCards = new ArrayList<>();
+        extraCards = new ArrayList<>();
+        sideCards = new ArrayList<>();
+    }
+    public void addMainCards(CardInfo card) {
+        if (card != null) {
+            this.mainCards.add(card);
+        }
+    }
+    public void addExtraCards(CardInfo card) {
+        if (card != null) {
+            this.extraCards.add(card);
+        }
+    }
+    public void addSideCards(CardInfo card) {
+        if (card != null) {
+            this.sideCards.add(card);
+        }
+    }
+    public void setMainCards(Collection<CardInfo> mainCards) {
+        if (mainCards != null) {
+            this.mainCards.addAll(mainCards);
+        }
     }
 
-    public void setMainCards(List<CardInfo> mainCards) {
-        this.mainCards = mainCards;
+    public void setExtraCards(Collection<CardInfo> extraCards) {
+        if (extraCards != null) {
+            this.extraCards.addAll(extraCards);
+        }
     }
 
-    public void setExtraCards(List<CardInfo> extraCards) {
-        this.extraCards = extraCards;
-    }
-
-    public void setSideCards(List<CardInfo> sideCards) {
-        this.sideCards = sideCards;
+    public void setSideCards(Collection<CardInfo> sideCards) {
+        if (sideCards != null) {
+            this.sideCards.addAll(sideCards);
+        }
     }
 
     public List<CardInfo> getMainCards() {

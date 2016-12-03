@@ -53,7 +53,7 @@ class DeckViewHolder extends RecyclerView.ViewHolder {
 
     public void useDefault() {
         File outFile = new File(AppsSettings.get().getCoreSkinPath(), Constants.CORE_SKIN_COVER);
-        ImageLoader.get().bind(view.getContext(), outFile, cardImage, outFile.getName().endsWith(Constants.BPG), 0);
+        ImageLoader.get().bind(view.getContext(), outFile, cardImage, outFile.getName().endsWith(Constants.BPG), 0,null);
     }
 
     protected <T extends View> T findViewById(int id) {

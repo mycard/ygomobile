@@ -118,7 +118,7 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
 //            copyCoreConfig(new File(mSettings.getResourcePath(), GameSettings.CORE_CONFIG_PATH).getAbsolutePath());
             setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.tip_new_deck)));
             IOUtils.copyFilesFromAssets(mContext, getDatapath(Constants.CORE_DECK_PATH),
-                    new File(resPath, Constants.CORE_SINGLE_PATH).getAbsolutePath(), needsUpdate);
+                    new File(resPath, Constants.CORE_DECK_PATH).getAbsolutePath(), needsUpdate);
             setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.game_skins)));
             IOUtils.copyFilesFromAssets(mContext, getDatapath(Constants.CORE_SKIN_PATH),
                     mSettings.getCoreSkinPath(), needsUpdate, mSettings.isPendulumScale());

@@ -9,6 +9,7 @@ import android.util.Log;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import cn.garymb.ygomobile.Constants;
@@ -47,7 +48,7 @@ public class CardLoader implements ICardLoader {
         mLimitList = limitList;
     }
 
-    public List<CardInfo> readCards(List<Long> ids, LimitList limitList) {
+    public HashMap<Long, CardInfo> readCards(List<Long> ids, LimitList limitList) {
         if (!isOpen()) return null;
         StringBuilder stringBuilder = new StringBuilder(CardInfo.SQL_BASE);
         stringBuilder.append(" and " + CardInfo.COL_ID + " in (");
@@ -66,7 +67,7 @@ public class CardLoader implements ICardLoader {
             reader = db.rawQuery(sql, null);
         } catch (Exception e) {
         }
-        List<CardInfo> tmp = new ArrayList<CardInfo>();
+        HashMap<Long, CardInfo> map=new HashMap<>();
         if (reader != null) {
             if (reader.moveToFirst()) {
 //                Log.d("kk", "find card count=" + reader.getCount());
@@ -81,13 +82,13 @@ public class CardLoader implements ICardLoader {
                             cardInfo.setLimitType(LimitType.SemiLimit);
                         }
                     }
-                    tmp.add(cardInfo);
+                    map.put(cardInfo.Code, cardInfo);
 
                 } while (reader.moveToNext());
             }
             reader.close();
         }
-        return tmp;
+        return map;
     }
 
     public boolean openDb() {

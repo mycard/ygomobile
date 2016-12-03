@@ -38,7 +38,7 @@ public class DeckManagerActivity extends BaseCardsAcitivity {
         mRecyclerView.setAdapter((mDeckAdapater = new DeckAdapater(this, mRecyclerView)));
         mRecyclerView.setLayoutManager(new DeckLayoutManager(this, Constants.DECK_WIDTH_COUNT));
         mCardSelector.hideLimit();
-        ItemTouchHelper touchHelper = new ItemTouchHelper(new DeckItemTouchHelper(this, mDeckAdapater));
+        ItemTouchHelper touchHelper = new ItemTouchHelper(new DeckItemTouchHelper(mDeckAdapater));
         touchHelper.attachToRecyclerView(mRecyclerView);
     }
 
@@ -149,6 +149,7 @@ public class DeckManagerActivity extends BaseCardsAcitivity {
                 break;
             case R.id.action_unsort:
                 //打乱
+                mDeckAdapater.notifyDataSetChanged();
                 break;
         }
         return super.onOptionsItemSelected(item);

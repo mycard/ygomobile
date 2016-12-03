@@ -1,6 +1,9 @@
 package cn.garymb.ygomobile.deck;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -177,7 +180,7 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
 
     public void addSide(int pos, CardInfo cardInfo) {
         List<CardInfo> list = getSideCards();
-        if (list != null && mSideCount < Constants.DECK_SIDE_MAX) {
+        if (list != null) {
             list.add(pos, cardInfo);
             addCount(cardInfo, DeckItemType.SideCard);
             mSideCount++;
@@ -207,7 +210,9 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
 
     public void setDeck(DeckInfo deck) {
         this.mDeck = deck;
-        loadData();
+        if (deck != null) {
+            loadData();
+        }
     }
 
     public DeckInfo getDeck() {
@@ -278,6 +283,7 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
             if (mHeight <= 0) {
                 makeHeight();
             }
+
 //            holder.cardImage.setLayoutParams(new RelativeLayout.LayoutParams(holder.cardImage.getMeasuredWidth(), mHeight));
             holder.textlayout.setVisibility(View.GONE);
             if (position == mDragPosition) {
@@ -292,6 +298,7 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
 //                holder.useDefault();
                 holder.rightImage.setVisibility(View.GONE);
             } else {
+                holder.setSize(mHeight);
                 CardInfo cardInfo = item.getCardInfo();
                 if (cardInfo != null) {
                     holder.setCardType(cardInfo.Type);

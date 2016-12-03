@@ -57,6 +57,7 @@ public interface Constants {
     int[] CORE_SKIN_CARD_COVER_SIZE = new int[]{177, 254};
     boolean SUPPORT_BPG = true;
     String BPG = ".bpg";
+    int CARD_MAX_COUNT = 3;
     String[] IMAGE_EX = SUPPORT_BPG ? new String[]{".bpg", ".jpg", ".png"}
             : new String[]{".jpg", ".png"};
 

@@ -14,6 +14,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import cn.garymb.ygomobile.Constants;
@@ -84,6 +85,7 @@ public class DeckItemUtils {
         List<Long> main = new ArrayList<>();
         List<Long> extra = new ArrayList<>();
         List<Long> side = new ArrayList<>();
+        HashMap<Long, Integer> mIds = new HashMap<>();
         InputStreamReader in = null;
         try {
             in = new InputStreamReader(inputStream, "utf-8");
@@ -105,12 +107,33 @@ public class DeckItemUtils {
                 }
                 try {
                     long id = Long.parseLong(line);
-                    if (type == DeckItemType.MainCard) {
-                        main.add(id);
-                    } else if (type == DeckItemType.ExtraCard) {
-                        extra.add(id);
-                    } else if (type == DeckItemType.SideCard) {
-                        side.add(id);
+                    if (type == DeckItemType.MainCard && main.size() < Constants.DECK_MAIN_MAX) {
+                        Integer i = mIds.get(id);
+                        if (i == null) {
+                            mIds.put(id, 1);
+                            main.add(id);
+                        } else if (i < Constants.CARD_MAX_COUNT) {
+                            mIds.put(id, i + 1);
+                            main.add(id);
+                        }
+                    } else if (type == DeckItemType.ExtraCard && extra.size() < Constants.DECK_EXTRA_MAX) {
+                        Integer i = mIds.get(id);
+                        if (i == null) {
+                            mIds.put(id, 1);
+                            extra.add(id);
+                        } else if (i < Constants.CARD_MAX_COUNT) {
+                            mIds.put(id, i + 1);
+                            extra.add(id);
+                        }
+                    } else if (type == DeckItemType.SideCard && side.size() < Constants.DECK_SIDE_MAX) {
+                        Integer i = mIds.get(id);
+                        if (i == null) {
+                            mIds.put(id, 1);
+                            side.add(id);
+                        } else if (i < Constants.CARD_MAX_COUNT) {
+                            mIds.put(id, i + 1);
+                            side.add(id);
+                        }
                     }
                 } catch (Exception e) {
 
@@ -122,9 +145,30 @@ public class DeckItemUtils {
             IOUtils.close(in);
         }
         DeckInfo deckInfo = new DeckInfo();
-        deckInfo.setMainCards(cardLoader.readCards(main, limitList));
-        deckInfo.setExtraCards(cardLoader.readCards(extra, limitList));
-        deckInfo.setSideCards(cardLoader.readCards(side, limitList));
+        HashMap<Long, CardInfo> tmp = cardLoader.readCards(main, limitList);
+        if (tmp.size() == main.size()) {
+            deckInfo.setMainCards(tmp.values());
+        } else {
+            for (Long id : main) {
+                deckInfo.addMainCards(tmp.get(id));
+            }
+        }
+        tmp = cardLoader.readCards(extra, limitList);
+        if (tmp.size() == extra.size()) {
+            deckInfo.setExtraCards(tmp.values());
+        } else {
+            for (Long id : extra) {
+                deckInfo.addExtraCards(tmp.get(id));
+            }
+        }
+        tmp = cardLoader.readCards(side, limitList);
+        if (tmp.size() == side.size()) {
+            deckInfo.setSideCards(tmp.values());
+        } else {
+            for (Long id : extra) {
+                deckInfo.addSideCards(tmp.get(id));
+            }
+        }
         return deckInfo;
     }
 

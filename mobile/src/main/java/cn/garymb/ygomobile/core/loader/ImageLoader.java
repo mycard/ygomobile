@@ -2,6 +2,7 @@ package cn.garymb.ygomobile.core.loader;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.widget.ImageView;
 
@@ -43,6 +44,7 @@ public class ImageLoader {
 
     private class BpgResourceDecoder implements ResourceDecoder<ImageVideoWrapper, GifBitmapWrapper> {
         String id;
+
         private BpgResourceDecoder(String id) {
             this.id = id;
         }
@@ -74,21 +76,21 @@ public class ImageLoader {
         return null;
     }
 
-    public void bind(Context context, byte[] data, ImageView imageview, boolean isbpg,long code) {
+    public void bind(Context context, byte[] data, ImageView imageview, boolean isbpg, long code, Drawable pre) {
         if (isbpg) {
-            Glide.with(context).load(data).decoder(new BpgResourceDecoder("bpg@"+code)).into(imageview);
+            Glide.with(context).load(data).placeholder(pre).decoder(new BpgResourceDecoder("bpg@" + code)).into(imageview);
         } else {
-            Glide.with(context).load(data).into(imageview);
+            Glide.with(context).load(data).placeholder(pre).into(imageview);
         }
     }
 
-    public void bind(Context context, final File file, ImageView imageview, boolean isbpg,long code) {
+    public void bind(Context context, final File file, ImageView imageview, boolean isbpg, long code, Drawable pre) {
         try {
             if (isbpg) {
-                Glide.with(context).load(file).signature(new StringSignature(file.getName() + file.lastModified()))
-                        .decoder(new BpgResourceDecoder("bpg@"+code)).into(imageview);
+                Glide.with(context).load(file).placeholder(pre).signature(new StringSignature(file.getName() + file.lastModified()))
+                        .decoder(new BpgResourceDecoder("bpg@" + code)).into(imageview);
             } else {
-                Glide.with(context).load(file).signature(new StringSignature(file.getName() + file.lastModified()))
+                Glide.with(context).load(file).placeholder(pre).signature(new StringSignature(file.getName() + file.lastModified()))
                         .into(imageview);
             }
         } catch (Exception e) {
@@ -97,6 +99,10 @@ public class ImageLoader {
     }
 
     public void bindImage(Context context, ImageView imageview, long code) {
+        bindImage(context, imageview, code, null);
+    }
+
+    public void bindImage(Context context, ImageView imageview, long code, Drawable pre) {
         String name = Constants.CORE_IMAGE_PATH + "/" + code;
         String path = AppsSettings.get().getResourcePath();
         File zip = new File(path, Constants.CORE_PICS_ZIP);
@@ -106,7 +112,7 @@ public class ImageLoader {
                 file = new File(context.getCacheDir(), name + ex);
             }
             if (file.exists()) {
-                bind(context, file, imageview, Constants.BPG.equals(ex), code);
+                bind(context, file, imageview, Constants.BPG.equals(ex), code, pre);
                 return;
             }
         }
@@ -124,7 +130,7 @@ public class ImageLoader {
                         inputStream = mZipFile.getInputStream(entry);
                         outputStream = new ByteArrayOutputStream();
                         IOUtils.copy(inputStream, outputStream);
-                        bind(context, outputStream.toByteArray(), imageview, Constants.BPG.equals(ex), code);
+                        bind(context, outputStream.toByteArray(), imageview, Constants.BPG.equals(ex), code, pre);
                     }
                 }
             } catch (IOException e) {
