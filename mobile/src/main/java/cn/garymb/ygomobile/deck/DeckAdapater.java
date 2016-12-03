@@ -181,8 +181,9 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
                 if (count >= 2) {
                     return false;
                 }
+            } else if (count >= Constants.CARD_MAX_COUNT) {
+                return false;
             }
-
         }
         if (type == DeckItemType.MainCard) {
             if (getMainCount() >= Constants.DECK_MAIN_MAX) {

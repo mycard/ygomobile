@@ -126,6 +126,7 @@
     <string name="save_deck">Save Deck</string>
     <string name="deck_list">Deck List</string>
     <string name="edit_deck">Edit</string>
+    <string name="card_add">Add</string>
     <string name="deck_main" formatted="false">Main:%d  Monster:%d Spell:%d Trap:%d</string>
     <string name="deck_extra" formatted="false">Extra:%d  Fusion:%d Synchro:%d Xyx:%d</string>
     <string name="deck_side" formatted="false">Side:%d  Monster:%d Spell:%d Trap:%d</string>

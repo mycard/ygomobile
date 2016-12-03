@@ -48,7 +48,7 @@
             android:layout_height="match_parent"
             android:layout_marginRight="20dp"
             android:gravity="center_vertical"
-            android:text="@string/card_faq"
+            android:text="@string/card_add"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@color/colorPrimary"
             android:textStyle="bold"

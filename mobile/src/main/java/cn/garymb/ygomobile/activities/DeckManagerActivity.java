@@ -84,7 +84,7 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
 
     @Override
     protected void onCardClick(CardInfo cardInfo, int pos) {
-        showCardDialog(cardInfo, true, pos);
+        showCardDialog(cardInfo, false, pos);
     }
 
     @Override
@@ -117,7 +117,7 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
     public void onItemClick(View view, int pos) {
         DeckItem deckItem = mDeckAdapater.getItem(pos);
         if (deckItem != null) {
-            showCardDialog(deckItem.getCardInfo(), false, pos);
+            showCardDialog(deckItem.getCardInfo(), true, pos);
         }
     }
 
@@ -162,6 +162,8 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
                         }
                         if (!rs) {
                             Toast.makeText(DeckManagerActivity.this, "add fail", Toast.LENGTH_SHORT).show();
+                        }else{
+                            Toast.makeText(DeckManagerActivity.this, "add ok", Toast.LENGTH_SHORT).show();
                         }
                     }
 //                    mDeckAdapater.AddCard(cardInfo, DeckItemType.MainCard);

@@ -119,4 +119,5 @@
     <string name="deck_side" formatted="false">副卡组:%d  怪兽:%d 魔法:%d 陷阱:%d</string>
     <string name="card_result">卡片列表</string>
     <string name="unsort">打乱</string>
+    <string name="card_add">添加</string>
 </resources>
