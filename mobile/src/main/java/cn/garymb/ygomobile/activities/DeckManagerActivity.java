@@ -7,11 +7,11 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 
 import java.io.File;
 import java.util.List;
@@ -20,15 +20,17 @@ import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.bean.CardInfo;
 import cn.garymb.ygomobile.core.CardDetail;
 import cn.garymb.ygomobile.deck.DeckAdapater;
+import cn.garymb.ygomobile.deck.DeckItem;
 import cn.garymb.ygomobile.deck.DeckItemTouchHelper;
 import cn.garymb.ygomobile.deck.DeckItemUtils;
 import cn.garymb.ygomobile.deck.DeckLayoutManager;
 import cn.garymb.ygomobile.lite.R;
+import cn.garymb.ygomobile.plus.RecyclerViewItemListener;
 import cn.garymb.ygomobile.plus.VUiKit;
 import cn.garymb.ygomobile.settings.AppsSettings;
 import cn.ygo.ocgcore.LimitList;
 
-public class DeckManagerActivity extends BaseCardsAcitivity {
+public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerViewItemListener.OnItemListener{
     private RecyclerView mRecyclerView;
     private DeckAdapater mDeckAdapater;
     private AppsSettings mSettings = AppsSettings.get();
@@ -44,6 +46,7 @@ public class DeckManagerActivity extends BaseCardsAcitivity {
 
         mDrawerlayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_OPEN);
         hideDrawers();
+        mRecyclerView.addOnItemTouchListener(new RecyclerViewItemListener(mRecyclerView, this));
     }
 
     @Override
@@ -100,6 +103,24 @@ public class DeckManagerActivity extends BaseCardsAcitivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.deck_menu, menu);
         return true;
+    }
+
+    @Override
+    public void onItemClick(View view, int pos) {
+        DeckItem deckItem = mDeckAdapater.getItem(pos);
+        if(deckItem!=null){
+            showCardDialog(deckItem.getCardInfo());
+        }
+    }
+
+    @Override
+    public void onItemLongClick(View view, int pos) {
+
+    }
+
+    @Override
+    public void onItemDoubleClick(View view, int pos) {
+Log.i("kk","double click "+pos);
     }
 
     protected void showCardDialog(CardInfo cardInfo) {

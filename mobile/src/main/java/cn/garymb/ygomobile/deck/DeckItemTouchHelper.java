@@ -35,12 +35,12 @@ public class DeckItemTouchHelper extends ItemTouchHelper.Callback {
                     || deckholder.getItemType() == DeckItemType.MainLabel
                     || deckholder.getItemType() == DeckItemType.SideLabel
                     || deckholder.getItemType() == DeckItemType.ExtraLabel) {
-                Log.d("kk", "move is label or space " + id);
+//                Log.d("kk", "move is label or space " + id);
                 return makeMovementFlags(0, 0);
             }
         } else {
             if (DeckItemUtils.isLabel(id)) {
-                Log.d("kk", "move is label " + id);
+//                Log.d("kk", "move is label " + id);
                 return makeMovementFlags(0, 0);
             }
         }
@@ -68,11 +68,11 @@ public class DeckItemTouchHelper extends ItemTouchHelper.Callback {
         int left = viewHolder.getAdapterPosition();
         int right = target.getAdapterPosition();
         boolean move= mDeckDrager.move((DeckViewHolder)viewHolder, (DeckViewHolder)target,left, right);
-        if(move) {
-            Log.d("kk", "move " + left + "<->" + right);
-        }else{
-            Log.d("kk", "don't move " + left + "<->" + right);
-        }
+//        if(move) {
+//            Log.d("kk", "move " + left + "<->" + right);
+//        }else{
+//            Log.d("kk", "don't move " + left + "<->" + right);
+//        }
         return move;
     }
 
