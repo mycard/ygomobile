@@ -120,7 +120,7 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
             } else if (cardInfo.isType(CardType.Synchro)) {
                 mExtraSynchroCount--;
             } else if (cardInfo.isType(CardType.Xyz)) {
-                mExtraFusionCount--;
+                mExtraXyzCount--;
             }
             return cardInfo;
         }
@@ -145,7 +145,7 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
                 } else if (cardInfo.isType(CardType.Synchro)) {
                     mExtraSynchroCount++;
                 } else if (cardInfo.isType(CardType.Xyz)) {
-                    mExtraFusionCount++;
+                    mExtraXyzCount++;
                 }
                 break;
             case SideCard:

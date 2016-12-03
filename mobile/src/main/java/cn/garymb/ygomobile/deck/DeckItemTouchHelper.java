@@ -67,7 +67,7 @@ public class DeckItemTouchHelper extends ItemTouchHelper.Callback {
     public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
         int left = viewHolder.getAdapterPosition();
         int right = target.getAdapterPosition();
-        boolean move= mDeckDrager.move(left, right);
+        boolean move= mDeckDrager.move((DeckViewHolder)viewHolder, (DeckViewHolder)target,left, right);
         if(move) {
             Log.d("kk", "move " + left + "<->" + right);
         }else{

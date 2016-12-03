@@ -54,6 +54,10 @@ public class DeckItem {
         mCardInfo = cardInfo;
     }
 
+    public void setType(DeckItemType type) {
+        mType = type;
+    }
+
     public DeckItem(DeckItemType type) {
         this.mType = type;
     }
