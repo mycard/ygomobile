@@ -136,16 +136,30 @@ class DeckDrager {
         if (right >= maincount) {
             right = maincount;
         }
+
+        //交换
         CardInfo cardInfo = deckAdapater.removeSide(left);
         deckAdapater.addExtra(right, cardInfo);
-        Collections.swap(deckAdapater.mItems, DeckItem.SideStart + left, DeckItem.ExtraStart + right);
+        //index最大的在前面
+        DeckItem deckItem = deckAdapater.mItems.remove(DeckItem.SideStart + left);
+        DeckItem space = deckAdapater.mItems.remove(DeckItem.ExtraEnd);
+        deckAdapater.mItems.add(DeckItem.ExtraStart + right, deckItem);
+        deckAdapater.mItems.add(DeckItem.SideEnd, space);
+        //空白向后移
+//        for (int i = DeckItem.SideStart + left; i < DeckItem.SideStart + sidecount; i++) {
+        // Collections.swap(deckAdapater.mItems, i, i + 1);
+//        }
+        //move
         deckAdapater.notifyItemMoved(DeckItem.SideStart + left, DeckItem.ExtraStart + right);
-        //多出一个空白
-        for (int i = DeckItem.SideStart + left; i < DeckItem.SideEnd; i++) {
-            Collections.swap(deckAdapater.mItems, i, i + 1);
-        }
         deckAdapater.notifyItemRemoved(DeckItem.ExtraEnd);
+        if (deckAdapater.getMainCount() == Constants.DECK_MAIN_MAX) {
+            deckAdapater.notifyItemChanged(DeckItem.ExtraEnd);
+        }
         deckAdapater.notifyItemInserted(DeckItem.SideEnd);
+        //label
+        deckAdapater.notifyItemChanged(DeckItem.ExtraLabel);
+        deckAdapater.notifyItemChanged(DeckItem.SideLabel);
+
         return true;
     }
 
@@ -156,16 +170,26 @@ class DeckDrager {
         if (right >= maincount) {
             right = maincount;
         }
+
+        //交换
         CardInfo cardInfo = deckAdapater.removeExtra(left);
         deckAdapater.addSide(right, cardInfo);
-        Collections.swap(deckAdapater.mItems, DeckItem.ExtraStart + left, DeckItem.SideStart + right);
+        DeckItem space = deckAdapater.mItems.remove(DeckItem.SideEnd);
+        DeckItem deckItem = deckAdapater.mItems.remove(DeckItem.ExtraStart + left);
+        deckAdapater.mItems.add(DeckItem.SideStart + right, deckItem);
+        deckAdapater.mItems.add(DeckItem.ExtraEnd, space);
+        //空白向后移
+//        for (int i = DeckItem.MainStart + left; i < DeckItem.MainStart + maincount; i++) {
+//            Collections.swap(deckAdapater.mItems, i, i + 1);
+//        }
+        //move
         deckAdapater.notifyItemMoved(DeckItem.ExtraStart + left, DeckItem.SideStart + right);
-        //多出一个空白
-        for (int i = DeckItem.ExtraStart + left; i < DeckItem.ExtraEnd; i++) {
-            Collections.swap(deckAdapater.mItems, i, i + 1);
-        }
         deckAdapater.notifyItemRemoved(DeckItem.SideEnd);
         deckAdapater.notifyItemInserted(DeckItem.ExtraEnd);
+        //label
+        deckAdapater.notifyItemChanged(DeckItem.ExtraLabel);
+        deckAdapater.notifyItemChanged(DeckItem.SideLabel);
+
         return true;
     }
 
@@ -191,11 +215,14 @@ class DeckDrager {
         deckAdapater.mItems.add(DeckItem.SideEnd, space);
         //空白向后移
 //        for (int i = DeckItem.SideStart + left; i < DeckItem.SideStart + sidecount; i++) {
-           // Collections.swap(deckAdapater.mItems, i, i + 1);
+        // Collections.swap(deckAdapater.mItems, i, i + 1);
 //        }
         //move
         deckAdapater.notifyItemMoved(DeckItem.SideStart + left, DeckItem.MainStart + right);
         deckAdapater.notifyItemRemoved(DeckItem.MainEnd);
+        if (deckAdapater.getMainCount() == Constants.DECK_MAIN_MAX) {
+            deckAdapater.notifyItemChanged(DeckItem.MainEnd);
+        }
         deckAdapater.notifyItemInserted(DeckItem.SideEnd);
         //label
         deckAdapater.notifyItemChanged(DeckItem.MainLabel);
@@ -231,39 +258,4 @@ class DeckDrager {
         deckAdapater.notifyItemChanged(DeckItem.SideLabel);
         return true;
     }
-
-    /**
-     * 减少main的一个，增加side
-     */
-    public void removeMainEnd() {
-        DeckItem deckItem = deckAdapater.mItems.remove(DeckItem.MainEnd);
-        deckAdapater.mItems.add(DeckItem.SideEnd, deckItem);
-        deckAdapater.notifyItemRemoved(DeckItem.MainEnd);
-        deckAdapater.notifyItemInserted(DeckItem.SideEnd);
-    }
-
-    public void addMainEnd() {
-        DeckItem deckItem = deckAdapater.mItems.remove(DeckItem.SideEnd);
-        deckAdapater.mItems.add(DeckItem.MainEnd, deckItem);
-        deckAdapater.notifyItemRemoved(DeckItem.SideEnd);
-        deckAdapater.notifyItemInserted(DeckItem.MainEnd);
-    }
-
-    /**
-     * 减少extra的一个，增加side
-     */
-    public void removeExtraEnd() {
-        DeckItem deckItem = deckAdapater.mItems.remove(DeckItem.ExtraEnd);
-        deckAdapater.mItems.add(DeckItem.SideEnd, deckItem);
-        deckAdapater.notifyItemRemoved(DeckItem.ExtraEnd);
-        deckAdapater.notifyItemInserted(DeckItem.SideEnd);
-    }
-
-    public void addExtraEnd() {
-        DeckItem deckItem = deckAdapater.mItems.remove(DeckItem.SideEnd);
-        deckAdapater.mItems.add(DeckItem.ExtraEnd, deckItem);
-        deckAdapater.notifyItemRemoved(DeckItem.SideEnd);
-        deckAdapater.notifyItemInserted(DeckItem.ExtraEnd);
-    }
-
 }
