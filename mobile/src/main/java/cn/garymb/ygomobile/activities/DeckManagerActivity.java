@@ -39,9 +39,11 @@ public class DeckManagerActivity extends BaseCardsAcitivity {
         mRecyclerView.setAdapter((mDeckAdapater = new DeckAdapater(this, mRecyclerView)));
         mRecyclerView.setLayoutManager(new DeckLayoutManager(this, Constants.DECK_WIDTH_COUNT));
         mCardSelector.hideLimit();
-        mDrawerlayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_OPEN);
         ItemTouchHelper touchHelper = new ItemTouchHelper(new DeckItemTouchHelper(mDeckAdapater));
         touchHelper.attachToRecyclerView(mRecyclerView);
+
+        mDrawerlayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_OPEN);
+        hideDrawers();
     }
 
     @Override

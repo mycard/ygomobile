@@ -74,12 +74,12 @@ class DeckDrager {
         int left = src - DeckItem.MainStart;
         int right = to - DeckItem.MainStart;
         int count = deckAdapater.getMainCount();
-//        if (left >= count && right >= count) {
-//            return;
-//        }
-//        if (left >= count) {
-//            left = count - 1;
-//        }
+        if (left >= count && right >= count) {
+            return false;
+        }
+        if (left >= count) {
+            left = count - 1;
+        }
         if (right >= count) {
             right = count - 1;
         }
@@ -95,12 +95,12 @@ class DeckDrager {
         int left = src - DeckItem.SideStart;
         int right = to - DeckItem.SideStart;
         int count = deckAdapater.getSideCount();
-//        if (left >= count && right >= count) {
-//            return;
-//        }
-//        if (left >= count) {
-//            left = count - 1;
-//        }
+        if (left >= count && right >= count) {
+            return false;
+        }
+        if (left >= count) {
+            left = count - 1;
+        }
         if (right >= count) {
             right = count - 1;
         }
@@ -114,12 +114,12 @@ class DeckDrager {
         int left = src - DeckItem.ExtraStart;
         int right = to - DeckItem.ExtraStart;
         int count = deckAdapater.getExtraCount();
-//        if (left >= count && right > count) {
-//            return;
-//        }
-//        if (left >= count) {
-//            left = count - 1;
-//        }
+        if (left >= count && right > count) {
+            return false;
+        }
+        if (left >= count) {
+            left = count - 1;
+        }
         if (right >= count) {
             right = count - 1;
         }

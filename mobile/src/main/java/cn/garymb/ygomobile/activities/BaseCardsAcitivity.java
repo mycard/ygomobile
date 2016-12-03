@@ -127,6 +127,14 @@ abstract class BaseCardsAcitivity extends BaseActivity implements CardLoader.Cal
 
     }
 
+    protected void hideDrawers(){
+        if (mDrawerlayout.isDrawerOpen(Gravity.RIGHT)) {
+            mDrawerlayout.closeDrawer(Gravity.RIGHT);
+        }
+        if (mDrawerlayout.isDrawerOpen(Gravity.LEFT)) {
+            mDrawerlayout.closeDrawer(Gravity.LEFT);
+        }
+    }
 
     @Override
     public void onBackPressed() {
