@@ -31,12 +31,13 @@ public class CardDetail extends BaseAdapterPlus.BaseViewHolder {
     private View view_bar;
     private View close;
     private View faq;
+    private View add;
     private View lb_race;
     private TextView cardcode;
 
     public interface OnClickListener {
         void onOpenUrl(CardInfo cardInfo);
-
+        void onAddCard(CardInfo cardInfo);
         void onClose();
     }
 
@@ -58,6 +59,7 @@ public class CardDetail extends BaseAdapterPlus.BaseViewHolder {
         race = bind(R.id.card_race);
         setname = bind(R.id.card_setname);
         lb_race = bind(R.id.lb_race);
+        add = bind(R.id.btn_add_card);
     }
 
     public ImageView getCardImage() {
@@ -67,7 +69,9 @@ public class CardDetail extends BaseAdapterPlus.BaseViewHolder {
     public void hideClose() {
         close.setVisibility(View.GONE);
     }
-
+    public void showAdd() {
+        add.setVisibility(View.VISIBLE);
+    }
     public View getView() {
         return view;
     }
@@ -121,6 +125,11 @@ public class CardDetail extends BaseAdapterPlus.BaseViewHolder {
         close.setOnClickListener((v) -> {
             if (listener != null) {
                 listener.onClose();
+            }
+        });
+        add.setOnClickListener((v)->{
+            if (listener != null) {
+                listener.onAddCard(cardInfo);
             }
         });
         faq.setOnClickListener((v) -> {

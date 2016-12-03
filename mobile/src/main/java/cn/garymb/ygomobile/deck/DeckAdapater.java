@@ -1,6 +1,7 @@
 package cn.garymb.ygomobile.deck;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -10,18 +11,23 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.bean.CardInfo;
 import cn.garymb.ygomobile.core.loader.ImageLoader;
 import cn.garymb.ygomobile.lite.R;
+import cn.ygo.ocgcore.Card;
+import cn.ygo.ocgcore.LimitList;
 import cn.ygo.ocgcore.enums.CardType;
 import cn.ygo.ocgcore.enums.LimitType;
 
 
 public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
     final List<DeckItem> mItems = new ArrayList<>();
+    private Map<Long, Integer> mCount = new HashMap<>();
     private DeckInfo mDeck = new DeckInfo();
     private Context context;
     private LayoutInflater mLayoutInflater;
@@ -76,7 +82,7 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
         return mDeck != null ? mDeck.getSideCards() : null;
     }
 
-    public CardInfo removeMain(int pos) {
+    CardInfo removeMain(int pos) {
         List<CardInfo> list = getMainCards();
         if (list != null && pos >= 0 && pos <= list.size()) {
             mMainCount--;
@@ -93,7 +99,7 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
         return null;
     }
 
-    public CardInfo removeSide(int pos) {
+    CardInfo removeSide(int pos) {
         List<CardInfo> list = getSideCards();
         if (list != null && pos >= 0 && pos <= list.size()) {
             mSideCount--;
@@ -110,7 +116,7 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
         return null;
     }
 
-    public CardInfo removeExtra(int pos) {
+    CardInfo removeExtra(int pos) {
         List<CardInfo> list = getExtraCards();
         if (list != null && pos >= 0 && pos <= list.size()) {
             mExtraCount--;
@@ -127,8 +133,9 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
         return null;
     }
 
-    public void addCount(CardInfo cardInfo, DeckItemType type) {
+    void addCount(CardInfo cardInfo, DeckItemType type) {
         if (cardInfo == null) return;
+        pushCount(cardInfo);
         switch (type) {
             case MainCard:
                 if (cardInfo.isType(CardType.Monster)) {
@@ -160,7 +167,69 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
         }
     }
 
-    public void addMain(int pos, CardInfo cardInfo) {
+    public boolean AddCard(CardInfo cardInfo, LimitList limitList, DeckItemType type) {
+        if (limitList.isForbidden(cardInfo.Code)) {
+            return false;
+        }
+        Integer count = mCount.get(Long.valueOf(cardInfo.Code));
+        if (count != null) {
+            if (limitList.isLimit(cardInfo.Code)) {
+                if (count >= 1) {
+                    return false;
+                }
+            } else if (limitList.isSemiLimit(cardInfo.Code)) {
+                if (count >= 2) {
+                    return false;
+                }
+            }
+
+        }
+        if (type == DeckItemType.MainCard) {
+            if (getMainCount() >= Constants.DECK_MAIN_MAX) {
+                return false;
+            }
+            mItems.remove(DeckItem.MainEnd);
+            mItems.add(DeckItem.MainStart + getMainCount(), new DeckItem(cardInfo, type));
+            notifyItemChanged(DeckItem.MainEnd);
+            addCount(cardInfo, type);
+            pushCount(cardInfo);
+            return true;
+        }
+        if (type == DeckItemType.ExtraCard) {
+            if (getExtraCount() >= Constants.DECK_EXTRA_MAX) {
+                return false;
+            }
+            mItems.remove(DeckItem.ExtraEnd);
+            mItems.add(DeckItem.ExtraStart + getExtraCount(), new DeckItem(cardInfo, type));
+            notifyItemChanged(DeckItem.ExtraEnd);
+            addCount(cardInfo, type);
+            pushCount(cardInfo);
+            return true;
+        }
+        if (type == DeckItemType.SideCard) {
+            if (getSideCount() >= Constants.DECK_SIDE_MAX) {
+                return false;
+            }
+            mItems.remove(DeckItem.SideEnd);
+            mItems.add(DeckItem.SideStart + getSideCount(), new DeckItem(cardInfo, type));
+            notifyItemChanged(DeckItem.SideEnd);
+            addCount(cardInfo, type);
+            pushCount(cardInfo);
+            return true;
+        }
+        return false;
+    }
+
+    void pushCount(CardInfo cardInfo) {
+        Integer i = mCount.get(Long.valueOf(cardInfo.Code));
+        if (i == null) {
+            mCount.put(Long.valueOf(cardInfo.Code), 1);
+        } else {
+            mCount.put(Long.valueOf(cardInfo.Code), i + 1);
+        }
+    }
+
+    void addMain(int pos, CardInfo cardInfo) {
         List<CardInfo> list = getMainCards();
         if (list != null && mMainCount < Constants.DECK_MAIN_MAX) {
             list.add(pos, cardInfo);
@@ -169,7 +238,7 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
         }
     }
 
-    public void addExtra(int pos, CardInfo cardInfo) {
+    void addExtra(int pos, CardInfo cardInfo) {
         List<CardInfo> list = getExtraCards();
         if (list != null && mExtraCount < Constants.DECK_EXTRA_MAX) {
             list.add(pos, cardInfo);
@@ -178,7 +247,7 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
         }
     }
 
-    public void addSide(int pos, CardInfo cardInfo) {
+    void addSide(int pos, CardInfo cardInfo) {
         List<CardInfo> list = getSideCards();
         if (list != null) {
             list.add(pos, cardInfo);
@@ -323,15 +392,6 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
                 }
             }
         }
-    }
-
-    public int getDragPosition() {
-        return mDragPosition;
-    }
-
-    public void setDragPosition(int dragPosition) {
-        mDragPosition = dragPosition;
-        notifyDataSetChanged();
     }
 
     @Override

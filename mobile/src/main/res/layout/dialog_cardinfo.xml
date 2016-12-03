@@ -4,50 +4,74 @@
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent">
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingLeft="8dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingLeft="8dp">
+
         <TextView
             android:id="@+id/card_code"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/button_width_small"
             android:gravity="center_vertical"
-            android:textIsSelectable="true"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
             android:textColor="@color/colorPrimary"
+            android:textIsSelectable="true"
             tools:text="12345678"/>
+
         <TextView
             android:id="@+id/btn_faq"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:gravity="center_vertical"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:shadowColor="@color/colorPrimary"
             android:text="@string/card_faq"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@color/colorAccent"
+            android:textStyle="bold"
             />
     </LinearLayout>
 
-    <ImageButton
-        android:id="@+id/btn_close"
-        android:layout_width="@dimen/button_width_small"
-        android:layout_height="@dimen/button_width_small"
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="right"
-        android:textIsSelectable="true"
-        android:background="@android:color/transparent"
-        android:paddingRight="8dp"
-        app:srcCompat="@drawable/ic_close_black_24dp"/>
+        android:orientation="horizontal"
+        android:paddingRight="8dp">
+
+        <TextView
+            android:id="@+id/btn_add_card"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginRight="20dp"
+            android:gravity="center_vertical"
+            android:text="@string/card_faq"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold"
+            android:visibility="gone"
+            />
+
+        <ImageButton
+            android:id="@+id/btn_close"
+            android:layout_width="@dimen/button_width_small"
+            android:layout_height="@dimen/button_width_small"
+            android:background="@android:color/transparent"
+            android:textIsSelectable="true"
+            app:srcCompat="@drawable/ic_close_black_24dp"/>
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="@dimen/button_width_small"
         android:orientation="vertical"
+        android:paddingBottom="10dp"
         android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:paddingBottom="10dp">
+        android:paddingRight="10dp">
 
         <TextView
             android:id="@+id/text_name"
@@ -55,10 +79,10 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
             android:maxLines="1"
-            android:textIsSelectable="true"
             android:singleLine="true"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
             android:textColor="@color/colorPrimaryDark"
+            android:textIsSelectable="true"
             android:textSize="20sp"
             tools:text="name"/>
 
@@ -76,8 +100,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
             android:layout_marginBottom="2dp"
+            android:layout_marginTop="2dp"
             android:orientation="horizontal">
 
             <ImageView
@@ -143,6 +167,7 @@
                         android:singleLine="true"
                         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                         tools:text="Test"/>
+
                     <View
                         android:id="@+id/view_bar"
                         android:layout_width="match_parent"
@@ -215,8 +240,8 @@
                 android:layout_height="wrap_content"
                 android:gravity="left|top"
                 android:minHeight="@dimen/card_desc_height"
-                android:textIsSelectable="true"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textIsSelectable="true"
                 tools:text="desc"/>
         </ScrollView>
     </LinearLayout>

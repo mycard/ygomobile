@@ -3,6 +3,7 @@ package cn.garymb.ygomobile.activities;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.os.Bundle;
+import android.os.Debug;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.RecyclerView;
@@ -12,6 +13,7 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import java.io.File;
 import java.util.List;
@@ -22,6 +24,7 @@ import cn.garymb.ygomobile.core.CardDetail;
 import cn.garymb.ygomobile.deck.DeckAdapater;
 import cn.garymb.ygomobile.deck.DeckItem;
 import cn.garymb.ygomobile.deck.DeckItemTouchHelper;
+import cn.garymb.ygomobile.deck.DeckItemType;
 import cn.garymb.ygomobile.deck.DeckItemUtils;
 import cn.garymb.ygomobile.deck.DeckLayoutManager;
 import cn.garymb.ygomobile.lite.R;
@@ -30,10 +33,11 @@ import cn.garymb.ygomobile.plus.VUiKit;
 import cn.garymb.ygomobile.settings.AppsSettings;
 import cn.ygo.ocgcore.LimitList;
 
-public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerViewItemListener.OnItemListener{
+public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerViewItemListener.OnItemListener {
     private RecyclerView mRecyclerView;
     private DeckAdapater mDeckAdapater;
     private AppsSettings mSettings = AppsSettings.get();
+    private LimitList mLimitList;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -52,11 +56,15 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
     @Override
     protected void onInit() {
         super.onInit();
+        mLimitList = mLimitManager.getCount() > 0 ? mLimitManager.getLimit(0) : null;
+        File file = new File(mSettings.getResourcePath(), Constants.CORE_DECK_PATH + "/911+YA02.ydk");
+        loadDeck(file);
+    }
+
+    private void loadDeck(File file) {
         VUiKit.defer().when(() -> {
             if (mCardLoader.isOpen()) {
-                File file = new File(mSettings.getResourcePath(), Constants.CORE_DECK_PATH + "/911+YA02.ydk");
-                LimitList limitList = mLimitManager.getCount() > 0 ? mLimitManager.getLimit(0) : null;
-                return DeckItemUtils.readDeck(mCardLoader, file, limitList);
+                return DeckItemUtils.readDeck(mCardLoader, file, mLimitList);
             } else {
                 return null;
             }
@@ -76,7 +84,7 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
 
     @Override
     protected void onCardClick(CardInfo cardInfo, int pos) {
-        showCardDialog(cardInfo);
+        showCardDialog(cardInfo, true, pos);
     }
 
     @Override
@@ -108,8 +116,8 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
     @Override
     public void onItemClick(View view, int pos) {
         DeckItem deckItem = mDeckAdapater.getItem(pos);
-        if(deckItem!=null){
-            showCardDialog(deckItem.getCardInfo());
+        if (deckItem != null) {
+            showCardDialog(deckItem.getCardInfo(), false, pos);
         }
     }
 
@@ -120,12 +128,12 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
 
     @Override
     public void onItemDoubleClick(View view, int pos) {
-Log.i("kk","double click "+pos);
     }
 
-    protected void showCardDialog(CardInfo cardInfo) {
+    protected void showCardDialog(CardInfo cardInfo, boolean isEdit, int pos) {
         if (cardInfo != null) {
             CardDetail cardDetail = new CardDetail(this);
+            cardDetail.showAdd();
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setView(cardDetail.getView());
             final Dialog dialog = builder.show();
@@ -139,6 +147,24 @@ Log.i("kk","double click "+pos);
                 @Override
                 public void onClose() {
                     dialog.dismiss();
+                }
+
+                @Override
+                public void onAddCard(CardInfo cardInfo) {
+                    if (isEdit) {
+                        boolean rs = false;
+                        if (DeckItemUtils.isMain(pos)) {
+                            rs = mDeckAdapater.AddCard(cardInfo, mLimitList, DeckItemType.MainCard);
+                        } else if (DeckItemUtils.isExtra(pos)) {
+                            rs = mDeckAdapater.AddCard(cardInfo, mLimitList, DeckItemType.ExtraCard);
+                        } else if (DeckItemUtils.isSide(pos)) {
+                            rs = mDeckAdapater.AddCard(cardInfo, mLimitList, DeckItemType.SideCard);
+                        }
+                        if (!rs) {
+                            Toast.makeText(DeckManagerActivity.this, "add fail", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+//                    mDeckAdapater.AddCard(cardInfo, DeckItemType.MainCard);
                 }
             });
         }

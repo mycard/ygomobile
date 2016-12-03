@@ -59,6 +59,11 @@ public class CardSearchActivity extends BaseCardsAcitivity {
             @Override
             public void onClose() {
             }
+
+            @Override
+            public void onAddCard(CardInfo cardInfo) {
+
+            }
         });
     }
 
