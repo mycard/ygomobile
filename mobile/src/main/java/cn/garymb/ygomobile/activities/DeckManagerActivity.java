@@ -12,6 +12,7 @@ import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -282,17 +283,14 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
 
                 //选择禁卡表
                 //卡组列表
+                View view=LayoutInflater.from(this).inflate(R.layout.dialog_deck, null);
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle(R.string.question);
-                LinearLayout linearLayout = new LinearLayout(this);
-                linearLayout.setOrientation(LinearLayout.VERTICAL);
-                Spinner ydks = new Spinner(this);
+                builder.setTitle(R.string.deck_manager);
+                builder.setView(view);
+                Spinner ydks = (Spinner) view.findViewById(R.id.sp_ydk_list);
                 initDecksListSpinners(ydks);
-                Spinner limits = new Spinner(this);
+                Spinner limits = (Spinner) view.findViewById(R.id.sp_limit_list);
                 initLimitListSpinners(limits);
-                linearLayout.addView(limits, getItemLayoutParams());
-                linearLayout.addView(ydks, getItemLayoutParams());
-                builder.setView(linearLayout);
                 builder.setNegativeButton(android.R.string.ok, (dlg, rs) -> {
                     LimitList limitList = getSelectLimitList(limits);
                     setLimitList(limitList);

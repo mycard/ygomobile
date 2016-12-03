@@ -36,29 +36,29 @@ public class DeckItemUtils {
             file.createNewFile();
             outputStream = new FileOutputStream(file);
             writer = new OutputStreamWriter(outputStream, "utf-8");
-            writer.write("#created by ygomobile\n".toCharArray());
-            writer.write("#main\n".toCharArray());
+            writer.write("#created by ygomobile".toCharArray());
+            writer.write("\n#main".toCharArray());
             if (deckInfo.getMainCards() != null) {
                 List<CardInfo> items = deckInfo.getMainCards();
                 for (int i = 0; i < Constants.DECK_MAIN_MAX && i < items.size(); i++) {
                     CardInfo cardInfo = items.get(i);
-                    writer.write((cardInfo.Code + "\n").toCharArray());
+                    writer.write(( "\n"+cardInfo.Code).toCharArray());
                 }
             }
-            writer.write("#extra\n".toCharArray());
+            writer.write("\n#extra".toCharArray());
             if (deckInfo.getExtraCards() != null) {
                 List<CardInfo> items = deckInfo.getExtraCards();
                 for (int i = 0; i < Constants.DECK_EXTRA_MAX && i < items.size(); i++) {
                     CardInfo cardInfo = items.get(i);
-                    writer.write((cardInfo.Code + "\n").toCharArray());
+                    writer.write(("\n"+cardInfo.Code).toCharArray());
                 }
             }
-            writer.write("!side\n".toCharArray());
+            writer.write("\n!side".toCharArray());
             if (deckInfo.getSideCards() != null) {
                 List<CardInfo> items = deckInfo.getSideCards();
                 for (int i = 0; i < Constants.DECK_SIDE_MAX && i < items.size(); i++) {
                     CardInfo cardInfo = items.get(i);
-                    writer.write((cardInfo.Code + "\n").toCharArray());
+                    writer.write(( "\n"+cardInfo.Code).toCharArray());
                 }
             }
             writer.flush();
@@ -99,6 +99,10 @@ public class DeckItemUtils {
             String line = null;
             DeckItemType type = DeckItemType.Space;
             while ((line = reader.readLine()) != null) {
+                if (line.startsWith("!side")) {
+                    type = DeckItemType.SideCard;
+                    continue;
+                }
                 if (line.startsWith("#")) {
                     if (line.startsWith("#main")) {
                         type = DeckItemType.MainCard;
@@ -107,12 +111,8 @@ public class DeckItemUtils {
                     }
                     continue;
                 }
-                if (line.startsWith("!side")) {
-                    type = DeckItemType.SideCard;
-                    continue;
-                }
                 line = line.trim();
-                if (!TextUtils.isDigitsOnly(line)) {
+                if (line.length()==0 || !TextUtils.isDigitsOnly(line)) {
                     Log.w("kk", "read not number " + line);
                     continue;
                 }
