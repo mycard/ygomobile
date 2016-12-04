@@ -20,6 +20,7 @@ import java.io.File;
 
 import cn.garymb.ygomobile.activities.BaseActivity;
 import cn.garymb.ygomobile.lite.R;
+import cn.garymb.ygomobile.plus.DialogPlus;
 
 public class FileActivity extends BaseActivity implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener
         , FileAdapter.OnPathChangedListener {
@@ -66,12 +67,12 @@ public class FileActivity extends BaseActivity implements AdapterView.OnItemClic
         headText = bind(R.id.path);
         newFolderButton=bind(R.id.new_folder);
         newFolderButton.setOnClickListener((v) -> {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            DialogPlus builder=new DialogPlus(this);
             final EditText editText = new EditText(this);
             editText.setSingleLine();
             builder.setTitle(R.string.create_folder);
             builder.setView(editText);
-            builder.setNegativeButton(android.R.string.ok, (d, s) -> {
+            builder.setButtonListener((d, s) -> {
                 if (editText.getText() != null) {
                     String name = String.valueOf(editText.getText());
                     if (TextUtils.isEmpty(name)) {
@@ -84,9 +85,6 @@ public class FileActivity extends BaseActivity implements AdapterView.OnItemClic
                     }
                     mFileAdapter.loadFiles();
                 }
-                d.dismiss();
-            });
-            builder.setNeutralButton(android.R.string.cancel, (d, s) -> {
                 d.dismiss();
             });
             builder.show();

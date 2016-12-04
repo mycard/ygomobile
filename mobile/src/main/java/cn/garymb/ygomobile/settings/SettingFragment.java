@@ -1,6 +1,5 @@
 package cn.garymb.ygomobile.settings;
 
-import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -27,12 +26,25 @@ import java.io.InputStream;
 import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.core.ResCheckTask;
 import cn.garymb.ygomobile.lite.R;
+import cn.garymb.ygomobile.plus.DialogPlus;
 import cn.garymb.ygomobile.plus.PreferenceFragmentPlus;
-import cn.garymb.ygomobile.utils.BitmapUtil;
-import cn.garymb.ygomobile.utils.IOUtils;
 import cn.garymb.ygomobile.plus.VUiKit;
+import cn.garymb.ygomobile.utils.IOUtils;
 
-import static cn.garymb.ygomobile.Constants.*;
+import static cn.garymb.ygomobile.Constants.PREF_DECK_SHOW_CARD;
+import static cn.garymb.ygomobile.Constants.PREF_FONT_ANTIALIAS;
+import static cn.garymb.ygomobile.Constants.PREF_GAME_FONT;
+import static cn.garymb.ygomobile.Constants.PREF_GAME_PATH;
+import static cn.garymb.ygomobile.Constants.PREF_GAME_VERSION;
+import static cn.garymb.ygomobile.Constants.PREF_IMAGE_QUALITY;
+import static cn.garymb.ygomobile.Constants.PREF_IMMERSIVE_MODE;
+import static cn.garymb.ygomobile.Constants.PREF_LOCK_SCREEN;
+import static cn.garymb.ygomobile.Constants.PREF_OPENGL_VERSION;
+import static cn.garymb.ygomobile.Constants.PREF_PENDULUM_SCALE;
+import static cn.garymb.ygomobile.Constants.PREF_SOUND_EFFECT;
+import static cn.garymb.ygomobile.Constants.PREF_USE_EXTRA_CARD_CARDS;
+import static cn.garymb.ygomobile.Constants.SETTINGS_CARD_BG;
+import static cn.garymb.ygomobile.Constants.SETTINGS_COVER;
 import static cn.garymb.ygomobile.core.ResCheckTask.getDatapath;
 
 public class SettingFragment extends PreferenceFragmentPlus {
@@ -152,30 +164,25 @@ public class SettingFragment extends PreferenceFragmentPlus {
 
     private void showImageDialog(Preference preference, String title, String outFile, boolean isJpeg, int outWidth, int outHeight) {
         int width = getResources().getDisplayMetrics().widthPixels;
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        DialogPlus builder = new DialogPlus(getActivity());
         final ImageView imageView = new ImageView(getActivity());
         FrameLayout frameLayout = new FrameLayout(getActivity());
         imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
         builder.setTitle(title);
         FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
-        layoutParams.topMargin = VUiKit.dpToPx(10);
-        layoutParams.leftMargin = VUiKit.dpToPx(10);
-        layoutParams.rightMargin = VUiKit.dpToPx(10);
         layoutParams.gravity = Gravity.CENTER_HORIZONTAL;
         frameLayout.addView(imageView, layoutParams);
         builder.setView(frameLayout);
-        builder.setNegativeButton(R.string.settings, (dlg, s) -> {
+        builder.setButtonText(R.string.settings);
+        builder.setButtonListener((dlg, s) -> {
             showImageCropChooser(preference, getString(R.string.dialog_select_image), outFile,
                     isJpeg, outWidth, outHeight);
             dlg.dismiss();
         });
-        builder.setNeutralButton(android.R.string.cancel, (dlg, s) -> {
-            dlg.dismiss();
-        });
-        builder.setOnCancelListener((dlg) -> {
-            BitmapUtil.destroy(imageView.getDrawable());
-        });
+//        builder.setOnCancelListener((dlg) -> {
+//            BitmapUtil.destroy(imageView.getDrawable());
+//        });
         builder.show();
         File img = new File(outFile);
         if (img.exists()) {

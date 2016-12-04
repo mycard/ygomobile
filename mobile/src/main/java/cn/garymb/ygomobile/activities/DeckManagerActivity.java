@@ -12,7 +12,6 @@ import android.support.v7.widget.helper.ItemTouchHelperCompat;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,6 +35,7 @@ import cn.garymb.ygomobile.deck.DeckItemTouchHelper;
 import cn.garymb.ygomobile.deck.DeckItemType;
 import cn.garymb.ygomobile.deck.DeckLayoutManager;
 import cn.garymb.ygomobile.lite.R;
+import cn.garymb.ygomobile.plus.DialogPlus;
 import cn.garymb.ygomobile.plus.RecyclerViewItemListener;
 import cn.garymb.ygomobile.plus.VUiKit;
 import cn.garymb.ygomobile.plus.spinner.SimpleSpinnerAdapter;
@@ -294,18 +294,16 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
                 loadDeck(null);
                 break;
             case R.id.action_delete_deck: {
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                DialogPlus builder=new DialogPlus(this);
                 builder.setTitle(R.string.question);
                 builder.setMessage(R.string.question_delete_deck);
-                builder.setNegativeButton(android.R.string.ok, (dlg, rs) -> {
+                builder.setButtonListener((dlg, rs) -> {
                     if (mYdkFile != null && mYdkFile.exists()) {
                         mYdkFile.delete();
                     }
                     dlg.dismiss();
                     loadDeck(null);
-                });
-                builder.setNeutralButton(android.R.string.cancel, (dlg, rs) -> {
-                    dlg.dismiss();
                 });
                 builder.show();
             }
@@ -315,15 +313,16 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
 
                 //选择禁卡表
                 //卡组列表
-                View view = LayoutInflater.from(this).inflate(R.layout.dialog_deck, null);
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle(R.string.deck_manager);
-                builder.setView(view);
-                Spinner ydks = (Spinner) view.findViewById(R.id.sp_ydk_list);
+                DialogPlus dialogPlus=new DialogPlus(this);
+//                View view = LayoutInflater.from(this).inflate(R.layout.dialog_deck, null);
+//                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                dialogPlus.setTitle(R.string.deck_manager);
+                dialogPlus.setView(R.layout.dialog_deck);
+                Spinner ydks = (Spinner) dialogPlus.findViewById(R.id.sp_ydk_list);
                 initDecksListSpinners(ydks);
-                Spinner limits = (Spinner) view.findViewById(R.id.sp_limit_list);
+                Spinner limits = (Spinner) dialogPlus.findViewById(R.id.sp_limit_list);
                 initLimitListSpinners(limits);
-                builder.setNegativeButton(android.R.string.ok, (dlg, rs) -> {
+                dialogPlus.setButtonListener((dlg, rs) -> {
                     LimitList limitList = getSelectLimitList(limits);
                     setLimitList(limitList);
                     File file = getSelectDeck(ydks);
@@ -332,10 +331,7 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
                         loadDeck(file);
                     }
                 });
-                builder.setNeutralButton(android.R.string.cancel, (dlg, rs) -> {
-                    dlg.dismiss();
-                });
-                builder.show();
+                dialogPlus.show();
             }
             break;
             case R.id.action_unsort:
@@ -443,14 +439,15 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
     }
 
     private void inputDeckName() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        DialogPlus builder=new DialogPlus(this);
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.intpu_name);
         EditText editText = new EditText(this);
         editText.setGravity(Gravity.TOP | Gravity.LEFT);
         editText.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
         editText.setSingleLine();
         builder.setView(editText);
-        builder.setNegativeButton(android.R.string.ok, (dlg, s) -> {
+        builder.setButtonListener((dlg, s) -> {
             CharSequence name = editText.getText();
             if (!TextUtils.isEmpty(name)) {
                 String filename = String.valueOf(name);
@@ -476,9 +473,6 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
             } else {
                 dlg.dismiss();
             }
-        });
-        builder.setNeutralButton(android.R.string.cancel, (dlg, s) -> {
-            dlg.dismiss();
         });
         builder.show();
     }

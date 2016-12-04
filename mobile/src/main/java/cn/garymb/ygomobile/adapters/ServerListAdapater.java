@@ -1,7 +1,6 @@
 package cn.garymb.ygomobile.adapters;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.text.TextUtils;
 import android.view.View;
@@ -19,11 +18,12 @@ import java.io.OutputStream;
 import cn.garymb.ygodata.YGOGameOptions;
 import cn.garymb.ygomobile.bean.ServerInfo;
 import cn.garymb.ygomobile.bean.ServerList;
-import cn.garymb.ygomobile.core.loader.IDataLoader;
 import cn.garymb.ygomobile.core.YGOStarter;
+import cn.garymb.ygomobile.core.loader.IDataLoader;
 import cn.garymb.ygomobile.core.loader.ILoadCallBack;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.plus.BaseAdapterPlus;
+import cn.garymb.ygomobile.plus.DialogPlus;
 import cn.garymb.ygomobile.plus.VUiKit;
 import cn.garymb.ygomobile.utils.IOUtils;
 import cn.garymb.ygomobile.utils.XmlUtils;
@@ -112,16 +112,9 @@ public class ServerListAdapater extends BaseAdapterPlus<ServerInfo> implements
 
     private void showDialog(ServerInfo serverInfo, int position) {
         final boolean isAdd = position < 0;
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-        View view = mLayoutInflater.inflate(R.layout.dialog_server_edit, null);
-        EditViewHolder editViewHolder = new EditViewHolder(view);
-//        if (isAdd) {
-//            builder.setTitle(R.string.action_add_server);
-//        } else {
-//            builder.setTitle(R.string.edit);
-//        }
-        builder.setView(view);
-//        builder.setCancelable(false);
+        DialogPlus builder = new DialogPlus(getContext());
+        builder.setView(R.layout.dialog_server_edit);
+        EditViewHolder editViewHolder = new EditViewHolder(builder.getContentView());
         final Dialog dialog = builder.show();
         if (serverInfo != null) {
             editViewHolder.serverName.setText(serverInfo.getName());
@@ -130,10 +123,14 @@ public class ServerListAdapater extends BaseAdapterPlus<ServerInfo> implements
             editViewHolder.serverPort.setText(String.valueOf(serverInfo.getPort()));
             editViewHolder.userPassword.setText(serverInfo.getPassword());
         }
-        editViewHolder.save.setOnClickListener((v) -> {
+        if (isAdd) {
+            builder.setTitle(R.string.action_add_server);
+        } else {
+            builder.setTitle(R.string.server_info_edit);
+        }
+        builder.setButtonListener((dlg,v)-> {
             //保存
             ServerInfo info;
-
             if (!isAdd) {
                 info = getItem(position);
             } else {
@@ -150,17 +147,6 @@ public class ServerListAdapater extends BaseAdapterPlus<ServerInfo> implements
             }
             info.setPort(Integer.valueOf("" + editViewHolder.serverPort.getText()));
             info.setPassword("" + editViewHolder.userPassword.getText());
-
-//            if (isAdd && exist(info)) {
-//                已经存在
-//                Toast.makeText(getContext(), R.string.server_is_exist, Toast.LENGTH_SHORT).show();
-//                return;
-//            }
-            if (isAdd) {
-                editViewHolder.title.setText(R.string.action_add_server);
-            } else {
-                editViewHolder.title.setText(R.string.server_info_edit);
-            }
             OutputStream outputStream = null;
             try {
                 outputStream = new FileOutputStream(xmlFile);
@@ -171,9 +157,6 @@ public class ServerListAdapater extends BaseAdapterPlus<ServerInfo> implements
                 IOUtils.close(outputStream);
             }
             notifyDataSetChanged();
-            dialog.dismiss();
-        });
-        editViewHolder.close.setOnClickListener((v) -> {
             dialog.dismiss();
         });
     }
@@ -221,16 +204,10 @@ public class ServerListAdapater extends BaseAdapterPlus<ServerInfo> implements
     }
 
     static class EditViewHolder extends ViewHolder {
-        View close;
-        View save;
         TextView userPassword;
-        TextView title;
 
         EditViewHolder(View view) {
             super(view);
-            title = findViewById(R.id.title);
-            close = findViewById(R.id.btn_close);
-            save = findViewById(R.id.btn_save);
             userPassword = findViewById(R.id.text_player_pwd);
         }
     }

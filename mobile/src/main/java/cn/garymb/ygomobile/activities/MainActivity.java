@@ -1,6 +1,5 @@
 package cn.garymb.ygomobile.activities;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -21,6 +20,7 @@ import cn.garymb.ygomobile.adapters.ServerListAdapater;
 import cn.garymb.ygomobile.core.ResCheckTask;
 import cn.garymb.ygomobile.core.YGOStarter;
 import cn.garymb.ygomobile.lite.R;
+import cn.garymb.ygomobile.plus.DialogPlus;
 import cn.garymb.ygomobile.plus.VUiKit;
 import cn.garymb.ygomobile.settings.AppsSettings;
 import cn.garymb.ygomobile.settings.SettingsActivity;
@@ -127,15 +127,13 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             }
             break;
             case R.id.action_quit: {
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                DialogPlus builder=new DialogPlus(this);
                 builder.setTitle(R.string.question);
                 builder.setMessage(R.string.quit_tip);
-                builder.setNegativeButton(android.R.string.ok, (dlg, s) -> {
+                builder.setButtonListener((dlg, s) -> {
                     dlg.dismiss();
                     finish();
-                });
-                builder.setNeutralButton(android.R.string.cancel, (dlg, s) -> {
-                    dlg.dismiss();
                 });
                 builder.show();
             }
