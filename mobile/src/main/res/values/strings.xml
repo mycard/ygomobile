@@ -70,9 +70,9 @@
     <string name="settings_game_diy_card_db_des">User custom databse</string>
     <string name="settings_game_immersive_mode_summary">Hide virtual navigation key in game</string>
     <string name="settings_game_immersive_mode">Immersive Mode</string>
-    <string name="settings_about_project_address">https://code.csdn.net/a247321453/ygomobile.git</string>
+    <string name="settings_about_project_address" translatable="false">https://github.com/garymabin/YGOMobile</string>
     <string name="settings_game_opengl">OpenGL</string>
-    <string name="settings_author">garymabin@gmail.com\n247321453@qq.com</string>
+    <string name="settings_author" translatable="false">garymabin@gmail.com\n247321453@qq.com</string>
     <string name="restart_app">"Please restart app！"</string>
     <string-array name="opengl_version">
         <item>OpenGL ES 1.X</item>

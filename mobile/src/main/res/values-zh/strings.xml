@@ -61,9 +61,7 @@
     <string name="settings_game_diy_card_back">卡片背面</string>
     <string name="settings_game_diy_card_db">使用自定義數據庫</string>
     <string name="settings_game_immersive_mode">在遊戲隱藏虛擬鍵盤</string>
-    <string name="settings_about_project_address">https://code.csdn.net/a247321453/ygomobile.git</string>
     <string name="settings_game_opengl">OpenGL</string>
-    <string name="settings_author">garymabin@gmail.com\n247321453@qq.com</string>
     <string name="restart_app">請重啟本應用</string>
     <string-array name="opengl_version">
         <item>OpenGL ES 1.X</item>
