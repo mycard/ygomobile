@@ -24,10 +24,12 @@ public class DialogPlus {
     private Button mButton;
     private Dialog mDialog;
     private View mContentView;
+    private int mMaxHeight;
 
     public DialogPlus(Context context) {
         this.context = context;
         mBuilder = new AlertDialog.Builder(context);
+        mMaxHeight = (int)(context.getResources().getDisplayMetrics().heightPixels * 0.7f);
         mLayoutInflater = LayoutInflater.from(context);
         mView = mLayoutInflater.inflate(R.layout.dialog_base, null);
         mBuilder.setView(mView);
@@ -82,8 +84,8 @@ public class DialogPlus {
     }
 
     public DialogPlus setMessage(String text) {
-        setView(R.layout.dialog_message);
-        TextView textView = findViewById(R.id.text);
+        TextView textView = bind(R.id.text);
+        textView.setVisibility(View.VISIBLE);
         textView.setText(text);
         return this;
     }

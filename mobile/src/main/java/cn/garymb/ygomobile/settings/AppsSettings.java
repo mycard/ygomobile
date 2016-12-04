@@ -4,10 +4,11 @@ import android.content.Context;
 import android.os.Environment;
 import android.util.Log;
 
+import org.json.JSONArray;
+
 import java.io.File;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.NativeInitOptions;
@@ -315,19 +316,32 @@ public class AppsSettings {
         return Integer.parseInt(mSharedPreferences.getString(Constants.PREF_DECK_SHOW_CARD, "" + Constants.PREF_DEF_DECK_SHOW_CARD));
     }
 
-    public Set<String> getLastRoomList() {
-        return mSharedPreferences.getStringSet(Constants.PREF_LAST_ROOM_LIST, null);
+    public List<String> getLastRoomList() {
+        List<String> names = new ArrayList<>();
+        String json = mSharedPreferences.getString(Constants.PREF_LAST_ROOM_LIST, null);
+        try {
+            JSONArray array = new JSONArray(json);
+            int count = array.length();
+            for (int i = 0; i < count; i++) {
+                names.add(array.optString(i));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+//        Log.i("kk", "read:" + names);
+        return names;
     }
 
     public void setLastRoomList(List<String> _names) {
-        Set<String> names = new HashSet<>();
+        JSONArray array=new JSONArray();
         if (_names != null) {
             int count = _names.size();
             int max = Math.min(count, Constants.LAST_ROOM_MAX);
             for (int i = 0; i < max; i++) {
-                names.add(_names.get(i));
+                array.put(_names.get(i));
             }
         }
-        mSharedPreferences.putStringSet(Constants.PREF_LAST_ROOM_LIST, names);
+//        Log.i("kk", "save:" + array);
+        mSharedPreferences.putString(Constants.PREF_LAST_ROOM_LIST, array.toString());
     }
 }

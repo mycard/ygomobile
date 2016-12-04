@@ -46,6 +46,10 @@ public abstract class BaseAdapterPlus<T> extends BaseAdapter implements SpinnerA
         return true;
     }
 
+    public T remove(int pos) {
+        return mItems.remove(pos);
+    }
+
     public List<T> getItems() {
         return mItems;
     }
@@ -64,6 +68,10 @@ public abstract class BaseAdapterPlus<T> extends BaseAdapter implements SpinnerA
         if (items != null) {
             mItems.addAll(items);
         }
+    }
+
+    public int findItem(T item) {
+        return mItems.indexOf(item);
     }
 
     public boolean exist(T item) {

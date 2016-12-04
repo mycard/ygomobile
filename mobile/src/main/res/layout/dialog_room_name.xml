@@ -12,6 +12,7 @@
         android:gravity="top|left"
         android:hint="@string/intput_room_name"
         android:inputType="textNoSuggestions"
+        android:imeOptions="actionDone"
         android:singleLine="true"/>
 
     <ListView

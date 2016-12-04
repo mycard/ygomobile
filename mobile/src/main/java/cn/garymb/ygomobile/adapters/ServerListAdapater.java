@@ -3,8 +3,10 @@ package cn.garymb.ygomobile.adapters;
 import android.app.Activity;
 import android.app.Dialog;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -16,6 +18,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.List;
 
 import cn.garymb.ygodata.YGOGameOptions;
 import cn.garymb.ygomobile.bean.ServerInfo;
@@ -74,19 +77,63 @@ public class ServerListAdapater extends BaseAdapterPlus<ServerInfo> implements
             simpleListAdapter.set(AppsSettings.get().getLastRoomList());
             listView.setAdapter(simpleListAdapter);
             listView.setOnItemClickListener((a, v, pos, index) -> {
-                builder.dismiss();
+//                builder.dismiss();
                 String name = simpleListAdapter.getItemById(index);
                 editText.setText(name);
 //                joinGame(serverInfo, name);
+            });
+            editText.setOnEditorActionListener((v, actionId,
+                                                event) -> {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    builder.dismiss();
+                    String name = editText.getText().toString();
+                    if (!TextUtils.isEmpty(name)) {
+                        List<String> items = simpleListAdapter.getItems();
+                        int index = items.indexOf(name);
+                        if (index >= 0) {
+                            items.remove(index);
+                            items.add(0, name);
+                            Log.i("kk", "swap:" + index + "," + items);
+                        } else {
+                            items.add(0, name);
+                            Log.i("kk", "add:" + index + "," + items);
+                        }
+                        AppsSettings.get().setLastRoomList(items);
+                        simpleListAdapter.notifyDataSetChanged();
+                    }
+                    joinGame(serverInfo, name);
+                    return true;
+                }
+                return false;
+            });
+            listView.setOnItemLongClickListener((a, v, i, index) -> {
+                String name = simpleListAdapter.getItemById(index);
+                int pos = simpleListAdapter.findItem(name);
+                if (pos >= 0) {
+                    simpleListAdapter.remove(pos);
+                    simpleListAdapter.notifyDataSetChanged();
+                    AppsSettings.get().setLastRoomList(simpleListAdapter.getItems());
+                }
+                return true;
             });
             builder.setButtonText(R.string.join_game);
             builder.setButtonListener((dlg, i) -> {
                 dlg.dismiss();
                 //保存名字
                 String name = editText.getText().toString();
-                if(!TextUtils.isEmpty(name)) {
-                    simpleListAdapter.add(0, name, true);
-                    AppsSettings.get().setLastRoomList(simpleListAdapter.getItems());
+                if (!TextUtils.isEmpty(name)) {
+                    List<String> items = simpleListAdapter.getItems();
+                    int index = items.indexOf(name);
+                    if (index >= 0) {
+                        items.remove(index);
+                        items.add(0, name);
+                        Log.i("kk", "swap:" + index + "," + items);
+                    } else {
+                        items.add(0, name);
+                        Log.i("kk", "add:" + index + "," + items);
+                    }
+                    AppsSettings.get().setLastRoomList(items);
+                    simpleListAdapter.notifyDataSetChanged();
                 }
                 joinGame(serverInfo, name);
             });
