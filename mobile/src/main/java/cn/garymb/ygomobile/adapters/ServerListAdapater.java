@@ -85,7 +85,7 @@ public class ServerListAdapater extends BaseAdapterPlus<ServerInfo> implements
                 //保存名字
                 String name = editText.getText().toString();
                 if(!TextUtils.isEmpty(name)) {
-                    simpleListAdapter.add(name, true);
+                    simpleListAdapter.add(0, name, true);
                     AppsSettings.get().setLastRoomList(simpleListAdapter.getItems());
                 }
                 joinGame(serverInfo, name);

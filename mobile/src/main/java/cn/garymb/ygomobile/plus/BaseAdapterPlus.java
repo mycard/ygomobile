@@ -26,17 +26,21 @@ public abstract class BaseAdapterPlus<T> extends BaseAdapter implements SpinnerA
     }
 
     public boolean add(T item) {
-        return add(item, false);
+        return add(-1, item, false);
     }
 
-    public boolean add(T item, boolean onlyone) {
+    public boolean add(int pos, T item, boolean onlyone) {
         if (item != null) {
             if (onlyone) {
                 if (exist(item)) {
                     return false;
                 }
             }
-            mItems.add(item);
+            if (pos >= 0) {
+                mItems.add(pos, item);
+            } else {
+                mItems.add(item);
+            }
             return true;
         }
         return true;

@@ -323,7 +323,8 @@ public class AppsSettings {
         Set<String> names = new HashSet<>();
         if (_names != null) {
             int count = _names.size();
-            for (int i = (Math.min(count, Constants.LAST_ROOM_MAX) - 1); i >= 0; i--) {
+            int max = Math.min(count, Constants.LAST_ROOM_MAX);
+            for (int i = 0; i < max; i++) {
                 names.add(_names.get(i));
             }
         }
