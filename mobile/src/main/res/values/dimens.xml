@@ -22,6 +22,7 @@
     <dimen name="card_height2">168dp</dimen>
     <dimen name="card_desc_height">140dp</dimen>
     <dimen name="right_size">20dp</dimen>
+    <dimen name="right_size2">14dp</dimen>
     <dimen name="card_def_width">44dp</dimen>
     <dimen name="card_def_height">64dp</dimen>
 

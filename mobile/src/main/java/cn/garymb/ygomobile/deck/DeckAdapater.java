@@ -95,6 +95,7 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
             } else if (cardInfo.isType(CardType.Trap)) {
                 mMainTrapCount--;
             }
+            removeCount(cardInfo);
             return cardInfo;
         }
         return null;
@@ -112,6 +113,7 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
             } else if (cardInfo.isType(CardType.Trap)) {
                 mSideTrapCount--;
             }
+            removeCount(cardInfo);
             return cardInfo;
         }
         return null;
@@ -129,6 +131,7 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
             } else if (cardInfo.isType(CardType.Xyz)) {
                 mExtraXyzCount--;
             }
+            removeCount(cardInfo);
             return cardInfo;
         }
         return null;
@@ -208,6 +211,14 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
         return false;
     }
 
+    void removeCount(CardInfo cardInfo){
+        Integer i = mCount.get(Long.valueOf(cardInfo.Code));
+        if (i == null) {
+            mCount.put(Long.valueOf(cardInfo.Code), 0);
+        } else {
+            mCount.put(Long.valueOf(cardInfo.Code), Math.max(0, i - 1));
+        }
+    }
     void pushCount(CardInfo cardInfo) {
         Integer i = mCount.get(Long.valueOf(cardInfo.Code));
         if (i == null) {

@@ -15,8 +15,8 @@
 
     <ImageView
         android:id="@+id/right_top"
-        android:layout_width="@dimen/right_size"
-        android:layout_height="@dimen/right_size"
+        android:layout_width="@dimen/right_size2"
+        android:layout_height="@dimen/right_size2"
         android:layout_alignParentRight="true"
         android:visibility="visible"
         tools:src="@drawable/ic_close_black_24dp"/>
