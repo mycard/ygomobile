@@ -31,6 +31,11 @@ public interface Constants {
     boolean PREF_DEF_LOCK_SCREEN = true;
     String PREF_IMMERSIVE_MODE = "pref_key_immersive_mode";
     boolean PREF_DEF_IMMERSIVE_MODE = true;
+    String PREF_DECK_SHOW_CARD = "pref_key_deck_show_card";
+    int PREF_DECK_SHOW_CARD_LONG_PRESS= 1;
+    int PREF_DECK_SHOW_CARD_DOUBLE= 0;
+    int PREF_DEF_DECK_SHOW_CARD = PREF_DECK_SHOW_CARD_DOUBLE;
+
     String SETTINGS_COVER = "settings_game_diy_card_cover";
     String SETTINGS_CARD_BG = "settings_game_diy_card_bg";
     String ASSETS_PATH = "data/";
@@ -88,4 +93,9 @@ public interface Constants {
     int DECK_SIDE_COUNT = DECK_EXTRA_COUNT;
     String URL_HELP = "http://www.jianshu.com/p/a43f5d951a25";
     String WIKI_SEARCH_URL = "http://www.ourocg.cn/S.aspx?key=";
+
+    /***
+     * 如果是双击显示，则单击拖拽
+     */
+    boolean DECK_SINGLE_PRESS_DRAG = true;
 }

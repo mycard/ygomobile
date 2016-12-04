@@ -151,11 +151,11 @@ public class ServerListAdapater extends BaseAdapterPlus<ServerInfo> implements
             info.setPort(Integer.valueOf("" + editViewHolder.serverPort.getText()));
             info.setPassword("" + editViewHolder.userPassword.getText());
 
-            if (isAdd && exist(info)) {
-                //已经存在
-                Toast.makeText(getContext(), R.string.server_is_exist, Toast.LENGTH_SHORT).show();
-                return;
-            }
+//            if (isAdd && exist(info)) {
+//                已经存在
+//                Toast.makeText(getContext(), R.string.server_is_exist, Toast.LENGTH_SHORT).show();
+//                return;
+//            }
             if (isAdd) {
                 editViewHolder.title.setText(R.string.action_add_server);
             } else {

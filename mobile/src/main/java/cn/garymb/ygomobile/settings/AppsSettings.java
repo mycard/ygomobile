@@ -8,7 +8,6 @@ import java.io.File;
 
 import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.NativeInitOptions;
-import cn.garymb.ygomobile.lite.BuildConfig;
 import cn.garymb.ygomobile.plus.PreferenceFragmentPlus;
 
 import static cn.garymb.ygomobile.Constants.PREF_DEF_IMMERSIVE_MODE;
@@ -302,5 +301,13 @@ public class AppsSettings {
      */
     public String getLastDeck() {
         return mSharedPreferences.getString(Constants.PREF_LAST_YDK, Constants.PREF_DEF_LAST_YDK);
+    }
+
+    /***
+     * 卡片显示触发操作
+     * @return
+     */
+    public int getShowCard(){
+        return Integer.parseInt(mSharedPreferences.getString(Constants.PREF_DECK_SHOW_CARD, ""+Constants.PREF_DEF_DECK_SHOW_CARD));
     }
 }

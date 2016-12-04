@@ -63,6 +63,11 @@ public class BaseActivity extends AppCompatActivity {
         return rect.top;
     }
 
+
+    public void hideSystemNavBar() {
+        findViewById(android.R.id.content).setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+    }
+
     public void setActionBarTitle(String title) {
         if (TextUtils.isEmpty(title)) {
             return;
@@ -70,6 +75,16 @@ public class BaseActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setTitle(title);
+        }
+    }
+
+    public void setActionBarSubTitle(String title) {
+        if (TextUtils.isEmpty(title)) {
+            return;
+        }
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setSubtitle(title);
         }
     }
 

@@ -1,17 +1,8 @@
 package cn.garymb.ygomobile.deck;
 
-import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
-
-import java.util.List;
-
-import cn.garymb.ygomobile.Constants;
-import cn.garymb.ygomobile.lite.R;
-import cn.ygo.ocgcore.Card;
 
 import static android.support.v7.widget.helper.ItemTouchHelper.ACTION_STATE_DRAG;
 import static android.support.v7.widget.helper.ItemTouchHelper.ACTION_STATE_IDLE;
@@ -52,6 +43,7 @@ public class DeckItemTouchHelper extends ItemTouchHelper.Callback {
         }
         return makeMovementFlags(dragFlags, 0);
     }
+
 
     @Override
     public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {

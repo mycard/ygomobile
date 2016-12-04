@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
+import android.support.v7.widget.helper.ItemTouchHelperCompat;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -50,6 +50,7 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
     private AppsSettings mSettings = AppsSettings.get();
     private LimitList mLimitList;
     private File mYdkFile;
+    private DeckItemTouchHelper mDeckItemTouchHelper;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -57,12 +58,22 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
         mRecyclerView.setAdapter((mDeckAdapater = new DeckAdapater(this, mRecyclerView)));
         mRecyclerView.setLayoutManager(new DeckLayoutManager(this, Constants.DECK_WIDTH_COUNT));
         mCardSelector.hideLimit();
-        ItemTouchHelper touchHelper = new ItemTouchHelper(new DeckItemTouchHelper(mDeckAdapater));
+        mDeckItemTouchHelper = new DeckItemTouchHelper(mDeckAdapater);
+        ItemTouchHelperCompat touchHelper = new ItemTouchHelperCompat(mDeckItemTouchHelper);
+        touchHelper.setEnableClickDrag(Constants.DECK_SINGLE_PRESS_DRAG);
         touchHelper.attachToRecyclerView(mRecyclerView);
 
-        mDrawerlayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_OPEN);
-        hideDrawers();
+        if(!Constants.DECK_SINGLE_PRESS_DRAG) {
+            mDrawerlayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_OPEN);
+            hideDrawers();
+        }
         mRecyclerView.addOnItemTouchListener(new RecyclerViewItemListener(mRecyclerView, this));
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        hideSystemNavBar();
     }
 
     @Override
@@ -91,8 +102,9 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
         }).done((rs) -> {
             mYdkFile = file;
             if (file != null && file.exists()) {
-                setTitle(mYdkFile.getName());
-                mSettings.setLastDeck(IOUtils.tirmName(file.getName(), Constants.YDK_FILE_EX));
+                String name = IOUtils.tirmName(file.getName(), Constants.YDK_FILE_EX);
+                setActionBarSubTitle(name);
+                mSettings.setLastDeck(name);
             } else {
                 setTitle(R.string.noname);
             }
@@ -143,19 +155,38 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
 
     @Override
     public void onItemClick(View view, int pos) {
-        DeckItem deckItem = mDeckAdapater.getItem(pos);
-        if (deckItem != null) {
-            showCardDialog(deckItem.getCardInfo(), pos);
+        if(!Constants.DECK_SINGLE_PRESS_DRAG) {
+            DeckItem deckItem = mDeckAdapater.getItem(pos);
+            if (deckItem != null) {
+                showCardDialog(deckItem.getCardInfo(), pos);
+            }
         }
     }
 
     @Override
     public void onItemLongClick(View view, int pos) {
-
+        //拖拽中，就不显示
+        if(Constants.DECK_SINGLE_PRESS_DRAG) {
+            if(mSettings.getShowCard() == Constants.PREF_DECK_SHOW_CARD_LONG_PRESS) {
+                DeckItem deckItem = mDeckAdapater.getItem(pos);
+                if (deckItem != null) {
+                    showCardDialog(deckItem.getCardInfo(), pos);
+                }
+            }
+        }
     }
 
     @Override
     public void onItemDoubleClick(View view, int pos) {
+        //拖拽中，就不显示
+        if(Constants.DECK_SINGLE_PRESS_DRAG) {
+            if(mSettings.getShowCard() == Constants.PREF_DECK_SHOW_CARD_DOUBLE) {
+                DeckItem deckItem = mDeckAdapater.getItem(pos);
+                if (deckItem != null) {
+                    showCardDialog(deckItem.getCardInfo(), pos);
+                }
+            }
+        }
     }
 
     protected void showCardDialog(CardInfo cardInfo, int pos) {

@@ -66,7 +66,7 @@ public class SettingFragment extends PreferenceFragmentPlus {
         bind(PREF_PENDULUM_SCALE, mSettings.isPendulumScale());
         bind(PREF_OPENGL_VERSION, Constants.PREF_DEF_OPENGL_VERSION);
         bind(PREF_IMAGE_QUALITY, Constants.PREF_DEF_IMAGE_QUALITY);
-
+        bind(PREF_DECK_SHOW_CARD, Constants.PREF_DECK_SHOW_CARD_DOUBLE);
         bind(PREF_GAME_FONT, mSettings.getFontPath());
         bind(PREF_USE_EXTRA_CARD_CARDS, mSettings.isUseExtraCards());
         bind(SETTINGS_COVER, new File(mSettings.getCoreSkinPath(), Constants.CORE_SKIN_COVER).getAbsolutePath());
