@@ -32,8 +32,8 @@ public interface Constants {
     String PREF_IMMERSIVE_MODE = "pref_key_immersive_mode";
     boolean PREF_DEF_IMMERSIVE_MODE = true;
     String PREF_DECK_SHOW_CARD = "pref_key_deck_show_card";
-    int PREF_DECK_SHOW_CARD_LONG_PRESS= 1;
-    int PREF_DECK_SHOW_CARD_DOUBLE= 0;
+    int PREF_DECK_SHOW_CARD_LONG_PRESS = 1;
+    int PREF_DECK_SHOW_CARD_DOUBLE = 0;
     int PREF_DEF_DECK_SHOW_CARD = PREF_DECK_SHOW_CARD_DOUBLE;
 
     String SETTINGS_COVER = "settings_game_diy_card_cover";
@@ -58,7 +58,7 @@ public interface Constants {
     String CORE_PICS_ZIP = "pics.zip";
     String CORE_SKIN_COVER = "cover.jpg";
     String CORE_SKIN_BG = "bg.jpg";
-    String UNKNOWN_IMAGE="unknown.jpg";
+    String UNKNOWN_IMAGE = "unknown.jpg";
     String YDK_FILE_EX = ".ydk";
     int[] CORE_SKIN_BG_SIZE = new int[]{1024, 640};
     int[] CORE_SKIN_CARD_COVER_SIZE = new int[]{177, 254};
@@ -78,6 +78,7 @@ public interface Constants {
 
     int STRING_ATTRIBUTE_START = 1010;
     int STRING_RACE_START = 1020;
+    int STRING_OT_START = 1239;
 
     int UNSORT_TIMES = 0x40;
 

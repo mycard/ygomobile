@@ -107,8 +107,8 @@
 
             <ImageView
                 android:id="@+id/card_image"
-                android:layout_width="@dimen/card_width"
-                android:layout_height="@dimen/card_height"
+                android:layout_width="@dimen/card_width2"
+                android:layout_height="@dimen/card_height2"
                 android:layout_gravity="center_vertical"
                 android:scaleType="fitXY"
                 android:src="@android:drawable/sym_def_app_icon"/>
@@ -121,8 +121,8 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="8dp"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:paddingLeft="5dp">
 
                     <TextView
                         android:id="@+id/card_code"
@@ -134,10 +134,33 @@
                         android:textColor="@color/colorPrimary"
                         android:textIsSelectable="true"
                         tools:text="12345678"/>
+
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:background="@color/gray"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/label_ot"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+                            android:textColor="@color/colorPrimary"/>
+
+                        <TextView
+                            android:id="@+id/card_ot"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="5dp"
+                            android:singleLine="true"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                            tools:text="Test"/>
+                    </LinearLayout>
 
                     <TextView
                         android:layout_width="match_parent"
@@ -150,6 +173,7 @@
                         android:id="@+id/card_type"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:maxLines="2"
                         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                         tools:text="A\nXYZ"/>
 
@@ -167,80 +191,103 @@
                         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                         tools:text="Test"/>
 
-                    <TextView
-                        android:id="@+id/lb_race"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/label_race"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-                        android:textColor="@color/colorPrimary"/>
-
-                    <TextView
-                        android:id="@+id/card_race"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:maxLines="1"
-                        android:singleLine="true"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                        android:textIsSelectable="true"
-                        tools:text="Test"/>
-
-                    <View
-                        android:id="@+id/view_bar"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/gray"/>
-
                     <LinearLayout
-                        android:id="@+id/layout_atkdef1"
-                        android:layout_width="wrap_content"
+                        android:id="@+id/layout_monster"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="right"
-                        android:orientation="horizontal">
+                        android:orientation="vertical">
 
-                        <TextView
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/label_attr"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+                                android:textColor="@color/colorPrimary"/>
+
+                            <TextView
+                                android:id="@+id/card_attribute"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="5dp"
+                                android:maxLines="1"
+                                android:singleLine="true"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                                android:textIsSelectable="true"
+                                tools:text="Test"/>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/label_race"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+                                android:textColor="@color/colorPrimary"/>
+
+                            <TextView
+                                android:id="@+id/card_race"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="5dp"
+                                android:maxLines="1"
+                                android:singleLine="true"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                                android:textIsSelectable="true"
+                                tools:text="Test"/>
+                        </LinearLayout>
+
+
+                        <View
+                            android:id="@+id/view_bar"
+                            android:layout_width="match_parent"
+                            android:layout_marginTop="10dp"
+                            android:layout_height="1dp"
+                            android:background="@color/gray"/>
+
+                        <LinearLayout
+                            android:id="@+id/layout_atkdef2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:maxLines="1"
-                            android:singleLine="true"
-                            android:text="ATK/"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+                            android:layout_gravity="right"
+                            android:orientation="horizontal">
+                            <TextView
+                                android:id="@+id/card_atk"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:gravity="right"
+                                android:layout_marginRight="5dp"
+                                android:maxLines="1"
+                                android:singleLine="true"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                                tools:text="2500"/>
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:maxLines="1"
+                                android:singleLine="true"
+                                android:text="/"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
 
-                        <TextView
-                            android:id="@+id/card_atk"
-                            android:layout_width="@dimen/label_width_small"
-                            android:layout_height="wrap_content"
-                            android:gravity="right"
-                            android:maxLines="1"
-                            android:singleLine="true"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                            tools:text="2500"/>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/layout_atkdef2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="right"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:maxLines="1"
-                            android:singleLine="true"
-                            android:text="DEF/"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
-
-                        <TextView
-                            android:id="@+id/card_def"
-                            android:layout_width="@dimen/label_width_small"
-                            android:layout_height="wrap_content"
-                            android:gravity="right"
-                            android:maxLines="1"
-                            android:singleLine="true"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                            tools:text="2500"/>
+                            <TextView
+                                android:id="@+id/card_def"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="5dp"
+                                android:gravity="right"
+                                android:maxLines="1"
+                                android:singleLine="true"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                                tools:text="2500"/>
+                        </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
             </ScrollView>

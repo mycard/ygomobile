@@ -30,14 +30,13 @@ public class CardDetail extends BaseAdapterPlus.BaseViewHolder {
     private TextView cardAtk;
     private TextView cardDef;
     private TextView setname;
-    private View atkdeflayout1;
-    private View atkdeflayout2;
-    private View view_bar;
+    private TextView otView;
+    private TextView attrView;
+    private View monsterlayout;
     private View close;
     private View faq;
     private View addMain;
     private View addSide;
-    private View lb_race;
     private TextView cardcode;
 
     public interface OnClickListener {
@@ -62,14 +61,13 @@ public class CardDetail extends BaseAdapterPlus.BaseViewHolder {
         faq = bind(R.id.btn_faq);
         cardAtk = bind(R.id.card_atk);
         cardDef = bind(R.id.card_def);
-        atkdeflayout1 = bind(R.id.layout_atkdef1);
-        atkdeflayout2 = bind(R.id.layout_atkdef2);
-        view_bar = bind(R.id.view_bar);
+        monsterlayout = bind(R.id.layout_monster);
         race = bind(R.id.card_race);
         setname = bind(R.id.card_setname);
-        lb_race = bind(R.id.lb_race);
         addMain = bind(R.id.btn_add_main);
         addSide = bind(R.id.btn_add_side);
+        otView = bind(R.id.card_ot);
+        attrView = bind(R.id.card_attribute);
     }
 
     public ImageView getCardImage() {
@@ -96,26 +94,25 @@ public class CardDetail extends BaseAdapterPlus.BaseViewHolder {
         name.setText(cardInfo.Name);
         desc.setText(cardInfo.Desc);
         cardcode.setText(String.format("%08d", cardInfo.Code));
-        type.setText(cardInfo.getAllTypeString(stringManager).replace("/", "\n"));
+        type.setText(cardInfo.getAllTypeString(stringManager).replace("/","|"));
+        attrView.setText(stringManager.getAttributeString(cardInfo.Attribute));
+        otView.setText(stringManager.getOtString(cardInfo.Ot));
         long[] sets = cardInfo.getSetCode();
         setname.setText("");
         int index = 0;
         for (long set : sets) {
             if (set > 0) {
-                setname.append("" + stringManager.getSetName(set));
-                if (index == 0) {
-                    setname.append("\n");
+                if (index != 0) {
+                    setname.append(" | ");
                 }
+                setname.append("" + stringManager.getSetName(set));
                 index++;
             }
         }
         if (cardInfo.isType(CardType.Monster)) {
             level.setVisibility(View.VISIBLE);
-            atkdeflayout1.setVisibility(View.VISIBLE);
-            atkdeflayout2.setVisibility(View.VISIBLE);
-            view_bar.setVisibility(View.VISIBLE);
+            monsterlayout.setVisibility(View.VISIBLE);
             race.setVisibility(View.VISIBLE);
-            lb_race.setVisibility(View.VISIBLE);
             String star = "";
             for (int i = 0; i < cardInfo.Level; i++) {
                 star += "★";
@@ -131,11 +128,8 @@ public class CardDetail extends BaseAdapterPlus.BaseViewHolder {
             race.setText(stringManager.getRaceString(cardInfo.Race));
         } else {
             race.setVisibility(View.GONE);
-            lb_race.setVisibility(View.GONE);
-            view_bar.setVisibility(View.GONE);
+            monsterlayout.setVisibility(View.GONE);
             level.setVisibility(View.GONE);
-            atkdeflayout1.setVisibility(View.GONE);
-            atkdeflayout2.setVisibility(View.GONE);
         }
         close.setOnClickListener((v) -> {
             if (listener != null) {

@@ -108,7 +108,7 @@
     <string name="hit_def">DEF</string>
     <string name="reset">Reset</string>
     <string name="label_race">Race</string>
-    <string name="label_ot">Exclusive</string>
+    <string name="label_ot">Rule</string>
     <string name="label_limit">Limit Type</string>
     <string name="label_limitlist">Limit List</string>
     <string name="label_type">Card Type</string>

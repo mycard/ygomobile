@@ -1,7 +1,6 @@
 package cn.ygo.ocgcore;
 
 import android.text.TextUtils;
-import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -13,6 +12,8 @@ import java.util.Map;
 import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.settings.AppsSettings;
 import cn.garymb.ygomobile.utils.IOUtils;
+import cn.garymb.ygomobile.utils.StringUtils;
+import cn.ygo.ocgcore.enums.CardOt;
 
 public class StringManager {
     private String PRE_SYSTEM = "!system";
@@ -126,8 +127,23 @@ public class StringManager {
         return race;
     }
 
+    public String getOtString(int ot) {
+        if (ot == CardOt.All.ordinal()) {
+            return "-";
+        }
+        try {
+            String str = getSystemString(Constants.STRING_OT_START + ot);
+            if (TextUtils.isEmpty(str)) {
+                return "" + ot;//String.valueOf(CardOt.values()[ot]);
+            }
+            return StringUtils.toDBC(str);
+        } catch (Exception e) {
+            return "" + ot;
+        }
+    }
+
     public String getCategoryString(long value) {
-        return getSystemString(Constants.STRING_CATEGORY_START, value);
+        return getSystemString(Constants.STRING_CATEGORY_START , value);
     }
 
     public int value2Index(long type) {

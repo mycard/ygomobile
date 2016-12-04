@@ -32,7 +32,6 @@ public class Card extends CardData implements Parcelable {
             this.Defense = cardData.Defense;
             this.LScale = cardData.LScale;
             this.RScale = cardData.RScale;
-            this.dbFile = cardData.dbFile;
             this.Category = cardData.Category;
         }
     }
@@ -43,6 +42,10 @@ public class Card extends CardData implements Parcelable {
 
     public boolean isType(CardType type) {
         return ((Type & type.value()) != 0);
+    }
+
+    public boolean onlyType(CardType type) {
+        return (Type == type.value());
     }
 
     public static boolean isSpellTrap(long Type) {

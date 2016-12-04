@@ -21,7 +21,6 @@ public class CardData implements Parcelable{
     public int LScale;
     public int RScale;
     public long Category;
-    public String dbFile;
 
     @Override
     public String toString() {
@@ -39,7 +38,6 @@ public class CardData implements Parcelable{
                 ", LScale=" + LScale +
                 ", RScale=" + RScale +
                 ", Category=" + Category +
-                ", dbFile='" + dbFile + '\'' +
                 '}';
     }
 
@@ -63,7 +61,6 @@ public class CardData implements Parcelable{
         dest.writeInt(this.LScale);
         dest.writeInt(this.RScale);
         dest.writeLong(this.Category);
-        dest.writeString(this.dbFile);
     }
 
     protected CardData(Parcel in) {
@@ -80,7 +77,17 @@ public class CardData implements Parcelable{
         this.LScale = in.readInt();
         this.RScale = in.readInt();
         this.Category = in.readLong();
-        this.dbFile = in.readString();
     }
 
+    public static final Creator<CardData> CREATOR = new Creator<CardData>() {
+        @Override
+        public CardData createFromParcel(Parcel source) {
+            return new CardData(source);
+        }
+
+        @Override
+        public CardData[] newArray(int size) {
+            return new CardData[size];
+        }
+    };
 }
