@@ -6,10 +6,14 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.File;
+
+import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.bean.CardInfo;
 import cn.garymb.ygomobile.core.loader.ImageLoader;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.plus.BaseAdapterPlus;
+import cn.garymb.ygomobile.settings.AppsSettings;
 import cn.ygo.ocgcore.StringManager;
 import cn.ygo.ocgcore.enums.CardType;
 
@@ -86,6 +90,8 @@ public class CardDetail extends BaseAdapterPlus.BaseViewHolder {
     }
 
     public void bind(CardInfo cardInfo, StringManager stringManager, final OnClickListener listener) {
+        File outFile = new File(AppsSettings.get().getCoreSkinPath(), Constants.UNKNOWN_IMAGE);
+        ImageLoader.get().bind(view.getContext(), outFile, cardImage, outFile.getName().endsWith(Constants.BPG), 0,null);
         ImageLoader.get().bindImage(context, cardImage, cardInfo.Code);
         name.setText(cardInfo.Name);
         desc.setText(cardInfo.Desc);

@@ -74,6 +74,8 @@ public interface Constants {
     int STRING_ATTRIBUTE_START = 1010;
     int STRING_RACE_START = 1020;
 
+    int UNSORT_TIMES = 0x40;
+
     int CARD_SEARCH_GRAVITY = Gravity.RIGHT;
     int STRING_LIMIT_START = 1315;
     int STRING_CATEGORY_START = 1100;

@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -216,10 +217,19 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
     }
 
     public void unSort() {
-        int start = DeckItem.MainStart;
-        int end = start + getMainCount();
-
-        notifyDataSetChanged();
+        for (int i = 0; i < Constants.UNSORT_TIMES; i++) {
+            int index1 = mRandom.nextInt(mMainCount);
+            int index2 = mRandom.nextInt(mMainCount);
+            if (index1 != index2) {
+                int sp = (mMainCount - Math.max(index1, index2));
+                int count = sp > 1 ? mRandom.nextInt(sp - 1) : 1;
+                for (int j = 0; j < count; j++) {
+                    Collections.swap(mItems, DeckItem.MainStart + index1 + j, DeckItem.MainStart + index2 + j);
+                    Collections.swap(getMainCards(), index1 + j, index2 + j);
+                }
+            }
+        }
+        notifyItemRangeChanged(DeckItem.MainStart, DeckItem.MainStart + getMainCount());
     }
 
     void removeCount(CardInfo cardInfo) {

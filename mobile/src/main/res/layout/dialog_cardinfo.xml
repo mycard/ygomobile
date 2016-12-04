@@ -27,7 +27,7 @@
             android:id="@+id/btn_add_main"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_marginLeft="16dp"
+            android:layout_marginLeft="24dp"
             android:gravity="center_vertical"
             android:text="@string/card_add_main"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
@@ -107,8 +107,8 @@
 
             <ImageView
                 android:id="@+id/card_image"
-                android:layout_width="@dimen/card_width2"
-                android:layout_height="@dimen/card_height2"
+                android:layout_width="@dimen/card_width"
+                android:layout_height="@dimen/card_height"
                 android:layout_gravity="center_vertical"
                 android:scaleType="fitXY"
                 android:src="@android:drawable/sym_def_app_icon"/>

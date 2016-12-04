@@ -340,15 +340,23 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
     private void initDecksListSpinners(Spinner spinner) {
         File[] files = getYdkFiles();
         List<SimpleSpinnerItem> items = new ArrayList<>();
+        String name = mYdkFile != null ? mYdkFile.getName() : null;
+        int index = -1;
         if (files != null) {
-            int index = 0;
+            int i = 0;
             for (File file : files) {
-                items.add(new SimpleSpinnerItem(index++, file.getName()).setTag(file));
+                if (name != null && TextUtils.equals(name, file.getName())) {
+                    index = i;
+                }
+                items.add(new SimpleSpinnerItem(i++, file.getName()).setTag(file));
             }
         }
         SimpleSpinnerAdapter adapter = new SimpleSpinnerAdapter(this);
         adapter.set(items);
         spinner.setAdapter(adapter);
+        if (index >= 0) {
+            spinner.setSelection(index);
+        }
     }
 
     private void initLimitListSpinners(Spinner spinner) {
@@ -408,7 +416,7 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
     private void save() {
         if (mDeckAdapater.save(mYdkFile)) {
             Toast.makeText(this, R.string.save_tip_ok, Toast.LENGTH_SHORT).show();
-        }else{
+        } else {
             Toast.makeText(this, R.string.save_tip_fail, Toast.LENGTH_SHORT).show();
         }
     }
