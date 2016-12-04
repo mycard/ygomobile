@@ -146,4 +146,6 @@
     <string name="file_exist">文件已经存在</string>
     <string name="share_deck_image">分享卡组截图</string>
     <string name="no_share_app">没有找到分享应用</string>
+    <string name="intput_room_name">输入房间名</string>
+    <string name="join_game">进入游戏</string>
 </resources>

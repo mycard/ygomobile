@@ -13,8 +13,8 @@ public class ServerInfo {
 
     @XmlElement("player-name")
     private String playerName;
-    @XmlElement("password")
-    private String password;
+//    @XmlElement("password")
+//    private String password;
 
     public ServerInfo() {
 
@@ -58,13 +58,13 @@ public class ServerInfo {
         this.playerName = playerName;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
+//    public String getPassword() {
+//        return password;
+//    }
+//
+//    public void setPassword(String password) {
+//        this.password = password;
+//    }
 
     @Override
     public boolean equals(Object o) {
@@ -95,7 +95,7 @@ public class ServerInfo {
                 ", serverAddr='" + serverAddr + '\'' +
                 ", port=" + port +
                 ", playerName='" + playerName + '\'' +
-                ", password='" + password + '\'' +
+//                ", password='" + password + '\'' +
                 '}';
     }
 }

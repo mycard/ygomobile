@@ -5,6 +5,9 @@ import android.os.Environment;
 import android.util.Log;
 
 import java.io.File;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.NativeInitOptions;
@@ -78,7 +81,7 @@ public class AppsSettings {
         options.mIsPendulumScaleEnabled = isPendulumScale();
         options.mIsSoundEffectEnabled = isSoundEffect();
         options.mOpenglVersion = getOpenglVersion();
-        if(Constants.DEBUG) {
+        if (Constants.DEBUG) {
             Log.i("Irrlicht", "option=" + options);
         }
         return options;
@@ -118,8 +121,8 @@ public class AppsSettings {
     public int getOpenglVersion() {
         try {
             return Integer.valueOf(mSharedPreferences.getString(Constants.PREF_OPENGL_VERSION, "" + Constants.PREF_DEF_OPENGL_VERSION));
-        }catch (Exception e){
-            return  Constants.PREF_DEF_OPENGL_VERSION;
+        } catch (Exception e) {
+            return Constants.PREF_DEF_OPENGL_VERSION;
         }
     }
 
@@ -127,7 +130,7 @@ public class AppsSettings {
      * opengl版本
      */
     public void setOpenglVersion(int openglVersion) {
-        mSharedPreferences.putString(Constants.PREF_OPENGL_VERSION, ""+openglVersion);
+        mSharedPreferences.putString(Constants.PREF_OPENGL_VERSION, "" + openglVersion);
     }
 
     /***
@@ -164,7 +167,7 @@ public class AppsSettings {
     public int getCardQuality() {
         try {
             return Integer.valueOf(mSharedPreferences.getString(Constants.PREF_IMAGE_QUALITY, "" + Constants.PREF_DEF_IMAGE_QUALITY));
-        }catch (Exception e){
+        } catch (Exception e) {
             return Constants.PREF_DEF_IMAGE_QUALITY;
         }
     }
@@ -173,7 +176,7 @@ public class AppsSettings {
      * 图片质量
      */
     public void setCardQuality(int quality) {
-        mSharedPreferences.putString(Constants.PREF_IMAGE_QUALITY, ""+quality);
+        mSharedPreferences.putString(Constants.PREF_IMAGE_QUALITY, "" + quality);
     }
 
     /***
@@ -305,9 +308,25 @@ public class AppsSettings {
 
     /***
      * 卡片显示触发操作
+     *
      * @return
      */
-    public int getShowCard(){
-        return Integer.parseInt(mSharedPreferences.getString(Constants.PREF_DECK_SHOW_CARD, ""+Constants.PREF_DEF_DECK_SHOW_CARD));
+    public int getShowCard() {
+        return Integer.parseInt(mSharedPreferences.getString(Constants.PREF_DECK_SHOW_CARD, "" + Constants.PREF_DEF_DECK_SHOW_CARD));
+    }
+
+    public Set<String> getLastRoomList() {
+        return mSharedPreferences.getStringSet(Constants.PREF_LAST_ROOM_LIST, null);
+    }
+
+    public void setLastRoomList(List<String> _names) {
+        Set<String> names = new HashSet<>();
+        if (_names != null) {
+            int count = _names.size();
+            for (int i = (Math.min(count, Constants.LAST_ROOM_MAX) - 1); i >= 0; i--) {
+                names.add(_names.get(i));
+            }
+        }
+        mSharedPreferences.putStringSet(Constants.PREF_LAST_ROOM_LIST, names);
     }
 }

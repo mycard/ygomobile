@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.SpinnerAdapter;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public abstract class BaseAdapterPlus<T> extends BaseAdapter implements SpinnerAdapter {
@@ -24,22 +25,38 @@ public abstract class BaseAdapterPlus<T> extends BaseAdapter implements SpinnerA
         return context;
     }
 
-    public void add(T item) {
-        if (item != null) {
-            mItems.add(item);
-        }
+    public boolean add(T item) {
+        return add(item, false);
     }
+
+    public boolean add(T item, boolean onlyone) {
+        if (item != null) {
+            if (onlyone) {
+                if (exist(item)) {
+                    return false;
+                }
+            }
+            mItems.add(item);
+            return true;
+        }
+        return true;
+    }
+
+    public List<T> getItems() {
+        return mItems;
+    }
+
 
     public void clear() {
         mItems.clear();
     }
 
-    public void set(List<T> items) {
+    public void set(Collection<T> items) {
         clear();
         addAll(items);
     }
 
-    public void addAll(List<T> items) {
+    public void addAll(Collection<T> items) {
         if (items != null) {
             mItems.addAll(items);
         }
@@ -63,8 +80,8 @@ public abstract class BaseAdapterPlus<T> extends BaseAdapter implements SpinnerA
         return null;
     }
 
-    public final T getItemById(long id){
-        return getItem((int)id);
+    public final T getItemById(long id) {
+        return getItem((int) id);
     }
 
     @Override

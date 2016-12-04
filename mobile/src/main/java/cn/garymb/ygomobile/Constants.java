@@ -36,6 +36,10 @@ public interface Constants {
     int PREF_DECK_SHOW_CARD_DOUBLE = 0;
     int PREF_DEF_DECK_SHOW_CARD = PREF_DECK_SHOW_CARD_DOUBLE;
 
+    String PREF_LAST_ROOM_LIST = "pref_key_lastroom_list";
+
+    int LAST_ROOM_MAX = 20;
+
     String SETTINGS_COVER = "settings_game_diy_card_cover";
     String SETTINGS_CARD_BG = "settings_game_diy_card_bg";
     String ASSETS_PATH = "data/";

@@ -6,6 +6,8 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,7 +26,9 @@ import cn.garymb.ygomobile.core.loader.ILoadCallBack;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.plus.BaseAdapterPlus;
 import cn.garymb.ygomobile.plus.DialogPlus;
+import cn.garymb.ygomobile.plus.SimpleListAdapter;
 import cn.garymb.ygomobile.plus.VUiKit;
+import cn.garymb.ygomobile.settings.AppsSettings;
 import cn.garymb.ygomobile.utils.IOUtils;
 import cn.garymb.ygomobile.utils.XmlUtils;
 
@@ -61,14 +65,43 @@ public class ServerListAdapater extends BaseAdapterPlus<ServerInfo> implements
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         ServerInfo serverInfo = getItem(position);
         if (serverInfo != null) {
-            //TODO 显示信息/直接进入游戏？
-            YGOGameOptions options = new YGOGameOptions();
-            options.mServerAddr = serverInfo.getServerAddr();
-            options.mUserName = serverInfo.getPlayerName();
-            options.mPort = serverInfo.getPort();
-            options.mUserPassword = serverInfo.getPassword();
-            YGOStarter.startGame(mActivity, options);
+            DialogPlus builder = new DialogPlus(getContext());
+            builder.setTitle(R.string.intput_room_name);
+            builder.setView(R.layout.dialog_room_name);
+            EditText editText = builder.findViewById(R.id.room_name);
+            ListView listView = builder.findViewById(R.id.room_list);
+            SimpleListAdapter simpleListAdapter = new SimpleListAdapter(getContext());
+            simpleListAdapter.set(AppsSettings.get().getLastRoomList());
+            listView.setAdapter(simpleListAdapter);
+            listView.setOnItemClickListener((a, v, pos, index) -> {
+                builder.dismiss();
+                String name = simpleListAdapter.getItemById(index);
+                editText.setText(name);
+//                joinGame(serverInfo, name);
+            });
+            builder.setButtonText(R.string.join_game);
+            builder.setButtonListener((dlg, i) -> {
+                dlg.dismiss();
+                //保存名字
+                String name = editText.getText().toString();
+                if(!TextUtils.isEmpty(name)) {
+                    simpleListAdapter.add(name, true);
+                    AppsSettings.get().setLastRoomList(simpleListAdapter.getItems());
+                }
+                joinGame(serverInfo, name);
+            });
+            builder.show();
+
         }
+    }
+
+    private void joinGame(ServerInfo serverInfo, String name) {
+        YGOGameOptions options = new YGOGameOptions();
+        options.mServerAddr = serverInfo.getServerAddr();
+        options.mUserName = serverInfo.getPlayerName();
+        options.mPort = serverInfo.getPort();
+        options.mRoomName = name;
+        YGOStarter.startGame(mActivity, options);
     }
 
     @Override
@@ -121,14 +154,14 @@ public class ServerListAdapater extends BaseAdapterPlus<ServerInfo> implements
             editViewHolder.serverIp.setText(serverInfo.getServerAddr());
             editViewHolder.userName.setText(serverInfo.getPlayerName());
             editViewHolder.serverPort.setText(String.valueOf(serverInfo.getPort()));
-            editViewHolder.userPassword.setText(serverInfo.getPassword());
+//            editViewHolder.userPassword.setText(serverInfo.getPassword());
         }
         if (isAdd) {
             builder.setTitle(R.string.action_add_server);
         } else {
             builder.setTitle(R.string.server_info_edit);
         }
-        builder.setButtonListener((dlg,v)-> {
+        builder.setButtonListener((dlg, v) -> {
             //保存
             ServerInfo info;
             if (!isAdd) {
@@ -146,7 +179,7 @@ public class ServerListAdapater extends BaseAdapterPlus<ServerInfo> implements
                 return;
             }
             info.setPort(Integer.valueOf("" + editViewHolder.serverPort.getText()));
-            info.setPassword("" + editViewHolder.userPassword.getText());
+//            info.setPassword("" + editViewHolder.userPassword.getText());
             OutputStream outputStream = null;
             try {
                 outputStream = new FileOutputStream(xmlFile);
@@ -204,11 +237,11 @@ public class ServerListAdapater extends BaseAdapterPlus<ServerInfo> implements
     }
 
     static class EditViewHolder extends ViewHolder {
-        TextView userPassword;
+//        TextView userPassword;
 
         EditViewHolder(View view) {
             super(view);
-            userPassword = findViewById(R.id.text_player_pwd);
+//            userPassword = findViewById(R.id.text_player_pwd);
         }
     }
 }

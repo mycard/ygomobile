@@ -40,6 +40,11 @@ public class DialogPlus {
         });
     }
 
+    public DialogPlus hideButton() {
+        mButton.setVisibility(View.GONE);
+        return this;
+    }
+
     public DialogPlus setCancelable(boolean cancelable) {
         mBuilder.setCancelable(cancelable);
         return this;
@@ -125,10 +130,19 @@ public class DialogPlus {
 
     public Dialog show() {
         if (mDialog != null) {
+            if (!mDialog.isShowing()) {
+                mDialog.show();
+            }
             return mDialog;
         }
         mDialog = mBuilder.show();
         return mDialog;
+    }
+
+    public void dismiss() {
+        if (mDialog != null && mDialog.isShowing()) {
+            mDialog.dismiss();
+        }
     }
 
     private <T extends View> T bind(int id) {
