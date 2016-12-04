@@ -172,10 +172,11 @@ class DeckItemUtils {
             }
         }
         tmp = cardLoader.readCards(side, limitList);
+//        Log.i("kk", "desk:" + tmp.size()+"/"+side.size());
         if (tmp.size() == side.size()) {
             deckInfo.setSideCards(tmp.values());
         } else {
-            for (Long id : extra) {
+            for (Long id : side) {
                 deckInfo.addSideCards(tmp.get(id));
             }
         }

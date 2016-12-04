@@ -70,12 +70,12 @@ public class CardLoader implements ICardLoader {
         try {
             reader = db.rawQuery(sql, null);
         } catch (Exception e) {
-            Log.e("kk", "read "+sql, e);
+            Log.e("kk", "read " + sql, e);
         }
         HashMap<Long, CardInfo> map = new HashMap<>();
         if (reader != null) {
             if (reader.moveToFirst()) {
-                Log.i("kk", "find card count=" + reader.getCount());
+//                Log.i("kk", "find card count=" + reader.getCount());
                 do {
                     CardInfo cardInfo = new CardInfo(reader);
                     if (limitList != null) {
@@ -91,12 +91,12 @@ public class CardLoader implements ICardLoader {
                     map.put(cardInfo.Code, cardInfo);
 
                 } while (reader.moveToNext());
-            }else{
-                Log.i("kk", "find card count 0");
+//            }else{
+//                Log.i("kk", "find card count 0");
             }
             reader.close();
-        }else{
-            Log.w("kk", "find no card ");
+//        }else{
+//            Log.w("kk", "find no card ");
         }
         return map;
     }
@@ -140,6 +140,7 @@ public class CardLoader implements ICardLoader {
         if (!isOpen()) {
             return;
         }
+        Log.d("kk", sql);
         mLimitList = limitList;
         if (mCallBack != null) {
             mCallBack.onSearchStart(limitList);
@@ -204,20 +205,20 @@ public class CardLoader implements ICardLoader {
                        String atk, String def,
                        long setcode, long category, long ot, long... types) {
         StringBuilder stringBuilder = new StringBuilder(CardInfo.SQL_BASE);
+        String w = null;
         if (!TextUtils.isEmpty(prefixWord) && !TextUtils.isEmpty(suffixWord)) {
-            stringBuilder.append(" and name like '%");
-            stringBuilder.append(prefixWord);
-            stringBuilder.append("%");
-            stringBuilder.append(suffixWord);
-            stringBuilder.append("%' ");
+            w = "'%" + prefixWord + "%" + suffixWord + "%'";
         } else if (!TextUtils.isEmpty(prefixWord)) {
-            stringBuilder.append(" and name like '%");
-            stringBuilder.append(prefixWord);
-            stringBuilder.append("%' ");
+            w = "'%" + prefixWord + "%'";
         } else if (!TextUtils.isEmpty(suffixWord)) {
-            stringBuilder.append(" and name like '%");
-            stringBuilder.append(suffixWord);
-            stringBuilder.append("%' ");
+            w = "'%" + suffixWord + "%'";
+        }
+        if (!TextUtils.isEmpty(w)) {
+            stringBuilder.append(" and (name like ");
+            stringBuilder.append(w);
+            stringBuilder.append(" or desc like ");
+            stringBuilder.append(w);
+            stringBuilder.append(")");
         }
         if (attribute != 0) {
             stringBuilder.append(" and attribute=" + attribute);
@@ -237,8 +238,15 @@ public class CardLoader implements ICardLoader {
         if (types.length > 0) {
             //通常魔法
             boolean st = false;
-            if (types[0] == CardType.Spell.value() || types[0] == CardType.Trap.value()) {
-                if (types.length > 1) {
+            Log.i("kk", "type1:"+types[0]+",type2:"+types[1]);
+            if (types[0] == CardType.Spell.value() || types[0] == CardType.Trap.value()
+                    || types[0] == CardType.Normal.value()) {
+                if (types.length > 2) {
+                    if (types[2] == CardType.Normal.value()) {
+                        stringBuilder.append(" and type = " + types[0]);
+                        st = true;
+                    }
+                }else  if (types.length > 1) {
                     if (types[1] == CardType.Normal.value()) {
                         stringBuilder.append(" and type = " + types[0]);
                         st = true;

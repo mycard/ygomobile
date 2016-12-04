@@ -1,6 +1,7 @@
 package cn.garymb.ygomobile.deck;
 
 import android.content.Context;
+import android.os.SystemClock;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.bean.CardInfo;
@@ -50,11 +52,13 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
     private int Padding = 1;
     private RecyclerView recyclerView;
     private int mDragPosition = -1;
+    private Random mRandom;
 
     public DeckAdapater(Context context, RecyclerView recyclerView) {
         this.context = context;
         this.recyclerView = recyclerView;
         mLayoutInflater = LayoutInflater.from(context);
+        mRandom = new Random(System.currentTimeMillis() + SystemClock.elapsedRealtime());
     }
 
     private void makeHeight() {
@@ -211,7 +215,14 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
         return false;
     }
 
-    void removeCount(CardInfo cardInfo){
+    public void unSort() {
+        int start = DeckItem.MainStart;
+        int end = start + getMainCount();
+
+        notifyDataSetChanged();
+    }
+
+    void removeCount(CardInfo cardInfo) {
         Integer i = mCount.get(Long.valueOf(cardInfo.Code));
         if (i == null) {
             mCount.put(Long.valueOf(cardInfo.Code), 0);
@@ -219,6 +230,7 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
             mCount.put(Long.valueOf(cardInfo.Code), Math.max(0, i - 1));
         }
     }
+
     void pushCount(CardInfo cardInfo) {
         Integer i = mCount.get(Long.valueOf(cardInfo.Code));
         if (i == null) {
@@ -291,6 +303,7 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
     public void setDeck(DeckInfo deck) {
         this.mDeck = deck;
         if (deck != null) {
+//            Log.i("kk", "desk" + deck);
             loadData(deck);
         }
     }

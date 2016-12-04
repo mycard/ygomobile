@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.text.InputType;
@@ -59,8 +60,8 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
         ItemTouchHelper touchHelper = new ItemTouchHelper(new DeckItemTouchHelper(mDeckAdapater));
         touchHelper.attachToRecyclerView(mRecyclerView);
 
-//        mDrawerlayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-//        hideDrawers();
+        mDrawerlayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_OPEN);
+        hideDrawers();
         mRecyclerView.addOnItemTouchListener(new RecyclerViewItemListener(mRecyclerView, this));
     }
 
@@ -304,7 +305,7 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
             break;
             case R.id.action_unsort:
                 //打乱
-                mDeckAdapater.notifyDataSetChanged();
+                mDeckAdapater.unSort();
                 break;
         }
 
