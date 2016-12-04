@@ -2,10 +2,10 @@ package cn.garymb.ygomobile.deck;
 
 public enum DeckItemType {
     MainLabel,
-    ExtraLabel,
-    SideLabel,
     MainCard,
+    ExtraLabel,
     ExtraCard,
+    SideLabel,
     SideCard,
     Space,
 }

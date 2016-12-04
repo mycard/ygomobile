@@ -1,1 +1,1 @@
-include ':libcore', ':mobile'
+include ':libcore', ':mobile'//,':app'

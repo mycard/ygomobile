@@ -42,7 +42,7 @@ public class ItemTouchHelperCompat extends ItemTouchHelper {
             field.setAccessible(true);
             field.set(this, new GestureDetectorCompat(mContext,
                     new ItemTouchHelperGestureListener()));
-            Log.d("kk", "repacleGestureDetector ok");
+            Log.v("kk", "repacleGestureDetector ok");
         } catch (Exception e) {
             e.printStackTrace();
             Log.e("kk", "repacleGestureDetector", e);

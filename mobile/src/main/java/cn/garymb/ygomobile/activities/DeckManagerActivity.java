@@ -338,6 +338,9 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
                 //打乱
                 mDeckAdapater.unSort();
                 break;
+            case R.id.action_sort:
+                mDeckAdapater.sort();
+                break;
         }
 
         return super.onOptionsItemSelected(item);

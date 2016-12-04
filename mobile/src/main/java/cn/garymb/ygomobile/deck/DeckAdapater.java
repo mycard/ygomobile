@@ -3,6 +3,7 @@ package cn.garymb.ygomobile.deck;
 import android.content.Context;
 import android.os.SystemClock;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -230,6 +231,153 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
             }
         }
         notifyItemRangeChanged(DeckItem.MainStart, DeckItem.MainStart + getMainCount());
+    }
+
+    private boolean comp(DeckItem d1, DeckItem d2) {
+        if (d1.getType() == d2.getType()) {
+            CardInfo c1 = d1.getCardInfo();
+            CardInfo c2 = d2.getCardInfo();
+            if (c1 == null) {
+                Log.w("kk", "c1 is null");
+                return c2 != null;
+            }
+            if (c2 == null) {
+                Log.w("kk", "c2 is null");
+                return false;
+            }
+            if (c1.isType(CardType.Monster)) {
+                if (c2.isSpellTrap()) {
+                    return false;
+                }
+                if (c1.isExtraCard()) {
+                    if (!c2.isExtraCard()) {
+                        return true;
+                    } else {
+                        if (c1.isType(CardType.Fusion)) {
+                            if (c2.isType(CardType.Synchro) || c2.isType(CardType.Xyz)) {
+                                return false;
+                            }
+                        } else if (c1.isType(CardType.Synchro)) {
+                            if (c2.isType(CardType.Xyz)) {
+                                return false;
+                            }
+                            if (c2.isType(CardType.Fusion)) {
+                                return true;
+                            }
+                            if(c2.isType(CardType.Synchro)) {
+                                if (c1.Type - c2.Type > 0) {
+                                    return true;
+                                }
+                            }
+                        } else if (c1.isType(CardType.Xyz)) {
+                            if (c2.isType(CardType.Fusion) || c2.isType(CardType.Synchro)) {
+                                return true;
+                            }
+                            if(c2.isType(CardType.Xyz)) {
+                                if (c1.Type - c2.Type > 0) {
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    if (c2.isExtraCard()) {
+                        return false;
+                    }
+                }
+                if (c1.Level - c2.Level > 0) {
+                    return true;
+                }
+                if (c1.Type - c2.Type > 0) {
+                    return true;
+                }
+            } else if (c1.isType(CardType.Spell)) {
+                if (c2.isType(CardType.Monster)) {
+                    return true;
+                }
+                if (c2.isType(CardType.Trap)) {
+                    return false;
+                }
+                if(c2.isType(CardType.Spell)) {
+                    if (c1.Type - c2.Type < 0) {
+                        return true;
+                    }
+                }
+            } else if (c1.isType(CardType.Trap)) {
+                if (c2.isType(CardType.Monster) || c2.isType(CardType.Spell)) {
+                    return true;
+                }
+                if(c2.isType(CardType.Trap)) {
+                    if (c1.Type - c2.Type < 0) {
+                        return true;
+                    }
+                }
+            } else {
+                return false;
+            }
+            return (c1.Code - c2.Code) > 0;
+        }
+        return (d1.getType().ordinal() - d2.getType().ordinal()) > 0;
+    }
+
+    private int sortMain() {
+        int len = getMainCount();
+        for (int i = 0; i < len - 1; i++) {
+            for (int j = 0; j < len - 1 - i; j++) {
+                DeckItem d1 = mItems.get(DeckItem.MainStart + j);
+                DeckItem d2 = mItems.get(DeckItem.MainStart + j + 1);
+                if (comp(d1, d2)) {
+                    DeckItem tmp = new DeckItem(d2);
+                    d2.set(d1);
+                    d1.set(tmp);
+                    Collections.swap(getMainCards(), j, j + 1);
+                }
+            }
+        }
+        return len;
+    }
+
+    private int sortExtra() {
+        int len = getExtraCount();
+        for (int i = 0; i < len - 1; i++) {
+            for (int j = 0; j < len - 1 - i; j++) {
+                DeckItem d1 = mItems.get(DeckItem.ExtraStart + j);
+                DeckItem d2 = mItems.get(DeckItem.ExtraStart + j + 1);
+                if (comp(d1, d2)) {
+                    DeckItem tmp = new DeckItem(d2);
+                    d2.set(d1);
+                    d1.set(tmp);
+                    Collections.swap(getExtraCards(), j, j + 1);
+                }
+            }
+        }
+        return len;
+    }
+
+    private int sortSide() {
+        int len = getSideCount();
+        for (int i = 0; i < len - 1; i++) {
+            for (int j = 0; j < len - 1 - i; j++) {
+                DeckItem d1 = mItems.get(DeckItem.SideStart + j);
+                DeckItem d2 = mItems.get(DeckItem.SideStart + j + 1);
+                if (comp(d1, d2)) {
+                    DeckItem tmp = new DeckItem(d2);
+                    d2.set(d1);
+                    d1.set(tmp);
+                    Collections.swap(getSideCards(), j, j + 1);
+                }
+            }
+        }
+        return len;
+    }
+
+    public void sort() {
+        int main = sortMain();
+        int extra = sortExtra();
+        int side = sortSide();
+        notifyItemRangeChanged(DeckItem.MainStart, DeckItem.MainStart + main);
+        notifyItemRangeChanged(DeckItem.ExtraStart, DeckItem.ExtraStart + extra);
+        notifyItemRangeChanged(DeckItem.SideStart, DeckItem.SideStart + side);
     }
 
     void removeCount(CardInfo cardInfo) {

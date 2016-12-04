@@ -45,8 +45,16 @@ public class Card extends CardData implements Parcelable {
         return ((Type & type.value()) != 0);
     }
 
+    public static boolean isSpellTrap(long Type) {
+        return (isType(Type, CardType.Spell) || isType(Type, CardType.Trap));
+    }
+
     public static boolean isExtraCard(long Type) {
         return (isType(Type, CardType.Fusion) || isType(Type, CardType.Synchro) || isType(Type, CardType.Xyz));
+    }
+
+    public boolean isSpellTrap() {
+        return isSpellTrap(Type);
     }
 
     public boolean isExtraCard() {

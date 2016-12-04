@@ -1,13 +1,11 @@
 package cn.garymb.ygomobile.bean;
 
-import android.content.Context;
 import android.database.Cursor;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
 import android.util.Log;
 
-import cn.garymb.ygomobile.Constants;
 import cn.ygo.ocgcore.Card;
 import cn.ygo.ocgcore.StringManager;
 import cn.ygo.ocgcore.enums.CardType;
@@ -83,20 +81,20 @@ public class CardInfo extends Card implements Parcelable {
         boolean isFrst = true;
         if (isType(CardType.Spell)) {
             for (CardType type : cardTypes) {
-                if (isType(type) && type != CardType.Spell) {
+                if (isType(type)) {
                     stringBuilder.append(stringManager.getTypeString(type.value()));
-                    break;
+//                    break;
                 }
             }
-            stringBuilder.append(stringManager.getTypeString(CardType.Spell.value()));
+//            stringBuilder.append(stringManager.getTypeString(CardType.Spell.value()));
         } else if (isType(CardType.Trap)) {
             for (CardType type : cardTypes) {
-                if (isType(type) && type != CardType.Trap) {
+                if (isType(type)) {
                     stringBuilder.append(stringManager.getTypeString(type.value()));
                 }
-                break;
+//                break;
             }
-            stringBuilder.append(stringManager.getTypeString(CardType.Trap.value()));
+//            stringBuilder.append(stringManager.getTypeString(CardType.Trap.value()));
         } else {
             for (CardType type : cardTypes) {
                 if (isType(type)) {

@@ -54,6 +54,16 @@ public class DeckItem {
         mCardInfo = cardInfo;
     }
 
+    public DeckItem(DeckItem deckItem) {
+        set(deckItem);
+    }
+
+    public void set(DeckItem deckItem) {
+        mType = deckItem.getType();
+        mCardInfo = deckItem.getCardInfo();
+    }
+
+
     public void setType(DeckItemType type) {
         mType = type;
     }
