@@ -7,31 +7,46 @@
 
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/button_width_small"
         android:orientation="horizontal"
         android:paddingLeft="8dp">
 
         <TextView
-            android:id="@+id/card_code"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/button_width_small"
-            android:gravity="center_vertical"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textColor="@color/colorPrimary"
-            android:textIsSelectable="true"
-            tools:text="12345678"/>
-
-        <TextView
             android:id="@+id/btn_faq"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp"
+            android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:shadowColor="@color/colorPrimary"
             android:text="@string/card_faq"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@color/colorAccent"
             android:textStyle="bold"
+            />
+
+        <TextView
+            android:id="@+id/btn_add_main"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="16dp"
+            android:gravity="center_vertical"
+            android:text="@string/card_add_main"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold"
+            android:visibility="invisible"
+            />
+
+        <TextView
+            android:id="@+id/btn_add_side"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="8dp"
+            android:gravity="center_vertical"
+            android:text="@string/card_add_side"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold"
+            android:visibility="invisible"
             />
     </LinearLayout>
 
@@ -42,37 +57,11 @@
         android:orientation="horizontal"
         android:paddingRight="8dp">
 
-        <TextView
-            android:id="@+id/btn_add_main"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginRight="20dp"
-            android:gravity="center_vertical"
-            android:text="@string/card_add_main"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="@color/colorPrimary"
-            android:textStyle="bold"
-            android:visibility="gone"
-            />
-
-        <TextView
-            android:id="@+id/btn_add_side"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginRight="20dp"
-            android:gravity="center_vertical"
-            android:text="@string/card_add_side"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="@color/colorPrimary"
-            android:textStyle="bold"
-            android:visibility="gone"
-            />
         <ImageButton
             android:id="@+id/btn_close"
             android:layout_width="@dimen/button_width_small"
             android:layout_height="@dimen/button_width_small"
             android:background="@android:color/transparent"
-            android:textIsSelectable="true"
             app:srcCompat="@drawable/ic_close_black_24dp"/>
     </LinearLayout>
 
@@ -131,9 +120,24 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginLeft="5dp"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="8dp"
                     android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/card_code"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:gravity="center_vertical"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        android:textColor="@color/colorPrimary"
+                        android:textIsSelectable="true"
+                        tools:text="12345678"/>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/gray"/>
 
                     <TextView
                         android:layout_width="match_parent"
@@ -178,6 +182,7 @@
                         android:maxLines="1"
                         android:singleLine="true"
                         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                        android:textIsSelectable="true"
                         tools:text="Test"/>
 
                     <View

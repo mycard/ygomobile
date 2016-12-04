@@ -1,10 +1,5 @@
 package cn.garymb.ygomobile.deck;
 
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-
-import java.util.Collections;
-
 import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.bean.CardInfo;
 import cn.ygo.ocgcore.Card;
@@ -214,9 +209,9 @@ class DeckDrager {
     public boolean moveExtraToSide(int src, int to) {
         int left = src - DeckItem.ExtraStart;
         int right = to - DeckItem.SideStart;
-        int maincount = deckAdapater.getSideCount();
-        if (right >= maincount) {
-            right = maincount;
+        int count = deckAdapater.getSideCount();
+        if (right >= count) {
+            right = count-1;
         }
 
         //交换
@@ -280,7 +275,7 @@ class DeckDrager {
         int sidecount = deckAdapater.getSideCount();
         int maincount = deckAdapater.getMainCount();
         if (right > sidecount) {
-            right = sidecount;
+            right = sidecount-1;
         }
         //交换
         CardInfo cardInfo = deckAdapater.removeMain(left);

@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -13,8 +14,10 @@ import java.util.Map;
 
 import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.bean.CardInfo;
+import cn.garymb.ygomobile.core.CardLoader;
 import cn.garymb.ygomobile.core.loader.ImageLoader;
 import cn.garymb.ygomobile.lite.R;
+import cn.ygo.ocgcore.LimitList;
 import cn.ygo.ocgcore.enums.CardType;
 import cn.ygo.ocgcore.enums.LimitType;
 
@@ -281,8 +284,12 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
         }
     }
 
-    public DeckInfo getDeck() {
-        return mDeck;
+    public DeckInfo read(CardLoader cardLoader, File file, LimitList limitList) {
+        return DeckItemUtils.readDeck(cardLoader, file, limitList);
+    }
+
+    public boolean save(File file) {
+        return DeckItemUtils.save(mItems, file);
     }
 
     private <T> int length(List<T> list) {
@@ -385,7 +392,7 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
                         holder.rightImage.setImageBitmap(mImageTop.forbidden);
                     } else if (cardInfo.getLimitType() == LimitType.Limit) {
                         holder.rightImage.setImageBitmap(mImageTop.limit);
-                    } else if (cardInfo.getLimitType() == LimitType.Limit) {
+                    } else if (cardInfo.getLimitType() == LimitType.SemiLimit) {
                         holder.rightImage.setImageBitmap(mImageTop.semiLimit);
                     } else {
                         holder.rightImage.setVisibility(View.GONE);

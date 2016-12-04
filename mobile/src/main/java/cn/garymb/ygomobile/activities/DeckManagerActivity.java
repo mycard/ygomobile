@@ -33,7 +33,6 @@ import cn.garymb.ygomobile.deck.DeckInfo;
 import cn.garymb.ygomobile.deck.DeckItem;
 import cn.garymb.ygomobile.deck.DeckItemTouchHelper;
 import cn.garymb.ygomobile.deck.DeckItemType;
-import cn.garymb.ygomobile.deck.DeckItemUtils;
 import cn.garymb.ygomobile.deck.DeckLayoutManager;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.plus.RecyclerViewItemListener;
@@ -85,7 +84,7 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
                 return new DeckInfo();
             }
             if (mCardLoader.isOpen() && file.exists()) {
-                return DeckItemUtils.readDeck(mCardLoader, file, mLimitList);
+                return mDeckAdapater.read(mCardLoader, file, mLimitList);
             } else {
                 return new DeckInfo();
             }
@@ -401,7 +400,7 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
     }
 
     private void save() {
-        if (DeckItemUtils.save(mDeckAdapater.getDeck(), mYdkFile)) {
+        if (mDeckAdapater.save(mYdkFile)) {
             Toast.makeText(this, "save ok", Toast.LENGTH_SHORT).show();
         }
     }

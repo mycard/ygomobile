@@ -21,16 +21,16 @@ import cn.garymb.ygomobile.core.CardLoader;
 import cn.garymb.ygomobile.utils.IOUtils;
 import cn.ygo.ocgcore.LimitList;
 
-public class DeckItemUtils {
+class DeckItemUtils {
 
-    public static boolean save(DeckInfo deckInfo, File file) {
+    public static boolean save(List<DeckItem> items, File file) {
         FileOutputStream outputStream = null;
         OutputStreamWriter writer = null;
         try {
-            if(file==null||!file.exists()){
+            if (file == null || !file.exists()) {
                 return false;
             }
-            if(file.exists()){
+            if (file.exists()) {
                 file.delete();
             }
             file.createNewFile();
@@ -38,28 +38,31 @@ public class DeckItemUtils {
             writer = new OutputStreamWriter(outputStream, "utf-8");
             writer.write("#created by ygomobile".toCharArray());
             writer.write("\n#main".toCharArray());
-            if (deckInfo.getMainCards() != null) {
-                List<CardInfo> items = deckInfo.getMainCards();
-                for (int i = 0; i < Constants.DECK_MAIN_MAX && i < items.size(); i++) {
-                    CardInfo cardInfo = items.get(i);
-                    writer.write(( "\n"+cardInfo.Code).toCharArray());
+            for (int i = DeckItem.MainStart; i < DeckItem.ExtraStart + Constants.DECK_MAIN_MAX; i++) {
+                DeckItem deckItem = items.get(i);
+                if (deckItem.getType() == DeckItemType.Space) {
+                    break;
                 }
+                CardInfo cardInfo = deckItem.getCardInfo();
+                writer.write(("\n" + cardInfo.Code).toCharArray());
             }
             writer.write("\n#extra".toCharArray());
-            if (deckInfo.getExtraCards() != null) {
-                List<CardInfo> items = deckInfo.getExtraCards();
-                for (int i = 0; i < Constants.DECK_EXTRA_MAX && i < items.size(); i++) {
-                    CardInfo cardInfo = items.get(i);
-                    writer.write(("\n"+cardInfo.Code).toCharArray());
+            for (int i = DeckItem.ExtraStart; i < DeckItem.ExtraStart + Constants.DECK_EXTRA_MAX; i++) {
+                DeckItem deckItem = items.get(i);
+                if (deckItem.getType() == DeckItemType.Space) {
+                    break;
                 }
+                CardInfo cardInfo = deckItem.getCardInfo();
+                writer.write(("\n" + cardInfo.Code).toCharArray());
             }
             writer.write("\n!side".toCharArray());
-            if (deckInfo.getSideCards() != null) {
-                List<CardInfo> items = deckInfo.getSideCards();
-                for (int i = 0; i < Constants.DECK_SIDE_MAX && i < items.size(); i++) {
-                    CardInfo cardInfo = items.get(i);
-                    writer.write(( "\n"+cardInfo.Code).toCharArray());
+            for (int i = DeckItem.SideStart; i < DeckItem.SideStart + Constants.DECK_SIDE_MAX; i++) {
+                DeckItem deckItem = items.get(i);
+                if (deckItem.getType() == DeckItemType.Space) {
+                    break;
                 }
+                CardInfo cardInfo = deckItem.getCardInfo();
+                writer.write(("\n" + cardInfo.Code).toCharArray());
             }
             writer.flush();
             outputStream.flush();
@@ -112,7 +115,7 @@ public class DeckItemUtils {
                     continue;
                 }
                 line = line.trim();
-                if (line.length()==0 || !TextUtils.isDigitsOnly(line)) {
+                if (line.length() == 0 || !TextUtils.isDigitsOnly(line)) {
                     Log.w("kk", "read not number " + line);
                     continue;
                 }
