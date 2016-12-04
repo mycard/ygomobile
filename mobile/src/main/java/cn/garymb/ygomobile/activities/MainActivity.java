@@ -5,7 +5,12 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
@@ -20,12 +25,12 @@ import cn.garymb.ygomobile.plus.VUiKit;
 import cn.garymb.ygomobile.settings.AppsSettings;
 import cn.garymb.ygomobile.settings.SettingsActivity;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
     private boolean enableStart;
     private ListView mListView;
     private AppsSettings mAppsSettings;
     private ServerListAdapater mServerListAdapater;
-
+    protected DrawerLayout mDrawerlayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +39,13 @@ public class MainActivity extends BaseActivity {
         setExitAnimEnable(false);
         Toolbar toolbar = bind(R.id.toolbar);
         setSupportActionBar(toolbar);
+        mDrawerlayout = bind(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, mDrawerlayout, toolbar, R.string.search_open, R.string.search_close);
+        mDrawerlayout.addDrawerListener(toggle);
+        toggle.syncState();
+        NavigationView navigationView = bind(R.id.nav_main);
+        navigationView.setNavigationItemSelectedListener(this);
         mAppsSettings = AppsSettings.get();
         mListView = bind(R.id.list_server);
         mServerListAdapater = new ServerListAdapater(this);
@@ -72,8 +84,31 @@ public class MainActivity extends BaseActivity {
     }
 
     @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        if (doMenu(item.getItemId())) {
+            closeDrawer();
+            return true;
+        }
+        return false;
+    }
+
+    private void closeDrawer() {
+        if (mDrawerlayout.isDrawerOpen(Gravity.LEFT)) {
+            mDrawerlayout.closeDrawer(Gravity.LEFT);
+        }
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
+        if (doMenu(item.getItemId())) {
+            closeDrawer();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private boolean doMenu(int id) {
+        switch (id) {
             case R.id.action_about: {
                 Intent intent = new Intent(this, AboutActivity.class);
                 startActivity(intent);
@@ -93,7 +128,8 @@ public class MainActivity extends BaseActivity {
             break;
             case R.id.action_quit: {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle(R.string.quit_tip);
+                builder.setTitle(R.string.question);
+                builder.setMessage(R.string.quit_tip);
                 builder.setNegativeButton(android.R.string.ok, (dlg, s) -> {
                     dlg.dismiss();
                     finish();
@@ -124,8 +160,10 @@ public class MainActivity extends BaseActivity {
 //                }
             }
             break;
+            default:
+                return false;
         }
-        return super.onOptionsItemSelected(item);
+        return true;
     }
 
     private void checkResourceDownload(ResCheckTask.ResCheckListener listener) {

@@ -2,13 +2,26 @@ package ygo;
 
 import org.junit.Test;
 
-import cn.garymb.ygomobile.Constants;
+import java.util.Locale;
+
 import cn.ygo.ocgcore.StringManager;
 import cn.ygo.ocgcore.enums.CardType;
 
 public class StringTest {
     int MASK = 0x1000;
-
+    public static String tirmName(String name, String ex) {
+        if (name.toLowerCase(Locale.US).endsWith(ex)) {
+            int i = name.lastIndexOf(".");
+            if (i >= 0) {
+                return name.substring(0, i);
+            }
+        }
+        return name;
+    }
+    @Test
+    public void testName(){
+        System.out.println(tirmName("a\\a.YDK",".ydk"));
+    }
     @Test
     public void testMask() {
         int i = 1;

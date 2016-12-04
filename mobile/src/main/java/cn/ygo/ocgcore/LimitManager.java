@@ -5,9 +5,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,23 +32,27 @@ public class LimitManager {
         return sManager;
     }
 
-    public int getCount(){
+    public int getCount() {
         return mListMap.size();
     }
+
     public List<Integer> getLists() {
-        List<Integer> ids=new ArrayList<>();
+        List<Integer> ids = new ArrayList<>();
         ids.addAll(mListMap.keySet());
         Collections.sort(ids, (o1, o2) -> {
             return o1 - o2;
         });
-        return  ids;
+        return ids;
     }
+
     public LimitList getLimit(int postion) {
         return mListMap.get(getLists().get(postion));
     }
+
     public LimitList getLimitFromIndex(int pos) {
         return mListMap.get(Integer.valueOf(pos));
     }
+
 
     public boolean load() {
         File stringfile = new File(AppsSettings.get().getResourcePath(),

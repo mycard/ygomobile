@@ -72,7 +72,7 @@
     <string name="settings_game_immersive_mode">Immersive Mode</string>
     <string name="settings_about_project_address">https://code.csdn.net/a247321453/ygomobile.git</string>
     <string name="settings_game_opengl">OpenGL</string>
-    <string name="settings_author">garymabin@gmail.com\n24732145321453@qq.com</string>
+    <string name="settings_author">garymabin@gmail.com\n247321453@qq.com</string>
     <string name="restart_app">"Please restart app！"</string>
     <string-array name="opengl_version">
         <item>OpenGL ES 1.X</item>
@@ -137,4 +137,10 @@
     <string name="question">Question</string>
     <string name="question_delete_deck">delete this deck?</string>
     <string name="noname">noname</string>
+    <string name="menu">Options</string>
+    <string name="save_tip_ok">save deck ok</string>
+    <string name="save_tip_fail">save deck fail</string>
+    <string name="add_card_tip_ok">add card ok</string>
+    <string name="add_card_tip_fail">add card fail</string>
+    <string name="tip_card_max" formatted="false">card max count:%d</string>
 </resources>

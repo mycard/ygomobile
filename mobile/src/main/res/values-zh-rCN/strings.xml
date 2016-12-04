@@ -59,7 +59,7 @@
     <string name="settings_game_immersive_mode">在游戏隐藏虚拟键盘</string>
     <string name="settings_about_project_address">https://code.csdn.net/a247321453/ygomobile.git</string>
     <string name="settings_game_opengl">OpenGL</string>
-    <string name="settings_author">garymabin@gmail.com\n24732145321453@qq.com</string>
+    <string name="settings_author">garymabin@gmail.com\n247321453@qq.com</string>
     <string name="restart_app">请重启本应用</string>
     <string-array name="opengl_version">
         <item>OpenGL ES 1.X</item>

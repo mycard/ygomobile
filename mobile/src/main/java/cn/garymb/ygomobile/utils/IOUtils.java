@@ -13,6 +13,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Locale;
 import java.util.zip.ZipFile;
 
 import cn.garymb.ygomobile.Constants;
@@ -72,6 +73,16 @@ public class IOUtils {
             return true;
         }
         return false;
+    }
+
+    public static String tirmName(String name, String ex) {
+        if (name.toLowerCase(Locale.US).endsWith(ex)) {
+            int i = name.lastIndexOf(".");
+            if (i >= 0) {
+                return name.substring(0, i);
+            }
+        }
+        return name;
     }
 
     public static String join(String path1, String path2) {

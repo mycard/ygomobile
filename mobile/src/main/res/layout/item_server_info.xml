@@ -37,7 +37,7 @@
                 android:layout_marginRight="6dp"
                 android:background="@android:color/transparent"
                 android:visibility="gone"
-                app:srcCompat="@drawable/ic_mode_edit_gray"/>
+                app:srcCompat="@drawable/ic_edit"/>
         </LinearLayout>
 
         <LinearLayout

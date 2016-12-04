@@ -8,26 +8,14 @@
         app:showAsAction="always"/>
     <item
         android:id="@+id/action_card_search"
+        android:icon="@drawable/ic_search_white"
         android:title="@string/card_search"
+        app:showAsAction="always"
         />
     <item
         android:id="@+id/action_deck_manager"
+        android:icon="@drawable/ic_edit_white"
         android:title="@string/deck_manager"
+        app:showAsAction="always"
         />
-    <item
-        android:id="@+id/action_add_server"
-        android:title="@string/action_add_server"/>
-    <item
-        android:id="@+id/action_settings"
-        android:title="@string/action_settings"/>
-    <item
-        android:id="@+id/action_help"
-        android:title="@string/help"/>
-    <item
-        android:id="@+id/action_about"
-        android:title="@string/action_about"/>
-
-    <item
-        android:id="@+id/action_quit"
-        android:title="@string/quit"/>
 </menu>

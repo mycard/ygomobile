@@ -63,7 +63,7 @@
     <string name="settings_game_immersive_mode">在遊戲隱藏虛擬鍵盤</string>
     <string name="settings_about_project_address">https://code.csdn.net/a247321453/ygomobile.git</string>
     <string name="settings_game_opengl">OpenGL</string>
-    <string name="settings_author">garymabin@gmail.com\n24732145321453@qq.com</string>
+    <string name="settings_author">garymabin@gmail.com\n247321453@qq.com</string>
     <string name="restart_app">請重啟本應用</string>
     <string-array name="opengl_version">
         <item>OpenGL ES 1.X</item>
@@ -122,8 +122,19 @@
     <string name="card_add">添加</string>
     <string name="card_add_main">+主卡组</string>
     <string name="card_add_side">+副卡组</string>
+    <string name="new_deck">新建卡组</string>
+    <string name="rename_deck">重命名卡组</string>
+    <string name="delete_deck">删除卡组</string>
+    <string name="save_deck">保存</string>
+    <string name="deck_list">卡组列表</string>
     <string name="loading">加载中..."</string>
-    <string name="question">提示</string>
+    <string name="question">询问</string>
     <string name="question_delete_deck">删除卡组?</string>
     <string name="noname">未命名</string>
+    <string name="menu">菜单</string>
+    <string name="save_tip_ok">保存卡组成功</string>
+    <string name="save_tip_fail">保存卡组失败</string>
+    <string name="add_card_tip_ok">添加卡片成功</string>
+    <string name="add_card_tip_fail">添加卡片失败</string>
+    <string name="tip_card_max" formatted="false">卡片最大数量:%d</string>
 </resources>

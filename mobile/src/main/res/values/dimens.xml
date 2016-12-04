@@ -18,6 +18,8 @@
     <dimen name="card_height_middle">169dp</dimen>
     <dimen name="card_width">177dp</dimen>
     <dimen name="card_height">254dp</dimen>
+    <dimen name="card_width2">118dp</dimen>
+    <dimen name="card_height2">168dp</dimen>
     <dimen name="card_desc_height">140dp</dimen>
     <dimen name="right_size">20dp</dimen>
     <dimen name="card_def_width">44dp</dimen>
@@ -25,4 +27,7 @@
 
     <dimen name="padding">6dp</dimen>
     <dimen name="padding2">8dp</dimen>
+    <dimen name="nav_head_height">160dp</dimen>
+    <dimen name="nav_icon_width">100dp</dimen>
+    <dimen name="nav_icon_height">100dp</dimen>
 </resources>

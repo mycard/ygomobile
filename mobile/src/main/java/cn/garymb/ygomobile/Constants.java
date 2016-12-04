@@ -7,7 +7,7 @@ import cn.garymb.ygomobile.lite.BuildConfig;
 public interface Constants {
     boolean DEBUG = BuildConfig.DEBUG;
     String PREF_LAST_YDK = "pref_last_ydk";
-    String PREF_DEF_LAST_YDK = "new.ydk";
+    String PREF_DEF_LAST_YDK = "new";
     String PREF_GAME_PATH = "pref_key_game_res_path";
     String PREF_DEF_GAME_DIR = "ygocore";
 

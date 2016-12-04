@@ -13,9 +13,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -40,6 +38,7 @@ import cn.garymb.ygomobile.plus.VUiKit;
 import cn.garymb.ygomobile.plus.spinner.SimpleSpinnerAdapter;
 import cn.garymb.ygomobile.plus.spinner.SimpleSpinnerItem;
 import cn.garymb.ygomobile.settings.AppsSettings;
+import cn.garymb.ygomobile.utils.IOUtils;
 import cn.ygo.ocgcore.LimitList;
 
 import static cn.garymb.ygomobile.Constants.YDK_FILE_EX;
@@ -69,7 +68,7 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
     protected void onInit() {
         super.onInit();
         setLimitList(mLimitManager.getCount() > 0 ? mLimitManager.getLimit(0) : null);
-        File file = new File(mSettings.getResourcePath(), Constants.CORE_DECK_PATH + "/" + mSettings.getLastDeck());
+        File file = new File(mSettings.getResourcePath(), Constants.CORE_DECK_PATH + "/" + mSettings.getLastDeck() + Constants.YDK_FILE_EX);
         loadDeck(file);
     }
 
@@ -92,6 +91,7 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
             mYdkFile = file;
             if (file != null && file.exists()) {
                 setTitle(mYdkFile.getName());
+                mSettings.setLastDeck(IOUtils.tirmName(file.getName(), Constants.YDK_FILE_EX));
             } else {
                 setTitle(R.string.noname);
             }
@@ -157,7 +157,7 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
     public void onItemDoubleClick(View view, int pos) {
     }
 
-    protected void showCardDialog(CardInfo cardInfo,int pos) {
+    protected void showCardDialog(CardInfo cardInfo, int pos) {
         if (cardInfo != null) {
             CardDetail cardDetail = new CardDetail(this);
             cardDetail.showAdd();
@@ -180,27 +180,27 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
                 public void onAddSideCard(CardInfo cardInfo) {
                     if (checkLimit(cardInfo)) {
                         boolean rs = mDeckAdapater.AddCard(cardInfo, DeckItemType.SideCard);
-                        if (!rs) {
-                            Toast.makeText(DeckManagerActivity.this, "add fail", Toast.LENGTH_SHORT).show();
+                        if (rs) {
+                            Toast.makeText(DeckManagerActivity.this, R.string.add_card_tip_ok, Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(DeckManagerActivity.this, "add ok", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(DeckManagerActivity.this, R.string.add_card_tip_fail, Toast.LENGTH_SHORT).show();
                         }
                     }
                 }
 
                 @Override
                 public void onAddMainCard(CardInfo cardInfo) {
-                    if(checkLimit(cardInfo)) {
+                    if (checkLimit(cardInfo)) {
                         boolean rs;
                         if (cardInfo.isExtraCard()) {
                             rs = mDeckAdapater.AddCard(cardInfo, DeckItemType.ExtraCard);
                         } else {
                             rs = mDeckAdapater.AddCard(cardInfo, DeckItemType.MainCard);
                         }
-                        if (!rs) {
-                            Toast.makeText(DeckManagerActivity.this, "add fail", Toast.LENGTH_SHORT).show();
+                        if (rs) {
+                            Toast.makeText(DeckManagerActivity.this, R.string.add_card_tip_ok, Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(DeckManagerActivity.this, "add ok", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(DeckManagerActivity.this, R.string.add_card_tip_fail, Toast.LENGTH_SHORT).show();
                         }
                     }
                 }
@@ -211,23 +211,23 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
     private boolean checkLimit(CardInfo cardInfo) {
         Map<Long, Integer> mCount = mDeckAdapater.getCardCount();
         if (mLimitList != null && mLimitList.isForbidden(cardInfo.Code)) {
-            Toast.makeText(DeckManagerActivity.this, "add fail max :0", Toast.LENGTH_SHORT).show();
+            Toast.makeText(DeckManagerActivity.this, getString(R.string.tip_card_max, 0), Toast.LENGTH_SHORT).show();
             return false;
         }
         Integer count = mCount.get(Long.valueOf(cardInfo.Code));
         if (count != null) {
             if (mLimitList != null && mLimitList.isLimit(cardInfo.Code)) {
                 if (count >= 1) {
-                    Toast.makeText(DeckManagerActivity.this, "add fail max :1", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(DeckManagerActivity.this, getString(R.string.tip_card_max, 1), Toast.LENGTH_SHORT).show();
                     return false;
                 }
             } else if (mLimitList != null && mLimitList.isSemiLimit(cardInfo.Code)) {
                 if (count >= 2) {
-                    Toast.makeText(DeckManagerActivity.this, "add fail max :2", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(DeckManagerActivity.this, getString(R.string.tip_card_max, 2), Toast.LENGTH_SHORT).show();
                     return false;
                 }
             } else if (count >= Constants.CARD_MAX_COUNT) {
-                Toast.makeText(DeckManagerActivity.this, "add fail max :3", Toast.LENGTH_SHORT).show();
+                Toast.makeText(DeckManagerActivity.this, getString(R.string.tip_card_max, 3), Toast.LENGTH_SHORT).show();
                 return false;
             }
         }
@@ -312,15 +312,6 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
 
     }
 
-    private ViewGroup.LayoutParams getItemLayoutParams() {
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.MATCH_PARENT, (int) getResources().getDimension(R.dimen.item_height));
-        lp.gravity = Gravity.CENTER_VERTICAL;
-        lp.leftMargin = 10;
-        lp.rightMargin = 10;
-        return lp;
-    }
-
     private File getSelectDeck(Spinner spinner) {
         Object o = SimpleSpinnerAdapter.getSelectTag(spinner);
         if (o != null && o instanceof File) {
@@ -337,11 +328,16 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
         return null;
     }
 
-    private void initDecksListSpinners(Spinner spinner) {
+    private File[] getYdkFiles() {
         File dir = new File(mSettings.getResourcePath(), Constants.CORE_DECK_PATH);
         File[] files = dir.listFiles((file, s) -> {
             return s.toLowerCase(Locale.US).endsWith(Constants.YDK_FILE_EX);
         });
+        return files;
+    }
+
+    private void initDecksListSpinners(Spinner spinner) {
+        File[] files = getYdkFiles();
         List<SimpleSpinnerItem> items = new ArrayList<>();
         if (files != null) {
             int index = 0;
@@ -357,13 +353,22 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
     private void initLimitListSpinners(Spinner spinner) {
         List<SimpleSpinnerItem> items = new ArrayList<>();
         List<Integer> ids = mLimitManager.getLists();
+        int index = -1;
+        int i = 0;
         for (Integer id : ids) {
             LimitList list = mLimitManager.getLimitFromIndex(id);
+            if (list == mLimitList) {
+                index = i;
+            }
             items.add(new SimpleSpinnerItem(id, list.getName()));
+            i++;
         }
         SimpleSpinnerAdapter adapter = new SimpleSpinnerAdapter(this);
         adapter.set(items);
         spinner.setAdapter(adapter);
+        if (index >= 0) {
+            spinner.setSelection(index);
+        }
     }
 
     private void inputDeckName() {
@@ -401,7 +406,9 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
 
     private void save() {
         if (mDeckAdapater.save(mYdkFile)) {
-            Toast.makeText(this, "save ok", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.save_tip_ok, Toast.LENGTH_SHORT).show();
+        }else{
+            Toast.makeText(this, R.string.save_tip_fail, Toast.LENGTH_SHORT).show();
         }
     }
 }
