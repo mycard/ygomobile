@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
@@ -12,10 +13,10 @@ import android.widget.Toast;
 
 import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.adapters.ServerListAdapater;
-import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.core.ResCheckTask;
-import cn.garymb.ygomobile.plus.VUiKit;
 import cn.garymb.ygomobile.core.YGOStarter;
+import cn.garymb.ygomobile.lite.R;
+import cn.garymb.ygomobile.plus.VUiKit;
 import cn.garymb.ygomobile.settings.AppsSettings;
 import cn.garymb.ygomobile.settings.SettingsActivity;
 
@@ -31,8 +32,10 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setExitAnimEnable(false);
+        Toolbar toolbar = bind(R.id.toolbar);
+        setSupportActionBar(toolbar);
         mAppsSettings = AppsSettings.get();
-        mListView = (ListView) findViewById(R.id.list_server);
+        mListView = bind(R.id.list_server);
         mServerListAdapater = new ServerListAdapater(this);
         mListView.setAdapter(mServerListAdapater);
         mListView.setOnItemClickListener(mServerListAdapater);

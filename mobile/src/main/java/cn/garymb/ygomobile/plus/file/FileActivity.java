@@ -7,15 +7,11 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,40 +20,29 @@ import java.io.File;
 
 import cn.garymb.ygomobile.activities.BaseActivity;
 import cn.garymb.ygomobile.lite.R;
-import cn.garymb.ygomobile.plus.VUiKit;
 
 public class FileActivity extends BaseActivity implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener
         , FileAdapter.OnPathChangedListener {
     private ListView mListView;
-    private TextView lastPath;
     private Intent mIntent;
-    private ImageButton newFolderButton;
-    private ImageButton saveFileButton;
-    //    private EditText inputText;
     private TextView headText;
-    private LinearLayout footView;
     private FileOpenInfo mFileOpenInfo;
     private FileAdapter mFileAdapter;
+    private View saveFileButton;
+    private View newFolderButton;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         if (doIntent(getIntent())) {
             super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_filebrowser);
+            Toolbar toolbar = bind(R.id.toolbar);
+            setSupportActionBar(toolbar);
             enableBackHome();
-            LinearLayout layout = new LinearLayout(this);
-            layout.setOrientation(LinearLayout.VERTICAL);
             initViews();
-//            mListView.addFooterView(footView, null, false);
-//            mListView.addHeaderView(footView, null, false);
-//            mListView.addHeaderView(lastPath, null, false);
-            mListView.setAdapter(mFileAdapter);
             mFileAdapter.setOnPathChangedListener(this);
             mListView.setOnItemClickListener(this);
             mListView.setOnItemLongClickListener(this);
-            layout.addView(footView);
-            layout.addView(lastPath);
-            layout.addView(mListView);
-            setContentView(layout);
             updateUI();
         } else {
             finish();
@@ -65,19 +50,11 @@ public class FileActivity extends BaseActivity implements AdapterView.OnItemClic
     }
 
     private void initViews() {
-
         mFileAdapter = new FileAdapter(this);
-        mListView = new ListView(this);
-        footView = new LinearLayout(this);
-        footView.setOrientation(LinearLayout.HORIZONTAL);
-        lastPath = new TextView(this);
-        lastPath.setPadding(VUiKit.dpToPx(8), 0, 0, 0);
-        lastPath.setSingleLine();
-        lastPath.setGravity(Gravity.CENTER_VERTICAL);
-        lastPath.setMinHeight((int) getResources().getDimension(R.dimen.item_height));
-//        lastPath.setTextColor(getResources().getColor(R.color.colorPrimary));
-        lastPath.setText(R.string.last_path);
-        lastPath.setOnClickListener((v) -> {
+        mListView = bind(R.id.list_files);
+        mListView.setAdapter(mFileAdapter);
+//        footView = bind(R.id.head_view);
+        bind(R.id.file_back).setOnClickListener((v) -> {
             File path = mFileAdapter.getCurPath();
             File dir = path == null ? null : path.getParentFile();
             if (dir != null) {
@@ -86,28 +63,8 @@ public class FileActivity extends BaseActivity implements AdapterView.OnItemClic
                 }
             }
         });
-
-        newFolderButton = new ImageButton(this);
-        newFolderButton.setPadding(VUiKit.dpToPx(4), 0, 0, VUiKit.dpToPx(8));
-        newFolderButton.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        newFolderButton.setImageResource(R.drawable.ic_create_new_folder);
-        newFolderButton.setBackgroundDrawable(null);
-
-        saveFileButton = new ImageButton(this);
-        saveFileButton.setPadding(VUiKit.dpToPx(4), 0, 0, VUiKit.dpToPx(8));
-        saveFileButton.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        saveFileButton.setImageResource(R.drawable.ic_mode_save);
-        saveFileButton.setBackgroundDrawable(null);
-//        inputText = new EditText(this);
-//        inputText.setPadding(VUiKit.dpToPx(8), 0, 0, 0);
-//        inputText.setSingleLine();
-//        inputText.setGravity(Gravity.CENTER_VERTICAL);
-        headText = new TextView(this);
-        headText.setPadding(VUiKit.dpToPx(8), 0, 0, 0);
-        headText.setSingleLine();
-        headText.setGravity(Gravity.CENTER_VERTICAL);
-        headText.setMinHeight((int) getResources().getDimension(R.dimen.item_height));
-        headText.setTextColor(getResources().getColor(R.color.colorPrimary));
+        headText = bind(R.id.path);
+        newFolderButton=bind(R.id.new_folder);
         newFolderButton.setOnClickListener((v) -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             final EditText editText = new EditText(this);
@@ -134,6 +91,7 @@ public class FileActivity extends BaseActivity implements AdapterView.OnItemClic
             });
             builder.show();
         });
+        saveFileButton = bind(R.id.file_save);
         saveFileButton.setOnClickListener((v) -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             final EditText editText = new EditText(this);
@@ -161,12 +119,6 @@ public class FileActivity extends BaseActivity implements AdapterView.OnItemClic
             });
             builder.show();
         });
-        footView.addView(headText, new LinearLayout.LayoutParams(0,
-                (int) (getResources().getDimension(R.dimen.item_height)), 1));
-        footView.addView(saveFileButton, new ViewGroup.LayoutParams((int) getResources().getDimension(R.dimen.label_width_small),
-                (int) (getResources().getDimension(R.dimen.item_height))));
-        footView.addView(newFolderButton, new ViewGroup.LayoutParams((int) getResources().getDimension(R.dimen.label_width_small),
-                (int) (getResources().getDimension(R.dimen.item_height))));
     }
 
     @Override

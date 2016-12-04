@@ -5,8 +5,10 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -40,8 +42,10 @@ abstract class BaseCardsAcitivity extends BaseActivity implements CardLoader.Cal
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        enableBackHome();
         setContentView(R.layout.activity_cards);
+        Toolbar toolbar = bind(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        enableBackHome();
         mDrawerlayout = bind(R.id.drawer_layout);
         ViewGroup group = bind(R.id.layout_main);
         group.addView(getMainView(), new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
@@ -49,11 +53,14 @@ abstract class BaseCardsAcitivity extends BaseActivity implements CardLoader.Cal
         mListView = (ListView) findViewById(R.id.list_cards);
         mCardListAdapater = new CardListAdapater(this);
         mListView.setAdapter(mCardListAdapater);
-
+//
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, mDrawerlayout, R.string.search_open, R.string.search_close);
+                this, mDrawerlayout, toolbar, R.string.search_open, R.string.search_close);
         toggle.setDrawerIndicatorEnabled(false);
         mDrawerlayout.addDrawerListener(toggle);
+        toggle.setToolbarNavigationClickListener((v)->{
+            onBack();
+        });
         toggle.syncState();
         mCardLoader = new CardLoader(this);
         mCardLoader.setCallBack(this);
@@ -67,7 +74,7 @@ abstract class BaseCardsAcitivity extends BaseActivity implements CardLoader.Cal
             if (!mLimitManager.isLoad()) {
                 mLimitManager.load();//loadFile(stringfile.getAbsolutePath());
             }
-            if(mLimitManager.getCount()>0){
+            if (mLimitManager.getCount() > 0) {
                 mCardLoader.setLimitList(mLimitManager.getLimitFromIndex(0));
             }
             mCardLoader.openDb();
@@ -111,6 +118,27 @@ abstract class BaseCardsAcitivity extends BaseActivity implements CardLoader.Cal
         });
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            return onBack();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private boolean onBack(){
+        if (mDrawerlayout.isDrawerOpen(Constants.CARD_SEARCH_GRAVITY)) {
+            mDrawerlayout.closeDrawer(Constants.CARD_SEARCH_GRAVITY);
+            return true;
+        }
+        if (mDrawerlayout.isDrawerOpen(Gravity.LEFT)) {
+            mDrawerlayout.closeDrawer(Gravity.LEFT);
+            return true;
+        }
+        finish();
+        return true;
+    }
+
     protected void onInit() {
         mCardSelector.initItems();
         isLoad = true;
@@ -130,7 +158,7 @@ abstract class BaseCardsAcitivity extends BaseActivity implements CardLoader.Cal
 
     }
 
-    protected void hideDrawers(){
+    protected void hideDrawers() {
         if (mDrawerlayout.isDrawerOpen(Gravity.RIGHT)) {
             mDrawerlayout.closeDrawer(Gravity.RIGHT);
         }

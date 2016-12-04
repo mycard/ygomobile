@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <include
+        layout="@layout/content_toolbar"/>
+
+    <LinearLayout
+        android:id="@+id/head_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
+
+        <!-- <ImageButton
+             android:id="@+id/file_back"
+             android:layout_width="@dimen/label_width_small"
+             android:layout_height="match_parent"
+             android:background="@android:color/transparent"
+             app:srcCompat="@drawable/ic_back"
+             />-->
+
+        <TextView
+            android:id="@+id/path"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/item_height"
+            android:layout_weight="1"
+            android:ellipsize="marquee"
+            android:fadingEdge="horizontal"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:gravity="center_vertical"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:singleLine="true"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textColor="@color/colorPrimary"
+            tools:text="path"/>
+
+        <ImageButton
+            android:id="@+id/new_folder"
+            android:layout_width="@dimen/label_width_small"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:paddingRight="10dp"
+            app:srcCompat="@drawable/ic_create_new_folder"
+            />
+
+        <ImageButton
+            android:id="@+id/file_save"
+            android:layout_width="@dimen/label_width_small"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            app:srcCompat="@drawable/ic_mode_save"
+            />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/file_back"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/item_height"
+        android:background="@android:color/transparent"
+        android:paddingLeft="10dp"
+        android:gravity="left|center_vertical"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textColor="@color/colorPrimary"
+        android:text="@string/last_path" />
+
+    <ListView
+        android:id="@+id/list_files"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="4dp"
+        android:padding="5dp"
+        android:scrollbars="none"/>
+</LinearLayout>

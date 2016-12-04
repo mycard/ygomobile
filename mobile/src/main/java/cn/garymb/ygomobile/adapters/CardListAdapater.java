@@ -1,44 +1,23 @@
 package cn.garymb.ygomobile.adapters;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 
 import cn.garymb.ygomobile.Constants;
-import cn.garymb.ygomobile.activities.WebActivity;
 import cn.garymb.ygomobile.bean.CardInfo;
-import cn.garymb.ygomobile.core.loader.ICardLoader;
-import cn.garymb.ygomobile.core.loader.ILoadCallBack;
 import cn.garymb.ygomobile.core.loader.ImageLoader;
 import cn.garymb.ygomobile.deck.ImageTop;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.plus.BaseAdapterPlus;
-import cn.garymb.ygomobile.plus.VUiKit;
 import cn.garymb.ygomobile.settings.AppsSettings;
-import cn.garymb.ygomobile.core.CardDetail;
-import cn.ygo.ocgcore.LimitList;
-import cn.ygo.ocgcore.LimitManager;
 import cn.ygo.ocgcore.StringManager;
-import cn.ygo.ocgcore.enums.LimitType;
 import cn.ygo.ocgcore.enums.CardType;
+import cn.ygo.ocgcore.enums.LimitType;
 
 public class CardListAdapater extends BaseAdapterPlus<CardInfo> {
     private StringManager mStringManager;
@@ -119,7 +98,7 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> {
             layout_atkdef = findViewById(R.id.layout_atkdef);
             view_bar = findViewById(R.id.view_bar);
             rightImage = findViewById(R.id.right_top);
-            File outFile = new File(AppsSettings.get().getCoreSkinPath(), Constants.CORE_SKIN_COVER);
+            File outFile = new File(AppsSettings.get().getCoreSkinPath(), Constants.UNKNOWN_IMAGE);
             ImageLoader.get().bind(context, outFile, cardImage, outFile.getName().endsWith(Constants.BPG), 0, null);
         }
     }

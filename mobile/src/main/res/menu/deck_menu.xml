@@ -13,14 +13,13 @@
         app:showAsAction="always"/>
 
     <item
-        android:id="@+id/action_save"
-        android:icon="@drawable/ic_mode_save"
-        android:title="@string/save_deck"
-        app:showAsAction="always"/>
-    <item
         android:id="@+id/action_unsort"
         android:icon="@drawable/ic_refresh"
         android:title="@string/unsort"/>
+    <item
+        android:id="@+id/action_save"
+        android:icon="@drawable/ic_mode_save_white"
+        android:title="@string/save_deck"/>
     <item
         android:id="@+id/action_manager"
         android:icon="@drawable/ic_mode_edit"

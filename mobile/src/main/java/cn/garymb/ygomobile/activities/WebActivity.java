@@ -4,10 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 
+import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.plus.WebViewPlus;
 
 public class WebActivity extends BaseActivity {
@@ -18,9 +20,11 @@ public class WebActivity extends BaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_webbrowser);
+        Toolbar toolbar = bind(R.id.toolbar);
+        setSupportActionBar(toolbar);
         enableBackHome();
-        mWebViewPlus = new WebViewPlus(this);
-        setContentView(mWebViewPlus);
+        mWebViewPlus = bind(R.id.webbrowser);
         mWebViewPlus.enableHtml5();
         mWebViewPlus.setWebChromeClient(new WebChromeClient(){
             @Override

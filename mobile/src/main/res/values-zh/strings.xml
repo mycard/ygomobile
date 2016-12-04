@@ -120,4 +120,10 @@
     <string name="card_result">卡片列表</string>
     <string name="unsort">打乱</string>
     <string name="card_add">添加</string>
+    <string name="card_add_main">+主卡族</string>
+    <string name="card_add_side">+附卡组</string>
+    <string name="loading">加载中..."</string>
+    <string name="question">提示</string>
+    <string name="question_delete_deck">删除卡组?</string>
+    <string name="noname">未命名</string>
 </resources>

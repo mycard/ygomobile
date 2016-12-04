@@ -2,7 +2,6 @@ package cn.garymb.ygomobile.deck;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -12,7 +11,6 @@ import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.core.loader.ImageLoader;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.settings.AppsSettings;
-import cn.ygo.ocgcore.enums.CardType;
 
 class DeckViewHolder extends RecyclerView.ViewHolder {
     private long mCardType;
@@ -52,7 +50,7 @@ class DeckViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void useDefault() {
-        File outFile = new File(AppsSettings.get().getCoreSkinPath(), Constants.CORE_SKIN_COVER);
+        File outFile = new File(AppsSettings.get().getCoreSkinPath(), Constants.UNKNOWN_IMAGE);
         ImageLoader.get().bind(view.getContext(), outFile, cardImage, outFile.getName().endsWith(Constants.BPG), 0,null);
     }
 

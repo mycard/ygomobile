@@ -33,7 +33,7 @@ public class CardSearchActivity extends BaseCardsAcitivity {
         if (mCardDetail == null) {
             mCardDetail = new CardDetail(this);
             mCardDetail.hideClose();
-            File outFile = new File(AppsSettings.get().getCoreSkinPath(), Constants.CORE_SKIN_COVER);
+            File outFile = new File(AppsSettings.get().getCoreSkinPath(), Constants.UNKNOWN_IMAGE);
             Glide.with(this).load(outFile).into(mCardDetail.getCardImage());
         }
         return mCardDetail.getView();
@@ -56,7 +56,12 @@ public class CardSearchActivity extends BaseCardsAcitivity {
             }
 
             @Override
-            public void onAddCard(CardInfo cardInfo) {
+            public void onAddMainCard(CardInfo cardInfo) {
+
+            }
+
+            @Override
+            public void onAddSideCard(CardInfo cardInfo) {
 
             }
         });
@@ -100,16 +105,6 @@ public class CardSearchActivity extends BaseCardsAcitivity {
                 break;
             case R.id.action_card_list:
                 showResult(true);
-                break;
-            case android.R.id.home:
-                if (mDrawerlayout.isDrawerOpen(Constants.CARD_SEARCH_GRAVITY)) {
-                    mDrawerlayout.closeDrawer(Constants.CARD_SEARCH_GRAVITY);
-                    return true;
-                }
-                if (mDrawerlayout.isDrawerOpen(Gravity.LEFT)) {
-                    mDrawerlayout.closeDrawer(Gravity.LEFT);
-                    return true;
-                }
                 break;
         }
         return super.onOptionsItemSelected(item);
