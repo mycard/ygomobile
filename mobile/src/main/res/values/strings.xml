@@ -152,4 +152,7 @@
         <item>Double click</item>
         <item>Long press</item>
     </string-array>
+    <string name="file_exist">file is exist</string>
+    <string name="share_deck_image">Share Image</string>
+    <string name="no_share_app">no find share app</string>
 </resources>

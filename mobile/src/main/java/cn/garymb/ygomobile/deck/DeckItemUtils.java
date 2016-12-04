@@ -156,29 +156,17 @@ class DeckItemUtils {
         }
         DeckInfo deckInfo = new DeckInfo();
         HashMap<Long, CardInfo> tmp = cardLoader.readCards(main, limitList);
-        if (tmp.size() == main.size()) {
-            deckInfo.setMainCards(tmp.values());
-        } else {
-            for (Long id : main) {
-                deckInfo.addMainCards(tmp.get(id));
-            }
+        for (Long id : main) {
+            deckInfo.addMainCards(tmp.get(id));
         }
         tmp = cardLoader.readCards(extra, limitList);
-        if (tmp.size() == extra.size()) {
-            deckInfo.setExtraCards(tmp.values());
-        } else {
-            for (Long id : extra) {
-                deckInfo.addExtraCards(tmp.get(id));
-            }
+        for (Long id : extra) {
+            deckInfo.addExtraCards(tmp.get(id));
         }
         tmp = cardLoader.readCards(side, limitList);
 //        Log.i("kk", "desk:" + tmp.size()+"/"+side.size());
-        if (tmp.size() == side.size()) {
-            deckInfo.setSideCards(tmp.values());
-        } else {
-            for (Long id : side) {
-                deckInfo.addSideCards(tmp.get(id));
-            }
+        for (Long id : side) {
+            deckInfo.addSideCards(tmp.get(id));
         }
         return deckInfo;
     }

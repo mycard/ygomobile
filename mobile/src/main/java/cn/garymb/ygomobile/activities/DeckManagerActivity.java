@@ -2,6 +2,8 @@ package cn.garymb.ygomobile.activities;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.DrawerLayout;
@@ -39,7 +41,9 @@ import cn.garymb.ygomobile.plus.VUiKit;
 import cn.garymb.ygomobile.plus.spinner.SimpleSpinnerAdapter;
 import cn.garymb.ygomobile.plus.spinner.SimpleSpinnerItem;
 import cn.garymb.ygomobile.settings.AppsSettings;
+import cn.garymb.ygomobile.utils.BitmapUtil;
 import cn.garymb.ygomobile.utils.IOUtils;
+import cn.garymb.ygomobile.utils.ShareUtil;
 import cn.ygo.ocgcore.LimitList;
 
 import static cn.garymb.ygomobile.Constants.YDK_FILE_EX;
@@ -63,7 +67,7 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
         touchHelper.setEnableClickDrag(Constants.DECK_SINGLE_PRESS_DRAG);
         touchHelper.attachToRecyclerView(mRecyclerView);
 
-        if(!Constants.DECK_SINGLE_PRESS_DRAG) {
+        if (!Constants.DECK_SINGLE_PRESS_DRAG) {
             mDrawerlayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_OPEN);
             hideDrawers();
         }
@@ -155,7 +159,7 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
 
     @Override
     public void onItemClick(View view, int pos) {
-        if(!Constants.DECK_SINGLE_PRESS_DRAG) {
+        if (!Constants.DECK_SINGLE_PRESS_DRAG) {
             DeckItem deckItem = mDeckAdapater.getItem(pos);
             if (deckItem != null) {
                 showCardDialog(deckItem.getCardInfo(), pos);
@@ -166,8 +170,8 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
     @Override
     public void onItemLongClick(View view, int pos) {
         //拖拽中，就不显示
-        if(Constants.DECK_SINGLE_PRESS_DRAG) {
-            if(mSettings.getShowCard() == Constants.PREF_DECK_SHOW_CARD_LONG_PRESS) {
+        if (Constants.DECK_SINGLE_PRESS_DRAG) {
+            if (mSettings.getShowCard() == Constants.PREF_DECK_SHOW_CARD_LONG_PRESS) {
                 DeckItem deckItem = mDeckAdapater.getItem(pos);
                 if (deckItem != null) {
                     showCardDialog(deckItem.getCardInfo(), pos);
@@ -179,8 +183,8 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
     @Override
     public void onItemDoubleClick(View view, int pos) {
         //拖拽中，就不显示
-        if(Constants.DECK_SINGLE_PRESS_DRAG) {
-            if(mSettings.getShowCard() == Constants.PREF_DECK_SHOW_CARD_DOUBLE) {
+        if (Constants.DECK_SINGLE_PRESS_DRAG) {
+            if (mSettings.getShowCard() == Constants.PREF_DECK_SHOW_CARD_DOUBLE) {
                 DeckItem deckItem = mDeckAdapater.getItem(pos);
                 if (deckItem != null) {
                     showCardDialog(deckItem.getCardInfo(), pos);
@@ -341,10 +345,34 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
             case R.id.action_sort:
                 mDeckAdapater.sort();
                 break;
+//            case R.id.action_share_image:
+//                shareDeck();
+//                mDeckAdapater.notifyDataSetChanged();
+//                break;
         }
 
         return super.onOptionsItemSelected(item);
 
+    }
+
+    private void shareDeck() {
+        ProgressDialog dialog = ProgressDialog.show(this, null, "share");
+        Bitmap bmp = BitmapUtil.getBitmapFromView(mRecyclerView);
+        if (bmp == null || mYdkFile == null) {
+            Toast.makeText(this, "get image fail", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        File file = new File(mSettings.getResourcePath(), Constants.SHARE_FILE);
+        VUiKit.defer().when(() -> {
+            return BitmapUtil.saveBitmap(bmp, file.getAbsolutePath(), 100);
+        }).done((rs) -> {
+            dialog.dismiss();
+            if (rs) {
+                ShareUtil.shareImage(this, "share deck", file.getAbsolutePath(), null);
+            } else {
+                Toast.makeText(this, "save image fail", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private File getSelectDeck(Spinner spinner) {
@@ -416,7 +444,7 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
 
     private void inputDeckName() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("input deck name");
+        builder.setTitle(R.string.intpu_name);
         EditText editText = new EditText(this);
         editText.setGravity(Gravity.TOP | Gravity.LEFT);
         editText.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
@@ -424,16 +452,24 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
         builder.setView(editText);
         builder.setNegativeButton(android.R.string.ok, (dlg, s) -> {
             CharSequence name = editText.getText();
-            if (TextUtils.isEmpty(name)) {
+            if (!TextUtils.isEmpty(name)) {
                 String filename = String.valueOf(name);
                 if (!filename.endsWith(YDK_FILE_EX)) {
                     filename += YDK_FILE_EX;
                 }
                 File ydk = new File(mSettings.getResourcePath(), Constants.CORE_DECK_PATH + "/" + filename);
+                if (ydk.exists()) {
+                    Toast.makeText(this, R.string.file_exist, Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 if (mYdkFile != null && mYdkFile.exists()) {
-                    mYdkFile.renameTo(ydk);
-                    mYdkFile = ydk;
+                    if (mYdkFile.renameTo(ydk)) {
+                        mYdkFile = ydk;
+                        dlg.dismiss();
+                        loadDeck(ydk);
+                    }
                 } else {
+                    dlg.dismiss();
                     mYdkFile = ydk;
                     save();
                 }

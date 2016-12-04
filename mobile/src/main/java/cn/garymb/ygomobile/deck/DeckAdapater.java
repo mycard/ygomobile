@@ -295,7 +295,7 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
                 }
                 //region 额外
                 if (c1.isType(CardType.Fusion)) {
-                    if(!c2.isExtraCard()){
+                    if (!c2.isExtraCard()) {
                         return true;
                     }
                     if (c2.isType(CardType.Synchro) || c2.isType(CardType.Xyz)) {
@@ -307,7 +307,7 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
                         }
                     }
                 } else if (c1.isType(CardType.Synchro)) {
-                    if(!c2.isExtraCard()){
+                    if (!c2.isExtraCard()) {
                         return true;
                     }
                     if (c2.isType(CardType.Fusion)) {
@@ -322,7 +322,7 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
                         }
                     }
                 } else if (c1.isType(CardType.Xyz)) {
-                    if(!c2.isExtraCard()){
+                    if (!c2.isExtraCard()) {
                         return true;
                     }
                     if (c2.isType(CardType.Fusion) || c2.isType(CardType.Synchro)) {
@@ -399,6 +399,7 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
                 DeckItem d1 = mItems.get(DeckItem.ExtraStart + j);
                 DeckItem d2 = mItems.get(DeckItem.ExtraStart + j + 1);
                 if (comp(d1, d2)) {
+//                    Log.d("kk", "swap extra:" + j + "->" + (j + 1));
                     DeckItem tmp = new DeckItem(d2);
                     d2.set(d1);
                     d1.set(tmp);

@@ -143,4 +143,7 @@
         <item>双击</item>
         <item>长按</item>
     </string-array>
+    <string name="file_exist">文件已经存在</string>
+    <string name="share_deck_image">分享卡组截图</string>
+    <string name="no_share_app">没有找到分享应用</string>
 </resources>
