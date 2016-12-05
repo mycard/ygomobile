@@ -31,6 +31,8 @@ public interface Constants {
     boolean PREF_DEF_LOCK_SCREEN = true;
     String PREF_IMMERSIVE_MODE = "pref_key_immersive_mode";
     boolean PREF_DEF_IMMERSIVE_MODE = true;
+    String PREF_SENSOR_REFRESH = "pref_key_sensor_refresh";
+    boolean PREF_DEF_SENSOR_REFRESH = false;
     String PREF_DECK_SHOW_CARD = "pref_key_deck_show_card";
     int PREF_DECK_SHOW_CARD_LONG_PRESS = 1;
     int PREF_DECK_SHOW_CARD_DOUBLE = 0;

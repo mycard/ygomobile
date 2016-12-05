@@ -110,7 +110,9 @@ public class YGOMobileActivity extends NativeActivity implements
         }
         //注册
         if (mSensor != null) {
-            mSensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_GAME);
+            if (mApp.isSensorRefresh()) {
+                mSensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_GAME);
+            }
         }
     }
 
@@ -122,6 +124,7 @@ public class YGOMobileActivity extends NativeActivity implements
 
     @Override
     public void onSensorChanged(SensorEvent event) {
+        if (!mApp.isSensorRefresh()) return;
         int sensorType = event.sensor.getType();
         float[] values = event.values;
         float x = values[0];

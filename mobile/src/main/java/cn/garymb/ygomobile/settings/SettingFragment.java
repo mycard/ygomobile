@@ -41,6 +41,7 @@ import static cn.garymb.ygomobile.Constants.PREF_IMMERSIVE_MODE;
 import static cn.garymb.ygomobile.Constants.PREF_LOCK_SCREEN;
 import static cn.garymb.ygomobile.Constants.PREF_OPENGL_VERSION;
 import static cn.garymb.ygomobile.Constants.PREF_PENDULUM_SCALE;
+import static cn.garymb.ygomobile.Constants.PREF_SENSOR_REFRESH;
 import static cn.garymb.ygomobile.Constants.PREF_SOUND_EFFECT;
 import static cn.garymb.ygomobile.Constants.PREF_USE_EXTRA_CARD_CARDS;
 import static cn.garymb.ygomobile.Constants.SETTINGS_CARD_BG;
@@ -76,6 +77,7 @@ public class SettingFragment extends PreferenceFragmentPlus {
         bind(PREF_FONT_ANTIALIAS, mSettings.isFontAntiAlias());
         bind(PREF_IMMERSIVE_MODE, mSettings.isImmerSiveMode());
         bind(PREF_PENDULUM_SCALE, mSettings.isPendulumScale());
+        bind(PREF_SENSOR_REFRESH, mSettings.isSensorRefresh());
         bind(PREF_OPENGL_VERSION, Constants.PREF_DEF_OPENGL_VERSION);
         bind(PREF_IMAGE_QUALITY, Constants.PREF_DEF_IMAGE_QUALITY);
         bind(PREF_DECK_SHOW_CARD, Constants.PREF_DECK_SHOW_CARD_DOUBLE);

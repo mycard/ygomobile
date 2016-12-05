@@ -29,7 +29,12 @@
             android:title="@string/settings_game_immersive_mode"/>
         <CheckBoxPreference
             android:key="pref_key_game_lab_pendulum_scale"
+            android:persistent="true"
             android:title="@string/settings_game_lab_pendulum_scale"/>
+        <CheckBoxPreference
+            android:key="pref_key_sensor_refresh"
+            android:persistent="true"
+            android:title="@string/settings_game_sensor_refresh"/>
         <ListPreference
             android:entries="@array/show_card_desc"
             android:entryValues="@array/show_card_value"

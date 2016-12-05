@@ -74,7 +74,9 @@ public class App extends GameApplication {
     public boolean isImmerSiveMode() {
         return AppsSettings.get().isImmerSiveMode();
     }
-
+    public boolean isSensorRefresh(){
+        return AppsSettings.get().isSensorRefresh();
+    }
     @Override
     public float getScreenHeight() {
         return AppsSettings.get().getScreenHeight();

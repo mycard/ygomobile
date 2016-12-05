@@ -15,8 +15,10 @@ import cn.garymb.ygomobile.NativeInitOptions;
 import cn.garymb.ygomobile.plus.PreferenceFragmentPlus;
 
 import static cn.garymb.ygomobile.Constants.PREF_DEF_IMMERSIVE_MODE;
+import static cn.garymb.ygomobile.Constants.PREF_DEF_SENSOR_REFRESH;
 import static cn.garymb.ygomobile.Constants.PREF_IMMERSIVE_MODE;
 import static cn.garymb.ygomobile.Constants.PREF_LOCK_SCREEN;
+import static cn.garymb.ygomobile.Constants.PREF_SENSOR_REFRESH;
 
 public class AppsSettings {
     private static AppsSettings sAppsSettings;
@@ -279,18 +281,8 @@ public class AppsSettings {
         return mSharedPreferences.getBoolean(PREF_IMMERSIVE_MODE, PREF_DEF_IMMERSIVE_MODE);
     }
 
-    /**
-     * 隐藏底部导航栏
-     */
-    public void setImmerSiveMode(boolean immerSiveMode) {
-        mSharedPreferences.putBoolean(PREF_IMMERSIVE_MODE, immerSiveMode);
-    }
-
-    /***
-     * 游戏根目录
-     */
-    public void setResourcePath(String path) {
-        mSharedPreferences.putString(Constants.PREF_GAME_PATH, path);
+    public boolean isSensorRefresh() {
+        return mSharedPreferences.getBoolean(PREF_SENSOR_REFRESH, PREF_DEF_SENSOR_REFRESH);
     }
 
     /***
@@ -333,7 +325,7 @@ public class AppsSettings {
     }
 
     public void setLastRoomList(List<String> _names) {
-        JSONArray array=new JSONArray();
+        JSONArray array = new JSONArray();
         if (_names != null) {
             int count = _names.size();
             int max = Math.min(count, Constants.LAST_ROOM_MAX);

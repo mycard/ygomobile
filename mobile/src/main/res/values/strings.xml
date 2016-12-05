@@ -157,4 +157,5 @@
     <string name="no_share_app">no find share app</string>
     <string name="intput_room_name">Input room name</string>
     <string name="join_game">Join game</string>
+    <string name="settings_game_sensor_refresh">Sensor Refresh Game</string>
 </resources>
