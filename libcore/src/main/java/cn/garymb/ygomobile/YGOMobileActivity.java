@@ -40,7 +40,6 @@ import cn.garymb.ygomobile.utils.SignUtils;
 import cn.garymb.ygomobile.widget.ComboBoxCompat;
 import cn.garymb.ygomobile.widget.EditWindowCompat;
 import cn.garymb.ygomobile.widget.overlay.OverlayOvalView;
-import cn.garymb.ygomobile.widget.overlay.OverlayRectView;
 import cn.garymb.ygomobile.widget.overlay.OverlayView;
 
 /**
@@ -91,12 +90,12 @@ public class YGOMobileActivity extends NativeActivity implements
             finish();
             return;
         }
-        super.onCreate(savedInstanceState);
         mNativeCrashHandler = new NativeCrashHandler();
         if (mApp.canNdkCash()) {
             mNativeCrashHandler.registerForNativeCrash(this);
             registNdkCash = true;
         }
+        super.onCreate(savedInstanceState);
         if (sChainControlXPostion < 0) {
             initPostion();
         }
