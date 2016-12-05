@@ -72,12 +72,12 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
             hideDrawers();
         }
         mRecyclerView.addOnItemTouchListener(new RecyclerViewItemListener(mRecyclerView, this));
+        setHideNav(true);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        hideSystemNavBar();
     }
 
     @Override
