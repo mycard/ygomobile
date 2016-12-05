@@ -55,7 +55,7 @@ public class YGOMobileActivity extends NativeActivity implements
     private static final String TAG = YGOMobileActivity.class.getSimpleName();
     private static final int CHAIN_CONTROL_PANEL_X_POSITION_LEFT_EDGE = 205;
     private static final int CHAIN_CONTROL_PANEL_Y_REVERT_POSITION = 100;
-    private static final int MAX_REFRESH = 15 * 000;
+    private static final int MAX_REFRESH = 5 * 1000;
     protected final int windowsFlags = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
             | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
             | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION

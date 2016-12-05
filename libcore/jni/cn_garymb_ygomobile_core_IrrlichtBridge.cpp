@@ -245,15 +245,6 @@ static void* join_game_thread(void* param) {
 			event.KeyInput.Control = false;
 			event.KeyInput.Key = KEY_KEY_R;
 			device->postEventFromUser(event);
-			
-			SEvent event2;
-			event2.EventType = EET_KEY_INPUT_EVENT;
-			//just cause a right up event to refresh texture
-			event2.KeyInput.PressedDown = false;
-			event2.KeyInput.Shift = false;
-			event2.KeyInput.Control = false;
-			event2.KeyInput.Key = KEY_KEY_R;
-			device->postEventFromUser(event2);
 		}
 	}
 }
