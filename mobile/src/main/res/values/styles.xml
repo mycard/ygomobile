@@ -6,28 +6,19 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
-    <style name="BaseDialog" parent="Theme.AppCompat.Light.Dialog">
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-    </style>
+
     <style name="AppTheme" parent="BaseTheme">
-
-    </style>
-    <style name="AppTheme.Translucent" parent="BaseTheme">
-        <item name="android:windowIsTranslucent">true</item>
-    </style>
-
-    <style name="AppTheme.NoActionBar" parent="AppTheme">
         <item name="android:windowActionBar">false</item>
         <item name="android:windowNoTitle">true</item>
-        <item name="android:windowIsTranslucent">true</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
-    <style name="AppTheme.NoActionBar.Translucent" parent="AppTheme.NoActionBar">
+    <style name="AppTheme.NoNavtionBar" parent="AppTheme">
+    </style>
+    <style name="AppTheme.Translucent" parent="AppTheme">
         <item name="android:windowIsTranslucent">true</item>
     </style>
+
     <style name="AppTheme.Game" parent="android:Theme.NoTitleBar.Fullscreen">
         <item name="android:windowIsTranslucent">true</item>
     </style>

@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.DrawerLayout;
@@ -15,6 +16,7 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -72,9 +74,7 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
             hideDrawers();
         }
         mRecyclerView.addOnItemTouchListener(new RecyclerViewItemListener(mRecyclerView, this));
-        setHideNav(true);
     }
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -295,7 +295,7 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
                 break;
             case R.id.action_delete_deck: {
 //                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                DialogPlus builder=new DialogPlus(this);
+                DialogPlus builder = new DialogPlus(this);
                 builder.setTitle(R.string.question);
                 builder.setMessage(R.string.question_delete_deck);
                 builder.setButtonListener((dlg, rs) -> {
@@ -313,7 +313,7 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
 
                 //选择禁卡表
                 //卡组列表
-                DialogPlus dialogPlus=new DialogPlus(this);
+                DialogPlus dialogPlus = new DialogPlus(this);
 //                View view = LayoutInflater.from(this).inflate(R.layout.dialog_deck, null);
 //                AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 dialogPlus.setTitle(R.string.deck_manager);
@@ -439,7 +439,7 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
     }
 
     private void inputDeckName() {
-        DialogPlus builder=new DialogPlus(this);
+        DialogPlus builder = new DialogPlus(this);
 //        AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.intpu_name);
         EditText editText = new EditText(this);

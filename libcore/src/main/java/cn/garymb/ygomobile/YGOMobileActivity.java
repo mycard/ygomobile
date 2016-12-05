@@ -57,6 +57,12 @@ public class YGOMobileActivity extends NativeActivity implements
     private static final int CHAIN_CONTROL_PANEL_X_POSITION_LEFT_EDGE = 205;
     private static final int CHAIN_CONTROL_PANEL_Y_REVERT_POSITION = 100;
     private static final int MAX_REFRESH = 15 * 000;
+    protected final int windowsFlags = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+            | View.SYSTEM_UI_FLAG_FULLSCREEN
+            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+
     private SensorManager mSensorManager;
     private Sensor mSensor;
     protected View mContentView;
@@ -123,7 +129,7 @@ public class YGOMobileActivity extends NativeActivity implements
 
     @Override
     protected void onDestroy() {
-        if(registNdkCash) {
+        if (registNdkCash) {
             mNativeCrashHandler.unregisterForNativeCrash();
         }
         super.onDestroy();
@@ -186,19 +192,8 @@ public class YGOMobileActivity extends NativeActivity implements
     }
 
     private void fullscreen() {
-        if (mApp.isImmerSiveMode()) {
-            int uiOptions = View.SYSTEM_UI_FLAG_LAYOUT_STABLE|
-                    //布局位于状态栏下方
-                    View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION|
-                    //隐藏导航栏
-                    View.SYSTEM_UI_FLAG_HIDE_NAVIGATION|
-                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
-            if (Build.VERSION.SDK_INT>=19){
-                uiOptions |= 0x00001000;
-            }else{
-                uiOptions |= View.SYSTEM_UI_FLAG_LOW_PROFILE;
-            }
-            getWindow().getDecorView().setSystemUiVisibility(uiOptions);
+        if (Build.VERSION.SDK_INT >= 19 && mApp.isImmerSiveMode()) {
+            getWindow().getDecorView().setSystemUiVisibility(windowsFlags);
         }
     }
 

@@ -12,6 +12,7 @@ import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
 
 import cn.garymb.ygomobile.lite.R;
 
@@ -19,7 +20,6 @@ public class BaseActivity extends AppCompatActivity {
     private final static int REQUEST_PERMISSIONS = 0x1000 + 1;
     private boolean mExitAnim = true;
     private boolean mEnterAnim = true;
-    private boolean mHideNav = false;
 
     protected String[] getPermissions() {
         return null;
@@ -71,40 +71,25 @@ public class BaseActivity extends AppCompatActivity {
         return rect.top;
     }
 
-    public void setHideNav(boolean hideNav) {
-        mHideNav = hideNav;
-    }
-
-    private void hideSystemNavBar() {
-        if (!mHideNav) return;
-        //保持布局状态
-        int uiOptions = View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
-                //布局位于状态栏下方
-                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
-                //隐藏导航栏
-                View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
-                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
+    protected void hideSystemNavBar() {
         if (Build.VERSION.SDK_INT >= 19) {
-            uiOptions |= 0x00001000;
-        } else {
-            uiOptions |= View.SYSTEM_UI_FLAG_LOW_PROFILE;
+//            final WindowManager.LayoutParams params = getWindow().getAttributes();
+//            params.systemUiVisibility |=
+//                    View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
+//                            View.SYSTEM_UI_FLAG_IMMERSIVE |
+//                            View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
+//                            View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
+//            getWindow().setAttributes(params);
         }
-        int finalUiOptions = uiOptions;
-        getWindow().getDecorView().setSystemUiVisibility(finalUiOptions);
-        getWindow().getDecorView().setOnSystemUiVisibilityChangeListener((visibility) -> {
-            if (mHideNav) {
-                hideSystemNavBar();
-            }
-        });
     }
 
-    @Override
-    public void onWindowFocusChanged(boolean hasFocus) {
-        if (hasFocus) {
-            hideSystemNavBar();
-        }
-        super.onWindowFocusChanged(hasFocus);
-    }
+//    @Override
+//    public void onWindowFocusChanged(boolean hasFocus) {
+//        if (hasFocus) {
+//            hideSystemNavBar();
+//        }
+//        super.onWindowFocusChanged(hasFocus);
+//    }
 
     public void setActionBarTitle(String title) {
         if (TextUtils.isEmpty(title)) {
