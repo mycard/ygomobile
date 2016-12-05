@@ -71,6 +71,11 @@ public class App extends GameApplication {
     }
 
     @Override
+    public boolean canNdkCash() {
+        return false;
+    }
+
+    @Override
     public boolean isImmerSiveMode() {
         return AppsSettings.get().isImmerSiveMode();
     }

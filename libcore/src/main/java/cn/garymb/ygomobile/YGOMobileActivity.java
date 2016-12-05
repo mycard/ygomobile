@@ -76,6 +76,7 @@ public class YGOMobileActivity extends NativeActivity implements
     private volatile int mCompatGUIMode;
     private static int sChainControlXPostion = -1;
     private static int sChainControlYPostion = -1;
+    private boolean registNdkCash = false;
     private GameApplication mApp;
     private Handler handler = new Handler();
     private NativeCrashHandler mNativeCrashHandler;
@@ -89,9 +90,12 @@ public class YGOMobileActivity extends NativeActivity implements
             finish();
             return;
         }
-        mNativeCrashHandler = new NativeCrashHandler();
-        mNativeCrashHandler.registerForNativeCrash(this);
         super.onCreate(savedInstanceState);
+        mNativeCrashHandler = new NativeCrashHandler();
+        if (mApp.canNdkCash()) {
+            mNativeCrashHandler.registerForNativeCrash(this);
+            registNdkCash = true;
+        }
         if (sChainControlXPostion < 0) {
             initPostion();
         }
@@ -118,7 +122,9 @@ public class YGOMobileActivity extends NativeActivity implements
 
     @Override
     protected void onDestroy() {
-        mNativeCrashHandler.unregisterForNativeCrash();
+        if(registNdkCash) {
+            mNativeCrashHandler.unregisterForNativeCrash();
+        }
         super.onDestroy();
     }
 
