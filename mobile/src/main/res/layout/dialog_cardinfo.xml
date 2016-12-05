@@ -178,9 +178,11 @@
                         tools:text="A\nXYZ"/>
 
                     <TextView
+                        android:id="@+id/label_setcode"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@string/label_set"
+                        android:visibility="invisible"
                         android:textAppearance="@style/TextAppearance.AppCompat.Caption"
                         android:textColor="@color/colorPrimary"/>
 
@@ -188,6 +190,7 @@
                         android:id="@+id/card_setname"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:visibility="invisible"
                         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                         tools:text="Test"/>
 
@@ -268,7 +271,7 @@
                                 android:maxLines="1"
                                 android:singleLine="true"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                                tools:text="2500"/>
+                                android:text="0"/>
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -286,7 +289,7 @@
                                 android:maxLines="1"
                                 android:singleLine="true"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                                tools:text="2500"/>
+                                android:text="0"/>
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>

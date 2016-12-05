@@ -1,6 +1,7 @@
 package cn.garymb.ygomobile.core;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
@@ -38,6 +39,7 @@ public class CardDetail extends BaseAdapterPlus.BaseViewHolder {
     private View addMain;
     private View addSide;
     private TextView cardcode;
+    private View lb_setcode;
 
     public interface OnClickListener {
         void onOpenUrl(CardInfo cardInfo);
@@ -68,6 +70,7 @@ public class CardDetail extends BaseAdapterPlus.BaseViewHolder {
         addSide = bind(R.id.btn_add_side);
         otView = bind(R.id.card_ot);
         attrView = bind(R.id.card_attribute);
+        lb_setcode=bind(R.id.label_setcode);
     }
 
     public ImageView getCardImage() {
@@ -108,6 +111,13 @@ public class CardDetail extends BaseAdapterPlus.BaseViewHolder {
                 setname.append("" + stringManager.getSetName(set));
                 index++;
             }
+        }
+        if(TextUtils.isEmpty(setname.getText())){
+            setname.setVisibility(View.INVISIBLE);
+            lb_setcode.setVisibility(View.INVISIBLE);
+        }else{
+            setname.setVisibility(View.VISIBLE);
+            lb_setcode.setVisibility(View.VISIBLE);
         }
         if (cardInfo.isType(CardType.Monster)) {
             level.setVisibility(View.VISIBLE);

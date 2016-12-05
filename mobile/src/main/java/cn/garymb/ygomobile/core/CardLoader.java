@@ -18,6 +18,7 @@ import cn.garymb.ygomobile.core.loader.ICardLoader;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.plus.VUiKit;
 import cn.garymb.ygomobile.settings.AppsSettings;
+import cn.ygo.ocgcore.Card;
 import cn.ygo.ocgcore.LimitList;
 import cn.ygo.ocgcore.LimitManager;
 import cn.ygo.ocgcore.enums.CardType;
@@ -140,7 +141,7 @@ public class CardLoader implements ICardLoader {
         if (!isOpen()) {
             return;
         }
-        Log.d("kk", sql);
+        Log.i("kk", sql);
         mLimitList = limitList;
         if (mCallBack != null) {
             mCallBack.onSearchStart(limitList);
@@ -151,6 +152,7 @@ public class CardLoader implements ICardLoader {
             try {
                 reader = db.rawQuery(sql, null);
             } catch (Exception e) {
+                Log.e("kk", "query", e);
             }
             List<CardInfo> tmp = new ArrayList<CardInfo>();
             if (reader != null) {
@@ -238,7 +240,7 @@ public class CardLoader implements ICardLoader {
         if (types.length > 0) {
             //通常魔法
             boolean st = false;
-            Log.i("kk", "type1:"+types[0]+",type2:"+types[1]);
+            Log.i("kk", "type1:" + types[0] + ",type2:" + types[1]);
             if (types[0] == CardType.Spell.value() || types[0] == CardType.Trap.value()
                     || types[0] == CardType.Normal.value()) {
                 if (types.length > 2) {
@@ -246,7 +248,7 @@ public class CardLoader implements ICardLoader {
                         stringBuilder.append(" and type = " + types[0]);
                         st = true;
                     }
-                }else  if (types.length > 1) {
+                } else if (types.length > 1) {
                     if (types[1] == CardType.Normal.value()) {
                         stringBuilder.append(" and type = " + types[0]);
                         st = true;
@@ -292,6 +294,8 @@ public class CardLoader implements ICardLoader {
             }
             stringBuilder.append(")");
         }
+//        stringBuilder.append(" order by atk desc,"+ CardInfo.COL_ID);
+        stringBuilder.append(" order by " + CardInfo.COL_STAR + " desc,atk desc," + CardInfo.COL_ID);
         loadData(stringBuilder.toString(), setcode, (limitList == null ? mLimitList : limitList));
     }
 }

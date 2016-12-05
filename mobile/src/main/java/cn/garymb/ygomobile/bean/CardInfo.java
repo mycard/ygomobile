@@ -15,8 +15,9 @@ public class CardInfo extends Card implements Parcelable {
     public static final String TAG = "CardInfo";
     public static final String SQL_DATA_BASE = "select * from datas";
     public static final String SQL_BASE;
-    private static final String _ID = "_id";
+    public static final String _ID = "_id";
     public static final String COL_ID = "datas." + _ID;
+    public static final String COL_STAR= "star";
     private LimitType mLimitType = LimitType.None;
 
     static {
@@ -25,6 +26,8 @@ public class CardInfo extends Card implements Parcelable {
         for (int i = 1; i <= 0x10; i++) {
             stringBuilder.append(",texts.str" + i);
         }
+//        stringBuilder.append(",level as "+COL_STAR+" ");
+        stringBuilder.append(",(datas.level & 255) as "+COL_STAR+" ");
         stringBuilder.append(" from datas, texts  where datas." + _ID + " = texts." + _ID + " ");
         SQL_BASE = stringBuilder.toString();
     }

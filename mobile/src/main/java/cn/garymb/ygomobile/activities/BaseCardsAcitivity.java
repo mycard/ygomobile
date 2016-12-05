@@ -84,6 +84,10 @@ abstract class BaseCardsAcitivity extends BaseActivity implements CardLoader.Cal
         });
     }
 
+    protected int getDimen(int id){
+        return (int)getResources().getDimension(id);
+    }
+
     protected void setListeners() {
         mListView.setOnItemClickListener((adapterView, view, pos, id) -> {
             CardInfo cardInfo = mCardListAdapater.getItemById(id);
