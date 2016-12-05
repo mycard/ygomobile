@@ -74,7 +74,7 @@ public class YGOStarter {
             return;
         }
 //        Log.i("checker", "show:" + activity);
-        activityShowInfo.oldRequestedOrientation = activity.getRequestedOrientation();
+//        activityShowInfo.oldRequestedOrientation = activity.getRequestedOrientation();
         activityShowInfo.rootOld = activityShowInfo.mRoot.getBackground();
         activityShowInfo.mContentView.setVisibility(View.INVISIBLE);
         //读取当前的背景图，如果卡的话，可以考虑缓存bitmap
@@ -93,13 +93,13 @@ public class YGOStarter {
 
     private static void hideLoadingBg(Activity activity, ActivityShowInfo activityShowInfo) {
         mLogo = null;
-        activity.setRequestedOrientation(activityShowInfo.oldRequestedOrientation);
         activityShowInfo.mContentView.setVisibility(View.VISIBLE);
         if (Build.VERSION.SDK_INT >= 16) {
             activityShowInfo.mRoot.setBackground(activityShowInfo.rootOld);
         } else {
             activityShowInfo.mRoot.setBackgroundDrawable(activityShowInfo.rootOld);
         }
+        activity.setRequestedOrientation(activityShowInfo.oldRequestedOrientation);
         quitFullScreen(activity, activityShowInfo);
     }
 

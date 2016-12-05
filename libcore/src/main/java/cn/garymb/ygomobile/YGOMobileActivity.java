@@ -11,6 +11,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -22,6 +26,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.nativehandler.NativeCrashHandler;
 
@@ -46,7 +51,8 @@ public class YGOMobileActivity extends NativeActivity implements
         View.OnClickListener,
         PopupWindow.OnDismissListener,
         TextView.OnEditorActionListener,
-        OverlayOvalView.OnDuelOptionsSelectListener {
+        OverlayOvalView.OnDuelOptionsSelectListener,
+        SensorEventListener {
     private static final String TAG = YGOMobileActivity.class.getSimpleName();
     protected final int windowsFlags = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
             | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
@@ -55,11 +61,14 @@ public class YGOMobileActivity extends NativeActivity implements
             | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
     private static final int CHAIN_CONTROL_PANEL_X_POSITION_LEFT_EDGE = 205;
     private static final int CHAIN_CONTROL_PANEL_Y_REVERT_POSITION = 100;
-
+    private static final int MAX_REFRESH = 15 * 000;
+    private SensorManager mSensorManager;
+    private Sensor mSensor;
     protected View mContentView;
     protected ComboBoxCompat mGlobalComboBox;
     protected EditWindowCompat mGlobalEditText;
     protected PowerManager mPM;
+    private long lastRefresh;
     //    private OverlayRectView mChainOverlayView;
 //    private OverlayOvalView mOverlayView;
     private NetworkController mNetController;
@@ -93,12 +102,48 @@ public class YGOMobileActivity extends NativeActivity implements
         mPM = (PowerManager) getSystemService(Context.POWER_SERVICE);
         mNetController = new NetworkController(getApplicationContext());
         handleExternalCommand(getIntent());
+
+        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        if (mSensorManager != null) {
+            //获得重力传感器
+            mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        }
+        //注册
+        if (mSensor != null) {
+            mSensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_GAME);
+        }
     }
 
     @Override
     protected void onDestroy() {
         mNativeCrashHandler.unregisterForNativeCrash();
         super.onDestroy();
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        int sensorType = event.sensor.getType();
+        float[] values = event.values;
+        float x = values[0];
+        float y = values[1];
+        float z = values[2];
+//        Log.i(TAG, "x:" + x + "y:" + y + "z:" + z);
+//        Log.i(TAG, "Math.abs(x):" + Math.abs(x) + "Math.abs(y):" + Math.abs(y) + "Math.abs(z):" + Math.abs(z));
+        if (sensorType == Sensor.TYPE_ACCELEROMETER) {
+            int value = 15;//摇一摇阀值,不同手机能达到的最大值不同,如某品牌手机只能达到20
+            if (x >= value || x <= -value || y >= value || y <= -value || z >= value || z <= -value) {
+                if (System.currentTimeMillis() - lastRefresh >= MAX_REFRESH) {
+                    lastRefresh = System.currentTimeMillis();
+                    Toast.makeText(this, "refresh", Toast.LENGTH_SHORT).show();
+                    IrrlichtBridge.refreshTexture();
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int i) {
+
     }
 
     private void initPostion() {
@@ -132,7 +177,7 @@ public class YGOMobileActivity extends NativeActivity implements
 
     private void fullscreen() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT && mApp.isImmerSiveMode()) {
-//            getWindow().getDecorView().setSystemUiVisibility(windowsFlags);
+            getWindow().getDecorView().setSystemUiVisibility(windowsFlags);
         }
     }
 
