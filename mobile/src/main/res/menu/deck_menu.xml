@@ -21,18 +21,17 @@
         android:icon="@drawable/ic_refresh"
         android:title="@string/sort"/>
     <item
+        android:id="@+id/action_manager"
+        android:icon="@drawable/ic_edit_white"
+        android:title="@string/deck_list"/>
+    <item
         android:id="@+id/action_save"
         android:icon="@drawable/ic_mode_save_white"
         android:title="@string/save_deck"/>
-
     <item
         android:id="@+id/action_rename"
         android:icon="@drawable/ic_edit_white"
         android:title="@string/rename_deck"/>
-    <item
-        android:id="@+id/action_manager"
-        android:icon="@drawable/ic_edit_white"
-        android:title="@string/deck_list"/>
     <!--<item
         android:id="@+id/action_share_image"
         android:icon="@drawable/ic_refresh"

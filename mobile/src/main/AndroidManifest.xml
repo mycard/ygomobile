@@ -44,10 +44,14 @@
             tools:replace="android:theme"/>
         <activity
             android:name="cn.garymb.ygomobile.activities.AboutActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
             android:label="@string/settings_about"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name="cn.garymb.ygomobile.settings.SettingsActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
             android:label="@string/settings"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
@@ -69,6 +73,8 @@
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name="cn.garymb.ygomobile.activities.WebActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
             android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
