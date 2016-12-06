@@ -6,7 +6,10 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import cn.garymb.ygomobile.Constants;
@@ -19,7 +22,8 @@ public class StringManager {
     private String PRE_SYSTEM = "!system";
     private String PRE_SETNAME = "!setname";
     private final Map<Integer, String> mSystem = new HashMap<>();
-    private final Map<Long, String> mSetname = new HashMap<>();
+    private final Map<Long, CardSet> mCardSets = new HashMap<>();
+    //    private final Map<Long, String> mSetname = new HashMap<>();
     private static StringManager sStringManager = new StringManager();
     private volatile boolean isLoad = false;
 
@@ -50,7 +54,7 @@ public class StringManager {
             return false;
         }
         mSystem.clear();
-        mSetname.clear();
+        mCardSets.clear();
         isLoad = false;
         InputStreamReader in = null;
         FileInputStream inputStream = null;
@@ -69,7 +73,8 @@ public class StringManager {
                     if (PRE_SETNAME.equals(words[0])) {
 //                        System.out.println(Arrays.toString(words));
                         //setcode
-                        mSetname.put(toNumber(words[1]), words[2]);
+                        long id = toNumber(words[1]);
+                        mCardSets.put(id, new CardSet(id, words[2]));
                     } else {
                         mSystem.put((int) toNumber(words[1]), words[2]);
                     }
@@ -89,12 +94,19 @@ public class StringManager {
         return mSystem;
     }
 
-    public Map<Long, String> getSetname() {
-        return mSetname;
+    public List<CardSet> getCardSets() {
+        List<CardSet> sets=new ArrayList<>();
+        sets.addAll(mCardSets.values());
+        Collections.sort(sets, CardSet.NAME_ASC);
+        return sets;
     }
 
     public String getSetName(long key) {
-        return mSetname.get(Long.valueOf(key));
+        CardSet set = mCardSets.get(key);
+        if (set != null) {
+            set.getName();
+        }
+        return null;
     }
 
     public String getSystemString(int key) {
@@ -143,7 +155,7 @@ public class StringManager {
     }
 
     public String getCategoryString(long value) {
-        return getSystemString(Constants.STRING_CATEGORY_START , value);
+        return getSystemString(Constants.STRING_CATEGORY_START, value);
     }
 
     public int value2Index(long type) {

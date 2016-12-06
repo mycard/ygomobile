@@ -9,12 +9,12 @@ import android.widget.Spinner;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import cn.garymb.ygomobile.core.loader.ICardLoader;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.plus.spinner.SimpleSpinnerAdapter;
 import cn.garymb.ygomobile.plus.spinner.SimpleSpinnerItem;
+import cn.ygo.ocgcore.CardSet;
 import cn.ygo.ocgcore.LimitList;
 import cn.ygo.ocgcore.LimitManager;
 import cn.ygo.ocgcore.StringManager;
@@ -231,11 +231,11 @@ public class CardSearcher implements View.OnClickListener {
     }
 
     private void initSetNameSpinners(Spinner spinner) {
-        Map<Long, String> setnames = mStringManager.getSetname();
+        List<CardSet> setnames = mStringManager.getCardSets();
         List<SimpleSpinnerItem> items = new ArrayList<>();
         items.add(new SimpleSpinnerItem(0, getString(R.string.label_set)));
-        for (Map.Entry<Long, String> item : setnames.entrySet()) {
-            items.add(new SimpleSpinnerItem(item.getKey(), item.getValue()));
+        for (CardSet set:setnames) {
+            items.add(new SimpleSpinnerItem(set.getCode(), set.getName()));
         }
         SimpleSpinnerAdapter adapter = new SimpleSpinnerAdapter(mContext);
         adapter.set(items);
