@@ -59,10 +59,11 @@ public class YGOMobileActivity extends NativeActivity implements
     private static final int MAX_REFRESH = 5 * 1000;
     protected final int windowsFlags =
             Build.VERSION.SDK_INT >= 19 ? (
-                    View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                             | View.SYSTEM_UI_FLAG_FULLSCREEN
-                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-            ) :
+                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY) :
                     View.SYSTEM_UI_FLAG_LOW_PROFILE;
 
     private SensorManager mSensorManager;
@@ -99,6 +100,21 @@ public class YGOMobileActivity extends NativeActivity implements
             registNdkCash = true;
         }
         super.onCreate(savedInstanceState);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            final View decorView = getWindow().getDecorView();
+            decorView.setSystemUiVisibility(windowsFlags);
+            decorView.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
+
+                        @Override
+                        public void onSystemUiVisibilityChange(int visibility) {
+                            if(mApp.isImmerSiveMode()) {
+                                if ((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) {
+                                    decorView.setSystemUiVisibility(windowsFlags);
+                                }
+                            }
+                        }
+                    });
+        }
         if (sChainControlXPostion < 0) {
             initPostion();
         }
@@ -121,12 +137,6 @@ public class YGOMobileActivity extends NativeActivity implements
                 mSensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_GAME);
             }
         }
-        getWindow().getDecorView().setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
-            @Override
-            public void onSystemUiVisibilityChange(int visibility) {
-                fullscreen();
-            }
-        });
     }
 
     @Override

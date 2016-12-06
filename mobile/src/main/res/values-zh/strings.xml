@@ -118,7 +118,6 @@
     <string name="card_result">卡片列表</string>
     <string name="unsort">打乱</string>
     <string name="sort">排序</string>
-    <string name="card_add">添加</string>
     <string name="card_add_main">+主卡组</string>
     <string name="card_add_side">+副卡组</string>
     <string name="new_deck">新建卡组</string>
@@ -136,7 +135,6 @@
     <string name="add_card_tip_ok">添加卡片成功</string>
     <string name="add_card_tip_fail">添加卡片失败</string>
     <string name="tip_card_max" formatted="false">卡片最大数量:%d</string>
-    <string name="settings_pref_key_deck_show_card_long">卡组编辑长按显示卡片信息</string>
     <string name="settings_deck_show_card">显示卡片详情</string>
     <string name="settings_deck_show_card_desc">在卡组编辑器显示卡片详情方式</string>
     <string-array name="show_card_desc">
