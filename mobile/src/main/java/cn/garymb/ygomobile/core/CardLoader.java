@@ -18,7 +18,6 @@ import cn.garymb.ygomobile.core.loader.ICardLoader;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.plus.VUiKit;
 import cn.garymb.ygomobile.settings.AppsSettings;
-import cn.ygo.ocgcore.Card;
 import cn.ygo.ocgcore.LimitList;
 import cn.ygo.ocgcore.LimitManager;
 import cn.ygo.ocgcore.enums.CardType;
@@ -204,7 +203,7 @@ public class CardLoader implements ICardLoader {
     public void search(String prefixWord, String suffixWord,
                        long attribute, long level, long race,
                        long limitlist, long limit,
-                       String atk, String def,
+                       String atk, String def, long pscale,
                        long setcode, long category, long ot, long... types) {
         StringBuilder stringBuilder = new StringBuilder(CardInfo.SQL_BASE);
         String w = null;
@@ -268,6 +267,10 @@ public class CardLoader implements ICardLoader {
         }
         if (race != 0) {
             stringBuilder.append(" and race=" + race);
+        }
+        if (pscale > 0) {
+            stringBuilder.append(" and ((level >>16 & 255)=" + pscale);
+            stringBuilder.append(" or (level >>24 & 255)=" + pscale+")");
         }
 
         LimitList limitList = mLimitManager.getLimitFromIndex((int) limitlist);

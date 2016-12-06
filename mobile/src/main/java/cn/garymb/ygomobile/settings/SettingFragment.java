@@ -98,9 +98,6 @@ public class SettingFragment extends PreferenceFragmentPlus {
         super.onPreferenceChange(preference, value);
         if (!isInit) {
             String key = preference.getKey();
-            if (PREF_PENDULUM_SCALE.equals(key)) {
-                setPendlumScale((Boolean) value);
-            }
             if (preference instanceof CheckBoxPreference) {
                 CheckBoxPreference checkBoxPreference = (CheckBoxPreference) preference;
                 mSharedPreferences.edit().putBoolean(preference.getKey(), checkBoxPreference.isChecked()).apply();
@@ -119,7 +116,10 @@ public class SettingFragment extends PreferenceFragmentPlus {
     @Override
     public boolean onPreferenceClick(Preference preference) {
         String key = preference.getKey();
-        if (PREF_GAME_FONT.equals(key)) {
+        if (PREF_PENDULUM_SCALE.equals(key)) {
+            CheckBoxPreference checkBoxPreference = (CheckBoxPreference) preference;
+            setPendlumScale(checkBoxPreference.isChecked());
+        } else if (PREF_GAME_FONT.equals(key)) {
             //选择ttf字体文件，保存
             showFileChooser(preference, "*.ttf", mSettings.getFontDirPath(), getString(R.string.dialog_select_font));
         } else if (SETTINGS_COVER.equals(key)) {
@@ -135,6 +135,8 @@ public class SettingFragment extends PreferenceFragmentPlus {
         } else if (PREF_USE_EXTRA_CARD_CARDS.equals(key)) {
             CheckBoxPreference checkBoxPreference = (CheckBoxPreference) preference;
             if (checkBoxPreference.isChecked()) {
+                checkBoxPreference.setChecked(false);
+                mSettings.setUseExtraCards(false);
                 showFileChooser(checkBoxPreference, "*.cdb", mSettings.getResourcePath(), getString(R.string.dialog_select_database));
             } else {
                 mSettings.setUseExtraCards(false);
@@ -158,6 +160,8 @@ public class SettingFragment extends PreferenceFragmentPlus {
             onPreferenceClick(preference);
         }
         if (PREF_USE_EXTRA_CARD_CARDS.equals(key)) {
+            ((CheckBoxPreference) preference).setChecked(true);
+            mSettings.setUseExtraCards(true);
             copyDataBase(preference, file);
         } else {
             super.onChooseFileOk(preference, file);

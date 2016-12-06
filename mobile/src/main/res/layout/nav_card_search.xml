@@ -36,10 +36,25 @@
                 android:singleLine="true"/>
         </android.support.design.widget.TextInputLayout>
 
-        <android.support.v7.widget.AppCompatSpinner
-            android:id="@+id/sp_ot"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/label_width_small"/>
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <android.support.v7.widget.AppCompatSpinner
+                android:id="@+id/sp_ot"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/label_width_small"
+                android:layout_weight="1"/>
+
+
+            <android.support.v7.widget.AppCompatSpinner
+                android:id="@+id/sp_scale"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/label_width_small"
+                android:layout_weight="1"
+                android:visibility="invisible"/>
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"

@@ -149,4 +149,5 @@
     <string name="intput_room_name">输入房间名</string>
     <string name="join_game">进入游戏</string>
     <string name="settings_game_sensor_refresh">摇一摇刷新界面</string>
+    <string name="label_pendulum">灵摆刻度</string>
 </resources>

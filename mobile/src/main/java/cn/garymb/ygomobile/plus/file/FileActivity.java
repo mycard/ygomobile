@@ -31,6 +31,7 @@ public class FileActivity extends BaseActivity implements AdapterView.OnItemClic
     private FileAdapter mFileAdapter;
     private View saveFileButton;
     private View newFolderButton;
+    private boolean selectFile;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -166,6 +167,14 @@ public class FileActivity extends BaseActivity implements AdapterView.OnItemClic
         return true;
     }
 
+    @Override
+    public void finish() {
+        if(!selectFile){
+            setResult(Activity.RESULT_CANCELED);
+        }
+        super.finish();
+    }
+
     private void selectFile(File file) {
 //        Log.i("kk", "select " + file);
         if (file != null) {
@@ -173,9 +182,8 @@ public class FileActivity extends BaseActivity implements AdapterView.OnItemClic
             if (mIntent != null) {
                 intent.putExtras(mIntent);
             }
+            selectFile = true;
             setResult(Activity.RESULT_OK, intent);
-        } else {
-            setResult(Activity.RESULT_CANCELED);
         }
         finish();
     }

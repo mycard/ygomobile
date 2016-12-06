@@ -43,6 +43,7 @@ public class CardSearcher implements View.OnClickListener {
     private Spinner attributeSpinner;
     private EditText atkText;
     private EditText defText;
+    private Spinner pScale;
     private Button searchButton;
     private Button resetButton;
     private View view;
@@ -78,6 +79,7 @@ public class CardSearcher implements View.OnClickListener {
         searchButton = findViewById(R.id.btn_search);
         resetButton = findViewById(R.id.btn_reset);
         layout_monster = findViewById(R.id.layout_monster);
+        pScale= findViewById(R.id.sp_scale);
         searchButton.setOnClickListener(this);
         resetButton.setOnClickListener(this);
         limitListSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -104,16 +106,19 @@ public class CardSearcher implements View.OnClickListener {
                     layout_monster.setVisibility(View.INVISIBLE);
                     typeMonsterSpinner.setVisibility(View.GONE);
                     typeSTSpinner.setVisibility(View.INVISIBLE);
+                    pScale.setVisibility(View.INVISIBLE);
                     resetMonster();
                 } else if (value == CardType.Spell.value() || value == CardType.Trap.value()) {
                     layout_monster.setVisibility(View.INVISIBLE);
                     typeMonsterSpinner.setVisibility(View.GONE);
                     typeSTSpinner.setVisibility(View.VISIBLE);
+                    pScale.setVisibility(View.INVISIBLE);
                     resetMonster();
                 } else {
                     layout_monster.setVisibility(View.VISIBLE);
                     typeMonsterSpinner.setVisibility(View.VISIBLE);
                     typeSTSpinner.setVisibility(View.GONE);
+                    pScale.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -142,6 +147,7 @@ public class CardSearcher implements View.OnClickListener {
                 CardType.Continuous, CardType.Equip, CardType.Field, CardType.Counter
         });
         initLevelSpinners(levelSpinner);
+        initPscaleSpinners(pScale);
         initAttributes(attributeSpinner);
         initRaceSpinners(raceSpinner);
         initSetNameSpinners(setcodeSpinner);
@@ -176,7 +182,7 @@ public class CardSearcher implements View.OnClickListener {
         for (LimitType item : eitems) {
             long val = item.value();
             if (val == 0) {
-                items.add(new SimpleSpinnerItem(val, getString(R.string.label_limit)));
+                items.add(new SimpleSpinnerItem(val, getString(R.string.label_pendulum)));
             } else {
                 items.add(new SimpleSpinnerItem(val, mStringManager.getLimitString(val)));
             }
@@ -198,7 +204,19 @@ public class CardSearcher implements View.OnClickListener {
         adapter.set(items);
         spinner.setAdapter(adapter);
     }
-
+    private void initPscaleSpinners(Spinner spinner) {
+        List<SimpleSpinnerItem> items = new ArrayList<>();
+        for (int i = 0; i <= 13; i++) {
+            if (i == 0) {
+                items.add(new SimpleSpinnerItem(i, getString(R.string.label_pendulum)));
+            } else {
+                items.add(new SimpleSpinnerItem(i, "" + i));
+            }
+        }
+        SimpleSpinnerAdapter adapter = new SimpleSpinnerAdapter(mContext);
+        adapter.set(items);
+        spinner.setAdapter(adapter);
+    }
     private void initLevelSpinners(Spinner spinner) {
         List<SimpleSpinnerItem> items = new ArrayList<>();
         for (int i = 0; i <= 13; i++) {
@@ -321,7 +339,9 @@ public class CardSearcher implements View.OnClickListener {
     private void search() {
         if (dataLoader != null) {
             dataLoader.search(text(prefixWord), text(suffixWord), getSelect(attributeSpinner)
-                    , getSelect(levelSpinner), getSelect(raceSpinner), getSelect(limitListSpinner), getSelect(limitSpinner), text(atkText), text(defText), getSelect(setcodeSpinner)
+                    , getSelect(levelSpinner), getSelect(raceSpinner), getSelect(limitListSpinner), getSelect(limitSpinner), text(atkText), text(defText),
+                    getSelect(pScale),
+                    getSelect(setcodeSpinner)
                     , getSelect(categorySpinner), getSelect(otSpinner), getSelect(typeSpinner), getSelect(typeMonsterSpinner), getSelect(typeSTSpinner));
         }
     }
@@ -343,6 +363,7 @@ public class CardSearcher implements View.OnClickListener {
     }
 
     private void resetMonster() {
+        reset(pScale);
         reset(typeMonsterSpinner);
         reset(raceSpinner);
         reset(levelSpinner);
