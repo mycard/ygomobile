@@ -14,10 +14,9 @@ import java.util.List;
 
 import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.bean.CardInfo;
+import cn.garymb.ygomobile.core.AppsSettings;
 import cn.garymb.ygomobile.core.CardDetail;
 import cn.garymb.ygomobile.lite.R;
-import cn.garymb.ygomobile.plus.VUiKit;
-import cn.garymb.ygomobile.core.AppsSettings;
 import cn.ygo.ocgcore.LimitList;
 
 public class CardSearchActivity extends BaseCardsAcitivity {
@@ -48,7 +47,7 @@ public class CardSearchActivity extends BaseCardsAcitivity {
         showCard(cardInfo);
     }
 
-    private void showCard(CardInfo cardInfo) {
+    protected void showCard(CardInfo cardInfo) {
         mCardDetail.bind(cardInfo, mStringManager, new CardDetail.OnClickListener() {
             @Override
             public void onOpenUrl(CardInfo cardInfo) {

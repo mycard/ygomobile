@@ -2,10 +2,10 @@ package cn.ygo.ocgcore.enums;
 
 public enum LimitType {
     None(0),
+    All(999),
     Forbidden(1),
     Limit(2),
-    SemiLimit(3),
-    All(999);
+    SemiLimit(3);
 
     private long value = 0;
 

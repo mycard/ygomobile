@@ -15,11 +15,13 @@ import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.NativeInitOptions;
 import cn.garymb.ygomobile.plus.PreferenceFragmentPlus;
 
+import static cn.garymb.ygomobile.Constants.PREF_DEF_CARD_SEARCH;
 import static cn.garymb.ygomobile.Constants.PREF_DEF_IMMERSIVE_MODE;
 import static cn.garymb.ygomobile.Constants.PREF_DEF_SENSOR_REFRESH;
 import static cn.garymb.ygomobile.Constants.PREF_IMMERSIVE_MODE;
 import static cn.garymb.ygomobile.Constants.PREF_LOCK_SCREEN;
 import static cn.garymb.ygomobile.Constants.PREF_SENSOR_REFRESH;
+import static cn.garymb.ygomobile.Constants.PREF_SHOW_CARD_SEARCH;
 
 public class AppsSettings {
     private static AppsSettings sAppsSettings;
@@ -59,6 +61,10 @@ public class AppsSettings {
 
     public void setAppVersion(int ver) {
         mSharedPreferences.putInt(PREF_VERSION, ver);
+    }
+
+    public int getCardSearchType(){
+        return Integer.valueOf(mSharedPreferences.getString(PREF_SHOW_CARD_SEARCH, ""+PREF_DEF_CARD_SEARCH));
     }
 
     public PreferenceFragmentPlus.SharedPreferencesPlus getSharedPreferences() {

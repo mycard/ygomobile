@@ -35,12 +35,18 @@
             android:key="pref_key_sensor_refresh"
             android:persistent="true"
             android:title="@string/settings_game_sensor_refresh"/>
+
+        <ListPreference
+            android:entries="@array/show_card_search_desc"
+            android:entryValues="@array/show_card_search_value"
+            android:key="pref_key_card_search"
+            android:title="@string/settings_card_search"/>
         <ListPreference
             android:entries="@array/show_card_desc"
             android:entryValues="@array/show_card_value"
             android:key="pref_key_deck_show_card"
-            android:title="@string/settings_deck_show_card"
-            android:summary="@string/settings_deck_show_card_desc"/>
+            android:summary="@string/settings_deck_show_card_desc"
+            android:title="@string/settings_deck_show_card"/>
         <ListPreference
             android:entries="@array/opengl_version"
             android:entryValues="@array/opengl_version_value"

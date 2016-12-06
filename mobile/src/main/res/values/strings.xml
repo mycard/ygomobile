@@ -160,4 +160,9 @@
     <string name="settings_game_sensor_refresh">Sensor Refresh Game</string>
     <string name="label_pendulum">Pendulum scale</string>
     <string name="all">All</string>
+    <string name="settings_card_search">Card Search UI</string>
+    <string-array name="show_card_search_desc">
+        <item>列表在左边</item>
+        <item>列表在中间</item>
+    </string-array>
 </resources>

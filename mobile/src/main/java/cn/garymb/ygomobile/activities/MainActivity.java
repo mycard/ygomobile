@@ -142,7 +142,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 mServerListAdapater.addServer();
                 break;
             case R.id.action_card_search:
-                startActivity(new Intent(this, CardSearchActivity.class));
+                if(AppsSettings.get().getCardSearchType() == Constants.PREF_CARD_SEARCH1) {
+                    startActivity(new Intent(this, CardSearchActivity.class));
+                }else{
+                    startActivity(new Intent(this, CardSearch2Acitivity.class));
+                }
                 break;
             case R.id.action_deck_manager:
                 startActivity(new Intent(this, DeckManagerActivity.class));

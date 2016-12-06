@@ -63,6 +63,12 @@
             android:label="@string/card_search"
             android:theme="@style/AppTheme"/>
         <activity
+            android:name="cn.garymb.ygomobile.activities.CardSearch2Acitivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
+            android:label="@string/card_search"
+            android:theme="@style/AppTheme"/>
+        <activity
             android:name="cn.garymb.ygomobile.activities.DeckManagerActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize"
