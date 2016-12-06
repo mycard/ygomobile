@@ -1,5 +1,6 @@
 package cn.garymb.ygomobile;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.res.AssetManager;
@@ -67,6 +68,10 @@ public abstract class GameApplication extends Application implements IrrlichtBri
 
     public boolean canNdkCash(){
         return true;
+    }
+
+    public void attachGame(Activity activity){
+
     }
 
     /***

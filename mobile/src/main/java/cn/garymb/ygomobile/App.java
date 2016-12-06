@@ -1,14 +1,10 @@
 package cn.garymb.ygomobile;
 
 
+import android.app.Activity;
 import android.support.v7.app.AppCompatDelegate;
-import android.util.Log;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.GlideBuilder;
-
-import cn.garymb.ygomobile.lite.BuildConfig;
-import cn.garymb.ygomobile.settings.AppsSettings;
+import cn.garymb.ygomobile.core.AppsSettings;
 
 public class App extends GameApplication {
 
@@ -28,6 +24,11 @@ public class App extends GameApplication {
     @Override
     public float getSmallerSize() {
         return AppsSettings.get().getSmallerSize();
+    }
+
+    @Override
+    public void attachGame(Activity activity) {
+        super.attachGame(activity);
     }
 
     @Override

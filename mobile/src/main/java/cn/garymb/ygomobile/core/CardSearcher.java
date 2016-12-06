@@ -15,7 +15,6 @@ import cn.garymb.ygomobile.core.loader.ICardLoader;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.plus.spinner.SimpleSpinnerAdapter;
 import cn.garymb.ygomobile.plus.spinner.SimpleSpinnerItem;
-import cn.garymb.ygomobile.settings.AppsSettings;
 import cn.ygo.ocgcore.LimitList;
 import cn.ygo.ocgcore.LimitManager;
 import cn.ygo.ocgcore.StringManager;

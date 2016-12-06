@@ -1,6 +1,7 @@
-package cn.garymb.ygomobile.settings;
+package cn.garymb.ygomobile.core;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.os.Environment;
 import android.util.Log;
 
@@ -40,6 +41,12 @@ public class AppsSettings {
         this.context = context;
         mSharedPreferences = PreferenceFragmentPlus.SharedPreferencesPlus.create(context, context.getPackageName() + ".settings");
         mSharedPreferences.setAutoSave(true);
+        mDensity = Resources.getSystem().getDisplayMetrics().density;
+        mScreenHeight = Resources.getSystem().getDisplayMetrics().heightPixels;
+        mScreenWidth = Resources.getSystem().getDisplayMetrics().widthPixels;
+    }
+
+    public void update(Context context) {
         mDensity = context.getResources().getDisplayMetrics().density;
         mScreenHeight = context.getResources().getDisplayMetrics().heightPixels;
         mScreenWidth = context.getResources().getDisplayMetrics().widthPixels;

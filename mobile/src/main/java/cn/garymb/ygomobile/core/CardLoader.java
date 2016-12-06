@@ -17,7 +17,6 @@ import cn.garymb.ygomobile.bean.CardInfo;
 import cn.garymb.ygomobile.core.loader.ICardLoader;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.plus.VUiKit;
-import cn.garymb.ygomobile.settings.AppsSettings;
 import cn.ygo.ocgcore.LimitList;
 import cn.ygo.ocgcore.LimitManager;
 import cn.ygo.ocgcore.enums.CardType;
@@ -239,7 +238,7 @@ public class CardLoader implements ICardLoader {
         if (types.length > 0) {
             //通常魔法
             boolean st = false;
-            Log.i("kk", "type1:" + types[0] + ",type2:" + types[1]);
+//            Log.i("kk", "type1:" + types[0] + ",type2:" + types[1]);
             if (types[0] == CardType.Spell.value() || types[0] == CardType.Trap.value()
                     || types[0] == CardType.Normal.value()) {
                 if (types.length > 2) {

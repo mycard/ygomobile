@@ -14,7 +14,6 @@ import java.io.IOException;
 
 import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.lite.R;
-import cn.garymb.ygomobile.settings.AppsSettings;
 import cn.garymb.ygomobile.utils.IOUtils;
 
 import static cn.garymb.ygomobile.Constants.ASSETS_PATH;

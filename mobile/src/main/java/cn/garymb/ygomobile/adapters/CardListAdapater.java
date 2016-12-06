@@ -14,7 +14,7 @@ import cn.garymb.ygomobile.core.loader.ImageLoader;
 import cn.garymb.ygomobile.deck.ImageTop;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.plus.BaseAdapterPlus;
-import cn.garymb.ygomobile.settings.AppsSettings;
+import cn.garymb.ygomobile.core.AppsSettings;
 import cn.ygo.ocgcore.StringManager;
 import cn.ygo.ocgcore.enums.CardType;
 import cn.ygo.ocgcore.enums.LimitType;

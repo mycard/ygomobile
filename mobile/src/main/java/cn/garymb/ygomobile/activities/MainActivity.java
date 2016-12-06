@@ -1,7 +1,6 @@
 package cn.garymb.ygomobile.activities;
 
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -23,7 +22,7 @@ import cn.garymb.ygomobile.core.YGOStarter;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.plus.DialogPlus;
 import cn.garymb.ygomobile.plus.VUiKit;
-import cn.garymb.ygomobile.settings.AppsSettings;
+import cn.garymb.ygomobile.core.AppsSettings;
 import cn.garymb.ygomobile.settings.SettingsActivity;
 
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {

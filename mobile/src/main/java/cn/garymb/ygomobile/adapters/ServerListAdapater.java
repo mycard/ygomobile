@@ -31,7 +31,7 @@ import cn.garymb.ygomobile.plus.BaseAdapterPlus;
 import cn.garymb.ygomobile.plus.DialogPlus;
 import cn.garymb.ygomobile.plus.SimpleListAdapter;
 import cn.garymb.ygomobile.plus.VUiKit;
-import cn.garymb.ygomobile.settings.AppsSettings;
+import cn.garymb.ygomobile.core.AppsSettings;
 import cn.garymb.ygomobile.utils.IOUtils;
 import cn.garymb.ygomobile.utils.XmlUtils;
 

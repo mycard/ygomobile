@@ -15,8 +15,6 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.ViewTarget;
 import com.bumptech.glide.signature.StringSignature;
 
@@ -28,8 +26,6 @@ import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.YGOMobileActivity;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.plus.ViewTargetPlus;
-import cn.garymb.ygomobile.settings.AppsSettings;
-import cn.garymb.ygomobile.utils.BitmapUtil;
 
 
 public class YGOStarter {

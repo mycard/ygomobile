@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import cn.garymb.ygomobile.Constants;
-import cn.garymb.ygomobile.settings.AppsSettings;
+import cn.garymb.ygomobile.core.AppsSettings;
 import cn.garymb.ygomobile.utils.IOUtils;
 import cn.garymb.ygomobile.utils.StringUtils;
 import cn.ygo.ocgcore.enums.CardOt;

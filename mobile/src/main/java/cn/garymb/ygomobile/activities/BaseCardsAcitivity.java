@@ -152,7 +152,7 @@ abstract class BaseCardsAcitivity extends BaseActivity implements CardLoader.Cal
 
     @Override
     public void onSearchResult(List<CardInfo> cardInfos) {
-        Log.i("kk", "find " + (cardInfos == null ? -1 : cardInfos.size()));
+//        Log.d("kk", "find " + (cardInfos == null ? -1 : cardInfos.size()));
         mCardListAdapater.set(cardInfos);
         mCardListAdapater.notifyDataSetChanged();
     }

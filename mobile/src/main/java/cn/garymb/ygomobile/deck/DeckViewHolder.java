@@ -10,7 +10,7 @@ import java.io.File;
 import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.core.loader.ImageLoader;
 import cn.garymb.ygomobile.lite.R;
-import cn.garymb.ygomobile.settings.AppsSettings;
+import cn.garymb.ygomobile.core.AppsSettings;
 
 class DeckViewHolder extends RecyclerView.ViewHolder {
     private long mCardType;

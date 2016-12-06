@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import cn.garymb.ygomobile.Constants;
+import cn.garymb.ygomobile.core.AppsSettings;
 import cn.garymb.ygomobile.core.ResCheckTask;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.plus.DialogPlus;
