@@ -44,10 +44,9 @@ public class IOUtils {
 
     public static void delete(File file) {
         if (file == null || !file.exists()) return;
-
         if (file.isFile()) {
             file.delete();
-        } else {
+        } else if(file.isDirectory()){
             File[] files = file.listFiles();
             if (files != null) {
                 for (File f : files) {

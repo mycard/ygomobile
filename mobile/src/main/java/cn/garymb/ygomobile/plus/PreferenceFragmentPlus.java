@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.preference.Preference;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.io.File;
@@ -138,6 +139,7 @@ public abstract class PreferenceFragmentPlus extends BasePreferenceFragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+//        Log.i("kk", "result "+requestCode+",data="+data);
         if (requestCode == Constants.REQUEST_CHOOSE_IMG) {
             if (resultCode == Activity.RESULT_OK) {
                 Uri file = data.getData();

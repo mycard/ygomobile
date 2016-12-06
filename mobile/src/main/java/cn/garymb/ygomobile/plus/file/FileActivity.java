@@ -35,6 +35,7 @@ public class FileActivity extends BaseActivity implements AdapterView.OnItemClic
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
+        setResult(Activity.RESULT_CANCELED);
         if (doIntent(getIntent())) {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_filebrowser);
@@ -170,7 +171,7 @@ public class FileActivity extends BaseActivity implements AdapterView.OnItemClic
     @Override
     public void finish() {
         if(!selectFile){
-            setResult(Activity.RESULT_CANCELED);
+
         }
         super.finish();
     }

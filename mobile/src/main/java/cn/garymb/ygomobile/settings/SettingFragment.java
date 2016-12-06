@@ -88,16 +88,11 @@ public class SettingFragment extends PreferenceFragmentPlus {
         isInit = false;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
 
     @Override
     public boolean onPreferenceChange(Preference preference, Object value) {
         super.onPreferenceChange(preference, value);
         if (!isInit) {
-            String key = preference.getKey();
             if (preference instanceof CheckBoxPreference) {
                 CheckBoxPreference checkBoxPreference = (CheckBoxPreference) preference;
                 mSharedPreferences.edit().putBoolean(preference.getKey(), checkBoxPreference.isChecked()).apply();
@@ -148,6 +143,11 @@ public class SettingFragment extends PreferenceFragmentPlus {
     @Override
     protected void onChooseFileFail(Preference preference) {
         super.onChooseFileFail(preference);
+        String key = preference.getKey();
+        if (PREF_USE_EXTRA_CARD_CARDS.equals(key)) {
+            mSettings.setUseExtraCards(false);
+            ((CheckBoxPreference) preference).setChecked(false);
+        }
     }
 
     @Override
@@ -237,16 +237,16 @@ public class SettingFragment extends PreferenceFragmentPlus {
     }
 
     private void setPendlumScale(boolean ok) {
-        File file = new File(mSettings.getCoreSkinPath(), Constants.CORE_SKIN_PENDULUM_PATH);
+        Log.i("kk", "setPendlumScale "+ok);
+        File file = new File(mSettings.getResourcePath(), Constants.CORE_SKIN_PENDULUM_PATH);
         if (ok) {
             //rename
             ProgressDialog dlg = ProgressDialog.show(getActivity(), null, getString(R.string.coping_pendulum_image));
             VUiKit.defer().when(() -> {
                 try {
-                    File toPath = new File(mSettings.getResourcePath(), Constants.CORE_SKIN_PENDULUM_PATH);
-                    IOUtils.createFolder(toPath);
+                    IOUtils.createFolder(file);
                     IOUtils.copyFilesFromAssets(getActivity(), getDatapath(Constants.CORE_SKIN_PENDULUM_PATH),
-                            toPath.getAbsolutePath(), false);
+                            file.getAbsolutePath(), false);
                 } catch (IOException e) {
                 }
             }).done((re) -> {
