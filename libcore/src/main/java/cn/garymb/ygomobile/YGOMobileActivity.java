@@ -24,7 +24,6 @@ import android.view.Gravity;
 import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -56,7 +55,7 @@ public class YGOMobileActivity extends NativeActivity implements
     private static final String TAG = YGOMobileActivity.class.getSimpleName();
     private static final int CHAIN_CONTROL_PANEL_X_POSITION_LEFT_EDGE = 205;
     private static final int CHAIN_CONTROL_PANEL_Y_REVERT_POSITION = 100;
-    private static final int MAX_REFRESH = 5 * 1000;
+    private static final int MAX_REFRESH = 15 * 1000;
     protected final int windowsFlags =
             Build.VERSION.SDK_INT >= 19 ? (
                     View.SYSTEM_UI_FLAG_LAYOUT_STABLE
@@ -72,7 +71,7 @@ public class YGOMobileActivity extends NativeActivity implements
     protected ComboBoxCompat mGlobalComboBox;
     protected EditWindowCompat mGlobalEditText;
     protected PowerManager mPM;
-    private long lastRefresh;
+    private volatile  long lastRefresh;
     //    private OverlayRectView mChainOverlayView;
 //    private OverlayOvalView mOverlayView;
     private NetworkController mNetController;
