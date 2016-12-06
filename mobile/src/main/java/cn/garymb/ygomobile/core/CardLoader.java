@@ -282,21 +282,24 @@ public class CardLoader implements ICardLoader {
                 ids = limitList.limit;
             } else if (cardLimitType == LimitType.SemiLimit) {
                 ids = limitList.semiLimit;
-            } else {
+            } else if (cardLimitType == LimitType.All){
                 ids = limitList.getCodeList();
+            }else{
+                ids = null;
             }
-            stringBuilder.append(" and " + CardInfo.COL_ID + " in (");
-            int i = 0;
-            for (Long id : ids) {
-                if (i != 0) {
-                    stringBuilder.append(",");
+            if(ids!=null) {
+                stringBuilder.append(" and " + CardInfo.COL_ID + " in (");
+                int i = 0;
+                for (Long id : ids) {
+                    if (i != 0) {
+                        stringBuilder.append(",");
+                    }
+                    stringBuilder.append(id);
+                    i++;
                 }
-                stringBuilder.append(id);
-                i++;
+                stringBuilder.append(")");
             }
-            stringBuilder.append(")");
         }
-//        stringBuilder.append(" order by atk desc,"+ CardInfo.COL_ID);
         stringBuilder.append(" order by " + CardInfo.COL_STAR + " desc,atk desc," + CardInfo.COL_ID);
         loadData(stringBuilder.toString(), setcode, (limitList == null ? mLimitList : limitList));
     }

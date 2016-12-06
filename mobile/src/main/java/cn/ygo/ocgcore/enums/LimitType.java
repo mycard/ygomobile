@@ -4,7 +4,8 @@ public enum LimitType {
     None(0),
     Forbidden(1),
     Limit(2),
-    SemiLimit(3);
+    SemiLimit(3),
+    All(999);
 
     private long value = 0;
 

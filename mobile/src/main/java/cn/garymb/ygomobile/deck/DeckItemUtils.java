@@ -27,7 +27,7 @@ class DeckItemUtils {
         FileOutputStream outputStream = null;
         OutputStreamWriter writer = null;
         try {
-            if (file == null || !file.exists()) {
+            if (file == null) {
                 return false;
             }
             if (file.exists()) {

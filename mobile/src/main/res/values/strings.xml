@@ -159,4 +159,5 @@
     <string name="join_game">Join game</string>
     <string name="settings_game_sensor_refresh">Sensor Refresh Game</string>
     <string name="label_pendulum">Pendulum scale</string>
+    <string name="all">All</string>
 </resources>

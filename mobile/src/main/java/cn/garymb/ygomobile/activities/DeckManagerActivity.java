@@ -61,7 +61,6 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
         super.onCreate(savedInstanceState);
         mRecyclerView.setAdapter((mDeckAdapater = new DeckAdapater(this, mRecyclerView)));
         mRecyclerView.setLayoutManager(new DeckLayoutManager(this, Constants.DECK_WIDTH_COUNT));
-        mCardSelector.hideLimit();
         mDeckItemTouchHelper = new DeckItemTouchHelper(mDeckAdapater);
         ItemTouchHelperCompat touchHelper = new ItemTouchHelperCompat(mDeckItemTouchHelper);
         touchHelper.setEnableClickDrag(Constants.DECK_SINGLE_PRESS_DRAG);
@@ -82,6 +81,7 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
     protected void onInit() {
         super.onInit();
         setLimitList(mLimitManager.getCount() > 0 ? mLimitManager.getLimit(0) : null);
+        isLoad = true;
         File file = new File(mSettings.getResourcePath(), Constants.CORE_DECK_PATH + "/" + mSettings.getLastDeck() + Constants.YDK_FILE_EX);
         loadDeck(file);
     }
@@ -102,17 +102,20 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
                 return new DeckInfo();
             }
         }).done((rs) -> {
-            mYdkFile = file;
-            if (file != null && file.exists()) {
-                String name = IOUtils.tirmName(file.getName(), Constants.YDK_FILE_EX);
-                setActionBarSubTitle(name);
-                mSettings.setLastDeck(name);
-            } else {
-                setTitle(R.string.noname);
-            }
+            setFile(file);
             mDeckAdapater.setDeck(rs);
             mDeckAdapater.notifyDataSetChanged();
         });
+    }
+    private void setFile(File file){
+        mYdkFile = file;
+        if (file != null && file.exists()) {
+            String name = IOUtils.tirmName(file.getName(), Constants.YDK_FILE_EX);
+            setActionBarSubTitle(name);
+            mSettings.setLastDeck(name);
+        } else {
+            setActionBarSubTitle(getString(R.string.noname));
+        }
     }
 
     @Override
@@ -467,6 +470,7 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
                     dlg.dismiss();
                     mYdkFile = ydk;
                     save();
+                    setFile(mYdkFile);
                 }
             } else {
                 dlg.dismiss();

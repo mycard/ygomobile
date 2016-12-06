@@ -78,7 +78,7 @@ public class CardSearcher implements View.OnClickListener {
         searchButton = findViewById(R.id.btn_search);
         resetButton = findViewById(R.id.btn_reset);
         layout_monster = findViewById(R.id.layout_monster);
-        pScale= findViewById(R.id.sp_scale);
+        pScale = findViewById(R.id.sp_scale);
         searchButton.setOnClickListener(this);
         resetButton.setOnClickListener(this);
         limitListSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -128,10 +128,6 @@ public class CardSearcher implements View.OnClickListener {
         });
     }
 
-    public void hideLimit() {
-        limitSpinner.setVisibility(View.GONE);
-        limitListSpinner.setVisibility(View.GONE);
-    }
 
     public void initItems() {
         initOtSpinners(otSpinner);
@@ -181,7 +177,9 @@ public class CardSearcher implements View.OnClickListener {
         for (LimitType item : eitems) {
             long val = item.value();
             if (val == 0) {
-                items.add(new SimpleSpinnerItem(val, getString(R.string.label_pendulum)));
+                items.add(new SimpleSpinnerItem(val, getString(R.string.label_limit)));
+            } else if (val == LimitType.All.value()) {
+                items.add(new SimpleSpinnerItem(val, getString(R.string.all)));
             } else {
                 items.add(new SimpleSpinnerItem(val, mStringManager.getLimitString(val)));
             }
@@ -203,6 +201,7 @@ public class CardSearcher implements View.OnClickListener {
         adapter.set(items);
         spinner.setAdapter(adapter);
     }
+
     private void initPscaleSpinners(Spinner spinner) {
         List<SimpleSpinnerItem> items = new ArrayList<>();
         for (int i = 0; i <= 13; i++) {
@@ -216,6 +215,7 @@ public class CardSearcher implements View.OnClickListener {
         adapter.set(items);
         spinner.setAdapter(adapter);
     }
+
     private void initLevelSpinners(Spinner spinner) {
         List<SimpleSpinnerItem> items = new ArrayList<>();
         for (int i = 0; i <= 13; i++) {
@@ -234,7 +234,7 @@ public class CardSearcher implements View.OnClickListener {
         List<CardSet> setnames = mStringManager.getCardSets();
         List<SimpleSpinnerItem> items = new ArrayList<>();
         items.add(new SimpleSpinnerItem(0, getString(R.string.label_set)));
-        for (CardSet set:setnames) {
+        for (CardSet set : setnames) {
             items.add(new SimpleSpinnerItem(set.getCode(), set.getName()));
         }
         SimpleSpinnerAdapter adapter = new SimpleSpinnerAdapter(mContext);
@@ -325,7 +325,7 @@ public class CardSearcher implements View.OnClickListener {
         }
         return charSequence.toString();
     }
-    
+
     @Override
     public void onClick(View v) {
         if (v == searchButton) {
