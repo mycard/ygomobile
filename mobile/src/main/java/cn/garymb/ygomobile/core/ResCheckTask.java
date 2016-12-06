@@ -2,6 +2,8 @@ package cn.garymb.ygomobile.core;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.os.AsyncTask;
@@ -30,6 +32,7 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
     private ResCheckListener mListener;
     private ProgressDialog dialog = null;
     private Handler handler;
+    private boolean isNewVersion;
 
     @SuppressWarnings("deprecation")
     public ResCheckTask(Context context, ResCheckListener listener) {
@@ -43,6 +46,20 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
     protected void onPreExecute() {
         super.onPreExecute();
         dialog = ProgressDialog.show(mContext, null, mContext.getString(R.string.check_res));
+        PackageInfo packageInfo = null;
+        try {
+            packageInfo = mContext.getPackageManager().getPackageInfo(mContext.getPackageName(), 0);
+        } catch (PackageManager.NameNotFoundException e) {
+        }
+        if (packageInfo != null) {
+            int vercode = packageInfo.versionCode;
+            if (mSettings.getAppVersion() < vercode) {
+                mSettings.setAppVersion(vercode);
+                isNewVersion = true;
+            } else {
+                isNewVersion = false;
+            }
+        }
     }
 
     @Override
@@ -107,7 +124,7 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
             return ERROR_CORE_CONFIG;
         }
         mSettings.setCoreConfigVersion(newConfigVersion);
-        needsUpdate = needsUpdate || !currentConfigVersion.equals(newConfigVersion);
+        needsUpdate = isNewVersion || needsUpdate || !currentConfigVersion.equals(newConfigVersion);
         //res
         try {
             String resPath = mSettings.getResourcePath();

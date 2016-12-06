@@ -26,6 +26,7 @@ public class AppsSettings {
     private Context context;
     private PreferenceFragmentPlus.SharedPreferencesPlus mSharedPreferences;
     private float mScreenHeight, mScreenWidth, mDensity;
+    private static final String PREF_VERSION = "app_version";
 
     public static void init(Context context) {
         if (sAppsSettings == null) {
@@ -50,6 +51,14 @@ public class AppsSettings {
         mDensity = context.getResources().getDisplayMetrics().density;
         mScreenHeight = context.getResources().getDisplayMetrics().heightPixels;
         mScreenWidth = context.getResources().getDisplayMetrics().widthPixels;
+    }
+
+    public int getAppVersion() {
+        return mSharedPreferences.getInt(PREF_VERSION, 0);
+    }
+
+    public void setAppVersion(int ver) {
+        mSharedPreferences.putInt(PREF_VERSION, ver);
     }
 
     public PreferenceFragmentPlus.SharedPreferencesPlus getSharedPreferences() {
