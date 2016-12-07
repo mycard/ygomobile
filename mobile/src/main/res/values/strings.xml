@@ -139,13 +139,6 @@
     <string name="add_card_tip_fail">add card fail</string>
     <string name="tip_card_max" formatted="false">card max count:%d</string>
 
-    <string name="settings_deck_show_card">show cardinfo</string>
-    <string name="settings_deck_show_card_desc">show cardinfo in deck editor</string>
-
-    <string-array name="show_card_desc">
-        <item>Double click</item>
-        <item>Long press</item>
-    </string-array>
     <string name="file_exist">file is exist</string>
     <string name="share_deck_image">Share Image</string>
     <string name="no_share_app">no find share app</string>

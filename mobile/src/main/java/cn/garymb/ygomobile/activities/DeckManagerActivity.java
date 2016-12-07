@@ -88,13 +88,17 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
         loadDeck(file);
     }
 
+
     @Override
-    public void onDragStart() {
-        getSupportActionBar().hide();
+    public void onDragStart(boolean isdelete) {
+        if (isdelete) {
+            getSupportActionBar().hide();
+        }
     }
 
     @Override
     public void onDragEnd() {
+        mDeckItemTouchHelper.setDeleteMode(false);
         getSupportActionBar().show();
     }
 
@@ -148,9 +152,9 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
     public void onAdd(int pos) {
         CardInfo cardInfo = mCardListAdapater.getItem(pos);
         if (cardInfo != null) {
-            if(mDeckAdapater.getMainCount()>=Constants.DECK_MAIN_MAX){
+            if (mDeckAdapater.getMainCount() >= Constants.DECK_MAIN_MAX) {
                 addSideCard(cardInfo);
-            }else {
+            } else {
                 addMainCard(cardInfo);
             }
         }
@@ -197,12 +201,6 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
     public void onItemLongClick(View view, int pos) {
         //拖拽中，就不显示
         if (Constants.DECK_SINGLE_PRESS_DRAG) {
-            if (mSettings.getShowCard() == Constants.PREF_DECK_SHOW_CARD_LONG_PRESS) {
-                DeckItem deckItem = mDeckAdapater.getItem(pos);
-                if (deckItem != null) {
-                    showCardDialog(deckItem.getCardInfo(), pos);
-                }
-            }
         }
     }
 
@@ -210,11 +208,9 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
     public void onItemDoubleClick(View view, int pos) {
         //拖拽中，就不显示
         if (Constants.DECK_SINGLE_PRESS_DRAG) {
-            if (mSettings.getShowCard() == Constants.PREF_DECK_SHOW_CARD_DOUBLE) {
-                DeckItem deckItem = mDeckAdapater.getItem(pos);
-                if (deckItem != null) {
-                    showCardDialog(deckItem.getCardInfo(), pos);
-                }
+            DeckItem deckItem = mDeckAdapater.getItem(pos);
+            if (deckItem != null) {
+                showCardDialog(deckItem.getCardInfo(), pos);
             }
         }
     }
@@ -251,7 +247,7 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
         }
     }
 
-    private void addSideCard(CardInfo cardInfo){
+    private void addSideCard(CardInfo cardInfo) {
         if (checkLimit(cardInfo)) {
             boolean rs = mDeckAdapater.AddCard(cardInfo, DeckItemType.SideCard);
             if (rs) {

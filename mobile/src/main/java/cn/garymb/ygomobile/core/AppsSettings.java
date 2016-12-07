@@ -327,15 +327,6 @@ public class AppsSettings {
         return mSharedPreferences.getString(Constants.PREF_LAST_YDK, Constants.PREF_DEF_LAST_YDK);
     }
 
-    /***
-     * 卡片显示触发操作
-     *
-     * @return
-     */
-    public int getShowCard() {
-        return Integer.parseInt(mSharedPreferences.getString(Constants.PREF_DECK_SHOW_CARD, "" + Constants.PREF_DEF_DECK_SHOW_CARD));
-    }
-
     public List<String> getLastRoomList() {
         List<String> names = new ArrayList<>();
         String json = mSharedPreferences.getString(Constants.PREF_LAST_ROOM_LIST, null);

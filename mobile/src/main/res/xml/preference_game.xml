@@ -37,12 +37,6 @@
             android:title="@string/settings_game_sensor_refresh"/>
 
         <ListPreference
-            android:entries="@array/show_card_desc"
-            android:entryValues="@array/show_card_value"
-            android:key="pref_key_deck_show_card"
-            android:summary="@string/settings_deck_show_card_desc"
-            android:title="@string/settings_deck_show_card"/>
-        <ListPreference
             android:entries="@array/opengl_version"
             android:entryValues="@array/opengl_version_value"
             android:key="pref_key_game_ogles_config"

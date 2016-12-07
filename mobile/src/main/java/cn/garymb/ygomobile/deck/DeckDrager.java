@@ -1,7 +1,5 @@
 package cn.garymb.ygomobile.deck;
 
-import android.util.Log;
-
 import cn.garymb.ygomobile.Constants;
 import cn.ygo.ocgcore.Card;
 
@@ -12,7 +10,7 @@ class DeckDrager {
         this.deckAdapater = deckAdapater;
     }
 
-    public boolean delete(int left) {
+    public DeckItem delete(int left) {
         //处理数据
         if (DeckItemUtils.isMain(left)) {
             return removeMain(left);
@@ -21,14 +19,16 @@ class DeckDrager {
         } else if (DeckItemUtils.isSide(left)) {
             return removeSide(left);
         }
-        return false;
+        return null;
     }
 
     private int mLast = -1;
-    private int count = 0;
-    private int MAX = 13;
 
     public void onDragStart() {
+        mLast = -1;
+    }
+
+    public void onDragEnd() {
         mLast = -1;
     }
 
@@ -40,18 +40,7 @@ class DeckDrager {
             return false;
         }
         if (right == DeckItem.HeadView) {
-            if (mLast != left) {
-                mLast = left;
-                count = 0;
-            } else {
-                count++;
-            }
-            if (count > MAX) {
-                Log.w("drag", "delete" + left);
-                return delete(left);
-            }
-            Log.d("drag", "delete ready " + left);
-            return false;
+            return true;
         }
         if (DeckItemUtils.isMain(left)) {
             if (DeckItemUtils.isMain(right)) {
@@ -93,40 +82,43 @@ class DeckDrager {
         return false;
     }
 
-    public boolean removeMain(int pos) {
+    public DeckItem removeMain(int pos) {
         int left = pos - DeckItem.MainStart;
         if (left >= 0 && left < deckAdapater.getMainCount()) {
-            deckAdapater.removeItem(left);
+            DeckItem deckItem = deckAdapater.removeItem(pos);
             deckAdapater.addItem(DeckItem.MainEnd, new DeckItem());
             deckAdapater.notifyItemRemoved(pos);
             deckAdapater.notifyItemInserted(DeckItem.MainEnd);
-            return true;
+            deckAdapater.notifyItemChanged(DeckItem.MainLabel);
+            return deckItem;
         }
-        return false;
+        return null;
     }
 
-    public boolean removeExtra(int pos) {
+    public DeckItem removeExtra(int pos) {
         int left = pos - DeckItem.ExtraStart;
         if (left >= 0 && left < deckAdapater.getExtraCount()) {
-            deckAdapater.removeItem(pos);
+            DeckItem deckItem = deckAdapater.removeItem(pos);
             deckAdapater.addItem(DeckItem.ExtraEnd, new DeckItem());
             deckAdapater.notifyItemRemoved(pos);
             deckAdapater.notifyItemInserted(DeckItem.ExtraEnd);
-            return false;
+            deckAdapater.notifyItemChanged(DeckItem.ExtraLabel);
+            return deckItem;
         }
-        return false;
+        return null;
     }
 
-    public boolean removeSide(int pos) {
+    public DeckItem removeSide(int pos) {
         int left = pos - DeckItem.SideStart;
         if (left >= 0 && left < deckAdapater.getSideCount()) {
-            deckAdapater.removeItem(pos);
+            DeckItem deckItem = deckAdapater.removeItem(pos);
             deckAdapater.addItem(DeckItem.SideEnd, new DeckItem());
             deckAdapater.notifyItemRemoved(pos);
             deckAdapater.notifyItemInserted(DeckItem.SideEnd);
-            return false;
+            deckAdapater.notifyItemChanged(DeckItem.SideLabel);
+            return deckItem;
         }
-        return false;
+        return null;
     }
 
     public boolean moveMain(int src, int to) {

@@ -10,13 +10,13 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import java.lang.reflect.Field;
-import java.util.List;
 
 
 public class ItemTouchHelperCompat extends ItemTouchHelper {
 
     private boolean enableClickDrag = false;
     private Context mContext;
+
 
     public ItemTouchHelperCompat(Callback callback) {
         super(callback);

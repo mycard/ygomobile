@@ -33,10 +33,6 @@ public interface Constants {
     boolean PREF_DEF_IMMERSIVE_MODE = false;
     String PREF_SENSOR_REFRESH = "pref_key_sensor_refresh";
     boolean PREF_DEF_SENSOR_REFRESH = true;
-    String PREF_DECK_SHOW_CARD = "pref_key_deck_show_card";
-    int PREF_DECK_SHOW_CARD_LONG_PRESS = 1;
-    int PREF_DECK_SHOW_CARD_DOUBLE = 0;
-    int PREF_DEF_DECK_SHOW_CARD = PREF_DECK_SHOW_CARD_DOUBLE;
 
     String PREF_LAST_ROOM_LIST = "pref_key_lastroom_list";
 
