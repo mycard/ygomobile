@@ -44,7 +44,6 @@
     <string name="settings_about_author_pref">作者</string>
     <string name="settings_about_proj_loc">项目链接</string>
     <string name="settings_about_version_pref">版本</string>
-    <string name="settings_about_opensource_pref">声明</string>
     <string name="settings_about_check_update">检查更新</string>
     <string name="settings_about_change_log">更新日志</string>
     <string name="settings_game_card_quality">游戏图片质量</string>

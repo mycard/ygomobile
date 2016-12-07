@@ -6,7 +6,6 @@
     <string name="action_about">About</string>
     <string name="action_add_server">Add Server</string>
     <string name="dont_start_game">don\'t start game</string>
-    <string name="action_checkupdate">Check Update</string>
     <!-- check -->
     <string name="check_res">Check Resources</string>
     <string name="check_things">Check %s ...</string>
@@ -49,7 +48,6 @@
     <string name="settings_game_screen_orientation">Lock screen in duel</string>
     <string name="settings_game_font_antialias">Font antialias</string>
     <string name="settings_game_lab_pendulum_scale">Pendulum Scale Images</string>
-    <string name="settings_game_lab_pendulum_scale_des">Show pendulum scale graphically</string>
     <string name="settings_game_font_antialias_summary">Disable this option can increase the frame rate</string>
     <string name="settings_about_author_pref">Author</string>
     <string name="settings_about_proj_loc">Project link</string>
@@ -66,8 +64,6 @@
     <string name="settings_game_diy_cover">Game Background</string>
     <string name="settings_game_diy_card_back">Card Cover</string>
     <string name="settings_game_diy_card_db">Use your own card database</string>
-    <string name="settings_game_diy_card_db_des">User custom databse</string>
-    <string name="settings_game_immersive_mode_summary">Hide virtual navigation key in game</string>
     <string name="settings_game_immersive_mode">Immersive Mode</string>
     <string name="settings_about_project_address" translatable="false">https://github.com/garymabin/YGOMobile</string>
     <string name="settings_game_opengl">OpenGL</string>
@@ -124,7 +120,6 @@
     <string name="delete_deck">Delete Deck</string>
     <string name="save_deck">Save Deck</string>
     <string name="deck_list">Deck List</string>
-    <string name="edit_deck">Edit</string>
     <string name="card_add_main">+Main Deck</string>
     <string name="card_add_side">+Side Deck</string>
     <string name="deck_main" formatted="false">Main:%d  Monster:%d Spell:%d Trap:%d</string>

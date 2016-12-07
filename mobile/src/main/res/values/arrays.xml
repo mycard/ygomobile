@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="opengl_version_value">
+    <string-array name="opengl_version_value"  translatable="false">
         <item>0</item>
         <item>1</item>
         <item>2</item>
     </string-array>
-    <string-array name="card_quality_value">
+    <string-array name="card_quality_value"  translatable="false">
         <item>0</item>
         <item>1</item>
     </string-array>
-    <string-array name="show_card_value">
+    <string-array name="show_card_value"  translatable="false">
         <item>0</item>
         <item>1</item>
     </string-array>
