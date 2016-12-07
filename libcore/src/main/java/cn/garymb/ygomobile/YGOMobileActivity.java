@@ -36,6 +36,7 @@ import cn.garymb.ygodata.YGOGameOptions;
 import cn.garymb.ygomobile.controller.NetworkController;
 import cn.garymb.ygomobile.core.IrrlichtBridge;
 import cn.garymb.ygomobile.lib.R;
+import cn.garymb.ygomobile.utils.FullScreenUtils;
 import cn.garymb.ygomobile.utils.SignUtils;
 import cn.garymb.ygomobile.widget.ComboBoxCompat;
 import cn.garymb.ygomobile.widget.EditWindowCompat;
@@ -83,6 +84,7 @@ public class YGOMobileActivity extends NativeActivity implements
     private GameApplication mApp;
     private Handler handler = new Handler();
     private NativeCrashHandler mNativeCrashHandler;
+    private FullScreenUtils mFullScreenUtils;
 
     @SuppressWarnings("WrongConstant")
     @Override
@@ -98,21 +100,10 @@ public class YGOMobileActivity extends NativeActivity implements
             mNativeCrashHandler.registerForNativeCrash(this);
             registNdkCash = true;
         }
+        mFullScreenUtils=new FullScreenUtils(this, mApp.isImmerSiveMode());
         super.onCreate(savedInstanceState);
-        fullscreen();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            getWindow().getDecorView().setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
-
-                @Override
-                public void onSystemUiVisibilityChange(int visibility) {
-                    if (mApp.isImmerSiveMode()) {
-                        if ((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) {
-                            getWindow().getDecorView().setSystemUiVisibility(windowsFlags);
-                        }
-                    }
-                }
-            });
-        }
+        mFullScreenUtils.fullscreen();
+        mFullScreenUtils.onCreate();
         if (sChainControlXPostion < 0) {
             initPostion();
         }
@@ -207,8 +198,8 @@ public class YGOMobileActivity extends NativeActivity implements
 
     private void fullscreen() {
         if (mApp.isImmerSiveMode()) {
+            mFullScreenUtils.fullscreen();
             mApp.attachGame(this);
-            getWindow().getDecorView().setSystemUiVisibility(windowsFlags);
         }
     }
 
