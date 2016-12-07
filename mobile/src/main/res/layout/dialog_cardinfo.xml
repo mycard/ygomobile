@@ -16,10 +16,13 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:shadowColor="@color/colorPrimary"
             android:text="@string/card_faq"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="@color/colorAccent"
+            android:textColor="@color/colorAccentDark"
+            android:shadowColor="@color/black"
+            android:shadowDx="1"
+            android:shadowDy="1"
+            android:shadowRadius="2"
             android:textStyle="bold"
             />
 
@@ -299,6 +302,9 @@
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="2dp"
+            android:background="@drawable/textview_border"
+            android:padding="4dp"
             android:scrollbars="none">
 
             <TextView

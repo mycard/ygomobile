@@ -44,7 +44,8 @@ class DeckItemUtils {
                     break;
                 }
                 CardInfo cardInfo = deckItem.getCardInfo();
-                writer.write(("\n" + cardInfo.Code).toCharArray());
+                if (cardInfo != null)
+                    writer.write(("\n" + cardInfo.Code).toCharArray());
             }
             writer.write("\n#extra".toCharArray());
             for (int i = DeckItem.ExtraStart; i < DeckItem.ExtraStart + Constants.DECK_EXTRA_MAX; i++) {
@@ -53,7 +54,8 @@ class DeckItemUtils {
                     break;
                 }
                 CardInfo cardInfo = deckItem.getCardInfo();
-                writer.write(("\n" + cardInfo.Code).toCharArray());
+                if (cardInfo != null)
+                    writer.write(("\n" + cardInfo.Code).toCharArray());
             }
             writer.write("\n!side".toCharArray());
             for (int i = DeckItem.SideStart; i < DeckItem.SideStart + Constants.DECK_SIDE_MAX; i++) {
@@ -62,7 +64,8 @@ class DeckItemUtils {
                     break;
                 }
                 CardInfo cardInfo = deckItem.getCardInfo();
-                writer.write(("\n" + cardInfo.Code).toCharArray());
+                if (cardInfo != null)
+                    writer.write(("\n" + cardInfo.Code).toCharArray());
             }
             writer.flush();
             outputStream.flush();

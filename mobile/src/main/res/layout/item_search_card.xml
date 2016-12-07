@@ -56,6 +56,7 @@
                 android:shadowDx="1"
                 android:shadowDy="2"
                 android:shadowRadius="2"
+                android:textSize="18sp"
                 tools:text="Card Name"/>
 
             <TextView
@@ -85,6 +86,7 @@
 
             <View
                 android:id="@+id/view_bar"
+                android:layout_marginTop="3dp"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@color/gray"/>
@@ -92,8 +94,29 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal" >
+                android:orientation="horizontal"
+                android:layout_marginTop="3dp"
+               >
 
+                <TextView
+                    android:id="@+id/card_code"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:maxLines="1"
+
+                    android:singleLine="true"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="@color/colorPrimary"
+                    tools:text="123456789"/>
+
+                <TextView
+                    android:layout_width="1px"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="@color/colorPrimary"
+                    android:visibility="invisible"
+                    android:text="A"/>
                 <View
                     android:layout_width="0dp"
                     android:layout_height="1dp"
@@ -103,8 +126,7 @@
                 <LinearLayout
                     android:id="@+id/layout_atkdef"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="4dp">
+                    android:layout_height="wrap_content">
 
                     <TextView
                         android:layout_width="wrap_content"

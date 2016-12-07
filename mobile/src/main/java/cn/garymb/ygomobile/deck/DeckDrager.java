@@ -3,7 +3,6 @@ package cn.garymb.ygomobile.deck;
 import android.util.Log;
 
 import cn.garymb.ygomobile.Constants;
-import cn.garymb.ygomobile.bean.CardInfo;
 import cn.ygo.ocgcore.Card;
 
 class DeckDrager {
@@ -12,7 +11,6 @@ class DeckDrager {
     public DeckDrager(DeckAdapater deckAdapater) {
         this.deckAdapater = deckAdapater;
     }
-
 
     public boolean delete(int left) {
         //处理数据
@@ -28,7 +26,11 @@ class DeckDrager {
 
     private int mLast = -1;
     private int count = 0;
-    private int MAX = 20;
+    private int MAX = 15;
+
+    public void onDragStart() {
+        mLast = -1;
+    }
 
     public boolean move(DeckViewHolder viewHolder, DeckViewHolder target) {
         //处理view
@@ -46,7 +48,7 @@ class DeckDrager {
             }
             if (count > MAX) {
                 Log.w("drag", "delete" + left);
-                return  delete(left);
+                return delete(left);
             }
             Log.d("drag", "delete ready " + left);
             return false;

@@ -9,6 +9,7 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:text="@string/label_limitlist"
+        android:textColor="@color/blackLinght"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
 
     <Spinner
@@ -21,6 +22,7 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:text="@string/deck_list"
+        android:textColor="@color/blackLinght"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
 
     <Spinner

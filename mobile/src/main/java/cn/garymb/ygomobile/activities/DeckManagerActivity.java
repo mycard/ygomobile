@@ -60,6 +60,8 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mCardListAdapater.setShowAdd(true);
+        mCardListAdapater.setOnAddCardListener(this);
         mRecyclerView.setPadding(mRecyclerView.getPaddingLeft(), 0, mRecyclerView.getPaddingRight(), mRecyclerView.getPaddingBottom());
         mRecyclerView.setAdapter((mDeckAdapater = new DeckAdapater(this, mRecyclerView)));
         mRecyclerView.setLayoutManager(new DeckLayoutManager(this, Constants.DECK_WIDTH_COUNT));
@@ -70,8 +72,6 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
         touchHelper.attachToRecyclerView(mRecyclerView);
 
         mRecyclerView.addOnItemTouchListener(new RecyclerViewItemListener(mRecyclerView, this));
-        mCardListAdapater.setShowAdd(true);
-        mCardListAdapater.setOnAddCardListener(this);
     }
 
     @Override
@@ -340,9 +340,9 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_refresh:
-                mDeckAdapater.notifyDataSetChanged();
-                break;
+//            case R.id.action_refresh:
+//                mDeckAdapater.notifyDataSetChanged();
+//                break;
             case R.id.action_search:
                 //弹条件对话框
                 showSearch(true);

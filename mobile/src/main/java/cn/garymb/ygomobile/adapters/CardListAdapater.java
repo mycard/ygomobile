@@ -49,16 +49,26 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> {
 
     @Override
     protected View createView(int position, ViewGroup parent) {
-        View view = mLayoutInflater.inflate(R.layout.item_list_card, parent, false);
+        View view;
+        if (showAdd) {
+            view = mLayoutInflater.inflate(R.layout.item_deck_list_card, parent, false);
+        } else if (showCode) {
+            view = mLayoutInflater.inflate(R.layout.item_search_card, parent, false);
+        } else {
+            view = mLayoutInflater.inflate(R.layout.item_list_card, parent, false);
+        }
         new ViewHolder(view);
         return view;
+    }
+
+    private int getColor(int id) {
+        return context.getResources().getColor(id);
     }
 
     @Override
     protected void attach(View view, CardInfo item, int position) {
         ViewHolder holder = (ViewHolder) view.getTag(view.getId());
         holder.setPosition(position);
-        holder.codeView.setText(String.format("%08d", item.Code));
         ImageLoader.get().bindImage(context, holder.cardImage, item.Code);
         holder.cardName.setText(item.Name);
         if (item.isType(CardType.Monster)) {
@@ -70,6 +80,11 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> {
                 star += "★";
             }
             holder.cardLevel.setText(star);
+            if (item.isType(CardType.Xyz)) {
+                holder.cardLevel.setTextColor(getColor(R.color.star_rank));
+            } else {
+                holder.cardLevel.setTextColor(getColor(R.color.star));
+            }
             holder.cardAtk.setText((item.Attack < 0 ? "?" : String.valueOf(item.Attack)));
             holder.cardDef.setText((item.Defense < 0 ? "?" : String.valueOf(item.Defense)));
         } else {
@@ -94,6 +109,9 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> {
         }
         //卡片类型
         holder.cardType.setText(item.getAllTypeString(mStringManager));
+        if (holder.codeView != null) {
+            holder.codeView.setText(String.format("%08d", item.Code));
+        }
     }
 
     class ViewHolder extends BaseViewHolder {
@@ -112,14 +130,16 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> {
 
         void setPosition(int position) {
             this.position = position;
-            addView.setOnClickListener((v) -> {
-                if (mOnAddCardListener != null) {
-                    mOnAddCardListener.onAdd(position);
-                }
-            });
+            if (addView != null) {
+                addView.setOnClickListener((v) -> {
+                    if (mOnAddCardListener != null) {
+                        mOnAddCardListener.onAdd(position);
+                    }
+                });
+            }
         }
 
-        int getPosition(){
+        int getPosition() {
             return position;
         }
 
@@ -138,16 +158,6 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> {
             rightImage = findViewById(R.id.right_top);
             addView = findViewById(R.id.card_add);
             codeView = findViewById(R.id.card_code);
-            if (showCode) {
-                codeView.setVisibility(View.VISIBLE);
-            } else {
-                codeView.setVisibility(View.GONE);
-            }
-            if (showAdd) {
-                addView.setVisibility(View.VISIBLE);
-            } else {
-                addView.setVisibility(View.GONE);
-            }
             File outFile = new File(AppsSettings.get().getCoreSkinPath(), Constants.UNKNOWN_IMAGE);
             ImageLoader.get().bind(context, outFile, cardImage, outFile.getName().endsWith(Constants.BPG), 0, null);
         }

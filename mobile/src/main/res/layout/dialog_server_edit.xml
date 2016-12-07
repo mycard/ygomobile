@@ -14,8 +14,7 @@
             android:layout_width="@dimen/label_width_middle"
             android:layout_height="wrap_content"
             android:text="@string/server_name"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textColor="@color/colorAccent"/>
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
 
         <EditText
             android:id="@+id/server_name"
@@ -44,8 +43,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:text="@string/server_ip"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:textColor="@color/colorAccent"/>
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
 
             <EditText
                 android:id="@+id/text_ip"
@@ -66,8 +64,7 @@
                 android:layout_width="@dimen/label_width_50dp"
                 android:layout_height="wrap_content"
                 android:text="@string/server_port"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:textColor="@color/colorAccent"/>
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
 
             <EditText
                 android:id="@+id/text_port"

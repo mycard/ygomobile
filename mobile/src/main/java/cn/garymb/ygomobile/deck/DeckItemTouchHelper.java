@@ -4,12 +4,8 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
-import android.view.View;
 
 import java.util.List;
-
-import cn.garymb.ygomobile.Constants;
-import cn.ygo.ocgcore.Card;
 
 import static android.support.v7.widget.helper.ItemTouchHelper.ACTION_STATE_DRAG;
 import static android.support.v7.widget.helper.ItemTouchHelper.ACTION_STATE_IDLE;
@@ -24,7 +20,9 @@ public class DeckItemTouchHelper extends ItemTouchHelper.Callback {
 
         void onDragEnd();
     }
+
     private CallBack mCallBack;
+    private DeckAdapater deckAdapater;
 
     public void setCallBack(CallBack callBack) {
         mCallBack = callBack;
@@ -32,9 +30,7 @@ public class DeckItemTouchHelper extends ItemTouchHelper.Callback {
 
     public DeckItemTouchHelper(DeckAdapater deckAdapater) {
         this.mDeckDrager = new DeckDrager(deckAdapater);
-//        NULL = new RecyclerView.ViewHolder(new View(deckAdapater.getContext())) {
-//
-//        };
+        this.deckAdapater = deckAdapater;
     }
 
     @Override
@@ -74,12 +70,13 @@ public class DeckItemTouchHelper extends ItemTouchHelper.Callback {
             if (deckholder.getItemType() == DeckItemType.Space
                     || deckholder.getItemType() == DeckItemType.MainLabel
                     || deckholder.getItemType() == DeckItemType.SideLabel
-                    || deckholder.getItemType() == DeckItemType.ExtraLabel) {
+                    || deckholder.getItemType() == DeckItemType.ExtraLabel
+                    || deckholder.getItemType() == DeckItemType.HeadView) {
 //                Log.d("kk", "move is label or space " + id);
                 return makeMovementFlags(0, 0);
             }
         } else {
-            if (DeckItemUtils.isLabel(id)) {
+            if (DeckItemUtils.isLabel(id) || id == DeckItem.HeadView) {
 //                Log.d("kk", "move is label " + id);
                 return makeMovementFlags(0, 0);
             }
@@ -97,11 +94,12 @@ public class DeckItemTouchHelper extends ItemTouchHelper.Callback {
     public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
         super.onSelectedChanged(viewHolder, actionState);
         if (actionState == ACTION_STATE_DRAG) {
-            if(mCallBack!=null){
+            mDeckDrager.onDragStart();
+            if (mCallBack != null) {
                 mCallBack.onDragStart();
             }
         } else if (actionState == ACTION_STATE_IDLE) {
-            if(mCallBack!=null){
+            if (mCallBack != null) {
                 mCallBack.onDragEnd();
             }
         } else if (actionState == ACTION_STATE_SWIPE) {
@@ -112,7 +110,24 @@ public class DeckItemTouchHelper extends ItemTouchHelper.Callback {
 
     @Override
     public RecyclerView.ViewHolder chooseDropTarget(RecyclerView.ViewHolder selected, List<RecyclerView.ViewHolder> dropTargets, int curX, int curY) {
-        return super.chooseDropTarget(selected, dropTargets, curX, curY);
+        RecyclerView.ViewHolder viewHolder = super.chooseDropTarget(selected, dropTargets, curX, curY);
+        if (viewHolder == null) {
+            if (dropTargets != null) {
+                if (dropTargets.size() >= 1) {
+                    RecyclerView.ViewHolder tmp = dropTargets.get(0);
+                    if (tmp.getAdapterPosition() == DeckItem.HeadView) {
+                        return tmp;
+                    }else if(tmp.getAdapterPosition()==DeckItem.MainLabel){
+                        return deckAdapater.getHeadHolder();
+                    }
+                }
+            }
+        }else if(viewHolder.getAdapterPosition()==DeckItem.MainLabel){
+            if(deckAdapater.getHeadHolder()!=null){
+                return deckAdapater.getHeadHolder();
+            }
+        }
+        return viewHolder;
     }
 
     @Override

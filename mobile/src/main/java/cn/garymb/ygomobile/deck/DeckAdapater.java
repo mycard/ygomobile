@@ -54,7 +54,7 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
     private RecyclerView recyclerView;
     private int mDragPosition = -1;
     private Random mRandom;
-
+    private DeckViewHolder mHeadHolder;
     private DeckItem mRemoveItem;
     private int mRemoveIndex;
 
@@ -543,12 +543,21 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
         return deckItem;
     }
 
+    public DeckViewHolder getHeadHolder() {
+        return mHeadHolder;
+    }
+
     public int getItemHeight() {
         return mHeight;
     }
 
     @Override
     public void onBindViewHolder(DeckViewHolder holder, int position) {
+        if (position == DeckItem.HeadView) {
+            if (mHeadHolder == null) {
+                mHeadHolder = holder;
+            }
+        }
         DeckItem item = mItems.get(position);
         holder.setItemType(item.getType());
         if (position == DeckItem.HeadView) {

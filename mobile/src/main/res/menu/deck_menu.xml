@@ -11,10 +11,10 @@
         android:icon="@drawable/ic_collections"
         android:title="@string/card_result"
         app:showAsAction="always"/>
-    <item
+    <!--<item
         android:id="@+id/action_refresh"
         android:icon="@drawable/ic_refresh"
-        android:title="@string/refresh"/>
+        android:title="@string/refresh"/>-->
     <item
         android:id="@+id/action_unsort"
         android:icon="@drawable/ic_refresh"
