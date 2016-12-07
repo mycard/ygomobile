@@ -27,9 +27,8 @@ import cn.ygo.ocgcore.enums.LimitType;
 
 
 public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
-    final List<DeckItem> mItems = new ArrayList<>();
+    private final List<DeckItem> mItems = new ArrayList<>();
     private Map<Long, Integer> mCount = new HashMap<>();
-    private DeckInfo mDeck = new DeckInfo();
     private Context context;
     private LayoutInflater mLayoutInflater;
     private ImageTop mImageTop;
@@ -73,121 +72,24 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
         return width * Constants.CORE_SKIN_CARD_COVER_SIZE[1] / Constants.CORE_SKIN_CARD_COVER_SIZE[0];
     }
 
-    public List<CardInfo> getMainCards() {
-        return mDeck != null ? mDeck.getMainCards() : null;
-    }
-
-    public List<CardInfo> getExtraCards() {
-        return mDeck != null ? mDeck.getExtraCards() : null;
-    }
-
-    public List<CardInfo> getSideCards() {
-        return mDeck != null ? mDeck.getSideCards() : null;
-    }
-
     public Map<Long, Integer> getCardCount() {
         return mCount;
     }
 
-    CardInfo removeMain(int pos) {
-        List<CardInfo> list = getMainCards();
-        if (list != null && pos >= 0 && pos <= list.size()) {
-            mMainCount--;
-            CardInfo cardInfo = list.remove(pos);
-            if (cardInfo.isType(CardType.Monster)) {
-                mMainMonsterCount--;
-            } else if (cardInfo.isType(CardType.Spell)) {
-                mMainSpellCount--;
-            } else if (cardInfo.isType(CardType.Trap)) {
-                mMainTrapCount--;
-            }
-            removeCount(cardInfo);
-            return cardInfo;
-        }
-        return null;
-    }
-
-    CardInfo removeSide(int pos) {
-        List<CardInfo> list = getSideCards();
-        if (list != null && pos >= 0 && pos <= list.size()) {
-            mSideCount--;
-            CardInfo cardInfo = list.remove(pos);
-            if (cardInfo.isType(CardType.Monster)) {
-                mSideMonsterCount--;
-            } else if (cardInfo.isType(CardType.Spell)) {
-                mSideSpellCount--;
-            } else if (cardInfo.isType(CardType.Trap)) {
-                mSideTrapCount--;
-            }
-            removeCount(cardInfo);
-            return cardInfo;
-        }
-        return null;
-    }
-
-    CardInfo removeExtra(int pos) {
-        List<CardInfo> list = getExtraCards();
-        if (list != null && pos >= 0 && pos <= list.size()) {
-            mExtraCount--;
-            CardInfo cardInfo = list.remove(pos);
-            if (cardInfo.isType(CardType.Fusion)) {
-                mExtraFusionCount--;
-            } else if (cardInfo.isType(CardType.Synchro)) {
-                mExtraSynchroCount--;
-            } else if (cardInfo.isType(CardType.Xyz)) {
-                mExtraXyzCount--;
-            }
-            removeCount(cardInfo);
-            return cardInfo;
-        }
-        return null;
-    }
-
-    void addCount(CardInfo cardInfo, DeckItemType type) {
-        if (cardInfo == null) return;
-        pushCount(cardInfo);
-        switch (type) {
-            case MainCard:
-                if (cardInfo.isType(CardType.Monster)) {
-                    mMainMonsterCount++;
-                } else if (cardInfo.isType(CardType.Spell)) {
-                    mMainSpellCount++;
-                } else if (cardInfo.isType(CardType.Trap)) {
-                    mMainTrapCount++;
-                }
-                break;
-            case ExtraCard:
-                if (cardInfo.isType(CardType.Fusion)) {
-                    mExtraFusionCount++;
-                } else if (cardInfo.isType(CardType.Synchro)) {
-                    mExtraSynchroCount++;
-                } else if (cardInfo.isType(CardType.Xyz)) {
-                    mExtraXyzCount++;
-                }
-                break;
-            case SideCard:
-                if (cardInfo.isType(CardType.Monster)) {
-                    mSideMonsterCount++;
-                } else if (cardInfo.isType(CardType.Spell)) {
-                    mSideSpellCount++;
-                } else if (cardInfo.isType(CardType.Trap)) {
-                    mSideTrapCount++;
-                }
-                break;
-        }
-    }
-
     public boolean AddCard(CardInfo cardInfo, DeckItemType type) {
+        if (cardInfo == null) return false;
+        if (cardInfo.isType(CardType.Token)) {
+            return false;
+        }
         if (type == DeckItemType.MainCard) {
             if (getMainCount() >= Constants.DECK_MAIN_MAX) {
                 return false;
             }
             int id = DeckItem.MainStart + getMainCount();
-            mItems.remove(DeckItem.MainEnd);
-            mItems.add(id, new DeckItem(cardInfo, type));
+            removeItem(DeckItem.MainEnd);
+            addItem(id, new DeckItem(cardInfo, type));
             notifyItemChanged(DeckItem.MainEnd);
             notifyItemChanged(id);
-            addMain(-1, cardInfo);
             return true;
         }
         if (type == DeckItemType.ExtraCard) {
@@ -195,11 +97,10 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
                 return false;
             }
             int id = DeckItem.ExtraStart + getExtraCount();
-            mItems.remove(DeckItem.ExtraEnd);
-            mItems.add(id, new DeckItem(cardInfo, type));
+            removeItem(DeckItem.ExtraEnd);
+            addItem(id, new DeckItem(cardInfo, type));
             notifyItemChanged(DeckItem.ExtraEnd);
             notifyItemChanged(id);
-            addExtra(-1, cardInfo);
             return true;
         }
         if (type == DeckItemType.SideCard) {
@@ -207,18 +108,17 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
                 return false;
             }
             int id = DeckItem.SideStart + getSideCount();
-            mItems.remove(DeckItem.SideEnd);
-            mItems.add(id, new DeckItem(cardInfo, type));
+            removeItem(DeckItem.SideEnd);
+            addItem(id, new DeckItem(cardInfo, type));
             notifyItemChanged(DeckItem.SideEnd);
             notifyItemChanged(id);
-            addSide(-1, cardInfo);
             return true;
         }
         return false;
     }
 
     public void unSort() {
-        if(mMainCount==0)return;
+        if (mMainCount == 0) return;
         for (int i = 0; i < Constants.UNSORT_TIMES; i++) {
             int index1 = mRandom.nextInt(mMainCount);
             int index2 = mRandom.nextInt(mMainCount);
@@ -227,7 +127,6 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
                 int count = sp > 1 ? mRandom.nextInt(sp - 1) : 1;
                 for (int j = 0; j < count; j++) {
                     Collections.swap(mItems, DeckItem.MainStart + index1 + j, DeckItem.MainStart + index2 + j);
-                    Collections.swap(getMainCards(), index1 + j, index2 + j);
                 }
             }
         }
@@ -386,7 +285,6 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
                     DeckItem tmp = new DeckItem(d2);
                     d2.set(d1);
                     d1.set(tmp);
-                    Collections.swap(getMainCards(), j, j + 1);
                 }
             }
         }
@@ -404,7 +302,6 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
                     DeckItem tmp = new DeckItem(d2);
                     d2.set(d1);
                     d1.set(tmp);
-                    Collections.swap(getExtraCards(), j, j + 1);
                 }
             }
         }
@@ -421,7 +318,6 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
                     DeckItem tmp = new DeckItem(d2);
                     d2.set(d1);
                     d1.set(tmp);
-                    Collections.swap(getSideCards(), j, j + 1);
                 }
             }
         }
@@ -437,60 +333,87 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
         notifyItemRangeChanged(DeckItem.SideStart, DeckItem.SideStart + side);
     }
 
-    void removeCount(CardInfo cardInfo) {
-        Integer i = mCount.get(Long.valueOf(cardInfo.Code));
-        if (i == null) {
-            mCount.put(Long.valueOf(cardInfo.Code), 0);
-        } else {
-            mCount.put(Long.valueOf(cardInfo.Code), Math.max(0, i - 1));
-        }
-    }
-
-    void pushCount(CardInfo cardInfo) {
+    public void addCount(CardInfo cardInfo, DeckItemType type) {
+        if (cardInfo == null) return;
         Integer i = mCount.get(Long.valueOf(cardInfo.Code));
         if (i == null) {
             mCount.put(Long.valueOf(cardInfo.Code), 1);
         } else {
             mCount.put(Long.valueOf(cardInfo.Code), i + 1);
         }
-    }
-
-    void addMain(int pos, CardInfo cardInfo) {
-        List<CardInfo> list = getMainCards();
-        if (list != null && mMainCount < Constants.DECK_MAIN_MAX) {
-            if (pos >= 0) {
-                list.add(pos, cardInfo);
-            } else {
-                list.add(cardInfo);
-            }
-            addCount(cardInfo, DeckItemType.MainCard);
-            mMainCount++;
+        switch (type) {
+            case MainCard:
+                mMainCount++;
+                if (cardInfo.isType(CardType.Monster)) {
+                    mMainMonsterCount++;
+                } else if (cardInfo.isType(CardType.Spell)) {
+                    mMainSpellCount++;
+                } else if (cardInfo.isType(CardType.Trap)) {
+                    mMainTrapCount++;
+                }
+                break;
+            case ExtraCard:
+                mExtraCount++;
+                if (cardInfo.isType(CardType.Fusion)) {
+                    mExtraFusionCount++;
+                } else if (cardInfo.isType(CardType.Synchro)) {
+                    mExtraSynchroCount++;
+                } else if (cardInfo.isType(CardType.Xyz)) {
+                    mExtraXyzCount++;
+                }
+                break;
+            case SideCard:
+                mSideCount++;
+                if (cardInfo.isType(CardType.Monster)) {
+                    mSideMonsterCount++;
+                } else if (cardInfo.isType(CardType.Spell)) {
+                    mSideSpellCount++;
+                } else if (cardInfo.isType(CardType.Trap)) {
+                    mSideTrapCount++;
+                }
+                break;
         }
     }
 
-    void addExtra(int pos, CardInfo cardInfo) {
-        List<CardInfo> list = getExtraCards();
-        if (list != null && mExtraCount < Constants.DECK_EXTRA_MAX) {
-            if (pos >= 0) {
-                list.add(pos, cardInfo);
-            } else {
-                list.add(cardInfo);
-            }
-            addCount(cardInfo, DeckItemType.ExtraCard);
-            mExtraCount++;
+    private void removeCount(CardInfo cardInfo, DeckItemType type) {
+        if (cardInfo == null) return;
+        Integer i = mCount.get(Long.valueOf(cardInfo.Code));
+        if (i == null) {
+            mCount.put(Long.valueOf(cardInfo.Code), 0);
+        } else {
+            mCount.put(Long.valueOf(cardInfo.Code), Math.max(0, i - 1));
         }
-    }
-
-    void addSide(int pos, CardInfo cardInfo) {
-        List<CardInfo> list = getSideCards();
-        if (list != null) {
-            if (pos >= 0) {
-                list.add(pos, cardInfo);
-            } else {
-                list.add(cardInfo);
-            }
-            addCount(cardInfo, DeckItemType.SideCard);
-            mSideCount++;
+        switch (type) {
+            case MainCard:
+                mMainCount--;
+                if (cardInfo.isType(CardType.Monster)) {
+                    mMainMonsterCount--;
+                } else if (cardInfo.isType(CardType.Spell)) {
+                    mMainSpellCount--;
+                } else if (cardInfo.isType(CardType.Trap)) {
+                    mMainTrapCount--;
+                }
+                break;
+            case ExtraCard:
+                mExtraCount--;
+                if (cardInfo.isType(CardType.Fusion)) {
+                    mExtraFusionCount--;
+                } else if (cardInfo.isType(CardType.Synchro)) {
+                    mExtraSynchroCount--;
+                } else if (cardInfo.isType(CardType.Xyz)) {
+                    mExtraXyzCount--;
+                }
+                break;
+            case SideCard:
+                mSideCount--;
+                if (cardInfo.isType(CardType.Monster)) {
+                    mSideMonsterCount--;
+                } else if (cardInfo.isType(CardType.Spell)) {
+                    mSideSpellCount--;
+                } else if (cardInfo.isType(CardType.Trap)) {
+                    mSideTrapCount--;
+                }
+                break;
         }
     }
 
@@ -516,9 +439,7 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
     }
 
     public void setDeck(DeckInfo deck) {
-        this.mDeck = deck;
         if (deck != null) {
-//            Log.i("kk", "desk" + deck);
             loadData(deck);
         }
     }
@@ -537,9 +458,9 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
 
     private void loadData(DeckInfo deck) {
         mCount.clear();
-        mMainCount = length(deck.getMainCards());
-        mExtraCount = length(deck.getExtraCards());
-        mSideCount = length(deck.getSideCards());
+        mMainCount = 0;
+        mExtraCount = 0;
+        mSideCount = 0;
         mMainMonsterCount = 0;
         mMainSpellCount = 0;
         mMainTrapCount = 0;
@@ -575,6 +496,25 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
         return getString(R.string.deck_side, mSideCount, mSideMonsterCount, mSideSpellCount, mSideTrapCount);
     }
 
+    public void addItem(int pos, DeckItem deckItem) {
+        if (deckItem.getCardInfo() != null) {
+            if (pos >= DeckItem.MainStart && pos <= DeckItem.MainEnd) {
+                deckItem.setType(DeckItemType.MainCard);
+            } else if (pos >= DeckItem.ExtraStart && pos <= DeckItem.ExtraEnd) {
+                deckItem.setType(DeckItemType.ExtraCard);
+            } else if (pos >= DeckItem.SideStart && pos <= DeckItem.SideEnd) {
+                deckItem.setType(DeckItemType.SideCard);
+            }
+        }
+        addCount(deckItem.getCardInfo(), deckItem.getType());
+        mItems.add(pos, deckItem);
+    }
+
+    public DeckItem removeItem(int pos) {
+        DeckItem deckItem = mItems.remove(pos);
+        removeCount(deckItem.getCardInfo(), deckItem.getType());
+        return deckItem;
+    }
 
     @Override
     public void onBindViewHolder(DeckViewHolder holder, int position) {

@@ -23,6 +23,7 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> {
     private StringManager mStringManager;
     private ImageTop mImageTop;
     private boolean showAdd;
+    private boolean showCode;
     private OnAddCardListener mOnAddCardListener;
 
     public interface OnAddCardListener {
@@ -36,6 +37,10 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> {
 
     public void setShowAdd(boolean showAdd) {
         this.showAdd = showAdd;
+    }
+
+    public void setShowCode(boolean showCode) {
+        this.showCode = showCode;
     }
 
     public void setOnAddCardListener(OnAddCardListener onAddCardListener) {
@@ -53,6 +58,7 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> {
     protected void attach(View view, CardInfo item, int position) {
         ViewHolder holder = (ViewHolder) view.getTag(view.getId());
         holder.setPosition(position);
+        holder.codeView.setText(String.format("%08d", item.Code));
 //        if (!isScroll) {
         ImageLoader.get().bindImage(context, holder.cardImage, item.Code);
 //        }
@@ -69,8 +75,10 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> {
             holder.cardAtk.setText((item.Attack < 0 ? "?" : String.valueOf(item.Attack)));
             holder.cardDef.setText((item.Defense < 0 ? "?" : String.valueOf(item.Defense)));
         } else {
-            holder.view_bar.setVisibility(View.GONE);
-            holder.cardLevel.setVisibility(View.GONE);
+            if (!showCode) {
+                holder.view_bar.setVisibility(View.INVISIBLE);
+            }
+            holder.cardLevel.setVisibility(View.INVISIBLE);
             holder.layout_atkdef.setVisibility(View.GONE);
         }
         if (mImageTop == null) {
@@ -101,9 +109,10 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> {
         View layout_atkdef;
         View addView;
         View view_bar;
+        TextView codeView;
         private int position;
 
-        void setPosition(int position){
+        void setPosition(int position) {
             this.position = position;
             addView.setOnClickListener((v) -> {
                 if (mOnAddCardListener != null) {
@@ -125,6 +134,12 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> {
             view_bar = findViewById(R.id.view_bar);
             rightImage = findViewById(R.id.right_top);
             addView = findViewById(R.id.card_add);
+            codeView = findViewById(R.id.card_code);
+            if (showCode) {
+                codeView.setVisibility(View.VISIBLE);
+            } else {
+                codeView.setVisibility(View.GONE);
+            }
             if (showAdd) {
                 addView.setVisibility(View.VISIBLE);
             } else {

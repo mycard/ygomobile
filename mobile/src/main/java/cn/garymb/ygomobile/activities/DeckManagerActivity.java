@@ -68,10 +68,8 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
         touchHelper.setEnableClickDrag(Constants.DECK_SINGLE_PRESS_DRAG);
         touchHelper.attachToRecyclerView(mRecyclerView);
 
-        if (!Constants.DECK_SINGLE_PRESS_DRAG) {
-            mDrawerlayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_OPEN);
-            hideDrawers();
-        }
+        mDrawerlayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_OPEN);
+        hideDrawers();
         mRecyclerView.addOnItemTouchListener(new RecyclerViewItemListener(mRecyclerView, this));
         mCardListAdapater.setShowAdd(true);
         mCardListAdapater.setOnAddCardListener(this);

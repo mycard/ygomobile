@@ -83,69 +83,93 @@
                 android:layout_height="1dp"
                 android:background="@color/gray"/>
 
-
             <LinearLayout
-                android:id="@+id/layout_atkdef"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:padding="4dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                >
 
                 <ImageButton
                     android:id="@+id/card_add"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_gravity="center_vertical"
-                    android:paddingRight="4dp"
                     android:background="@android:color/transparent"
-                    app:srcCompat="@drawable/ic_add"
-                    android:visibility="invisible"/>
+                    android:paddingRight="4dp"
+                    android:visibility="gone"
+                    app:srcCompat="@drawable/ic_add"/>
 
+                <TextView
+                    android:id="@+id/card_code"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="@color/colorPrimary"
+                    android:visibility="gone"
+                    tools:text="123456789"/>
+
+                <TextView
+                    android:layout_width="1dp"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:text="A"
+                    android:visibility="invisible"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
                 <View
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_weight="1"
                     />
-                <TextView
+
+                <LinearLayout
+                    android:id="@+id/layout_atkdef"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:maxLines="1"
-                    android:singleLine="true"
-                    android:text="ATK/"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+                    android:padding="4dp">
 
-                <TextView
-                    android:id="@+id/card_atk"
-                    android:layout_width="@dimen/label_width_small"
-                    android:layout_height="wrap_content"
-                    android:gravity="right"
-                    android:maxLines="1"
-                    android:singleLine="true"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    tools:text="2500"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:text="ATK/"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
 
-                <View
-                    android:layout_width="10dp"
-                    android:layout_height="1dp"/>
+                    <TextView
+                        android:id="@+id/card_atk"
+                        android:layout_width="@dimen/label_width_small"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                        tools:text="2500"/>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:maxLines="1"
-                    android:singleLine="true"
-                    android:text="DEF/"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+                    <View
+                        android:layout_width="10dp"
+                        android:layout_height="1dp"/>
 
-                <TextView
-                    android:id="@+id/card_def"
-                    android:layout_width="@dimen/label_width_small"
-                    android:layout_height="wrap_content"
-                    android:gravity="right"
-                    android:maxLines="1"
-                    android:singleLine="true"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    tools:text="2500"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:text="DEF/"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+
+                    <TextView
+                        android:id="@+id/card_def"
+                        android:layout_width="@dimen/label_width_small"
+                        android:layout_height="wrap_content"
+                        android:gravity="right"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                        tools:text="2500"/>
+                </LinearLayout>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

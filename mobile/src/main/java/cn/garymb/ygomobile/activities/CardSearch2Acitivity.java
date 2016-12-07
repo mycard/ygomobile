@@ -52,6 +52,7 @@ public class CardSearch2Acitivity extends BaseActivity implements CardLoader.Cal
 
         mListView = (ListView) findViewById(R.id.list_cards);
         mCardListAdapater = new CardListAdapater(this);
+        mCardListAdapater.setShowCode(true);
         mListView.setAdapter(mCardListAdapater);
 //
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
