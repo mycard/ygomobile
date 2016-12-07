@@ -71,7 +71,7 @@ public class YGOMobileActivity extends NativeActivity implements
     protected ComboBoxCompat mGlobalComboBox;
     protected EditWindowCompat mGlobalEditText;
     protected PowerManager mPM;
-    private volatile  long lastRefresh;
+    private volatile long lastRefresh;
     //    private OverlayRectView mChainOverlayView;
 //    private OverlayOvalView mOverlayView;
     private NetworkController mNetController;
@@ -103,15 +103,15 @@ public class YGOMobileActivity extends NativeActivity implements
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             getWindow().getDecorView().setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
 
-                        @Override
-                        public void onSystemUiVisibilityChange(int visibility) {
-                            if(mApp.isImmerSiveMode()) {
-                                if ((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) {
-                                    getWindow().getDecorView().setSystemUiVisibility(windowsFlags);
-                                }
-                            }
+                @Override
+                public void onSystemUiVisibilityChange(int visibility) {
+                    if (mApp.isImmerSiveMode()) {
+                        if ((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) {
+                            getWindow().getDecorView().setSystemUiVisibility(windowsFlags);
                         }
-                    });
+                    }
+                }
+            });
         }
         if (sChainControlXPostion < 0) {
             initPostion();
@@ -158,12 +158,16 @@ public class YGOMobileActivity extends NativeActivity implements
         if (sensorType == Sensor.TYPE_ACCELEROMETER) {
             int value = 15;//摇一摇阀值,不同手机能达到的最大值不同,如某品牌手机只能达到20
             if (x >= value || x <= -value || y >= value || y <= -value || z >= value || z <= -value) {
-                if (System.currentTimeMillis() - lastRefresh >= MAX_REFRESH) {
-                    lastRefresh = System.currentTimeMillis();
-                    Toast.makeText(this, "refresh", Toast.LENGTH_SHORT).show();
-                    IrrlichtBridge.refreshTexture();
-                }
+                refreshTextures();
             }
+        }
+    }
+
+    private void refreshTextures() {
+        if (System.currentTimeMillis() - lastRefresh >= MAX_REFRESH) {
+            lastRefresh = System.currentTimeMillis();
+            Toast.makeText(this, R.string.refresh_textures, Toast.LENGTH_SHORT).show();
+            IrrlichtBridge.refreshTexture();
         }
     }
 
