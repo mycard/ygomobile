@@ -135,11 +135,11 @@ public class CardSearcher implements View.OnClickListener {
         initLimitListSpinners(limitListSpinner);
         initTypeSpinners(typeSpinner, new CardType[]{CardType.None, CardType.Monster, CardType.Spell, CardType.Trap});
         initTypeSpinners(typeMonsterSpinner, new CardType[]{CardType.None, CardType.Normal, CardType.Effect, CardType.Fusion, CardType.Ritual,
-                CardType.Synchro, CardType.Pendulum, CardType.Xyz, CardType.Spirit, CardType.Union,
-                CardType.Dual, CardType.Tuner, CardType.Flip, CardType.Toon, CardType.Token
+                                                            CardType.Synchro, CardType.Pendulum, CardType.Xyz, CardType.Spirit, CardType.Union,
+                                                            CardType.Dual, CardType.Tuner, CardType.Flip, CardType.Toon, CardType.Token
         });
         initTypeSpinners(typeSTSpinner, new CardType[]{CardType.None, CardType.Normal, CardType.QuickPlay,
-                CardType.Continuous, CardType.Equip, CardType.Field, CardType.Counter
+                                                       CardType.Continuous, CardType.Equip, CardType.Field, CardType.Counter
         });
         initLevelSpinners(levelSpinner);
         initPscaleSpinners(pScale);
@@ -193,13 +193,22 @@ public class CardSearcher implements View.OnClickListener {
         List<SimpleSpinnerItem> items = new ArrayList<>();
         List<Integer> ids = mLimitManager.getLists();
         items.add(new SimpleSpinnerItem(0, getString(R.string.label_limitlist)));
+        int index = -1;
+        int i = 0;
         for (Integer id : ids) {
             LimitList list = mLimitManager.getLimitFromIndex(id);
+            if (dataLoader != null && list == dataLoader.getLimitList()) {
+                index = i;
+            }
             items.add(new SimpleSpinnerItem(id, list.getName()));
+            i++;
         }
         SimpleSpinnerAdapter adapter = new SimpleSpinnerAdapter(mContext);
         adapter.set(items);
         spinner.setAdapter(adapter);
+        if (index >= 0) {
+            spinner.setSelection(index);
+        }
     }
 
     private void initPscaleSpinners(Spinner spinner) {

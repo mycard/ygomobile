@@ -131,6 +131,11 @@ public class CardLoader implements ICardLoader {
         mCallBack = callBack;
     }
 
+    @Override
+    public LimitList getLimitList() {
+        return mLimitList;
+    }
+
     public void loadData() {
         loadData(defSQL, 0, mLimitList);
     }

@@ -218,6 +218,7 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
     }
 
     public void unSort() {
+        if(mMainCount==0)return;
         for (int i = 0; i < Constants.UNSORT_TIMES; i++) {
             int index1 = mRandom.nextInt(mMainCount);
             int index2 = mRandom.nextInt(mMainCount);
