@@ -26,7 +26,7 @@ class DeckDrager {
 
     private int mLast = -1;
     private int count = 0;
-    private int MAX = 15;
+    private int MAX = 13;
 
     public void onDragStart() {
         mLast = -1;

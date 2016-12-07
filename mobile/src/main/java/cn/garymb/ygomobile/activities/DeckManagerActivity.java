@@ -148,7 +148,11 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
     public void onAdd(int pos) {
         CardInfo cardInfo = mCardListAdapater.getItem(pos);
         if (cardInfo != null) {
-            addMainCard(cardInfo);
+            if(mDeckAdapater.getMainCount()>=Constants.DECK_MAIN_MAX){
+                addSideCard(cardInfo);
+            }else {
+                addMainCard(cardInfo);
+            }
         }
     }
 
@@ -236,14 +240,7 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
 
                 @Override
                 public void onAddSideCard(CardInfo cardInfo) {
-                    if (checkLimit(cardInfo)) {
-                        boolean rs = mDeckAdapater.AddCard(cardInfo, DeckItemType.SideCard);
-                        if (rs) {
-                            Toast.makeText(DeckManagerActivity.this, R.string.add_card_tip_ok, Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(DeckManagerActivity.this, R.string.add_card_tip_fail, Toast.LENGTH_SHORT).show();
-                        }
-                    }
+                    addSideCard(cardInfo);
                 }
 
                 @Override
@@ -251,6 +248,17 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
                     addMainCard(cardInfo);
                 }
             });
+        }
+    }
+
+    private void addSideCard(CardInfo cardInfo){
+        if (checkLimit(cardInfo)) {
+            boolean rs = mDeckAdapater.AddCard(cardInfo, DeckItemType.SideCard);
+            if (rs) {
+                Toast.makeText(DeckManagerActivity.this, R.string.add_card_tip_ok, Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(DeckManagerActivity.this, R.string.add_card_tip_fail, Toast.LENGTH_SHORT).show();
+            }
         }
     }
 

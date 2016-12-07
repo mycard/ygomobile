@@ -113,19 +113,19 @@ public class DeckItemTouchHelper extends ItemTouchHelper.Callback {
         RecyclerView.ViewHolder viewHolder = super.chooseDropTarget(selected, dropTargets, curX, curY);
         if (viewHolder == null) {
             if (dropTargets != null) {
-                if (dropTargets.size() >= 1) {
+                if (dropTargets.size() == 1) {
                     RecyclerView.ViewHolder tmp = dropTargets.get(0);
                     if (tmp.getAdapterPosition() == DeckItem.HeadView) {
                         return tmp;
-                    }else if(tmp.getAdapterPosition()==DeckItem.MainLabel){
-                        return deckAdapater.getHeadHolder();
+//                    }else if(tmp.getAdapterPosition()==DeckItem.MainLabel){
+//                        return deckAdapater.getHeadHolder();
                     }
                 }
             }
-        }else if(viewHolder.getAdapterPosition()==DeckItem.MainLabel){
-            if(deckAdapater.getHeadHolder()!=null){
-                return deckAdapater.getHeadHolder();
-            }
+//        }else if(viewHolder.getAdapterPosition()==DeckItem.MainLabel){
+//            if(deckAdapater.getHeadHolder()!=null){
+//                return deckAdapater.getHeadHolder();
+//            }
         }
         return viewHolder;
     }
