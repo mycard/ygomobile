@@ -85,15 +85,24 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
         setLimitList(mLimitManager.getCount() > 0 ? mLimitManager.getLimit(0) : null);
         isLoad = true;
         File file = new File(mSettings.getResourcePath(), Constants.CORE_DECK_PATH + "/" + mSettings.getLastDeck() + Constants.YDK_FILE_EX);
+        if (!file.exists()) {
+            //当默认卡组不存在的时候
+            File[] files = getYdkFiles();
+            if (files != null && files.length > 0) {
+                file = files[0];
+            }
+        }
         loadDeck(file);
     }
 
 
     @Override
-    public void onDragStart(boolean isdelete) {
-        if (isdelete) {
-            getSupportActionBar().hide();
-        }
+    public void onDragStart() {
+    }
+
+    @Override
+    public void onDragDelete() {
+        getSupportActionBar().hide();
     }
 
     @Override
@@ -118,13 +127,13 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
                 return new DeckInfo();
             }
         }).done((rs) -> {
-            setFile(file);
+            setCurYdkFile(file);
             mDeckAdapater.setDeck(rs);
             mDeckAdapater.notifyDataSetChanged();
         });
     }
 
-    private void setFile(File file) {
+    private void setCurYdkFile(File file) {
         mYdkFile = file;
         if (file != null && file.exists()) {
             String name = IOUtils.tirmName(file.getName(), Constants.YDK_FILE_EX);
@@ -364,14 +373,27 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
             case R.id.action_rename:
                 inputDeckName();
                 break;
-            case R.id.action_deck_new:
-                loadDeck(null);
-                break;
+            case R.id.action_deck_new: {
+                setCurYdkFile(null);
+                DialogPlus builder = new DialogPlus(this);
+                builder.setTitle(R.string.question);
+                builder.setMessage(R.string.question_keep_cur_deck);
+                builder.setMessageGravity(Gravity.CLIP_HORIZONTAL);
+                builder.setButtonListener((dlg, rs) -> {
+                    dlg.dismiss();
+                });
+                builder.setOnCancelListener((dlg) -> {
+                    dlg.dismiss();
+                    loadDeck(null);
+                });
+                builder.show();
+            }
+            break;
             case R.id.action_delete_deck: {
-//                AlertDialog.Builder builder = new AlertDialog.Builder(this);
                 DialogPlus builder = new DialogPlus(this);
                 builder.setTitle(R.string.question);
                 builder.setMessage(R.string.question_delete_deck);
+                builder.setMessageGravity(Gravity.CLIP_HORIZONTAL);
                 builder.setButtonListener((dlg, rs) -> {
                     if (mYdkFile != null && mYdkFile.exists()) {
                         mYdkFile.delete();
@@ -543,7 +565,7 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
                     dlg.dismiss();
                     mYdkFile = ydk;
                     save();
-                    setFile(mYdkFile);
+                    setCurYdkFile(mYdkFile);
                 }
             } else {
                 dlg.dismiss();

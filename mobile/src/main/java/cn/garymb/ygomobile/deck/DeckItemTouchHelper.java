@@ -8,6 +8,8 @@ import android.util.Log;
 
 import java.util.List;
 
+import cn.garymb.ygomobile.Constants;
+
 import static android.support.v7.widget.helper.ItemTouchHelper.ACTION_STATE_DRAG;
 import static android.support.v7.widget.helper.ItemTouchHelper.ACTION_STATE_IDLE;
 import static android.support.v7.widget.helper.ItemTouchHelper.ACTION_STATE_SWIPE;
@@ -17,8 +19,8 @@ public class DeckItemTouchHelper extends ItemTouchHelper.Callback {
 
     //    private RecyclerView.ViewHolder NULL;
     public interface CallBack {
-        void onDragStart(boolean isdelete);
-
+        void onDragStart();
+        void onDragDelete();
         void onDragEnd();
     }
 
@@ -36,10 +38,6 @@ public class DeckItemTouchHelper extends ItemTouchHelper.Callback {
         mHandler = new Handler(deckAdapater.getContext().getMainLooper());
     }
 
-    public boolean isDeleteMode() {
-        return isDeleteMode;
-    }
-
     private boolean isDeleteMode;
 
     public void setDeleteMode(boolean deleteMode) {
@@ -54,11 +52,6 @@ public class DeckItemTouchHelper extends ItemTouchHelper.Callback {
             return id == DeckItem.HeadView;
         }
         return id != DeckItem.HeadView;
-    }
-
-    @Override
-    public int getBoundingBoxMargin() {
-        return -1;
     }
 
     /**
@@ -101,7 +94,7 @@ public class DeckItemTouchHelper extends ItemTouchHelper.Callback {
             mHandler.postDelayed(enterDelete, 1000);
             mDeckDrager.onDragStart();
             if (mCallBack != null) {
-                mCallBack.onDragStart(isDeleteMode);
+                mCallBack.onDragStart();
             }
         } else if (actionState == ACTION_STATE_IDLE) {
             mDeckDrager.onDragEnd();
@@ -117,11 +110,11 @@ public class DeckItemTouchHelper extends ItemTouchHelper.Callback {
     private Runnable enterDelete = new Runnable() {
         @Override
         public void run() {
-            if (System.currentTimeMillis() - lasttime >= 800) {
+            if (System.currentTimeMillis() - lasttime >= Constants.LONG_PRESS_DRAG) {
                 Log.i("drag", "enter delete");
                 isDeleteMode = true;
                 if (mCallBack != null) {
-                    mCallBack.onDragStart(isDeleteMode);
+                    mCallBack.onDragDelete();
                 }
             } else {
                 Log.w("drag", "no enter delete " + (System.currentTimeMillis() - lasttime));

@@ -103,4 +103,6 @@ public interface Constants {
      * 如果是双击显示，则单击拖拽
      */
     boolean DECK_SINGLE_PRESS_DRAG = true;
+
+    long LONG_PRESS_DRAG = 800;
 }

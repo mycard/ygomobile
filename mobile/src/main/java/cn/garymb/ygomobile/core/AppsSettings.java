@@ -3,6 +3,7 @@ package cn.garymb.ygomobile.core;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Environment;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 
@@ -317,6 +318,10 @@ public class AppsSettings {
      * 最后卡组名
      */
     public void setLastDeck(String name) {
+        if(TextUtils.equals(name, getCurLastDeck())){
+            //一样
+            return;
+        }
         mSharedPreferences.putString(Constants.PREF_LAST_YDK, name);
     }
 
@@ -326,7 +331,9 @@ public class AppsSettings {
     public String getLastDeck() {
         return mSharedPreferences.getString(Constants.PREF_LAST_YDK, Constants.PREF_DEF_LAST_YDK);
     }
-
+    public String getCurLastDeck() {
+        return mSharedPreferences.getString(Constants.PREF_LAST_YDK, null);
+    }
     public List<String> getLastRoomList() {
         List<String> names = new ArrayList<>();
         String json = mSharedPreferences.getString(Constants.PREF_LAST_ROOM_LIST, null);
