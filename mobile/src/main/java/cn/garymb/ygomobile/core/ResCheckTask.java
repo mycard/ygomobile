@@ -135,20 +135,20 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
             if (needsUpdate) {
                 setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.tip_new_deck)));
                 IOUtils.copyFilesFromAssets(mContext, getDatapath(Constants.CORE_DECK_PATH),
-                        new File(resPath, Constants.CORE_DECK_PATH).getAbsolutePath(), needsUpdate);
+                        new File(resPath, Constants.CORE_DECK_PATH).getAbsolutePath(), false);
             }
             if (needsUpdate) {
                 setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.game_skins)));
                 IOUtils.copyFilesFromAssets(mContext, getDatapath(Constants.CORE_SKIN_PATH),
-                        mSettings.getCoreSkinPath(), needsUpdate, mSettings.isPendulumScale());
+                        mSettings.getCoreSkinPath(), false, mSettings.isPendulumScale());
             }
             setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.font_files)));
             IOUtils.copyFilesFromAssets(mContext, getDatapath(Constants.FONT_DIRECTORY),
-                    mSettings.getFontDirPath(), needsUpdate);
+                    mSettings.getFontDirPath(), false);
             if (needsUpdate) {
                 setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.single_lua)));
                 IOUtils.copyFilesFromAssets(mContext, getDatapath(Constants.CORE_SINGLE_PATH),
-                        new File(resPath, Constants.CORE_SINGLE_PATH).getAbsolutePath(), needsUpdate);
+                        new File(resPath, Constants.CORE_SINGLE_PATH).getAbsolutePath(), false);
             }
             if (IOUtils.hasAssets(mContext, getDatapath(Constants.CORE_SCRIPTS_ZIP))) {
                 setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.scripts)));
