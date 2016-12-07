@@ -1,6 +1,7 @@
 package cn.garymb.ygomobile.activities;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,12 +18,12 @@ import android.widget.Toast;
 
 import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.adapters.ServerListAdapater;
+import cn.garymb.ygomobile.core.AppsSettings;
 import cn.garymb.ygomobile.core.ResCheckTask;
 import cn.garymb.ygomobile.core.YGOStarter;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.plus.DialogPlus;
 import cn.garymb.ygomobile.plus.VUiKit;
-import cn.garymb.ygomobile.core.AppsSettings;
 import cn.garymb.ygomobile.settings.SettingsActivity;
 
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -69,6 +70,12 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         YGOStarter.onCreated(this);
         //加载服务器列表
         mServerListAdapater.loadData();
+
+        navigationView.getHeaderView(0).findViewById(R.id.nav_donation).setOnClickListener((v)->{
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.ALIPAY_URL));
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        });
     }
 
     @Override

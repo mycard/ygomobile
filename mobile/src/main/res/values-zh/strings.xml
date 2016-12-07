@@ -152,4 +152,5 @@
     <string name="donation">捐助</string>
     <string name="refresh">刷新</string>
     <string name="quit_deck_tip">退出卡组编辑?</string>
+    <string name="deck_delete_text">拖到这里删除</string>
 </resources>

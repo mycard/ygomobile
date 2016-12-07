@@ -161,4 +161,5 @@
     <string name="all">All</string>
     <string name="refresh">Refresh</string>
     <string name="quit_deck_tip">Quit deck editor?</string>
+    <string name="deck_delete_text">Drag here to delete</string>
 </resources>

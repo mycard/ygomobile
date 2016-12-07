@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="@dimen/nav_head_height"
-              android:background="@color/colorPrimary"
+              android:background="@color/colorPrimaryDark"
               android:paddingTop="24dp"
               android:orientation="vertical">
 
@@ -15,6 +15,7 @@
         <ImageView
             android:layout_width="@dimen/nav_icon_width"
             android:layout_height="@dimen/nav_icon_height"
+            android:layout_marginTop="8dp"
             android:layout_marginLeft="4dp"
             android:src="@drawable/ic_icon"/>
 
@@ -38,6 +39,16 @@
                 android:text="@string/settings_author"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 android:textColor="@color/white"/>
+            <Button
+                android:id="@+id/nav_donation"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:background="@drawable/button_bg"
+                android:layout_margin="4dp"
+                android:textColor="@color/white"
+                android:layout_gravity="right"
+                android:text="@string/donation"/>
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

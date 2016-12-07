@@ -97,7 +97,7 @@
                     android:background="@android:color/transparent"
                     android:paddingRight="4dp"
                     android:visibility="gone"
-                    app:srcCompat="@drawable/ic_add"/>
+                    app:srcCompat="@drawable/ic_add_color"/>
 
                 <TextView
                     android:id="@+id/card_code"

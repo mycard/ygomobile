@@ -42,8 +42,8 @@ android {
         exclude 'META-INF/LICENSE'
     }
     lintOptions {
-        checkReleaseBuilds false
-        abortOnError false
+//        checkReleaseBuilds false
+//        abortOnError false
     }
 }
 
