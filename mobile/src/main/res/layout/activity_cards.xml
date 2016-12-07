@@ -5,58 +5,57 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clipToPadding="true"
-    android:fitsSystemWindows="true"
-    >
+    android:fitsSystemWindows="true">
 
-
-    <android.support.v4.widget.DrawerLayout
-        android:id="@+id/drawer_layout"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:openDrawer="left">
+        android:orientation="vertical">
 
-        <LinearLayout
-            android:id="@+id/layout_main"
+        <include
+            layout="@layout/content_toolbar"/>
+
+        <android.support.v4.widget.DrawerLayout
+            android:id="@+id/drawer_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingTop="?attr/actionBarSize"
-            android:orientation="vertical">
+            tools:openDrawer="left">
 
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:paddingTop="?attr/actionBarSize"
-            android:layout_gravity="left"
-            android:background="@color/white"
-            android:orientation="vertical">
-
-            <ListView
-                android:id="@+id/list_cards"
+            <LinearLayout
+                android:id="@+id/layout_main"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:divider="@android:color/transparent"
-                android:dividerHeight="4dp"
-                android:padding="5dp"
-                android:scrollbars="none"/>
-        </LinearLayout>
+                android:orientation="vertical">
+            </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingTop="?attr/actionBarSize"
-            android:layout_gravity="right"
-            android:background="@color/white"
-            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="left"
+                android:background="@color/white"
+                android:orientation="vertical">
 
-            <include
-                android:id="@+id/nav_view_list"
-                layout="@layout/nav_card_search"/>
-        </LinearLayout>
+                <ListView
+                    android:id="@+id/list_cards"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:divider="@android:color/transparent"
+                    android:dividerHeight="4dp"
+                    android:padding="5dp"
+                    android:scrollbars="none"/>
+            </LinearLayout>
 
-    </android.support.v4.widget.DrawerLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="right"
+                android:background="@color/white"
+                android:orientation="vertical">
 
-    <include
-        layout="@layout/content_toolbar"/>
+                <include
+                    android:id="@+id/nav_view_list"
+                    layout="@layout/nav_card_search"/>
+            </LinearLayout>
+        </android.support.v4.widget.DrawerLayout>
+    </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>

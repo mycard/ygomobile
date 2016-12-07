@@ -290,6 +290,9 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.action_refresh:
+                mDeckAdapater.notifyDataSetChanged();
+                break;
             case R.id.action_search:
                 //弹条件对话框
                 showSearch(true);

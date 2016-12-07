@@ -5,8 +5,11 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -29,7 +32,7 @@ public class DialogPlus {
     public DialogPlus(Context context) {
         this.context = context;
         mBuilder = new AlertDialog.Builder(context);
-        mMaxHeight = (int)(context.getResources().getDisplayMetrics().heightPixels * 0.7f);
+        mMaxHeight = (int) (context.getResources().getDisplayMetrics().heightPixels * 0.7f);
         mLayoutInflater = LayoutInflater.from(context);
         mView = mLayoutInflater.inflate(R.layout.dialog_base, null);
         mBuilder.setView(mView);
@@ -155,4 +158,21 @@ public class DialogPlus {
         return (T) mContentView.findViewById(id);
     }
 
+    public DialogPlus loadUrl(String url) {
+        FrameLayout frameLayout = new FrameLayout(context);
+        WebView webView = new WebViewPlus(context);
+        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT);
+        layoutParams.topMargin = VUiKit.dpToPx(10);
+        layoutParams.leftMargin = VUiKit.dpToPx(10);
+        layoutParams.rightMargin = VUiKit.dpToPx(10);
+        layoutParams.gravity = Gravity.CENTER_HORIZONTAL;
+        frameLayout.addView(webView, layoutParams);
+        setView(frameLayout);
+        setButtonListener((dlg, v) -> {
+            dlg.dismiss();
+        });
+        webView.loadUrl(url);
+        return this;
+    }
 }

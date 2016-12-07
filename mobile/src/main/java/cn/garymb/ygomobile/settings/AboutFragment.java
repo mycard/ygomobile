@@ -15,6 +15,7 @@ import android.widget.FrameLayout;
 
 import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.lite.R;
+import cn.garymb.ygomobile.plus.DialogPlus;
 import cn.garymb.ygomobile.plus.PreferenceFragmentPlus;
 import cn.garymb.ygomobile.plus.VUiKit;
 import cn.garymb.ygomobile.plus.WebViewPlus;
@@ -45,7 +46,10 @@ public class AboutFragment extends PreferenceFragmentPlus {
     public boolean onPreferenceClick(Preference preference) {
         String key = preference.getKey();
         if ("pref_key_change_log".equals(key)) {
-            showDialog(getString(R.string.settings_about_change_log), "file:///android_asset/changelog.html");
+            new DialogPlus(getActivity())
+                    .setTitle(getString(R.string.settings_about_change_log))
+                    .loadUrl("file:///android_asset/changelog.html")
+                    .show();
         } else if ("pref_key_open_alipay".equals(key)) {
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.ALIPAY_URL));
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -55,23 +59,9 @@ public class AboutFragment extends PreferenceFragmentPlus {
     }
 
     private void showDialog(String title, String url) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle(title);
-        FrameLayout frameLayout = new FrameLayout(getActivity());
-        WebView webView = new WebViewPlus(getActivity());
-        builder.setTitle(title);
-        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT);
-        layoutParams.topMargin = VUiKit.dpToPx(10);
-        layoutParams.leftMargin = VUiKit.dpToPx(10);
-        layoutParams.rightMargin = VUiKit.dpToPx(10);
-        layoutParams.gravity = Gravity.CENTER_HORIZONTAL;
-        frameLayout.addView(webView, layoutParams);
-        builder.setView(frameLayout);
-        builder.setNegativeButton(android.R.string.ok, (dlg, s) -> {
-            dlg.dismiss();
-        });
-        builder.show();
-        webView.loadUrl(url);
+        new DialogPlus(getActivity())
+                .setTitle(title)
+                .loadUrl(url)
+                .show();
     }
 }

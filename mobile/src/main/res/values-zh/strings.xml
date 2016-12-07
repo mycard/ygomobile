@@ -150,4 +150,6 @@
     <string name="label_pendulum">灵摆刻度</string>
     <string name="all">全部</string>
     <string name="settings_card_search">卡片搜索界面</string>
+    <string name="donation">捐助</string>
+    <string name="refresh">刷新</string>
 </resources>

@@ -3,12 +3,13 @@
               android:layout_width="match_parent"
               android:layout_height="@dimen/nav_head_height"
               android:background="@color/colorPrimary"
+              android:paddingTop="24dp"
               android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="?attr/actionBarSize"
+        android:layout_marginTop="12dp"
         android:orientation="horizontal">
 
         <ImageView

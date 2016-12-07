@@ -26,18 +26,18 @@ public class DeckItem {
         if (SeacondIsSide) {
             SideLabel = MainEnd + 1;
             SideStart = SideLabel + 1;
-            SideEnd = SideStart + Constants.DECK_EXTRA_COUNT - 1;
+            SideEnd = SideStart + Constants.DECK_SIDE_COUNT - 1;
             ExtraLabel = SideEnd + 1;
             ExtraStart = ExtraLabel + 1;
-            ExtraEnd = ExtraStart + Constants.DECK_SIDE_COUNT - 1;
+            ExtraEnd = ExtraStart + Constants.DECK_EXTRA_COUNT - 1;
         } else {
             ExtraLabel = MainEnd + 1;
             ExtraStart = ExtraLabel + 1;
-            ExtraEnd = ExtraStart + Constants.DECK_SIDE_COUNT - 1;
+            ExtraEnd = ExtraStart + Constants.DECK_EXTRA_COUNT - 1;
 
             SideLabel = ExtraEnd + 1;
             SideStart = SideLabel + 1;
-            SideEnd = SideStart + Constants.DECK_EXTRA_COUNT - 1;
+            SideEnd = SideStart + Constants.DECK_SIDE_COUNT - 1;
         }
     }
 

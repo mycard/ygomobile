@@ -67,7 +67,7 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
         super.onPostExecute(result);
         dialog.dismiss();
         if (mListener != null) {
-            mListener.onResCheckFinished(result);
+            mListener.onResCheckFinished(result,isNewVersion);
         }
     }
 
@@ -274,7 +274,7 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
     }
 
     public interface ResCheckListener {
-        void onResCheckFinished(int result);
+        void onResCheckFinished(int result,boolean isNewVersion);
     }
 
 }

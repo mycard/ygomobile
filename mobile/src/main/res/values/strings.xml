@@ -164,4 +164,5 @@
         <item>result in left</item>
         <item>result in center</item>
     </string-array>
+    <string name="refresh">Refresh</string>
 </resources>

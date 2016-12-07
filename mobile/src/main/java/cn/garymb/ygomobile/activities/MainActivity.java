@@ -53,11 +53,17 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         mListView.setOnItemClickListener(mServerListAdapater);
         mListView.setOnItemLongClickListener(mServerListAdapater);
         //资源复制
-        checkResourceDownload((error) -> {
+        checkResourceDownload((error, isNew) -> {
             if (error < 0) {
                 enableStart = false;
             } else {
                 enableStart = true;
+            }
+            if(isNew){
+                new DialogPlus(this)
+                        .setTitle(getString(R.string.settings_about_change_log))
+                        .loadUrl("file:///android_asset/changelog.html")
+                        .show();
             }
         });
         YGOStarter.onCreated(this);

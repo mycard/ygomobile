@@ -333,7 +333,7 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
         notifyItemRangeChanged(DeckItem.SideStart, DeckItem.SideStart + side);
     }
 
-    public void addCount(CardInfo cardInfo, DeckItemType type) {
+    private void addCount(CardInfo cardInfo, DeckItemType type) {
         if (cardInfo == null) return;
         Integer i = mCount.get(Long.valueOf(cardInfo.Code));
         if (i == null) {
@@ -471,7 +471,7 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
         mSideSpellCount = 0;
         mSideTrapCount = 0;
         mItems.clear();
-        mItems.addAll(DeckItemUtils.makeItems(deck, this));
+        DeckItemUtils.makeItems(deck, this);
     }
 
     @Override
@@ -496,6 +496,11 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
         return getString(R.string.deck_side, mSideCount, mSideMonsterCount, mSideSpellCount, mSideTrapCount);
     }
 
+    public void addItem(DeckItem deckItem) {
+        addCount(deckItem.getCardInfo(), deckItem.getType());
+        mItems.add(deckItem);
+    }
+
     public void addItem(int pos, DeckItem deckItem) {
         if (deckItem.getCardInfo() != null) {
             if (pos >= DeckItem.MainStart && pos <= DeckItem.MainEnd) {
@@ -506,13 +511,18 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
                 deckItem.setType(DeckItemType.SideCard);
             }
         }
-        addCount(deckItem.getCardInfo(), deckItem.getType());
-        mItems.add(pos, deckItem);
+        synchronized (this) {
+            addCount(deckItem.getCardInfo(), deckItem.getType());
+            mItems.add(pos, deckItem);
+        }
     }
 
     public DeckItem removeItem(int pos) {
-        DeckItem deckItem = mItems.remove(pos);
-        removeCount(deckItem.getCardInfo(), deckItem.getType());
+        DeckItem deckItem = null;
+        synchronized (this) {
+            deckItem = mItems.remove(pos);
+            removeCount(deckItem.getCardInfo(), deckItem.getType());
+        }
         return deckItem;
     }
 
