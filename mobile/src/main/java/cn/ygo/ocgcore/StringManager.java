@@ -22,7 +22,7 @@ public class StringManager {
     private String PRE_SYSTEM = "!system";
     private String PRE_SETNAME = "!setname";
     private final Map<Integer, String> mSystem = new HashMap<>();
-    private final Map<Long, CardSet> mCardSets = new HashMap<>();
+    private final List<CardSet> mCardSets = new ArrayList<>();
     //    private final Map<Long, String> mSetname = new HashMap<>();
     private static StringManager sStringManager = new StringManager();
     private volatile boolean isLoad = false;
@@ -74,7 +74,14 @@ public class StringManager {
 //                        System.out.println(Arrays.toString(words));
                         //setcode
                         long id = toNumber(words[1]);
-                        mCardSets.put(id, new CardSet(id, words[2]));
+                        CardSet cardSet = new CardSet(id, words[2]);
+                        int i = mCardSets.indexOf(cardSet);
+                        if (i>=0){
+                            CardSet cardSet1 = mCardSets.get(i);
+                            cardSet1.setName(cardSet.getName());
+                        }else {
+                            mCardSets.add(cardSet);
+                        }
                     } else {
                         mSystem.put((int) toNumber(words[1]), words[2]);
                     }
@@ -86,6 +93,7 @@ public class StringManager {
             IOUtils.close(inputStream);
             IOUtils.close(in);
         }
+        Collections.sort(mCardSets, CardSet.NAME_ASC);
         isLoad = true;
         return true;
     }
@@ -95,16 +103,14 @@ public class StringManager {
     }
 
     public List<CardSet> getCardSets() {
-        List<CardSet> sets=new ArrayList<>();
-        sets.addAll(mCardSets.values());
-        Collections.sort(sets, CardSet.NAME_ASC);
-        return sets;
+        return mCardSets;
     }
 
     public String getSetName(long key) {
-        CardSet set = mCardSets.get(key);
-        if (set != null) {
-            set.getName();
+        CardSet cardSet=new CardSet(key, null);
+        int i = mCardSets.indexOf(cardSet);
+        if(i>=0){
+            return mCardSets.get(i).getName();
         }
         return String.format("0x%x", key);
     }
