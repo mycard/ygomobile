@@ -26,6 +26,7 @@ import java.util.Locale;
 import java.util.Map;
 
 import cn.garymb.ygomobile.Constants;
+import cn.garymb.ygomobile.adapters.CardListAdapater;
 import cn.garymb.ygomobile.bean.CardInfo;
 import cn.garymb.ygomobile.core.CardDetail;
 import cn.garymb.ygomobile.deck.DeckAdapater;
@@ -48,7 +49,8 @@ import cn.ygo.ocgcore.LimitList;
 
 import static cn.garymb.ygomobile.Constants.YDK_FILE_EX;
 
-public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerViewItemListener.OnItemListener {
+public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerViewItemListener.OnItemListener,
+        CardListAdapater.OnAddCardListener {
     private RecyclerView mRecyclerView;
     private DeckAdapater mDeckAdapater;
     private AppsSettings mSettings = AppsSettings.get();
@@ -71,7 +73,10 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
             hideDrawers();
         }
         mRecyclerView.addOnItemTouchListener(new RecyclerViewItemListener(mRecyclerView, this));
+        mCardListAdapater.setShowAdd(true);
+        mCardListAdapater.setOnAddCardListener(this);
     }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -107,7 +112,8 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
             mDeckAdapater.notifyDataSetChanged();
         });
     }
-    private void setFile(File file){
+
+    private void setFile(File file) {
         mYdkFile = file;
         if (file != null && file.exists()) {
             String name = IOUtils.tirmName(file.getName(), Constants.YDK_FILE_EX);
@@ -120,7 +126,7 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
 
     @Override
     public void onSearchStart(LimitList limitList) {
-
+        hideDrawers();
     }
 
     @Override
@@ -129,6 +135,14 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
             mRecyclerView = new RecyclerView(this);
         }
         return mRecyclerView;
+    }
+
+    @Override
+    public void onAdd(int pos) {
+        CardInfo cardInfo = mCardListAdapater.getItem(pos);
+        if (cardInfo != null) {
+            addMainCard(cardInfo);
+        }
     }
 
     @Override
@@ -227,21 +241,25 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
 
                 @Override
                 public void onAddMainCard(CardInfo cardInfo) {
-                    if (checkLimit(cardInfo)) {
-                        boolean rs;
-                        if (cardInfo.isExtraCard()) {
-                            rs = mDeckAdapater.AddCard(cardInfo, DeckItemType.ExtraCard);
-                        } else {
-                            rs = mDeckAdapater.AddCard(cardInfo, DeckItemType.MainCard);
-                        }
-                        if (rs) {
-                            Toast.makeText(DeckManagerActivity.this, R.string.add_card_tip_ok, Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(DeckManagerActivity.this, R.string.add_card_tip_fail, Toast.LENGTH_SHORT).show();
-                        }
-                    }
+                    addMainCard(cardInfo);
                 }
             });
+        }
+    }
+
+    private void addMainCard(CardInfo cardInfo) {
+        if (checkLimit(cardInfo)) {
+            boolean rs;
+            if (cardInfo.isExtraCard()) {
+                rs = mDeckAdapater.AddCard(cardInfo, DeckItemType.ExtraCard);
+            } else {
+                rs = mDeckAdapater.AddCard(cardInfo, DeckItemType.MainCard);
+            }
+            if (rs) {
+                Toast.makeText(DeckManagerActivity.this, R.string.add_card_tip_ok, Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(DeckManagerActivity.this, R.string.add_card_tip_fail, Toast.LENGTH_SHORT).show();
+            }
         }
     }
 

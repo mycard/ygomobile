@@ -83,22 +83,37 @@
                 android:layout_height="1dp"
                 android:background="@color/gray"/>
 
+
             <LinearLayout
                 android:id="@+id/layout_atkdef"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
-                android:layout_margin="4dp"
+                android:padding="4dp"
                 android:orientation="horizontal">
 
+                <ImageButton
+                    android:id="@+id/card_add"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical"
+                    android:paddingRight="4dp"
+                    android:background="@android:color/transparent"
+                    app:srcCompat="@drawable/ic_add"
+                    android:visibility="invisible"/>
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"
+                    />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:maxLines="1"
                     android:singleLine="true"
                     android:text="ATK/"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:textSize="14sp"/>
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
 
                 <TextView
                     android:id="@+id/card_atk"
@@ -108,13 +123,11 @@
                     android:maxLines="1"
                     android:singleLine="true"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:textSize="14sp"
                     tools:text="2500"/>
 
                 <View
                     android:layout_width="10dp"
-                    android:layout_height="1dp"
-                    android:layout_weight="1"/>
+                    android:layout_height="1dp"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -122,8 +135,7 @@
                     android:maxLines="1"
                     android:singleLine="true"
                     android:text="DEF/"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:textSize="14sp"/>
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
 
                 <TextView
                     android:id="@+id/card_def"
@@ -133,7 +145,6 @@
                     android:maxLines="1"
                     android:singleLine="true"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:textSize="14sp"
                     tools:text="2500"/>
             </LinearLayout>
         </LinearLayout>

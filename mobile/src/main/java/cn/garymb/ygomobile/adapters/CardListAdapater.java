@@ -22,10 +22,24 @@ import cn.ygo.ocgcore.enums.LimitType;
 public class CardListAdapater extends BaseAdapterPlus<CardInfo> {
     private StringManager mStringManager;
     private ImageTop mImageTop;
+    private boolean showAdd;
+    private OnAddCardListener mOnAddCardListener;
+
+    public interface OnAddCardListener {
+        void onAdd(int pos);
+    }
 
     public CardListAdapater(Context context) {
         super(context);
         mStringManager = StringManager.get();
+    }
+
+    public void setShowAdd(boolean showAdd) {
+        this.showAdd = showAdd;
+    }
+
+    public void setOnAddCardListener(OnAddCardListener onAddCardListener) {
+        mOnAddCardListener = onAddCardListener;
     }
 
     @Override
@@ -38,6 +52,7 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> {
     @Override
     protected void attach(View view, CardInfo item, int position) {
         ViewHolder holder = (ViewHolder) view.getTag(view.getId());
+        holder.setPosition(position);
 //        if (!isScroll) {
         ImageLoader.get().bindImage(context, holder.cardImage, item.Code);
 //        }
@@ -84,7 +99,18 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> {
         TextView cardDef;
         ImageView rightImage;
         View layout_atkdef;
+        View addView;
         View view_bar;
+        private int position;
+
+        void setPosition(int position){
+            this.position = position;
+            addView.setOnClickListener((v) -> {
+                if (mOnAddCardListener != null) {
+                    mOnAddCardListener.onAdd(position);
+                }
+            });
+        }
 
         ViewHolder(View view) {
             super(view);
@@ -98,6 +124,12 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> {
             layout_atkdef = findViewById(R.id.layout_atkdef);
             view_bar = findViewById(R.id.view_bar);
             rightImage = findViewById(R.id.right_top);
+            addView = findViewById(R.id.card_add);
+            if (showAdd) {
+                addView.setVisibility(View.VISIBLE);
+            } else {
+                addView.setVisibility(View.GONE);
+            }
             File outFile = new File(AppsSettings.get().getCoreSkinPath(), Constants.UNKNOWN_IMAGE);
             ImageLoader.get().bind(context, outFile, cardImage, outFile.getName().endsWith(Constants.BPG), 0, null);
         }
