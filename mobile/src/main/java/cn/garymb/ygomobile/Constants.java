@@ -37,10 +37,6 @@ public interface Constants {
     int PREF_DECK_SHOW_CARD_LONG_PRESS = 1;
     int PREF_DECK_SHOW_CARD_DOUBLE = 0;
     int PREF_DEF_DECK_SHOW_CARD = PREF_DECK_SHOW_CARD_DOUBLE;
-    String PREF_SHOW_CARD_SEARCH = "pref_key_card_search";
-    int PREF_CARD_SEARCH1= 0;
-    int PREF_CARD_SEARCH2 = 1;
-    int PREF_DEF_CARD_SEARCH = PREF_CARD_SEARCH2;
 
     String PREF_LAST_ROOM_LIST = "pref_key_lastroom_list";
 

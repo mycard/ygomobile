@@ -41,7 +41,7 @@ abstract class BaseCardsAcitivity extends BaseActivity implements CardLoader.Cal
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_cards);
+        setContentView(R.layout.activity_deck_cards);
         Toolbar toolbar = bind(R.id.toolbar);
         setSupportActionBar(toolbar);
         enableBackHome();

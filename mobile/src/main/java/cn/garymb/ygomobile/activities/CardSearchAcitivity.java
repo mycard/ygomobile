@@ -31,7 +31,7 @@ import cn.ygo.ocgcore.LimitList;
 import cn.ygo.ocgcore.LimitManager;
 import cn.ygo.ocgcore.StringManager;
 
-public class CardSearch2Acitivity extends BaseActivity implements CardLoader.CallBack {
+public class CardSearchAcitivity extends BaseActivity implements CardLoader.CallBack {
     protected DrawerLayout mDrawerlayout;
     private ListView mListView;
     protected CardSearcher mCardSelector;
@@ -105,13 +105,13 @@ public class CardSearch2Acitivity extends BaseActivity implements CardLoader.Cal
             public void onScrollStateChanged(AbsListView absListView, int scrollState) {
                 switch (scrollState) {
                     case SCROLL_STATE_IDLE:
-                        Glide.with(CardSearch2Acitivity.this).resumeRequests();
+                        Glide.with(CardSearchAcitivity.this).resumeRequests();
                         break;
                     case SCROLL_STATE_TOUCH_SCROLL:
-                        Glide.with(CardSearch2Acitivity.this).pauseRequests();
+                        Glide.with(CardSearchAcitivity.this).pauseRequests();
                         break;
                     case SCROLL_STATE_FLING:
-                        Glide.with(CardSearch2Acitivity.this).resumeRequests();
+                        Glide.with(CardSearchAcitivity.this).resumeRequests();
                         break;
                 }
             }

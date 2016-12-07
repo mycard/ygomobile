@@ -37,11 +37,6 @@
             android:title="@string/settings_game_sensor_refresh"/>
 
         <ListPreference
-            android:entries="@array/show_card_search_desc"
-            android:entryValues="@array/show_card_search_value"
-            android:key="pref_key_card_search"
-            android:title="@string/settings_card_search"/>
-        <ListPreference
             android:entries="@array/show_card_desc"
             android:entryValues="@array/show_card_value"
             android:key="pref_key_deck_show_card"

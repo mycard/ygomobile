@@ -50,7 +50,7 @@ import cn.ygo.ocgcore.LimitList;
 import static cn.garymb.ygomobile.Constants.YDK_FILE_EX;
 
 public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerViewItemListener.OnItemListener,
-        CardListAdapater.OnAddCardListener {
+        CardListAdapater.OnAddCardListener, DeckItemTouchHelper.CallBack {
     private RecyclerView mRecyclerView;
     private DeckAdapater mDeckAdapater;
     private AppsSettings mSettings = AppsSettings.get();
@@ -61,9 +61,11 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mRecyclerView.setPadding(mRecyclerView.getPaddingLeft(), 0, mRecyclerView.getPaddingRight(), mRecyclerView.getPaddingBottom());
         mRecyclerView.setAdapter((mDeckAdapater = new DeckAdapater(this, mRecyclerView)));
         mRecyclerView.setLayoutManager(new DeckLayoutManager(this, Constants.DECK_WIDTH_COUNT));
         mDeckItemTouchHelper = new DeckItemTouchHelper(mDeckAdapater);
+        mDeckItemTouchHelper.setCallBack(this);
         ItemTouchHelperCompat touchHelper = new ItemTouchHelperCompat(mDeckItemTouchHelper);
         touchHelper.setEnableClickDrag(Constants.DECK_SINGLE_PRESS_DRAG);
         touchHelper.attachToRecyclerView(mRecyclerView);
@@ -87,6 +89,16 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
         isLoad = true;
         File file = new File(mSettings.getResourcePath(), Constants.CORE_DECK_PATH + "/" + mSettings.getLastDeck() + Constants.YDK_FILE_EX);
         loadDeck(file);
+    }
+
+    @Override
+    public void onDragStart() {
+        getSupportActionBar().hide();
+    }
+
+    @Override
+    public void onDragEnd() {
+        getSupportActionBar().show();
     }
 
     private void setLimitList(LimitList limitList) {
@@ -259,6 +271,47 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
                 Toast.makeText(DeckManagerActivity.this, R.string.add_card_tip_fail, Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    private boolean isExit = false;
+//
+//    @Override
+//    public void finish() {
+//        if (!isExit) {
+//            if (mYdkFile != null && mYdkFile.exists()) {
+//                DialogPlus builder = new DialogPlus(this);
+//                builder.setTitle(R.string.question);
+//                builder.setMessage(R.string.quit_deck_tip);
+//                builder.setButtonListener((dlg, s) -> {
+//                    dlg.dismiss();
+//                    isExit = true;
+//                    finish();
+//                });
+//                builder.show();
+//                return;
+//            }
+//        }
+//        super.finish();
+//    }
+
+    @Override
+    public void onBackPressed() {
+        if (!isExit) {
+            if (mYdkFile != null && mYdkFile.exists()) {
+                DialogPlus builder = new DialogPlus(this);
+                builder.setTitle(R.string.question);
+                builder.setMessage(R.string.quit_deck_tip);
+                builder.setMessageGravity(Gravity.CENTER_HORIZONTAL);
+                builder.setButtonListener((dlg, s) -> {
+                    dlg.dismiss();
+                    isExit = true;
+                    finish();
+                });
+                builder.show();
+                return;
+            }
+        }
+        super.onBackPressed();
     }
 
     private boolean checkLimit(CardInfo cardInfo) {

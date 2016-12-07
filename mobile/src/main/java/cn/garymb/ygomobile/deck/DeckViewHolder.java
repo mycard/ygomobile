@@ -15,6 +15,7 @@ import cn.garymb.ygomobile.core.AppsSettings;
 class DeckViewHolder extends RecyclerView.ViewHolder {
     private long mCardType;
     private DeckItemType mItemType;
+
     public DeckViewHolder(View view) {
         super(view);
         this.view = view;
@@ -23,6 +24,7 @@ class DeckViewHolder extends RecyclerView.ViewHolder {
         rightImage = findViewById(R.id.right_top);
         labelText = findViewById(R.id.label);
         textlayout = findViewById(R.id.layout_label);
+        headView = findViewById(R.id.head);
     }
 
     public DeckItemType getItemType() {
@@ -51,7 +53,7 @@ class DeckViewHolder extends RecyclerView.ViewHolder {
 
     public void useDefault() {
         File outFile = new File(AppsSettings.get().getCoreSkinPath(), Constants.UNKNOWN_IMAGE);
-        ImageLoader.get().bind(view.getContext(), outFile, cardImage, outFile.getName().endsWith(Constants.BPG), 0,null);
+        ImageLoader.get().bind(view.getContext(), outFile, cardImage, outFile.getName().endsWith(Constants.BPG), 0, null);
     }
 
     protected <T extends View> T findViewById(int id) {
@@ -59,6 +61,7 @@ class DeckViewHolder extends RecyclerView.ViewHolder {
     }
 
     private final View view;
+    public final View headView;
     public final View textlayout;
     public final TextView labelText;
     public final ImageView cardImage;

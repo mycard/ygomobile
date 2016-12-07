@@ -34,7 +34,7 @@ public class DialogPlus {
         mBuilder = new AlertDialog.Builder(context);
         mMaxHeight = (int) (context.getResources().getDisplayMetrics().heightPixels * 0.7f);
         mLayoutInflater = LayoutInflater.from(context);
-        mView = mLayoutInflater.inflate(R.layout.dialog_base, null);
+        mView = mLayoutInflater.inflate(R.layout.dialog_plus_base, null);
         mBuilder.setView(mView);
         mTitleView = bind(R.id.title);
         closeView = bind(R.id.close);
@@ -84,6 +84,12 @@ public class DialogPlus {
 
     public DialogPlus setMessage(int id) {
         return setMessage(context.getString(id));
+    }
+
+    public DialogPlus setMessageGravity(int g) {
+        TextView textView = bind(R.id.text);
+        textView.setGravity(g);
+        return this;
     }
 
     public DialogPlus setMessage(String text) {
@@ -163,9 +169,6 @@ public class DialogPlus {
         WebView webView = new WebViewPlus(context);
         FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
-        layoutParams.topMargin = VUiKit.dpToPx(10);
-        layoutParams.leftMargin = VUiKit.dpToPx(10);
-        layoutParams.rightMargin = VUiKit.dpToPx(10);
         layoutParams.gravity = Gravity.CENTER_HORIZONTAL;
         frameLayout.addView(webView, layoutParams);
         setView(frameLayout);

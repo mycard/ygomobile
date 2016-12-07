@@ -29,14 +29,18 @@
 
         <TextView
             android:id="@+id/label"
-            android:background="@color/colorPrimaryLight"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/colorPrimaryLight"
+            android:gravity="center_vertical"
             android:paddingLeft="5dp"
             android:singleLine="true"
-            android:gravity="center_vertical"
-            android:textColor="@color/white"
             android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+            android:textColor="@color/white"
             tools:text="name"/>
     </LinearLayout>
+
+    <include
+        android:id="@+id/head"
+        layout="@layout/head_view"/>
 </RelativeLayout>

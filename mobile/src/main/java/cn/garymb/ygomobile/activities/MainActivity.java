@@ -59,7 +59,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             } else {
                 enableStart = true;
             }
-            if(isNew){
+            if (isNew) {
                 new DialogPlus(this)
                         .setTitle(getString(R.string.settings_about_change_log))
                         .loadUrl("file:///android_asset/changelog.html")
@@ -134,9 +134,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             break;
             case R.id.action_quit: {
 //                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                DialogPlus builder=new DialogPlus(this);
+                DialogPlus builder = new DialogPlus(this);
                 builder.setTitle(R.string.question);
                 builder.setMessage(R.string.quit_tip);
+                builder.setMessageGravity(Gravity.CENTER_HORIZONTAL);
                 builder.setButtonListener((dlg, s) -> {
                     dlg.dismiss();
                     finish();
@@ -148,11 +149,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 mServerListAdapater.addServer();
                 break;
             case R.id.action_card_search:
-                if(AppsSettings.get().getCardSearchType() == Constants.PREF_CARD_SEARCH1) {
-                    startActivity(new Intent(this, CardSearchActivity.class));
-                }else{
-                    startActivity(new Intent(this, CardSearch2Acitivity.class));
-                }
+                startActivity(new Intent(this, CardSearchAcitivity.class));
                 break;
             case R.id.action_deck_manager:
                 startActivity(new Intent(this, DeckManagerActivity.class));

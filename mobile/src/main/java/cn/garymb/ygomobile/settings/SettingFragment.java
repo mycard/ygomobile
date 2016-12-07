@@ -43,7 +43,6 @@ import static cn.garymb.ygomobile.Constants.PREF_LOCK_SCREEN;
 import static cn.garymb.ygomobile.Constants.PREF_OPENGL_VERSION;
 import static cn.garymb.ygomobile.Constants.PREF_PENDULUM_SCALE;
 import static cn.garymb.ygomobile.Constants.PREF_SENSOR_REFRESH;
-import static cn.garymb.ygomobile.Constants.PREF_SHOW_CARD_SEARCH;
 import static cn.garymb.ygomobile.Constants.PREF_SOUND_EFFECT;
 import static cn.garymb.ygomobile.Constants.PREF_USE_EXTRA_CARD_CARDS;
 import static cn.garymb.ygomobile.Constants.SETTINGS_CARD_BG;
@@ -83,7 +82,6 @@ public class SettingFragment extends PreferenceFragmentPlus {
         bind(PREF_OPENGL_VERSION, mSettings.getOpenglVersion());
         bind(PREF_IMAGE_QUALITY,mSettings.getCardQuality());
         bind(PREF_DECK_SHOW_CARD, mSettings.getShowCard());
-        bind(PREF_SHOW_CARD_SEARCH, mSettings.getCardSearchType());
         bind(PREF_GAME_FONT, mSettings.getFontPath());
         bind(PREF_USE_EXTRA_CARD_CARDS, mSettings.isUseExtraCards());
         bind(SETTINGS_COVER, new File(mSettings.getCoreSkinPath(), Constants.CORE_SKIN_COVER).getAbsolutePath());

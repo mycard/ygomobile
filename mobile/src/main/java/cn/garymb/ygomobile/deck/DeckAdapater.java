@@ -55,11 +55,18 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
     private int mDragPosition = -1;
     private Random mRandom;
 
+    private DeckItem mRemoveItem;
+    private int mRemoveIndex;
+
     public DeckAdapater(Context context, RecyclerView recyclerView) {
         this.context = context;
         this.recyclerView = recyclerView;
         mLayoutInflater = LayoutInflater.from(context);
         mRandom = new Random(System.currentTimeMillis() + SystemClock.elapsedRealtime());
+    }
+
+    public Context getContext() {
+        return context;
     }
 
     private void makeHeight() {
@@ -517,19 +524,38 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
         }
     }
 
+    public int getRemoveIndex() {
+        return mRemoveIndex;
+    }
+
+    public DeckItem getRemoveItem() {
+        return mRemoveItem;
+    }
+
     public DeckItem removeItem(int pos) {
         DeckItem deckItem = null;
         synchronized (this) {
             deckItem = mItems.remove(pos);
             removeCount(deckItem.getCardInfo(), deckItem.getType());
         }
+        mRemoveIndex = pos;
+        mRemoveItem = deckItem;
         return deckItem;
+    }
+
+    public int getItemHeight() {
+        return mHeight;
     }
 
     @Override
     public void onBindViewHolder(DeckViewHolder holder, int position) {
         DeckItem item = mItems.get(position);
         holder.setItemType(item.getType());
+        if (position == DeckItem.HeadView) {
+            holder.headView.setVisibility(View.VISIBLE);
+        } else {
+            holder.headView.setVisibility(View.GONE);
+        }
         if (item.getType() == DeckItemType.MainLabel || item.getType() == DeckItemType.SideLabel
                 || item.getType() == DeckItemType.ExtraLabel) {
             holder.cardImage.setVisibility(View.GONE);

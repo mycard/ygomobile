@@ -85,6 +85,7 @@ public class YGOMobileActivity extends NativeActivity implements
     private Handler handler = new Handler();
     private NativeCrashHandler mNativeCrashHandler;
     private FullScreenUtils mFullScreenUtils;
+    private boolean registerSensor;
 
     @SuppressWarnings("WrongConstant")
     @Override
@@ -123,6 +124,7 @@ public class YGOMobileActivity extends NativeActivity implements
         //注册
         if (mSensor != null) {
             if (mApp.isSensorRefresh()) {
+                registerSensor =true;
                 mSensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_GAME);
             }
         }
@@ -130,6 +132,9 @@ public class YGOMobileActivity extends NativeActivity implements
 
     @Override
     protected void onDestroy() {
+        if(registerSensor){
+            mSensorManager.unregisterListener(this);
+        }
         if (registNdkCash) {
             mNativeCrashHandler.unregisterForNativeCrash();
         }

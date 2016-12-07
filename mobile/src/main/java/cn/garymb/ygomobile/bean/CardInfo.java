@@ -17,7 +17,7 @@ public class CardInfo extends Card implements Parcelable {
     public static final String SQL_BASE;
     public static final String _ID = "_id";
     public static final String COL_ID = "datas." + _ID;
-    public static final String COL_STAR= "star";
+    public static final String COL_STAR = "star";
     private LimitType mLimitType = LimitType.None;
 
     static {
@@ -27,7 +27,7 @@ public class CardInfo extends Card implements Parcelable {
             stringBuilder.append(",texts.str" + i);
         }
 //        stringBuilder.append(",level as "+COL_STAR+" ");
-        stringBuilder.append(",(datas.level & 255) as "+COL_STAR+" ");
+        stringBuilder.append(",(datas.level & 255) as " + COL_STAR + " ");
         stringBuilder.append(" from datas, texts  where datas." + _ID + " = texts." + _ID + " ");
         SQL_BASE = stringBuilder.toString();
     }
@@ -123,6 +123,10 @@ public class CardInfo extends Card implements Parcelable {
         super();
     }
 
+    @Override
+    public String toString() {
+        return "CardInfo{" + Code + Name + '}';
+    }
 
     @Override
     public int describeContents() {

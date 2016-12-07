@@ -1,5 +1,7 @@
 package cn.garymb.ygomobile.deck;
 
+import android.util.Log;
+
 import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.bean.CardInfo;
 import cn.ygo.ocgcore.Card;
@@ -11,21 +13,45 @@ class DeckDrager {
         this.deckAdapater = deckAdapater;
     }
 
-    public void onDragStart(DeckViewHolder viewHolder) {
+
+    public boolean delete(int left) {
+        //处理数据
+        if (DeckItemUtils.isMain(left)) {
+            return removeMain(left);
+        } else if (DeckItemUtils.isExtra(left)) {
+            return removeExtra(left);
+        } else if (DeckItemUtils.isSide(left)) {
+            return removeSide(left);
+        }
+        return false;
     }
 
-    public void onDragEnd(DeckViewHolder viewHolder) {
-//        deckAdapater.notifyDataSetChanged();
-    }
+    private int mLast = -1;
+    private int count = 0;
+    private int MAX = 20;
 
-    public boolean move(DeckViewHolder viewHolder, DeckViewHolder target, int left, int right) {
-        if (left < 0) {
+    public boolean move(DeckViewHolder viewHolder, DeckViewHolder target) {
+        //处理view
+        int left = viewHolder.getAdapterPosition();
+        int right = target.getAdapterPosition();
+        if (left < 0 || DeckItemUtils.isLabel(right)) {
+            return false;
+        }
+        if (right == DeckItem.HeadView) {
+            if (mLast != left) {
+                mLast = left;
+                count = 0;
+            } else {
+                count++;
+            }
+            if (count > MAX) {
+                Log.w("drag", "delete" + left);
+                return  delete(left);
+            }
+            Log.d("drag", "delete ready " + left);
             return false;
         }
         if (DeckItemUtils.isMain(left)) {
-            if (right == 0) {
-                return removeMain(left);
-            }
             if (DeckItemUtils.isMain(right)) {
                 return moveMain(left, right);
             }
@@ -33,9 +59,6 @@ class DeckDrager {
                 return moveMainToSide(left, right);
             }
         } else if (DeckItemUtils.isExtra(left)) {
-            if (right == 0) {
-                return removeExtra(left);
-            }
             if (DeckItemUtils.isExtra(right)) {
                 return moveExtra(left, right);
             }
@@ -43,9 +66,6 @@ class DeckDrager {
                 return moveExtraToSide(left, right);
             }
         } else if (DeckItemUtils.isSide(left)) {
-            if (right == 0) {
-                return removeSide(left);
-            }
             if (DeckItemUtils.isSide(right)) {
                 return moveSide(left, right);
             }
@@ -74,7 +94,7 @@ class DeckDrager {
     public boolean removeMain(int pos) {
         int left = pos - DeckItem.MainStart;
         if (left >= 0 && left < deckAdapater.getMainCount()) {
-            deckAdapater.removeItem(pos);
+            deckAdapater.removeItem(left);
             deckAdapater.addItem(DeckItem.MainEnd, new DeckItem());
             deckAdapater.notifyItemRemoved(pos);
             deckAdapater.notifyItemInserted(DeckItem.MainEnd);
@@ -90,7 +110,7 @@ class DeckDrager {
             deckAdapater.addItem(DeckItem.ExtraEnd, new DeckItem());
             deckAdapater.notifyItemRemoved(pos);
             deckAdapater.notifyItemInserted(DeckItem.ExtraEnd);
-            return true;
+            return false;
         }
         return false;
     }
@@ -102,7 +122,7 @@ class DeckDrager {
             deckAdapater.addItem(DeckItem.SideEnd, new DeckItem());
             deckAdapater.notifyItemRemoved(pos);
             deckAdapater.notifyItemInserted(DeckItem.SideEnd);
-            return true;
+            return false;
         }
         return false;
     }
@@ -123,8 +143,6 @@ class DeckDrager {
         DeckItem deckItem = deckAdapater.removeItem(DeckItem.MainStart + left);
         deckAdapater.addItem(DeckItem.MainStart + right, deckItem);
         deckAdapater.notifyItemMoved(DeckItem.MainStart + left, DeckItem.MainStart + right);
-//        loadData();
-//        notifyDataSetChanged();
         return true;
     }
 
@@ -199,7 +217,7 @@ class DeckDrager {
         int right = to - DeckItem.SideStart;
         int count = deckAdapater.getSideCount();
         if (right >= count) {
-            right = count-1;
+            right = count - 1;
         }
 
         //交换
@@ -258,7 +276,7 @@ class DeckDrager {
         int sidecount = deckAdapater.getSideCount();
         int maincount = deckAdapater.getMainCount();
         if (right > sidecount) {
-            right = sidecount-1;
+            right = sidecount - 1;
         }
         //交换
         DeckItem space = deckAdapater.removeItem(DeckItem.SideEnd);
