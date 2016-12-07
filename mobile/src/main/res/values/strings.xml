@@ -42,7 +42,6 @@
     <string name="back_tip">Press back key again to exit.</string>
     <string name="string_help_text">The current application lacks the necessary permissions. \n
         please click Settings - permissions - open the required permissions.</string>
-
     <!-- settings -->
     <string name="settings_about">About</string>
     <string name="settings_about_sub_about">About</string>
@@ -55,7 +54,7 @@
     <string name="settings_about_author_pref">Author</string>
     <string name="settings_about_proj_loc">Project link</string>
     <string name="settings_about_version_pref">Version</string>
-    <string name="settings_about_opensource_pref">License</string>
+    <string name="donation">Donation</string>
     <string name="settings_about_check_update">Check update</string>
     <string name="settings_about_change_log">Change log</string>
     <string name="settings_game_card_quality">Card texture quality</string>
@@ -72,7 +71,7 @@
     <string name="settings_game_immersive_mode">Immersive Mode</string>
     <string name="settings_about_project_address" translatable="false">https://github.com/garymabin/YGOMobile</string>
     <string name="settings_game_opengl">OpenGL</string>
-    <string name="settings_author" translatable="false">garymabin@gmail.com\n247321453@qq.com</string>
+    <string name="settings_author" translatable="false">247321453@qq.com\n905309599@qq.com</string>
     <string name="restart_app">"Please restart app！"</string>
     <string-array name="opengl_version">
         <item>OpenGL ES 1.X</item>
@@ -162,7 +161,7 @@
     <string name="all">All</string>
     <string name="settings_card_search">Card Search UI</string>
     <string-array name="show_card_search_desc">
-        <item>列表在左边</item>
-        <item>列表在中间</item>
+        <item>result in left</item>
+        <item>result in center</item>
     </string-array>
 </resources>

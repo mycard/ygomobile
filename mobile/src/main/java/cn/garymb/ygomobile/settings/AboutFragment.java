@@ -1,9 +1,11 @@
 package cn.garymb.ygomobile.settings;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.view.Gravity;
@@ -11,6 +13,7 @@ import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.widget.FrameLayout;
 
+import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.plus.PreferenceFragmentPlus;
 import cn.garymb.ygomobile.plus.VUiKit;
@@ -35,7 +38,7 @@ public class AboutFragment extends PreferenceFragmentPlus {
         }
         bind("pref_key_about_version", (packageInfo == null) ? "?" : packageInfo.versionName);
         bind("pref_key_change_log");
-        bind("pref_key_opensource_cert");
+        bind("pref_key_open_alipay");
     }
 
     @Override
@@ -43,8 +46,10 @@ public class AboutFragment extends PreferenceFragmentPlus {
         String key = preference.getKey();
         if ("pref_key_change_log".equals(key)) {
             showDialog(getString(R.string.settings_about_change_log), "file:///android_asset/changelog.html");
-        } else if ("pref_key_opensource_cert".equals(key)) {
-            showDialog(getString(R.string.settings_about_opensource_pref), "file:///android_asset/licenses.html");
+        } else if ("pref_key_open_alipay".equals(key)) {
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.ALIPAY_URL));
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
         }
         return false;
     }

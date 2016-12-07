@@ -1,8 +1,10 @@
 package cn.garymb.ygomobile.core;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.Environment;
+import android.util.DisplayMetrics;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -14,6 +16,7 @@ import java.util.List;
 import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.NativeInitOptions;
 import cn.garymb.ygomobile.plus.PreferenceFragmentPlus;
+import cn.garymb.ygomobile.utils.SystemUtils;
 
 import static cn.garymb.ygomobile.Constants.PREF_DEF_CARD_SEARCH;
 import static cn.garymb.ygomobile.Constants.PREF_DEF_IMMERSIVE_MODE;
@@ -44,15 +47,24 @@ public class AppsSettings {
         this.context = context;
         mSharedPreferences = PreferenceFragmentPlus.SharedPreferencesPlus.create(context, context.getPackageName() + ".settings");
         mSharedPreferences.setAutoSave(true);
-        mDensity = Resources.getSystem().getDisplayMetrics().density;
-        mScreenHeight = Resources.getSystem().getDisplayMetrics().heightPixels;
-        mScreenWidth = Resources.getSystem().getDisplayMetrics().widthPixels;
+        update(context);
     }
 
     public void update(Context context) {
         mDensity = context.getResources().getDisplayMetrics().density;
         mScreenHeight = context.getResources().getDisplayMetrics().heightPixels;
         mScreenWidth = context.getResources().getDisplayMetrics().widthPixels;
+        if (isImmerSiveMode() && context instanceof Activity) {
+            DisplayMetrics dm = SystemUtils.getHasVirtualDisplayMetrics((Activity)context);
+            if (dm != null) {
+                int height = Math.max(dm.widthPixels, dm.heightPixels);
+                if (mScreenHeight == Math.max(mScreenHeight, mScreenWidth)) {
+                    mScreenHeight = height;
+                } else {
+                    mScreenWidth = height;
+                }
+            }
+        }
     }
 
     public int getAppVersion() {
@@ -63,8 +75,8 @@ public class AppsSettings {
         mSharedPreferences.putInt(PREF_VERSION, ver);
     }
 
-    public int getCardSearchType(){
-        return Integer.valueOf(mSharedPreferences.getString(PREF_SHOW_CARD_SEARCH, ""+PREF_DEF_CARD_SEARCH));
+    public int getCardSearchType() {
+        return Integer.valueOf(mSharedPreferences.getString(PREF_SHOW_CARD_SEARCH, "" + PREF_DEF_CARD_SEARCH));
     }
 
     public PreferenceFragmentPlus.SharedPreferencesPlus getSharedPreferences() {
