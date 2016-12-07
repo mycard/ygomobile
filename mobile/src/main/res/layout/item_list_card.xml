@@ -86,8 +86,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                >
+                android:orientation="horizontal" >
 
                 <ImageButton
                     android:id="@+id/card_add"
@@ -116,8 +115,9 @@
                     android:layout_height="wrap_content"
                     android:singleLine="true"
                     android:text="A"
-                    android:visibility="invisible"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:visibility="invisible"/>
+
                 <View
                     android:layout_width="0dp"
                     android:layout_height="1dp"

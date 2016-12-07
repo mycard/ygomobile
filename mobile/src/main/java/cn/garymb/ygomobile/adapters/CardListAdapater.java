@@ -59,9 +59,7 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> {
         ViewHolder holder = (ViewHolder) view.getTag(view.getId());
         holder.setPosition(position);
         holder.codeView.setText(String.format("%08d", item.Code));
-//        if (!isScroll) {
         ImageLoader.get().bindImage(context, holder.cardImage, item.Code);
-//        }
         holder.cardName.setText(item.Name);
         if (item.isType(CardType.Monster)) {
             holder.cardLevel.setVisibility(View.VISIBLE);
@@ -120,6 +118,11 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> {
                 }
             });
         }
+
+        int getPosition(){
+            return position;
+        }
+
 
         ViewHolder(View view) {
             super(view);

@@ -52,7 +52,12 @@ abstract class BaseCardsAcitivity extends BaseActivity implements CardLoader.Cal
         mListView = (ListView) findViewById(R.id.list_cards);
         mCardListAdapater = new CardListAdapater(this);
         mListView.setAdapter(mCardListAdapater);
-//
+        setListeners();
+
+        mCardLoader = new CardLoader(this);
+        mCardLoader.setCallBack(this);
+        mCardSelector = new CardSearcher(bind(R.id.nav_view_list), mCardLoader);
+        //
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, mDrawerlayout, toolbar, R.string.search_open, R.string.search_close);
         toggle.setDrawerIndicatorEnabled(false);
@@ -61,10 +66,7 @@ abstract class BaseCardsAcitivity extends BaseActivity implements CardLoader.Cal
             onBack();
         });
         toggle.syncState();
-        mCardLoader = new CardLoader(this);
-        mCardLoader.setCallBack(this);
-        mCardSelector = new CardSearcher(bind(R.id.nav_view_list), mCardLoader);
-        setListeners();
+        //
         ProgressDialog dlg = ProgressDialog.show(this, null, getString(R.string.loading));
         VUiKit.defer().when(() -> {
             if (!mStringManager.isLoad()) {
@@ -81,6 +83,7 @@ abstract class BaseCardsAcitivity extends BaseActivity implements CardLoader.Cal
             dlg.dismiss();
             onInit();
         });
+
     }
 
     protected int getDimen(int id){
