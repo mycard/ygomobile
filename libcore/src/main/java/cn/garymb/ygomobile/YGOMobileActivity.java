@@ -99,16 +99,15 @@ public class YGOMobileActivity extends NativeActivity implements
             registNdkCash = true;
         }
         super.onCreate(savedInstanceState);
+        fullscreen();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            final View decorView = getWindow().getDecorView();
-            decorView.setSystemUiVisibility(windowsFlags);
-            decorView.setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
+            getWindow().getDecorView().setOnSystemUiVisibilityChangeListener(new View.OnSystemUiVisibilityChangeListener() {
 
                         @Override
                         public void onSystemUiVisibilityChange(int visibility) {
                             if(mApp.isImmerSiveMode()) {
                                 if ((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) {
-                                    decorView.setSystemUiVisibility(windowsFlags);
+                                    getWindow().getDecorView().setSystemUiVisibility(windowsFlags);
                                 }
                             }
                         }

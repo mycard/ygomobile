@@ -29,6 +29,7 @@ public class App extends GameApplication {
     @Override
     public void attachGame(Activity activity) {
         super.attachGame(activity);
+        AppsSettings.get().update(activity);
     }
 
     @Override
@@ -75,7 +76,6 @@ public class App extends GameApplication {
     public boolean canNdkCash() {
         return false;
     }
-
     @Override
     public boolean isImmerSiveMode() {
         return AppsSettings.get().isImmerSiveMode();

@@ -106,7 +106,7 @@ public class StringManager {
         if (set != null) {
             set.getName();
         }
-        return null;
+        return String.format("0x%x", key);
     }
 
     public String getSystemString(int key) {
