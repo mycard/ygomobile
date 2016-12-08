@@ -170,11 +170,11 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
                         return true;
                     }
                 }
-                if (c2.isType(CardType.Spell)) {
-                    if (c1.Type - c2.Type > 0) {
-                        return true;
-                    }
-                }
+//                if (c2.isType(CardType.Spell)) {
+//                    if (c1.Type - c2.Type > 0) {
+//                        return true;
+//                    }
+//                }
                 //endregion
             } else if (c1.isType(CardType.Trap)) {
                 //region 陷阱
@@ -190,11 +190,11 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
                         return true;
                     }
                 }
-                if (c2.isType(CardType.Trap)) {
-                    if (c1.Type - c2.Type > 0) {
-                        return true;
-                    }
-                }
+//                if (c2.isType(CardType.Trap)) {
+//                    if (c1.Type - c2.Type > 0) {
+//                        return true;
+//                    }
+//                }
                 //endregion
             } else if (c1.isType(CardType.Monster)) {
                 if (c2.isSpellTrap()) {
@@ -243,9 +243,6 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
                 }
                 //endregion
                 //region 怪兽
-                if (c1.Type != c2.Type) {
-                    return c1.Type - c2.Type > 0;
-                }
                 if (c1.Level != c2.Level) {
                     return c1.Level - c2.Level > 0;
                 }
@@ -264,6 +261,9 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
                 if (c1.Ot != c2.Ot) {
                     return c1.Ot - c2.Ot > 0;
                 }
+//                if (c1.Type != c2.Type) {
+//                    return c1.Type - c2.Type > 0;
+//                }
                 //endregion
             } else {
                 return false;
