@@ -550,6 +550,9 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
         editText.setGravity(Gravity.TOP | Gravity.LEFT);
         editText.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
         editText.setSingleLine();
+        if(mYdkFile!=null){
+            editText.setText(mYdkFile.getName());
+        }
         builder.setView(editText);
         builder.setButtonListener((dlg, s) -> {
             CharSequence name = editText.getText();
