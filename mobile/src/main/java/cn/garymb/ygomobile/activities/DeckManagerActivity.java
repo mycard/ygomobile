@@ -106,9 +106,13 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
     }
 
     @Override
-    public void onDragEnd() {
-        mDeckItemTouchHelper.setDeleteMode(false);
+    public void onDragDeleteEnd() {
         getSupportActionBar().show();
+    }
+
+    @Override
+    public void onDragEnd() {
+
     }
 
     private void setLimitList(LimitList limitList) {

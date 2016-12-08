@@ -20,7 +20,11 @@ public class DeckItemTouchHelper extends ItemTouchHelper.Callback {
     //    private RecyclerView.ViewHolder NULL;
     public interface CallBack {
         void onDragStart();
+
         void onDragDelete();
+
+        void onDragDeleteEnd();
+
         void onDragEnd();
     }
 
@@ -86,24 +90,35 @@ public class DeckItemTouchHelper extends ItemTouchHelper.Callback {
     }
 
     @Override
+    public boolean isLongPressDragEnabled() {
+        return super.isLongPressDragEnabled();
+    }
+
+    @Override
+    public boolean isItemViewSwipeEnabled() {
+        return false;//super.isItemViewSwipeEnabled();
+    }
+
+    @Override
     public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
         super.onSelectedChanged(viewHolder, actionState);
         if (actionState == ACTION_STATE_DRAG) {
             isCencel = false;
             lasttime = System.currentTimeMillis();
-            mHandler.postDelayed(enterDelete, 1000);
+            mHandler.postDelayed(enterDelete, Constants.LONG_PRESS_DRAG);
             mDeckDrager.onDragStart();
             if (mCallBack != null) {
                 mCallBack.onDragStart();
             }
         } else if (actionState == ACTION_STATE_IDLE) {
+            disableDelete();
             mDeckDrager.onDragEnd();
             if (mCallBack != null) {
                 mCallBack.onDragEnd();
             }
-            mHandler.removeCallbacks(enterDelete);
         } else if (actionState == ACTION_STATE_SWIPE) {
-
+            Log.w("drag", "cancel enter delete by swipe");
+            disableDelete();
         }
     }
 
@@ -111,7 +126,7 @@ public class DeckItemTouchHelper extends ItemTouchHelper.Callback {
         @Override
         public void run() {
             if (System.currentTimeMillis() - lasttime >= Constants.LONG_PRESS_DRAG) {
-                Log.i("drag", "enter delete");
+                Log.i("drag", "enter delete 1");
                 isDeleteMode = true;
                 if (mCallBack != null) {
                     mCallBack.onDragDelete();
@@ -122,16 +137,25 @@ public class DeckItemTouchHelper extends ItemTouchHelper.Callback {
         }
     };
 
+    private void disableDelete() {
+        isDeleteMode = false;
+        lasttime = System.currentTimeMillis();
+        mHandler.removeCallbacks(enterDelete);
+        if (mCallBack != null) {
+            mCallBack.onDragDeleteEnd();
+        }
+    }
+
     private volatile long lasttime = 0;
     private boolean isCencel = false;
+    private int Min_Pos = -4;
 
     @Override
     public RecyclerView.ViewHolder chooseDropTarget(RecyclerView.ViewHolder selected, List<RecyclerView.ViewHolder> dropTargets, int curX, int curY) {
         if (!isCencel) {
             isCencel = true;
             if (!isDeleteMode) {
-                lasttime = System.currentTimeMillis();
-                mHandler.removeCallbacks(enterDelete);
+                disableDelete();
                 Log.w("drag", "cancel enter delete");
             }
         }
@@ -147,8 +171,14 @@ public class DeckItemTouchHelper extends ItemTouchHelper.Callback {
     public void onMoved(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, int fromPos, RecyclerView.ViewHolder target, int toPos, int x, int y) {
         if (toPos == DeckItem.HeadView) {
             if (isDeleteMode) {
-                DeckItem deckItem = mDeckDrager.delete(fromPos);
-                Log.i("drag", "delete " + fromPos + " " + deckItem + "  " + (deckItem != null ? deckItem.getCardInfo() : null));
+                disableDelete();
+                if (y > Min_Pos) {
+                    DeckItem deckItem = mDeckDrager.delete(fromPos);
+                    Log.i("drag", "delete " + fromPos + " x=" + x + ",y=" + y);
+                    return;
+                }else{
+                    Log.i("drag", "cancel delete " + fromPos + " x=" + x + ",y=" + y);
+                }
             }
         }
         super.onMoved(recyclerView, viewHolder, fromPos, target, toPos, x, y);
