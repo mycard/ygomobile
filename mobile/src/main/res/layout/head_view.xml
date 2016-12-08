@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
-    android:background="@color/colorAccentDark">
+    android:background="@color/colorPrimary"
+    android:orientation="horizontal">
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/colorAccentDark"
         android:gravity="center_vertical|center_horizontal"
         android:text="@string/deck_delete_text"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="@color/white"/>
-</FrameLayout>
+</LinearLayout>

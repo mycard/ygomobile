@@ -172,13 +172,12 @@ public class DeckItemTouchHelper extends ItemTouchHelper.Callback {
         if (toPos == DeckItem.HeadView) {
             if (isDeleteMode) {
                 //防止删除后，弹回来
-//                disableDelete();
+                disableDelete();
                 if (y > Min_Pos) {
                     DeckItem deckItem = mDeckDrager.delete(fromPos);
                     Log.i("drag", "delete " + fromPos + " x=" + x + ",y=" + y);
-                    return;
-                }else{
-                    Log.i("drag", "cancel delete " + fromPos + " x=" + x + ",y=" + y);
+                } else {
+                    Log.d("drag", "cancel delete " + fromPos + " x=" + x + ",y=" + y);
                 }
             }
         }
