@@ -74,7 +74,7 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> {
         if (item.isType(CardType.Monster)) {
             holder.cardLevel.setVisibility(View.VISIBLE);
             holder.layout_atkdef.setVisibility(View.VISIBLE);
-            holder.view_bar.setVisibility(View.VISIBLE);
+//            holder.view_bar.setVisibility(View.VISIBLE);
             String star = "";
             for (int i = 0; i < item.Level; i++) {
                 star += "★";
@@ -88,9 +88,9 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> {
             holder.cardAtk.setText((item.Attack < 0 ? "?" : String.valueOf(item.Attack)));
             holder.cardDef.setText((item.Defense < 0 ? "?" : String.valueOf(item.Defense)));
         } else {
-            if (!showCode) {
-                holder.view_bar.setVisibility(View.INVISIBLE);
-            }
+//            if (!showCode) {
+//                holder.view_bar.setVisibility(View.INVISIBLE);
+//            }
             holder.cardLevel.setVisibility(View.INVISIBLE);
             holder.layout_atkdef.setVisibility(View.GONE);
         }

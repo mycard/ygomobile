@@ -306,7 +306,11 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
 
     @Override
     public void onBackPressed() {
-        if (!isExit) {
+        if (mDrawerlayout.isDrawerOpen(Gravity.RIGHT)) {
+            mDrawerlayout.closeDrawer(Gravity.RIGHT);
+        } else if (mDrawerlayout.isDrawerOpen(Gravity.LEFT)) {
+            mDrawerlayout.closeDrawer(Gravity.LEFT);
+        } else if (!isExit) {
             if (mYdkFile != null && mYdkFile.exists()) {
                 DialogPlus builder = new DialogPlus(this);
                 builder.setTitle(R.string.question);
@@ -318,10 +322,10 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
                     finish();
                 });
                 builder.show();
-                return;
             }
+        }else {
+            super.onBackPressed();
         }
-        super.onBackPressed();
     }
 
     private boolean checkLimit(CardInfo cardInfo) {

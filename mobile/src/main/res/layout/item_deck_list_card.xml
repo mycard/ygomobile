@@ -50,6 +50,7 @@
                 android:layout_height="wrap_content"
                 android:maxLines="1"
                 android:singleLine="true"
+                android:textIsSelectable="true"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
                 android:textColor="@color/colorAccent"
                 android:shadowColor="@color/black"
@@ -101,6 +102,15 @@
                     android:layout_gravity="center_vertical"
                     android:paddingRight="4dp"
                     app:srcCompat="@drawable/ic_add_circle"/>
+                <TextView
+                    android:layout_width="1dp"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:padding="4dp"
+                    android:text="A"
+                    android:visibility="invisible"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
 
                 <View
                     android:layout_width="0dp"

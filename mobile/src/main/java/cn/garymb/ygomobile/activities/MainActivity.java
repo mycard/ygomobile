@@ -191,6 +191,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     @Override
     public void onBackPressed() {
+        if (mDrawerlayout.isDrawerOpen(Gravity.LEFT)) {
+            mDrawerlayout.closeDrawer(Gravity.LEFT);
+            return;
+        }
         if (System.currentTimeMillis() - exitLasttime <= 3000) {
             super.onBackPressed();
         } else {

@@ -53,6 +53,7 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
                 android:textColor="@color/colorAccent"
                 android:shadowColor="@color/black"
+                android:textIsSelectable="true"
                 android:shadowDx="1"
                 android:shadowDy="2"
                 android:shadowRadius="2"

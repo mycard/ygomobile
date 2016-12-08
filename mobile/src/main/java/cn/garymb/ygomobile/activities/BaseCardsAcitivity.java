@@ -173,17 +173,6 @@ abstract class BaseCardsAcitivity extends BaseActivity implements CardLoader.Cal
         }
     }
 
-    @Override
-    public void onBackPressed() {
-        if (mDrawerlayout.isDrawerOpen(Gravity.RIGHT)) {
-            mDrawerlayout.closeDrawer(Gravity.RIGHT);
-        } else if (mDrawerlayout.isDrawerOpen(Gravity.LEFT)) {
-            mDrawerlayout.closeDrawer(Gravity.LEFT);
-        } else {
-            super.onBackPressed();
-        }
-    }
-
     protected abstract void onCardClick(CardInfo cardInfo, int pos);
 
     protected abstract void onCardLongClick(View view, CardInfo cardInfo, int pos);
