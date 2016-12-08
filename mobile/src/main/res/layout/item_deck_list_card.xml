@@ -50,7 +50,6 @@
                 android:layout_height="wrap_content"
                 android:maxLines="1"
                 android:singleLine="true"
-                android:textIsSelectable="true"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
                 android:textColor="@color/colorAccent"
                 android:shadowColor="@color/black"

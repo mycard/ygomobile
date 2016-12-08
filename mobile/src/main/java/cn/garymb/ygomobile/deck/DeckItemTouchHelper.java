@@ -171,7 +171,8 @@ public class DeckItemTouchHelper extends ItemTouchHelper.Callback {
     public void onMoved(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, int fromPos, RecyclerView.ViewHolder target, int toPos, int x, int y) {
         if (toPos == DeckItem.HeadView) {
             if (isDeleteMode) {
-                disableDelete();
+                //防止删除后，弹回来
+//                disableDelete();
                 if (y > Min_Pos) {
                     DeckItem deckItem = mDeckDrager.delete(fromPos);
                     Log.i("drag", "delete " + fromPos + " x=" + x + ",y=" + y);

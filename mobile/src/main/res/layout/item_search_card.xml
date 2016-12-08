@@ -52,7 +52,6 @@
                 android:singleLine="true"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
                 android:textColor="@color/colorAccent"
-                android:textIsSelectable="true"
                 android:shadowColor="@color/black"
                 android:shadowDx="1"
                 android:shadowDy="2"
