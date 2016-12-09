@@ -1,5 +1,7 @@
 package cn.garymb.ygomobile.deck;
 
+import android.util.Log;
+
 import cn.garymb.ygomobile.Constants;
 import cn.ygo.ocgcore.Card;
 
@@ -21,6 +23,7 @@ class DeckDrager {
     }
 
     public DeckItem delete(int left) {
+        Log.i("drag", "delete "+left);
         //处理数据
         if (DeckItemUtils.isMain(left)) {
             return removeMain(left);

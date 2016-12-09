@@ -18,6 +18,8 @@ import cn.garymb.ygomobile.NativeInitOptions;
 import cn.garymb.ygomobile.plus.PreferenceFragmentPlus;
 import cn.garymb.ygomobile.utils.SystemUtils;
 
+import static cn.garymb.ygomobile.Constants.PREF_DECK_DELETE_DILAOG;
+import static cn.garymb.ygomobile.Constants.PREF_DEF_DECK_DELETE_DILAOG;
 import static cn.garymb.ygomobile.Constants.PREF_DEF_IMMERSIVE_MODE;
 import static cn.garymb.ygomobile.Constants.PREF_DEF_SENSOR_REFRESH;
 import static cn.garymb.ygomobile.Constants.PREF_IMMERSIVE_MODE;
@@ -53,7 +55,7 @@ public class AppsSettings {
         mScreenHeight = context.getResources().getDisplayMetrics().heightPixels;
         mScreenWidth = context.getResources().getDisplayMetrics().widthPixels;
         if (isImmerSiveMode() && context instanceof Activity) {
-            DisplayMetrics dm = SystemUtils.getHasVirtualDisplayMetrics((Activity)context);
+            DisplayMetrics dm = SystemUtils.getHasVirtualDisplayMetrics((Activity) context);
             if (dm != null) {
                 int height = Math.max(dm.widthPixels, dm.heightPixels);
                 if (mScreenHeight == Math.max(mScreenHeight, mScreenWidth)) {
@@ -84,6 +86,10 @@ public class AppsSettings {
 
     public float getScreenWidth() {
         return Math.min(mScreenWidth, mScreenHeight);
+    }
+
+    public boolean isDialogDelete() {
+        return mSharedPreferences.getBoolean(PREF_DECK_DELETE_DILAOG, PREF_DEF_DECK_DELETE_DILAOG);
     }
 
     public float getXScale() {
@@ -318,7 +324,7 @@ public class AppsSettings {
      * 最后卡组名
      */
     public void setLastDeck(String name) {
-        if(TextUtils.equals(name, getCurLastDeck())){
+        if (TextUtils.equals(name, getCurLastDeck())) {
             //一样
             return;
         }
@@ -331,9 +337,11 @@ public class AppsSettings {
     public String getLastDeck() {
         return mSharedPreferences.getString(Constants.PREF_LAST_YDK, Constants.PREF_DEF_LAST_YDK);
     }
+
     public String getCurLastDeck() {
         return mSharedPreferences.getString(Constants.PREF_LAST_YDK, null);
     }
+
     public List<String> getLastRoomList() {
         List<String> names = new ArrayList<>();
         String json = mSharedPreferences.getString(Constants.PREF_LAST_ROOM_LIST, null);

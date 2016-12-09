@@ -32,6 +32,7 @@ import cn.garymb.ygomobile.plus.PreferenceFragmentPlus;
 import cn.garymb.ygomobile.plus.VUiKit;
 import cn.garymb.ygomobile.utils.IOUtils;
 
+import static cn.garymb.ygomobile.Constants.PREF_DECK_DELETE_DILAOG;
 import static cn.garymb.ygomobile.Constants.PREF_FONT_ANTIALIAS;
 import static cn.garymb.ygomobile.Constants.PREF_GAME_FONT;
 import static cn.garymb.ygomobile.Constants.PREF_GAME_PATH;
@@ -81,6 +82,7 @@ public class SettingFragment extends PreferenceFragmentPlus {
         bind(PREF_OPENGL_VERSION, mSettings.getOpenglVersion());
         bind(PREF_IMAGE_QUALITY,mSettings.getCardQuality());
         bind(PREF_GAME_FONT, mSettings.getFontPath());
+        bind(PREF_DECK_DELETE_DILAOG, mSettings.isDialogDelete());
         bind(PREF_USE_EXTRA_CARD_CARDS, mSettings.isUseExtraCards());
         bind(SETTINGS_COVER, new File(mSettings.getCoreSkinPath(), Constants.CORE_SKIN_COVER).getAbsolutePath());
         bind(SETTINGS_CARD_BG, new File(mSettings.getCoreSkinPath(), Constants.CORE_SKIN_BG).getAbsolutePath());

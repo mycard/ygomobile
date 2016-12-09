@@ -35,8 +35,9 @@ public interface Constants {
     boolean PREF_DEF_SENSOR_REFRESH = true;
 
     String PREF_LAST_ROOM_LIST = "pref_key_lastroom_list";
-
     int LAST_ROOM_MAX = 20;
+    String PREF_DECK_DELETE_DILAOG= "pref_key_deck_delete_dialog";
+    boolean PREF_DEF_DECK_DELETE_DILAOG = true;
 
     String SETTINGS_COVER = "settings_game_diy_card_cover";
     String SETTINGS_CARD_BG = "settings_game_diy_card_bg";
