@@ -154,6 +154,7 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
         mLimitList = limitList;
         mDeckAdapater.setLimitList(mLimitList);
         mDeckAdapater.notifyDataSetChanged();
+        mCardListAdapater.setLimitList(limitList);
         mCardLoader.setLimitList(mLimitList);
     }
 
