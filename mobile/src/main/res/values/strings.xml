@@ -115,9 +115,9 @@
     <string name="card_faq">FAQ</string>
     <string name="no_webbrowser">No web browser</string>
     <string name="load_game">loading game</string>
-    <string name="new_deck">New Deck</string>
-    <string name="rename_deck">Rename Deck</string>
-    <string name="delete_deck">Delete Deck</string>
+    <string name="new_deck">New</string>
+    <string name="rename_deck">Rename</string>
+    <string name="delete_deck">Delete</string>
     <string name="save_deck">Save Deck</string>
     <string name="deck_list">Deck List</string>
     <string name="card_add_main">+Main Deck</string>

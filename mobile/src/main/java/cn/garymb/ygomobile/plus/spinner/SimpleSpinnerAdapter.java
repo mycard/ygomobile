@@ -34,6 +34,7 @@ public class SimpleSpinnerAdapter extends BaseAdapterPlus<SimpleSpinnerItem> {
     protected void attach(View view, SimpleSpinnerItem item, int position) {
         TextView textView = (TextView) view.getTag();
         textView.setTextColor(color);
+        textView.setMaxLines(2);
         if (item != null) {
             textView.setText(item.toString());
         }

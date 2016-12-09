@@ -1,7 +1,6 @@
 package android.support.v7.widget.helper;
 
 import android.content.Context;
-import android.graphics.Canvas;
 import android.support.annotation.Nullable;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.widget.RecyclerView;
@@ -9,8 +8,6 @@ import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
-
-import java.lang.reflect.Field;
 
 
 public class ItemTouchHelperCompat extends ItemTouchHelper2 {
@@ -30,9 +27,15 @@ public class ItemTouchHelperCompat extends ItemTouchHelper2 {
     }
 
     @Override
+    public void attachToRecyclerView(@Nullable RecyclerView recyclerView) {
+        this.mContext = recyclerView.getContext();
+        super.attachToRecyclerView(recyclerView);
+    }
+
+    @Override
     protected void initGestureDetector() {
 //        super.initGestureDetector();
-        if(mGestureDetector!=null){
+        if (mGestureDetector != null) {
             return;
         }
         mGestureDetector = new GestureDetectorCompat(mContext,

@@ -92,7 +92,7 @@
     <string name="hit_def">DEF</string>
     <string name="label_race">种族</string>
     <string name="label_ot">专属</string>
-    <string name="label_limit">限制类型</string>
+    <string name="label_limit">不限制</string>
     <string name="label_limitlist">禁卡表</string>
     <string name="label_type">卡片类型</string>
     <string name="label_set">卡片系列</string>
@@ -119,9 +119,9 @@
     <string name="sort">排序</string>
     <string name="card_add_main">+主卡组</string>
     <string name="card_add_side">+副卡组</string>
-    <string name="new_deck">新建卡组</string>
-    <string name="rename_deck">重命名卡组</string>
-    <string name="delete_deck">删除卡组</string>
+    <string name="new_deck">新建</string>
+    <string name="rename_deck">重命名</string>
+    <string name="delete_deck">删除</string>
     <string name="save_deck">保存</string>
     <string name="deck_list">卡组列表</string>
     <string name="loading">加载中..."</string>
@@ -141,7 +141,7 @@
     <string name="join_game">进入游戏</string>
     <string name="settings_game_sensor_refresh">摇一摇刷新界面</string>
     <string name="label_pendulum">灵摆刻度</string>
-    <string name="all">全部</string>
+    <string name="all">全卡表</string>
     <string name="donation">捐助</string>
     <string name="refresh">刷新</string>
     <string name="quit_deck_tip">退出卡组编辑?</string>

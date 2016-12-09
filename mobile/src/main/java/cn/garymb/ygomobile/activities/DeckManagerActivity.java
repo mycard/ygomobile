@@ -16,9 +16,7 @@ import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.WindowInsets;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -558,7 +556,8 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
                 if (name != null && TextUtils.equals(name, file.getName())) {
                     index = i;
                 }
-                items.add(new SimpleSpinnerItem(i++, file.getName()).setTag(file));
+                String filename = IOUtils.tirmName(file.getName(), Constants.YDK_FILE_EX);
+                items.add(new SimpleSpinnerItem(i++, filename).setTag(file));
             }
         }
         mSimpleSpinnerAdapter = new SimpleSpinnerAdapter(this);

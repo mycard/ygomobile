@@ -31,10 +31,6 @@
         android:id="@+id/action_save"
         android:icon="@drawable/ic_mode_save_white"
         android:title="@string/save_deck"/>
-    <item
-        android:id="@+id/action_rename"
-        android:icon="@drawable/ic_edit_white"
-        android:title="@string/rename_deck"/>
     <!--<item
         android:id="@+id/action_share_image"
         android:icon="@drawable/ic_refresh"
@@ -47,4 +43,8 @@
         android:id="@+id/action_delete_deck"
         android:icon="@drawable/ic_edit_white"
         android:title="@string/delete_deck"/>
+    <item
+        android:id="@+id/action_rename"
+        android:icon="@drawable/ic_edit_white"
+        android:title="@string/rename_deck"/>
 </menu>
