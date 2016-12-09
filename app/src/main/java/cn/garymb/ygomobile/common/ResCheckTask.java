@@ -281,7 +281,7 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
             publishProgress(RES_CHECK_TYPE_DOWNLOAD_HINT);
             return;
         }
-        final File wqyFont = new File(extraDir, "WQYMicroHei.TTF");
+        final File wqyFont = new File(extraDir, "ygo.ttf");
         SimpleDownloadJob job = new SimpleDownloadJob(FileDownloadHelper.getPrivateDownloadUrl(ResourcesConstants.FONTS_DOWNLOAD_URL), wqyFont.getAbsolutePath());
         SimpleDownloadTask task = new SimpleDownloadTask(StaticApplication.get().getOkHttpClient());
         ProgressUpdateDialogController c = (ProgressUpdateDialogController) mProgressUpdateDialog.getController();
