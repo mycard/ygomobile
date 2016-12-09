@@ -80,7 +80,7 @@ public class SettingFragment extends PreferenceFragmentPlus {
         bind(PREF_PENDULUM_SCALE, mSettings.isPendulumScale());
         bind(PREF_SENSOR_REFRESH, mSettings.isSensorRefresh());
         bind(PREF_OPENGL_VERSION, mSettings.getOpenglVersion());
-        bind(PREF_IMAGE_QUALITY,mSettings.getCardQuality());
+        bind(PREF_IMAGE_QUALITY, mSettings.getCardQuality());
         bind(PREF_GAME_FONT, mSettings.getFontPath());
         bind(PREF_DECK_DELETE_DILAOG, mSettings.isDialogDelete());
         bind(PREF_USE_EXTRA_CARD_CARDS, mSettings.isUseExtraCards());
@@ -238,7 +238,8 @@ public class SettingFragment extends PreferenceFragmentPlus {
     }
 
     private void setPendlumScale(boolean ok) {
-        Log.i("kk", "setPendlumScale "+ok);
+        if (Constants.DEBUG)
+            Log.i("kk", "setPendlumScale " + ok);
         File file = new File(mSettings.getResourcePath(), Constants.CORE_SKIN_PENDULUM_PATH);
         if (ok) {
             //rename

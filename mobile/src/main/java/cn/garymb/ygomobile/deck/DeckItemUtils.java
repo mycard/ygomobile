@@ -86,7 +86,7 @@ class DeckItemUtils {
             inputStream = new FileInputStream(file);
             deckInfo = readDeck(cardLoader, inputStream, limitList);
         } catch (Exception e) {
-            Log.e("kk", "read 1", e);
+            Log.e("deckreader", "read 1", e);
         } finally {
             IOUtils.close(inputStream);
         }
@@ -119,7 +119,8 @@ class DeckItemUtils {
                 }
                 line = line.trim();
                 if (line.length() == 0 || !TextUtils.isDigitsOnly(line)) {
-                    Log.w("kk", "read not number " + line);
+                    if (Constants.DEBUG)
+                        Log.w("kk", "read not number " + line);
                     continue;
                 }
                 long id = Long.parseLong(line);
@@ -153,7 +154,7 @@ class DeckItemUtils {
                 }
             }
         } catch (IOException e) {
-            Log.e("kk", "read 2", e);
+            Log.e("deckreader", "read 2", e);
         } finally {
             IOUtils.close(in);
         }

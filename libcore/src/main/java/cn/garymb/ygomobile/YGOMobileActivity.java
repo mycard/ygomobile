@@ -54,6 +54,7 @@ public class YGOMobileActivity extends NativeActivity implements
         OverlayOvalView.OnDuelOptionsSelectListener,
         SensorEventListener {
     private static final String TAG = YGOMobileActivity.class.getSimpleName();
+    private static final boolean DEBUG = false;
     private static final int CHAIN_CONTROL_PANEL_X_POSITION_LEFT_EDGE = 205;
     private static final int CHAIN_CONTROL_PANEL_Y_REVERT_POSITION = 100;
     private static final int MAX_REFRESH = 30 * 1000;
@@ -101,7 +102,7 @@ public class YGOMobileActivity extends NativeActivity implements
             mNativeCrashHandler.registerForNativeCrash(this);
             registNdkCash = true;
         }
-        mFullScreenUtils=new FullScreenUtils(this, mApp.isImmerSiveMode());
+        mFullScreenUtils = new FullScreenUtils(this, mApp.isImmerSiveMode());
         super.onCreate(savedInstanceState);
         mFullScreenUtils.fullscreen();
         mFullScreenUtils.onCreate();
@@ -124,7 +125,7 @@ public class YGOMobileActivity extends NativeActivity implements
         //注册
         if (mSensor != null) {
             if (mApp.isSensorRefresh()) {
-                registerSensor =true;
+                registerSensor = true;
                 mSensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_GAME);
             }
         }
@@ -132,7 +133,7 @@ public class YGOMobileActivity extends NativeActivity implements
 
     @Override
     protected void onDestroy() {
-        if(registerSensor){
+        if (registerSensor) {
             mSensorManager.unregisterListener(this);
         }
         if (registNdkCash) {
@@ -193,11 +194,13 @@ public class YGOMobileActivity extends NativeActivity implements
         YGOGameOptions options = intent
                 .getParcelableExtra(YGOGameOptions.YGO_GAME_OPTIONS_BUNDLE_KEY);
         if (options != null) {
-            Log.i(TAG, "receive from mycard:" + options.toString());
+            if (DEBUG)
+                Log.i(TAG, "receive from mycard:" + options.toString());
             ByteBuffer buffer = options.toByteBuffer();
             IrrlichtBridge.joinGame(buffer, buffer.position());
         } else {
-            Log.i(TAG, "receive from mycard:null");
+            if (DEBUG)
+                Log.i(TAG, "receive from mycard:null");
         }
     }
 
@@ -246,7 +249,8 @@ public class YGOMobileActivity extends NativeActivity implements
         if (v.getId() == R.id.cancel) {
         } else if (v.getId() == R.id.submit) {
             int idx = mGlobalComboBox.getCurrentSelection();
-            Log.d(TAG, "showComboBoxCompat: receive selection: " + idx);
+            if (DEBUG)
+                Log.d(TAG, "showComboBoxCompat: receive selection: " + idx);
             if (mCompatGUIMode == ComboBoxCompat.COMPAT_GUI_MODE_COMBOBOX) {
                 IrrlichtBridge.setComboBoxSelection(idx);
             } else if (mCompatGUIMode == ComboBoxCompat.COMPAT_GUI_MODE_CHECKBOXES_PANEL) {
@@ -260,19 +264,23 @@ public class YGOMobileActivity extends NativeActivity implements
     public void onDuelOptionsSelected(int mode, boolean action) {
         switch (mode) {
             case OverlayView.MODE_CANCEL_CHAIN_OPTIONS:
-                Log.d(TAG, "Constants.MODE_CANCEL_CHAIN_OPTIONS: " + action);
+                if (DEBUG)
+                    Log.d(TAG, "Constants.MODE_CANCEL_CHAIN_OPTIONS: " + action);
                 IrrlichtBridge.cancelChain();
                 break;
             case OverlayView.MODE_REFRESH_OPTION:
-                Log.d(TAG, "Constants.MODE_REFRESH_OPTION: " + action);
+                if (DEBUG)
+                    Log.d(TAG, "Constants.MODE_REFRESH_OPTION: " + action);
                 IrrlichtBridge.refreshTexture();
                 break;
             case OverlayView.MODE_REACT_CHAIN_OPTION:
-                Log.d(TAG, "Constants.MODE_REACT_CHAIN_OPTION: " + action);
+                if (DEBUG)
+                    Log.d(TAG, "Constants.MODE_REACT_CHAIN_OPTION: " + action);
                 IrrlichtBridge.reactChain(action);
                 break;
             case OverlayView.MODE_IGNORE_CHAIN_OPTION:
-                Log.d(TAG, "Constants.MODE_IGNORE_CHAIN_OPTION: " + action);
+                if (DEBUG)
+                    Log.d(TAG, "Constants.MODE_IGNORE_CHAIN_OPTION: " + action);
                 IrrlichtBridge.ignoreChain(action);
                 break;
             default:
@@ -348,7 +356,8 @@ public class YGOMobileActivity extends NativeActivity implements
     public void showComboBoxCompat(String[] items, boolean isShow, int mode) {
         handler.post(() -> {
             mCompatGUIMode = mode;
-            Log.i(TAG, "showComboBoxCompat： isShow = " + isShow);
+            if (DEBUG)
+                Log.i(TAG, "showComboBoxCompat： isShow = " + isShow);
             if (isShow) {
                 mGlobalComboBox.fillContent(items);
                 mGlobalComboBox.showAtLocation(mContentView,

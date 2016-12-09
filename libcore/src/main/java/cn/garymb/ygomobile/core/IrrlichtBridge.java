@@ -52,6 +52,9 @@ public final class IrrlichtBridge {
 
     public static native String getSecretKey();
 
+    private static final boolean DEBUG = false;
+    private static final String TAG = IrrlichtBridge.class.getSimpleName();
+
     public static Bitmap getBpgImage(InputStream inputStream, Bitmap.Config config) {
         ByteArrayOutputStream outputStream = null;
         try {
@@ -65,7 +68,8 @@ public final class IrrlichtBridge {
             byte[] bpg = outputStream.toByteArray();
             return getBpgImage(bpg, config);
         } catch (Exception e) {
-            Log.e("kk", "zip image", e);
+            if (DEBUG)
+                Log.e(TAG, "zip image", e);
         } finally {
             if (outputStream != null) {
                 try {
@@ -89,7 +93,8 @@ public final class IrrlichtBridge {
             int w = byte2int(Arrays.copyOfRange(data, 0, 4));
             int h = byte2int(Arrays.copyOfRange(data, 4, 8));
             if (w < 0 || h < 0) {
-                Log.e("kk", "zip image:w=" + w + ",h=" + h);
+                if (DEBUG)
+                    Log.e(TAG, "zip image:w=" + w + ",h=" + h);
                 return null;
             }
             int index = 0;
@@ -100,7 +105,8 @@ public final class IrrlichtBridge {
             }
             return Bitmap.createBitmap(colors, w, h, config);
         } catch (Throwable e) {
-            Log.e("kk", "zip image", e);
+            if (DEBUG)
+                Log.e(TAG, "zip image", e);
             return null;
         }
     }

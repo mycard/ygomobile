@@ -33,9 +33,9 @@ public class DeckItemTouchHelper extends ItemTouchHelperCompat.Callback {
     }
 
     private CallBack mCallBack;
-    private DeckAdapater deckAdapater;
     private Handler mHandler;
-
+    private static final String TAG = "drag";
+    private static final boolean DEBUG = false;
 
     public void setCallBack(CallBack callBack) {
         mCallBack = callBack;
@@ -43,7 +43,6 @@ public class DeckItemTouchHelper extends ItemTouchHelperCompat.Callback {
 
     public DeckItemTouchHelper(DeckAdapater deckAdapater) {
         this.mDeckDrager = new DeckDrager(deckAdapater);
-        this.deckAdapater = deckAdapater;
         mHandler = new Handler(deckAdapater.getContext().getMainLooper());
     }
 
@@ -92,7 +91,8 @@ public class DeckItemTouchHelper extends ItemTouchHelperCompat.Callback {
             isCencel = true;
             if (!isDeleteMode) {
                 disableDelete();
-                Log.w("drag", "cancel enter delete");
+                if (DEBUG)
+                    Log.w(TAG, "cancel enter delete");
             }
         }
         RecyclerView.ViewHolder viewHolder = super.chooseDropTarget(selected, dropTargets, curX, curY);
@@ -131,7 +131,8 @@ public class DeckItemTouchHelper extends ItemTouchHelperCompat.Callback {
         super.onSelectedChanged(viewHolder, actionState);
         if (actionState == ACTION_STATE_DRAG) {
             mDeleteId = -1;
-            Log.d("drag", "start drag");
+            if (DEBUG)
+                Log.d(TAG, "start drag");
             isCencel = false;
             mSelectId = viewHolder.getAdapterPosition();
             lasttime = System.currentTimeMillis();
@@ -141,14 +142,16 @@ public class DeckItemTouchHelper extends ItemTouchHelperCompat.Callback {
                 mCallBack.onDragStart();
             }
         } else if (actionState == ACTION_STATE_IDLE) {
-            Log.d("drag", "end drag");
+            if (DEBUG)
+                Log.d(TAG, "end drag");
             disableDelete();
             mDeckDrager.onDragEnd();
             if (mCallBack != null) {
                 mCallBack.onDragEnd();
             }
         } else if (actionState == ACTION_STATE_SWIPE) {
-            Log.w("drag", "cancel enter delete by swipe");
+            if (DEBUG)
+                Log.d(TAG, "cancel enter delete by swipe");
             disableDelete();
         }
     }
@@ -157,13 +160,15 @@ public class DeckItemTouchHelper extends ItemTouchHelperCompat.Callback {
         @Override
         public void run() {
             if (System.currentTimeMillis() - lasttime >= Constants.LONG_PRESS_DRAG) {
-                Log.i("drag", "enter delete");
+                if (DEBUG)
+                    Log.d(TAG, "enter delete");
                 isDeleteMode = true;
                 if (mCallBack != null) {
                     mCallBack.onDragDelete(mSelectId);
                 }
             } else {
-                Log.w("drag", "no enter delete " + (System.currentTimeMillis() - lasttime));
+                if (DEBUG)
+                    Log.d(TAG, "no enter delete " + (System.currentTimeMillis() - lasttime));
             }
         }
     };
@@ -187,7 +192,8 @@ public class DeckItemTouchHelper extends ItemTouchHelperCompat.Callback {
 
     @Override
     public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-        Log.i("drag", "clearView");
+        if (DEBUG)
+            Log.i(TAG, "clearView");
         super.clearView(recyclerView, viewHolder);
         if (mDeleteId > 0) {
             //
@@ -207,7 +213,8 @@ public class DeckItemTouchHelper extends ItemTouchHelperCompat.Callback {
         if (viewHolder.getAdapterPosition() < 0) {
             if (mDeleteId > 0) {
                 //还原Canvas
-                Log.w("drag", "resotre " + mDeleteId + " state=" + actionState);
+                if (DEBUG)
+                    Log.w(TAG, "resotre " + mDeleteId + " state=" + actionState);
                 mDeleteId = -2;
                 return false;
             }
@@ -223,13 +230,15 @@ public class DeckItemTouchHelper extends ItemTouchHelperCompat.Callback {
                 disableDelete();
                 if (y > Min_Pos) {
                     mDeleteId = fromPos;
-                    Log.i("drag", "delete " + fromPos + " x=" + x + ",y=" + y);
+                    if (DEBUG)
+                        Log.i(TAG, "delete " + fromPos + " x=" + x + ",y=" + y);
                     if (!Constants.DRAG_END_DELETE) {
                         mDeleteItem = mDeckDrager.delete(mDeleteId);
                         return;
                     }
                 } else {
-                    Log.d("drag", "cancel delete " + fromPos + " x=" + x + ",y=" + y);
+                    if (DEBUG)
+                        Log.d(TAG, "cancel delete " + fromPos + " x=" + x + ",y=" + y);
                 }
             }
         }
