@@ -85,9 +85,12 @@
             android:maxLines="1"
             android:singleLine="true"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
-            android:textColor="@color/colorPrimaryDark"
+            android:textColor="@color/colorAccent"
+            android:shadowColor="@color/black"
+            android:shadowDx="1"
+            android:shadowDy="2"
+            android:shadowRadius="2"
             android:textIsSelectable="true"
-            android:textSize="20sp"
             tools:text="name"/>
 
         <TextView

@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
@@ -56,6 +57,7 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
     private LimitList mLimitList;
     private File mYdkFile;
     private DeckItemTouchHelper mDeckItemTouchHelper;
+    private boolean isShowing = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -229,10 +231,20 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
 
     protected void showCardDialog(CardInfo cardInfo, int pos) {
         if (cardInfo != null) {
+            if (isShowing) return;
+            isShowing = true;
             CardDetail cardDetail = new CardDetail(this);
             cardDetail.showAdd();
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setView(cardDetail.getView());
+            builder.setOnCancelListener((dlg) -> {
+                isShowing = false;
+            });
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                builder.setOnDismissListener((dlg) -> {
+                    isShowing = false;
+                });
+            }
             final Dialog dialog = builder.show();
             cardDetail.bind(cardInfo, mStringManager, new CardDetail.OnClickListener() {
                 @Override
@@ -244,6 +256,7 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
                 @Override
                 public void onClose() {
                     dialog.dismiss();
+                    isShowing = false;
                 }
 
                 @Override
@@ -326,7 +339,7 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
                 });
                 builder.show();
             }
-        }else {
+        } else {
             super.onBackPressed();
         }
     }
@@ -549,7 +562,7 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
         editText.setGravity(Gravity.TOP | Gravity.LEFT);
         editText.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
         editText.setSingleLine();
-        if(mYdkFile!=null){
+        if (mYdkFile != null) {
             editText.setText(mYdkFile.getName());
         }
         builder.setView(editText);

@@ -3,6 +3,7 @@ package cn.garymb.ygomobile.activities;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.DrawerLayout;
@@ -40,6 +41,7 @@ public class CardSearchAcitivity extends BaseActivity implements CardLoader.Call
     protected boolean isLoad = false;
     protected StringManager mStringManager = StringManager.get();
     protected LimitManager mLimitManager = LimitManager.get();
+    private boolean isShowing = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -197,10 +199,20 @@ public class CardSearchAcitivity extends BaseActivity implements CardLoader.Call
     }
 
     protected void showCard(CardInfo cardInfo) {
+        if (isShowing) return;
         if (cardInfo != null) {
+            isShowing = true;
             CardDetail cardDetail = new CardDetail(this);
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setView(cardDetail.getView());
+            builder.setOnCancelListener((dlg) -> {
+                isShowing = false;
+            });
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                builder.setOnDismissListener((dlg) -> {
+                    isShowing = false;
+                });
+            }
             final Dialog dialog = builder.show();
             cardDetail.bind(cardInfo, mStringManager, new CardDetail.OnClickListener() {
                 @Override
@@ -212,6 +224,7 @@ public class CardSearchAcitivity extends BaseActivity implements CardLoader.Call
                 @Override
                 public void onClose() {
                     dialog.dismiss();
+                    isShowing = false;
                 }
 
                 @Override

@@ -52,7 +52,6 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
     private int mHeight;
     private int Padding = 1;
     private RecyclerView recyclerView;
-    private int mDragPosition = -1;
     private Random mRandom;
     private DeckViewHolder mHeadHolder;
     private DeckItem mRemoveItem;
@@ -562,6 +561,8 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
         holder.setItemType(item.getType());
         if (position == DeckItem.HeadView) {
             holder.headView.setVisibility(View.VISIBLE);
+            holder.cardImage.setVisibility(View.GONE);
+            return;
         } else {
             holder.headView.setVisibility(View.GONE);
         }
@@ -590,14 +591,9 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
             if (mHeight <= 0) {
                 makeHeight();
             }
-
 //            holder.cardImage.setLayoutParams(new RelativeLayout.LayoutParams(holder.cardImage.getMeasuredWidth(), mHeight));
             holder.textlayout.setVisibility(View.GONE);
-            if (position == mDragPosition) {
-                holder.cardImage.setVisibility(View.GONE);
-            } else {
-                holder.cardImage.setVisibility(View.VISIBLE);
-            }
+            holder.cardImage.setVisibility(View.VISIBLE);
             holder.setSize(mHeight);
             if (item.getType() == DeckItemType.Space) {
                 holder.setCardType(0);
