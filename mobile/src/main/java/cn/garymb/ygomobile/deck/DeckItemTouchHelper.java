@@ -1,5 +1,7 @@
 package cn.garymb.ygomobile.deck;
 
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.os.Handler;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -103,6 +105,8 @@ public class DeckItemTouchHelper extends ItemTouchHelper.Callback {
     public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
         super.onSelectedChanged(viewHolder, actionState);
         if (actionState == ACTION_STATE_DRAG) {
+            mDeleteId = -1;
+            Log.d("drag", "start drag");
             isCencel = false;
             lasttime = System.currentTimeMillis();
             mHandler.postDelayed(enterDelete, Constants.LONG_PRESS_DRAG);
@@ -111,6 +115,7 @@ public class DeckItemTouchHelper extends ItemTouchHelper.Callback {
                 mCallBack.onDragStart();
             }
         } else if (actionState == ACTION_STATE_IDLE) {
+            Log.d("drag", "end drag");
             disableDelete();
             mDeckDrager.onDragEnd();
             if (mCallBack != null) {
@@ -162,9 +167,38 @@ public class DeckItemTouchHelper extends ItemTouchHelper.Callback {
         return super.chooseDropTarget(selected, dropTargets, curX, curY);
     }
 
+    int mDeleteId;
+    DeckItem mDeleteItem;
+
     @Override
     public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+        if (viewHolder.getAdapterPosition() < 0) {
+            return false;
+        }
         return mDeckDrager.move((DeckViewHolder) viewHolder, (DeckViewHolder) target);
+    }
+
+    @Override
+    public void clearView(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+        Log.i("drag", "clearView");
+        if (mDeleteId > 0) {
+            mDeleteItem = mDeckDrager.delete(mDeleteId);
+            mDeleteId = -1;
+        }else{
+            super.clearView(recyclerView, viewHolder);
+        }
+    }
+
+    @Override
+    public void onChildDrawOver(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+        if (viewHolder.getAdapterPosition() < 0) {
+            if (mDeleteId > 0) {
+                //还原Canvas
+                Log.w("drag", "resotre " + mDeleteId);
+                mDeleteId = -2;
+            }
+        }
+        super.onChildDrawOver(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
     }
 
     @Override
@@ -174,8 +208,9 @@ public class DeckItemTouchHelper extends ItemTouchHelper.Callback {
                 //防止删除后，弹回来
                 disableDelete();
                 if (y > Min_Pos) {
-                    DeckItem deckItem = mDeckDrager.delete(fromPos);
+                    mDeleteId = fromPos;
                     Log.i("drag", "delete " + fromPos + " x=" + x + ",y=" + y);
+                    return;
                 } else {
                     Log.d("drag", "cancel delete " + fromPos + " x=" + x + ",y=" + y);
                 }
@@ -186,6 +221,5 @@ public class DeckItemTouchHelper extends ItemTouchHelper.Callback {
 
     @Override
     public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-        Log.i("kk", "onSwiped " + viewHolder.getAdapterPosition() + " -> " + direction);
     }
 }
