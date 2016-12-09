@@ -22,8 +22,6 @@ import cn.ygo.ocgcore.enums.LimitType;
 public class CardListAdapater extends BaseAdapterPlus<CardInfo> {
     private StringManager mStringManager;
     private ImageTop mImageTop;
-    private boolean showAdd;
-    private boolean showCode;
     private OnAddCardListener mOnAddCardListener;
 
     public interface OnAddCardListener {
@@ -35,28 +33,13 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> {
         mStringManager = StringManager.get();
     }
 
-    public void setShowAdd(boolean showAdd) {
-        this.showAdd = showAdd;
-    }
-
-    public void setShowCode(boolean showCode) {
-        this.showCode = showCode;
-    }
-
     public void setOnAddCardListener(OnAddCardListener onAddCardListener) {
         mOnAddCardListener = onAddCardListener;
     }
 
     @Override
     protected View createView(int position, ViewGroup parent) {
-        View view;
-        if (showAdd) {
-            view = mLayoutInflater.inflate(R.layout.item_deck_list_card, parent, false);
-        } else if (showCode) {
-            view = mLayoutInflater.inflate(R.layout.item_search_card, parent, false);
-        } else {
-            view = mLayoutInflater.inflate(R.layout.item_list_card, parent, false);
-        }
+        View view = inflate(R.layout.item_search_card, parent, false);
         new ViewHolder(view);
         return view;
     }
@@ -123,15 +106,14 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> {
         TextView cardDef;
         ImageView rightImage;
         View layout_atkdef;
-        View addView;
         View view_bar;
         TextView codeView;
         private int position;
 
         void setPosition(int position) {
             this.position = position;
-            if (addView != null) {
-                addView.setOnClickListener((v) -> {
+            if (cardImage != null) {
+                cardImage.setOnClickListener((v) -> {
                     if (mOnAddCardListener != null) {
                         mOnAddCardListener.onAdd(position);
                     }
@@ -156,7 +138,6 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> {
             layout_atkdef = findViewById(R.id.layout_atkdef);
             view_bar = findViewById(R.id.view_bar);
             rightImage = findViewById(R.id.right_top);
-            addView = findViewById(R.id.card_add);
             codeView = findViewById(R.id.card_code);
             File outFile = new File(AppsSettings.get().getCoreSkinPath(), Constants.UNKNOWN_IMAGE);
             ImageLoader.get().bind(context, outFile, cardImage, outFile.getName().endsWith(Constants.BPG), 0, null);

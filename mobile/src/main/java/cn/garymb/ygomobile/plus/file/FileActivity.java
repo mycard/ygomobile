@@ -16,11 +16,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
 import java.io.File;
 
 import cn.garymb.ygomobile.activities.BaseActivity;
 import cn.garymb.ygomobile.lite.R;
-import cn.garymb.ygomobile.plus.DialogPlus;
+
 
 public class FileActivity extends BaseActivity implements AdapterView.OnItemClickListener, AdapterView.OnItemLongClickListener
         , FileAdapter.OnPathChangedListener {
@@ -67,14 +68,14 @@ public class FileActivity extends BaseActivity implements AdapterView.OnItemClic
             }
         });
         headText = bind(R.id.path);
-        newFolderButton=bind(R.id.new_folder);
+        newFolderButton = bind(R.id.new_folder);
         newFolderButton.setOnClickListener((v) -> {
-            DialogPlus builder=new DialogPlus(this);
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
             final EditText editText = new EditText(this);
             editText.setSingleLine();
             builder.setTitle(R.string.create_folder);
             builder.setView(editText);
-            builder.setButtonListener((d, s) -> {
+            builder.setNegativeButton(android.R.string.ok, (d, s) -> {
                 if (editText.getText() != null) {
                     String name = String.valueOf(editText.getText());
                     if (TextUtils.isEmpty(name)) {
@@ -103,6 +104,10 @@ public class FileActivity extends BaseActivity implements AdapterView.OnItemClic
                     String name = String.valueOf(editText.getText());
                     if (TextUtils.isEmpty(name)) {
                         return;
+                    }
+                    String ex = mFileOpenInfo.getFileExtention();
+                    if (ex != null && !name.endsWith(ex)) {
+                        name += ex;
                     }
                     File file = new File(mFileAdapter.getCurPath(), name);
                     if (!file.isDirectory()) {
@@ -140,7 +145,17 @@ public class FileActivity extends BaseActivity implements AdapterView.OnItemClic
                 return;
             }
         }
-        selectFile(file);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.question);
+        builder.setMessage(getString(R.string.check_choose_file, file.getName()));
+        builder.setNegativeButton(android.R.string.ok, (d, s) -> {
+            selectFile(file);
+            d.dismiss();
+        });
+        builder.setNeutralButton(android.R.string.cancel, (d, s) -> {
+            d.dismiss();
+        });
+        builder.show();
     }
 
     @Override
@@ -170,7 +185,7 @@ public class FileActivity extends BaseActivity implements AdapterView.OnItemClic
 
     @Override
     public void finish() {
-        if(!selectFile){
+        if (!selectFile) {
 
         }
         super.finish();

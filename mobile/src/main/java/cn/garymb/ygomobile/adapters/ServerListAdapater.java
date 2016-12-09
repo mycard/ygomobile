@@ -244,7 +244,7 @@ public class ServerListAdapater extends BaseAdapterPlus<ServerInfo> implements
 
     @Override
     protected View createView(int position, ViewGroup parent) {
-        View view = mLayoutInflater.inflate(R.layout.item_server_info, parent, false);
+        View view = inflate(R.layout.item_server_info, parent, false);
         new ViewHolder(view);
         return view;
     }

@@ -44,7 +44,16 @@ public class FileOpenInfo implements Parcelable {
 
     public FileOpenInfo() {
     }
-
+    public String getFileExtention(){
+        if(mFileFilter==null){
+            return "";
+        }
+        int i = mFileFilter.lastIndexOf(".");
+        if(i>=0){
+            return mFileFilter.substring(i);
+        }
+        return "";
+    }
     public FileOpenInfo(String title, String fileFilter, boolean showHide, String defPath, FileOpenType type) {
         mTitle = title;
         mFileFilter = fileFilter;

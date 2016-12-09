@@ -151,4 +151,5 @@
     <string name="quit_deck_tip">Quit deck editor?</string>
     <string name="deck_delete_text">Drag here to delete</string>
     <string name="question_keep_cur_deck">keep current cards?</string>
+    <string name="check_choose_file" formatted="false">Determine the choose %s ？</string>
 </resources>

@@ -13,7 +13,7 @@ import java.util.List;
 
 public abstract class BaseAdapterPlus<T> extends BaseAdapter implements SpinnerAdapter {
     protected Context context;
-    protected LayoutInflater mLayoutInflater;
+    private LayoutInflater mLayoutInflater;
     protected final List<T> mItems = new ArrayList<T>();
 
     public BaseAdapterPlus(Context context) {
@@ -52,6 +52,14 @@ public abstract class BaseAdapterPlus<T> extends BaseAdapter implements SpinnerA
 
     public List<T> getItems() {
         return mItems;
+    }
+
+    protected  <T extends View> T inflate(int resource, ViewGroup root) {
+        return (T) mLayoutInflater.inflate(resource, root);
+    }
+
+    protected <T extends View> T inflate(int resource, ViewGroup root, boolean attachToRoot) {
+        return (T) mLayoutInflater.inflate(resource, root, attachToRoot);
     }
 
 

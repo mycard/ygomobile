@@ -40,7 +40,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="6dp"
+            android:layout_marginLeft="4dp"
             android:orientation="vertical"
             >
 
@@ -104,10 +104,9 @@
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
                     android:maxLines="1"
-
                     android:singleLine="true"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:textColor="@color/colorPrimary"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+                    android:textColor="@color/blackLinght"
                     tools:text="123456789"/>
 
                 <TextView
@@ -138,8 +137,9 @@
 
                     <TextView
                         android:id="@+id/card_atk"
-                        android:layout_width="@dimen/label_width_small"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:minWidth="@dimen/label_width_small_35dp"
                         android:gravity="right"
                         android:maxLines="1"
                         android:singleLine="true"
@@ -147,7 +147,7 @@
                         tools:text="2500"/>
 
                     <View
-                        android:layout_width="10dp"
+                        android:layout_width="5dp"
                         android:layout_height="1dp"/>
 
                     <TextView
@@ -160,8 +160,9 @@
 
                     <TextView
                         android:id="@+id/card_def"
-                        android:layout_width="@dimen/label_width_small"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:minWidth="@dimen/label_width_small_35dp"
                         android:gravity="right"
                         android:maxLines="1"
                         android:singleLine="true"

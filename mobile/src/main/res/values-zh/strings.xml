@@ -147,4 +147,5 @@
     <string name="quit_deck_tip">退出卡组编辑?</string>
     <string name="deck_delete_text">拖到这里删除</string>
     <string name="question_keep_cur_deck">保留当前卡牌？</string>
+    <string name="check_choose_file" formatted="false">确定选择该文件 %s ？</string>
 </resources>

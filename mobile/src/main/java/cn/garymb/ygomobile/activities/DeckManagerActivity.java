@@ -60,7 +60,6 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mCardListAdapater.setShowAdd(true);
         mCardListAdapater.setOnAddCardListener(this);
         mRecyclerView.setPadding(mRecyclerView.getPaddingLeft(), 0, mRecyclerView.getPaddingRight(), mRecyclerView.getPaddingBottom());
         mRecyclerView.setAdapter((mDeckAdapater = new DeckAdapater(this, mRecyclerView)));
