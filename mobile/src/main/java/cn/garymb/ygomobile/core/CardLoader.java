@@ -77,15 +77,6 @@ public class CardLoader implements ICardLoader {
 //                Log.i("kk", "find card count=" + reader.getCount());
                 do {
                     CardInfo cardInfo = new CardInfo(reader);
-                    if (limitList != null) {
-                        if (limitList.isForbidden(cardInfo.Code)) {
-                            cardInfo.setLimitType(LimitType.Forbidden);
-                        } else if (limitList.isLimit(cardInfo.Code)) {
-                            cardInfo.setLimitType(LimitType.Limit);
-                        } else if (limitList.isSemiLimit(cardInfo.Code)) {
-                            cardInfo.setLimitType(LimitType.SemiLimit);
-                        }
-                    }
 //                    Log.i("kk", "read card " + cardInfo);
                     map.put(cardInfo.Code, cardInfo);
 
@@ -128,13 +119,12 @@ public class CardLoader implements ICardLoader {
         mCallBack = callBack;
     }
 
-    @Override
-    public LimitList getLimitList() {
-        return mLimitList;
-    }
-
     public void loadData() {
         loadData(defSQL, 0, mLimitList);
+    }
+
+    public LimitList getLimitList() {
+        return mLimitList;
     }
 
     private void loadData(String sql, long setcode, LimitList limitList) {
@@ -163,15 +153,6 @@ public class CardLoader implements ICardLoader {
                         if (setcode > 0) {
                             if (!cardInfo.isSetCode(setcode)) {
                                 continue;
-                            }
-                        }
-                        if (limitList != null) {
-                            if (limitList.isForbidden(cardInfo.Code)) {
-                                cardInfo.setLimitType(LimitType.Forbidden);
-                            } else if (limitList.isLimit(cardInfo.Code)) {
-                                cardInfo.setLimitType(LimitType.Limit);
-                            } else if (limitList.isSemiLimit(cardInfo.Code)) {
-                                cardInfo.setLimitType(LimitType.SemiLimit);
                             }
                         }
                         tmp.add(cardInfo);

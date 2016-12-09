@@ -18,7 +18,6 @@ public class CardInfo extends Card implements Parcelable {
     public static final String _ID = "_id";
     public static final String COL_ID = "datas." + _ID;
     public static final String COL_STAR = "star";
-    private LimitType mLimitType = LimitType.None;
 
     static {
         StringBuilder stringBuilder = new StringBuilder("select datas." + _ID + ",ot,alias,setcode,type,level,race,attribute,atk,def,category");
@@ -68,14 +67,6 @@ public class CardInfo extends Card implements Parcelable {
         } catch (Exception e) {
             Log.e("card", "read text", e);
         }
-    }
-
-    public LimitType getLimitType() {
-        return mLimitType;
-    }
-
-    public void setLimitType(LimitType limitType) {
-        mLimitType = limitType;
     }
 
     public String getAllTypeString(StringManager stringManager) {

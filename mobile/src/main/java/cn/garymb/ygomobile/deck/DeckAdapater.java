@@ -56,6 +56,7 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
     private DeckViewHolder mHeadHolder;
     private DeckItem mRemoveItem;
     private int mRemoveIndex;
+    private LimitList mLimitList;
 
     public DeckAdapater(Context context, RecyclerView recyclerView) {
         this.context = context;
@@ -137,6 +138,10 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
             }
         }
         notifyItemRangeChanged(DeckItem.MainStart, DeckItem.MainStart + getMainCount());
+    }
+
+    public void setLimitList(LimitList limitList) {
+        mLimitList = limitList;
     }
 
     private boolean comp(DeckItem d1, DeckItem d2) {
@@ -606,12 +611,16 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
                         mImageTop = new ImageTop(context);
                     }
                     holder.rightImage.setVisibility(View.VISIBLE);
-                    if (cardInfo.getLimitType() == LimitType.Forbidden) {
-                        holder.rightImage.setImageBitmap(mImageTop.forbidden);
-                    } else if (cardInfo.getLimitType() == LimitType.Limit) {
-                        holder.rightImage.setImageBitmap(mImageTop.limit);
-                    } else if (cardInfo.getLimitType() == LimitType.SemiLimit) {
-                        holder.rightImage.setImageBitmap(mImageTop.semiLimit);
+                    if (mLimitList != null) {
+                        if (mLimitList.isForbidden(cardInfo.Code)) {
+                            holder.rightImage.setImageBitmap(mImageTop.forbidden);
+                        } else if (mLimitList.isLimit(cardInfo.Code)) {
+                            holder.rightImage.setImageBitmap(mImageTop.limit);
+                        } else if (mLimitList.isSemiLimit(cardInfo.Code)) {
+                            holder.rightImage.setImageBitmap(mImageTop.semiLimit);
+                        } else {
+                            holder.rightImage.setVisibility(View.GONE);
+                        }
                     } else {
                         holder.rightImage.setVisibility(View.GONE);
                     }

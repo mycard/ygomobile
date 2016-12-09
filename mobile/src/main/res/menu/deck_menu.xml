@@ -23,10 +23,10 @@
         android:id="@+id/action_sort"
         android:icon="@drawable/ic_refresh"
         android:title="@string/sort"/>
-    <item
+   <!-- <item
         android:id="@+id/action_manager"
         android:icon="@drawable/ic_edit_white"
-        android:title="@string/deck_list"/>
+        android:title="@string/deck_list"/>-->
     <item
         android:id="@+id/action_save"
         android:icon="@drawable/ic_mode_save_white"

@@ -11,15 +11,21 @@ import cn.garymb.ygomobile.plus.BaseAdapterPlus;
 
 
 public class SimpleSpinnerAdapter extends BaseAdapterPlus<SimpleSpinnerItem> {
+    private int color;
+
     public SimpleSpinnerAdapter(Context context) {
         super(context);
+        color = context.getResources().getColor(R.color.colorPrimaryDark);
+    }
+
+    public void setColor(int color) {
+        this.color = color;
     }
 
     @Override
     protected View createView(int position, ViewGroup parent) {
         View view = inflate(android.R.layout.simple_list_item_1, null);
         TextView textView = (TextView) view.findViewById(android.R.id.text1);
-        textView.setTextColor(context.getResources().getColor(R.color.colorPrimaryDark));
         view.setTag(textView);
         return view;
     }
@@ -27,10 +33,12 @@ public class SimpleSpinnerAdapter extends BaseAdapterPlus<SimpleSpinnerItem> {
     @Override
     protected void attach(View view, SimpleSpinnerItem item, int position) {
         TextView textView = (TextView) view.getTag();
+        textView.setTextColor(color);
         if (item != null) {
             textView.setText(item.toString());
         }
     }
+
     public static Object getSelectTag(Spinner spinner) {
         if (spinner.getCount() > 0) {
             Object item = spinner.getSelectedItem();
@@ -41,6 +49,7 @@ public class SimpleSpinnerAdapter extends BaseAdapterPlus<SimpleSpinnerItem> {
         }
         return null;
     }
+
     public static long getSelect(Spinner spinner) {
         if (spinner.getCount() > 0) {
             Object item = spinner.getSelectedItem();

@@ -4,9 +4,11 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelperCompat;
 import android.text.InputType;
@@ -14,7 +16,10 @@ import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowInsets;
+import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -58,10 +63,12 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
     private File mYdkFile;
     private DeckItemTouchHelper mDeckItemTouchHelper;
     private boolean isShowing = false;
-
+    private AppCompatSpinner mDeckSpinner;
+    private SimpleSpinnerAdapter mSimpleSpinnerAdapter;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mDeckSpinner = bind(R.id.toolbar_list);
         mCardListAdapater.setOnAddCardListener(this);
         mRecyclerView.setPadding(mRecyclerView.getPaddingLeft(), 0, mRecyclerView.getPaddingRight(), mRecyclerView.getPaddingBottom());
         mRecyclerView.setAdapter((mDeckAdapater = new DeckAdapater(this, mRecyclerView)));
@@ -71,8 +78,21 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
         ItemTouchHelperCompat touchHelper = new ItemTouchHelperCompat(mDeckItemTouchHelper);
         touchHelper.setEnableClickDrag(Constants.DECK_SINGLE_PRESS_DRAG);
         touchHelper.attachToRecyclerView(mRecyclerView);
-
         mRecyclerView.addOnItemTouchListener(new RecyclerViewItemListener(mRecyclerView, this));
+        mDeckSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                File file = getSelectDeck(mDeckSpinner);
+                if (file != null) {
+                    loadDeck(file);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+            }
+        });
+        initDecksListSpinners(mDeckSpinner);
     }
 
     @Override
@@ -134,6 +154,8 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
 
     private void setLimitList(LimitList limitList) {
         mLimitList = limitList;
+        mDeckAdapater.setLimitList(mLimitList);
+        mDeckAdapater.notifyDataSetChanged();
         mCardLoader.setLimitList(mLimitList);
     }
 
@@ -167,6 +189,7 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
 
     @Override
     public void onSearchStart(LimitList limitList) {
+        setLimitList(limitList);
         hideDrawers();
     }
 
@@ -440,9 +463,8 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
                 builder.show();
             }
             break;
-            case R.id.action_manager: {
+          /*  case R.id.action_manager: {
                 //显示对话框:
-
                 //选择禁卡表
                 //卡组列表
                 DialogPlus dialogPlus = new DialogPlus(this);
@@ -465,7 +487,7 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
                 });
                 dialogPlus.show();
             }
-            break;
+            break;*/
             case R.id.action_unsort:
                 //打乱
                 mDeckAdapater.unSort();
@@ -478,9 +500,7 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
 //                mDeckAdapater.notifyDataSetChanged();
 //                break;
         }
-
         return super.onOptionsItemSelected(item);
-
     }
 
     private void shareDeck() {
@@ -541,9 +561,10 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
                 items.add(new SimpleSpinnerItem(i++, file.getName()).setTag(file));
             }
         }
-        SimpleSpinnerAdapter adapter = new SimpleSpinnerAdapter(this);
-        adapter.set(items);
-        spinner.setAdapter(adapter);
+        mSimpleSpinnerAdapter = new SimpleSpinnerAdapter(this);
+        mSimpleSpinnerAdapter.set(items);
+        mSimpleSpinnerAdapter.setColor(Color.WHITE);
+        spinner.setAdapter(mSimpleSpinnerAdapter);
         if (index >= 0) {
             spinner.setSelection(index);
         }

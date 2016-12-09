@@ -95,6 +95,14 @@ public class LimitList {
     }
 
     @Override
+    public int hashCode() {
+        int result = forbidden != null ? forbidden.hashCode() : 0;
+        result = 31 * result + (limit != null ? limit.hashCode() : 0);
+        result = 31 * result + (semiLimit != null ? semiLimit.hashCode() : 0);
+        return result;
+    }
+
+    @Override
     public String toString() {
         return "LimitList{" +
                 "name='" + name + '\'' +
