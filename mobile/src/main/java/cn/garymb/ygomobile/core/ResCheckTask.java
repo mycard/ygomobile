@@ -135,7 +135,7 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
             if (needsUpdate) {
                 setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.tip_new_deck)));
                 IOUtils.copyFilesFromAssets(mContext, getDatapath(Constants.CORE_DECK_PATH),
-                        new File(resPath, Constants.CORE_DECK_PATH).getAbsolutePath(), false);
+                        new File(resPath, Constants.CORE_DECK_PATH).getAbsolutePath(), needsUpdate);
             }
             if (needsUpdate) {
                 setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.game_skins)));
@@ -148,7 +148,7 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
             if (needsUpdate) {
                 setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.single_lua)));
                 IOUtils.copyFilesFromAssets(mContext, getDatapath(Constants.CORE_SINGLE_PATH),
-                        new File(resPath, Constants.CORE_SINGLE_PATH).getAbsolutePath(), false);
+                        new File(resPath, Constants.CORE_SINGLE_PATH).getAbsolutePath(), needsUpdate);
             }
             if (IOUtils.hasAssets(mContext, getDatapath(Constants.CORE_SCRIPTS_ZIP))) {
                 setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.scripts)));
