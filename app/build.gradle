@@ -8,8 +8,8 @@ android {
         applicationId "cn.garymb.ygomobile"
         minSdkVersion 14
         targetSdkVersion 22
-        versionCode 211602
-        versionName "2.1.16"
+        versionCode 220501
+        versionName "2.2.5ex"
 //        externalNativeBuild {
 //            cmake {
 //                cppFlags "-Wno-error=format-security -std=gnu++11 -fpermissive"

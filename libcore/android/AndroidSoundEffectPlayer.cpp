@@ -109,7 +109,7 @@ void AndroidSoundEffectPlayer::doDamageEffect() {
 
 void AndroidSoundEffectPlayer::doGainLpEffect() {
 	if (m_isEnabled) {
-		m_pAudioTracker->playBGM(irr::io::path("sound/gain.ogg"),
+		m_pAudioTracker->playBGM(irr::io::path("sound/addcounter.ogg"),
 				AP_TYPE_ASSET);
 	}
 }
@@ -130,7 +130,7 @@ void AndroidSoundEffectPlayer::doAddCounterEffect() {
 
 void AndroidSoundEffectPlayer::doRemoveCounterEffect() {
 	if (m_isEnabled) {
-		m_pAudioTracker->playBGM(irr::io::path("sound/removecounter.ogg"),
+		m_pAudioTracker->playBGM(irr::io::path("sound/coinflip.ogg"),
 				AP_TYPE_ASSET);
 	}
 }
@@ -169,93 +169,111 @@ void AndroidSoundEffectPlayer::doDestroyEffect() {
 				AP_TYPE_ASSET);
 	}
 }
- void AndroidSoundEffectPlayer::doMenuBGM() {
-	if (m_isEnabled) {
 
+//add new soundeffect and BGM
+void AndroidSoundEffectPlayer::doMenuBGM() {
+	if (m_isEnabled) {
+		m_pAudioTracker->playBGM(irr::io::path("sound/MenuBGM.ogg"),
+				AP_TYPE_ASSET);
 	}
 }
 
- void AndroidSoundEffectPlayer::doDeckBgm() {
+void AndroidSoundEffectPlayer::doDeckBgm() {
 	if (m_isEnabled) {
-
+		m_pAudioTracker->playBGM(irr::io::path("sound/DeckBgm.ogg"),
+				AP_TYPE_ASSET);
 	}
 }
 
- void AndroidSoundEffectPlayer::doSaveDeck() {
+void AndroidSoundEffectPlayer::doSaveDeck() {
 	if (m_isEnabled) {
-
+		m_pAudioTracker->playBGM(irr::io::path("sound/addcounter.ogg"),
+				AP_TYPE_ASSET);
 	}
 }
 
- void AndroidSoundEffectPlayer::doDelete() {
+void AndroidSoundEffectPlayer::doDelete() {
 	if (m_isEnabled) {
-
+		m_pAudioTracker->playBGM(irr::io::path("sound/phase.ogg"),
+				AP_TYPE_ASSET);
 	}
 }
 
- void AndroidSoundEffectPlayer::doLeave() {
+void AndroidSoundEffectPlayer::doLeave() {
 	if (m_isEnabled) {
-
+		m_pAudioTracker->playBGM(irr::io::path("sound/equip.ogg"),
+				AP_TYPE_ASSET);
 	}
 }
 
- void AndroidSoundEffectPlayer::doReady() {
+void AndroidSoundEffectPlayer::doReady() {
 	if (m_isEnabled) {
-
+		m_pAudioTracker->playBGM(irr::io::path("sound/addcounte.ogg"),
+				AP_TYPE_ASSET);
 	}
 }
 
- void AndroidSoundEffectPlayer::doUnReady() {
+void AndroidSoundEffectPlayer::doUnReady() {
 	if (m_isEnabled) {
-
+		m_pAudioTracker->playBGM(irr::io::path("sound/phase.ogg"),
+				AP_TYPE_ASSET);
 	}
 }
 
- void AndroidSoundEffectPlayer::doPlayerExit() {
+void AndroidSoundEffectPlayer::doPlayerExit() {
 	if (m_isEnabled) {
-
+		m_pAudioTracker->playBGM(irr::io::path("sound/equip.ogg"),
+				AP_TYPE_ASSET);
 	}
 }
 
- void AndroidSoundEffectPlayer::doOpeningBGM() {
+void AndroidSoundEffectPlayer::doOpeningBGM() {
 	if (m_isEnabled) {
-
+		m_pAudioTracker->playBGM(irr::io::path("sound/doOpeningBGM.ogg"),
+				AP_TYPE_ASSET);
 	}
 }
 
- void AndroidSoundEffectPlayer::doDisadvantageBgm() {
+void AndroidSoundEffectPlayer::doDisadvantageBgm() {
 	if (m_isEnabled) {
-
+		m_pAudioTracker->playBGM(irr::io::path("sound/doDisadvantageBgm.ogg"),
+				AP_TYPE_ASSET);
 	}
 }
 
- void AndroidSoundEffectPlayer::doAdvantageBgm() {
+void AndroidSoundEffectPlayer::doAdvantageBgm() {
 	if (m_isEnabled) {
-
+		m_pAudioTracker->playBGM(irr::io::path("sound/doAdvantageBgm.ogg"),
+				AP_TYPE_ASSET);
 	}
 }
 
- void AndroidSoundEffectPlayer::doWinBgm() {
+void AndroidSoundEffectPlayer::doWinBgm() {
 	if (m_isEnabled) {
-
+		m_pAudioTracker->playBGM(irr::io::path("sound/doWinBgm.ogg"),
+				AP_TYPE_ASSET);
 	}
 }
 
- void AndroidSoundEffectPlayer::doLoseBgm() {
+void AndroidSoundEffectPlayer::doLoseBgm() {
 	if (m_isEnabled) {
-
+		m_pAudioTracker->playBGM(irr::io::path("sound/doLoseBgm.ogg"),
+				AP_TYPE_ASSET);
 	}
 }
 
- void AndroidSoundEffectPlayer::doStartGame() {
+void AndroidSoundEffectPlayer::doStartGame() {
 	if (m_isEnabled) {
-
+		m_pAudioTracker->playBGM(irr::io::path("sound/doStartGame.ogg"),
+				AP_TYPE_ASSET);
 	}
 }
 
- void AndroidSoundEffectPlayer::doPressButton() {
+void AndroidSoundEffectPlayer::doPressButton() {
 	if (m_isEnabled) {
-
+		m_pAudioTracker->playBGM(irr::io::path("sound/chatmessage.ogg"),
+				AP_TYPE_ASSET);
 	}
 }
+
 } /* namespace ygo */

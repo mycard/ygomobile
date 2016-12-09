@@ -134,7 +134,7 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
     }
 
     private void checkDirs() {
-        String[] dirs = {"script", "single", "deck", "replay", "fonts"};
+        String[] dirs = {"pics","script", "single", "deck", "replay", "fonts"};
         File dirFile = null;
         for (String dir : dirs) {
             dirFile = new File(mApp.getResourcePath(), dir);

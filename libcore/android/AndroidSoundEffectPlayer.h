@@ -63,35 +63,36 @@ public:
 	virtual void doDestroyEffect();
 
 	virtual void setSEEnabled(bool enabled);
-	
+
+	//add new sound effect and BGM @fallenstardust
 	virtual void doMenuBGM();
-	
+
 	virtual void doDeckBgm();
-	
+
 	virtual void doSaveDeck();
-	
+
 	virtual void doDelete();
-	
+
 	virtual void doLeave();
-	
+
 	virtual void doReady();
-	
+
 	virtual void doUnReady();
-	
+
 	virtual void doPlayerExit();
-	
+
 	virtual void doOpeningBGM();
-	
+
 	virtual void doDisadvantageBgm();
-	
+
 	virtual void doAdvantageBgm();
-	
+
 	virtual void doWinBgm();
-	
+
 	virtual void doLoseBgm();
-	
+
 	virtual void doStartGame();
-	
+
 	virtual void doPressButton();
 
 private:
