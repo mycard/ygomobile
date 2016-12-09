@@ -50,7 +50,7 @@
         <CheckBoxPreference
             android:key="pref_key_deck_delete_dialog"
             android:persistent="true"
-            android:summary="@string/settings_deck_delete_dialog"
+            android:summary="@string/settings_deck_delete_dialog_desc"
             android:title="@string/settings_deck_delete_dialog"/>
 
     </PreferenceCategory>
