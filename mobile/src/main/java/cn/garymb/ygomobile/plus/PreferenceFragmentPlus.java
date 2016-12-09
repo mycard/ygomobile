@@ -8,7 +8,6 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.preference.Preference;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.widget.Toast;
 
 import java.io.File;
@@ -80,12 +79,12 @@ public abstract class PreferenceFragmentPlus extends BasePreferenceFragment {
         mCurImageInfo.mCurTitle = title;
         curPreference = preference;
         String defPath = new File(outFile).getParent();
-        Intent intent = FileActivity.getIntent(getActivity(), title, "*.[jpg|png|bmp]", defPath, false, FileOpenType.SelectFile);
-        startActivityForResult(intent, REQUEST_CHOOSE_IMG);
+//        Intent intent = FileActivity.getIntent(getActivity(), title, "*.[jpg|png|bmp]", defPath, false, FileOpenType.SelectFile);
+//        startActivityForResult(intent, REQUEST_CHOOSE_IMG);
 
-//        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
 ////        intent.addCategory(Intent.CATEGORY_OPENABLE);
-//        intent.setType("image/*");
+        intent.setType("image/*");
 ////        intent.putExtra("crop", "true");
 ////        intent.putExtra("aspectX", width);
 ////        intent.putExtra("aspectY", height);
@@ -97,13 +96,13 @@ public abstract class PreferenceFragmentPlus extends BasePreferenceFragment {
 ////        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(outFile)));
 ////        intent.putExtra("outputFormat", isJpeg ? Bitmap.CompressFormat.JPEG.toString() : Bitmap.CompressFormat.PNG.toString());
 ////        intent.putExtra("noFaceDetection", true); // no face detection
-//        try {
-//            startActivityForResult(intent, REQUEST_CHOOSE_IMG);
-//        } catch (android.content.ActivityNotFoundException ex) {
-//            Toast.makeText(getActivity(), R.string.no_find_file_selectotr, Toast.LENGTH_SHORT)
-//                    .show();
-//            onChooseFileFail(preference);
-//        }
+        try {
+            startActivityForResult(intent, REQUEST_CHOOSE_IMG);
+        } catch (android.content.ActivityNotFoundException ex) {
+            Toast.makeText(getActivity(), R.string.no_find_file_selectotr, Toast.LENGTH_SHORT)
+                    .show();
+            onChooseFileFail(preference);
+        }
     }
 
     protected void openPhotoCut(Preference preference, Uri srcfile, CurImageInfo info) {
