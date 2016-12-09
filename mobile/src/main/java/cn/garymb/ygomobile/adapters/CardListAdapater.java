@@ -15,6 +15,7 @@ import cn.garymb.ygomobile.deck.ImageTop;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.plus.BaseAdapterPlus;
 import cn.garymb.ygomobile.core.AppsSettings;
+import cn.ygo.ocgcore.LimitList;
 import cn.ygo.ocgcore.StringManager;
 import cn.ygo.ocgcore.enums.CardType;
 import cn.ygo.ocgcore.enums.LimitType;
@@ -23,6 +24,7 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> {
     private StringManager mStringManager;
     private ImageTop mImageTop;
     private OnAddCardListener mOnAddCardListener;
+    private LimitList mLimitList;
 
     public interface OnAddCardListener {
         void onAdd(int pos);
@@ -35,6 +37,10 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> {
 
     public void setOnAddCardListener(OnAddCardListener onAddCardListener) {
         mOnAddCardListener = onAddCardListener;
+    }
+
+    public void setLimitList(LimitList limitList) {
+        mLimitList = limitList;
     }
 
     @Override
@@ -80,13 +86,17 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> {
         if (mImageTop == null) {
             mImageTop = new ImageTop(context);
         }
-        holder.rightImage.setVisibility(View.VISIBLE);
-        if (item.getLimitType() == LimitType.Forbidden) {
-            holder.rightImage.setImageBitmap(mImageTop.forbidden);
-        } else if (item.getLimitType() == LimitType.Limit) {
-            holder.rightImage.setImageBitmap(mImageTop.limit);
-        } else if (item.getLimitType() == LimitType.SemiLimit) {
-            holder.rightImage.setImageBitmap(mImageTop.semiLimit);
+        if (mLimitList != null) {
+            holder.rightImage.setVisibility(View.VISIBLE);
+            if (mLimitList.isForbidden(item.Code)) {
+                holder.rightImage.setImageBitmap(mImageTop.forbidden);
+            } else if (mLimitList.isLimit(item.Code)) {
+                holder.rightImage.setImageBitmap(mImageTop.limit);
+            } else if (mLimitList.isSemiLimit(item.Code)) {
+                holder.rightImage.setImageBitmap(mImageTop.semiLimit);
+            } else {
+                holder.rightImage.setVisibility(View.GONE);
+            }
         } else {
             holder.rightImage.setVisibility(View.GONE);
         }

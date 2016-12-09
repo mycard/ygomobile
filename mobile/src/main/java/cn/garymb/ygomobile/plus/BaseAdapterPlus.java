@@ -54,14 +54,13 @@ public abstract class BaseAdapterPlus<T> extends BaseAdapter implements SpinnerA
         return mItems;
     }
 
-    protected  <T extends View> T inflate(int resource, ViewGroup root) {
+    protected <T extends View> T inflate(int resource, ViewGroup root) {
         return (T) mLayoutInflater.inflate(resource, root);
     }
 
     protected <T extends View> T inflate(int resource, ViewGroup root, boolean attachToRoot) {
         return (T) mLayoutInflater.inflate(resource, root, attachToRoot);
     }
-
 
     public void clear() {
         mItems.clear();
@@ -89,12 +88,28 @@ public abstract class BaseAdapterPlus<T> extends BaseAdapter implements SpinnerA
 
     @Override
     public final int getCount() {
+//        if (hideSelect) {
+//            if (selectId >= 0) {
+//                return mItems.size() - 1;
+//            }
+//        }
         return mItems.size();
+    }
+
+    public final T getDataItem(int position) {
+        return mItems.get(position);
     }
 
     @Override
     public final T getItem(int position) {
         if (position >= 0 && position < getCount()) {
+//            if (hideSelect) {
+//                if (selectId >= 0) {
+//                    if (position > selectId) {
+//                        return mItems.get(position - 1);
+//                    }
+//                }
+//            }
             return mItems.get(position);
         }
         return null;

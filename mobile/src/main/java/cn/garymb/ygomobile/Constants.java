@@ -36,6 +36,10 @@ public interface Constants {
 
     String PREF_LAST_ROOM_LIST = "pref_key_lastroom_list";
     int LAST_ROOM_MAX = 20;
+    /**
+     * 动画结束再删除
+     */
+    boolean DRAG_END_DELETE = false;
     /***
      * 卡组编辑，长按删除对话框
      */
@@ -107,10 +111,7 @@ public interface Constants {
      * 如果是双击显示，则单击拖拽
      */
     boolean DECK_SINGLE_PRESS_DRAG = true;
-    /**
-     * 动画结束再删除
-     */
-    boolean DRAG_END_DELETE = false;
+
     /***
      * 长按删除
      */

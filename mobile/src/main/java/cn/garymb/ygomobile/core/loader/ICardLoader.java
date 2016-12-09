@@ -7,6 +7,5 @@ public interface ICardLoader{
                 long attribute, long level, long race,long limitlist,long limit,
                 String atk, String def,long pscale,
                 long setcode, long category, long ot, long... types);
-    LimitList getLimitList();
     void onReset();
 }

@@ -138,9 +138,9 @@ public class CardSearchAcitivity extends BaseActivity implements CardLoader.Call
     }
 
     protected void onInit() {
-        mCardSelector.initItems();
         isLoad = true;
         mCardLoader.loadData();
+        mCardSelector.initItems();
     }
 
     @Override
@@ -160,6 +160,7 @@ public class CardSearchAcitivity extends BaseActivity implements CardLoader.Call
         if (mDrawerlayout.isDrawerOpen(Constants.CARD_SEARCH_GRAVITY)) {
             mDrawerlayout.closeDrawer(Constants.CARD_SEARCH_GRAVITY);
         }
+        mCardListAdapater.setLimitList(limitList);
     }
 
     @Override

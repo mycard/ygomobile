@@ -209,17 +209,25 @@ public class DeckItemTouchHelper extends ItemTouchHelperCompat.Callback {
     }
 
     @Override
-    public boolean onChildDrawOver(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+    public boolean canAnimation(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+        if(viewHolder!=null&&viewHolder.getAdapterPosition()<0){
+            return false;
+        }
+        return super.canAnimation(recyclerView, viewHolder);
+    }
+
+    @Override
+    public void onChildDrawOver(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
         if (viewHolder.getAdapterPosition() < 0) {
             if (mDeleteId > 0) {
                 //还原Canvas
                 if (DEBUG)
                     Log.w(TAG, "resotre " + mDeleteId + " state=" + actionState);
                 mDeleteId = -2;
-                return false;
+                return;
             }
         }
-        return super.onChildDrawOver(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+        super.onChildDrawOver(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
     }
 
     @Override

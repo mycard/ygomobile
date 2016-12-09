@@ -197,9 +197,6 @@ public class CardSearcher implements View.OnClickListener {
         int i = 1;
         for (Integer id : ids) {
             LimitList list = mLimitManager.getLimitFromIndex(id);
-            if (dataLoader != null && list == dataLoader.getLimitList()) {
-                index = i;
-            }
             items.add(new SimpleSpinnerItem(id, list.getName()));
             i++;
         }
