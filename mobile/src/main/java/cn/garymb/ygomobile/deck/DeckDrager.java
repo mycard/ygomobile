@@ -23,7 +23,8 @@ class DeckDrager {
     }
 
     public DeckItem delete(int left) {
-        Log.i("drag", "delete "+left);
+        if (Constants.DEBUG)
+            Log.i("drag", "delete " + left);
         //处理数据
         if (DeckItemUtils.isMain(left)) {
             return removeMain(left);

@@ -66,7 +66,7 @@ public class CardInfo extends Card implements Parcelable {
                 this.Strs[i] = reader.getString(13 + i);
             }
         } catch (Exception e) {
-            Log.e("kk", "read text", e);
+            Log.e("card", "read text", e);
         }
     }
 

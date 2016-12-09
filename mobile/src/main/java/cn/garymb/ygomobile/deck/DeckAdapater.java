@@ -144,11 +144,9 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
             CardInfo c1 = d1.getCardInfo();
             CardInfo c2 = d2.getCardInfo();
             if (c1 == null) {
-                Log.w("kk", "c1 is null");
                 return c2 != null;
             }
             if (c2 == null) {
-                Log.w("kk", "c2 is null");
                 return false;
             }
 //            boolean log = c1.Code == 74003290||c2.Code == 74003290;

@@ -32,7 +32,7 @@ import cn.garymb.ygomobile.utils.IOUtils;
 import static cn.garymb.ygomobile.Constants.CORE_SKIN_BG_SIZE;
 
 public class ImageLoader {
-
+    private static final String TAG = ImageLoader.class.getSimpleName();
     private static ImageLoader sImageLoader = new ImageLoader();
     private ZipFile mZipFile;
     private LruBitmapPool mLruBitmapPool;
@@ -93,7 +93,7 @@ public class ImageLoader {
                         .into(imageview);
             }
         } catch (Exception e) {
-            Log.e("kk", "bind", e);
+            Log.e(TAG, "bind", e);
         }
     }
 

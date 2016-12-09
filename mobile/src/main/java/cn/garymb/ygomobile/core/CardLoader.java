@@ -31,6 +31,7 @@ public class CardLoader implements ICardLoader {
     private CallBack mCallBack;
     private String defSQL = CardInfo.SQL_BASE + " limit " + Constants.DEFAULT_CARD_COUNT + ";";
     private LimitList mLimitList;
+    private static final String TAG = CardLoader.class.getSimpleName();
 
     public interface CallBack {
         void onSearchStart(LimitList limitList);
@@ -50,7 +51,6 @@ public class CardLoader implements ICardLoader {
 
     public HashMap<Long, CardInfo> readCards(List<Long> ids, LimitList limitList) {
         if (!isOpen()) {
-            Log.w("kk", "not open");
             return null;
         }
         StringBuilder stringBuilder = new StringBuilder(CardInfo.SQL_BASE);
@@ -69,7 +69,7 @@ public class CardLoader implements ICardLoader {
         try {
             reader = db.rawQuery(sql, null);
         } catch (Exception e) {
-            Log.e("kk", "read " + sql, e);
+            Log.e(TAG, "read " + sql, e);
         }
         HashMap<Long, CardInfo> map = new HashMap<>();
         if (reader != null) {
@@ -114,11 +114,8 @@ public class CardLoader implements ICardLoader {
                 db = SQLiteDatabase.openOrCreateDatabase(file, null);
                 return true;
             } catch (Exception e) {
-                if (Constants.DEBUG)
-                    Log.e("kk", "open db", e);
+                Log.e("kk", "open db", e);
             }
-        } else if (Constants.DEBUG) {
-            Log.w("kk", "no find " + file);
         }
         return false;
     }
@@ -144,7 +141,8 @@ public class CardLoader implements ICardLoader {
         if (!isOpen()) {
             return;
         }
-        Log.i("kk", sql);
+        if (Constants.DEBUG)
+            Log.i(TAG, sql);
         mLimitList = limitList;
         if (mCallBack != null) {
             mCallBack.onSearchStart(limitList);
@@ -155,7 +153,7 @@ public class CardLoader implements ICardLoader {
             try {
                 reader = db.rawQuery(sql, null);
             } catch (Exception e) {
-                Log.e("kk", "query", e);
+                Log.e(TAG, "query", e);
             }
             List<CardInfo> tmp = new ArrayList<CardInfo>();
             if (reader != null) {
@@ -274,7 +272,7 @@ public class CardLoader implements ICardLoader {
         }
         if (pscale > 0) {
             stringBuilder.append(" and ((level >>16 & 255)=" + pscale);
-            stringBuilder.append(" or (level >>24 & 255)=" + pscale+")");
+            stringBuilder.append(" or (level >>24 & 255)=" + pscale + ")");
         }
 
         LimitList limitList = mLimitManager.getLimitFromIndex((int) limitlist);
@@ -287,12 +285,12 @@ public class CardLoader implements ICardLoader {
                 ids = limitList.limit;
             } else if (cardLimitType == LimitType.SemiLimit) {
                 ids = limitList.semiLimit;
-            } else if (cardLimitType == LimitType.All){
+            } else if (cardLimitType == LimitType.All) {
                 ids = limitList.getCodeList();
-            }else{
+            } else {
                 ids = null;
             }
-            if(ids!=null) {
+            if (ids != null) {
                 stringBuilder.append(" and " + CardInfo.COL_ID + " in (");
                 int i = 0;
                 for (Long id : ids) {

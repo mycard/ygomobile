@@ -93,10 +93,8 @@ public class ServerListAdapater extends BaseAdapterPlus<ServerInfo> implements
                         if (index >= 0) {
                             items.remove(index);
                             items.add(0, name);
-                            Log.i("kk", "swap:" + index + "," + items);
                         } else {
                             items.add(0, name);
-                            Log.i("kk", "add:" + index + "," + items);
                         }
                         AppsSettings.get().setLastRoomList(items);
                         simpleListAdapter.notifyDataSetChanged();
@@ -127,10 +125,8 @@ public class ServerListAdapater extends BaseAdapterPlus<ServerInfo> implements
                     if (index >= 0) {
                         items.remove(index);
                         items.add(0, name);
-                        Log.i("kk", "swap:" + index + "," + items);
                     } else {
                         items.add(0, name);
-                        Log.i("kk", "add:" + index + "," + items);
                     }
                     AppsSettings.get().setLastRoomList(items);
                     simpleListAdapter.notifyDataSetChanged();

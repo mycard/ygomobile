@@ -132,7 +132,7 @@ class FileAdapter extends BaseAdapterPlus<File> {
                 try {
                     p = Pattern.compile(mFilefilter.replace("*.", "[\\S\\s]*?\\."), Pattern.CASE_INSENSITIVE);
                 } catch (Exception e2) {
-                    Log.e("kk", "load files", e2);
+                    Log.e("file", "load files", e2);
                 }
 
             }
