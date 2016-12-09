@@ -40,7 +40,7 @@ public interface Constants {
      * 卡组编辑，长按删除对话框
      */
     String PREF_DECK_DELETE_DILAOG= "pref_key_deck_delete_dialog";
-    boolean PREF_DEF_DECK_DELETE_DILAOG = false;
+    boolean PREF_DEF_DECK_DELETE_DILAOG = true;
 
     String SETTINGS_COVER = "settings_game_diy_card_cover";
     String SETTINGS_CARD_BG = "settings_game_diy_card_bg";
@@ -110,7 +110,7 @@ public interface Constants {
     /**
      * 动画结束再删除
      */
-    boolean DRAG_END_DELETE = false;
+    boolean DRAG_END_DELETE = true;
     /***
      * 长按删除
      */
