@@ -23,6 +23,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -63,6 +64,7 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
     private boolean isShowing = false;
     private AppCompatSpinner mDeckSpinner;
     private SimpleSpinnerAdapter mSimpleSpinnerAdapter;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -90,7 +92,6 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
             public void onNothingSelected(AdapterView<?> adapterView) {
             }
         });
-        initDecksListSpinners(mDeckSpinner);
     }
 
     @Override
@@ -111,6 +112,8 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
                 file = files[0];
             }
         }
+        mYdkFile = file;
+        initDecksListSpinners(mDeckSpinner);
         loadDeck(file);
     }
 
@@ -439,14 +442,35 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
                 builder.setMessageGravity(Gravity.CLIP_HORIZONTAL);
                 builder.setButtonListener((dlg, rs) -> {
                     dlg.dismiss();
+                    inputDeckName();
                 });
-                builder.setOnCancelListener((dlg) -> {
+                builder.setCloseLinster((dlg, rs) -> {
                     dlg.dismiss();
                     loadDeck(null);
+                    inputDeckName();
                 });
                 builder.show();
             }
             break;
+            case R.id.action_clear_deck: {
+                DialogPlus builder = new DialogPlus(this);
+                builder.setTitle(R.string.question);
+                builder.setMessage(R.string.question_clear_deck);
+                builder.setMessageGravity(Gravity.CLIP_HORIZONTAL);
+                builder.setButtonListener((dlg, rs) -> {
+                    if (mYdkFile != null && mYdkFile.exists()) {
+                        mYdkFile.delete();
+                        try {
+                            mYdkFile.createNewFile();
+                        } catch (IOException e) {
+                        }
+                    }
+                    dlg.dismiss();
+                    loadDeck(mYdkFile);
+                });
+                builder.show();
+            }
+                break;
             case R.id.action_delete_deck: {
                 DialogPlus builder = new DialogPlus(this);
                 builder.setTitle(R.string.question);
@@ -457,6 +481,7 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
                         mYdkFile.delete();
                     }
                     dlg.dismiss();
+                    initDecksListSpinners(mDeckSpinner);
                     loadDeck(null);
                 });
                 builder.show();
@@ -618,12 +643,18 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
                 if (mYdkFile != null && mYdkFile.exists()) {
                     if (mYdkFile.renameTo(ydk)) {
                         mYdkFile = ydk;
+                        initDecksListSpinners(mDeckSpinner);
                         dlg.dismiss();
                         loadDeck(ydk);
                     }
                 } else {
                     dlg.dismiss();
+                    try {
+                        ydk.createNewFile();
+                    } catch (IOException e) {
+                    }
                     mYdkFile = ydk;
+                    initDecksListSpinners(mDeckSpinner);
                     save();
                     setCurYdkFile(mYdkFile);
                 }
