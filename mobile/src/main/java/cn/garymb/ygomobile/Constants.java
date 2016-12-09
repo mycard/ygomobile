@@ -84,7 +84,7 @@ public interface Constants {
     int STRING_OT_START = 1239;
 
     int UNSORT_TIMES = 0x80;
-    boolean DRAG_END_DELETE = true;
+
     int CARD_SEARCH_GRAVITY = Gravity.RIGHT;
     int STRING_LIMIT_START = 1315;
     int STRING_CATEGORY_START = 1100;
@@ -104,6 +104,12 @@ public interface Constants {
      * 如果是双击显示，则单击拖拽
      */
     boolean DECK_SINGLE_PRESS_DRAG = true;
-
+    /**
+     * 动画结束再删除
+     */
+    boolean DRAG_END_DELETE = false;
+    /***
+     * 长按删除
+     */
     long LONG_PRESS_DRAG = 800;
 }

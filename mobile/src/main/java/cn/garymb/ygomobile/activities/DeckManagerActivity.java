@@ -69,7 +69,6 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
         mDeckItemTouchHelper = new DeckItemTouchHelper(mDeckAdapater);
         mDeckItemTouchHelper.setCallBack(this);
         ItemTouchHelperCompat touchHelper = new ItemTouchHelperCompat(mDeckItemTouchHelper);
-        mDeckItemTouchHelper.setHelperCompat(touchHelper);
         touchHelper.setEnableClickDrag(Constants.DECK_SINGLE_PRESS_DRAG);
         touchHelper.attachToRecyclerView(mRecyclerView);
 
