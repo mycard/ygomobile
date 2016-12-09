@@ -152,6 +152,7 @@
     <string name="deck_delete_text">Drag here to delete</string>
     <string name="question_keep_cur_deck">keep current cards?</string>
     <string name="check_choose_file" formatted="false">Determine the choose %s ？</string>
-    <string name="settings_deck_delete_dialog">Deck delete use dialog</string>
+    <string name="settings_deck_delete_dialog">Delete Card use dialog</string>
+    <string name="settings_deck_delete_dialog_Desc">show delete card dialog in deck editor</string>
     <string name="delete_card" formatted="false">Delete %s ?</string>
 </resources>
