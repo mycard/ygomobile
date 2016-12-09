@@ -611,7 +611,9 @@ public class ItemTouchHelper2 extends RecyclerView.ItemDecoration
                         targetTranslateX, targetTranslateY) {
                     @Override
                     public void onAnimationEnd(ValueAnimatorCompat animation) {
-                        super.onAnimationEnd(animation);
+                        if(animation!=null) {
+                            super.onAnimationEnd(animation);
+                        }
                         if (this.mOverridden) {
                             return;
                         }
@@ -638,8 +640,12 @@ public class ItemTouchHelper2 extends RecyclerView.ItemDecoration
                 final long duration = mCallback.getAnimationDuration(mRecyclerView, animationType,
                         targetTranslateX - currentTranslateX, targetTranslateY - currentTranslateY);
                 rv.setDuration(duration);
-                mRecoverAnimations.add(rv);
-                rv.start();
+                if(mCallback.canAnimation(mRecyclerView, prevSelected)) {
+                    mRecoverAnimations.add(rv);
+                    rv.start();
+                }else{
+                    rv.onAnimationEnd(null);
+                }
                 preventLayout = true;
             } else {
                 removeChildDrawingOrderCallbackIfNecessary(prevSelected.itemView);
@@ -1971,10 +1977,8 @@ public class ItemTouchHelper2 extends RecyclerView.ItemDecoration
             for (int i = 0; i < recoverAnimSize; i++) {
                 final ItemTouchHelper2.RecoverAnimation anim = recoverAnimationList.get(i);
                 final int count = c.save();
-                if (!onChildDrawOver(c, parent, anim.mViewHolder, anim.mX, anim.mY, anim.mActionState,
-                        false)) {
-                    anim.cancel();
-                }
+                onChildDrawOver(c, parent, anim.mViewHolder, anim.mX, anim.mY, anim.mActionState,
+                        false);
                 c.restoreToCount(count);
             }
             if (selected != null) {
@@ -2075,12 +2079,11 @@ public class ItemTouchHelper2 extends RecyclerView.ItemDecoration
          * @see #onChildDrawOver(Canvas, RecyclerView, ViewHolder, float, float, int,
          * boolean)
          */
-        public boolean onChildDrawOver(Canvas c, RecyclerView recyclerView,
+        public void onChildDrawOver(Canvas c, RecyclerView recyclerView,
                                        ViewHolder viewHolder,
                                        float dX, float dY, int actionState, boolean isCurrentlyActive) {
             sUICallback.onDrawOver(c, recyclerView, viewHolder.itemView, dX, dY, actionState,
                     isCurrentlyActive);
-            return true;
         }
 
         /**
@@ -2115,6 +2118,9 @@ public class ItemTouchHelper2 extends RecyclerView.ItemDecoration
             }
         }
 
+        public boolean canAnimation(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder){
+            return true;
+        }
         /**
          * Called by the ItemTouchHelper when user is dragging a view out of bounds.
          * <p>

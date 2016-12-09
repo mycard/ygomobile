@@ -36,11 +36,15 @@ public interface Constants {
 
     String PREF_LAST_ROOM_LIST = "pref_key_lastroom_list";
     int LAST_ROOM_MAX = 20;
+    /**
+     * 动画结束再删除
+     */
+    boolean DRAG_END_DELETE = false;
     /***
      * 卡组编辑，长按删除对话框
      */
     String PREF_DECK_DELETE_DILAOG= "pref_key_deck_delete_dialog";
-    boolean PREF_DEF_DECK_DELETE_DILAOG = true;
+    boolean PREF_DEF_DECK_DELETE_DILAOG = false;
 
     String SETTINGS_COVER = "settings_game_diy_card_cover";
     String SETTINGS_CARD_BG = "settings_game_diy_card_bg";
@@ -107,10 +111,7 @@ public interface Constants {
      * 如果是双击显示，则单击拖拽
      */
     boolean DECK_SINGLE_PRESS_DRAG = true;
-    /**
-     * 动画结束再删除
-     */
-    boolean DRAG_END_DELETE = true;
+
     /***
      * 长按删除
      */
