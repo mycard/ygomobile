@@ -35,8 +35,9 @@ public interface Constants {
     boolean PREF_DEF_SENSOR_REFRESH = true;
 
     String PREF_LAST_ROOM_LIST = "pref_key_lastroom_list";
-
     int LAST_ROOM_MAX = 20;
+    String PREF_DECK_DELETE_DILAOG= "pref_key_deck_delete_dialog";
+    boolean PREF_DEF_DECK_DELETE_DILAOG = true;
 
     String SETTINGS_COVER = "settings_game_diy_card_cover";
     String SETTINGS_CARD_BG = "settings_game_diy_card_bg";
@@ -83,7 +84,7 @@ public interface Constants {
     int STRING_OT_START = 1239;
 
     int UNSORT_TIMES = 0x80;
-
+    boolean DRAG_END_DELETE = true;
     int CARD_SEARCH_GRAVITY = Gravity.RIGHT;
     int STRING_LIMIT_START = 1315;
     int STRING_CATEGORY_START = 1100;
@@ -94,7 +95,7 @@ public interface Constants {
     int DECK_SIDE_MAX = 15;
     int DECK_EXTRA_COUNT = (DECK_SIDE_MAX / DECK_WIDTH_COUNT * DECK_WIDTH_COUNT < DECK_SIDE_MAX) ? DECK_WIDTH_COUNT * 2 : DECK_WIDTH_COUNT;
     int DECK_SIDE_COUNT = DECK_EXTRA_COUNT;
-    String ALIPAY_URL="https://d.alipay.com/i/index.htm?b=RECEIVE_AC&u=q/aSHOGFuYbRrZ6hHTW46iruN3EhgSHvvlAZMt5oSaM=";
+    String ALIPAY_URL = "https://d.alipay.com/i/index.htm?b=RECEIVE_AC&u=q/aSHOGFuYbRrZ6hHTW46iruN3EhgSHvvlAZMt5oSaM=";
     String URL_HELP = "http://www.jianshu.com/p/a43f5d951a25";
     String WIKI_SEARCH_URL = "http://www.ourocg.cn/S.aspx?key=";
 

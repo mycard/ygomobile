@@ -1,5 +1,7 @@
 package cn.garymb.ygomobile.deck;
 
+import android.util.Log;
+
 import cn.garymb.ygomobile.Constants;
 import cn.ygo.ocgcore.Card;
 
@@ -10,7 +12,18 @@ class DeckDrager {
         this.deckAdapater = deckAdapater;
     }
 
+    public void resotre(int id, DeckItem deckItem) {
+        if (DeckItemUtils.isMain(id)) {
+            resotreMain(id, deckItem);
+        } else if (DeckItemUtils.isExtra(id)) {
+            resotreExtra(id, deckItem);
+        } else if (DeckItemUtils.isSide(id)) {
+            resotreSide(id, deckItem);
+        }
+    }
+
     public DeckItem delete(int left) {
+        Log.i("drag", "delete "+left);
         //处理数据
         if (DeckItemUtils.isMain(left)) {
             return removeMain(left);
@@ -80,6 +93,30 @@ class DeckDrager {
             }
         }
         return false;
+    }
+
+    public void resotreMain(int pos, DeckItem deckItem) {
+        deckAdapater.removeItem(DeckItem.MainEnd);
+        deckAdapater.addItem(pos, deckItem);
+        deckAdapater.notifyItemRemoved(DeckItem.MainEnd);
+        deckAdapater.notifyItemInserted(pos);
+        deckAdapater.notifyItemChanged(DeckItem.MainLabel);
+    }
+
+    public void resotreExtra(int pos, DeckItem deckItem) {
+        deckAdapater.removeItem(DeckItem.ExtraEnd);
+        deckAdapater.addItem(pos, deckItem);
+        deckAdapater.notifyItemRemoved(DeckItem.ExtraEnd);
+        deckAdapater.notifyItemInserted(pos);
+        deckAdapater.notifyItemChanged(DeckItem.ExtraLabel);
+    }
+
+    public void resotreSide(int pos, DeckItem deckItem) {
+        deckAdapater.removeItem(DeckItem.SideEnd);
+        deckAdapater.addItem(pos, deckItem);
+        deckAdapater.notifyItemRemoved(DeckItem.SideEnd);
+        deckAdapater.notifyItemInserted(pos);
+        deckAdapater.notifyItemChanged(DeckItem.SideLabel);
     }
 
     public DeckItem removeMain(int pos) {

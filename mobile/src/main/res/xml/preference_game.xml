@@ -10,6 +10,18 @@
             android:key="pref_key_game_res_path"
             android:persistent="true"
             android:title="@string/settings_game_res_path"/>
+        <ListPreference
+            android:entries="@array/opengl_version"
+            android:entryValues="@array/opengl_version_value"
+            android:key="pref_key_game_ogles_config"
+            android:persistent="true"
+            android:title="@string/settings_game_opengl"/>
+        <ListPreference
+            android:entries="@array/card_quality"
+            android:entryValues="@array/card_quality_value"
+            android:key="pref_key_game_image_quality"
+            android:persistent="true"
+            android:title="@string/settings_game_card_quality"/>
         <CheckBoxPreference
             android:key="pref_key_game_sound_effect"
             android:persistent="true"
@@ -35,19 +47,11 @@
             android:key="pref_key_sensor_refresh"
             android:persistent="true"
             android:title="@string/settings_game_sensor_refresh"/>
-
-        <ListPreference
-            android:entries="@array/opengl_version"
-            android:entryValues="@array/opengl_version_value"
-            android:key="pref_key_game_ogles_config"
+        <CheckBoxPreference
+            android:key="pref_key_deck_delete_dialog"
             android:persistent="true"
-            android:title="@string/settings_game_opengl"/>
-        <ListPreference
-            android:entries="@array/card_quality"
-            android:entryValues="@array/card_quality_value"
-            android:key="pref_key_game_image_quality"
-            android:persistent="true"
-            android:title="@string/settings_game_card_quality"/>
+            android:summary="@string/settings_deck_delete_dialog"
+            android:title="@string/settings_deck_delete_dialog"/>
 
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/settings_category_diy">

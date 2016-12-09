@@ -17,7 +17,6 @@ public class ItemTouchHelperCompat extends ItemTouchHelper {
     private boolean enableClickDrag = false;
     private Context mContext;
 
-
     public ItemTouchHelperCompat(Callback callback) {
         super(callback);
     }

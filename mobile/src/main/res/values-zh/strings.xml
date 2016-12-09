@@ -148,4 +148,7 @@
     <string name="deck_delete_text">拖到这里删除</string>
     <string name="question_keep_cur_deck">保留当前卡牌？</string>
     <string name="check_choose_file" formatted="false">确定选择该文件 %s ？</string>
+    <string name="settings_deck_delete_dialog">删除卡片对话框</string>
+    <string name="settings_deck_delete_dialog_Desc">在卡组编辑，直接显示删除对话框</string>
+    <string name="delete_card" formatted="false">删除卡片 %s ?</string>
 </resources>

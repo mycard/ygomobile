@@ -69,6 +69,7 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
         mDeckItemTouchHelper = new DeckItemTouchHelper(mDeckAdapater);
         mDeckItemTouchHelper.setCallBack(this);
         ItemTouchHelperCompat touchHelper = new ItemTouchHelperCompat(mDeckItemTouchHelper);
+        mDeckItemTouchHelper.setHelperCompat(touchHelper);
         touchHelper.setEnableClickDrag(Constants.DECK_SINGLE_PRESS_DRAG);
         touchHelper.attachToRecyclerView(mRecyclerView);
 
@@ -102,8 +103,24 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
     }
 
     @Override
-    public void onDragDelete() {
-        getSupportActionBar().hide();
+    public void onDragDelete(int id) {
+        if (mSettings.isDialogDelete()) {
+            DeckItem deckItem = mDeckAdapater.getItem(id);
+            if (deckItem == null || deckItem.getCardInfo() == null) {
+                return;
+            }
+            DialogPlus dialogPlus = new DialogPlus(this);
+            dialogPlus.setTitle(R.string.question);
+            dialogPlus.setMessage(getString(R.string.delete_card, deckItem.getCardInfo().Name));
+            dialogPlus.setMessageGravity(Gravity.CENTER_HORIZONTAL);
+            dialogPlus.setButtonListener((dlg, v) -> {
+                dlg.dismiss();
+                mDeckItemTouchHelper.remove(id);
+            });
+            dialogPlus.show();
+        } else {
+            getSupportActionBar().hide();
+        }
     }
 
     @Override
