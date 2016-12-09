@@ -18,7 +18,7 @@ import static android.support.v7.widget.helper.ItemTouchHelper.ACTION_STATE_DRAG
 import static android.support.v7.widget.helper.ItemTouchHelper.ACTION_STATE_IDLE;
 import static android.support.v7.widget.helper.ItemTouchHelper.ACTION_STATE_SWIPE;
 
-public class DeckItemTouchHelper extends ItemTouchHelper.Callback {
+public class DeckItemTouchHelper extends ItemTouchHelperCompat.Callback {
     private DeckDrager mDeckDrager;
 
     //    private RecyclerView.ViewHolder NULL;
@@ -35,7 +35,7 @@ public class DeckItemTouchHelper extends ItemTouchHelper.Callback {
     private CallBack mCallBack;
     private DeckAdapater deckAdapater;
     private Handler mHandler;
-    private ItemTouchHelperCompat helperCompat;
+
 
     public void setCallBack(CallBack callBack) {
         mCallBack = callBack;
@@ -49,17 +49,13 @@ public class DeckItemTouchHelper extends ItemTouchHelper.Callback {
 
     private volatile long lasttime = 0;
     private boolean isCencel = false;
-    private int Min_Pos = -4;
+    private int Min_Pos = -10;
     private int mSelectId;
 
     int mDeleteId;
     DeckItem mDeleteItem;
 
     private boolean isDeleteMode;
-
-    public void setHelperCompat(ItemTouchHelperCompat helperCompat) {
-        this.helperCompat = helperCompat;
-    }
 
     public void setDeleteMode(boolean deleteMode) {
         isDeleteMode = deleteMode;
@@ -161,7 +157,7 @@ public class DeckItemTouchHelper extends ItemTouchHelper.Callback {
         @Override
         public void run() {
             if (System.currentTimeMillis() - lasttime >= Constants.LONG_PRESS_DRAG) {
-                Log.i("drag", "enter delete 1");
+                Log.i("drag", "enter delete");
                 isDeleteMode = true;
                 if (mCallBack != null) {
                     mCallBack.onDragDelete(mSelectId);
@@ -207,15 +203,16 @@ public class DeckItemTouchHelper extends ItemTouchHelper.Callback {
     }
 
     @Override
-    public void onChildDrawOver(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+    public boolean onChildDrawOver(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
         if (viewHolder.getAdapterPosition() < 0) {
             if (mDeleteId > 0) {
                 //还原Canvas
                 Log.w("drag", "resotre " + mDeleteId + " state=" + actionState);
                 mDeleteId = -2;
+                return false;
             }
         }
-        super.onChildDrawOver(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+        return super.onChildDrawOver(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
     }
 
     @Override

@@ -1,6 +1,7 @@
 package android.support.v7.widget.helper;
 
 import android.content.Context;
+import android.graphics.Canvas;
 import android.support.annotation.Nullable;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v7.widget.RecyclerView;
@@ -12,7 +13,7 @@ import android.view.View;
 import java.lang.reflect.Field;
 
 
-public class ItemTouchHelperCompat extends ItemTouchHelper {
+public class ItemTouchHelperCompat extends ItemTouchHelper2 {
 
     private boolean enableClickDrag = false;
     private Context mContext;
@@ -29,24 +30,13 @@ public class ItemTouchHelperCompat extends ItemTouchHelper {
     }
 
     @Override
-    public void attachToRecyclerView(@Nullable RecyclerView recyclerView) {
-        super.attachToRecyclerView(recyclerView);
-        mContext = recyclerView.getContext();
-        repacleGestureDetector();
-    }
-
-    private void repacleGestureDetector() {
-        Field field = null;
-        try {
-            field = ItemTouchHelper.class.getDeclaredField("mGestureDetector");
-            field.setAccessible(true);
-            field.set(this, new GestureDetectorCompat(mContext,
-                    new ItemTouchHelperGestureListener()));
-            Log.v("kk", "repacleGestureDetector ok");
-        } catch (Exception e) {
-            e.printStackTrace();
-            Log.e("kk", "repacleGestureDetector", e);
+    protected void initGestureDetector() {
+//        super.initGestureDetector();
+        if(mGestureDetector!=null){
+            return;
         }
+        mGestureDetector = new GestureDetectorCompat(mContext,
+                new ItemTouchHelperGestureListener());
     }
 
     private class ItemTouchHelperGestureListener extends GestureDetector.SimpleOnGestureListener {
