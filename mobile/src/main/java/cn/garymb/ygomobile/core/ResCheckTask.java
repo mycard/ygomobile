@@ -11,9 +11,11 @@ import android.util.Log;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.lite.R;
+import cn.garymb.ygomobile.utils.FileUtils;
 import cn.garymb.ygomobile.utils.IOUtils;
 import cn.garymb.ygomobile.utils.SystemUtils;
 
@@ -249,13 +251,17 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
         return null;
     }
 
-    private int copyCoreConfig(String toPath,boolean needsUpdate) {
+    private int copyCoreConfig(String toPath, boolean needsUpdate) {
         try {
             String path = getDatapath(Constants.CORE_CONFIG_PATH);
             int count = IOUtils.copyFilesFromAssets(mContext, path, toPath, needsUpdate);
             if (count < 3) {
                 return ERROR_CORE_CONFIG_LOST;
             }
+            //替换换行符
+            File stringfile = new File(AppsSettings.get().getResourcePath(),
+                    String.format(Constants.CORE_STRING_PATH, AppsSettings.get().getCoreConfigVersion()));
+            fixString(stringfile.getAbsolutePath());
             return ERROR_NONE;
         } catch (IOException e) {
             if (Constants.DEBUG)
@@ -263,6 +269,12 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
             mError = ERROR_COPY;
             return ERROR_COPY;
         }
+    }
+
+    private void fixString(String stringfile) {
+        String encoding = "utf-8";
+        List<String> lines = FileUtils.readLines(stringfile, encoding);
+        FileUtils.writeLines(stringfile, lines, encoding, "\n");
     }
 
     public interface ResCheckListener {
