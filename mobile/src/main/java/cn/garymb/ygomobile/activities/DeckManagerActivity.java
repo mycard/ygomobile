@@ -11,7 +11,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper2;
-import android.support.v7.widget.helper.ItemTouchHelperCompat;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -77,7 +76,7 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
         mRecyclerView.setLayoutManager(new DeckLayoutManager(this, Constants.DECK_WIDTH_COUNT));
         mDeckItemTouchHelper = new DeckItemTouchHelper(mDeckAdapater);
         mDeckItemTouchHelper.setOnDragListner(this);
-        ItemTouchHelperCompat touchHelper = new ItemTouchHelperCompat(this, mDeckItemTouchHelper);
+        ItemTouchHelper2 touchHelper = new ItemTouchHelper2(this, mDeckItemTouchHelper);
         touchHelper.setEnableClickDrag(Constants.DECK_SINGLE_PRESS_DRAG);
         touchHelper.attachToRecyclerView(mRecyclerView);
         mRecyclerView.addOnItemTouchListener(new RecyclerViewItemListener(mRecyclerView, this));

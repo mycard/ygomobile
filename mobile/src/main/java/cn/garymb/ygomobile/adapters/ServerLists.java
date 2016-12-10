@@ -7,8 +7,8 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.support.v7.widget.helper.ItemTouchHelper2;
-import android.support.v7.widget.helper.ItemTouchHelperCompat;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +23,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Collections;
 import java.util.List;
 
 import cn.garymb.ygodata.YGOGameOptions;
@@ -72,16 +73,17 @@ public class ServerLists {
 
     public static ServerAdapater attch(Activity context, RecyclerView recyclerView) {
         ServerAdapater serverAdapater = new ServerAdapater(context);
+        serverAdapater.setCanMove(true);
         recyclerView.setAdapter(serverAdapater);
         recyclerView.addOnItemTouchListener(new RecyclerViewItemListener(recyclerView,
                 new ServerHandler(context, serverAdapater)));
-        ItemTouchHelperCompat helper = new ItemTouchHelperCompat(context, new TouchCallback(serverAdapater));
+        ItemTouchHelper2 helper = new ItemTouchHelper2(context, new TouchCallback(serverAdapater));
         helper.setEnableClickDrag(true);
         helper.attachToRecyclerView(recyclerView);
         return serverAdapater;
     }
 
-    private static class TouchCallback extends ItemTouchHelperCompat.Callback implements ItemTouchHelper2.OnDragListner {
+    private static class TouchCallback extends ItemTouchHelper2.Callback implements ItemTouchHelper2.OnDragListner {
         ServerAdapater adapater;
 
         public TouchCallback(ServerAdapater adapater) {
@@ -115,30 +117,42 @@ public class ServerLists {
 
         @Override
         public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-            return makeMovementFlags(ItemTouchHelper.UP | ItemTouchHelper.DOWN, ItemTouchHelper.END | ItemTouchHelper.START);
+            if (!adapater.isEditMode()) {
+                return makeMovementFlags(0, 0);
+            }
+            return makeMovementFlags(adapater.isCanMove() ? (ItemTouchHelper.UP | ItemTouchHelper.DOWN
+                    | ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) : 0, ItemTouchHelper.END | ItemTouchHelper.START);
         }
 
         @Override
         public void onSelectedChanged(RecyclerView.ViewHolder viewHolder, int actionState) {
+            super.onSelectedChanged(viewHolder, actionState);
             if (actionState == ItemTouchHelper.ACTION_STATE_IDLE) {
                 adapater.saveItems();
-                adapater.notifyDataSetChanged();
+//                adapater.notifyDataSetChanged();
             }
-            super.onSelectedChanged(viewHolder, actionState);
         }
 
         @Override
         public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
             int left = viewHolder.getAdapterPosition();
-            int right = viewHolder.getAdapterPosition();
+            int right = target.getAdapterPosition();
             if (left >= 0) {
-                ServerInfo serverInfo = adapater.remove(left);
-                adapater.add(right, serverInfo, false);
-                adapater.notifyItemRemoved(left);
-                adapater.notifyItemInserted(right);
+                Log.i("drag", left + "->" + right);
+                adapater.notifyItemMoved(left, right);
                 return true;
             }
-            return false;
+            return true;
+        }
+
+        @Override
+        public void onMoved(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, int fromPos, RecyclerView.ViewHolder target, int toPos, int x, int y) {
+            super.onMoved(recyclerView, viewHolder, fromPos, target, toPos, x, y);
+            int left = viewHolder.getAdapterPosition();
+            int right = target.getAdapterPosition();
+            if (left >= 0) {
+                Collections.swap(adapater.getItems(), left, right);
+            }
         }
 
         @Override
@@ -265,7 +279,16 @@ public class ServerLists {
 
         @Override
         public void onItemLongClick(View view, int position) {
-
+            if (!adapater.isEditMode()) {
+                adapater.setEditMode(true);
+                return;
+            }
+            if (!adapater.isCanMove()) {
+                ServerInfo serverInfo = adapater.getItem(position);
+                if (serverInfo != null) {
+                    adapater.showEditDialog(serverInfo, position);
+                }
+            }
         }
 
         @Override
@@ -274,15 +297,45 @@ public class ServerLists {
         }
     }
 
+    public interface OnEditListener {
+        void onEdit(boolean enter);
+    }
+
     public static class ServerAdapater extends BaseRecyclerAdapterPlus<ServerInfo, ServerInfoViewHolder> implements IDataLoader {
         private final File xmlFile;
         private ILoadCallBack loadCallBack;
+        private boolean mEditMode;
+        private OnEditListener mOnEditListener;
 
         public ServerAdapater(Context context) {
             super(context);
             xmlFile = new File(context.getFilesDir(), Constants.SERVER_FILE);
         }
 
+        public void setOnEditListener(OnEditListener onEditListener) {
+            mOnEditListener = onEditListener;
+        }
+
+        public boolean isEditMode() {
+            return mEditMode;
+        }
+
+        public void setEditMode(boolean editMode) {
+            mEditMode = editMode;
+            if (mOnEditListener != null) {
+                mOnEditListener.onEdit(editMode);
+            }
+        }
+
+        private boolean canMove = false;
+
+        public void setCanMove(boolean canMove) {
+            this.canMove = canMove;
+        }
+
+        public boolean isCanMove() {
+            return canMove;
+        }
 
         @Override
         public void setCallBack(ILoadCallBack loadCallBack) {

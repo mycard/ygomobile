@@ -11,10 +11,6 @@
             android:persistent="true"
             android:title="@string/settings_about_version_pref"/>
         <Preference
-            android:key="pref_key_about_project"
-            android:summary="@string/settings_about_project_address"
-            android:title="@string/settings_about_proj_loc"/>
-        <Preference
             android:key="pref_key_open_alipay"
             android:persistent="true"
             android:title="@string/donation"/>

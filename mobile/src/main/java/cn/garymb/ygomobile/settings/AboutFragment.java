@@ -1,6 +1,5 @@
 package cn.garymb.ygomobile.settings;
 
-import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
@@ -8,17 +7,12 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
-import android.view.Gravity;
-import android.view.ViewGroup;
-import android.webkit.WebView;
-import android.widget.FrameLayout;
 
 import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.plus.DialogPlus;
 import cn.garymb.ygomobile.plus.PreferenceFragmentPlus;
-import cn.garymb.ygomobile.plus.VUiKit;
-import cn.garymb.ygomobile.plus.WebViewPlus;
+import cn.garymb.ygomobile.utils.SystemUtils;
 
 public class AboutFragment extends PreferenceFragmentPlus {
     @Override
@@ -40,6 +34,10 @@ public class AboutFragment extends PreferenceFragmentPlus {
         bind("pref_key_about_version", (packageInfo == null) ? "?" : packageInfo.versionName);
         bind("pref_key_change_log");
         bind("pref_key_open_alipay");
+        bind("pref_key_about_version");
+        bind("pref_key_about_check_update");
+        String text = SystemUtils.getVersionName(getActivity()) + " (" + SystemUtils.getVersion(getContext()) + ")";
+        findPreference("pref_key_about_version").setSummary(text);
     }
 
     @Override

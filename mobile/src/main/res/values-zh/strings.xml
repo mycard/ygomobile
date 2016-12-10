@@ -42,7 +42,6 @@
     <string name="settings_game_lab_pendulum_scale">摇摆数字图片</string>
     <string name="settings_game_font_antialias_summary">禁用字体抗锯齿可以提升帧数</string>
     <string name="settings_about_author_pref">作者</string>
-    <string name="settings_about_proj_loc">项目链接</string>
     <string name="settings_about_version_pref">版本</string>
     <string name="settings_about_check_update">检查更新</string>
     <string name="settings_about_change_log">更新日志</string>
@@ -154,4 +153,5 @@
     <string name="clear_deck">清空</string>
     <string name="question_clear_deck">清空当前卡组?</string>
     <string name="delete_server_info">删除当前服务器信息？</string>
+    <string name="exit_edit_mode">退出编辑模式</string>
 </resources>

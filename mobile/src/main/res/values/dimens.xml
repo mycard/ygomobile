@@ -30,7 +30,7 @@
     <dimen name="padding">6dp</dimen>
     <dimen name="padding2">8dp</dimen>
     <dimen name="list_height">240dp</dimen>
-    <dimen name="nav_head_height">160dp</dimen>
+    <dimen name="nav_head_height">150dp</dimen>
     <dimen name="nav_icon_width">100dp</dimen>
     <dimen name="nav_icon_height">100dp</dimen>
 </resources>

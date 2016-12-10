@@ -15,6 +15,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import cn.garymb.ygomobile.Constants;
@@ -33,6 +34,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private AppsSettings mAppsSettings;
     private ServerLists.ServerAdapater mServerAdapater;
     protected DrawerLayout mDrawerlayout;
+    private View editView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +44,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         Toolbar toolbar = bind(R.id.toolbar);
         setSupportActionBar(toolbar);
         mDrawerlayout = bind(R.id.drawer_layout);
+        editView = bind(R.id.button_edit);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, mDrawerlayout, toolbar, R.string.search_open, R.string.search_close);
         mDrawerlayout.addDrawerListener(toggle);
@@ -61,6 +64,16 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             startActivity(intent);
         });
         YGOStarter.onCreated(this);
+        mServerAdapater.setOnEditListener((edit)->{
+            if(edit){
+                editView.setVisibility(View.VISIBLE);
+            }else {
+                editView.setVisibility(View.GONE);
+            }
+        });
+        editView.setOnClickListener((v)->{
+            mServerAdapater.setEditMode(false);
+        });
         //资源复制
         checkResourceDownload((error, isNew) -> {
             if (error < 0) {

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.preference.Preference;
 import android.provider.MediaStore;
 import android.widget.Toast;
@@ -66,6 +67,15 @@ public abstract class PreferenceFragmentPlus extends BasePreferenceFragment {
 //                    .show();
 //            onChooseFileFail(preference);
 //        }
+    }
+
+    @Override
+    public Context getContext() {
+        if(Build.VERSION.SDK_INT>=23) {
+            return super.getContext();
+        }else{
+            return super.getActivity();
+        }
     }
 
     /***
