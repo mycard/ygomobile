@@ -33,4 +33,5 @@
     <dimen name="nav_head_height">150dp</dimen>
     <dimen name="nav_icon_width">100dp</dimen>
     <dimen name="nav_icon_height">100dp</dimen>
+    <dimen name="logo_size">160dp</dimen>
 </resources>

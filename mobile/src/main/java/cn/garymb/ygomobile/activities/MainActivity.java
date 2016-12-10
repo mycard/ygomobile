@@ -38,9 +38,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setEnterAnimEnable(false);
+        setExitAnimEnable(false);
+        startActivity(new Intent(this, LogoActivity.class));
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setExitAnimEnable(false);
         Toolbar toolbar = bind(R.id.toolbar);
         setSupportActionBar(toolbar);
         mDrawerlayout = bind(R.id.drawer_layout);
@@ -81,6 +83,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             } else {
                 enableStart = true;
             }
+            setEnterAnimEnable(true);
+            setExitAnimEnable(false);
             if (isNew) {
                 new DialogPlus(this)
                         .setTitle(getString(R.string.settings_about_change_log))

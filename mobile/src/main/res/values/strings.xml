@@ -157,4 +157,5 @@
     <string name="question_clear_deck">clear this deck?</string>
     <string name="delete_server_info">delete this server info?</string>
     <string name="exit_edit_mode">Exit Edit Mode</string>
+    <string name="logo_text">Thank you all for your support.</string>
 </resources>

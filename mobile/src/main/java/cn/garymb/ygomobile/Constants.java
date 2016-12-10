@@ -39,7 +39,7 @@ public interface Constants {
     /***
      * 卡组编辑，长按删除对话框
      */
-    String PREF_DECK_DELETE_DILAOG= "pref_key_deck_delete_dialog";
+    String PREF_DECK_DELETE_DILAOG = "pref_key_deck_delete_dialog";
     boolean PREF_DEF_DECK_DELETE_DILAOG = false;
 
     String SETTINGS_COVER = "settings_game_diy_card_cover";
@@ -104,6 +104,8 @@ public interface Constants {
 
     String SERVER_FILE = "server_list.xml";
     String SHARE_FILE = ".share_deck.png";
+
+    long LOG_TIME = 3 * 1000;
     /***
      * 如果是双击显示，则单击拖拽
      */
