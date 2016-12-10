@@ -36,7 +36,8 @@ public class AboutFragment extends PreferenceFragmentPlus {
         bind("pref_key_open_alipay");
         bind("pref_key_about_version");
         bind("pref_key_about_check_update");
-        String text = SystemUtils.getVersionName(getActivity()) + " (" + SystemUtils.getVersion(getContext()) + ")";
+        String text = SystemUtils.getVersionName(getActivity())
+                + " (" + SystemUtils.getVersion(getActivity()) + ")";
         findPreference("pref_key_about_version").setSummary(text);
     }
 

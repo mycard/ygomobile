@@ -69,7 +69,6 @@ public abstract class PreferenceFragmentPlus extends BasePreferenceFragment {
 //        }
     }
 
-    @Override
     public Context getContext() {
         if(Build.VERSION.SDK_INT>=23) {
             return super.getContext();
