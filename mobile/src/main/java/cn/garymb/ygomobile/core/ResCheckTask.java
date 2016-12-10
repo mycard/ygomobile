@@ -2,8 +2,6 @@ package cn.garymb.ygomobile.core;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.os.AsyncTask;
@@ -17,6 +15,7 @@ import java.io.IOException;
 import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.utils.IOUtils;
+import cn.garymb.ygomobile.utils.SystemUtils;
 
 import static cn.garymb.ygomobile.Constants.ASSETS_PATH;
 
@@ -46,19 +45,12 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
     protected void onPreExecute() {
         super.onPreExecute();
         dialog = ProgressDialog.show(mContext, null, mContext.getString(R.string.check_res));
-        PackageInfo packageInfo = null;
-        try {
-            packageInfo = mContext.getPackageManager().getPackageInfo(mContext.getPackageName(), 0);
-        } catch (PackageManager.NameNotFoundException e) {
-        }
-        if (packageInfo != null) {
-            int vercode = packageInfo.versionCode;
-            if (mSettings.getAppVersion() < vercode) {
-                mSettings.setAppVersion(vercode);
-                isNewVersion = true;
-            } else {
-                isNewVersion = false;
-            }
+        int vercode = SystemUtils.getVersion(mContext);
+        if (mSettings.getAppVersion() < vercode) {
+            mSettings.setAppVersion(vercode);
+            isNewVersion = true;
+        } else {
+            isNewVersion = false;
         }
     }
 
@@ -67,7 +59,7 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
         super.onPostExecute(result);
         dialog.dismiss();
         if (mListener != null) {
-            mListener.onResCheckFinished(result,isNewVersion);
+            mListener.onResCheckFinished(result, isNewVersion);
         }
     }
 
@@ -102,7 +94,7 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
         if (!verPath.exists() || TextUtils.isEmpty(currentConfigVersion = getCurVersion(verPath))) {
             //
             setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.core_config)));
-            int error = copyCoreConfig(verPath.getAbsolutePath());
+            int error = copyCoreConfig(verPath.getAbsolutePath(), true);
             if (error != ERROR_NONE) {
                 return error;
             }
@@ -130,7 +122,7 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
             String resPath = mSettings.getResourcePath();
             IOUtils.createNoMedia(resPath);
             checkDirs();
-            copyCoreConfig(verPath.getAbsolutePath());
+            copyCoreConfig(verPath.getAbsolutePath(), needsUpdate);
 //            copyCoreConfig(new File(mSettings.getResourcePath(), GameSettings.CORE_CONFIG_PATH).getAbsolutePath());
             if (needsUpdate) {
                 setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.tip_new_deck)));
@@ -257,10 +249,10 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
         return null;
     }
 
-    private int copyCoreConfig(String toPath) {
+    private int copyCoreConfig(String toPath,boolean needsUpdate) {
         try {
             String path = getDatapath(Constants.CORE_CONFIG_PATH);
-            int count = IOUtils.copyFilesFromAssets(mContext, path, toPath, true);
+            int count = IOUtils.copyFilesFromAssets(mContext, path, toPath, needsUpdate);
             if (count < 3) {
                 return ERROR_CORE_CONFIG_LOST;
             }
@@ -274,7 +266,7 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
     }
 
     public interface ResCheckListener {
-        void onResCheckFinished(int result,boolean isNewVersion);
+        void onResCheckFinished(int result, boolean isNewVersion);
     }
 
 }

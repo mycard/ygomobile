@@ -54,12 +54,12 @@ public abstract class BaseAdapterPlus<T> extends BaseAdapter implements SpinnerA
         return mItems;
     }
 
-    protected <T extends View> T inflate(int resource, ViewGroup root) {
-        return (T) mLayoutInflater.inflate(resource, root);
+    protected <VW extends View> VW  inflate(int resource, ViewGroup root) {
+        return (VW) mLayoutInflater.inflate(resource, root);
     }
 
-    protected <T extends View> T inflate(int resource, ViewGroup root, boolean attachToRoot) {
-        return (T) mLayoutInflater.inflate(resource, root, attachToRoot);
+    protected <VW extends View> VW inflate(int resource, ViewGroup root, boolean attachToRoot) {
+        return (VW) mLayoutInflater.inflate(resource, root, attachToRoot);
     }
 
     public void clear() {

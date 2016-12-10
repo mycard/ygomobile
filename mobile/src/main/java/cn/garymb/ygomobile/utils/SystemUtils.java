@@ -1,12 +1,27 @@
 package cn.garymb.ygomobile.utils;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.util.DisplayMetrics;
 import android.view.Display;
 
 import java.lang.reflect.Method;
 
 public class SystemUtils {
+
+    public static int getVersion(Context context) {
+        PackageInfo packageInfo = null;
+        try {
+            packageInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
+        } catch (PackageManager.NameNotFoundException e) {
+        }
+        if (packageInfo != null) {
+            return packageInfo.versionCode;
+        }
+        return 0;
+    }
 
     public static DisplayMetrics getHasVirtualDisplayMetrics(Activity context) {
         int dpi = 0;

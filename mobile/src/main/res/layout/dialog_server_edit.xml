@@ -23,6 +23,7 @@
             android:layout_weight="1"
             android:hint="@string/must_info"
             android:maxLines="1"
+            android:inputType="textNoSuggestions"
             android:singleLine="true"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
     </LinearLayout>
@@ -51,6 +52,7 @@
                 android:layout_height="wrap_content"
                 android:digits="1234567890."
                 android:hint="@string/must_info"
+                android:inputType="textNoSuggestions"
                 android:maxLines="1"
                 android:singleLine="true"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
@@ -95,6 +97,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:inputType="textNoSuggestions"
             android:hint="@string/must_info"
             android:maxLines="1"
             android:singleLine="true"

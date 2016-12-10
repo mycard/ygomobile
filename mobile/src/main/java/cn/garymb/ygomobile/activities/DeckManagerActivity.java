@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper2;
 import android.support.v7.widget.helper.ItemTouchHelperCompat;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -51,10 +52,11 @@ import cn.garymb.ygomobile.utils.IOUtils;
 import cn.garymb.ygomobile.utils.ShareUtil;
 import cn.ygo.ocgcore.LimitList;
 
+import static android.R.attr.id;
 import static cn.garymb.ygomobile.Constants.YDK_FILE_EX;
 
 public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerViewItemListener.OnItemListener,
-        CardListAdapater.OnAddCardListener, DeckItemTouchHelper.CallBack {
+        CardListAdapater.OnAddCardListener, ItemTouchHelper2.OnDragListner {
     private RecyclerView mRecyclerView;
     private DeckAdapater mDeckAdapater;
     private AppsSettings mSettings = AppsSettings.get();
@@ -74,8 +76,8 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
         mRecyclerView.setAdapter((mDeckAdapater = new DeckAdapater(this, mRecyclerView)));
         mRecyclerView.setLayoutManager(new DeckLayoutManager(this, Constants.DECK_WIDTH_COUNT));
         mDeckItemTouchHelper = new DeckItemTouchHelper(mDeckAdapater);
-        mDeckItemTouchHelper.setCallBack(this);
-        ItemTouchHelperCompat touchHelper = new ItemTouchHelperCompat(mDeckItemTouchHelper);
+        mDeckItemTouchHelper.setOnDragListner(this);
+        ItemTouchHelperCompat touchHelper = new ItemTouchHelperCompat(this, mDeckItemTouchHelper);
         touchHelper.setEnableClickDrag(Constants.DECK_SINGLE_PRESS_DRAG);
         touchHelper.attachToRecyclerView(mRecyclerView);
         mRecyclerView.addOnItemTouchListener(new RecyclerViewItemListener(mRecyclerView, this));
@@ -117,13 +119,13 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
         loadDeck(file);
     }
 
-
     @Override
     public void onDragStart() {
+
     }
 
     @Override
-    public void onDragDelete(int id) {
+    public void onDragLongPress(int pos) {
         if (mSettings.isDialogDelete()) {
             DeckItem deckItem = mDeckAdapater.getItem(id);
             if (deckItem == null || deckItem.getCardInfo() == null) {
@@ -133,7 +135,7 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
             dialogPlus.setTitle(R.string.question);
             dialogPlus.setMessage(getString(R.string.delete_card, deckItem.getCardInfo().Name));
             dialogPlus.setMessageGravity(Gravity.CENTER_HORIZONTAL);
-            dialogPlus.setButtonListener((dlg, v) -> {
+            dialogPlus.setLeftButtonListener((dlg, v) -> {
                 dlg.dismiss();
                 mDeckItemTouchHelper.remove(id);
             });
@@ -144,7 +146,7 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
     }
 
     @Override
-    public void onDragDeleteEnd() {
+    public void onDragLongPressEnd() {
         getSupportActionBar().show();
     }
 
@@ -349,7 +351,7 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
 //                DialogPlus builder = new DialogPlus(this);
 //                builder.setTitle(R.string.question);
 //                builder.setMessage(R.string.quit_deck_tip);
-//                builder.setButtonListener((dlg, s) -> {
+//                builder.setLeftButtonListener((dlg, s) -> {
 //                    dlg.dismiss();
 //                    isExit = true;
 //                    finish();
@@ -373,7 +375,7 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
                 builder.setTitle(R.string.question);
                 builder.setMessage(R.string.quit_deck_tip);
                 builder.setMessageGravity(Gravity.CENTER_HORIZONTAL);
-                builder.setButtonListener((dlg, s) -> {
+                builder.setLeftButtonListener((dlg, s) -> {
                     dlg.dismiss();
                     isExit = true;
                     finish();
@@ -440,7 +442,7 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
                 builder.setTitle(R.string.question);
                 builder.setMessage(R.string.question_keep_cur_deck);
                 builder.setMessageGravity(Gravity.CLIP_HORIZONTAL);
-                builder.setButtonListener((dlg, rs) -> {
+                builder.setLeftButtonListener((dlg, rs) -> {
                     dlg.dismiss();
                     inputDeckName();
                 });
@@ -457,7 +459,7 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
                 builder.setTitle(R.string.question);
                 builder.setMessage(R.string.question_clear_deck);
                 builder.setMessageGravity(Gravity.CLIP_HORIZONTAL);
-                builder.setButtonListener((dlg, rs) -> {
+                builder.setLeftButtonListener((dlg, rs) -> {
                     if (mYdkFile != null && mYdkFile.exists()) {
                         mYdkFile.delete();
                         try {
@@ -476,7 +478,7 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
                 builder.setTitle(R.string.question);
                 builder.setMessage(R.string.question_delete_deck);
                 builder.setMessageGravity(Gravity.CLIP_HORIZONTAL);
-                builder.setButtonListener((dlg, rs) -> {
+                builder.setLeftButtonListener((dlg, rs) -> {
                     if (mYdkFile != null && mYdkFile.exists()) {
                         mYdkFile.delete();
                     }
@@ -500,7 +502,7 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
                 initDecksListSpinners(ydks);
                 Spinner limits = (Spinner) dialogPlus.findViewById(R.id.sp_limit_list);
                 initLimitListSpinners(limits);
-                dialogPlus.setButtonListener((dlg, rs) -> {
+                dialogPlus.setLeftButtonListener((dlg, rs) -> {
                     LimitList limitList = getSelectLimitList(limits);
                     setLimitList(limitList);
                     File file = getSelectDeck(ydks);
@@ -628,7 +630,7 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
             editText.setText(mYdkFile.getName());
         }
         builder.setView(editText);
-        builder.setButtonListener((dlg, s) -> {
+        builder.setLeftButtonListener((dlg, s) -> {
             CharSequence name = editText.getText();
             if (!TextUtils.isEmpty(name)) {
                 String filename = String.valueOf(name);

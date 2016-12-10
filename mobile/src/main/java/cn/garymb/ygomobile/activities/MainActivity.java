@@ -9,15 +9,16 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import cn.garymb.ygomobile.Constants;
-import cn.garymb.ygomobile.adapters.ServerListAdapater;
+import cn.garymb.ygomobile.adapters.ServerLists;
 import cn.garymb.ygomobile.core.AppsSettings;
 import cn.garymb.ygomobile.core.ResCheckTask;
 import cn.garymb.ygomobile.core.YGOStarter;
@@ -28,9 +29,9 @@ import cn.garymb.ygomobile.settings.SettingsActivity;
 
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
     private boolean enableStart;
-    private ListView mListView;
+    private RecyclerView mServerList;
     private AppsSettings mAppsSettings;
-    private ServerListAdapater mServerListAdapater;
+    private ServerLists.ServerAdapater mServerAdapater;
     protected DrawerLayout mDrawerlayout;
 
     @Override
@@ -48,11 +49,18 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         NavigationView navigationView = bind(R.id.nav_main);
         navigationView.setNavigationItemSelectedListener(this);
         mAppsSettings = AppsSettings.get();
-        mListView = bind(R.id.list_server);
-        mServerListAdapater = new ServerListAdapater(this);
-        mListView.setAdapter(mServerListAdapater);
-        mListView.setOnItemClickListener(mServerListAdapater);
-        mListView.setOnItemLongClickListener(mServerListAdapater);
+        mServerList = bind(R.id.list_server);
+        mServerList.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        mServerAdapater = ServerLists.attch(this, mServerList);
+        //加载服务器列表
+        mServerAdapater.loadData();
+        //侧边
+        navigationView.getHeaderView(0).findViewById(R.id.nav_donation).setOnClickListener((v)->{
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.ALIPAY_URL));
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        });
+        YGOStarter.onCreated(this);
         //资源复制
         checkResourceDownload((error, isNew) -> {
             if (error < 0) {
@@ -66,15 +74,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                         .loadUrl("file:///android_asset/changelog.html")
                         .show();
             }
-        });
-        YGOStarter.onCreated(this);
-        //加载服务器列表
-        mServerListAdapater.loadData();
-
-        navigationView.getHeaderView(0).findViewById(R.id.nav_donation).setOnClickListener((v)->{
-            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.ALIPAY_URL));
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
         });
     }
 
@@ -145,7 +144,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 builder.setTitle(R.string.question);
                 builder.setMessage(R.string.quit_tip);
                 builder.setMessageGravity(Gravity.CENTER_HORIZONTAL);
-                builder.setButtonListener((dlg, s) -> {
+                builder.setLeftButtonListener((dlg, s) -> {
                     dlg.dismiss();
                     finish();
                 });
@@ -153,7 +152,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             }
             break;
             case R.id.action_add_server:
-                mServerListAdapater.addServer();
+                mServerAdapater.addServer();
                 break;
             case R.id.action_card_search:
                 startActivity(new Intent(this, CardSearchAcitivity.class));

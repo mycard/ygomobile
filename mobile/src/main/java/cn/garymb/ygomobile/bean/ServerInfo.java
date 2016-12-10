@@ -16,6 +16,9 @@ public class ServerInfo {
 //    @XmlElement("password")
 //    private String password;
 
+    @XmlElement("keep")
+    private boolean keep;
+
     public ServerInfo() {
 
     }
@@ -24,6 +27,14 @@ public class ServerInfo {
         this.name = name;
         this.serverAddr = serverAddr;
         this.port = port;
+    }
+
+    public boolean isKeep() {
+        return keep;
+    }
+
+    public void setKeep(boolean keep) {
+        this.keep = keep;
     }
 
     public String getName() {

@@ -36,10 +36,6 @@ public interface Constants {
 
     String PREF_LAST_ROOM_LIST = "pref_key_lastroom_list";
     int LAST_ROOM_MAX = 20;
-    /**
-     * 动画结束再删除
-     */
-    boolean DRAG_END_DELETE = false;
     /***
      * 卡组编辑，长按删除对话框
      */
@@ -106,6 +102,7 @@ public interface Constants {
     String URL_HELP = "http://www.jianshu.com/p/a43f5d951a25";
     String WIKI_SEARCH_URL = "http://www.ourocg.cn/S.aspx?key=";
 
+    String SERVER_FILE = "server_list.xml";
     String SHARE_FILE = ".share_deck.png";
     /***
      * 如果是双击显示，则单击拖拽

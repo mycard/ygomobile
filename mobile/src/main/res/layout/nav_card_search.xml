@@ -20,6 +20,7 @@
                 android:layout_height="@dimen/label_width_small"
                 android:hint="@string/hit_keyword1"
                 android:maxLines="1"
+                android:inputType="textNoSuggestions"
                 android:singleLine="true"/>
         </android.support.design.widget.TextInputLayout>
 
@@ -33,6 +34,7 @@
                 android:layout_height="@dimen/label_width_small"
                 android:hint="@string/hit_keyword2"
                 android:maxLines="1"
+                android:inputType="textNoSuggestions"
                 android:singleLine="true"/>
         </android.support.design.widget.TextInputLayout>
 

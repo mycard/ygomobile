@@ -16,10 +16,12 @@
 
 package android.support.v7.widget.helper;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.os.Build;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.animation.AnimatorCompatHelper;
 import android.support.v4.animation.AnimatorListenerCompat;
@@ -75,6 +77,15 @@ import java.util.List;
  */
 public class ItemTouchHelper2 extends RecyclerView.ItemDecoration
         implements RecyclerView.OnChildAttachStateChangeListener {
+    public interface OnDragListner {
+        void onDragStart();
+
+        void onDragLongPress(int pos);
+
+        void onDragLongPressEnd();
+
+        void onDragEnd();
+    }
 
     /**
      * Up direction, used for swipe & drag control.
@@ -90,6 +101,7 @@ public class ItemTouchHelper2 extends RecyclerView.ItemDecoration
      * Left direction, used for swipe & drag control.
      */
     public static final int LEFT = 1 << 2;
+    private Context mContext;
 
     /**
      * Right direction, used for swipe & drag control.
@@ -144,7 +156,7 @@ public class ItemTouchHelper2 extends RecyclerView.ItemDecoration
 
     static final String TAG = "ItemTouchHelper";
 
-    static final boolean DEBUG = false;
+    static final boolean DEBUG = true;
 
     static final int ACTIVE_POINTER_ID_NONE = -1;
 
@@ -432,8 +444,9 @@ public class ItemTouchHelper2 extends RecyclerView.ItemDecoration
      *
      * @param callback The Callback which controls the behavior of this touch helper.
      */
-    public ItemTouchHelper2(Callback callback) {
+    public ItemTouchHelper2(Context context, Callback callback) {
         mCallback = callback;
+        mContext = context;
         mCallback.setItemTouchHelper(this);
     }
 
@@ -442,6 +455,10 @@ public class ItemTouchHelper2 extends RecyclerView.ItemDecoration
                 x <= left + child.getWidth() &&
                 y >= top &&
                 y <= top + child.getHeight();
+    }
+
+    public Context getContext() {
+        return mContext;
     }
 
     /**
@@ -454,6 +471,9 @@ public class ItemTouchHelper2 extends RecyclerView.ItemDecoration
      *                     RecyclerView.
      */
     public void attachToRecyclerView(@Nullable RecyclerView recyclerView) {
+        if (mContext == null) {
+            mContext = recyclerView.getContext();
+        }
         if (mRecyclerView == recyclerView) {
             return; // nothing to do
         }
@@ -611,7 +631,7 @@ public class ItemTouchHelper2 extends RecyclerView.ItemDecoration
                         targetTranslateX, targetTranslateY) {
                     @Override
                     public void onAnimationEnd(ValueAnimatorCompat animation) {
-                        if(animation!=null) {
+                        if (animation != null) {
                             super.onAnimationEnd(animation);
                         }
                         if (this.mOverridden) {
@@ -640,10 +660,10 @@ public class ItemTouchHelper2 extends RecyclerView.ItemDecoration
                 final long duration = mCallback.getAnimationDuration(mRecyclerView, animationType,
                         targetTranslateX - currentTranslateX, targetTranslateY - currentTranslateY);
                 rv.setDuration(duration);
-                if(mCallback.canAnimation(mRecyclerView, prevSelected)) {
+                if (mCallback.canAnimation(mRecyclerView, prevSelected)) {
                     mRecoverAnimations.add(rv);
                     rv.start();
-                }else{
+                } else {
                     rv.onAnimationEnd(null);
                 }
                 preventLayout = true;
@@ -1453,6 +1473,31 @@ public class ItemTouchHelper2 extends RecyclerView.ItemDecoration
 
         public void setItemTouchHelper(ItemTouchHelper2 itemTouchHelper) {
             mItemTouchHelper = itemTouchHelper;
+            mHandler = new Handler(itemTouchHelper.getContext().getMainLooper());
+        }
+
+        public void setLongTime(long longTime) {
+            mLongTime = longTime;
+        }
+
+        private Handler mHandler;
+        private int mSelectId;
+        private long mLongTime = 1000;
+        private boolean mLongPressMode;
+        private volatile long longPressTime = 0;
+        private boolean isLongPressCancel = false;
+        protected OnDragListner mOnDragListner;
+
+        public void setOnDragListner(OnDragListner onDragListner) {
+            mOnDragListner = onDragListner;
+        }
+
+        public boolean isLongPressMode() {
+            return mLongPressMode;
+        }
+
+        public int getSelectId() {
+            return mSelectId;
         }
 
         /**
@@ -1750,6 +1795,35 @@ public class ItemTouchHelper2 extends RecyclerView.ItemDecoration
             return defaultValue;
         }
 
+
+        private Runnable enterLongPress = new Runnable() {
+            @Override
+            public void run() {
+                if (System.currentTimeMillis() - longPressTime >= mLongTime) {
+                    if (DEBUG)
+                        Log.i(TAG, "enter delete");
+                    mLongPressMode = true;
+                    if (mOnDragListner != null) {
+                        mOnDragListner.onDragLongPress(mSelectId);
+                    }
+                } else {
+                    if (DEBUG)
+                        Log.i(TAG, "no enter long press " + (System.currentTimeMillis() - longPressTime));
+                }
+            }
+        };
+
+        protected void endLongPressMode() {
+            longPressTime = System.currentTimeMillis();
+            mHandler.removeCallbacks(enterLongPress);
+            if(mLongPressMode) {
+                if (mOnDragListner != null) {
+                    mOnDragListner.onDragLongPressEnd();
+                }
+            }
+            mLongPressMode = false;
+        }
+
         /**
          * Called by ItemTouchHelper to select a drop target from the list of ViewHolders that
          * are under the dragged View.
@@ -1873,6 +1947,29 @@ public class ItemTouchHelper2 extends RecyclerView.ItemDecoration
         public void onSelectedChanged(ViewHolder viewHolder, int actionState) {
             if (viewHolder != null) {
                 sUICallback.onSelected(viewHolder.itemView);
+            }
+            if (viewHolder != null && actionState == ACTION_STATE_DRAG) {
+                if (DEBUG)
+                    Log.i(TAG, "start drag");
+                if (mOnDragListner != null) {
+                    mOnDragListner.onDragStart();
+                }
+                isLongPressCancel = false;
+                mSelectId = viewHolder.getAdapterPosition();
+                longPressTime = System.currentTimeMillis();
+                mHandler.removeCallbacks(enterLongPress);
+                mHandler.postDelayed(enterLongPress, mLongTime);
+            } else if (actionState == ACTION_STATE_IDLE) {
+                if (DEBUG)
+                    Log.i(TAG, "end drag");
+                endLongPressMode();
+                if (mOnDragListner != null) {
+                    mOnDragListner.onDragEnd();
+                }
+            } else if (actionState == ACTION_STATE_SWIPE) {
+                if (DEBUG)
+                    Log.i(TAG, "cancel enter delete by swipe");
+                endLongPressMode();
             }
         }
 
@@ -2080,10 +2177,25 @@ public class ItemTouchHelper2 extends RecyclerView.ItemDecoration
          * boolean)
          */
         public void onChildDrawOver(Canvas c, RecyclerView recyclerView,
-                                       ViewHolder viewHolder,
-                                       float dX, float dY, int actionState, boolean isCurrentlyActive) {
+                                    ViewHolder viewHolder,
+                                    float dX, float dY, int actionState, boolean isCurrentlyActive) {
             sUICallback.onDrawOver(c, recyclerView, viewHolder.itemView, dX, dY, actionState,
                     isCurrentlyActive);
+            if (actionState == ACTION_STATE_DRAG) {
+//                if (viewHolder.itemView != null) {
+//                    int w = viewHolder.itemView.getWidth();
+//                    int h = viewHolder.itemView.getHeight();
+                if (dX > 0 || dY > 0) {
+                    if (!isLongPressCancel) {
+                        isLongPressCancel = true;
+                        endLongPressMode();
+                        if (DEBUG)
+                            Log.w(TAG, "cancel enter long press");
+//                    }
+                    }
+                }
+//                }
+            }
         }
 
         /**
@@ -2118,9 +2230,10 @@ public class ItemTouchHelper2 extends RecyclerView.ItemDecoration
             }
         }
 
-        public boolean canAnimation(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder){
+        public boolean canAnimation(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
             return true;
         }
+
         /**
          * Called by the ItemTouchHelper when user is dragging a view out of bounds.
          * <p>

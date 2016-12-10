@@ -13,10 +13,9 @@ import android.view.View;
 public class ItemTouchHelperCompat extends ItemTouchHelper2 {
 
     private boolean enableClickDrag = false;
-    private Context mContext;
 
-    public ItemTouchHelperCompat(Callback callback) {
-        super(callback);
+    public ItemTouchHelperCompat(Context context,Callback callback) {
+        super(context, callback);
     }
 
     /***
@@ -28,7 +27,6 @@ public class ItemTouchHelperCompat extends ItemTouchHelper2 {
 
     @Override
     public void attachToRecyclerView(@Nullable RecyclerView recyclerView) {
-        this.mContext = recyclerView.getContext();
         super.attachToRecyclerView(recyclerView);
     }
 
@@ -38,7 +36,7 @@ public class ItemTouchHelperCompat extends ItemTouchHelper2 {
         if (mGestureDetector != null) {
             return;
         }
-        mGestureDetector = new GestureDetectorCompat(mContext,
+        mGestureDetector = new GestureDetectorCompat(getContext(),
                 new ItemTouchHelperGestureListener());
     }
 

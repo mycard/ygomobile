@@ -11,36 +11,29 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_margin="@dimen/padding2">
+        android:layout_margin="@dimen/padding">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="@dimen/label_height"
+            android:orientation="horizontal"
+            android:layout_margin="4dp">
 
             <TextView
                 android:id="@+id/server_name"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginBottom="4dp"
                 android:layout_weight="1"
                 android:singleLine="true"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
                 android:textColor="@color/colorAccentDark"
                 tools:text="Server Name"/>
-
-            <ImageButton
-                android:id="@+id/btn_edit"
-                android:layout_width="@dimen/label_height"
-                android:layout_height="@dimen/label_height"
-                android:layout_gravity="center_vertical"
-                android:layout_marginRight="6dp"
-                android:background="@android:color/transparent"
-                android:visibility="gone"
-                app:srcCompat="@drawable/ic_edit"/>
         </LinearLayout>
 
         <LinearLayout
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
             android:layout_width="match_parent"
             android:layout_height="@dimen/label_height"
             android:orientation="horizontal">
@@ -94,6 +87,8 @@
         </LinearLayout>
 
         <LinearLayout
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
             android:layout_width="match_parent"
             android:layout_height="@dimen/label_height"
             android:orientation="horizontal">

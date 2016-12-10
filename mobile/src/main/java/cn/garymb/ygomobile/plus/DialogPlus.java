@@ -24,8 +24,10 @@ public class DialogPlus {
     private TextView mTitleView;
     private View closeView;
     private FrameLayout mFrameLayout;
-    private Button mButton;
+    private Button mLeft;
     private Dialog mDialog;
+    private View mCancelView;
+    private Button mRight;
     private View mContentView;
     private int mMaxHeight;
 
@@ -39,14 +41,16 @@ public class DialogPlus {
         mTitleView = bind(R.id.title);
         closeView = bind(R.id.close);
         mFrameLayout = bind(R.id.container);
-        mButton = bind(R.id.button_ok);
+        mLeft = bind(R.id.button_ok);
+        mRight = bind(R.id.button_cancel);
+        mCancelView = bind(R.id.space_cancel);
         setCloseLinster((dlg, id) -> {
             dlg.dismiss();
         });
     }
 
     public DialogPlus hideButton() {
-        mButton.setVisibility(View.GONE);
+        mLeft.setVisibility(View.GONE);
         return this;
     }
 
@@ -64,8 +68,17 @@ public class DialogPlus {
         return this;
     }
 
-    public DialogPlus setButtonListener(DialogInterface.OnClickListener clickListener) {
-        mButton.setOnClickListener((v) -> {
+    public DialogPlus setRightButtonListener(DialogInterface.OnClickListener clickListener) {
+        mRight.setOnClickListener((v) -> {
+            if (clickListener != null) {
+                clickListener.onClick(mDialog, DialogInterface.BUTTON_NEUTRAL);
+            }
+        });
+        return this;
+    }
+
+    public DialogPlus setLeftButtonListener(DialogInterface.OnClickListener clickListener) {
+        mLeft.setOnClickListener((v) -> {
             if (clickListener != null) {
                 clickListener.onClick(mDialog, DialogInterface.BUTTON_POSITIVE);
             }
@@ -104,12 +117,23 @@ public class DialogPlus {
         return this;
     }
 
-    public DialogPlus setButtonText(int id) {
-        return setButtonText(context.getString(id));
+    public DialogPlus setRightButtonText(int id) {
+        return setRightButtonText(context.getString(id));
     }
 
-    public DialogPlus setButtonText(String text) {
-        mButton.setText(text);
+    public DialogPlus setRightButtonText(String text) {
+        mRight.setVisibility(View.VISIBLE);
+        mRight.setText(text);
+        mCancelView.setVisibility(View.VISIBLE);
+        return this;
+    }
+
+    public DialogPlus setLeftButtonText(int id) {
+        return setLeftButtonText(context.getString(id));
+    }
+
+    public DialogPlus setLeftButtonText(String text) {
+        mLeft.setText(text);
         return this;
     }
 
@@ -172,7 +196,7 @@ public class DialogPlus {
         layoutParams.gravity = Gravity.CENTER_HORIZONTAL;
         frameLayout.addView(webView, layoutParams);
         setView(frameLayout);
-        setButtonListener((dlg, v) -> {
+        setLeftButtonListener((dlg, v) -> {
             dlg.dismiss();
         });
         webView.loadUrl(url);
