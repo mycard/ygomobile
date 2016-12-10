@@ -13,9 +13,6 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
-    <style name="AppTheme.Main" parent="AppTheme">
-        <item name="android:windowBackground">@drawable/bg</item>
-    </style>
     <style name="AppTheme.Translucent" parent="AppTheme">
         <item name="android:windowIsTranslucent">true</item>
     </style>
