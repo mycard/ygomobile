@@ -1495,9 +1495,16 @@ public class ItemTouchHelper2 extends RecyclerView.ItemDecoration
         private volatile long longPressTime = 0;
         private boolean isLongPressCancel = false;
         protected OnDragListner mOnDragListner;
+        private int mDx = 2;
+        private int mDy = 2;
 
         public void setOnDragListner(OnDragListner onDragListner) {
             mOnDragListner = onDragListner;
+        }
+
+        public void setDragSize(int dx,int dy) {
+            mDx = dx;
+            mDy = dy;
         }
 
         public boolean isLongPressMode() {
@@ -2192,7 +2199,7 @@ public class ItemTouchHelper2 extends RecyclerView.ItemDecoration
             sUICallback.onDrawOver(c, recyclerView, viewHolder.itemView, dX, dY, actionState,
                     isCurrentlyActive);
             if (isCurrentlyActive && actionState == ACTION_STATE_DRAG) {
-                if (dX > 0 || dY > 0) {
+                if (dX > mDx || dY > mDy) {
                     if (!isLongPressMode() && !isLongPressCancel) {
                         isLongPressCancel = true;
                         endLongPressMode();

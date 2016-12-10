@@ -20,6 +20,7 @@ public class DeckItemTouchHelper extends ItemTouchHelper2.Callback {
     public DeckItemTouchHelper(DeckAdapater deckAdapater) {
         this.mDeckDrager = new DeckDrager(deckAdapater);
         this.deckAdapater = deckAdapater;
+//        setDragSize();
     }
 
     private int Min_Pos = -10;

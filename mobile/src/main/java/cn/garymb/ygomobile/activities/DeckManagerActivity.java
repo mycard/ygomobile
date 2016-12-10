@@ -13,6 +13,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper2;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -51,7 +52,6 @@ import cn.garymb.ygomobile.utils.IOUtils;
 import cn.garymb.ygomobile.utils.ShareUtil;
 import cn.ygo.ocgcore.LimitList;
 
-import static android.R.attr.id;
 import static cn.garymb.ygomobile.Constants.YDK_FILE_EX;
 
 public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerViewItemListener.OnItemListener,
@@ -125,8 +125,10 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
 
     @Override
     public void onDragLongPress(int pos) {
+        Log.i("kk", "delete "+pos);
         if (mSettings.isDialogDelete()) {
-            DeckItem deckItem = mDeckAdapater.getItem(id);
+
+            DeckItem deckItem = mDeckAdapater.getItem(pos);
             if (deckItem == null || deckItem.getCardInfo() == null) {
                 return;
             }
@@ -136,7 +138,7 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
             dialogPlus.setMessageGravity(Gravity.CENTER_HORIZONTAL);
             dialogPlus.setLeftButtonListener((dlg, v) -> {
                 dlg.dismiss();
-                mDeckItemTouchHelper.remove(id);
+                mDeckItemTouchHelper.remove(pos);
             });
             dialogPlus.show();
         } else {
