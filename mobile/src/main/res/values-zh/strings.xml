@@ -153,4 +153,5 @@
     <string name="delete_card" formatted="false">删除卡片 %s ?</string>
     <string name="clear_deck">清空</string>
     <string name="question_clear_deck">清空当前卡组?</string>
+    <string name="delete_server_info">删除当前服务器信息？</string>
 </resources>

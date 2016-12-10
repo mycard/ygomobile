@@ -3,7 +3,6 @@ package cn.garymb.ygomobile.adapters;
 import android.app.Activity;
 import android.app.Dialog;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
@@ -23,6 +22,7 @@ import java.util.List;
 import cn.garymb.ygodata.YGOGameOptions;
 import cn.garymb.ygomobile.bean.ServerInfo;
 import cn.garymb.ygomobile.bean.ServerList;
+import cn.garymb.ygomobile.core.AppsSettings;
 import cn.garymb.ygomobile.core.YGOStarter;
 import cn.garymb.ygomobile.core.loader.IDataLoader;
 import cn.garymb.ygomobile.core.loader.ILoadCallBack;
@@ -31,7 +31,6 @@ import cn.garymb.ygomobile.plus.BaseAdapterPlus;
 import cn.garymb.ygomobile.plus.DialogPlus;
 import cn.garymb.ygomobile.plus.SimpleListAdapter;
 import cn.garymb.ygomobile.plus.VUiKit;
-import cn.garymb.ygomobile.core.AppsSettings;
 import cn.garymb.ygomobile.utils.IOUtils;
 import cn.garymb.ygomobile.utils.XmlUtils;
 
@@ -206,13 +205,20 @@ public class ServerListAdapater extends BaseAdapterPlus<ServerInfo> implements
         }
         builder.setButtonListener((dlg, v) -> {
             //保存
+            String serverName = ""+editViewHolder.serverName.getText();
             ServerInfo info;
             if (!isAdd) {
                 info = getItem(position);
+//                if(TextUtils.isEmpty(serverName)){
+//                    mItems.remove(info);
+//                    saveItems();
+//                    dialog.dismiss();
+//                    return;
+//                }
             } else {
                 info = new ServerInfo();
             }
-            info.setName("" + editViewHolder.serverName.getText());
+            info.setName("" + serverName);
             info.setServerAddr("" + editViewHolder.serverIp.getText());
             info.setPlayerName("" + editViewHolder.userName.getText());
             if (TextUtils.isEmpty(info.getName())
@@ -221,20 +227,27 @@ public class ServerListAdapater extends BaseAdapterPlus<ServerInfo> implements
                 Toast.makeText(getContext(), R.string.server_is_exist, Toast.LENGTH_SHORT).show();
                 return;
             }
+            if(isAdd){
+                mItems.add(info);
+            }
             info.setPort(Integer.valueOf("" + editViewHolder.serverPort.getText()));
 //            info.setPassword("" + editViewHolder.userPassword.getText());
-            OutputStream outputStream = null;
-            try {
-                outputStream = new FileOutputStream(xmlFile);
-                XmlUtils.get().saveXml(new ServerList(mItems), outputStream);
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                IOUtils.close(outputStream);
-            }
-            notifyDataSetChanged();
+            saveItems();
             dialog.dismiss();
         });
+    }
+
+    private void saveItems(){
+        OutputStream outputStream = null;
+        try {
+            outputStream = new FileOutputStream(xmlFile);
+            XmlUtils.get().saveXml(new ServerList(mItems), outputStream);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            IOUtils.close(outputStream);
+        }
+        notifyDataSetChanged();
     }
 
 

@@ -157,4 +157,5 @@
     <string name="delete_card" formatted="false">Delete %s ?</string>
     <string name="clear_deck">Clear</string>
     <string name="question_clear_deck">clear this deck?</string>
+    <string name="delete_server_info">delete this server info?</string>
 </resources>

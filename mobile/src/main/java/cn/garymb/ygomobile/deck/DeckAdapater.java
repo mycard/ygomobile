@@ -3,7 +3,6 @@ package cn.garymb.ygomobile.deck;
 import android.content.Context;
 import android.os.SystemClock;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +22,6 @@ import cn.garymb.ygomobile.core.loader.ImageLoader;
 import cn.garymb.ygomobile.lite.R;
 import cn.ygo.ocgcore.LimitList;
 import cn.ygo.ocgcore.enums.CardType;
-import cn.ygo.ocgcore.enums.LimitType;
 
 
 public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
@@ -97,6 +95,7 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
             addItem(id, new DeckItem(cardInfo, type));
             notifyItemChanged(DeckItem.MainEnd);
             notifyItemChanged(id);
+            notifyItemChanged(DeckItem.MainLabel);
             return true;
         }
         if (type == DeckItemType.ExtraCard) {
@@ -108,6 +107,7 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
             addItem(id, new DeckItem(cardInfo, type));
             notifyItemChanged(DeckItem.ExtraEnd);
             notifyItemChanged(id);
+            notifyItemChanged(DeckItem.ExtraLabel);
             return true;
         }
         if (type == DeckItemType.SideCard) {
@@ -119,6 +119,7 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
             addItem(id, new DeckItem(cardInfo, type));
             notifyItemChanged(DeckItem.SideEnd);
             notifyItemChanged(id);
+            notifyItemChanged(DeckItem.SideLabel);
             return true;
         }
         return false;

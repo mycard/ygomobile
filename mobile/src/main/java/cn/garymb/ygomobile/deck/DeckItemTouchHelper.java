@@ -1,14 +1,12 @@
 package cn.garymb.ygomobile.deck;
 
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.os.Handler;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.support.v7.widget.helper.ItemTouchHelperCompat;
 import android.util.Log;
-import android.view.View;
 
 import java.util.List;
 
@@ -36,13 +34,14 @@ public class DeckItemTouchHelper extends ItemTouchHelperCompat.Callback {
     private Handler mHandler;
     private static final String TAG = "drag";
     private static final boolean DEBUG = false;
-
+    private DeckAdapater deckAdapater;
     public void setCallBack(CallBack callBack) {
         mCallBack = callBack;
     }
 
     public DeckItemTouchHelper(DeckAdapater deckAdapater) {
         this.mDeckDrager = new DeckDrager(deckAdapater);
+        this.deckAdapater=deckAdapater;
         mHandler = new Handler(deckAdapater.getContext().getMainLooper());
     }
 
@@ -75,6 +74,23 @@ public class DeckItemTouchHelper extends ItemTouchHelperCompat.Callback {
      */
     @Override
     public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+        int id = viewHolder.getAdapterPosition();
+        if(DeckItemUtils.isLabel(id) || id == DeckItem.HeadView){
+            return  makeMovementFlags(0, 0);
+        }
+        if(DeckItemUtils.isMain(id)){
+            if(id >= DeckItem.MainStart+ deckAdapater.getMainCount()){
+                return  makeMovementFlags(0, 0);
+            }
+        }else if(DeckItemUtils.isExtra(id)){
+            if(id >= DeckItem.ExtraStart+ deckAdapater.getExtraCount()){
+                return  makeMovementFlags(0, 0);
+            }
+        }else if(DeckItemUtils.isSide(id)){
+            if(id >= DeckItem.SideStart+ deckAdapater.getSideCount()){
+                return  makeMovementFlags(0, 0);
+            }
+        }
         int dragFlags;
         if (recyclerView.getLayoutManager() instanceof GridLayoutManager) {
             dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN | ItemTouchHelper.RIGHT | ItemTouchHelper.LEFT;
@@ -106,8 +122,7 @@ public class DeckItemTouchHelper extends ItemTouchHelperCompat.Callback {
                     }
                     return null;
                 }
-                if (deckholder.getItemType() == DeckItemType.Space
-                        || deckholder.getItemType() == DeckItemType.MainLabel
+                if (deckholder.getItemType() == DeckItemType.MainLabel
                         || deckholder.getItemType() == DeckItemType.SideLabel
                         || deckholder.getItemType() == DeckItemType.ExtraLabel) {
 //                Log.d("kk", "move is label or space " + id);
