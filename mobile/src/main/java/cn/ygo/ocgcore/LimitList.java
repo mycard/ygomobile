@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.garymb.ygomobile.bean.CardInfo;
 import cn.ygo.ocgcore.enums.LimitType;
 
 public class LimitList {
@@ -46,10 +47,6 @@ public class LimitList {
         }
     }
 
-    public boolean isSemiLimit(Long id) {
-        return semiLimit.contains(id);
-    }
-
     public void addLimit(Long id) {
         if (!limit.contains(id)) {
             limit.add(id);
@@ -61,10 +58,6 @@ public class LimitList {
         return allList.contains(id);
     }
 
-    public boolean isLimit(Long id) {
-        return limit.contains(id);
-    }
-
     public void addForbidden(Long id) {
         if (!forbidden.contains(id)) {
             forbidden.add(id);
@@ -72,25 +65,25 @@ public class LimitList {
         }
     }
 
-    public boolean isForbidden(Long id) {
-        return forbidden.contains(id);
-    }
-
     public List<Long> getCodeList() {
         return allList;
     }
 
-    public boolean check(Long code, LimitType type) {
-        if (type == LimitType.None) {
-            return allList.contains(code);
+    public boolean check(CardInfo cardInfo, LimitType type) {
+        return check(cardInfo.Code, cardInfo.Alias, type);
+    }
+
+    public boolean check(Long code, Long alias, LimitType type) {
+        if (type == LimitType.All) {
+            return allList.contains(code) || allList.contains(alias);
         } else if (type == LimitType.Limit) {
-            return limit.contains(code);
+            return limit.contains(code) || limit.contains(alias);
         } else if (type == LimitType.SemiLimit) {
-            return semiLimit.contains(code);
+            return semiLimit.contains(code) || semiLimit.contains(alias);
         } else if (type == LimitType.Forbidden) {
-            return forbidden.contains(code);
+            return forbidden.contains(code) || forbidden.contains(alias);
         } else {
-            return true;
+            return false;
         }
     }
 

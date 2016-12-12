@@ -22,6 +22,7 @@ import cn.garymb.ygomobile.core.loader.ImageLoader;
 import cn.garymb.ygomobile.lite.R;
 import cn.ygo.ocgcore.LimitList;
 import cn.ygo.ocgcore.enums.CardType;
+import cn.ygo.ocgcore.enums.LimitType;
 
 
 public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
@@ -345,11 +346,12 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
 
     private void addCount(CardInfo cardInfo, DeckItemType type) {
         if (cardInfo == null) return;
-        Integer i = mCount.get(Long.valueOf(cardInfo.Code));
+        Long code = cardInfo.Alias>0?cardInfo.Alias:cardInfo.Code;
+        Integer i = mCount.get(code);
         if (i == null) {
-            mCount.put(Long.valueOf(cardInfo.Code), 1);
+            mCount.put(code, 1);
         } else {
-            mCount.put(Long.valueOf(cardInfo.Code), i + 1);
+            mCount.put(code, i + 1);
         }
         switch (type) {
             case MainCard:
@@ -387,11 +389,12 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
 
     private void removeCount(CardInfo cardInfo, DeckItemType type) {
         if (cardInfo == null) return;
-        Integer i = mCount.get(Long.valueOf(cardInfo.Code));
+        Long code = cardInfo.Alias>0?cardInfo.Alias:cardInfo.Code;
+        Integer i = mCount.get(code);
         if (i == null) {
-            mCount.put(Long.valueOf(cardInfo.Code), 0);
+            mCount.put(code, 0);
         } else {
-            mCount.put(Long.valueOf(cardInfo.Code), Math.max(0, i - 1));
+            mCount.put(code, Math.max(0, i - 1));
         }
         switch (type) {
             case MainCard:
@@ -613,11 +616,11 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
                     }
                     holder.rightImage.setVisibility(View.VISIBLE);
                     if (mLimitList != null) {
-                        if (mLimitList.isForbidden(cardInfo.Code)) {
+                        if (mLimitList.check(cardInfo, LimitType.Forbidden)) {
                             holder.rightImage.setImageBitmap(mImageTop.forbidden);
-                        } else if (mLimitList.isLimit(cardInfo.Code)) {
+                        } else if (mLimitList.check(cardInfo, LimitType.Limit)) {
                             holder.rightImage.setImageBitmap(mImageTop.limit);
-                        } else if (mLimitList.isSemiLimit(cardInfo.Code)) {
+                        } else if (mLimitList.check(cardInfo, LimitType.SemiLimit)) {
                             holder.rightImage.setImageBitmap(mImageTop.semiLimit);
                         } else {
                             holder.rightImage.setVisibility(View.GONE);

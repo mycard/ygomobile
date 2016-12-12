@@ -51,6 +51,7 @@ import cn.garymb.ygomobile.utils.BitmapUtil;
 import cn.garymb.ygomobile.utils.IOUtils;
 import cn.garymb.ygomobile.utils.ShareUtil;
 import cn.ygo.ocgcore.LimitList;
+import cn.ygo.ocgcore.enums.LimitType;
 
 import static cn.garymb.ygomobile.Constants.YDK_FILE_EX;
 
@@ -390,18 +391,18 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
 
     private boolean checkLimit(CardInfo cardInfo) {
         Map<Long, Integer> mCount = mDeckAdapater.getCardCount();
-        if (mLimitList != null && mLimitList.isForbidden(cardInfo.Code)) {
+        if (mLimitList != null && mLimitList.check(cardInfo, LimitType.Forbidden)) {
             Toast.makeText(DeckManagerActivity.this, getString(R.string.tip_card_max, 0), Toast.LENGTH_SHORT).show();
             return false;
         }
         Integer count = mCount.get(Long.valueOf(cardInfo.Code));
         if (count != null) {
-            if (mLimitList != null && mLimitList.isLimit(cardInfo.Code)) {
+            if (mLimitList != null && mLimitList.check(cardInfo, LimitType.Limit)) {
                 if (count >= 1) {
                     Toast.makeText(DeckManagerActivity.this, getString(R.string.tip_card_max, 1), Toast.LENGTH_SHORT).show();
                     return false;
                 }
-            } else if (mLimitList != null && mLimitList.isSemiLimit(cardInfo.Code)) {
+            } else if (mLimitList != null && mLimitList.check(cardInfo, LimitType.SemiLimit)) {
                 if (count >= 2) {
                     Toast.makeText(DeckManagerActivity.this, getString(R.string.tip_card_max, 2), Toast.LENGTH_SHORT).show();
                     return false;
