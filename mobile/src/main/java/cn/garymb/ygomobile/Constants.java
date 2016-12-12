@@ -117,17 +117,38 @@ public interface Constants {
     long LONG_PRESS_DRAG = 800;
     /***
      * adb shell am start -n cn.garymb.ygomobile/cn.garymb.ygomobile.activities.MainActivity -a ygomobile.intent.action.DECK --es android.intent.extra.TEXT 青眼白龙.ydk
-
-     adb shell am start -n cn.garymb.ygomobile/cn.garymb.ygomobile.activities.MainActivity -a ygomobile.intent.action.DECK --es android.intent.extra.TEXT /sdcard/ygocore/deck/青眼白龙.ydk
+     *
+     * adb shell am start -n cn.garymb.ygomobile/cn.garymb.ygomobile.activities.MainActivity -a ygomobile.intent.action.DECK --es android.intent.extra.TEXT /sdcard/ygocore/deck/青眼白龙.ydk
      */
-    String ACTION_OPEN_DECK="ygomobile.intent.action.DECK";
+    String ACTION_OPEN_DECK = "ygomobile.intent.action.DECK";
+    /***
+     *
+     Intent intent1=new Intent("ygomobile.intent.action.GAME");
+     intent1.putExtra("host", "127.0.0.1");
+     intent1.putExtra("port", 233);
+     intent1.putExtra("user", "player");
+     intent1.putExtra("room", "room$123");
+     intent1.setPackage("cn.garymb.ygomobile");
+     startActivity(intent1);
+     */
+    String ACTION_OPEN_GAME = "ygomobile.intent.action.GAME";
     /**
      * https://m.ygomobile.com/deck?ydk=卡组名&main=124563789,12456487&extra=123,145&side=4564,4546
      * ygomobile://m.ygomobile.com/deck?ydk=卡组名&main=124563789,12456487&extra=123,145&side=4564,4546
+     *
+     * https://m.ygomobile.com/game?host=127.0.0.1&port=233&user=player&room=1235$123
+     * ygomobile://m.ygomobile.com/game?host=127.0.0.1&port=233&user=player&room=1235$123
      */
-    String QUERY_YDK ="ydk";
-    String QUERY_NAME ="name";
+    String PATH_DECK = "/deck";
+
+    String QUERY_YDK = "ydk";
+    String QUERY_NAME = "name";
     String QUERY_MAIN = "main";
     String QUERY_EXTRA = "extra";
     String QUERY_SIDE = "side";
+    String PATH_ROOM = "/room";
+    String QUERY_HOST = "host";
+    String QUERY_PORT = "port";
+    String QUERY_USER = "user";
+    String QUERY_ROOM = "room";
 }

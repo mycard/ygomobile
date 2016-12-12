@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import java.io.File;
 
+import cn.garymb.ygodata.YGOGameOptions;
 import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.adapters.ServerLists;
 import cn.garymb.ygomobile.bean.Deck;
@@ -34,6 +35,9 @@ import cn.garymb.ygomobile.plus.VUiKit;
 import cn.garymb.ygomobile.settings.SettingsActivity;
 
 import static cn.garymb.ygomobile.Constants.ACTION_OPEN_DECK;
+import static cn.garymb.ygomobile.Constants.ACTION_OPEN_GAME;
+import static cn.garymb.ygomobile.Constants.PATH_DECK;
+import static cn.garymb.ygomobile.Constants.PATH_ROOM;
 import static cn.garymb.ygomobile.Constants.QUERY_NAME;
 
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -132,6 +136,18 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             } else {
                 finish();
             }
+        } else if (ACTION_OPEN_GAME.equals(intent.getAction())) {
+            try {
+                YGOGameOptions options = new YGOGameOptions();
+                options.mServerAddr = intent.getStringExtra(Constants.QUERY_HOST);
+                options.mUserName = intent.getStringExtra(Constants.QUERY_USER);
+                options.mPort = intent.getIntExtra(Constants.QUERY_PORT, 0);
+                options.mRoomName = intent.getStringExtra(Constants.QUERY_ROOM);
+                YGOStarter.startGame(this, options);
+            } catch (Exception e) {
+                Toast.makeText(this, R.string.start_game_error, Toast.LENGTH_SHORT).show();
+                finish();
+            }
         }
     }
 
@@ -142,15 +158,30 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             startdeck.putExtra(Intent.EXTRA_TEXT, file.getAbsolutePath());
             startActivity(startdeck);
         } else {
-            String name = uri.getQueryParameter(QUERY_NAME);
-            if (!TextUtils.isEmpty(name)) {
-                doOpenPath(name);
-            } else {
-                Deck deckInfo = new Deck(uri);
-                File file = deckInfo.save(AppsSettings.get().getDeckDir());
-                Intent startdeck = new Intent(this, DeckManagerActivity.class);
-                startdeck.putExtra(Intent.EXTRA_TEXT, file.getAbsolutePath());
-                startActivity(startdeck);
+            String path = uri.getPath();
+            if (PATH_DECK.equals(path)) {
+                String name = uri.getQueryParameter(QUERY_NAME);
+                if (!TextUtils.isEmpty(name)) {
+                    doOpenPath(name);
+                } else {
+                    Deck deckInfo = new Deck(uri);
+                    File file = deckInfo.save(AppsSettings.get().getDeckDir());
+                    Intent startdeck = new Intent(this, DeckManagerActivity.class);
+                    startdeck.putExtra(Intent.EXTRA_TEXT, file.getAbsolutePath());
+                    startActivity(startdeck);
+                }
+            } else if (PATH_ROOM.equals(path)) {
+                try {
+                    YGOGameOptions options = new YGOGameOptions();
+                    options.mServerAddr = uri.getQueryParameter(Constants.QUERY_HOST);
+                    options.mUserName = uri.getQueryParameter(Constants.QUERY_USER);
+                    options.mPort = Integer.parseInt(uri.getQueryParameter(Constants.QUERY_PORT));
+                    options.mRoomName = uri.getQueryParameter(Constants.QUERY_ROOM);
+                    YGOStarter.startGame(this, options);
+                } catch (Exception e) {
+                    Toast.makeText(this, R.string.start_game_error, Toast.LENGTH_SHORT).show();
+                    finish();
+                }
             }
         }
     }

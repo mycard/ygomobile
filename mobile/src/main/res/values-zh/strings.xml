@@ -155,4 +155,5 @@
     <string name="delete_server_info">删除当前服务器信息？</string>
     <string name="exit_edit_mode">退出编辑模式</string>
     <string name="logo_text">感谢大家一直以来的支持</string>
+    <string name="start_game_error">启动游戏失败</string>
 </resources>
