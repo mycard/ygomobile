@@ -34,10 +34,11 @@ import java.util.Map;
 import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.adapters.CardListAdapater;
 import cn.garymb.ygomobile.bean.CardInfo;
+import cn.garymb.ygomobile.bean.Deck;
 import cn.garymb.ygomobile.core.AppsSettings;
 import cn.garymb.ygomobile.core.CardDetail;
 import cn.garymb.ygomobile.deck.DeckAdapater;
-import cn.garymb.ygomobile.deck.DeckInfo;
+import cn.garymb.ygomobile.bean.DeckInfo;
 import cn.garymb.ygomobile.deck.DeckItem;
 import cn.garymb.ygomobile.deck.DeckItemTouchHelper;
 import cn.garymb.ygomobile.deck.DeckItemType;
@@ -130,6 +131,7 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
         }
         mYdkFile = file;
         initDecksListSpinners(mDeckSpinner);
+        //EXTRA_DECK
         loadDeck(file, noSaveLast);
     }
 

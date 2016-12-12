@@ -17,12 +17,13 @@ import java.util.List;
 
 import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.bean.CardInfo;
+import cn.garymb.ygomobile.bean.Deck;
+import cn.garymb.ygomobile.bean.DeckInfo;
 import cn.garymb.ygomobile.core.CardLoader;
 import cn.garymb.ygomobile.utils.IOUtils;
 import cn.ygo.ocgcore.LimitList;
 
 class DeckItemUtils {
-
     public static boolean save(List<DeckItem> items, File file) {
         FileOutputStream outputStream = null;
         OutputStreamWriter writer = null;

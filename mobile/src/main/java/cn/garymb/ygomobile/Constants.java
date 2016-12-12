@@ -121,4 +121,13 @@ public interface Constants {
      adb shell am start -n cn.garymb.ygomobile/cn.garymb.ygomobile.activities.MainActivity -a ygomobile.intent.action.DECK --es android.intent.extra.TEXT /sdcard/ygocore/deck/青眼白龙.ydk
      */
     String ACTION_OPEN_DECK="ygomobile.intent.action.DECK";
+    /**
+     * https://m.ygomobile.com/deck?ydk=卡组名&main=124563789,12456487&extra=123,145&side=4564,4546
+     * ygomobile://m.ygomobile.com/deck?ydk=卡组名&main=124563789,12456487&extra=123,145&side=4564,4546
+     */
+    String QUERY_YDK ="ydk";
+    String QUERY_NAME ="name";
+    String QUERY_MAIN = "main";
+    String QUERY_EXTRA = "extra";
+    String QUERY_SIDE = "side";
 }

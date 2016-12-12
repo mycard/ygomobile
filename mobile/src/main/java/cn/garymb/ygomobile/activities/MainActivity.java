@@ -24,6 +24,7 @@ import java.io.File;
 
 import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.adapters.ServerLists;
+import cn.garymb.ygomobile.bean.Deck;
 import cn.garymb.ygomobile.core.AppsSettings;
 import cn.garymb.ygomobile.core.ResCheckTask;
 import cn.garymb.ygomobile.core.YGOStarter;
@@ -31,9 +32,9 @@ import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.plus.DialogPlus;
 import cn.garymb.ygomobile.plus.VUiKit;
 import cn.garymb.ygomobile.settings.SettingsActivity;
-import dalvik.system.DexClassLoader;
 
 import static cn.garymb.ygomobile.Constants.ACTION_OPEN_DECK;
+import static cn.garymb.ygomobile.Constants.QUERY_NAME;
 
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
     private boolean enableStart;
@@ -68,7 +69,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         navigationView.getHeaderView(0).findViewById(R.id.nav_donation).setOnClickListener((v) -> {
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.ALIPAY_URL));
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
+            try {
+                startActivity(Intent.createChooser(intent, getString(R.string.donation)));
+            } catch (Exception e) {
+
+            }
         });
         YGOStarter.onCreated(this);
         mServerAdapater.setOnEditListener((edit) -> {
@@ -91,6 +96,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             if (isNew) {
                 new DialogPlus(this)
                         .setTitle(getString(R.string.settings_about_change_log))
+                        .setCancelable(false)
                         .loadUrl("file:///android_asset/changelog.html")
                         .show();
             } else {
@@ -114,22 +120,56 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     private void doOpenDeck(Intent intent) {
         if (ACTION_OPEN_DECK.equals(intent.getAction())) {
-            File deck = null;
-            String name = intent.getStringExtra(Intent.EXTRA_TEXT);
-            if (!TextUtils.isEmpty(name)) {
-                deck = new File(name);
-                if (!deck.exists()) {
-                    deck = new File(AppsSettings.get().getDeckDir(), name);
-                }
-            }
-            if (deck != null && deck.exists()) {
-                Intent startdeck = new Intent(this, DeckManagerActivity.class);
-                startdeck.putExtra(Intent.EXTRA_TEXT, deck.getAbsolutePath());
-                startActivity(startdeck);
+            if (intent.getData() != null) {
+                doUri(intent.getData());
             } else {
-                Log.w("kk", "no find " + name);
+                String name = intent.getStringExtra(Intent.EXTRA_TEXT);
+                doOpenPath(name);
+            }
+        } else if (Intent.ACTION_VIEW.equals(intent.getAction())) {
+            if (intent.getData() != null) {
+                doUri(intent.getData());
+            } else {
                 finish();
             }
+        }
+    }
+
+    private void doUri(Uri uri) {
+        if ("file".equalsIgnoreCase(uri.getScheme())) {
+            File file = new File(uri.getPath());
+            Intent startdeck = new Intent(this, DeckManagerActivity.class);
+            startdeck.putExtra(Intent.EXTRA_TEXT, file.getAbsolutePath());
+            startActivity(startdeck);
+        } else {
+            String name = uri.getQueryParameter(QUERY_NAME);
+            if (!TextUtils.isEmpty(name)) {
+                doOpenPath(name);
+            } else {
+                Deck deckInfo = new Deck(uri);
+                File file = deckInfo.save(AppsSettings.get().getDeckDir());
+                Intent startdeck = new Intent(this, DeckManagerActivity.class);
+                startdeck.putExtra(Intent.EXTRA_TEXT, file.getAbsolutePath());
+                startActivity(startdeck);
+            }
+        }
+    }
+
+    private void doOpenPath(String name) {
+        File deck = null;
+        if (!TextUtils.isEmpty(name)) {
+            deck = new File(name);
+            if (!deck.exists()) {
+                deck = new File(AppsSettings.get().getDeckDir(), name);
+            }
+        }
+        if (deck != null && deck.exists()) {
+            Intent startdeck = new Intent(this, DeckManagerActivity.class);
+            startdeck.putExtra(Intent.EXTRA_TEXT, deck.getAbsolutePath());
+            startActivity(startdeck);
+        } else {
+            Log.w("kk", "no find " + name);
+            finish();
         }
     }
 

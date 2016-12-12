@@ -17,6 +17,7 @@ import java.util.Random;
 
 import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.bean.CardInfo;
+import cn.garymb.ygomobile.bean.DeckInfo;
 import cn.garymb.ygomobile.core.CardLoader;
 import cn.garymb.ygomobile.core.loader.ImageLoader;
 import cn.garymb.ygomobile.lite.R;
