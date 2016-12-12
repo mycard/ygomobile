@@ -1,6 +1,7 @@
 package cn.garymb.ygomobile.activities;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.animation.AlphaAnimation;
@@ -36,6 +37,7 @@ public class LogoActivity extends Activity {
 
             @Override
             public void onAnimationEnd(Animation arg0) {
+                startActivity(new Intent(LogoActivity.this, MainActivity.class));
                 finish();
             }
         });

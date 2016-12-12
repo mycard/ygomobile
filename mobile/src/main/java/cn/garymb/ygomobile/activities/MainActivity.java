@@ -18,6 +18,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import java.io.File;
+
 import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.adapters.ServerLists;
 import cn.garymb.ygomobile.core.AppsSettings;
@@ -27,6 +29,8 @@ import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.plus.DialogPlus;
 import cn.garymb.ygomobile.plus.VUiKit;
 import cn.garymb.ygomobile.settings.SettingsActivity;
+
+import static cn.garymb.ygomobile.Constants.ACTION_OPEN_DECK;
 
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
     private boolean enableStart;
@@ -38,9 +42,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setEnterAnimEnable(false);
         setExitAnimEnable(false);
-        startActivity(new Intent(this, LogoActivity.class));
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = bind(R.id.toolbar);
@@ -83,13 +85,19 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             } else {
                 enableStart = true;
             }
-            setEnterAnimEnable(true);
-            setExitAnimEnable(false);
             if (isNew) {
                 new DialogPlus(this)
                         .setTitle(getString(R.string.settings_about_change_log))
                         .loadUrl("file:///android_asset/changelog.html")
                         .show();
+            }else{
+                Intent intent=getIntent();
+                if(ACTION_OPEN_DECK.equals(intent.getAction())){
+                    File deck=new File(intent.getData().getPath());
+                    Intent startdeck = new Intent(this, DeckManagerActivity.class);
+                    startdeck.putExtra(Intent.EXTRA_TEXT, deck.getAbsoluteFile());
+                    startActivity(startdeck);
+                }
             }
         });
     }

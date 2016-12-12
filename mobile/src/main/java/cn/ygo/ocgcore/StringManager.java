@@ -145,18 +145,18 @@ public class StringManager {
         return race;
     }
 
-    public String getOtString(int ot) {
+    public String getOtString(int ot,String def) {
         if (ot == CardOt.All.ordinal()) {
             return "-";
         }
         try {
             String str = getSystemString(Constants.STRING_OT_START + ot);
             if (TextUtils.isEmpty(str)) {
-                return "" + ot;//String.valueOf(CardOt.values()[ot]);
+                return def;//String.valueOf(CardOt.values()[ot]);
             }
             return StringUtils.toDBC(str);
         } catch (Exception e) {
-            return "" + ot;
+            return def;
         }
     }
 

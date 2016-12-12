@@ -88,11 +88,11 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> {
         }
         if (mLimitList != null) {
             holder.rightImage.setVisibility(View.VISIBLE);
-            if (mLimitList.isForbidden(item.Code)) {
+            if (mLimitList.check(item, LimitType.Forbidden)) {
                 holder.rightImage.setImageBitmap(mImageTop.forbidden);
-            } else if (mLimitList.isLimit(item.Code)) {
+            } else if (mLimitList.check(item, LimitType.Limit)) {
                 holder.rightImage.setImageBitmap(mImageTop.limit);
-            } else if (mLimitList.isSemiLimit(item.Code)) {
+            } else if (mLimitList.check(item, LimitType.SemiLimit)) {
                 holder.rightImage.setImageBitmap(mImageTop.semiLimit);
             } else {
                 holder.rightImage.setVisibility(View.GONE);

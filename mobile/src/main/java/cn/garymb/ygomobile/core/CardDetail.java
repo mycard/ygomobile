@@ -98,7 +98,7 @@ public class CardDetail extends BaseAdapterPlus.BaseViewHolder {
         cardcode.setText(String.format("%08d", cardInfo.Code));
         type.setText(cardInfo.getAllTypeString(stringManager).replace("/","|"));
         attrView.setText(stringManager.getAttributeString(cardInfo.Attribute));
-        otView.setText(stringManager.getOtString(cardInfo.Ot));
+        otView.setText(stringManager.getOtString(cardInfo.Ot, ""+cardInfo.Ot));
         long[] sets = cardInfo.getSetCode();
         setname.setText("");
         int index = 0;

@@ -105,7 +105,7 @@ public interface Constants {
     String SERVER_FILE = "server_list.xml";
     String SHARE_FILE = ".share_deck.png";
 
-    long LOG_TIME = 3 * 1000;
+    long LOG_TIME = 2 * 1000;
     /***
      * 如果是双击显示，则单击拖拽
      */
@@ -115,4 +115,5 @@ public interface Constants {
      * 长按删除
      */
     long LONG_PRESS_DRAG = 800;
+    String ACTION_OPEN_DECK="ygomobile.intent.action.DECK";
 }

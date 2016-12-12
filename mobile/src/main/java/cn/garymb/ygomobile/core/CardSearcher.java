@@ -159,7 +159,9 @@ public class CardSearcher implements View.OnClickListener {
         items.add(new SimpleSpinnerItem(0, getString(R.string.label_ot)));
         for (CardOt item : ots) {
             if (item.ordinal() != 0) {
-                items.add(new SimpleSpinnerItem(item.ordinal(), item.toString()));
+                items.add(new SimpleSpinnerItem(item.ordinal(),
+                        mStringManager.getOtString(item.ordinal(), item.toString()))
+                );
             }
         }
         SimpleSpinnerAdapter adapter = new SimpleSpinnerAdapter(mContext);
