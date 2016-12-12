@@ -414,7 +414,8 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
             Toast.makeText(DeckManagerActivity.this, getString(R.string.tip_card_max, 0), Toast.LENGTH_SHORT).show();
             return false;
         }
-        Integer count = mCount.get(Long.valueOf(cardInfo.Code));
+        Long id = cardInfo.Alias>0?cardInfo.Alias:cardInfo.Code;
+        Integer count = mCount.get(id);
         if (count != null) {
             if (mLimitList != null && mLimitList.check(cardInfo, LimitType.Limit)) {
                 if (count >= 1) {
