@@ -309,6 +309,10 @@ public class AppsSettings {
         return mSharedPreferences.getString(Constants.PREF_GAME_PATH, defPath);
     }
 
+    public String getDeckDir() {
+        return new File(getResourcePath(), Constants.CORE_DECK_PATH).getAbsolutePath();
+    }
+
     /**
      * 隐藏底部导航栏
      */

@@ -12,6 +12,8 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,6 +31,7 @@ import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.plus.DialogPlus;
 import cn.garymb.ygomobile.plus.VUiKit;
 import cn.garymb.ygomobile.settings.SettingsActivity;
+import dalvik.system.DexClassLoader;
 
 import static cn.garymb.ygomobile.Constants.ACTION_OPEN_DECK;
 
@@ -62,20 +65,20 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         //加载服务器列表
         mServerAdapater.loadData();
         //侧边
-        navigationView.getHeaderView(0).findViewById(R.id.nav_donation).setOnClickListener((v)->{
+        navigationView.getHeaderView(0).findViewById(R.id.nav_donation).setOnClickListener((v) -> {
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.ALIPAY_URL));
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         });
         YGOStarter.onCreated(this);
-        mServerAdapater.setOnEditListener((edit)->{
-            if(edit){
+        mServerAdapater.setOnEditListener((edit) -> {
+            if (edit) {
                 editView.setVisibility(View.VISIBLE);
-            }else {
+            } else {
                 editView.setVisibility(View.GONE);
             }
         });
-        editView.setOnClickListener((v)->{
+        editView.setOnClickListener((v) -> {
             mServerAdapater.setEditMode(false);
         });
         //资源复制
@@ -90,14 +93,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                         .setTitle(getString(R.string.settings_about_change_log))
                         .loadUrl("file:///android_asset/changelog.html")
                         .show();
-            }else{
-                Intent intent=getIntent();
-                if(ACTION_OPEN_DECK.equals(intent.getAction())){
-                    File deck=new File(intent.getData().getPath());
-                    Intent startdeck = new Intent(this, DeckManagerActivity.class);
-                    startdeck.putExtra(Intent.EXTRA_TEXT, deck.getAbsoluteFile());
-                    startActivity(startdeck);
-                }
+            } else {
+                doOpenDeck(getIntent());
             }
         });
     }
@@ -112,6 +109,28 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     protected void onDestroy() {
         YGOStarter.onDestroy(this);
         super.onDestroy();
+    }
+
+
+    private void doOpenDeck(Intent intent) {
+        if (ACTION_OPEN_DECK.equals(intent.getAction())) {
+            File deck = null;
+            String name = intent.getStringExtra(Intent.EXTRA_TEXT);
+            if (!TextUtils.isEmpty(name)) {
+                deck = new File(name);
+                if (!deck.exists()) {
+                    deck = new File(AppsSettings.get().getDeckDir(), name);
+                }
+            }
+            if (deck != null && deck.exists()) {
+                Intent startdeck = new Intent(this, DeckManagerActivity.class);
+                startdeck.putExtra(Intent.EXTRA_TEXT, deck.getAbsolutePath());
+                startActivity(startdeck);
+            } else {
+                Log.w("kk", "no find " + name);
+                finish();
+            }
+        }
     }
 
     @Override

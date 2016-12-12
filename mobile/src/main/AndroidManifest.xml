@@ -41,13 +41,14 @@
         <activity
             android:name="cn.garymb.ygomobile.activities.MainActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:exported="true"
             android:label="@string/app_name"
             android:stateNotNeeded="true"
             android:theme="@style/AppTheme.Translucent"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize">
             <intent-filter>
                 <action android:name="ygomobile.intent.action.DECK"/>
-                <category android:name="android.intent.category.OPENABLE"/>
+                <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
         <activity

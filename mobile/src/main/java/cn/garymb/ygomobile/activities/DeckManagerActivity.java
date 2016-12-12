@@ -67,6 +67,7 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
     private boolean isShowing = false;
     private AppCompatSpinner mDeckSpinner;
     private SimpleSpinnerAdapter mSimpleSpinnerAdapter;
+    private String mPreLoad;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -95,6 +96,12 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
             public void onNothingSelected(AdapterView<?> adapterView) {
             }
         });
+        if (getIntent().hasExtra(Intent.EXTRA_TEXT)) {
+            String path = getIntent().getStringExtra(Intent.EXTRA_TEXT);
+            if (!TextUtils.isEmpty(path)) {
+                mPreLoad = path;
+            }
+        }
     }
 
     @Override
@@ -109,12 +116,10 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
         isLoad = true;
         boolean noSaveLast = false;
         File file = new File(mSettings.getResourcePath(), Constants.CORE_DECK_PATH + "/" + mSettings.getLastDeck() + Constants.YDK_FILE_EX);
-        if (getIntent().hasExtra(Intent.EXTRA_TEXT)) {
-            String path = getIntent().getStringExtra(Intent.EXTRA_TEXT);
-            if (!TextUtils.isEmpty(path)) {
-                file = new File(path);
-                noSaveLast = true;
-            }
+        if (!TextUtils.isEmpty(mPreLoad)) {
+            file = new File(mPreLoad);
+            mPreLoad = null;
+            noSaveLast = true;
         }
         if (!file.exists()) {
             //当默认卡组不存在的时候
@@ -414,7 +419,7 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
             Toast.makeText(DeckManagerActivity.this, getString(R.string.tip_card_max, 0), Toast.LENGTH_SHORT).show();
             return false;
         }
-        Long id = cardInfo.Alias>0?cardInfo.Alias:cardInfo.Code;
+        Long id = cardInfo.Alias > 0 ? cardInfo.Alias : cardInfo.Code;
         Integer count = mCount.get(id);
         if (count != null) {
             if (mLimitList != null && mLimitList.check(cardInfo, LimitType.Limit)) {
