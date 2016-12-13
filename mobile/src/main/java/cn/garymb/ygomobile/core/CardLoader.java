@@ -208,7 +208,7 @@ public class CardLoader implements ICardLoader {
             stringBuilder.append(" and attribute=" + attribute);
         }
         if (level != 0) {
-            stringBuilder.append(" and (level &" + level + ") =" + level);
+            stringBuilder.append(" and (level & 255) =" + level);
         }
         if (!TextUtils.isEmpty(atk)) {
             stringBuilder.append(" and atk=" + (TextUtils.isDigitsOnly(atk) ? atk : -2));
