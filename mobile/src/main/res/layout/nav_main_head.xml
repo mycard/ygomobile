@@ -16,6 +16,7 @@
             android:layout_width="@dimen/nav_icon_width"
             android:layout_height="@dimen/nav_icon_height"
             android:layout_marginLeft="4dp"
+            android:layout_gravity="center_vertical"
             android:src="@drawable/ic_icon"/>
 
         <LinearLayout
