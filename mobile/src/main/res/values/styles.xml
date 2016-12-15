@@ -19,7 +19,9 @@
     <style name="AppTheme.Game" parent="android:Theme.Holo.NoActionBar.Fullscreen">
         <item name="android:windowIsTranslucent">true</item>
     </style>
-
+    <style name="AppTheme.Logo" parent="AppTheme">
+        <item name="android:windowBackground">@drawable/bg3</item>
+    </style>
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
 
     </style>
