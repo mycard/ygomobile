@@ -69,12 +69,6 @@ abstract class BaseCardsAcitivity extends BaseActivity implements CardLoader.Cal
         //
         ProgressDialog dlg = ProgressDialog.show(this, null, getString(R.string.loading));
         VUiKit.defer().when(() -> {
-            if (!mStringManager.isLoad()) {
-                mStringManager.load();//loadFile(stringfile.getAbsolutePath());
-            }
-            if (!mLimitManager.isLoad()) {
-                mLimitManager.load();//loadFile(stringfile.getAbsolutePath());
-            }
             if (mLimitManager.getCount() > 0) {
                 mCardLoader.setLimitList(mLimitManager.getLimitFromIndex(0));
             }

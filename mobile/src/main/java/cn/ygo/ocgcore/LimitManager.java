@@ -1,5 +1,7 @@
 package cn.ygo.ocgcore;
 
+import android.util.Log;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -92,7 +94,7 @@ public class LimitManager {
                     }
                     index++;
                     tmp = new LimitList(name);
-                } else {
+                } else if (tmp != null) {
                     String[] words = line.trim().split("[\t| ]+");
                     if (words.length >= 2) {
                         long id = toNumber(words[0]);
@@ -113,7 +115,7 @@ public class LimitManager {
                 }
             }
         } catch (Exception e) {
-
+            Log.e("kk", "limit", e);
         } finally {
             IOUtils.close(inputStream);
             IOUtils.close(in);

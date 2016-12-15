@@ -84,11 +84,6 @@
                 <data android:host="*"/>
                 <data android:pathPattern=".*\\.ydk"/>
             </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <data android:mimeType="text/plain"/>
-            </intent-filter>
         </activity>
         <activity
             android:name="cn.garymb.ygomobile.YGOMobileActivity"

@@ -18,6 +18,8 @@ import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.utils.FileUtils;
 import cn.garymb.ygomobile.utils.IOUtils;
 import cn.garymb.ygomobile.utils.SystemUtils;
+import cn.ygo.ocgcore.LimitManager;
+import cn.ygo.ocgcore.StringManager;
 
 import static cn.garymb.ygomobile.Constants.ASSETS_PATH;
 
@@ -91,6 +93,8 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
         boolean needsUpdate = false;
         //core config
         setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.core_config)));
+        StringManager.get().load();//loadFile(stringfile.getAbsolutePath());
+        LimitManager.get().load();//loadFile(stringfile.getAbsolutePath());
         String newConfigVersion = null, currentConfigVersion = null;
         File verPath = new File(mSettings.getResourcePath(), Constants.CORE_CONFIG_PATH);
         if (!verPath.exists() || TextUtils.isEmpty(currentConfigVersion = getCurVersion(verPath))) {
@@ -219,11 +223,11 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
 
     private void checkDirs() {
         String[] dirs = {Constants.CORE_SCRIPT_PATH,
-                Constants.CORE_SINGLE_PATH,
-                Constants.CORE_DECK_PATH,
-                Constants.CORE_REPLAY_PATH,
-                Constants.FONT_DIRECTORY,
-                Constants.CORE_IMAGE_PATH
+                         Constants.CORE_SINGLE_PATH,
+                         Constants.CORE_DECK_PATH,
+                         Constants.CORE_REPLAY_PATH,
+                         Constants.FONT_DIRECTORY,
+                         Constants.CORE_IMAGE_PATH
         };
         File dirFile = null;
         for (String dir : dirs) {
