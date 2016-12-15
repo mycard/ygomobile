@@ -25,6 +25,7 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> {
     private ImageTop mImageTop;
     private OnAddCardListener mOnAddCardListener;
     private LimitList mLimitList;
+    private boolean mItemBg;
 
     public interface OnAddCardListener {
         void onAdd(int pos);
@@ -39,13 +40,22 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> {
         mOnAddCardListener = onAddCardListener;
     }
 
+    public void setItemBg(boolean itemBg) {
+        this.mItemBg = itemBg;
+    }
+
     public void setLimitList(LimitList limitList) {
         mLimitList = limitList;
     }
 
     @Override
     protected View createView(int position, ViewGroup parent) {
-        View view = inflate(R.layout.item_search_card, parent, false);
+        View view;
+        if(mItemBg){
+            view = inflate(R.layout.item_search_card, parent, false);
+        }else{
+            view = inflate(R.layout.item_search_card2, parent, false);
+        }
         new ViewHolder(view);
         return view;
     }

@@ -1,50 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              xmlns:tools="http://schemas.android.com/tools"
+              android:background="@drawable/right"
               android:orientation="vertical"
-              tools:showIn="@layout/activity_search"
-              android:padding="10dp">
+              android:padding="10dp"
+
+              android:theme="@style/AppTheme.PopupOverlay.Dark"
+              tools:showIn="@layout/activity_search">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="16dp"
         android:orientation="vertical">
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp">
 
             <android.support.v7.widget.AppCompatEditText
                 android:id="@+id/edt_word1"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/label_width_small"
                 android:hint="@string/hit_keyword1"
-                android:maxLines="1"
                 android:inputType="textNoSuggestions"
-                android:singleLine="true"/>
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColorHint="@color/gold"/>
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            >
 
             <android.support.v7.widget.AppCompatEditText
                 android:id="@+id/edt_word2"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/label_width_small"
                 android:hint="@string/hit_keyword2"
-                android:maxLines="1"
                 android:inputType="textNoSuggestions"
-                android:singleLine="true"/>
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColorHint="@color/gold"/>
         </android.support.design.widget.TextInputLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="wrap_content">
 
             <android.support.v7.widget.AppCompatSpinner
                 android:id="@+id/sp_ot"
@@ -83,8 +90,8 @@
         <com.toptoche.searchablespinnerlibrary.SearchableSpinner
             android:id="@+id/sp_setcode"
             android:layout_width="match_parent"
-            app:searchTitle="@string/label_set"
-            android:layout_height="@dimen/label_width_small"/>
+            android:layout_height="@dimen/label_width_small"
+            app:searchTitle="@string/label_set"/>
 
         <android.support.v7.widget.AppCompatSpinner
             android:id="@+id/sp_category"
@@ -121,8 +128,7 @@
             android:id="@+id/layout_monster"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="invisible">
+            android:orientation="vertical">
 
             <android.support.v7.widget.AppCompatSpinner
                 android:id="@+id/sp_race"
@@ -137,19 +143,20 @@
                 <android.support.v7.widget.AppCompatSpinner
                     android:id="@+id/sp_level"
                     android:layout_width="0dp"
-                    android:layout_height="@dimen/label_width_small"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"/>
 
                 <android.support.v7.widget.AppCompatSpinner
                     android:id="@+id/sp_attribute"
                     android:layout_width="0dp"
-                    android:layout_height="@dimen/label_width_small"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"/>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
                 android:orientation="horizontal">
 
                 <android.support.design.widget.TextInputLayout
@@ -163,7 +170,8 @@
                         android:layout_height="@dimen/label_width_small"
                         android:hint="@string/hit_atk"
                         android:maxLines="1"
-                        android:singleLine="true"/>
+                        android:singleLine="true"
+                        tools:text="100"/>
                 </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
@@ -177,36 +185,48 @@
                         android:layout_height="@dimen/label_width_small"
                         android:hint="@string/hit_def"
                         android:maxLines="1"
-                        android:singleLine="true"/>
+                        android:singleLine="true"
+                        tools:text="100"/>
                 </android.support.design.widget.TextInputLayout>
             </LinearLayout>
         </LinearLayout>
 
-        <FrameLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1"/>
 
             <android.support.v7.widget.AppCompatButton
                 android:id="@+id/btn_search"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="10dp"
                 android:background="@drawable/button_bg"
-                android:text="@string/search"
-                android:textColor="@android:color/white"/>
+                android:text="@string/search"/>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="2"/>
 
             <android.support.v7.widget.AppCompatButton
                 android:id="@+id/btn_reset"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
-                android:layout_marginRight="20dp"
-                android:layout_marginTop="10dp"
                 android:background="@drawable/button_bg"
-                android:text="@string/reset"
-                android:textColor="@android:color/white"/>
-        </FrameLayout>
+                android:text="@string/reset"/>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1"/>
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>

@@ -36,7 +36,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="right"
-            android:background="@color/white"
             android:orientation="vertical"
             android:paddingTop="?attr/actionBarSize">
 

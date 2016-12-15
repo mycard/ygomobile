@@ -46,7 +46,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-                android:background="@drawable/button_bg"
+                android:background="@drawable/button2_bg"
                 android:gravity="center"
                 android:layout_margin="5dp"
                 android:textColor="@color/white"

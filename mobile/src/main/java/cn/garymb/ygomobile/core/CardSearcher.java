@@ -1,6 +1,7 @@
 package cn.garymb.ygomobile.core;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -165,6 +166,8 @@ public class CardSearcher implements View.OnClickListener {
             }
         }
         SimpleSpinnerAdapter adapter = new SimpleSpinnerAdapter(mContext);
+        adapter.setColor(Color.WHITE);
+        adapter.setColor(Color.WHITE);
         adapter.set(items);
         spinner.setAdapter(adapter);
     }
@@ -187,6 +190,7 @@ public class CardSearcher implements View.OnClickListener {
             }
         }
         SimpleSpinnerAdapter adapter = new SimpleSpinnerAdapter(mContext);
+        adapter.setColor(Color.WHITE);
         adapter.set(items);
         spinner.setAdapter(adapter);
     }
@@ -203,6 +207,7 @@ public class CardSearcher implements View.OnClickListener {
             i++;
         }
         SimpleSpinnerAdapter adapter = new SimpleSpinnerAdapter(mContext);
+        adapter.setColor(Color.WHITE);
         adapter.set(items);
         spinner.setAdapter(adapter);
         if (index >= 0) {
@@ -220,6 +225,7 @@ public class CardSearcher implements View.OnClickListener {
             }
         }
         SimpleSpinnerAdapter adapter = new SimpleSpinnerAdapter(mContext);
+        adapter.setColor(Color.WHITE);
         adapter.set(items);
         spinner.setAdapter(adapter);
     }
@@ -234,6 +240,7 @@ public class CardSearcher implements View.OnClickListener {
             }
         }
         SimpleSpinnerAdapter adapter = new SimpleSpinnerAdapter(mContext);
+        adapter.setColor(Color.WHITE);
         adapter.set(items);
         spinner.setAdapter(adapter);
     }
@@ -246,6 +253,7 @@ public class CardSearcher implements View.OnClickListener {
             items.add(new SimpleSpinnerItem(set.getCode(), set.getName()));
         }
         SimpleSpinnerAdapter adapter = new SimpleSpinnerAdapter(mContext);
+        adapter.setColor(Color.WHITE);
         adapter.set(items);
         spinner.setAdapter(adapter);
     }
@@ -264,6 +272,7 @@ public class CardSearcher implements View.OnClickListener {
             }
         }
         SimpleSpinnerAdapter adapter = new SimpleSpinnerAdapter(mContext);
+        adapter.setColor(Color.WHITE);
         adapter.set(items);
         spinner.setAdapter(adapter);
     }
@@ -280,6 +289,7 @@ public class CardSearcher implements View.OnClickListener {
             }
         }
         SimpleSpinnerAdapter adapter = new SimpleSpinnerAdapter(mContext);
+        adapter.setColor(Color.WHITE);
         adapter.set(items);
         spinner.setAdapter(adapter);
     }
@@ -296,6 +306,7 @@ public class CardSearcher implements View.OnClickListener {
             }
         }
         SimpleSpinnerAdapter adapter = new SimpleSpinnerAdapter(mContext);
+        adapter.setColor(Color.WHITE);
         adapter.set(items);
         spinner.setAdapter(adapter);
     }
@@ -312,6 +323,7 @@ public class CardSearcher implements View.OnClickListener {
             }
         }
         SimpleSpinnerAdapter adapter = new SimpleSpinnerAdapter(mContext);
+        adapter.setColor(Color.WHITE);
         adapter.set(items);
         spinner.setAdapter(adapter);
     }

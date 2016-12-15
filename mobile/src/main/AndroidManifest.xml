@@ -108,13 +108,13 @@
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:label="@string/card_search"
             android:theme="@style/AppTheme"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"/>
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"/>
         <activity
             android:name="cn.garymb.ygomobile.activities.DeckManagerActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:label="@string/deck_manager"
             android:theme="@style/AppTheme"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"/>
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"/>
         <activity
             android:name="cn.garymb.ygomobile.plus.file.FileActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"

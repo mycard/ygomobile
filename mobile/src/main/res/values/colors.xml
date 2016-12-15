@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="white">#ffffff</color>
-
     <color name="gray">#80000000</color>
     <color name="star">#CD6600</color>
     <color name="star_rank">#000000</color>
@@ -9,9 +8,10 @@
     <color name="blackLinght">#AA000000</color>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#2F41A5</color>
-    <color name="colorAccent">#B8BE35</color>
-    <color name="gold">#EF3934</color>
+    <color name="gold">#B8BE35</color>
+    <color name="colorAccent">#EF3934</color>
     <color name="colorAccentDark">#CF3934</color>
     <color name="item_title">@color/gold</color>
-    <color name="item_bg">#70ffffff</color>
+    <color name="item_bg">#65ffffff</color>
+    <color name="item_bg2">#70ffffff</color>
 </resources>
