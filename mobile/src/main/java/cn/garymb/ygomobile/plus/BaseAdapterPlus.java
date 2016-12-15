@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public abstract class BaseAdapterPlus<T> extends BaseAdapter implements SpinnerAdapter {
+public abstract class BaseAdapterPlus<T> extends AdapterPlus {
     protected Context context;
     private LayoutInflater mLayoutInflater;
     protected final List<T> mItems = new ArrayList<T>();

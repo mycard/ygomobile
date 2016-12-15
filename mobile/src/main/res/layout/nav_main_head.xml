@@ -2,8 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:layout_width="match_parent"
               android:layout_height="@dimen/nav_head_height"
+              xmlns:tools="http://schemas.android.com/tools"
               android:background="@color/colorPrimaryDark"
               android:paddingTop="24dp"
+              tools:showIn="@layout/activity_main"
               android:orientation="vertical">
 
     <LinearLayout

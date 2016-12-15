@@ -65,9 +65,9 @@ public class CardSearcher implements View.OnClickListener {
         otSpinner = findViewById(R.id.sp_ot);
         limitSpinner = findViewById(R.id.sp_limit);
         limitListSpinner = findViewById(R.id.sp_limit_list);
-        typeSpinner = findViewById(R.id.sp_type1);
-        typeMonsterSpinner = findViewById(R.id.sp_type2);
-        typeSTSpinner = findViewById(R.id.sp_type3);
+        typeSpinner = findViewById(R.id.sp_type_card);
+        typeMonsterSpinner = findViewById(R.id.sp_type_monster);
+        typeSTSpinner = findViewById(R.id.sp_type_st);
         setcodeSpinner = findViewById(R.id.sp_setcode);
         categorySpinner = findViewById(R.id.sp_category);
         raceSpinner = findViewById(R.id.sp_race);
