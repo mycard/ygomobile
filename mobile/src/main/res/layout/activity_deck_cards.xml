@@ -28,7 +28,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="left"
             android:paddingTop="?attr/actionBarSize"
-            android:background="@color/white"
+            android:background="@android:color/transparent"
             android:orientation="vertical">
 
             <ListView
@@ -38,14 +38,15 @@
                 android:divider="@android:color/transparent"
                 android:dividerHeight="4dp"
                 android:padding="5dp"
-                android:scrollbars="none"/>
+                android:scrollbars="none"
+                android:background="@drawable/left" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="right"
-            android:background="@color/white"
+            android:background="@android:color/transparent"
             android:paddingTop="?attr/actionBarSize"
             android:orientation="vertical">
 

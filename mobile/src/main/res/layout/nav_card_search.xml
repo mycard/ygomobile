@@ -1,65 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical"
               android:padding="10dp">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@drawable/right"
+        android:weightSum="1">
 
         <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_width="251dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="100dp"
+            android:layout_marginTop="15dp"
+            android:textColorHint="?android:attr/textColorLinkInverse">
 
             <android.support.v7.widget.AppCompatEditText
                 android:id="@+id/edt_word1"
-                android:layout_width="match_parent"
+                android:layout_width="239dp"
                 android:layout_height="@dimen/label_width_small"
                 android:hint="@string/hit_keyword1"
                 android:maxLines="1"
                 android:inputType="textNoSuggestions"
-                android:singleLine="true"/>
+                android:singleLine="true" />
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_width="251dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="100dp"
+            android:textColorHint="@color/colorAccent">
 
             <android.support.v7.widget.AppCompatEditText
                 android:id="@+id/edt_word2"
-                android:layout_width="match_parent"
+                android:layout_width="239dp"
                 android:layout_height="@dimen/label_width_small"
                 android:hint="@string/hit_keyword2"
                 android:maxLines="1"
                 android:inputType="textNoSuggestions"
-                android:singleLine="true"/>
+                android:singleLine="true" />
         </android.support.design.widget.TextInputLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_width="351dp"
+            android:layout_height="wrap_content">
 
             <android.support.v7.widget.AppCompatSpinner
                 android:id="@+id/sp_ot"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/label_width_small"
-                android:layout_weight="1"/>
+                android:layout_weight="0.77"
+                android:layout_marginLeft="20dp" />
 
 
             <android.support.v7.widget.AppCompatSpinner
                 android:id="@+id/sp_scale"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/label_width_small"
-                android:layout_weight="1"
-                android:visibility="invisible"/>
+                android:layout_weight="0.82"
+                android:visibility="invisible" />
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="351dp"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
@@ -67,7 +75,8 @@
                 android:id="@+id/sp_limit_list"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/label_width_small"
-                android:layout_weight="1"/>
+                android:layout_weight="0.94"
+                android:layout_marginLeft="20dp" />
 
             <android.support.v7.widget.AppCompatSpinner
                 android:id="@+id/sp_limit"
@@ -79,16 +88,18 @@
 
         <android.support.v7.widget.AppCompatSpinner
             android:id="@+id/sp_setcode"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/label_width_small"/>
+            android:layout_width="331dp"
+            android:layout_height="@dimen/label_width_small"
+            android:layout_marginLeft="20dp" />
 
         <android.support.v7.widget.AppCompatSpinner
             android:id="@+id/sp_category"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/label_width_small"/>
+            android:layout_width="331dp"
+            android:layout_height="@dimen/label_width_small"
+            android:layout_marginLeft="20dp" />
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="351dp"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
@@ -96,7 +107,8 @@
                 android:id="@+id/sp_type1"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/label_width_small"
-                android:layout_weight="1"/>
+                android:layout_weight="1"
+                android:layout_marginLeft="20dp" />
 
             <android.support.v7.widget.AppCompatSpinner
                 android:id="@+id/sp_type2"
@@ -122,19 +134,20 @@
 
             <android.support.v7.widget.AppCompatSpinner
                 android:id="@+id/sp_race"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/label_width_small"/>
+                android:layout_width="331dp"
+                android:layout_height="@dimen/label_width_small"
+                android:layout_marginLeft="20dp" />
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="351dp"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
                 <android.support.v7.widget.AppCompatSpinner
                     android:id="@+id/sp_level"
                     android:layout_width="0dp"
-                    android:layout_height="@dimen/label_width_small"
-                    android:layout_weight="1"/>
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="20dp" />
 
                 <android.support.v7.widget.AppCompatSpinner
                     android:id="@+id/sp_attribute"
@@ -144,18 +157,19 @@
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="351dp"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1">
+                    android:layout_weight="1"
+                    android:layout_marginLeft="20dp">
 
                     <android.support.v7.widget.AppCompatEditText
                         android:id="@+id/edt_atk"
-                        android:layout_width="match_parent"
+                        android:layout_width="145dp"
                         android:layout_height="@dimen/label_width_small"
                         android:hint="@string/hit_atk"
                         android:maxLines="1"
@@ -169,7 +183,7 @@
 
                     <android.support.v7.widget.AppCompatEditText
                         android:id="@+id/edt_def"
-                        android:layout_width="match_parent"
+                        android:layout_width="136dp"
                         android:layout_height="@dimen/label_width_small"
                         android:hint="@string/hit_def"
                         android:maxLines="1"
@@ -187,7 +201,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="30dp"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/button_bg"
                 android:text="@string/search"

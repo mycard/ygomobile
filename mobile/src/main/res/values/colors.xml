@@ -2,14 +2,14 @@
 <resources>
     <color name="white">#ffffff</color>
 
-    <color name="gray">#B0C0C0</color>
+    <color name="gray">#b0c0c0</color>
     <color name="star">#CD6600</color>
     <color name="star_rank">#000000</color>
     <color name="black">#000000</color>
     <color name="blackLinght">#AA000000</color>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#2F41A5</color>
-    <color name="colorAccent">#B8BE35</color>
+    <color name="colorAccent">#b8be35</color>
     <color name="gold">#EF3934</color>
     <color name="colorAccentDark">#CF3934</color>
 </resources>
