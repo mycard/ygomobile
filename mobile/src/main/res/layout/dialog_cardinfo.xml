@@ -1,350 +1,365 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:app="http://schemas.android.com/apk/res-auto"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-    android:background="@android:color/transparent">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@android:color/transparent"
+              android:orientation="horizontal">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/button_width_small"
-        android:orientation="vertical"
-        android:paddingBottom="10dp"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:background="@drawable/detail"
-        android:id="@+id/detail">
+    <View
+        android:layout_width="10dp"
+        android:layout_height="1dp"/>
 
-        <TextView
-            android:id="@+id/text_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:maxLines="1"
-            android:shadowColor="@color/black"
-            android:shadowDx="1"
-            android:shadowDy="2"
-            android:shadowRadius="2"
-            android:singleLine="true"
-            android:textAppearance="@style/TextAppearance.AppCompat.Title"
-            android:textColor="@color/colorAccent"
-            android:textIsSelectable="true"
-            tools:text="name"
-            android:paddingLeft="4dp" />
-
-        <TextView
-            android:id="@+id/card_level"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:maxLines="1"
-            android:singleLine="true"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="@color/star"
-            tools:text="★★★★"
-            android:paddingLeft="4dp" />
+    <FrameLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1">
 
         <LinearLayout
+            android:id="@+id/detail"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="2dp"
-            android:layout_marginTop="2dp"
-            android:orientation="horizontal">
+            android:layout_height="match_parent"
+            android:layout_marginRight="6dp"
+            android:layout_marginTop="@dimen/button_width_small"
+            android:background="@drawable/detail"
+            android:orientation="vertical"
+            android:paddingBottom="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
 
-            <ImageView
-                android:id="@+id/card_image"
-                android:layout_width="@dimen/card_width2"
-                android:layout_height="@dimen/card_height2"
-                android:layout_gravity="center_vertical"
-                android:scaleType="fitXY"
-                android:src="@android:drawable/sym_def_app_icon"/>
-
-            <ScrollView
+            <TextView
+                android:id="@+id/text_name"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scrollbars="none">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:gravity="center_vertical"
+                android:maxLines="1"
+                android:minHeight="@dimen/label_height"
+                android:paddingLeft="4dp"
+                android:shadowColor="@color/black"
+                android:shadowDx="1"
+                android:shadowDy="2"
+                android:shadowRadius="2"
+                android:singleLine="true"
+                android:textAppearance="@style/TextAppearance.AppCompat.Title"
+                android:textColor="@color/item_title"
+                android:textIsSelectable="true"
+                tools:text="name"/>
 
-                <LinearLayout
+            <TextView
+                android:id="@+id/card_level"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:maxLines="1"
+                android:paddingLeft="4dp"
+                android:singleLine="true"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@color/star"
+                tools:text="★★★★"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="2dp"
+                android:layout_marginTop="2dp"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/card_image"
+                    android:layout_width="@dimen/card_width2"
+                    android:layout_height="@dimen/card_height2"
+                    android:layout_gravity="center_vertical"
+                    android:scaleType="fitXY"
+                    android:src="@android:drawable/sym_def_app_icon"/>
+
+                <ScrollView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingLeft="5dp">
-
-                    <TextView
-                        android:id="@+id/card_code"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="bottom"
-                        android:gravity="center_vertical"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                        android:textColor="@color/item_title"
-                        android:textIsSelectable="true"
-                        tools:text="12345678"/>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="@color/gray"/>
+                    android:layout_height="match_parent"
+                    android:scrollbars="none">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:orientation="vertical"
+                        android:paddingLeft="5dp">
 
                         <TextView
+                            android:id="@+id/card_code"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/label_ot"
+                            android:layout_gravity="bottom"
+                            android:gravity="center_vertical"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                            android:textColor="@color/colorAccent"
+                            android:textIsSelectable="true"
+                            tools:text="12345678"/>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/white"/>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/label_ot"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+                                android:textColor="@color/item_title"/>
+
+                            <TextView
+                                android:id="@+id/card_ot"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="5dp"
+                                android:singleLine="true"
+                                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                                android:textColor="@android:color/holo_blue_bright"
+                                tools:text="Test"/>
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/label_type"
                             android:textAppearance="@style/TextAppearance.AppCompat.Caption"
                             android:textColor="@color/item_title"/>
 
                         <TextView
-                            android:id="@+id/card_ot"
+                            android:id="@+id/card_type"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="5dp"
-                            android:singleLine="true"
+                            android:maxLines="2"
                             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                            tools:text="Test"
-                            android:textColor="@android:color/holo_blue_bright" />
-                    </LinearLayout>
+                            android:textColor="@android:color/holo_blue_bright"
+                            tools:text="A\nXYZ"/>
 
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/label_type"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-                        android:textColor="@color/item_title"/>
-
-                    <TextView
-                        android:id="@+id/card_type"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:maxLines="2"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                        tools:text="A\nXYZ"
-                        android:textColor="@android:color/holo_blue_bright" />
-
-                    <TextView
-                        android:id="@+id/label_setcode"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/label_set"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-                        android:textColor="@color/item_title"
-                        android:visibility="invisible"/>
-
-                    <TextView
-                        android:id="@+id/card_setname"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                        android:visibility="invisible"
-                        tools:text="Test"
-                        android:textColor="@android:color/holo_blue_bright" />
-
-                    <LinearLayout
-                        android:id="@+id/layout_monster"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <LinearLayout
+                        <TextView
+                            android:id="@+id/label_setcode"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal">
+                            android:text="@string/label_set"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+                            android:textColor="@color/item_title"
+                            android:visibility="invisible"/>
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/label_attr"
-                                android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-                                android:textColor="@color/item_title"/>
+                        <TextView
+                            android:id="@+id/card_setname"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                            android:textColor="@android:color/holo_blue_bright"
+                            android:visibility="invisible"
+                            tools:text="Test"/>
 
-                            <TextView
-                                android:id="@+id/card_attribute"
+                        <LinearLayout
+                            android:id="@+id/layout_monster"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="5dp"
-                                android:maxLines="1"
-                                android:singleLine="true"
-                                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                                android:textIsSelectable="true"
-                                tools:text="Test"
-                                android:textColor="@android:color/holo_blue_bright" />
-                        </LinearLayout>
+                                android:orientation="horizontal">
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/label_attr"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+                                    android:textColor="@color/item_title"/>
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/label_race"
-                                android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-                                android:textColor="@color/item_title"/>
+                                <TextView
+                                    android:id="@+id/card_attribute"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="5dp"
+                                    android:maxLines="1"
+                                    android:singleLine="true"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                                    android:textColor="@android:color/holo_blue_bright"
+                                    android:textIsSelectable="true"
+                                    tools:text="Test"/>
+                            </LinearLayout>
 
-                            <TextView
-                                android:id="@+id/card_race"
+                            <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="5dp"
-                                android:maxLines="1"
-                                android:singleLine="true"
-                                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                                android:textIsSelectable="true"
-                                tools:text="Test"
-                                android:textColor="@android:color/holo_blue_bright" />
-                        </LinearLayout>
+                                android:orientation="horizontal">
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/label_race"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Caption"
+                                    android:textColor="@color/item_title"/>
+
+                                <TextView
+                                    android:id="@+id/card_race"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="5dp"
+                                    android:maxLines="1"
+                                    android:singleLine="true"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                                    android:textColor="@android:color/holo_blue_bright"
+                                    android:textIsSelectable="true"
+                                    tools:text="Test"/>
+                            </LinearLayout>
 
 
-                        <View
-                            android:id="@+id/view_bar"
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:layout_marginTop="10dp"
-                            android:background="@color/gray"/>
+                            <View
+                                android:id="@+id/view_bar"
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:layout_marginTop="10dp"
+                                android:background="@color/white"/>
 
-                        <LinearLayout
-                            android:id="@+id/layout_atkdef2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="right"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:id="@+id/card_atk"
+                            <LinearLayout
+                                android:id="@+id/layout_atkdef2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginRight="5dp"
-                                android:gravity="right"
-                                android:maxLines="1"
-                                android:singleLine="true"
-                                android:text="0"
-                                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                                android:textColor="@android:color/holo_blue_bright" />
+                                android:layout_gravity="right"
+                                android:orientation="horizontal">
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:maxLines="1"
-                                android:singleLine="true"
-                                android:text="/"
-                                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                                android:textColor="@android:color/holo_blue_bright" />
+                                <TextView
+                                    android:id="@+id/card_atk"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginRight="5dp"
+                                    android:gravity="right"
+                                    android:maxLines="1"
+                                    android:singleLine="true"
+                                    android:text="0"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                                    android:textColor="@android:color/holo_blue_bright"/>
 
-                            <TextView
-                                android:id="@+id/card_def"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="5dp"
-                                android:gravity="right"
-                                android:maxLines="1"
-                                android:singleLine="true"
-                                android:text="0"
-                                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                                android:textColor="@android:color/holo_blue_bright" />
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:maxLines="1"
+                                    android:singleLine="true"
+                                    android:text="/"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                                    android:textColor="@android:color/holo_blue_bright"/>
+
+                                <TextView
+                                    android:id="@+id/card_def"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="5dp"
+                                    android:gravity="right"
+                                    android:maxLines="1"
+                                    android:singleLine="true"
+                                    android:text="0"
+                                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                                    android:textColor="@android:color/holo_blue_bright"/>
+                            </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
-                </LinearLayout>
+                </ScrollView>
+            </LinearLayout>
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="2dp"
+                android:background="@drawable/textview_border"
+                android:padding="4dp"
+                android:paddingRight="4dp"
+                android:scrollbars="none">
+
+                <TextView
+                    android:id="@+id/text_desc"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="left|top"
+                    android:minHeight="@dimen/card_desc_height"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="@android:color/holo_blue_light"
+                    android:textIsSelectable="true"
+                    tools:text="desc"/>
             </ScrollView>
         </LinearLayout>
 
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="2dp"
-            android:background="@drawable/textview_border"
-            android:padding="4dp"
-            android:scrollbars="none"
-            android:paddingRight="4dp">
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/cardinfo_title_height"
+            android:background="@android:color/transparent"
+            android:orientation="horizontal"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
 
             <TextView
-                android:id="@+id/text_desc"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="left|top"
-                android:minHeight="@dimen/card_desc_height"
+                android:id="@+id/btn_faq"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@drawable/btnc"
+                android:gravity="center_vertical"
+                android:shadowColor="@color/black"
+                android:shadowDx="1"
+                android:shadowDy="1"
+                android:shadowRadius="2"
+                android:text="@string/card_faq"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                android:textColor="@color/colorAccentDark"
+                android:textSize="14sp"
+                android:textStyle="bold"/>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1"/>
+
+            <TextView
+                android:id="@+id/btn_add_main"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@drawable/btnc"
+                android:gravity="center_vertical"
+                android:text="@string/card_add_main"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:textIsSelectable="true"
-                tools:text="desc"
-                android:textColor="@android:color/holo_blue_light" />
-        </ScrollView>
-    </LinearLayout>
+                android:textColor="@color/colorPrimary"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:visibility="invisible"/>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:orientation="horizontal"
-        android:paddingRight="8dp"
-        android:weightSum="1">
+            <TextView
+                android:id="@+id/btn_add_side"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="16dp"
+                android:background="@drawable/btnc"
+                android:gravity="center_vertical"
+                android:text="@string/card_add_side"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textColor="@color/colorPrimary"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:visibility="invisible"/>
 
-        <ImageButton
-            android:id="@+id/btn_close"
-            android:layout_width="match_parent"
-            android:layout_height="57dp"
-            app:srcCompat="@drawable/ic_close_black_24dp"
-            android:layout_marginRight="10dp"
-            android:background="@drawable/btnc" />
-    </LinearLayout>
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1"/>
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="57dp"
-        android:orientation="horizontal"
-        android:paddingLeft="8dp"
-        android:weightSum="1"
-        android:background="@android:color/transparent">
+            <ImageButton
+                android:id="@+id/btn_close"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/btnc"
+                app:srcCompat="@drawable/ic_close_black_24dp"/>
+        </LinearLayout>
+    </FrameLayout>
 
-        <TextView
-            android:id="@+id/btn_faq"
-            android:layout_width="84dp"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:shadowColor="@color/black"
-            android:shadowDx="1"
-            android:shadowDy="1"
-            android:shadowRadius="2"
-            android:text="@string/card_faq"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="@color/colorAccentDark"
-            android:textStyle="bold"
-            android:background="@drawable/btnc"
-            android:layout_weight="0.28"
-            android:textSize="14sp" />
-
-        <TextView
-            android:id="@+id/btn_add_main"
-            android:layout_width="71dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="20dp"
-            android:gravity="center_vertical"
-            android:text="@string/card_add_main"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="@color/colorPrimary"
-            android:textStyle="bold"
-            android:visibility="invisible"
-            android:background="@drawable/btnc"
-            android:layout_weight="0.10"
-            android:textSize="14sp" />
-
-        <TextView
-            android:id="@+id/btn_add_side"
-            android:layout_width="72dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="12dp"
-            android:gravity="center_vertical"
-            android:text="@string/card_add_side"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="@color/colorPrimary"
-            android:textStyle="bold"
-            android:visibility="invisible"
-            android:background="@drawable/btnc"
-            android:textSize="14sp" />
-    </LinearLayout>
-</FrameLayout>
+    <View
+        android:layout_width="10dp"
+        android:layout_height="1dp"/>
+</LinearLayout>

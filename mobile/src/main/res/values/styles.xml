@@ -42,7 +42,16 @@
         <item name="android:backgroundDimEnabled">true</item><!--模糊-->
         <item name="android:backgroundDimAmount">0.5</item>
     </style>
+    <style name="AppTheme.Dialog" parent="AppTheme">
 
+    </style>
+    <style name="AppTheme.Dialog.Translucent" parent="AppTheme.Dialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowIsFloating">true</item><!--是否浮现在activity之上-->
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item><!--背景透明-->
+        <item name="android:backgroundDimEnabled">false</item><!--模糊-->
+    </style>
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 
     <style name="AppTheme.PopupOverlay.Bule" parent="ThemeOverlay.AppCompat.Dark">

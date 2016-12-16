@@ -199,7 +199,7 @@ public class CardSearchAcitivity extends BaseActivity implements CardLoader.Call
         if (cardInfo != null) {
             isShowing = true;
             CardDetail cardDetail = new CardDetail(this);
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AppTheme_Dialog_Translucent);
             builder.setView(cardDetail.getView());
             builder.setOnCancelListener((dlg) -> {
                 isShowing = false;
