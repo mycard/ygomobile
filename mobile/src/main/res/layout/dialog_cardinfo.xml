@@ -3,70 +3,8 @@
              xmlns:app="http://schemas.android.com/apk/res-auto"
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
-             android:layout_height="match_parent">
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/button_width_small"
-        android:orientation="horizontal"
-        android:paddingLeft="8dp">
-
-        <TextView
-            android:id="@+id/btn_faq"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:shadowColor="@color/black"
-            android:shadowDx="1"
-            android:shadowDy="1"
-            android:shadowRadius="2"
-            android:text="@string/card_faq"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="@color/colorAccentDark"
-            android:textStyle="bold"
-            />
-
-        <TextView
-            android:id="@+id/btn_add_main"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="20dp"
-            android:gravity="center_vertical"
-            android:text="@string/card_add_main"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="@color/colorPrimary"
-            android:textStyle="bold"
-            android:visibility="invisible"
-            />
-
-        <TextView
-            android:id="@+id/btn_add_side"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="12dp"
-            android:gravity="center_vertical"
-            android:text="@string/card_add_side"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="@color/colorPrimary"
-            android:textStyle="bold"
-            android:visibility="invisible"
-            />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:orientation="horizontal"
-        android:paddingRight="8dp">
-
-        <ImageButton
-            android:id="@+id/btn_close"
-            android:layout_width="@dimen/button_width_small"
-            android:layout_height="@dimen/button_width_small"
-            android:background="@android:color/transparent"
-            app:srcCompat="@drawable/ic_close_black_24dp"/>
-    </LinearLayout>
+             android:layout_height="match_parent"
+    android:background="@android:color/transparent">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -75,7 +13,9 @@
         android:orientation="vertical"
         android:paddingBottom="10dp"
         android:paddingLeft="10dp"
-        android:paddingRight="10dp">
+        android:paddingRight="10dp"
+        android:background="@drawable/detail"
+        android:id="@+id/detail">
 
         <TextView
             android:id="@+id/text_name"
@@ -91,7 +31,8 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
             android:textColor="@color/colorAccent"
             android:textIsSelectable="true"
-            tools:text="name"/>
+            tools:text="name"
+            android:paddingLeft="4dp" />
 
         <TextView
             android:id="@+id/card_level"
@@ -102,7 +43,8 @@
             android:singleLine="true"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@color/star"
-            tools:text="★★★★"/>
+            tools:text="★★★★"
+            android:paddingLeft="4dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -137,7 +79,7 @@
                         android:layout_gravity="bottom"
                         android:gravity="center_vertical"
                         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                        android:textColor="@color/colorPrimary"
+                        android:textColor="@color/item_title"
                         android:textIsSelectable="true"
                         tools:text="12345678"/>
 
@@ -156,7 +98,7 @@
                             android:layout_height="wrap_content"
                             android:text="@string/label_ot"
                             android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-                            android:textColor="@color/colorPrimary"/>
+                            android:textColor="@color/item_title"/>
 
                         <TextView
                             android:id="@+id/card_ot"
@@ -165,7 +107,8 @@
                             android:layout_marginLeft="5dp"
                             android:singleLine="true"
                             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                            tools:text="Test"/>
+                            tools:text="Test"
+                            android:textColor="@android:color/holo_blue_bright" />
                     </LinearLayout>
 
                     <TextView
@@ -173,7 +116,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/label_type"
                         android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-                        android:textColor="@color/colorPrimary"/>
+                        android:textColor="@color/item_title"/>
 
                     <TextView
                         android:id="@+id/card_type"
@@ -181,7 +124,8 @@
                         android:layout_height="wrap_content"
                         android:maxLines="2"
                         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                        tools:text="A\nXYZ"/>
+                        tools:text="A\nXYZ"
+                        android:textColor="@android:color/holo_blue_bright" />
 
                     <TextView
                         android:id="@+id/label_setcode"
@@ -189,7 +133,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/label_set"
                         android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-                        android:textColor="@color/colorPrimary"
+                        android:textColor="@color/item_title"
                         android:visibility="invisible"/>
 
                     <TextView
@@ -198,7 +142,8 @@
                         android:layout_height="wrap_content"
                         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                         android:visibility="invisible"
-                        tools:text="Test"/>
+                        tools:text="Test"
+                        android:textColor="@android:color/holo_blue_bright" />
 
                     <LinearLayout
                         android:id="@+id/layout_monster"
@@ -216,7 +161,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="@string/label_attr"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-                                android:textColor="@color/colorPrimary"/>
+                                android:textColor="@color/item_title"/>
 
                             <TextView
                                 android:id="@+id/card_attribute"
@@ -227,7 +172,8 @@
                                 android:singleLine="true"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                                 android:textIsSelectable="true"
-                                tools:text="Test"/>
+                                tools:text="Test"
+                                android:textColor="@android:color/holo_blue_bright" />
                         </LinearLayout>
 
                         <LinearLayout
@@ -240,7 +186,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="@string/label_race"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-                                android:textColor="@color/colorPrimary"/>
+                                android:textColor="@color/item_title"/>
 
                             <TextView
                                 android:id="@+id/card_race"
@@ -251,7 +197,8 @@
                                 android:singleLine="true"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                                 android:textIsSelectable="true"
-                                tools:text="Test"/>
+                                tools:text="Test"
+                                android:textColor="@android:color/holo_blue_bright" />
                         </LinearLayout>
 
 
@@ -278,7 +225,8 @@
                                 android:maxLines="1"
                                 android:singleLine="true"
                                 android:text="0"
-                                android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+                                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                                android:textColor="@android:color/holo_blue_bright" />
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -286,7 +234,8 @@
                                 android:maxLines="1"
                                 android:singleLine="true"
                                 android:text="/"
-                                android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+                                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                                android:textColor="@android:color/holo_blue_bright" />
 
                             <TextView
                                 android:id="@+id/card_def"
@@ -297,7 +246,8 @@
                                 android:maxLines="1"
                                 android:singleLine="true"
                                 android:text="0"
-                                android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+                                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                                android:textColor="@android:color/holo_blue_bright" />
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
@@ -310,7 +260,8 @@
             android:layout_marginTop="2dp"
             android:background="@drawable/textview_border"
             android:padding="4dp"
-            android:scrollbars="none">
+            android:scrollbars="none"
+            android:paddingRight="4dp">
 
             <TextView
                 android:id="@+id/text_desc"
@@ -320,7 +271,80 @@
                 android:minHeight="@dimen/card_desc_height"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 android:textIsSelectable="true"
-                tools:text="desc"/>
+                tools:text="desc"
+                android:textColor="@android:color/holo_blue_light" />
         </ScrollView>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:orientation="horizontal"
+        android:paddingRight="8dp"
+        android:weightSum="1">
+
+        <ImageButton
+            android:id="@+id/btn_close"
+            android:layout_width="match_parent"
+            android:layout_height="57dp"
+            app:srcCompat="@drawable/ic_close_black_24dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/btnc" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="57dp"
+        android:orientation="horizontal"
+        android:paddingLeft="8dp"
+        android:weightSum="1"
+        android:background="@android:color/transparent">
+
+        <TextView
+            android:id="@+id/btn_faq"
+            android:layout_width="84dp"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:shadowColor="@color/black"
+            android:shadowDx="1"
+            android:shadowDy="1"
+            android:shadowRadius="2"
+            android:text="@string/card_faq"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/colorAccentDark"
+            android:textStyle="bold"
+            android:background="@drawable/btnc"
+            android:layout_weight="0.28"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/btn_add_main"
+            android:layout_width="71dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="20dp"
+            android:gravity="center_vertical"
+            android:text="@string/card_add_main"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold"
+            android:visibility="invisible"
+            android:background="@drawable/btnc"
+            android:layout_weight="0.10"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/btn_add_side"
+            android:layout_width="72dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="12dp"
+            android:gravity="center_vertical"
+            android:text="@string/card_add_side"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold"
+            android:visibility="invisible"
+            android:background="@drawable/btnc"
+            android:textSize="14sp" />
     </LinearLayout>
 </FrameLayout>
