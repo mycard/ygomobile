@@ -42,7 +42,7 @@
         <item name="android:backgroundDimEnabled">true</item><!--模糊-->
         <item name="android:backgroundDimAmount">0.5</item>
     </style>
-    <style name="AppTheme.Dialog" parent="AppTheme">
+    <style name="AppTheme.Dialog" parent="Theme.AppCompat">
 
     </style>
     <style name="AppTheme.Dialog.Translucent" parent="AppTheme.Dialog">
