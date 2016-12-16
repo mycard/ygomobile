@@ -33,7 +33,7 @@ public class DialogPlus {
 
     public DialogPlus(Context context) {
         this.context = context;
-        mBuilder = new AlertDialog.Builder(context);
+        mBuilder = new AlertDialog.Builder(context,R.style.AppTheme_Dialog_Translucent);
         mMaxHeight = (int) (context.getResources().getDisplayMetrics().heightPixels * 0.7f);
         mLayoutInflater = LayoutInflater.from(context);
         mView = mLayoutInflater.inflate(R.layout.dialog_plus_base, null);
