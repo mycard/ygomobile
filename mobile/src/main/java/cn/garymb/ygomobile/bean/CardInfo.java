@@ -22,9 +22,9 @@ public class CardInfo extends Card implements Parcelable {
     static {
         StringBuilder stringBuilder = new StringBuilder("select datas." + _ID + ",ot,alias,setcode,type,level,race,attribute,atk,def,category");
         stringBuilder.append(",texts.name,texts.desc");
-        for (int i = 1; i <= 0x10; i++) {
-            stringBuilder.append(",texts.str" + i);
-        }
+//        for (int i = 1; i <= 0x10; i++) {
+//            stringBuilder.append(",texts.str" + i);
+//        }
 //        stringBuilder.append(",level as "+COL_STAR+" ");
         stringBuilder.append(",(datas.level & 255) as " + COL_STAR + " ");
         stringBuilder.append(" from datas, texts  where datas." + _ID + " = texts." + _ID + " ");
@@ -61,9 +61,9 @@ public class CardInfo extends Card implements Parcelable {
         try {
             this.Name = reader.getString(11);
             this.Desc = reader.getString(12);
-            for (int i = 0; i < this.Strs.length; i++) {
-                this.Strs[i] = reader.getString(13 + i);
-            }
+//            for (int i = 0; i < this.Strs.length; i++) {
+//                this.Strs[i] = reader.getString(13 + i);
+//            }
         } catch (Exception e) {
             Log.e("card", "read text", e);
         }

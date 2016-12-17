@@ -12,10 +12,8 @@ public class Card extends CardData implements Parcelable {
     public static final int SETCODE_MAX = 4;
     public String Name;
     public String Desc;
-    public String[] Strs;
 
     public Card() {
-        Strs = new String[0x10];
     }
 
     public Card(CardData cardData) {
@@ -109,7 +107,6 @@ public class Card extends CardData implements Parcelable {
                 ", RScale=" + RScale +
                 ", Name='" + Name + '\'' +
                 ", Desc='" + Desc + '\'' +
-                ", Strs=" + Arrays.toString(Strs) +
                 '}';
     }
 
@@ -123,14 +120,12 @@ public class Card extends CardData implements Parcelable {
         super.writeToParcel(dest, flags);
         dest.writeString(this.Name);
         dest.writeString(this.Desc);
-        dest.writeStringArray(this.Strs);
     }
 
     protected Card(Parcel in) {
         super(in);
         this.Name = in.readString();
         this.Desc = in.readString();
-        this.Strs = in.createStringArray();
     }
 
     public static final Creator<Card> CREATOR = new Creator<Card>() {
