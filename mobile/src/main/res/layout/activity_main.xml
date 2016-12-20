@@ -15,8 +15,7 @@
         android:id="@+id/layout_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/bg3"
-        android:orientation="vertical">
+        android:background="@drawable/bg3">
 
         <include
             layout="@layout/content_toolbar"/>
@@ -48,5 +47,6 @@
         android:layout_height="match_parent"
         android:layout_gravity="left"
         app:headerLayout="@layout/nav_main_head"
-        app:menu="@menu/nav_main_menu"/>
+        app:menu="@menu/nav_main_menu"
+        android:background="@drawable/left" />
 </android.support.v4.widget.DrawerLayout>

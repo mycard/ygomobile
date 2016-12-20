@@ -51,7 +51,7 @@
                 android:gravity="center_vertical"
                 android:text="@string/server_ip"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:textColor="@color/colorPrimaryDark"/>
+                android:textColor="@color/item_title"/>
 
             <TextView
                 android:id="@+id/text_ip"
@@ -60,7 +60,8 @@
                 android:gravity="center_vertical"
                 android:singleLine="true"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                tools:text="127.0.0.1"/>
+                tools:text="127.0.0.1"
+                android:textColor="@android:color/holo_blue_bright" />
         </LinearLayout>
 
         <LinearLayout
@@ -73,7 +74,7 @@
                 android:gravity="center_vertical"
                 android:text="@string/server_port"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                android:textColor="@color/colorPrimaryDark"/>
+                android:textColor="@color/item_title"/>
 
             <TextView
                 android:id="@+id/text_port"
@@ -83,7 +84,8 @@
                 android:maxLines="1"
                 android:singleLine="true"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                tools:text="233"/>
+                tools:text="233"
+                android:textColor="@android:color/holo_blue_bright" />
         </LinearLayout>
     </LinearLayout>
 
@@ -100,7 +102,7 @@
             android:gravity="center_vertical"
             android:text="@string/server_user"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textColor="@color/colorPrimaryDark"/>
+            android:textColor="@color/item_title"/>
 
         <TextView
             android:id="@+id/text_player"
@@ -110,7 +112,8 @@
             android:gravity="center_vertical"
             android:singleLine="true"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            tools:text="player"/>
+            tools:text="player"
+            android:textColor="@android:color/holo_blue_bright" />
     </LinearLayout>
 </LinearLayout>
 </LinearLayout>

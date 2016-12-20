@@ -13,7 +13,7 @@
         android:hint="@string/intput_room_name"
         android:inputType="textNoSuggestions"
         android:imeOptions="actionDone"
-        android:singleLine="true"/>
+        android:singleLine="true" />
 
     <ListView
         android:id="@+id/room_list"
