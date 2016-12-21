@@ -40,7 +40,7 @@ public class MyEditTextPreference extends EditTextPreference {
         final int titleDividerId = res.getIdentifier("titleDivider", "id", "android");
         final View titleDivider = getDialog().findViewById(titleDividerId);
         if (titleDivider != null) {
-            titleDivider.setBackgroundColor(res.getColor(R.color.apptheme_color));
+            titleDivider.setBackgroundColor(res.getColor(R.color.item_title));
         }
 	}
 

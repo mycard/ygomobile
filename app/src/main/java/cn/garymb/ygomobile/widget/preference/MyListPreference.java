@@ -28,14 +28,14 @@ public class MyListPreference extends ListPreference {
         final int titleId = res.getIdentifier("alertTitle", "id", "android");
         final View title = getDialog().findViewById(titleId);
         if (title != null) {
-            ((TextView) title).setTextColor(res.getColor(R.color.apptheme_color));
+            ((TextView) title).setTextColor(res.getColor(R.color.item_title));
         }
 
         // Title divider
         final int titleDividerId = res.getIdentifier("titleDivider", "id", "android");
         final View titleDivider = getDialog().findViewById(titleDividerId);
         if (titleDivider != null) {
-            titleDivider.setBackgroundColor(res.getColor(R.color.apptheme_color));
+            titleDivider.setBackgroundColor(res.getColor(R.color.item_title));
         }
 	}
 }

@@ -94,7 +94,7 @@ public abstract class BaseDialog extends AlertDialog implements DialogConfigUIBa
 			final View title = findViewById(titleId);
 			if (title != null) {
 				((TextView) title).setTextColor(res
-						.getColor(R.color.apptheme_color));
+						.getColor(R.color.item_title));
 			}
 			// Title divider
 			final int titleDividerId = res.getIdentifier("titleDivider", "id",
@@ -102,7 +102,7 @@ public abstract class BaseDialog extends AlertDialog implements DialogConfigUIBa
 			final View titleDivider = findViewById(titleDividerId);
 			if (titleDivider != null) {
 				titleDivider.setBackgroundColor(res
-						.getColor(R.color.apptheme_color));
+						.getColor(R.color.item_title));
 			}
 		}
 	}

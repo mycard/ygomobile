@@ -6,23 +6,12 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:background="@drawable/item_bg"
+    android:background="@drawable/blue"
     android:padding="@dimen/padding2">
 
     <RelativeLayout
         android:layout_width="@dimen/card_small_width"
         android:layout_height="@dimen/card_small_height">
-
-        <ImageView
-            android:id="@+id/card_image"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="1dp"
-            android:layout_marginRight="1dp"
-            android:layout_marginTop="1dp"
-            android:scaleType="fitXY"
-            tools:src="@android:drawable/sym_def_app_icon"/>
 
         <ImageView
             android:id="@+id/right_top"
@@ -31,6 +20,16 @@
             android:layout_alignParentRight="true"
             android:visibility="visible"
             tools:src="@drawable/ic_close_black_24dp"/>
+
+        <ImageView
+            android:id="@+id/card_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
+            android:scaleType="fitXY"
+            tools:src="@android:drawable/sym_def_app_icon"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true" />
     </RelativeLayout>
 
     <LinearLayout
@@ -76,7 +75,7 @@
             android:maxLines="1"
             android:singleLine="true"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@android:color/holo_blue_dark"
             android:textSize="15sp"
             tools:text="[A/XYZ]"/>
 
@@ -102,7 +101,7 @@
                 android:maxLines="1"
                 android:singleLine="true"
                 android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-                android:textColor="@color/blackLinght"
+                android:textColor="@android:color/holo_blue_bright"
                 tools:text="123456789"/>
 
             <TextView
@@ -130,7 +129,8 @@
                     android:maxLines="1"
                     android:singleLine="true"
                     android:text="ATK/"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="@android:color/holo_green_light" />
 
                 <TextView
                     android:id="@+id/card_atk"
@@ -141,7 +141,8 @@
                     android:minWidth="@dimen/label_width_small_32dp"
                     android:singleLine="true"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    tools:text="2500"/>
+                    tools:text="2500"
+                    android:textColor="@android:color/holo_blue_bright" />
 
                 <View
                     android:layout_width="5dp"
@@ -153,7 +154,8 @@
                     android:maxLines="1"
                     android:singleLine="true"
                     android:text="DEF/"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                    android:textColor="@android:color/holo_green_light" />
 
                 <TextView
                     android:id="@+id/card_def"
@@ -164,7 +166,8 @@
                     android:minWidth="@dimen/label_width_small_32dp"
                     android:singleLine="true"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    tools:text="2500"/>
+                    tools:text="2500"
+                    android:textColor="@android:color/holo_blue_bright" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

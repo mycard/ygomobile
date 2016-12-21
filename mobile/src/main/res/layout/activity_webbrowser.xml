@@ -16,9 +16,7 @@
         <cn.garymb.ygomobile.plus.WebViewPlus
             android:id="@+id/webbrowser"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-        </cn.garymb.ygomobile.plus.WebViewPlus>
+            android:layout_height="match_parent"/>
     </LinearLayout>
 
 </android.support.design.widget.CoordinatorLayout>

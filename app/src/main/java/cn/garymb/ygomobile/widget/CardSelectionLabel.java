@@ -29,8 +29,8 @@ public class CardSelectionLabel extends LinearLayout {
 	protected void onFinishInflate() {
 		super.onFinishInflate();
 		mLabel = (TextView) findViewById(R.id.cardSelectionLabel1);
-		originColor = getResources().getColor(R.color.black);
-		selectionColor = getResources().getColor(R.color.apptheme_color);
+		originColor = getResources().getColor(R.color.item_title);
+		selectionColor = getResources().getColor(R.color.item_title);
 		isSelected = false;
 	}
 	

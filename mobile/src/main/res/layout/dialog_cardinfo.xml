@@ -33,7 +33,7 @@
                 <TextView
                     android:id="@+id/btn_faq"
                     android:layout_width="0dp"
-                    android:layout_weight="0.53"
+                    android:layout_weight="0.56"
                     android:layout_height="match_parent"
                     android:background="@drawable/addto"
                     android:gravity="center"
@@ -42,7 +42,8 @@
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     android:textColor="@color/colorAccentDark"
                     android:textSize="14sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:layout_marginLeft="5dp" />
 
                 <TextView
                     android:id="@+id/btn_add_main"
@@ -56,7 +57,7 @@
                     android:textColor="@color/item_title"
                     android:textSize="14sp"
                     android:textStyle="bold"
-                    android:visibility="visible" />
+                    android:visibility="invisible" />
 
                 <TextView
                     android:id="@+id/btn_add_side"
@@ -70,7 +71,7 @@
                     android:textColor="@color/item_title"
                     android:textSize="14sp"
                     android:textStyle="bold"
-                    android:visibility="visible"/>
+                    android:visibility="invisible"/>
 
 
                 <ImageButton

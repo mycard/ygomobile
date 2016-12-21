@@ -16,7 +16,7 @@ public class SimpleListAdapter extends BaseAdapterPlus<String>{
     protected View createView(int position, ViewGroup parent) {
         View view = inflate(android.R.layout.simple_list_item_1, null);
         TextView textView = (TextView) view.findViewById(android.R.id.text1);
-        textView.setTextColor(context.getResources().getColor(R.color.colorPrimaryDark));
+        textView.setTextColor(context.getResources().getColor(R.color.item_title));
         view.setTag(textView);
         return view;
     }
