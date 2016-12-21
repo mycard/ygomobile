@@ -98,10 +98,6 @@ public class YGOMobileActivity extends NativeActivity implements
             return;
         }
         mNativeCrashHandler = new NativeCrashHandler();
-        if (mApp.canNdkCash()) {
-            mNativeCrashHandler.registerForNativeCrash(this);
-            registNdkCash = true;
-        }
         mFullScreenUtils = new FullScreenUtils(this, mApp.isImmerSiveMode());
         super.onCreate(savedInstanceState);
         mFullScreenUtils.fullscreen();
@@ -122,6 +118,11 @@ public class YGOMobileActivity extends NativeActivity implements
             //获得重力传感器
             mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         //注册
         if (mSensor != null) {
             if (mApp.isSensorRefresh()) {
@@ -129,17 +130,21 @@ public class YGOMobileActivity extends NativeActivity implements
                 mSensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_GAME);
             }
         }
+        if (mApp.canNdkCash()) {
+            mNativeCrashHandler.registerForNativeCrash(this);
+            registNdkCash = true;
+        }
     }
 
     @Override
-    protected void onDestroy() {
+    protected void onPause() {
+        super.onPause();
         if (registerSensor) {
             mSensorManager.unregisterListener(this);
         }
         if (registNdkCash) {
             mNativeCrashHandler.unregisterForNativeCrash();
         }
-        super.onDestroy();
     }
 
     @Override
@@ -313,15 +318,6 @@ public class YGOMobileActivity extends NativeActivity implements
 //                }
             });
         }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-//                if (mOverlayShowRequest) {
-//                    mOverlayView.hide();
-//                    mChainOverlayView.hide();
-//                }
     }
 
     @Override
