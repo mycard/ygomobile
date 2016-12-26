@@ -4,14 +4,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-    <ImageView
-        android:id="@+id/card_image"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="1px"
-        android:layout_marginRight="1px"
-        android:layout_marginTop="1px"
-        tools:src="@android:drawable/sym_def_app_icon"/>
+    <include
+        android:id="@+id/head"
+        layout="@layout/head_view"/>
 
     <ImageView
         android:id="@+id/right_top"
@@ -31,8 +26,8 @@
             android:id="@+id/label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimaryDark"
-            android:gravity="center_vertical"
+            android:background="@drawable/veil"
+            android:gravity="top"
             android:paddingLeft="5dp"
             android:singleLine="true"
             android:textAppearance="@style/TextAppearance.AppCompat.Caption"
@@ -40,7 +35,13 @@
             tools:text="name"/>
     </LinearLayout>
 
-    <include
-        android:id="@+id/head"
-        layout="@layout/head_view"/>
+    <ImageView
+        android:id="@+id/card_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:src="@android:drawable/sym_def_app_icon"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
 </RelativeLayout>

@@ -63,6 +63,7 @@
     </android.support.v4.widget.DrawerLayout>
 
     <include
-        layout="@layout/content_toolbar_list"/>
+        layout="@layout/content_toolbar_list"
+        android:visibility="visible" />
 
 </android.support.design.widget.CoordinatorLayout>

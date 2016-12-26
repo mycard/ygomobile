@@ -6,6 +6,7 @@ import android.app.DialogFragment;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -17,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.TextView;
 
 import java.io.Serializable;
 import java.util.List;
@@ -145,6 +147,9 @@ public class SearchableListDialog extends DialogFragment implements
         _searchView.setOnQueryTextListener(this);
         _searchView.setOnCloseListener(this);
         _searchView.clearFocus();
+        int id =_searchView.getContext().getResources().getIdentifier("android:id/search_src_text", null, null);
+        TextView textView1= (TextView)_searchView.findViewById(id);
+        textView1.setTextColor(Color.parseColor("#ff8800"));
         InputMethodManager mgr = (InputMethodManager) getActivity().getSystemService(Context
                 .INPUT_METHOD_SERVICE);
         mgr.hideSoftInputFromWindow(_searchView.getWindowToken(), 0);
@@ -155,9 +160,17 @@ public class SearchableListDialog extends DialogFragment implements
         _listViewItems = (ListView) rootView.findViewById(R.id.listItems);
 
         //create the adapter by passing your ArrayList data
-        listAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1,
-                items);
+        /*listAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_1,
+                items);*/
+        listAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_1, items) {
+            @Override
+            public View getView(int position, View convertView, ViewGroup parent) {
+                TextView textView = (TextView) super.getView(position, convertView, parent);
+                textView.setTextColor(Color.parseColor("#b8be35"));
 
+                return textView;
+            }
+        };
         //attach the adapter to the list
         _listViewItems.setAdapter(listAdapter);
 
