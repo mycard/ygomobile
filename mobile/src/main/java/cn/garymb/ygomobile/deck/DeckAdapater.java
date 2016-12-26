@@ -57,6 +57,7 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
     private DeckItem mRemoveItem;
     private int mRemoveIndex;
     private LimitList mLimitList;
+    private boolean showHead = false;
 
     public DeckAdapater(Context context, RecyclerView recyclerView) {
         this.context = context;
@@ -347,7 +348,7 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
 
     private void addCount(CardInfo cardInfo, DeckItemType type) {
         if (cardInfo == null) return;
-        Long code = cardInfo.Alias>0?cardInfo.Alias:cardInfo.Code;
+        Long code = cardInfo.Alias > 0 ? cardInfo.Alias : cardInfo.Code;
         Integer i = mCount.get(code);
         if (i == null) {
             mCount.put(code, 1);
@@ -390,7 +391,7 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
 
     private void removeCount(CardInfo cardInfo, DeckItemType type) {
         if (cardInfo == null) return;
-        Long code = cardInfo.Alias>0?cardInfo.Alias:cardInfo.Code;
+        Long code = cardInfo.Alias > 0 ? cardInfo.Alias : cardInfo.Code;
         Integer i = mCount.get(code);
         if (i == null) {
             mCount.put(code, 0);
@@ -558,6 +559,16 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
         return mHeight;
     }
 
+    public void showHeadView() {
+        showHead=true;
+        notifyItemChanged(DeckItem.HeadView);
+    }
+
+    public void hideHeadView() {
+        showHead=false;
+        notifyItemChanged(DeckItem.HeadView);
+    }
+
     @Override
     public void onBindViewHolder(DeckViewHolder holder, int position) {
         if (position == DeckItem.HeadView) {
@@ -568,7 +579,11 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
         DeckItem item = mItems.get(position);
         holder.setItemType(item.getType());
         if (position == DeckItem.HeadView) {
-            holder.headView.setVisibility(View.VISIBLE);
+            if(showHead){
+                holder.headView.setVisibility(View.VISIBLE);
+            }else{
+                holder.headView.setVisibility(View.INVISIBLE);
+            }
             holder.cardImage.setVisibility(View.GONE);
             return;
         } else {
