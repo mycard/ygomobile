@@ -19,7 +19,7 @@
         android:orientation="vertical">
 
         <include
-            layout="@layout/content_toolbar"/>
+            layout="@layout/content_toolbar" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/list_server"
@@ -48,5 +48,8 @@
         android:layout_height="match_parent"
         android:layout_gravity="left"
         app:headerLayout="@layout/nav_main_head"
-        app:menu="@menu/nav_main_menu"/>
+        app:menu="@menu/nav_main_menu"
+        app:itemTextColor="@color/white"
+        app:itemIconTint="@color/gold"
+        android:background="@drawable/left" />
 </android.support.v4.widget.DrawerLayout>

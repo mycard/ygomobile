@@ -14,7 +14,8 @@
             android:layout_width="@dimen/label_width_middle"
             android:layout_height="wrap_content"
             android:text="@string/server_name"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textColor="@color/gold" />
 
         <EditText
             android:id="@+id/server_name"
@@ -25,7 +26,8 @@
             android:maxLines="1"
             android:inputType="textNoSuggestions"
             android:singleLine="true"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textColor="@android:color/holo_blue_bright" />
     </LinearLayout>
 
     <LinearLayout
@@ -44,7 +46,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:text="@string/server_ip"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textColor="@color/gold" />
 
             <EditText
                 android:id="@+id/text_ip"
@@ -55,7 +58,8 @@
                 android:inputType="textNoSuggestions"
                 android:maxLines="1"
                 android:singleLine="true"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textColor="@android:color/holo_blue_bright" />
         </LinearLayout>
 
         <LinearLayout
@@ -66,7 +70,8 @@
                 android:layout_width="@dimen/label_width_50dp"
                 android:layout_height="wrap_content"
                 android:text="@string/server_port"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textColor="@color/gold" />
 
             <EditText
                 android:id="@+id/text_port"
@@ -76,7 +81,8 @@
                 android:maxLines="1"
                 android:singleLine="true"
                 android:text="0"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                android:textColor="@android:color/holo_blue_bright" />
         </LinearLayout>
     </LinearLayout>
 
@@ -90,7 +96,8 @@
             android:layout_width="@dimen/label_width_middle"
             android:layout_height="wrap_content"
             android:text="@string/server_user"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textColor="@color/gold" />
 
         <EditText
             android:id="@+id/text_player"
@@ -101,7 +108,8 @@
             android:hint="@string/must_info"
             android:maxLines="1"
             android:singleLine="true"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"/>
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textColor="@android:color/holo_green_light" />
     </LinearLayout>
 <!--
     <LinearLayout

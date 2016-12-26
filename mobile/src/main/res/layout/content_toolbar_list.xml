@@ -5,13 +5,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:theme="@style/AppTheme.AppBarOverlay">
+    android:theme="@style/AppTheme.AppBarOverlay"
+    android:background="@drawable/bar">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimaryDark"
+        android:layout_height="41dp"
+        android:background="@android:color/transparent"
         app:popupTheme="@style/AppTheme.PopupOverlay"
         app:theme="@style/AppTheme.AppBarOverlay"
         app:titleMargin="0dp"
@@ -22,6 +23,7 @@
             android:id="@+id/toolbar_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:popupTheme="@style/AppTheme.PopupOverlay.Bule"/>
+            app:popupTheme="@style/AppTheme.PopupOverlay.Bule"
+            android:layout_marginBottom="10dp" />
     </android.support.v7.widget.Toolbar>
 </android.support.design.widget.AppBarLayout>

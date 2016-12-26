@@ -16,7 +16,7 @@ public class SimpleSpinnerAdapter extends BaseAdapterPlus<SimpleSpinnerItem> {
 
     public SimpleSpinnerAdapter(Context context) {
         super(context);
-        color = context.getResources().getColor(R.color.colorPrimaryDark);
+        color = context.getResources().getColor(R.color.item_title);
     }
 
     public void setColor(int color) {

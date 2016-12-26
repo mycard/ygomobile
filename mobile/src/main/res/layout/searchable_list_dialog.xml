@@ -9,12 +9,12 @@
         android:id="@+id/search"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:iconifiedByDefault="false"/>
+        android:iconifiedByDefault="false" />
 
     <ListView
-        android:id="@+id/listItems"
-        android:scrollbars="none"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+    android:id="@+id/listItems"
+    android:scrollbars="none"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" />
 
 </LinearLayout>
