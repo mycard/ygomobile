@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
-    android:layout_marginTop="4dp"
+    android:layout_marginTop="8dp"
     android:background="@android:color/transparent"
     android:orientation="horizontal">
     <TextView
