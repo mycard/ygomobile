@@ -1,5 +1,6 @@
 package cn.ygo.ocgcore;
 
+import android.text.TextUtils;
 import android.util.Log;
 
 import java.io.BufferedReader;
@@ -15,13 +16,13 @@ import java.util.Map;
 import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.core.AppsSettings;
 import cn.garymb.ygomobile.utils.IOUtils;
+import cn.garymb.ygomobile.utils.MD5Util;
 
 public class LimitManager {
     private static LimitManager sManager = new LimitManager();
     private Map<Integer, LimitList> mListMap = new HashMap<>();
-
     private volatile boolean isLoad = false;
-
+    private String lastMd5;
     private LimitManager() {
 
     }
@@ -59,6 +60,11 @@ public class LimitManager {
     public boolean load() {
         File stringfile = new File(AppsSettings.get().getResourcePath(),
                 String.format(Constants.CORE_LIMIT_PATH, AppsSettings.get().getCoreConfigVersion()));
+        String md5 = MD5Util.getFileMD5(stringfile.getAbsolutePath());
+        if (TextUtils.equals(md5, lastMd5)) {
+            return true;
+        }
+        lastMd5 = md5;
         return loadFile(stringfile.getAbsolutePath());
     }
 

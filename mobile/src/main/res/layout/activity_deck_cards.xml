@@ -11,37 +11,40 @@
         android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clipToPadding="true"
-        android:fitsSystemWindows="true"
         tools:openDrawer="left">
 
-        <LinearLayout
-            android:id="@+id/layout_main"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/bg3"
-            android:orientation="vertical">
-        </LinearLayout>
+            android:layout_height="match_parent">
+            <LinearLayout
+                android:id="@+id/layout_main"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg3"
+                android:orientation="vertical">
+            </LinearLayout>
+            <include
+                layout="@layout/content_toolbar_list"/>
+        </FrameLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="left"
             android:background="@android:color/transparent"
-            android:orientation="vertical"
-
-            android:paddingTop="?attr/actionBarSize">
+            android:orientation="vertical">
 
             <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/left">
+
                 <ListView
                     android:id="@+id/list_cards"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginTop="10dp"
                     android:layout_marginRight="8dp"
+                    android:layout_marginTop="10dp"
                     android:divider="@android:color/transparent"
                     android:dividerHeight="4dp"
                     android:scrollbars="none"/>
@@ -53,17 +56,12 @@
             android:layout_height="match_parent"
             android:layout_gravity="right"
             android:background="@android:color/transparent"
-            android:orientation="vertical"
-            android:paddingTop="?attr/actionBarSize">
+            android:orientation="vertical">
 
             <include
                 android:id="@+id/nav_view_list"
                 layout="@layout/nav_card_search"/>
         </LinearLayout>
     </android.support.v4.widget.DrawerLayout>
-
-    <include
-        layout="@layout/content_toolbar_list"
-        android:visibility="visible" />
 
 </android.support.design.widget.CoordinatorLayout>

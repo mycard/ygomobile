@@ -15,6 +15,7 @@ import java.util.Map;
 import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.core.AppsSettings;
 import cn.garymb.ygomobile.utils.IOUtils;
+import cn.garymb.ygomobile.utils.MD5Util;
 import cn.garymb.ygomobile.utils.StringUtils;
 import cn.ygo.ocgcore.enums.CardOt;
 
@@ -26,6 +27,7 @@ public class StringManager {
     //    private final Map<Long, String> mSetname = new HashMap<>();
     private static StringManager sStringManager = new StringManager();
     private volatile boolean isLoad = false;
+    private String lastMd5;
 
     private StringManager() {
 
@@ -42,6 +44,11 @@ public class StringManager {
     public boolean load() {
         File stringfile = new File(AppsSettings.get().getResourcePath(),
                 String.format(Constants.CORE_STRING_PATH, AppsSettings.get().getCoreConfigVersion()));
+        String md5 = MD5Util.getFileMD5(stringfile.getAbsolutePath());
+        if (TextUtils.equals(md5, lastMd5)) {
+            return true;
+        }
+        lastMd5 = md5;
         return loadFile(stringfile.getAbsolutePath());
     }
 
@@ -76,10 +83,10 @@ public class StringManager {
                         long id = toNumber(words[1]);
                         CardSet cardSet = new CardSet(id, words[2]);
                         int i = mCardSets.indexOf(cardSet);
-                        if (i>=0){
+                        if (i >= 0) {
                             CardSet cardSet1 = mCardSets.get(i);
                             cardSet1.setName(cardSet.getName());
-                        }else {
+                        } else {
                             mCardSets.add(cardSet);
                         }
                     } else {
@@ -107,9 +114,9 @@ public class StringManager {
     }
 
     public String getSetName(long key) {
-        CardSet cardSet=new CardSet(key, null);
+        CardSet cardSet = new CardSet(key, null);
         int i = mCardSets.indexOf(cardSet);
-        if(i>=0){
+        if (i >= 0) {
             return mCardSets.get(i).getName();
         }
         return String.format("0x%x", key);
@@ -145,7 +152,7 @@ public class StringManager {
         return race;
     }
 
-    public String getOtString(int ot,String def) {
+    public String getOtString(int ot, String def) {
         if (ot == CardOt.All.ordinal()) {
             return "-";
         }

@@ -13,6 +13,8 @@ import cn.garymb.ygomobile.plus.BaseAdapterPlus;
 
 public class SimpleSpinnerAdapter extends BaseAdapterPlus<SimpleSpinnerItem> {
     private int color;
+    private int maxLines = 2;
+    private boolean singleLine = false;
 
     public SimpleSpinnerAdapter(Context context) {
         super(context);
@@ -23,11 +25,23 @@ public class SimpleSpinnerAdapter extends BaseAdapterPlus<SimpleSpinnerItem> {
         this.color = color;
     }
 
+    public void setSingleLine(boolean singleLine) {
+        this.singleLine = singleLine;
+    }
+
+    public void setMaxLines(int maxLines) {
+        this.maxLines = maxLines;
+    }
+
     @Override
     protected View createView(int position, ViewGroup parent) {
         View view = inflate(android.R.layout.simple_list_item_1, null);
         TextView textView = (TextView) view.findViewById(android.R.id.text1);
         view.setTag(textView);
+        textView.setMaxLines(maxLines);
+        if (singleLine) {
+            textView.setSingleLine();
+        }
         return view;
     }
 

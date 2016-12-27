@@ -61,14 +61,19 @@ public class WebActivity extends BaseActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            if (mWebViewPlus.canGoBack()) {
-                mWebViewPlus.goBack();
-            } else {
-                finish();
-            }
+            onBackHome();
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onBackHome() {
+        if (mWebViewPlus.canGoBack()) {
+            mWebViewPlus.goBack();
+        } else {
+            finish();
+        }
     }
 
     @Override

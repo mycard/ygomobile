@@ -71,6 +71,8 @@ public class CardSearchAcitivity extends BaseActivity implements CardLoader.Call
         setListeners();
         ProgressDialog dlg = ProgressDialog.show(this, null, getString(R.string.loading));
         VUiKit.defer().when(() -> {
+            StringManager.get().load();//loadFile(stringfile.getAbsolutePath());
+            LimitManager.get().load();//loadFile(stringfile.getAbsolutePath());
             if (mLimitManager.getCount() > 0) {
                 mCardLoader.setLimitList(mLimitManager.getLimitFromIndex(0));
             }
@@ -171,10 +173,13 @@ public class CardSearchAcitivity extends BaseActivity implements CardLoader.Call
                 //弹条件对话框
                 showSearch(true);
                 break;
-            case android.R.id.home:
-                return onBack();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onBackHome() {
+        onBack();
     }
 
     @Override

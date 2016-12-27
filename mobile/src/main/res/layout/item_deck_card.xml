@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
@@ -7,14 +8,6 @@
     <include
         android:id="@+id/head"
         layout="@layout/head_view"/>
-
-    <ImageView
-        android:id="@+id/right_top"
-        android:layout_width="@dimen/right_size2"
-        android:layout_height="@dimen/right_size2"
-        android:layout_alignParentRight="true"
-        android:visibility="visible"
-        tools:src="@drawable/ic_close_black_24dp"/>
 
     <LinearLayout
         android:id="@+id/layout_label"
@@ -40,8 +33,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:src="@android:drawable/sym_def_app_icon"
-        android:layout_alignParentTop="true"
+        android:layout_margin="1px"/>
+
+    <ImageView
+        android:id="@+id/right_top"
+        android:layout_width="@dimen/right_size2"
+        android:layout_height="@dimen/right_size2"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:visibility="visible"
+        app:srcCompat="@drawable/ic_close_black_24dp"/>
 
 </RelativeLayout>
