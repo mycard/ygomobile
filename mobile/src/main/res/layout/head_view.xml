@@ -12,6 +12,6 @@
         android:gravity="center_vertical|center_horizontal"
         android:text="@string/deck_delete_text"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textColor="@color/white"
+        android:textColor="?android:attr/colorControlActivated"
         android:visibility="invisible" />
 </LinearLayout>

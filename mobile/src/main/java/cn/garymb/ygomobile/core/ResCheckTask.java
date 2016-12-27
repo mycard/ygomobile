@@ -93,8 +93,6 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
         boolean needsUpdate = false;
         //core config
         setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.core_config)));
-        StringManager.get().load();//loadFile(stringfile.getAbsolutePath());
-        LimitManager.get().load();//loadFile(stringfile.getAbsolutePath());
         String newConfigVersion = null, currentConfigVersion = null;
         File verPath = new File(mSettings.getResourcePath(), Constants.CORE_CONFIG_PATH);
         if (!verPath.exists() || TextUtils.isEmpty(currentConfigVersion = getCurVersion(verPath))) {

@@ -3,39 +3,38 @@
               xmlns:app="http://schemas.android.com/apk/res-auto"
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
-              android:layout_height="match_parent"
+              android:layout_height="wrap_content"
               android:background="@android:color/transparent"
               android:orientation="horizontal">
 
     <FrameLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:id="@+id/detail"
             android:layout_width="match_parent"
-            android:layout_height="484dp"
-            android:layout_marginRight="6dp"
-            android:layout_marginTop="@dimen/button_width_small"
+            android:layout_height="wrap_content"
             android:background="@drawable/blue"
             android:orientation="vertical"
             android:paddingBottom="10dp"
             android:paddingLeft="10dp"
-            android:paddingRight="10dp">
+            android:paddingRight="10dp"
+            >
 
             <LinearLayout
-                android:layout_width="337dp"
-                android:layout_height="34dp"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/title_height_small"
                 android:background="@android:color/transparent"
                 android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/btn_faq"
-                    android:layout_width="0dp"
-                    android:layout_weight="0.56"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:background="@drawable/addto"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp"
                     android:gravity="center"
                     android:shadowColor="@color/black"
                     android:text="@string/card_faq"
@@ -47,9 +46,9 @@
 
                 <TextView
                     android:id="@+id/btn_add_main"
-                    android:layout_width="0dp"
-                    android:layout_weight="0.63"
+                    android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:layout_marginLeft="4dp"
                     android:background="@drawable/addto"
                     android:gravity="center"
                     android:text="@string/card_add_main"
@@ -57,12 +56,13 @@
                     android:textColor="@color/item_title"
                     android:textSize="14sp"
                     android:textStyle="bold"
-                    android:visibility="invisible" />
+                    android:visibility="invisible"
+                    tools:visibility="visible"/>
 
                 <TextView
                     android:id="@+id/btn_add_side"
-                    android:layout_width="0dp"
-                    android:layout_weight="0.58"
+                    android:layout_width="wrap_content"
+                    android:layout_marginLeft="4dp"
                     android:layout_height="match_parent"
                     android:background="@drawable/addto"
                     android:gravity="center"
@@ -71,16 +71,19 @@
                     android:textColor="@color/item_title"
                     android:textSize="14sp"
                     android:textStyle="bold"
-                    android:visibility="invisible"/>
+                    android:visibility="invisible"
+                    tools:visibility="visible"/>
 
-
+                <View
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="1dp"/>
                 <ImageButton
                     android:id="@+id/btn_close"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.25"
-                    android:background="@drawable/ic_close_black_24dp"
-                    android:layout_marginLeft="70dp" />
+                    android:layout_width="@dimen/button_width_small"
+                    android:layout_height="@dimen/button_width_small"
+                    android:background="@android:color/transparent"
+                    app:srcCompat="@drawable/ic_close_black_24dp"/>
             </LinearLayout>
 
             <TextView
@@ -341,7 +344,7 @@
                     android:textColor="@android:color/holo_blue_light"
                     android:textIsSelectable="true"
                     tools:text="desc"
-                    android:layout_marginTop="7dp" />
+                    android:layout_margin="5dp" />
             </ScrollView>
         </LinearLayout>
 

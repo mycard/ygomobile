@@ -4,12 +4,12 @@
       xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/action_search"
-        android:icon="@drawable/ic_search_white"
+        android:icon="@drawable/search"
         android:title="@string/search"
         app:showAsAction="always"/>
     <item
         android:id="@+id/action_card_list"
-        android:icon="@drawable/ic_collections"
+        android:icon="@drawable/listicon"
         android:title="@string/card_result"
         app:showAsAction="always"/>
     <!--<item
@@ -19,7 +19,7 @@
     <item
         android:id="@+id/action_unsort"
         android:icon="@drawable/ic_refresh"
-        android:title="@string/unsort"/>
+        android:title="@string/unsort" />
     <item
         android:id="@+id/action_sort"
         android:icon="@drawable/ic_refresh"

@@ -66,18 +66,6 @@ abstract class BaseCardsAcitivity extends BaseActivity implements CardLoader.Cal
             onBack();
         });
         toggle.syncState();
-        //
-        ProgressDialog dlg = ProgressDialog.show(this, null, getString(R.string.loading));
-        VUiKit.defer().when(() -> {
-            if (mLimitManager.getCount() > 0) {
-                mCardLoader.setLimitList(mLimitManager.getLimitFromIndex(0));
-            }
-            mCardLoader.openDb();
-        }).done((rs) -> {
-            dlg.dismiss();
-            onInit();
-        });
-
     }
 
     protected int getDimen(int id){
@@ -119,11 +107,8 @@ abstract class BaseCardsAcitivity extends BaseActivity implements CardLoader.Cal
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            return onBack();
-        }
-        return super.onOptionsItemSelected(item);
+    protected void onBackHome() {
+        onBack();
     }
 
     private boolean onBack(){
@@ -137,11 +122,6 @@ abstract class BaseCardsAcitivity extends BaseActivity implements CardLoader.Cal
         }
         finish();
         return true;
-    }
-
-    protected void onInit() {
-        mCardSelector.initItems();
-        isLoad = true;
     }
 
     protected abstract View getMainView();

@@ -52,6 +52,8 @@ import cn.garymb.ygomobile.utils.BitmapUtil;
 import cn.garymb.ygomobile.utils.IOUtils;
 import cn.garymb.ygomobile.utils.ShareUtil;
 import cn.ygo.ocgcore.LimitList;
+import cn.ygo.ocgcore.LimitManager;
+import cn.ygo.ocgcore.StringManager;
 import cn.ygo.ocgcore.enums.LimitType;
 
 import static cn.garymb.ygomobile.Constants.YDK_FILE_EX;
@@ -102,36 +104,55 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
                 mPreLoad = path;
             }
         }
+        //
+        ProgressDialog dlg = ProgressDialog.show(this, null, getString(R.string.loading));
+        VUiKit.defer().when(() -> {
+            StringManager.get().load();//loadFile(stringfile.getAbsolutePath());
+            LimitManager.get().load();//loadFile(stringfile.getAbsolutePath());
+            if (mLimitManager.getCount() > 0) {
+                mCardLoader.setLimitList(mLimitManager.getLimitFromIndex(0));
+            }
+            mCardLoader.openDb();
+            File file = new File(mSettings.getResourcePath(), Constants.CORE_DECK_PATH + "/" + mSettings.getLastDeck() + Constants.YDK_FILE_EX);
+            if (!TextUtils.isEmpty(mPreLoad)) {
+                file = new File(mPreLoad);
+                mPreLoad = null;
+            }
+            if (!file.exists()) {
+                //当默认卡组不存在的时候
+                File[] files = getYdkFiles();
+                if (files != null && files.length > 0) {
+                    file = files[0];
+                }
+            }
+            //EXTRA_DECK
+            if (file == null) {
+                return new DeckInfo();
+            }
+            mYdkFile = file;
+            if (mCardLoader.isOpen() && file.exists()) {
+                return mDeckAdapater.read(mCardLoader, file, mLimitList);
+            } else {
+                return new DeckInfo();
+            }
+        }).done((rs) -> {
+            isLoad = true;
+            dlg.dismiss();
+            setLimitList(mLimitManager.getCount() > 0 ? mLimitManager.getLimit(0) : null);
+            mCardSelector.initItems();
+            isLoad = true;
+            setCurYdkFile(mYdkFile, false);
+            initDecksListSpinners(mDeckSpinner);
+            mDeckAdapater.setDeck(rs);
+            mDeckAdapater.notifyDataSetChanged();
+
+        });
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-    }
-
-    @Override
-    protected void onInit() {
-        super.onInit();
-        setLimitList(mLimitManager.getCount() > 0 ? mLimitManager.getLimit(0) : null);
-        isLoad = true;
-        boolean noSaveLast = false;
-        File file = new File(mSettings.getResourcePath(), Constants.CORE_DECK_PATH + "/" + mSettings.getLastDeck() + Constants.YDK_FILE_EX);
-        if (!TextUtils.isEmpty(mPreLoad)) {
-            file = new File(mPreLoad);
-            mPreLoad = null;
-            noSaveLast = true;
-        }
-        if (!file.exists()) {
-            //当默认卡组不存在的时候
-            File[] files = getYdkFiles();
-            if (files != null && files.length > 0) {
-                file = files[0];
-            }
-        }
-        mYdkFile = file;
-        initDecksListSpinners(mDeckSpinner);
-        //EXTRA_DECK
-        loadDeck(file, noSaveLast);
     }
 
     @Override
@@ -175,9 +196,9 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
     }
 
     private void setLimitList(LimitList limitList) {
-        boolean nochanged = mLimitList!=null&&TextUtils.equals(mLimitList.getName(), limitList.getName());
+        boolean nochanged = mLimitList != null && TextUtils.equals(mLimitList.getName(), limitList.getName());
         mLimitList = limitList;
-        if(!nochanged) {
+        if (!nochanged) {
             mDeckAdapater.setLimitList(mLimitList);
             mDeckAdapater.notifyDataSetChanged();
         }
@@ -190,6 +211,7 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
     }
 
     private void loadDeck(File file, boolean noSaveLast) {
+        ProgressDialog dlg = ProgressDialog.show(this, null, getString(R.string.loading));
         VUiKit.defer().when(() -> {
             if (file == null) {
                 return new DeckInfo();
@@ -200,6 +222,7 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
                 return new DeckInfo();
             }
         }).done((rs) -> {
+            dlg.dismiss();
             setCurYdkFile(file, noSaveLast);
             mDeckAdapater.setDeck(rs);
             mDeckAdapater.notifyDataSetChanged();
@@ -618,6 +641,7 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
         mSimpleSpinnerAdapter = new SimpleSpinnerAdapter(this);
         mSimpleSpinnerAdapter.set(items);
         mSimpleSpinnerAdapter.setColor(Color.WHITE);
+        mSimpleSpinnerAdapter.setSingleLine(true);
         spinner.setAdapter(mSimpleSpinnerAdapter);
         if (index >= 0) {
             spinner.setSelection(index);
