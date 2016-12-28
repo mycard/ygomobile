@@ -33,7 +33,7 @@ public class DialogPlus {
 
     public DialogPlus(Context context) {
         this.context = context;
-        mBuilder = new AlertDialog.Builder(context,R.style.AppTheme_Dialog_Translucent);
+        mBuilder = new AlertDialog.Builder(context, R.style.AppTheme_Dialog_Translucent);
         mMaxHeight = (int) (context.getResources().getDisplayMetrics().heightPixels * 0.7f);
         mLayoutInflater = LayoutInflater.from(context);
         mView = mLayoutInflater.inflate(R.layout.dialog_plus_base, null);
@@ -188,9 +188,10 @@ public class DialogPlus {
         return (T) mContentView.findViewById(id);
     }
 
-    public DialogPlus loadUrl(String url) {
+    public DialogPlus loadUrl(String url, int bgColor) {
         FrameLayout frameLayout = new FrameLayout(context);
         WebView webView = new WebViewPlus(context);
+        webView.setBackgroundColor(bgColor);
         FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutParams.gravity = Gravity.CENTER_HORIZONTAL;

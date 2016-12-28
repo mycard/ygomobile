@@ -53,6 +53,11 @@
             android:summary="@string/settings_deck_delete_dialog_desc"
             android:title="@string/settings_deck_delete_dialog"/>
 
+       <!-- <EditTextPreference
+            android:key="pref_settings_font_size"
+            android:persistent="true"
+            android:title="@string/set_font_size"/>-->
+
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/settings_category_diy">
         <Preference

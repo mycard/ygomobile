@@ -18,10 +18,13 @@ import cn.garymb.ygomobile.NativeInitOptions;
 import cn.garymb.ygomobile.plus.PreferenceFragmentPlus;
 import cn.garymb.ygomobile.utils.SystemUtils;
 
+import static cn.garymb.ygomobile.Constants.CORE_SYSTEM_PATH;
+import static cn.garymb.ygomobile.Constants.DEF_PREF_FONT_SIZE;
 import static cn.garymb.ygomobile.Constants.PREF_DECK_DELETE_DILAOG;
 import static cn.garymb.ygomobile.Constants.PREF_DEF_DECK_DELETE_DILAOG;
 import static cn.garymb.ygomobile.Constants.PREF_DEF_IMMERSIVE_MODE;
 import static cn.garymb.ygomobile.Constants.PREF_DEF_SENSOR_REFRESH;
+import static cn.garymb.ygomobile.Constants.PREF_FONT_SIZE;
 import static cn.garymb.ygomobile.Constants.PREF_IMMERSIVE_MODE;
 import static cn.garymb.ygomobile.Constants.PREF_LOCK_SCREEN;
 import static cn.garymb.ygomobile.Constants.PREF_SENSOR_REFRESH;
@@ -41,6 +44,10 @@ public class AppsSettings {
 
     public static AppsSettings get() {
         return sAppsSettings;
+    }
+
+    public File getSystemConfig(){
+        return new File(getResourcePath(), String.format(CORE_SYSTEM_PATH, getCoreConfigVersion()));
     }
 
     private AppsSettings(Context context) {
@@ -90,6 +97,10 @@ public class AppsSettings {
 
     public boolean isDialogDelete() {
         return mSharedPreferences.getBoolean(PREF_DECK_DELETE_DILAOG, PREF_DEF_DECK_DELETE_DILAOG);
+    }
+
+    public int getFontSize(){
+        return mSharedPreferences.getInt(PREF_FONT_SIZE, DEF_PREF_FONT_SIZE);
     }
 
     public float getXScale() {
