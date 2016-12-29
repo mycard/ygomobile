@@ -24,6 +24,50 @@ import cn.garymb.ygomobile.utils.IOUtils;
 import cn.ygo.ocgcore.LimitList;
 
 class DeckItemUtils {
+    public static Deck toDeck(List<DeckItem> items, File file) {
+        Deck deck;
+        if (file == null) {
+            deck = new Deck();
+        } else {
+            deck = new Deck(file.getName());
+        }
+        try {
+            for (int i = DeckItem.MainStart; i < DeckItem.ExtraStart + Constants.DECK_MAIN_MAX; i++) {
+                DeckItem deckItem = items.get(i);
+                if (deckItem.getType() == DeckItemType.Space) {
+                    break;
+                }
+                CardInfo cardInfo = deckItem.getCardInfo();
+                if (cardInfo != null) {
+                    deck.addMain(cardInfo.Code);
+                }
+            }
+            for (int i = DeckItem.ExtraStart; i < DeckItem.ExtraStart + Constants.DECK_EXTRA_MAX; i++) {
+                DeckItem deckItem = items.get(i);
+                if (deckItem.getType() == DeckItemType.Space) {
+                    break;
+                }
+                CardInfo cardInfo = deckItem.getCardInfo();
+                if (cardInfo != null) {
+                    deck.addExtra(cardInfo.Code);
+                }
+            }
+            for (int i = DeckItem.SideStart; i < DeckItem.SideStart + Constants.DECK_SIDE_MAX; i++) {
+                DeckItem deckItem = items.get(i);
+                if (deckItem.getType() == DeckItemType.Space) {
+                    break;
+                }
+                CardInfo cardInfo = deckItem.getCardInfo();
+                if (cardInfo != null) {
+                    deck.addSide(cardInfo.Code);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return deck;
+    }
+
     public static boolean save(List<DeckItem> items, File file) {
         FileOutputStream outputStream = null;
         OutputStreamWriter writer = null;

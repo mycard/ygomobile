@@ -159,6 +159,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             startdeck.putExtra(Intent.EXTRA_TEXT, file.getAbsolutePath());
             startActivity(startdeck);
         } else {
+            String host = uri.getHost();
+            if (!Constants.URI_HOST.equalsIgnoreCase(host)) {
+                return;
+            }
             String path = uri.getPath();
             if (PATH_DECK.equals(path)) {
                 String name = uri.getQueryParameter(QUERY_NAME);
@@ -166,7 +170,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     doOpenPath(name);
                 } else {
                     Deck deckInfo = new Deck(uri);
-                    File file = deckInfo.save(AppsSettings.get().getDeckDir());
+                    File file = deckInfo.saveTemp(AppsSettings.get().getDeckDir());
                     Intent startdeck = new Intent(this, DeckManagerActivity.class);
                     startdeck.putExtra(Intent.EXTRA_TEXT, file.getAbsolutePath());
                     startActivity(startdeck);
