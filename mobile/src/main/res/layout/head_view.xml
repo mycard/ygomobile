@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="?attr/actionBarSize"
+    android:layout_marginTop="8dp"
     android:background="@android:color/transparent"
     android:orientation="horizontal">
     <TextView
@@ -11,7 +12,5 @@
         android:background="@drawable/red"
         android:gravity="center_vertical|center_horizontal"
         android:text="@string/deck_delete_text"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textColor="?android:attr/colorControlActivated"
-        android:visibility="invisible" />
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
 </LinearLayout>
