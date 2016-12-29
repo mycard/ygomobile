@@ -43,11 +43,11 @@
             android:key="pref_key_game_lab_pendulum_scale"
             android:persistent="true"
             android:title="@string/settings_game_lab_pendulum_scale"/>
-        <CheckBoxPreference
+        <!--  <CheckBoxPreference
             android:key="pref_key_sensor_refresh"
             android:persistent="true"
             android:title="@string/settings_game_sensor_refresh"/>
-        <CheckBoxPreference
+      <CheckBoxPreference
             android:key="pref_key_deck_delete_dialog"
             android:persistent="true"
             android:summary="@string/settings_deck_delete_dialog_desc"
@@ -56,7 +56,7 @@
        <EditTextPreference
             android:key="pref_settings_font_size"
             android:persistent="true"
-            android:title="@string/set_font_size"/>
+            android:title="@string/set_font_size"/>-->
 
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/settings_category_diy">
