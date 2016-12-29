@@ -382,7 +382,7 @@ public class AppsSettings {
                 array.put(_names.get(i));
             }
         }
-//        Log.i("kk", "save:" + array);
+//        Log.i("kk", "saveTemp:" + array);
         mSharedPreferences.putString(Constants.PREF_LAST_ROOM_LIST, array.toString());
     }
 }

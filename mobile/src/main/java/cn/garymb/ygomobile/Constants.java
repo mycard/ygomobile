@@ -143,6 +143,9 @@ public interface Constants {
      * ygomobile://m.ygomobile.com/game?host=127.0.0.1&port=233&user=player&room=1235$123
      */
     String PATH_DECK = "/deck";
+    String SCHEME_HTTP="https";
+    String SCHEME_APP="ygomobile";
+    String URI_HOST="m.ygomobile.com";
 
     String QUERY_YDK = "ydk";
     String QUERY_NAME = "name";

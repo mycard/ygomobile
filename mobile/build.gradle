@@ -51,6 +51,7 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile project(':libcore')
+    compile 'com.android.volley:volley:1.0.0'
     compile 'org.jdeferred:jdeferred-android-aar:1.2.4'
     compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'com.android.support:recyclerview-v7:25.+'

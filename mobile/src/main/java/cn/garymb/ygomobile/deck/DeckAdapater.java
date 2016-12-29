@@ -17,6 +17,7 @@ import java.util.Random;
 
 import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.bean.CardInfo;
+import cn.garymb.ygomobile.bean.Deck;
 import cn.garymb.ygomobile.bean.DeckInfo;
 import cn.garymb.ygomobile.core.CardLoader;
 import cn.garymb.ygomobile.core.loader.ImageLoader;
@@ -467,6 +468,9 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
         return DeckItemUtils.save(mItems, file);
     }
 
+    public Deck toDeck(File file){
+        return DeckItemUtils.toDeck(mItems, file);
+    }
     private <T> int length(List<T> list) {
         return list == null ? 0 : list.size();
     }

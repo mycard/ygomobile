@@ -3,6 +3,8 @@ package cn.garymb.ygomobile.activities;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -24,9 +26,21 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -34,6 +48,7 @@ import java.util.Map;
 import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.adapters.CardListAdapater;
 import cn.garymb.ygomobile.bean.CardInfo;
+import cn.garymb.ygomobile.bean.Deck;
 import cn.garymb.ygomobile.bean.DeckInfo;
 import cn.garymb.ygomobile.core.AppsSettings;
 import cn.garymb.ygomobile.core.CardDetail;
@@ -571,6 +586,9 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
             case R.id.action_sort:
                 mDeckAdapater.sort();
                 break;
+            case R.id.action_share_deck:
+                shareDeck();
+                break;
 //            case R.id.action_share_image:
 //                shareDeck();
 //                mDeckAdapater.notifyDataSetChanged();
@@ -580,23 +598,42 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
     }
 
     private void shareDeck() {
-        ProgressDialog dialog = ProgressDialog.show(this, null, "share");
-        Bitmap bmp = BitmapUtil.getBitmapFromView(mRecyclerView);
-        if (bmp == null || mYdkFile == null) {
-            Toast.makeText(this, "get image fail", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        File file = new File(mSettings.getResourcePath(), Constants.SHARE_FILE);
-        VUiKit.defer().when(() -> {
-            return BitmapUtil.saveBitmap(bmp, file.getAbsolutePath(), 100);
-        }).done((rs) -> {
-            dialog.dismiss();
-            if (rs) {
-                ShareUtil.shareImage(this, "share deck", file.getAbsolutePath(), null);
-            } else {
-                Toast.makeText(this, "save image fail", Toast.LENGTH_SHORT).show();
+        Deck deck = mDeckAdapater.toDeck(mYdkFile);
+        String label = TextUtils.isEmpty(deck.getName()) ? getString(R.string.share_deck) : deck.getName();
+        final String uriString = deck.toAppUri().toString();
+        RequestQueue mQueue = Volley.newRequestQueue(this);
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://dwz.cn/create.php",
+                (response) -> {
+                    Log.i("kk", "json=" + response);
+                    JSONObject jsonObject = null;
+                    try {
+                        jsonObject = new JSONObject(response);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    if (null == jsonObject) {
+                        Toast.makeText(this, R.string.deck_share_fail, Toast.LENGTH_SHORT).show();
+                    } else {
+                        String url = getString(R.string.deck_share_head) + "  " +jsonObject.optString("tinyurl");
+                        ShareUtil.shareText(this, getString(R.string.share_deck), url, null);
+                        ClipboardManager clipboardManager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+                        clipboardManager.setText(url);
+                        clipboardManager.setPrimaryClip(ClipData.newPlainText(label,  url));
+                        Toast.makeText(this, R.string.copy_to_clipbroad, Toast.LENGTH_SHORT).show();
+                    }
+                },
+                (error) -> {
+                    Log.e("kk", "error=" + error);
+                }
+        ) {
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> map = new HashMap<>();
+                map.put("url", uriString);
+                return map;
             }
-        });
+        };
+        mQueue.add(stringRequest);
     }
 
     private File getSelectDeck(Spinner spinner) {

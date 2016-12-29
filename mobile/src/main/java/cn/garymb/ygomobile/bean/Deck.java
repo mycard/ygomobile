@@ -4,11 +4,13 @@ import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
+import android.util.Log;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.deck.DeckItem;
 import cn.garymb.ygomobile.deck.DeckUtils;
 
@@ -64,12 +66,50 @@ public class Deck implements Parcelable {
         }
     }
 
+    public Uri toAppUri() {
+        return toUri(Constants.SCHEME_APP);
+    }
+
+    public Uri toHttpUri() {
+        return toUri(Constants.SCHEME_HTTP);
+    }
+
+    public Uri toUri(String host) {
+        Uri.Builder uri = Uri.parse(host + "://")
+                .buildUpon()
+                .authority(Constants.URI_HOST)
+                .path(Constants.PATH_DECK);
+        if (!TextUtils.isEmpty(name)) {
+            uri.appendQueryParameter(Constants.QUERY_NAME, name);
+        }
+        uri.appendQueryParameter(Constants.QUERY_MAIN, toString(mainlist))
+                .appendQueryParameter(Constants.QUERY_EXTRA, toString(extraList))
+                .appendQueryParameter(Constants.QUERY_SIDE, toString(sideList));
+        return uri.build();
+    }
+
+    private String toString(List<Long> ids) {
+        StringBuilder builder = new StringBuilder();
+        int i = 0;
+        for (Long id : ids) {
+            if (i > 0) {
+                builder.append(",");
+            }
+            if (id > 0) {
+                builder.append(id);
+                i++;
+            }
+        }
+        return builder.toString();
+    }
+
+
     public String getName() {
         return name;
     }
 
 
-    public File save(String dir) {
+    public File saveTemp(String dir) {
         if (TextUtils.isEmpty(name)) {
             name = "__noname.ydk";
         }
@@ -82,6 +122,7 @@ public class Deck implements Parcelable {
     }
 
     private long toId(String str) {
+        if (TextUtils.isEmpty(str)) return 0;
         try {
             return Long.parseLong(str);
         } catch (Exception e) {
@@ -106,6 +147,17 @@ public class Deck implements Parcelable {
         return extraList;
     }
 
+    public void addMain(Long id) {
+        mainlist.add(id);
+    }
+
+    public void addExtra(Long id) {
+        extraList.add(id);
+    }
+
+    public void addSide(Long id) {
+        sideList.add(id);
+    }
 
     @Override
     public int describeContents() {
