@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
@@ -47,7 +48,7 @@ public class AboutFragment extends PreferenceFragmentPlus {
         if ("pref_key_change_log".equals(key)) {
             new DialogPlus(getActivity())
                     .setTitle(getString(R.string.settings_about_change_log))
-                    .loadUrl("file:///android_asset/changelog.html")
+                    .loadUrl("file:///android_asset/changelog.html", Color.TRANSPARENT)
                     .show();
         } else if ("pref_key_open_alipay".equals(key)) {
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.ALIPAY_URL));
@@ -55,12 +56,5 @@ public class AboutFragment extends PreferenceFragmentPlus {
             startActivity(intent);
         }
         return false;
-    }
-
-    private void showDialog(String title, String url) {
-        new DialogPlus(getActivity())
-                .setTitle(title)
-                .loadUrl(url)
-                .show();
     }
 }

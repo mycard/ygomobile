@@ -51,8 +51,7 @@ public class YGOMobileActivity extends NativeActivity implements
         View.OnClickListener,
         PopupWindow.OnDismissListener,
         TextView.OnEditorActionListener,
-        OverlayOvalView.OnDuelOptionsSelectListener,
-        SensorEventListener {
+        OverlayOvalView.OnDuelOptionsSelectListener{
     private static final String TAG = YGOMobileActivity.class.getSimpleName();
     private static final boolean DEBUG = false;
     private static final int CHAIN_CONTROL_PANEL_X_POSITION_LEFT_EDGE = 205;
@@ -67,8 +66,6 @@ public class YGOMobileActivity extends NativeActivity implements
                             | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY) :
                     View.SYSTEM_UI_FLAG_LOW_PROFILE;
 
-    private SensorManager mSensorManager;
-    private Sensor mSensor;
     protected View mContentView;
     protected ComboBoxCompat mGlobalComboBox;
     protected EditWindowCompat mGlobalEditText;
@@ -112,24 +109,12 @@ public class YGOMobileActivity extends NativeActivity implements
         mPM = (PowerManager) getSystemService(Context.POWER_SERVICE);
         mNetController = new NetworkController(getApplicationContext());
         handleExternalCommand(getIntent());
-
-        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        if (mSensorManager != null) {
-            //获得重力传感器
-            mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         //注册
-        if (mSensor != null) {
-            if (mApp.isSensorRefresh()) {
-                registerSensor = true;
-                mSensorManager.registerListener(this, mSensor, SensorManager.SENSOR_DELAY_GAME);
-            }
-        }
         if (mApp.canNdkCash()) {
             mNativeCrashHandler.registerForNativeCrash(this);
             registNdkCash = true;
@@ -139,29 +124,8 @@ public class YGOMobileActivity extends NativeActivity implements
     @Override
     protected void onPause() {
         super.onPause();
-        if (registerSensor) {
-            mSensorManager.unregisterListener(this);
-        }
         if (registNdkCash) {
             mNativeCrashHandler.unregisterForNativeCrash();
-        }
-    }
-
-    @Override
-    public void onSensorChanged(SensorEvent event) {
-        if (!mApp.isSensorRefresh()) return;
-        int sensorType = event.sensor.getType();
-        float[] values = event.values;
-        float x = values[0];
-        float y = values[1];
-        float z = values[2];
-//        Log.i(TAG, "x:" + x + "y:" + y + "z:" + z);
-//        Log.i(TAG, "Math.abs(x):" + Math.abs(x) + "Math.abs(y):" + Math.abs(y) + "Math.abs(z):" + Math.abs(z));
-        if (sensorType == Sensor.TYPE_ACCELEROMETER) {
-            int value = 15;//摇一摇阀值,不同手机能达到的最大值不同,如某品牌手机只能达到20
-            if (x >= value || x <= -value || y >= value || y <= -value || z >= value || z <= -value) {
-                refreshTextures();
-            }
         }
     }
 
@@ -171,11 +135,6 @@ public class YGOMobileActivity extends NativeActivity implements
             Toast.makeText(this, R.string.refresh_textures, Toast.LENGTH_SHORT).show();
             IrrlichtBridge.refreshTexture();
         }
-    }
-
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int i) {
-
     }
 
     private void initPostion() {

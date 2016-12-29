@@ -53,6 +53,7 @@ public interface Constants {
     String CORE_CONFIG_PATH = "core";
     String CORE_STRING_PATH = "core/%s/config/strings.conf";
     String CORE_LIMIT_PATH = "core/%s/config/lflist.conf";
+    String CORE_SYSTEM_PATH = "core/%s/config/system.conf";
     String CORE_SKIN_PATH = "textures";
     String CORE_SKIN_PENDULUM_PATH = CORE_SKIN_PATH + "/extra";
     String CORE_DECK_PATH = "deck";
@@ -75,6 +76,9 @@ public interface Constants {
             : new String[]{".jpg", ".png"};
 
     String[] FILE_IMAGE_EX = new String[]{".bmp", ".jpg", ".png", ".gif"};
+
+    String PREF_FONT_SIZE = "pref_settings_font_size";
+    int DEF_PREF_FONT_SIZE = 14;
 
     int REQUEST_CUT_IMG = 0x1000 + 0x10;
     int REQUEST_CHOOSE_FILE = 0x1000 + 0x20;
@@ -117,25 +121,24 @@ public interface Constants {
     long LONG_PRESS_DRAG = 800;
     /***
      * adb shell am start -n cn.garymb.ygomobile/cn.garymb.ygomobile.activities.MainActivity -a ygomobile.intent.action.DECK --es android.intent.extra.TEXT 青眼白龙.ydk
-     *
+     * <p>
      * adb shell am start -n cn.garymb.ygomobile/cn.garymb.ygomobile.activities.MainActivity -a ygomobile.intent.action.DECK --es android.intent.extra.TEXT /sdcard/ygocore/deck/青眼白龙.ydk
      */
     String ACTION_OPEN_DECK = "ygomobile.intent.action.DECK";
     /***
-     *
-     Intent intent1=new Intent("ygomobile.intent.action.GAME");
-     intent1.putExtra("host", "127.0.0.1");
-     intent1.putExtra("port", 233);
-     intent1.putExtra("user", "player");
-     intent1.putExtra("room", "room$123");
-     intent1.setPackage("cn.garymb.ygomobile");
-     startActivity(intent1);
+     * Intent intent1=new Intent("ygomobile.intent.action.GAME");
+     * intent1.putExtra("host", "127.0.0.1");
+     * intent1.putExtra("port", 233);
+     * intent1.putExtra("user", "player");
+     * intent1.putExtra("room", "room$123");
+     * intent1.setPackage("cn.garymb.ygomobile");
+     * startActivity(intent1);
      */
     String ACTION_OPEN_GAME = "ygomobile.intent.action.GAME";
     /**
      * https://m.ygomobile.com/deck?ydk=卡组名&main=124563789,12456487&extra=123,145&side=4564,4546
      * ygomobile://m.ygomobile.com/deck?ydk=卡组名&main=124563789,12456487&extra=123,145&side=4564,4546
-     *
+     * <p>
      * https://m.ygomobile.com/game?host=127.0.0.1&port=233&user=player&room=1235$123
      * ygomobile://m.ygomobile.com/game?host=127.0.0.1&port=233&user=player&room=1235$123
      */

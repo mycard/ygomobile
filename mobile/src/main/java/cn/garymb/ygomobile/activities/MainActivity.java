@@ -1,6 +1,7 @@
 package cn.garymb.ygomobile.activities;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -101,7 +102,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 new DialogPlus(this)
                         .setTitle(getString(R.string.settings_about_change_log))
                         .setCancelable(false)
-                        .loadUrl("file:///android_asset/changelog.html")
+                        .loadUrl("file:///android_asset/changelog.html", Color.TRANSPARENT)
                         .show();
             } else {
                 doOpenDeck(getIntent());

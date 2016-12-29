@@ -18,10 +18,12 @@ import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.utils.FileUtils;
 import cn.garymb.ygomobile.utils.IOUtils;
 import cn.garymb.ygomobile.utils.SystemUtils;
+import cn.ygo.ocgcore.ConfigManager;
 import cn.ygo.ocgcore.LimitManager;
 import cn.ygo.ocgcore.StringManager;
 
 import static cn.garymb.ygomobile.Constants.ASSETS_PATH;
+import static cn.garymb.ygomobile.Constants.CORE_SYSTEM_PATH;
 
 public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
     private static final String TAG = "ResCheckTask";
@@ -127,6 +129,8 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
             IOUtils.createNoMedia(resPath);
             checkDirs();
             copyCoreConfig(verPath.getAbsolutePath(), needsUpdate);
+            //设置字体
+            new ConfigManager(mSettings.getSystemConfig()).setFontSize(mSettings.getFontSize());
 //            copyCoreConfig(new File(mSettings.getResourcePath(), GameSettings.CORE_CONFIG_PATH).getAbsolutePath());
             if (needsUpdate) {
                 setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.tip_new_deck)));
