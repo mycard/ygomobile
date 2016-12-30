@@ -67,7 +67,7 @@
                 <data
                     android:host="m.ygomobile.com"
                     android:pathPrefix="/deck"
-                    android:scheme="https"/>
+                    android:scheme="http"/>
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
