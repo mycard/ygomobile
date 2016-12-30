@@ -16,6 +16,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper2;
 import android.text.InputType;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -26,21 +27,18 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -586,12 +584,8 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
             case R.id.action_sort:
                 mDeckAdapater.sort();
                 break;
-            case R.id.action_share_deck:
-                shareDeck();
-                break;
-//            case R.id.action_share_image:
+//            case R.id.action_share_deck:
 //                shareDeck();
-//                mDeckAdapater.notifyDataSetChanged();
 //                break;
         }
         return super.onOptionsItemSelected(item);
@@ -601,8 +595,14 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
         Deck deck = mDeckAdapater.toDeck(mYdkFile);
         String label = TextUtils.isEmpty(deck.getName()) ? getString(R.string.share_deck) : deck.getName();
         final String uriString = deck.toAppUri().toString();
+        final String httpUri = deck.toHttpUri().toString();
+        shareUrl(uriString, label);
+        /*
         RequestQueue mQueue = Volley.newRequestQueue(this);
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, "http://dwz.cn/create.php",
+        final String url = "http://dwz.wailian.work/api.php?url="
+                + Base64.encodeToString(uriString.getBytes(), Base64.NO_WRAP)+"&site=sina";
+        Log.i("kk", "url=" + url);
+        StringRequest stringRequest = new StringRequest(url,
                 (response) -> {
                     Log.i("kk", "json=" + response);
                     JSONObject jsonObject = null;
@@ -611,29 +611,38 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    if (null == jsonObject) {
-                        Toast.makeText(this, R.string.deck_share_fail, Toast.LENGTH_SHORT).show();
-                    } else {
-                        String url = getString(R.string.deck_share_head) + "  " +jsonObject.optString("tinyurl");
-                        ShareUtil.shareText(this, getString(R.string.share_deck), url, null);
-                        ClipboardManager clipboardManager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-                        clipboardManager.setText(url);
-                        clipboardManager.setPrimaryClip(ClipData.newPlainText(label,  url));
-                        Toast.makeText(this, R.string.copy_to_clipbroad, Toast.LENGTH_SHORT).show();
+                    if (null != jsonObject) {
+                        if("error".equals(jsonObject.optString("result"))){
+                            Log.e("kk", "json=" + jsonObject.optString("data"));
+                        }else {
+                            JSONObject data = jsonObject.optJSONObject("data");
+                            if (data != null) {
+                                shareUrl(data.optString("short_url"), label);
+                                return;
+                            }
+                        }
                     }
+                    shareUrl(httpUri, label);
                 },
                 (error) -> {
                     Log.e("kk", "error=" + error);
+                    shareUrl(httpUri, label);
                 }
-        ) {
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> map = new HashMap<>();
-                map.put("url", uriString);
-                return map;
-            }
-        };
+        );
         mQueue.add(stringRequest);
+        */
+    }
+
+    private void shareUrl(String uri, String label) {
+        String url = getString(R.string.deck_share_head) + "  " + uri;
+        ShareUtil.shareText(this, getString(R.string.share_deck), url, null);
+        ClipboardManager clipboardManager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+        if (Build.VERSION.SDK_INT > 19) {
+            clipboardManager.setPrimaryClip(ClipData.newPlainText(label, uri));
+        } else {
+            clipboardManager.setText(uri);
+        }
+        Toast.makeText(this, R.string.copy_to_clipbroad, Toast.LENGTH_SHORT).show();
     }
 
     private File getSelectDeck(Spinner spinner) {
