@@ -10,21 +10,21 @@
         <keep>true</keep>
     </server>
     <server>
-        <player-name>YGOMobile_User</player-name>
+        <player-name>YGOMobile User</player-name>
         <name>233正式服务器</name>
         <ip>118.178.111.167</ip>
         <port>233</port>
         <keep>true</keep>
     </server>
     <server>
-        <player-name>YGOMobile</player-name>
+        <player-name>fresh chicken</player-name>
         <name>233人机练习</name>
         <ip>118.178.111.167</ip>
         <port>9999</port>
         <keep>true</keep>
     </server>
     <server>
-        <player-name>YGOMobile</player-name>
+        <player-name>YGOMobile User</player-name>
         <name>C萌约战</name>
         <ip>120.24.169.252</ip>
         <port>233</port>
