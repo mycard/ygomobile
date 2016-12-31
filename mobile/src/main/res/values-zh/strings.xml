@@ -68,7 +68,7 @@
     </string-array>
     <!-- settings -->
     <string name="server_name">服务器:</string>
-    <string name="server_ip">IP地址:</string>
+    <string name="server_ip">主机信息:</string>
     <string name="server_user">用户:</string>
     <string name="server_room_name">房间名:</string>
     <string name="server_port">端口:</string>
