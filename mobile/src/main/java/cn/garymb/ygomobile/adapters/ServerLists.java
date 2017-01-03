@@ -4,6 +4,7 @@ package cn.garymb.ygomobile.adapters;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.support.v7.widget.helper.ItemTouchHelper2;
@@ -78,7 +79,7 @@ public class ServerLists {
         recyclerView.addOnItemTouchListener(new RecyclerViewItemListener(recyclerView,
                 new ServerHandler(context, serverAdapater)));
         ItemTouchHelper2 helper = new ItemTouchHelper2(context, new TouchCallback(serverAdapater));
-        helper.setEnableClickDrag(true);
+        helper.setEnableClickDrag(false);
         helper.attachToRecyclerView(recyclerView);
         return serverAdapater;
     }
@@ -99,10 +100,10 @@ public class ServerLists {
 
         @Override
         public void onDragLongPress(int position) {
-            ServerInfo serverInfo = adapater.getItem(position);
-            if (serverInfo != null) {
-                adapater.showEditDialog(serverInfo, position);
-            }
+//            ServerInfo serverInfo = adapater.getItem(position);
+//            if (serverInfo != null) {
+//                adapater.showEditDialog(serverInfo, position);
+//            }
         }
 
         @Override
@@ -160,28 +161,34 @@ public class ServerLists {
             int position = viewHolder.getAdapterPosition();
             ServerInfo serverInfo = adapater.getItem(position);
             if (serverInfo != null) {
-                DialogPlus dialogPlus = new DialogPlus(adapater.getContext());
-                dialogPlus.setTitle(R.string.question);
-                dialogPlus.setMessage(R.string.delete_server_info);
-                dialogPlus.setMessageGravity(Gravity.CLIP_HORIZONTAL);
-                dialogPlus.setLeftButtonListener((dlg, rs) -> {
+                showDelete(adapater.getContext(), serverInfo,(dlg, rs) -> {
                     dlg.dismiss();
                     adapater.removeItem(serverInfo);
                     adapater.saveItems();
-                });
-                dialogPlus.setCancelable(false);
-                dialogPlus.setCloseLinster((dlg, rs) -> {
+                },(dlg, rs) -> {
                     dlg.dismiss();
                     adapater.notifyDataSetChanged();
                 });
-                dialogPlus.show();
             }
         }
+    }
+    private static void showDelete(Context context,ServerInfo serverInfo,
+                                   DialogInterface.OnClickListener ok,
+                                   DialogInterface.OnClickListener cancel){
+        DialogPlus dialogPlus = new DialogPlus(context);
+        dialogPlus.setTitle(R.string.question);
+        dialogPlus.setMessage(R.string.delete_server_info);
+        dialogPlus.setMessageGravity(Gravity.CLIP_HORIZONTAL);
+        dialogPlus.setLeftButtonListener(ok);
+        dialogPlus.setCancelable(false);
+        dialogPlus.setCloseLinster(cancel);
+        dialogPlus.show();
     }
 
     private static class ServerHandler implements RecyclerViewItemListener.OnItemListener {
         private Activity context;
         private ServerAdapater adapater;
+        //防止重复点击
         private boolean isEditing;
 
         public ServerHandler(Activity context, ServerAdapater adapater) {
@@ -196,9 +203,16 @@ public class ServerLists {
         @Override
         public void onItemClick(View view, int position) {
             ServerInfo serverInfo = adapater.getItem(position);
-            if (serverInfo != null) {
-                if (isEditing)
+            if (serverInfo == null) {
+                return;
+            }
+            if (adapater.isEditMode()) {
+                adapater.showEditDialog(serverInfo, position);
+            } else {
+                //进入房间
+                if (isEditing) {
                     return;
+                }
                 isEditing = true;
                 DialogPlus builder = new DialogPlus(getContext());
                 builder.setTitle(R.string.intput_room_name);
