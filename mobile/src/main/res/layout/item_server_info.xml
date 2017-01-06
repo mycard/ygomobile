@@ -30,8 +30,8 @@
                 android:layout_weight="1"
                 android:singleLine="true"
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
-                android:textColor="@color/colorAccentDark"
-                tools:text="Server Name"/>
+                android:textColor="@color/brightgreen"
+                tools:text="233正式服务器"/>
         </LinearLayout>
 
         <LinearLayout

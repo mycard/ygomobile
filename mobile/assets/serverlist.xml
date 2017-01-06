@@ -12,14 +12,14 @@
     <server>
         <player-name>YGOMobile User</player-name>
         <name>233正式服务器</name>
-        <ip>118.178.111.167</ip>
+        <ip>s1.ygo233.com</ip>
         <port>233</port>
         <keep>true</keep>
     </server>
     <server>
         <player-name>fresh chicken</player-name>
         <name>233人机练习</name>
-        <ip>118.178.111.167</ip>
+        <ip>s1.ygo233.com</ip>
         <port>9999</port>
         <keep>true</keep>
     </server>
