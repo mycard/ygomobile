@@ -163,4 +163,5 @@
     <string name="copy_to_clipbroad">Copy to clipbroad</string>
     <string name="deck_share_head">share deck by ygomobile.</string>
     <string name="deck_share_fail">share deck fail</string>
+    <string name="choose_game_path">choose game folder</string>
 </resources>

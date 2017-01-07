@@ -96,11 +96,11 @@ public class SettingFragment extends PreferenceFragmentPlus {
     @Override
     public boolean onPreferenceChange(Preference preference, Object value) {
         super.onPreferenceChange(preference, value);
-        if(PREF_FONT_SIZE.equals(preference.getKey())){
+        if (PREF_FONT_SIZE.equals(preference.getKey())) {
             int size = Constants.DEF_PREF_FONT_SIZE;
             try {
                 size = Integer.parseInt(String.valueOf(value));
-            }catch (Exception e){
+            } catch (Exception e) {
 
             }
             new ConfigManager(mSettings.getSystemConfig()).setFontSize(size);
@@ -149,6 +149,8 @@ public class SettingFragment extends PreferenceFragmentPlus {
             } else {
                 mSettings.setUseExtraCards(false);
             }
+        } else if (PREF_GAME_PATH.equals(key)) {
+            showFolderChooser(preference, mSettings.getResourcePath(), getString(R.string.choose_game_path));
         }
         return false;
     }
@@ -171,8 +173,13 @@ public class SettingFragment extends PreferenceFragmentPlus {
         if (SETTINGS_COVER.equals(key) || SETTINGS_CARD_BG.equals(key)) {
             super.onChooseFileOk(preference, file);
             onPreferenceClick(preference);
-        }
-        if (PREF_USE_EXTRA_CARD_CARDS.equals(key)) {
+        } else if (PREF_GAME_PATH.equalsIgnoreCase(preference.getKey())) {
+            if (!TextUtils.equals(mSettings.getResourcePath(), file)) {
+                Toast.makeText(getActivity(), R.string.restart_app, Toast.LENGTH_SHORT).show();
+            }
+            mSettings.setResourcePath(file);
+            super.onChooseFileOk(preference, file);
+        } else if (PREF_USE_EXTRA_CARD_CARDS.equals(key)) {
             ((CheckBoxPreference) preference).setChecked(true);
             mSettings.setUseExtraCards(true);
             copyDataBase(preference, file);

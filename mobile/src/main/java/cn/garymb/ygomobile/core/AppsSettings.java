@@ -320,6 +320,10 @@ public class AppsSettings {
         return mSharedPreferences.getString(Constants.PREF_GAME_PATH, defPath);
     }
 
+    public void setResourcePath(String path){
+        if(TextUtils.equals(path, getResourcePath()))return;
+        mSharedPreferences.putString(Constants.PREF_GAME_PATH, path);
+    }
     public String getDeckDir() {
         return new File(getResourcePath(), Constants.CORE_DECK_PATH).getAbsolutePath();
     }

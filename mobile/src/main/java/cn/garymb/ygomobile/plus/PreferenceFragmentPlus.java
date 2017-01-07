@@ -21,6 +21,7 @@ import cn.garymb.ygomobile.plus.file.FileActivity;
 import cn.garymb.ygomobile.plus.file.FileOpenType;
 
 import static cn.garymb.ygomobile.Constants.REQUEST_CHOOSE_FILE;
+import static cn.garymb.ygomobile.Constants.REQUEST_CHOOSE_FOLDER;
 import static cn.garymb.ygomobile.Constants.REQUEST_CHOOSE_IMG;
 
 public abstract class PreferenceFragmentPlus extends BasePreferenceFragment {
@@ -46,7 +47,11 @@ public abstract class PreferenceFragmentPlus extends BasePreferenceFragment {
     protected void onChooseFileFail(Preference preference) {
 
     }
-
+    protected void showFolderChooser(Preference preference,  String defPath, String title) {
+        curPreference = preference;
+        Intent intent = FileActivity.getIntent(getActivity(), title, null, defPath, false, FileOpenType.SelectFolder);
+        startActivityForResult(intent, REQUEST_CHOOSE_FOLDER);
+    }
     /***
      * @param preference
      * @param type       *\/*
@@ -163,6 +168,19 @@ public abstract class PreferenceFragmentPlus extends BasePreferenceFragment {
                 onChooseFileFail(curPreference);
             }
         } else if (requestCode == Constants.REQUEST_CHOOSE_FILE) {
+            //选择文件
+            if (data != null) {
+                Uri uri = data.getData();
+                if (uri != null) {
+                    File file = new File(uri.getPath());
+                    if (file.exists()) {
+                        onChooseFileOk(curPreference, file.getAbsolutePath());
+                        return;
+                    }
+                }
+            }
+            onChooseFileFail(curPreference);
+        }else if(requestCode==Constants.REQUEST_CHOOSE_FOLDER){
             //选择文件
             if (data != null) {
                 Uri uri = data.getData();

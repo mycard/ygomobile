@@ -94,35 +94,50 @@ public class FileActivity extends BaseActivity implements AdapterView.OnItemClic
         });
         saveFileButton = bind(R.id.file_save);
         saveFileButton.setOnClickListener((v) -> {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            final EditText editText = new EditText(this);
-            editText.setSingleLine();
-            builder.setTitle(R.string.intpu_name);
-            builder.setView(editText);
-            builder.setNegativeButton(android.R.string.ok, (d, s) -> {
-                if (editText.getText() != null) {
-                    String name = String.valueOf(editText.getText());
-                    if (TextUtils.isEmpty(name)) {
-                        return;
+            if (mFileOpenInfo.getType() == FileOpenType.SelectFolder) {
+                File file = mFileAdapter.getCurPath();
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle(R.string.question);
+                builder.setMessage(getString(R.string.check_choose_file, file.getName()));
+                builder.setNegativeButton(android.R.string.ok, (d, s) -> {
+                    selectFile(file);
+                    d.dismiss();
+                });
+                builder.setNeutralButton(android.R.string.cancel, (d, s) -> {
+                    d.dismiss();
+                });
+                builder.show();
+            } else {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                final EditText editText = new EditText(this);
+                editText.setSingleLine();
+                builder.setTitle(R.string.intpu_name);
+                builder.setView(editText);
+                builder.setNegativeButton(android.R.string.ok, (d, s) -> {
+                    if (editText.getText() != null) {
+                        String name = String.valueOf(editText.getText());
+                        if (TextUtils.isEmpty(name)) {
+                            return;
+                        }
+                        String ex = mFileOpenInfo.getFileExtention();
+                        if (ex != null && !name.endsWith(ex)) {
+                            name += ex;
+                        }
+                        File file = new File(mFileAdapter.getCurPath(), name);
+                        if (!file.isDirectory()) {
+                            selectFile(file);
+                        } else {
+                            Toast.makeText(this, R.string.the_name_is_folder, Toast.LENGTH_SHORT).show();
+                            return;
+                        }
                     }
-                    String ex = mFileOpenInfo.getFileExtention();
-                    if (ex != null && !name.endsWith(ex)) {
-                        name += ex;
-                    }
-                    File file = new File(mFileAdapter.getCurPath(), name);
-                    if (!file.isDirectory()) {
-                        selectFile(file);
-                    } else {
-                        Toast.makeText(this, R.string.the_name_is_folder, Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                }
-                d.dismiss();
-            });
-            builder.setNeutralButton(android.R.string.cancel, (d, s) -> {
-                d.dismiss();
-            });
-            builder.show();
+                    d.dismiss();
+                });
+                builder.setNeutralButton(android.R.string.cancel, (d, s) -> {
+                    d.dismiss();
+                });
+                builder.show();
+            }
         });
     }
 
@@ -138,7 +153,7 @@ public class FileActivity extends BaseActivity implements AdapterView.OnItemClic
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         File file = mFileAdapter.getItemById(id);
         if (file != null && file.isDirectory()) {
-            if (mFileOpenInfo.getType() != FileOpenType.SelectFolder || mFileAdapter.isParent(file)) {
+            if (mFileOpenInfo.getType() == FileOpenType.SelectFolder||mFileAdapter.isParent(file)) {
                 if (mFileAdapter.setPath(file.getAbsolutePath())) {
                     mFileAdapter.loadFiles();
                 }
@@ -215,7 +230,8 @@ public class FileActivity extends BaseActivity implements AdapterView.OnItemClic
 
     private void updateUI() {
         setTitle(mFileOpenInfo.getTitle());
-        if (mFileOpenInfo.getType() == FileOpenType.SaveFile) {
+        if (mFileOpenInfo.getType() == FileOpenType.SaveFile
+                || mFileOpenInfo.getType() == FileOpenType.SelectFolder) {
             saveFileButton.setVisibility(View.VISIBLE);
         } else {
             saveFileButton.setVisibility(View.GONE);
