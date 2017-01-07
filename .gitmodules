@@ -1,9 +1,0 @@
-[submodule "Classes"]
-	path = Classes
-	url = https://code.csdn.net/a247321453/ygomobile-classes.git
-[submodule "irrlicht"]
-	path = irrlicht
-	url = https://code.csdn.net/a247321453/irrlicht-android.git
-[submodule "xml2object"]
-	path = xml2object
-	url = https://github.com/247321453/Xml2Object.git
