@@ -37,6 +37,7 @@ import cn.garymb.ygomobile.settings.SettingsActivity;
 
 import static cn.garymb.ygomobile.Constants.ACTION_OPEN_DECK;
 import static cn.garymb.ygomobile.Constants.ACTION_OPEN_GAME;
+import static cn.garymb.ygomobile.Constants.ACTION_RELOAD;
 import static cn.garymb.ygomobile.Constants.PATH_DECK;
 import static cn.garymb.ygomobile.Constants.PATH_ROOM;
 import static cn.garymb.ygomobile.Constants.QUERY_NAME;
@@ -117,11 +118,27 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        if (ACTION_RELOAD.equals(intent.getAction())) {
+            checkResourceDownload((error, isNew) -> {
+                if (error < 0) {
+                    enableStart = false;
+                } else {
+                    enableStart = true;
+                }
+                doOpenDeck(getIntent());
+            });
+        } else {
+            doOpenDeck(intent);
+        }
+    }
+
+    @Override
     protected void onDestroy() {
         YGOStarter.onDestroy(this);
         super.onDestroy();
     }
-
 
     private void doOpenDeck(Intent intent) {
         if (ACTION_OPEN_DECK.equals(intent.getAction())) {

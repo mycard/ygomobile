@@ -135,6 +135,7 @@ public interface Constants {
      * startActivity(intent1);
      */
     String ACTION_OPEN_GAME = "ygomobile.intent.action.GAME";
+    String ACTION_RELOAD = "ygomobile.intent.action.RELOAD";
     /**
      * https://m.ygomobile.com/deck?ydk=卡组名&main=124563789,12456487&extra=123,145&side=4564,4546
      * ygomobile://m.ygomobile.com/deck?ydk=卡组名&main=124563789,12456487&extra=123,145&side=4564,4546

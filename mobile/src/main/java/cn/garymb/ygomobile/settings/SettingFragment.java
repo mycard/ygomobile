@@ -1,6 +1,7 @@
 package cn.garymb.ygomobile.settings;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
@@ -24,6 +25,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 import cn.garymb.ygomobile.Constants;
+import cn.garymb.ygomobile.activities.MainActivity;
 import cn.garymb.ygomobile.core.AppsSettings;
 import cn.garymb.ygomobile.core.ResCheckTask;
 import cn.garymb.ygomobile.lite.R;
@@ -33,6 +35,7 @@ import cn.garymb.ygomobile.plus.VUiKit;
 import cn.garymb.ygomobile.utils.IOUtils;
 import cn.ygo.ocgcore.ConfigManager;
 
+import static cn.garymb.ygomobile.Constants.ACTION_RELOAD;
 import static cn.garymb.ygomobile.Constants.PREF_DECK_DELETE_DILAOG;
 import static cn.garymb.ygomobile.Constants.PREF_FONT_ANTIALIAS;
 import static cn.garymb.ygomobile.Constants.PREF_FONT_SIZE;
@@ -175,7 +178,9 @@ public class SettingFragment extends PreferenceFragmentPlus {
             onPreferenceClick(preference);
         } else if (PREF_GAME_PATH.equalsIgnoreCase(preference.getKey())) {
             if (!TextUtils.equals(mSettings.getResourcePath(), file)) {
-                Toast.makeText(getActivity(), R.string.restart_app, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getActivity(), R.string.restart_app, Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(getContext(), MainActivity.class).setAction(ACTION_RELOAD));
+                getActivity().finish();
             }
             mSettings.setResourcePath(file);
             super.onChooseFileOk(preference, file);
