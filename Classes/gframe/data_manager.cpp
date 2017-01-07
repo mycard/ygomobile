@@ -9,7 +9,7 @@ DataManager dataManager;
 
 bool DataManager::LoadDB(const char* file) {
 	sqlite3* pDB;
-	if(sqlite3_open(file, &pDB) != SQLITE_OK)
+	if(sqlite3_open_v2(file, &pDB, SQLITE_OPEN_READONLY, 0) != SQLITE_OK)
 		return Error(pDB);
 	sqlite3_stmt* pStmt;
 	const char* sql = "select * from datas,texts where datas._id=texts._id";
@@ -70,8 +70,6 @@ bool DataManager::LoadStrings(const char* file) {
 	FILE* fp = fopen(file, "r");
 	if(!fp)
 		return false;
-	for(int i = 0; i < 2048; ++i)
-		_sysStrings[i] = 0;
 	char linebuf[256];
 	char strbuf[256];
 	int value;
@@ -195,9 +193,12 @@ const wchar_t* DataManager::GetSetName(int code) {
 	return csit->second;
 }
 unsigned int DataManager::GetSetCode(const wchar_t* setname) {
-	for(auto csit = _setnameStrings.begin(); csit != _setnameStrings.end(); ++csit)
-		if(wcscmp(csit->second, setname) == 0)
+	wchar_t strbuff[256];
+	for(auto csit = _setnameStrings.begin(); csit != _setnameStrings.end(); ++csit) {
+		swscanf(csit->second, L"%[^|]", strbuff);//setname|extra info
+		if(wcscmp(strbuff, setname) == 0)
 			return csit->first;
+	}
 	return 0;
 }
 const wchar_t* DataManager::GetNumString(int num, bool bracket) {

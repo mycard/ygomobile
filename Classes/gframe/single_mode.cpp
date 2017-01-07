@@ -112,6 +112,8 @@ int SingleMode::SinglePlayThread(void* param) {
 		mainGame->device->setEventReceiver(&mainGame->menuHandler);
 		mainGame->soundEffectPlayer->doMenuBGM();
 		mainGame->gMutex.Unlock();
+		if(exit_on_return)
+			mainGame->device->closeDevice();
 	}
 	return 0;
 }

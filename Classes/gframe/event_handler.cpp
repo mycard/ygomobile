@@ -323,6 +323,8 @@ bool ClientField::OnEvent(const irr::SEvent& event) {
 				case MSG_SELECT_TRIBUTE:
 				case MSG_SELECT_SUM: {
 					mainGame->HideElement(mainGame->wQuery);
+					if(select_panalmode)
+						mainGame->dField.ShowSelectCard(true);
 					break;
 				}
 				case MSG_SELECT_CHAIN: {
@@ -511,8 +513,6 @@ bool ClientField::OnEvent(const irr::SEvent& event) {
 						for(size_t i = 0; i < remove[command_controler].size(); ++i)
 							if(remove[command_controler][i]->cmdFlag & COMMAND_ACTIVATE)
 								selectable_cards.push_back(remove[command_controler][i]);
-						selectable_cards.reserve(selectable_cards.size() + conti_cards.size());
-						selectable_cards.insert(selectable_cards.end(), conti_cards.begin(), conti_cards.end());
 						break;
 					}
 					case LOCATION_EXTRA: {
@@ -522,7 +522,10 @@ bool ClientField::OnEvent(const irr::SEvent& event) {
 						break;
 					}
 					case POSITION_HINT: {
-						selectable_cards.insert(selectable_cards.end(), conti_cards.begin(), conti_cards.end());
+						selectable_cards = conti_cards;
+						std::sort(selectable_cards.begin(), selectable_cards.end());
+						auto eit = std::unique(selectable_cards.begin(), selectable_cards.end());
+						selectable_cards.erase(eit, selectable_cards.end());
 						conti_selecting = true;
 						break;
 					}
@@ -931,6 +934,13 @@ bool ClientField::OnEvent(const irr::SEvent& event) {
 				}
 				break;
 			}
+			case LISTBOX_ANCARD: {
+				int sel = mainGame->lstANCard->getSelected();
+				if(sel != -1) {
+					mainGame->ShowCardInfo(ancard[sel]);
+				}
+				break;
+			}
 			}
 			break;
 		}
@@ -1151,6 +1161,10 @@ bool ClientField::OnEvent(const irr::SEvent& event) {
 			s32 y = event.MouseInput.Y;
 			hovered_location = 0;
 			irr::core::position2di pos(x, y);
+			if (x < (200 * mainGame->xScale) && y < (270 * mainGame->yScale)) {
+				mainGame->textFont->setTransparency(true);
+				break;
+			 }
 			if(x < 300 * mainGame->xScale)
 				break;
 			if(mainGame->gameConf.control_mode == 1) {
@@ -1368,7 +1382,6 @@ bool ClientField::OnEvent(const irr::SEvent& event) {
 					int command_flag = 0;
 					if(conti_cards.size() == 0)
 						break;
-					if(conti_cards.size())
 						command_flag |= COMMAND_OPERATION;
 					list_command = 1;
 					ShowMenu(command_flag, x, y);
@@ -1495,12 +1508,12 @@ bool ClientField::OnEvent(const irr::SEvent& event) {
 					clicked_card->is_selectable = false;
 				select_counter_count--;
 				if (select_counter_count == 0) {
-					unsigned char respbuf[64];
+					unsigned short int respbuf[32];
 					for(size_t i = 0; i < selectable_cards.size(); ++i)
 						respbuf[i] = (selectable_cards[i]->opParam >> 16) - (selectable_cards[i]->opParam & 0xffff);
 					mainGame->stHintMsg->setVisible(false);
 					ClearSelect();
-					DuelClient::SetResponseB(respbuf, selectable_cards.size());
+					DuelClient::SetResponseB(respbuf, selectable_cards.size() * 2);
 					DuelClient::SendResponse();
 				} else {
 					wchar_t formatBuffer[2048];
@@ -1525,6 +1538,8 @@ bool ClientField::OnEvent(const irr::SEvent& event) {
 		}
 		case irr::EMIE_RMOUSE_LEFT_UP: {
 			if(mainGame->dInfo.isReplay)
+				break;
+			if(event.MouseInput.isLeftPressed())
 				break;
 			s32 x = event.MouseInput.X;
 			s32 y = event.MouseInput.Y;
@@ -1902,7 +1917,7 @@ bool ClientField::OnEvent(const irr::SEvent& event) {
 	case irr::EET_KEY_INPUT_EVENT: {
 		switch(event.KeyInput.Key) {
 		case irr::KEY_KEY_A: {
-			if(mainGame->gameConf.control_mode == 0) {
+			if(mainGame->gameConf.control_mode == 0 && !mainGame->HasFocus(EGUIET_EDIT_BOX)) {
 				mainGame->always_chain = event.KeyInput.PressedDown;
 				mainGame->ignore_chain = false;
 				mainGame->chain_when_avail = false;
@@ -1911,7 +1926,7 @@ bool ClientField::OnEvent(const irr::SEvent& event) {
 			break;
 		}
 		case irr::KEY_KEY_S: {
-			if(mainGame->gameConf.control_mode == 0) {
+			if(mainGame->gameConf.control_mode == 0 && !mainGame->HasFocus(EGUIET_EDIT_BOX)) {
 				mainGame->ignore_chain = event.KeyInput.PressedDown;
 				mainGame->always_chain = false;
 				mainGame->chain_when_avail = false;
@@ -1920,7 +1935,7 @@ bool ClientField::OnEvent(const irr::SEvent& event) {
 			break;
 		}
 		case irr::KEY_KEY_D: {
-			if(mainGame->gameConf.control_mode == 0) {
+			if(mainGame->gameConf.control_mode == 0 && !mainGame->HasFocus(EGUIET_EDIT_BOX)) {
 				mainGame->chain_when_avail = event.KeyInput.PressedDown;
 				mainGame->always_chain = false;
 				mainGame->ignore_chain = false;

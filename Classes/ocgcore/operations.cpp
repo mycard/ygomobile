@@ -706,8 +706,8 @@ int32 field::remove_counter(uint16 step, uint32 reason, card* pcard, uint8 rplay
 	}
 	case 2: {
 		for(uint32 i = 0; i < core.select_cards.size(); ++i)
-			if(returns.bvalue[i] > 0)
-				core.select_cards[i]->remove_counter(countertype, returns.bvalue[i]);
+			if(returns.svalue[i] > 0)
+				core.select_cards[i]->remove_counter(countertype, returns.svalue[i]);
 		return FALSE;
 	}
 	case 3: {
@@ -1528,6 +1528,7 @@ int32 field::summon(uint16 step, uint8 sumplayer, card * target, effect * proc, 
 		target->current.reason_player = sumplayer;
 		if(proc->operation) {
 			pduel->lua->add_param(target, PARAM_TYPE_CARD);
+			pduel->lua->add_param(min_tribute, PARAM_TYPE_INT);
 			core.sub_solving_event.push_back(nil_event);
 			add_process(PROCESSOR_EXECUTE_OPERATION, 0, proc, 0, sumplayer, 0);
 		}
@@ -3419,6 +3420,7 @@ int32 field::send_to(uint16 step, group * targets, effect * reason_effect, uint3
 			pcard->previous.position = pcard->current.position;
 			pcard->current.reason &= ~REASON_TEMPORARY;
 			pcard->fieldid = infos.field_id++;
+			pcard->fieldid_r = pcard->fieldid;
 			pcard->reset(RESET_LEAVE, RESET_EVENT);
 			pcard->clear_relate_effect();
 			remove_card(pcard);
