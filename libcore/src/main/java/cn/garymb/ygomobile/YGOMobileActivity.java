@@ -51,7 +51,7 @@ public class YGOMobileActivity extends NativeActivity implements
         View.OnClickListener,
         PopupWindow.OnDismissListener,
         TextView.OnEditorActionListener,
-        OverlayOvalView.OnDuelOptionsSelectListener{
+        OverlayOvalView.OnDuelOptionsSelectListener {
     private static final String TAG = YGOMobileActivity.class.getSimpleName();
     private static final boolean DEBUG = false;
     private static final int CHAIN_CONTROL_PANEL_X_POSITION_LEFT_EDGE = 205;
@@ -69,7 +69,6 @@ public class YGOMobileActivity extends NativeActivity implements
     protected View mContentView;
     protected ComboBoxCompat mGlobalComboBox;
     protected EditWindowCompat mGlobalEditText;
-    protected PowerManager mPM;
     private volatile long lastRefresh;
     //    private OverlayRectView mChainOverlayView;
 //    private OverlayOvalView mOverlayView;
@@ -83,7 +82,6 @@ public class YGOMobileActivity extends NativeActivity implements
     private Handler handler = new Handler();
     private NativeCrashHandler mNativeCrashHandler;
     private FullScreenUtils mFullScreenUtils;
-    private boolean registerSensor;
 
     @SuppressWarnings("WrongConstant")
     @Override
@@ -110,10 +108,18 @@ public class YGOMobileActivity extends NativeActivity implements
         mNetController = new NetworkController(getApplicationContext());
         handleExternalCommand(getIntent());
     }
-
+    private PowerManager mPM;
+    private PowerManager.WakeLock mLock;
     @Override
     protected void onResume() {
         super.onResume();
+        if (mLock == null) {
+            if (mPM == null) {
+                mPM = (PowerManager) getSystemService(POWER_SERVICE);
+            }
+            mLock = mPM.newWakeLock(PowerManager.SCREEN_DIM_WAKE_LOCK, TAG);
+        }
+        mLock.acquire();
         //注册
         if (mApp.canNdkCash()) {
             mNativeCrashHandler.registerForNativeCrash(this);
@@ -124,6 +130,9 @@ public class YGOMobileActivity extends NativeActivity implements
     @Override
     protected void onPause() {
         super.onPause();
+        if (mLock != null) {
+            mLock.release();
+        }
         if (registNdkCash) {
             mNativeCrashHandler.unregisterForNativeCrash();
         }
