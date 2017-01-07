@@ -29,6 +29,8 @@ field::field(duel* pduel) {
 	infos.copy_id = 1;
 	infos.can_shuffle = TRUE;
 	infos.turn_id = 0;
+	infos.turn_id_by_player[0] = 0;
+	infos.turn_id_by_player[1] = 0;
 	infos.card_id = 1;
 	infos.phase = 0;
 	infos.turn_player = 0;
@@ -1249,18 +1251,15 @@ int32 field::check_release_list(uint8 playerid, int32 count, int32 use_con, int3
 }
 int32 field::get_summon_release_list(card* target, card_set* release_list, card_set* ex_list, card_set* ex_list_sum, group* mg, uint32 ex) {
 	uint8 p = target->current.controler;
-	card* pcard;
 	uint32 rcount = 0;
 	for(int i = 0; i < 5; ++i) {
-		pcard = player[p].list_mzone[i];
+		card* pcard = player[p].list_mzone[i];
 		if(pcard && pcard->is_releasable_by_summon(p, target)) {
 			if(mg && !mg->has_card(pcard))
 				continue;
 			if(release_list)
 				release_list->insert(pcard);
-			if(pcard->is_affected_by_effect(EFFECT_TRIPLE_TRIBUTE, target))
-				pcard->release_param = 3;
-			else if(pcard->is_affected_by_effect(EFFECT_DOUBLE_TRIBUTE, target))
+			if(pcard->is_affected_by_effect(EFFECT_DOUBLE_TRIBUTE, target))
 				pcard->release_param = 2;
 			else
 				pcard->release_param = 1;
@@ -1269,17 +1268,15 @@ int32 field::get_summon_release_list(card* target, card_set* release_list, card_
 	}
 	uint32 ex_sum_max = 0;
 	for(int i = 0; i < 5; ++i) {
-		pcard = player[1 - p].list_mzone[i];
-		if(!(pcard && pcard->is_releasable_by_summon(p, target)))
+		card* pcard = player[1 - p].list_mzone[i];
+		if(!pcard || !pcard->is_releasable_by_summon(p, target))
 			continue;
 		if(mg && !mg->has_card(pcard))
 			continue;
 		if(ex || pcard->is_affected_by_effect(EFFECT_EXTRA_RELEASE)) {
 			if(ex_list)
 				ex_list->insert(pcard);
-			if(pcard->is_affected_by_effect(EFFECT_TRIPLE_TRIBUTE, target))
-				pcard->release_param = 3;
-			else if(pcard->is_affected_by_effect(EFFECT_DOUBLE_TRIBUTE, target))
+			if(pcard->is_affected_by_effect(EFFECT_DOUBLE_TRIBUTE, target))
 				pcard->release_param = 2;
 			else
 				pcard->release_param = 1;
@@ -1290,9 +1287,7 @@ int32 field::get_summon_release_list(card* target, card_set* release_list, card_
 				continue;
 			if(ex_list_sum)
 				ex_list_sum->insert(pcard);
-			if(pcard->is_affected_by_effect(EFFECT_TRIPLE_TRIBUTE, target))
-				pcard->release_param = 3;
-			else if(pcard->is_affected_by_effect(EFFECT_DOUBLE_TRIBUTE, target))
+			if(pcard->is_affected_by_effect(EFFECT_DOUBLE_TRIBUTE, target))
 				pcard->release_param = 2;
 			else
 				pcard->release_param = 1;
@@ -1322,26 +1317,40 @@ int32 field::get_draw_count(uint8 playerid) {
 	return count;
 }
 void field::get_ritual_material(uint8 playerid, effect* peffect, card_set* material) {
-	card* pcard;
 	for(int i = 0; i < 5; ++i) {
-		pcard = player[playerid].list_mzone[i];
-		if(pcard && pcard->get_level() && pcard->is_affect_by_effect(core.reason_effect)
+		card* pcard = player[playerid].list_mzone[i];
+		if(pcard && pcard->get_level() && pcard->is_affect_by_effect(peffect)
 		        && pcard->is_releasable_by_nonsummon(playerid) && pcard->is_releasable_by_effect(playerid, peffect))
 			material->insert(pcard);
 	}
 	for(int i = 0; i < 5; ++i) {
-		pcard = player[1 - playerid].list_mzone[i];
-		if(pcard && pcard->get_level() && pcard->is_affect_by_effect(core.reason_effect)
+		card* pcard = player[1 - playerid].list_mzone[i];
+		if(pcard && pcard->get_level() && pcard->is_affect_by_effect(peffect)
 		        && pcard->is_affected_by_effect(EFFECT_EXTRA_RELEASE)
 		        && pcard->is_releasable_by_nonsummon(playerid) && pcard->is_releasable_by_effect(playerid, peffect))
 			material->insert(pcard);
 	}
 	for(auto cit = player[playerid].list_hand.begin(); cit != player[playerid].list_hand.end(); ++cit)
 		if(((*cit)->data.type & TYPE_MONSTER) && (*cit)->is_releasable_by_nonsummon(playerid))
-			material->insert((*cit));
+			material->insert(*cit);
 	for(auto cit = player[playerid].list_grave.begin(); cit != player[playerid].list_grave.end(); ++cit)
 		if(((*cit)->data.type & TYPE_MONSTER) && (*cit)->is_affected_by_effect(EFFECT_EXTRA_RITUAL_MATERIAL) && (*cit)->is_removeable(playerid))
-			material->insert((*cit));
+			material->insert(*cit);
+}
+void field::get_fusion_material(uint8 playerid, card_set* material) {
+	for(int i = 0; i < 5; ++i) {
+		card* pcard = player[playerid].list_mzone[i];
+		if(pcard)
+			material->insert(pcard);
+	}
+	for(int i = 0; i < 8; ++i) {
+		card* pcard = player[playerid].list_szone[i];
+		if(pcard && pcard->is_affected_by_effect(EFFECT_EXTRA_FUSION_MATERIAL))
+			material->insert(pcard);
+	}
+	for(auto cit = player[playerid].list_hand.begin(); cit != player[playerid].list_hand.end(); ++cit)
+		if((*cit)->data.type & TYPE_MONSTER)
+			material->insert(*cit);
 }
 void field::ritual_release(card_set* material) {
 	card_set rel;
@@ -2172,6 +2181,32 @@ int32 field::check_tuner_material(card* pcard, card* tuner, int32 findex1, int32
 	pduel->restore_assumes();
 	return FALSE;
 }
+int32 field::check_tribute(card* pcard, int32 min, int32 max, group* mg, uint8 toplayer) {
+	int32 ex = FALSE;
+	if(toplayer == 1 - pcard->current.controler)
+		ex = TRUE;
+	card_set release_list, ex_list;
+	int32 m = get_summon_release_list(pcard, &release_list, &ex_list, 0, mg, ex);
+	if(max > m)
+		max = m;
+	if(min > max)
+		return FALSE;
+	int32 s;
+	if(toplayer == pcard->current.controler) {
+		s = release_list.size();
+		max -= (int32)ex_list.size();
+	} else {
+		s = ex_list.size();
+	}
+	int32 fcount = get_useable_count(toplayer, LOCATION_MZONE, pcard->current.controler, LOCATION_REASON_TOFIELD);
+	if(s < -fcount + 1)
+		return FALSE;
+	if(max < 0)
+		max = 0;
+	if(max < -fcount + 1)
+		return FALSE;
+	return TRUE;
+}
 int32 field::check_with_sum_limit(const card_vector& mats, int32 acc, int32 index, int32 count, int32 min, int32 max) {
 	if(count > max)
 		return FALSE;
@@ -2540,7 +2575,7 @@ int32 field::is_player_can_remove(uint8 playerid, card * pcard) {
 	}
 	return TRUE;
 }
-int32 field::is_chain_negatable(uint8 chaincount, uint8 naga_check) {
+int32 field::is_chain_negatable(uint8 chaincount) {
 	effect_set eset;
 	if(chaincount < 0 || chaincount > core.current_chain.size())
 		return FALSE;
@@ -2549,8 +2584,6 @@ int32 field::is_chain_negatable(uint8 chaincount, uint8 naga_check) {
 		peffect = core.current_chain.back().triggering_effect;
 	else
 		peffect = core.current_chain[chaincount - 1].triggering_effect;
-	if(naga_check && peffect->is_flag(EFFECT_FLAG2_NAGA))
-		return FALSE;
 	if(peffect->is_flag(EFFECT_FLAG_CANNOT_DISABLE))
 		return FALSE;
 	filter_field_effect(EFFECT_CANNOT_INACTIVATE, &eset);
@@ -2561,7 +2594,7 @@ int32 field::is_chain_negatable(uint8 chaincount, uint8 naga_check) {
 	}
 	return TRUE;
 }
-int32 field::is_chain_disablable(uint8 chaincount, uint8 naga_check) {
+int32 field::is_chain_disablable(uint8 chaincount) {
 	effect_set eset;
 	if(chaincount < 0 || chaincount > core.current_chain.size())
 		return FALSE;
@@ -2570,8 +2603,6 @@ int32 field::is_chain_disablable(uint8 chaincount, uint8 naga_check) {
 		peffect = core.current_chain.back().triggering_effect;
 	else
 		peffect = core.current_chain[chaincount - 1].triggering_effect;
-	if(naga_check && peffect->is_flag(EFFECT_FLAG2_NAGA))
-		return FALSE;
 	if(!peffect->get_handler()->get_status(STATUS_FORBIDDEN)) {
 		if(peffect->is_flag(EFFECT_FLAG_CANNOT_DISABLE))
 			return FALSE;

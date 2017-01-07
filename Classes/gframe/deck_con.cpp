@@ -17,7 +17,6 @@ static int parse_filter(const wchar_t* pstr, unsigned int* type) {
 	} else if(*pstr >= L'0' && *pstr <= L'9') {
 		*type = 1;
 		return BufferIO::GetVal(pstr);
-	irr::SEvent transferEvent;
 	} else if(*pstr == L'>') {
 		if(*(pstr + 1) == L'=') {
 			*type = 2;
@@ -97,7 +96,8 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 				break;
 			}
 			case BUTTON_SAVE_DECK: {
-				if(deckManager.SaveDeck(deckManager.current_deck, mainGame->cbDBDecks->getItem(mainGame->cbDBDecks->getSelected()))) {
+				int sel = mainGame->cbDBDecks->getSelected();
+				if(sel>-1 && deckManager.SaveDeck(deckManager.current_deck, mainGame->cbDBDecks->getItem(sel))) {
 					mainGame->stACMessage->setText(dataManager.GetSysString(1335));
 					mainGame->PopupElement(mainGame->wACMessage, 20);
 					mainGame->soundEffectPlayer->doSaveDeck();
@@ -156,9 +156,6 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 				mainGame->wACMessage->setVisible(false);
 				imageManager.ClearTexture();
 				mainGame->scrFilter->setVisible(false);
-				if(mainGame->wQuery->isVisible()) {
-					mainGame->HideElement(mainGame->wQuery);
-				}
 				if(mainGame->cbDBDecks->getSelected() != -1) {
 					BufferIO::CopyWStr(mainGame->cbDBDecks->getItem(mainGame->cbDBDecks->getSelected()), mainGame->gameConf.lastdeck, 64);
 				}
@@ -223,6 +220,11 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 				for(size_t i = 0; i < deckManager.current_deck.side.size(); ++i)
 					BufferIO::WriteInt32(pdeck, deckManager.current_deck.side[i]->first);
 				DuelClient::SendBufferToServer(CTOS_UPDATE_DECK, deckbuf, pdeck - deckbuf);
+				break;
+			}
+			case BUTTON_MSG_OK: {
+				mainGame->HideElement(mainGame->wMessage);
+				mainGame->actionSignal.Set();
 				break;
 			}
 			case BUTTON_YES: {
@@ -803,6 +805,8 @@ void DeckBuilder::FilterCards() {
 	unsigned int set_code = 0;
 	if(pstr[0] == L'@')
 		set_code = dataManager.GetSetCode(&pstr[1]);
+	else
+		set_code = dataManager.GetSetCode(&pstr[0]);
 	if(pstr[0] == 0 || (pstr[0] == L'$' && pstr[1] == 0) || (pstr[0] == L'@' && pstr[1] == 0))
 		pstr = 0;
 	auto strpointer = dataManager._strings.begin();
@@ -881,11 +885,9 @@ void DeckBuilder::FilterCards() {
 			} else if(pstr[0] == L'@' && set_code) {
 				if(!check_set_code(data, set_code)) continue;
 			} else {
-				if(wcsstr(text.name, pstr) == 0 && wcsstr(text.text, pstr) == 0) {
-					set_code = dataManager.GetSetCode(&pstr[0]);
-					if(!set_code || !check_set_code(data, set_code))
+				if(wcsstr(text.name, pstr) == 0 && wcsstr(text.text, pstr) == 0
+					&& (!set_code || !check_set_code(data, set_code)))
 						continue;
-				}
 			}
 		}
 		results.push_back(ptr);
