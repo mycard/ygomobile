@@ -15,7 +15,7 @@
             android:inputType="text"
             android:maxLength="128"
             android:singleLine="true"
-            android:textColor="#626262"
+            android:textColor="#FFFFFF"
             android:textCursorDrawable="@null" >
         </EditText>
     </LinearLayout>
