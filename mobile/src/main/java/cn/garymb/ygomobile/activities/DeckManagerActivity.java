@@ -175,6 +175,7 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
 
     @Override
     public void onDragLongPress(int pos) {
+        if(pos<0) return;
         Log.i("kk", "delete " + pos);
         if (mSettings.isDialogDelete()) {
 

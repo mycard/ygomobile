@@ -113,7 +113,9 @@ public class DialogPlus {
     }
 
     public DialogPlus setTitle(String text) {
-        mTitleView.setText(text);
+        if(mTitleView!=null) {
+            mTitleView.setText(text);
+        }
         return this;
     }
 

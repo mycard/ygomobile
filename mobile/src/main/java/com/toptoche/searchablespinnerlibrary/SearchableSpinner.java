@@ -33,7 +33,7 @@ public class SearchableSpinner extends Spinner implements View.OnTouchListener,
     private BaseAdapter _arrayAdapter;
     private String _strHintText;
     private boolean _isFromInit;
-    private String mTitleString="Select Item";
+    private String mTitleString = "Select Item";
 
     public SearchableSpinner(Context context) {
         super(context);
@@ -96,8 +96,10 @@ public class SearchableSpinner extends Spinner implements View.OnTouchListener,
                     _items.add(_arrayAdapter.getItem(i));
                 }
                 // Change end.
-
-                _searchableListDialog.show(scanForActivity(_context).getFragmentManager(), "TAG");
+                //修复 重复点击 bug
+                if (!_searchableListDialog.isAdded()) {
+                    _searchableListDialog.show(scanForActivity(_context).getFragmentManager(), "TAG");
+                }
             }
         }
         return true;

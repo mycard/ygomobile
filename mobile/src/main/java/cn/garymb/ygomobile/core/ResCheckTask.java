@@ -63,7 +63,14 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
     @Override
     protected void onPostExecute(final Integer result) {
         super.onPostExecute(result);
-        dialog.dismiss();
+        //关闭异常
+        if(dialog.isShowing()) {
+            try {
+                dialog.dismiss();
+            }catch (Exception e){
+
+            }
+        }
         if (mListener != null) {
             mListener.onResCheckFinished(result, isNewVersion);
         }
@@ -246,6 +253,9 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
             return null;
         }
         String[] files = verPath.list();
+        if(files==null){
+            return null;
+        }
         for (String file : files) {
             File f = new File(verPath, file);
             if (f.isDirectory()) {

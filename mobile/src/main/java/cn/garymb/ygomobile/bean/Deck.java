@@ -22,9 +22,9 @@ import static cn.garymb.ygomobile.Constants.YDK_FILE_EX;
 
 public class Deck implements Parcelable {
     private String name;
-    private final List<Long> mainlist;
-    private final List<Long> extraList;
-    private final List<Long> sideList;
+    private final ArrayList<Long> mainlist;
+    private final ArrayList<Long> extraList;
+    private final ArrayList<Long> sideList;
 
     public Deck() {
         mainlist = new ArrayList<>();

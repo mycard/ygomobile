@@ -318,7 +318,7 @@ public class ServerLists {
     public static class ServerAdapater extends BaseRecyclerAdapterPlus<ServerInfo, ServerInfoViewHolder> implements IDataLoader {
         private final File xmlFile;
         private ILoadCallBack loadCallBack;
-        private boolean mEditMode;
+        private volatile boolean mEditMode;
         private OnEditListener mOnEditListener;
 
         public ServerAdapater(Context context) {
@@ -481,7 +481,8 @@ public class ServerLists {
             } finally {
                 IOUtils.close(outputStream);
             }
-            notifyDataSetChanged();
+            //修复 拖动 异常
+//            notifyDataSetChanged();
         }
     }
 }

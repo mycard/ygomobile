@@ -86,6 +86,7 @@ public class YGOMobileActivity extends NativeActivity implements
     @SuppressWarnings("WrongConstant")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         if (getApplication() instanceof GameApplication) {
             mApp = (GameApplication) getApplication();
         } else {
@@ -94,7 +95,6 @@ public class YGOMobileActivity extends NativeActivity implements
         }
         mNativeCrashHandler = new NativeCrashHandler();
         mFullScreenUtils = new FullScreenUtils(this, mApp.isImmerSiveMode());
-        super.onCreate(savedInstanceState);
         mFullScreenUtils.fullscreen();
         mFullScreenUtils.onCreate();
         if (sChainControlXPostion < 0) {

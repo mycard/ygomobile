@@ -161,6 +161,8 @@ public class SettingFragment extends PreferenceFragmentPlus {
     @Override
     protected void onChooseFileFail(Preference preference) {
         super.onChooseFileFail(preference);
+        //空指针异常
+        if(preference==null)return;
         String key = preference.getKey();
         if (PREF_USE_EXTRA_CARD_CARDS.equals(key)) {
             mSettings.setUseExtraCards(false);
