@@ -308,6 +308,15 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 //                }
             }
             break;
+            case R.id.action_update:
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.DOWNLOAD_HOME));
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                try {
+                    startActivity(intent);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
             default:
                 return false;
         }

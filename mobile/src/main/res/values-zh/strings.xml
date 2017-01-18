@@ -161,4 +161,5 @@
     <string name="deck_share_head">卡组分享来源YGOMobile</string>
     <string name="deck_share_fail">卡组分享失败</string>
     <string name="choose_game_path">选择游戏目录</string>
+    <string name="download_home">网盘下载</string>
 </resources>

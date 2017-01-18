@@ -25,6 +25,10 @@
                 android:icon="@drawable/ic_live_help"
                 android:title="@string/help"/>
             <item
+                android:id="@+id/action_update"
+                android:icon="@drawable/ic_file_download_black_24dp"
+                android:title="@string/download_home"/>
+            <item
                 android:id="@+id/action_about"
                 android:icon="@drawable/ic_about"
                 android:title="@string/action_about"/>

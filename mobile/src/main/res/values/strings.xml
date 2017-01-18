@@ -164,4 +164,5 @@
     <string name="deck_share_head">share deck by ygomobile.</string>
     <string name="deck_share_fail">share deck fail</string>
     <string name="choose_game_path">choose game folder</string>
+    <string name="download_home">NetDisk Page</string>
 </resources>

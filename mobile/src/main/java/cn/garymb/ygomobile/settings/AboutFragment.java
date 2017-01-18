@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.preference.Preference;
 
 import cn.garymb.ygomobile.Constants;
+import cn.garymb.ygomobile.activities.WebActivity;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.plus.DialogPlus;
 import cn.garymb.ygomobile.plus.PreferenceFragmentPlus;
@@ -54,6 +55,14 @@ public class AboutFragment extends PreferenceFragmentPlus {
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.ALIPAY_URL));
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
+        }else if("pref_key_about_check_update".equals(key)){
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.DOWNLOAD_HOME));
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            try {
+                startActivity(intent);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         return false;
     }

@@ -85,7 +85,7 @@ public class WebViewPlus extends WebView {
                 try {
                     context.startActivity(intent);
                 } catch (Exception e) {
-
+                    e.printStackTrace();
                 }
             }
         });
