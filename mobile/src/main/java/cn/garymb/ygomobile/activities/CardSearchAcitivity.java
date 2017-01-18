@@ -151,7 +151,10 @@ public class CardSearchAcitivity extends BaseActivity implements CardLoader.Call
     public void onResetSearch() {
 
     }
-
+    private boolean isShowDrawer(){
+        return mDrawerlayout.isDrawerOpen(Gravity.LEFT)
+                || mDrawerlayout.isDrawerOpen(Gravity.RIGHT);
+    }
     @Override
     public void onSearchStart(LimitList limitList) {
         if (mDrawerlayout.isDrawerOpen(Constants.CARD_SEARCH_GRAVITY)) {
@@ -192,6 +195,7 @@ public class CardSearchAcitivity extends BaseActivity implements CardLoader.Call
     }
 
     protected void onCardClick(CardInfo cardInfo, int pos) {
+        if(isShowDrawer())return;
         showCard(cardInfo);
     }
 

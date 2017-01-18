@@ -288,6 +288,9 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
 
     @Override
     protected void onCardClick(CardInfo cardInfo, int pos) {
+        if(isShowDrawer()){
+            return;
+        }
         showCardDialog(cardInfo, pos);
     }
 
@@ -315,6 +318,9 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
 
     @Override
     public void onItemClick(View view, int pos) {
+        if(isShowDrawer()){
+            return;
+        }
         if (!Constants.DECK_SINGLE_PRESS_DRAG) {
             DeckItem deckItem = mDeckAdapater.getItem(pos);
             if (deckItem != null) {
@@ -325,6 +331,9 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
 
     @Override
     public void onItemLongClick(View view, int pos) {
+        if(isShowDrawer()){
+            return;
+        }
         //拖拽中，就不显示
         if (Constants.DECK_SINGLE_PRESS_DRAG) {
         }
@@ -333,6 +342,9 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
     @Override
     public void onItemDoubleClick(View view, int pos) {
         //拖拽中，就不显示
+        if(isShowDrawer()){
+            return;
+        }
         if (Constants.DECK_SINGLE_PRESS_DRAG) {
             DeckItem deckItem = mDeckAdapater.getItem(pos);
             if (deckItem != null) {
@@ -341,6 +353,10 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
         }
     }
 
+    private boolean isShowDrawer(){
+        return mDrawerlayout.isDrawerOpen(Gravity.LEFT)
+                || mDrawerlayout.isDrawerOpen(Gravity.RIGHT);
+    }
     protected void showCardDialog(CardInfo cardInfo, int pos) {
         if (cardInfo != null) {
             if (isShowing) return;
