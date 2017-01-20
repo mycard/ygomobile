@@ -332,8 +332,6 @@
                 android:layout_height="match_parent"
                 android:layout_marginTop="2dp"
                 android:background="@drawable/red"
-                android:padding="4dp"
-                android:paddingRight="4dp"
                 android:scrollbars="none">
 
                 <TextView
@@ -341,6 +339,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="left|top"
+                    android:paddingBottom="10dp"
                     android:minHeight="@dimen/card_desc_height"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                     android:textColor="@android:color/holo_blue_light"
