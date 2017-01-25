@@ -451,6 +451,11 @@ public class ServerLists {
                 }
                 if (isAdd) {
                     mItems.add(info);
+                    this.notifyDataSetChanged();
+                }else{
+                    if(position >= 0) {
+                        this.notifyItemChanged(position);
+                    }
                 }
                 info.setPort(Integer.valueOf("" + editViewHolder.serverPort.getText()));
 //            info.setPassword("" + editViewHolder.userPassword.getText());
