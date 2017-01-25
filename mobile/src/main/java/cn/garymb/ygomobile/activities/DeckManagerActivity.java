@@ -6,7 +6,6 @@ import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,7 +15,6 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper2;
 import android.text.InputType;
 import android.text.TextUtils;
-import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
@@ -26,15 +24,6 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
-
-
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-
-import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
@@ -61,7 +50,6 @@ import cn.garymb.ygomobile.plus.RecyclerViewItemListener;
 import cn.garymb.ygomobile.plus.VUiKit;
 import cn.garymb.ygomobile.plus.spinner.SimpleSpinnerAdapter;
 import cn.garymb.ygomobile.plus.spinner.SimpleSpinnerItem;
-import cn.garymb.ygomobile.utils.BitmapUtil;
 import cn.garymb.ygomobile.utils.IOUtils;
 import cn.garymb.ygomobile.utils.ShareUtil;
 import cn.ygo.ocgcore.LimitList;
@@ -288,9 +276,9 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
 
     @Override
     protected void onCardClick(CardInfo cardInfo, int pos) {
-        if(isShowDrawer()){
-            return;
-        }
+//        if(isShowDrawer()){
+//            return;
+//        }
         showCardDialog(cardInfo, pos);
     }
 
