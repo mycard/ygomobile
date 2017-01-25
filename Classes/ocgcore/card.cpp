@@ -420,7 +420,7 @@ uint32 card::get_fusion_type() {
 int32 card::get_base_attack() {
 	if(!(data.type & TYPE_MONSTER) && !(get_type() & TYPE_MONSTER) && !is_affected_by_effect(EFFECT_PRE_MONSTER))
 		return 0;
-	if (current.location != LOCATION_MZONE || is_status(STATUS_SUMMONING))
+	if (current.location != LOCATION_MZONE || get_status(STATUS_SUMMONING | STATUS_SPSUMMON_STEP))
 		return data.attack;
 	if (temp.base_attack != -1)
 		return temp.base_attack;
@@ -485,7 +485,7 @@ int32 card::get_attack() {
 		return assume_value;
 	if(!(data.type & TYPE_MONSTER) && !(get_type() & TYPE_MONSTER) && !is_affected_by_effect(EFFECT_PRE_MONSTER))
 		return 0;
-	if (current.location != LOCATION_MZONE || is_status(STATUS_SUMMONING))
+	if (current.location != LOCATION_MZONE || get_status(STATUS_SUMMONING | STATUS_SPSUMMON_STEP))
 		return data.attack;
 	if (temp.attack != -1)
 		return temp.attack;
@@ -614,7 +614,7 @@ int32 card::get_attack() {
 int32 card::get_base_defense() {
 	if(!(data.type & TYPE_MONSTER) && !(get_type() & TYPE_MONSTER) && !is_affected_by_effect(EFFECT_PRE_MONSTER))
 		return 0;
-	if (current.location != LOCATION_MZONE || is_status(STATUS_SUMMONING))
+	if (current.location != LOCATION_MZONE || get_status(STATUS_SUMMONING | STATUS_SPSUMMON_STEP))
 		return data.defense;
 	if (temp.base_defense != -1)
 		return temp.base_defense;
@@ -678,7 +678,7 @@ int32 card::get_defense() {
 		return assume_value;
 	if(!(data.type & TYPE_MONSTER) && !(get_type() & TYPE_MONSTER) && !is_affected_by_effect(EFFECT_PRE_MONSTER))
 		return 0;
-	if (current.location != LOCATION_MZONE || is_status(STATUS_SUMMONING))
+	if (current.location != LOCATION_MZONE || get_status(STATUS_SUMMONING | STATUS_SPSUMMON_STEP))
 		return data.defense;
 	if (temp.defense != -1)
 		return temp.defense;
@@ -2301,6 +2301,23 @@ int32 card::is_summonable_card() {
 	if(!(data.type & TYPE_MONSTER))
 		return FALSE;
 	return !is_affected_by_effect(EFFECT_UNSUMMONABLE_CARD);
+}
+int32 card::is_fusion_summonable_card(uint32 summon_type) {
+	if(!(data.type & TYPE_FUSION))
+		return FALSE;
+	summon_type |= SUMMON_TYPE_FUSION;
+	effect_set eset;
+	filter_effect(EFFECT_SPSUMMON_CONDITION, &eset);
+	for(int32 i = 0; i < eset.size(); ++i) {
+		pduel->lua->add_param((void*)0, PARAM_TYPE_EFFECT);
+		pduel->lua->add_param((void*)0, PARAM_TYPE_INT);
+		pduel->lua->add_param(summon_type, PARAM_TYPE_INT);
+		pduel->lua->add_param((void*)0, PARAM_TYPE_INT);
+		pduel->lua->add_param((void*)0, PARAM_TYPE_INT);
+		if(!eset[i]->check_value_condition(5))
+			return FALSE;
+	}
+	return TRUE;
 }
 // check if this can be summoned/sp_summoned by procedure peffect
 // check the condition of peffect

@@ -418,18 +418,16 @@ bool ClientField::OnEvent(const irr::SEvent& event) {
 				mainGame->soundEffectPlayer->doPressButton();
 				if (mainGame->dInfo.curMsg == MSG_SELECT_OPTION) {
 					DuelClient::SetResponseI(selected_option);
-				} else if (mainGame->dInfo.curMsg == MSG_SELECT_IDLECMD) {
-					int index = 0;
-					while(activatable_cards[index] != command_card || activatable_descs[index].first != select_options[selected_option]) index++;
-					DuelClient::SetResponseI((index << 16) + 5);
-				} else if (mainGame->dInfo.curMsg == MSG_SELECT_BATTLECMD) {
-					int index = 0;
-					while(activatable_cards[index] != command_card || activatable_descs[index].first != select_options[selected_option]) index++;
-					DuelClient::SetResponseI(index << 16);
 				} else {
 					int index = 0;
 					while(activatable_cards[index] != command_card || activatable_descs[index].first != select_options[selected_option]) index++;
+					if (mainGame->dInfo.curMsg == MSG_SELECT_IDLECMD) {
+					DuelClient::SetResponseI((index << 16) + 5);
+				} else if (mainGame->dInfo.curMsg == MSG_SELECT_BATTLECMD) {
+					DuelClient::SetResponseI(index << 16);
+				} else {
 					DuelClient::SetResponseI(index);
+					}
 				}
 				mainGame->HideElement(mainGame->wOptions, true);
 				break;

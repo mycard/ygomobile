@@ -151,6 +151,7 @@ static const struct luaL_Reg cardlib[] = {
 	{ "IsDisabled", scriptlib::card_is_disabled },
 	{ "IsDestructable", scriptlib::card_is_destructable },
 	{ "IsSummonableCard", scriptlib::card_is_summonable },
+	{ "IsFusionSummonableCard", scriptlib::card_is_fusion_summonable_card },
 	{ "IsSpecialSummonable", scriptlib::card_is_special_summonable },
 	{ "IsSynchroSummonable", scriptlib::card_is_synchro_summonable },
 	{ "IsXyzSummonable", scriptlib::card_is_xyz_summonable },
@@ -680,7 +681,7 @@ int32 interpreter::load_card_script(uint32 code) {
 		lua_pushvalue(current_state, -2);
 		lua_rawset(current_state, -3);
 		//load extra scripts
-		sprintf(script_name, "./expansions/script/c%d.lua", code);
+		sprintf(script_name, "./script/c%d.lua", code);
 		if (!load_script(script_name)) {
 			sprintf(script_name, "./script/c%d.lua", code);
 	 		if (!load_script(script_name)) {

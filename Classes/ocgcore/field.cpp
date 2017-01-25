@@ -989,7 +989,7 @@ int32 field::filter_matching_card(int32 findex, uint8 self, uint32 location1, ui
 		if(location & LOCATION_MZONE) {
 			for(uint32 i = 0; i < 5; ++i) {
 				pcard = player[self].list_mzone[i];
-				if(pcard && !pcard->is_status(STATUS_SUMMONING) && !pcard->is_status(STATUS_SUMMON_DISABLED) && !pcard->is_status(STATUS_SPSUMMON_STEP) 
+				if(pcard && !pcard->get_status(STATUS_SUMMONING | STATUS_SUMMON_DISABLED | STATUS_SPSUMMON_STEP)
 						&& pcard != pexception && pduel->lua->check_matching(pcard, findex, extraargs) 
 						&& (!is_target || pcard->is_capable_be_effect_target(core.reason_effect, core.reason_player))) {
 					if(pret) {
@@ -1123,7 +1123,7 @@ int32 field::filter_field_card(uint8 self, uint32 location1, uint32 location2, g
 		if(location & LOCATION_MZONE) {
 			for(int i = 0; i < 5; ++i) {
 				pcard = player[self].list_mzone[i];
-				if(pcard && !pcard->is_status(STATUS_SUMMONING)) {
+				if(pcard && !pcard->get_status(STATUS_SUMMONING | STATUS_SPSUMMON_STEP)) {
 					if(pgroup)
 						pgroup->container.insert(pcard);
 					count++;
@@ -1402,7 +1402,7 @@ void field::get_overlay_group(uint8 self, uint8 s, uint8 o, card_set* pset) {
 		if(c) {
 			for(int i = 0; i < 5; ++i) {
 				pcard = player[self].list_mzone[i];
-				if(pcard && !pcard->is_status(STATUS_SUMMONING) && pcard->xyz_materials.size())
+				if(pcard && !pcard->get_status(STATUS_SUMMONING | STATUS_SPSUMMON_STEP) && pcard->xyz_materials.size())
 					pset->insert(pcard->xyz_materials.begin(), pcard->xyz_materials.end());
 			}
 		}
@@ -1417,7 +1417,7 @@ int32 field::get_overlay_count(uint8 self, uint8 s, uint8 o) {
 		if(c) {
 			for(int i = 0; i < 5; ++i) {
 				card* pcard = player[self].list_mzone[i];
-				if(pcard && !pcard->is_status(STATUS_SUMMONING))
+				if(pcard && !pcard->get_status(STATUS_SUMMONING | STATUS_SPSUMMON_STEP))
 					count += pcard->xyz_materials.size();
 			}
 		}
@@ -2269,7 +2269,42 @@ int32 field::check_with_sum_greater_limit_m(const card_vector& mats, int32 acc, 
 }
 int32 field::check_xyz_material(card* scard, int32 findex, int32 lv, int32 min, int32 max, group* mg) {
 	get_xyz_material(scard, findex, lv, max, mg);
+	if(!(core.global_flag & GLOBALFLAG_TUNE_MAGICIAN))
 	return (int32)core.xmaterial_lst.size() >= min;
+	for(auto cit = core.xmaterial_lst.begin(); cit != core.xmaterial_lst.end(); ++cit)
+		cit->second->sum_param = 0;
+	int32 digit = 1;
+	for(auto cit = core.xmaterial_lst.begin(); cit != core.xmaterial_lst.end(); ++cit) {
+		card* pcard = cit->second;
+		effect* peffect = pcard->is_affected_by_effect(EFFECT_TUNE_MAGICIAN_X);
+		if(peffect) {
+			digit <<= 1;
+			for(auto mit = core.xmaterial_lst.begin(); mit != core.xmaterial_lst.end(); ++mit) {
+				if(!peffect->get_value(mit->second))
+					mit->second->sum_param |= digit;
+			}
+			pcard->sum_param |= digit;
+		} else
+			pcard->sum_param |= 1;
+	}
+	std::multimap<int32, card*, std::greater<int32> > mat;
+	for(int32 icheck = 1; icheck <= digit; icheck <<= 1) {
+		mat.clear();
+		for(auto cit = core.xmaterial_lst.begin(); cit != core.xmaterial_lst.end(); ++cit) {
+			if(cit->second->sum_param & icheck)
+				mat.insert(*cit);
+		}
+		if(core.global_flag & GLOBALFLAG_XMAT_COUNT_LIMIT) {
+			int32 maxc = std::min(max, (int32)mat.size());
+			auto iter = mat.lower_bound(maxc);
+			if((int32)std::distance(iter, mat.end()) >= min)
+				return TRUE;
+		} else {
+			if((int32)mat.size() >= min)
+				return TRUE;
+		}
+	}
+	return FALSE;
 }
 int32 field::is_player_can_draw(uint8 playerid) {
 	return !is_player_affected_by_effect(playerid, EFFECT_CANNOT_DRAW);
