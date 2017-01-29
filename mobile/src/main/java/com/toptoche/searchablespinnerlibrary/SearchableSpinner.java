@@ -18,8 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.garymb.ygomobile.lite.R;
-import cn.garymb.ygomobile.plus.AdapterPlus;
-import cn.garymb.ygomobile.plus.BaseAdapterPlus;
 
 public class SearchableSpinner extends Spinner implements View.OnTouchListener,
         SearchableListDialog.SearchableItem {
@@ -91,13 +89,13 @@ public class SearchableSpinner extends Spinner implements View.OnTouchListener,
                 // Change Start
                 // Description: The items were only set initially, not reloading the data in the
                 // spinner every time it is loaded with items in the adapter.
-                _items.clear();
-                for (int i = 0; i < _arrayAdapter.getCount(); i++) {
-                    _items.add(_arrayAdapter.getItem(i));
-                }
                 // Change end.
                 //修复 重复点击 bug
                 if (!_searchableListDialog.isAdded()) {
+                    _items.clear();
+                    for (int i = 0; i < _arrayAdapter.getCount(); i++) {
+                        _items.add(_arrayAdapter.getItem(i));
+                    }
                     _searchableListDialog.show(scanForActivity(_context).getFragmentManager(), "TAG");
                 }
             }

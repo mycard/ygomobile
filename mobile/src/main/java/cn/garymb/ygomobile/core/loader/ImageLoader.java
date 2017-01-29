@@ -132,7 +132,7 @@ public class ImageLoader {
                         bind(context, outputStream.toByteArray(), imageview, Constants.BPG.equals(ex), code, pre);
                     }
                 }
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             } finally {
                 IOUtils.close(inputStream);

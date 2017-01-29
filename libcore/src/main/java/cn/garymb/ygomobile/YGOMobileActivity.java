@@ -138,7 +138,9 @@ public class YGOMobileActivity extends NativeActivity implements
     protected void onPause() {
         super.onPause();
         if (mLock != null) {
-            mLock.release();
+            if(mLock.isHeld()) {
+                mLock.release();
+            }
         }
         if (registNdkCash) {
             mNativeCrashHandler.unregisterForNativeCrash();
