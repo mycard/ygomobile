@@ -98,12 +98,6 @@ public class YGOMobileActivity extends NativeActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getApplication() instanceof GameApplication) {
-            mApp = (GameApplication) getApplication();
-        } else {
-            finish();
-            return;
-        }
         mNativeCrashHandler = new NativeCrashHandler();
         mFullScreenUtils = new FullScreenUtils(this, app().isImmerSiveMode());
         mFullScreenUtils.fullscreen();
