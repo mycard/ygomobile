@@ -3,6 +3,7 @@ package cn.garymb.ygomobile.deck;
 import android.content.Context;
 import android.os.SystemClock;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -78,7 +79,7 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
     }
 
     private int scaleHeight(int width) {
-        return width * Constants.CORE_SKIN_CARD_COVER_SIZE[1] / Constants.CORE_SKIN_CARD_COVER_SIZE[0];
+        return Math.round((float)width * ((float)Constants.CORE_SKIN_CARD_COVER_SIZE[1] / (float)Constants.CORE_SKIN_CARD_COVER_SIZE[0]));
     }
 
     public Map<Long, Integer> getCardCount() {
@@ -608,15 +609,17 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
 
             holder.textlayout.setVisibility(View.VISIBLE);
         } else {
-            if (holder.cardImage.getMeasuredHeight() > 0) {
-                mHeight = holder.cardImage.getMeasuredHeight();
-                mWidth = holder.cardImage.getMeasuredWidth();
-                if (mHeight <= 0 && mWidth >= 0) {
-                    mHeight = scaleHeight(mWidth);
+            if(mHeight <= 0){
+                if (holder.cardImage.getMeasuredWidth() > 0) {
+                    mWidth = holder.cardImage.getMeasuredWidth();
+                    if (mWidth >= 0) {
+                        mHeight = scaleHeight(mWidth);
+                    }
                 }
-            }
-            if (mHeight <= 0) {
-                makeHeight();
+                if (mHeight <= 0) {
+                    makeHeight();
+                }
+                Log.i("kk","w="+mWidth+",h="+mHeight);
             }
 //            holder.cardImage.setLayoutParams(new RelativeLayout.LayoutParams(holder.cardImage.getMeasuredWidth(), mHeight));
             holder.textlayout.setVisibility(View.GONE);
@@ -648,12 +651,12 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
                     } else {
                         holder.rightImage.setVisibility(View.GONE);
                     }
-                    holder.useDefault();
+//                    holder.useDefault();
                     ImageLoader.get().bindImage(context, holder.cardImage, cardInfo.Code);
                 } else {
                     holder.setCardType(0);
                     holder.rightImage.setVisibility(View.GONE);
-                    holder.useDefault();
+                    holder.useDefault(mWidth, mHeight);
                 }
             }
         }

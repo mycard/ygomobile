@@ -139,7 +139,7 @@ public class CardSearcher implements View.OnClickListener {
                                                             CardType.Synchro, CardType.Pendulum, CardType.Xyz, CardType.Spirit, CardType.Union,
                                                             CardType.Dual, CardType.Tuner, CardType.Flip, CardType.Toon, CardType.Token
         });
-        initTypeSpinners(typeSTSpinner, new CardType[]{CardType.None, CardType.Normal, CardType.QuickPlay,
+        initTypeSpinners(typeSTSpinner, new CardType[]{CardType.None, CardType.Normal, CardType.QuickPlay,CardType.Ritual,
                                                        CardType.Continuous, CardType.Equip, CardType.Field, CardType.Counter
         });
         initLevelSpinners(levelSpinner);
