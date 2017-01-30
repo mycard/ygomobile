@@ -19,7 +19,6 @@ import com.bumptech.glide.load.resource.gifbitmap.GifBitmapWrapper;
 import com.bumptech.glide.load.resource.gifbitmap.GifBitmapWrapperResource;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
-import com.bumptech.glide.signature.StringSignature;
 
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
@@ -114,11 +113,9 @@ public class ImageLoader implements Closeable {
             } else {
                 resource.placeholder(R.drawable.unknown);
             }
-            resource.signature(new StringSignature(file.getName() + file.lastModified()));
             if (isbpg) {
                 resource.decoder(new BpgResourceDecoder("bpg@" + code));
             }
-
             resource.into(imageview);
         } catch (Exception e) {
             Log.e(TAG, "bind", e);
