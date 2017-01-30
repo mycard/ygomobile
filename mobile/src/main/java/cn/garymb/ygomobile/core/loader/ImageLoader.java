@@ -13,14 +13,22 @@ import com.bumptech.glide.load.engine.Resource;
 import com.bumptech.glide.load.engine.bitmap_recycle.LruBitmapPool;
 import com.bumptech.glide.load.model.ImageVideoWrapper;
 import com.bumptech.glide.load.resource.bitmap.BitmapResource;
+import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.load.resource.gifbitmap.GifBitmapWrapper;
 import com.bumptech.glide.load.resource.gifbitmap.GifBitmapWrapperResource;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.bumptech.glide.signature.StringSignature;
 
 import java.io.ByteArrayOutputStream;
+import java.io.Closeable;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -34,13 +42,16 @@ import cn.garymb.ygomobile.utils.IOUtils;
 import static cn.garymb.ygomobile.Constants.CORE_SKIN_BG_SIZE;
 import static com.bumptech.glide.Glide.with;
 
-public class ImageLoader {
+public class ImageLoader implements Closeable {
     private static final String TAG = ImageLoader.class.getSimpleName();
-    private static ImageLoader sImageLoader = new ImageLoader();
     private ZipFile mZipFile;
     private LruBitmapPool mLruBitmapPool;
+    private ExecutorService mExecutorService = Executors.newSingleThreadExecutor();
+    private boolean isClose = false;
+    private Context mContext;
 
-    private ImageLoader() {
+    public ImageLoader(Context context) {
+        mContext = context;
         mLruBitmapPool = new LruBitmapPool(100);
     }
 
@@ -66,8 +77,12 @@ public class ImageLoader {
         }
     }
 
-    public static ImageLoader get() {
-        return sImageLoader;
+    @Override
+    public void close() throws IOException {
+        isClose = true;
+        if (!mExecutorService.isShutdown()) {
+            mExecutorService.shutdown();
+        }
     }
 
     private Bitmap loadImage(String path, int w, int h) {
@@ -78,8 +93,8 @@ public class ImageLoader {
         return null;
     }
 
-    public void bind(Context context, byte[] data, ImageView imageview, boolean isbpg, long code, Drawable pre) {
-        DrawableTypeRequest<byte[]> resource = with(context).load(data);
+    private void bind(byte[] data, ImageView imageview, boolean isbpg, long code, Drawable pre) {
+        DrawableTypeRequest<byte[]> resource = with(mContext).load(data);
         if (pre != null) {
             resource.placeholder(pre);
         } else {
@@ -91,9 +106,9 @@ public class ImageLoader {
         resource.into(imageview);
     }
 
-    public void bind(Context context, final File file, ImageView imageview, boolean isbpg, long code, Drawable pre) {
+    public void bind(final File file, ImageView imageview, boolean isbpg, long code, Drawable pre) {
         try {
-            DrawableTypeRequest<File> resource = with(context).load(file);
+            DrawableTypeRequest<File> resource = with(mContext).load(file);
             if (pre != null) {
                 resource.placeholder(pre);
             } else {
@@ -110,23 +125,60 @@ public class ImageLoader {
         }
     }
 
-    public void bind(Context context, final String url, ImageView imageview, long code, Drawable pre) {
-        DrawableTypeRequest<Uri> resource = with(context).load(Uri.parse(url));
+    public void bind(final String url, ImageView imageview, long code, Drawable pre) {
+        DrawableTypeRequest<Uri> resource = with(mContext).load(Uri.parse(url));
         if (pre != null) {
             resource.placeholder(pre);
         } else {
             resource.placeholder(R.drawable.unknown);
         }
-//        File file=new File(AppsSettings.get().getResourcePath(), Constants.CORE_IMAGE_PATH+"/"+code+".jpg");
-        resource.into(imageview);
+        resource.error(R.drawable.unknown);
+//
+        resource.into(new GlideDrawableImageViewTarget(imageview) {
+            @Override
+            public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> animation) {
+                super.onResourceReady(resource, animation);
+                if (resource != null && !isClose) {
+                    if (resource instanceof GlideBitmapDrawable) {
+                        GlideBitmapDrawable glideBitmapDrawable = (GlideBitmapDrawable) resource;
+                        Bitmap bitmap = glideBitmapDrawable.getBitmap();
+                        if (bitmap != null) {
+                            File file = new File(AppsSettings.get().getResourcePath(), Constants.CORE_IMAGE_PATH + "/" + code + ".jpg");
+                            if (!file.exists()) {
+                                File tmp = new File(AppsSettings.get().getResourcePath(), Constants.CORE_IMAGE_PATH + "/" + code + ".tmp");
+                                if (!tmp.exists()) {
+                                    if (!mExecutorService.isShutdown()) {
+                                        mExecutorService.submit(() -> {
+                                            File dir = file.getParentFile();
+                                            if (!dir.exists()) {
+                                                dir.mkdirs();
+                                            }
+                                            try {
+                                                file.createNewFile();
+                                                FileOutputStream outputStream = new FileOutputStream(file);
+                                                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+                                                outputStream.flush();
+                                                outputStream.close();
+                                                tmp.renameTo(file);
+                                            } catch (Exception e) {
+                                            }
+
+                                        });
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        });
     }
 
-    public void bindImage(Context context, ImageView imageview, long code) {
-        bindImage(context, imageview, code, null);
+    public void bindImage(ImageView imageview, long code) {
+        bindImage(imageview, code, null);
     }
 
-
-    public void bindImage(Context context, ImageView imageview, long code, Drawable pre) {
+    public void bindImage(ImageView imageview, long code, Drawable pre) {
         String name = Constants.CORE_IMAGE_PATH + "/" + code;
         String path = AppsSettings.get().getResourcePath();
         boolean bind = false;
@@ -134,10 +186,10 @@ public class ImageLoader {
         for (String ex : Constants.IMAGE_EX) {
             File file = new File(AppsSettings.get().getResourcePath(), name + ex);
             if (!file.exists()) {
-                file = new File(context.getCacheDir(), name + ex);
+                file = new File(mContext.getCacheDir(), name + ex);
             }
             if (file.exists()) {
-                bind(context, file, imageview, Constants.BPG.equals(ex), code, pre);
+                bind(file, imageview, Constants.BPG.equals(ex), code, pre);
                 bind = true;
                 return;
             }
@@ -156,7 +208,7 @@ public class ImageLoader {
                         inputStream = mZipFile.getInputStream(entry);
                         outputStream = new ByteArrayOutputStream();
                         IOUtils.copy(inputStream, outputStream);
-                        bind(context, outputStream.toByteArray(), imageview, Constants.BPG.equals(ex), code, pre);
+                        bind(outputStream.toByteArray(), imageview, Constants.BPG.equals(ex), code, pre);
                         bind = true;
                         break;
                     }
@@ -168,7 +220,7 @@ public class ImageLoader {
             }
         }
         if (!bind) {
-            bind(context, String.format(Constants.IMAGE_URL, "" + code), imageview, code, pre);
+            bind(String.format(Constants.IMAGE_URL, "" + code), imageview, code, pre);
         }
     }
 }

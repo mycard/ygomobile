@@ -57,14 +57,14 @@ class DeckViewHolder extends RecyclerView.ViewHolder {
         }
     }
 
-    public void useDefault(int w, int h) {
+    public void useDefault(ImageLoader imageLoader, int w, int h) {
 //        cardImage.setImageResource(R.drawable.unknown);
         File outFile = new File(AppsSettings.get().getCoreSkinPath(), Constants.UNKNOWN_IMAGE);
         ViewGroup.LayoutParams layoutParams = cardImage.getLayoutParams();
         if (layoutParams != null) {
             layoutParams.height = h;
         }
-        ImageLoader.get().bind(view.getContext(), outFile, cardImage, outFile.getName().endsWith(Constants.BPG), 0, null);
+        imageLoader.bind(outFile, cardImage, outFile.getName().endsWith(Constants.BPG), 0, null);
     }
 
     protected <T extends View> T findViewById(int id) {

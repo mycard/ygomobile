@@ -3,7 +3,6 @@ package cn.garymb.ygomobile.activities;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.DrawerLayout;
@@ -18,6 +17,7 @@ import android.widget.ListView;
 
 import com.bumptech.glide.Glide;
 
+import java.io.IOException;
 import java.util.List;
 
 import cn.garymb.ygomobile.Constants;
@@ -26,6 +26,7 @@ import cn.garymb.ygomobile.bean.CardInfo;
 import cn.garymb.ygomobile.core.CardDetail;
 import cn.garymb.ygomobile.core.CardLoader;
 import cn.garymb.ygomobile.core.CardSearcher;
+import cn.garymb.ygomobile.core.loader.ImageLoader;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.plus.VUiKit;
 import cn.ygo.ocgcore.LimitList;
@@ -41,7 +42,7 @@ public class CardSearchAcitivity extends BaseActivity implements CardLoader.Call
     protected boolean isLoad = false;
     protected StringManager mStringManager = StringManager.get();
     protected LimitManager mLimitManager = LimitManager.get();
-    private boolean isShowing = false;
+    private ImageLoader mImageLoader;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -51,9 +52,9 @@ public class CardSearchAcitivity extends BaseActivity implements CardLoader.Call
         setSupportActionBar(toolbar);
         enableBackHome();
         mDrawerlayout = bind(R.id.drawer_layout);
-
+        mImageLoader = new ImageLoader(this);
         mListView = (ListView) findViewById(R.id.list_cards);
-        mCardListAdapater = new CardListAdapater(this);
+        mCardListAdapater = new CardListAdapater(this, mImageLoader);
         mCardListAdapater.setItemBg(true);
         mListView.setAdapter(mCardListAdapater);
 //
@@ -141,6 +142,16 @@ public class CardSearchAcitivity extends BaseActivity implements CardLoader.Call
     }
 
     @Override
+    protected void onDestroy() {
+        try {
+            mImageLoader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        super.onDestroy();
+    }
+
+    @Override
     public void onSearchResult(List<CardInfo> cardInfos) {
 //        Log.d("kk", "find " + (cardInfos == null ? -1 : cardInfos.size()));
         mCardListAdapater.set(cardInfos);
@@ -207,24 +218,27 @@ public class CardSearchAcitivity extends BaseActivity implements CardLoader.Call
     protected void onCardLongClick(View view, CardInfo cardInfo, int pos) {
 
     }
+    private CardDetail mCardDetail;
+    private Dialog mDialog;
 
+    private boolean isShowCard(){
+        return mDialog!=null&&mDialog.isShowing();
+    }
     protected void showCard(CardInfo cardInfo) {
-        if (isShowing) return;
+        if (isShowCard()) return;
         if (cardInfo != null) {
-            isShowing = true;
-            CardDetail cardDetail = new CardDetail(this);
-            AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AppTheme_Dialog_Translucent);
-            builder.setView(cardDetail.getView());
-            builder.setOnCancelListener((dlg) -> {
-                isShowing = false;
-            });
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                builder.setOnDismissListener((dlg) -> {
-                    isShowing = false;
-                });
+            if (mCardDetail == null) {
+                mCardDetail = new CardDetail(this, mImageLoader);
             }
-            final Dialog dialog = builder.show();
-            cardDetail.bind(cardInfo, mStringManager, new CardDetail.OnClickListener() {
+            if (mDialog == null) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AppTheme_Dialog_Translucent);
+                builder.setView(mCardDetail.getView());
+                mDialog = builder.show();
+            }
+            if(!mDialog.isShowing()) {
+                mDialog.show();
+            }
+            mCardDetail.bind(cardInfo, mStringManager, new CardDetail.OnClickListener() {
                 @Override
                 public void onOpenUrl(CardInfo cardInfo) {
                     String uri = Constants.WIKI_SEARCH_URL + String.format("%08d", cardInfo.Code);
@@ -233,8 +247,7 @@ public class CardSearchAcitivity extends BaseActivity implements CardLoader.Call
 
                 @Override
                 public void onClose() {
-                    dialog.dismiss();
-                    isShowing = false;
+                    mDialog.dismiss();
                 }
 
                 @Override

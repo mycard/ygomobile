@@ -34,6 +34,7 @@ public class CardSearcher implements View.OnClickListener {
     private Spinner limitListSpinner;
     private Spinner typeSpinner;
     private Spinner typeMonsterSpinner;
+    private Spinner typeMonsterSpinner2;
     private Spinner typeSTSpinner;
 
     private Spinner setcodeSpinner;
@@ -68,6 +69,7 @@ public class CardSearcher implements View.OnClickListener {
         limitListSpinner = findViewById(R.id.sp_limit_list);
         typeSpinner = findViewById(R.id.sp_type_card);
         typeMonsterSpinner = findViewById(R.id.sp_type_monster);
+        typeMonsterSpinner2 = findViewById(R.id.sp_type_monster2);
         typeSTSpinner = findViewById(R.id.sp_type_st);
         setcodeSpinner = findViewById(R.id.sp_setcode);
         categorySpinner = findViewById(R.id.sp_category);
@@ -104,19 +106,19 @@ public class CardSearcher implements View.OnClickListener {
                 long value = getSelect(typeSpinner);
                 if (value == 0) {
                     layout_monster.setVisibility(View.INVISIBLE);
-                    typeMonsterSpinner.setVisibility(View.GONE);
+                    raceSpinner.setVisibility(View.GONE);
                     typeSTSpinner.setVisibility(View.INVISIBLE);
                     pScale.setVisibility(View.INVISIBLE);
                     resetMonster();
                 } else if (value == CardType.Spell.value() || value == CardType.Trap.value()) {
                     layout_monster.setVisibility(View.INVISIBLE);
-                    typeMonsterSpinner.setVisibility(View.GONE);
+                    raceSpinner.setVisibility(View.GONE);
                     typeSTSpinner.setVisibility(View.VISIBLE);
                     pScale.setVisibility(View.INVISIBLE);
                     resetMonster();
                 } else {
                     layout_monster.setVisibility(View.VISIBLE);
-                    typeMonsterSpinner.setVisibility(View.VISIBLE);
+                    raceSpinner.setVisibility(View.VISIBLE);
                     typeSTSpinner.setVisibility(View.GONE);
                     pScale.setVisibility(View.VISIBLE);
                 }
@@ -136,11 +138,13 @@ public class CardSearcher implements View.OnClickListener {
         initLimitListSpinners(limitListSpinner);
         initTypeSpinners(typeSpinner, new CardType[]{CardType.None, CardType.Monster, CardType.Spell, CardType.Trap});
         initTypeSpinners(typeMonsterSpinner, new CardType[]{CardType.None, CardType.Normal, CardType.Effect, CardType.Fusion, CardType.Ritual,
-                                                            CardType.Synchro, CardType.Pendulum, CardType.Xyz, CardType.Spirit, CardType.Union,
-                                                            CardType.Dual, CardType.Tuner, CardType.Flip, CardType.Toon, CardType.Token
+                CardType.Synchro, CardType.Pendulum, CardType.Xyz, CardType.Spirit, CardType.Union,
+                CardType.Dual, CardType.Tuner, CardType.Flip, CardType.Toon, CardType.Token
         });
-        initTypeSpinners(typeSTSpinner, new CardType[]{CardType.None, CardType.Normal, CardType.QuickPlay,CardType.Ritual,
-                                                       CardType.Continuous, CardType.Equip, CardType.Field, CardType.Counter
+        initTypeSpinners(typeMonsterSpinner2, new CardType[]{CardType.None, CardType.Pendulum, CardType.Tuner, CardType.Effect, CardType.Normal
+        });
+        initTypeSpinners(typeSTSpinner, new CardType[]{CardType.None, CardType.Normal, CardType.QuickPlay, CardType.Ritual,
+                CardType.Continuous, CardType.Equip, CardType.Field, CardType.Counter
         });
         initLevelSpinners(levelSpinner);
         initPscaleSpinners(pScale);
@@ -361,7 +365,8 @@ public class CardSearcher implements View.OnClickListener {
                     , getSelect(levelSpinner), getSelect(raceSpinner), getSelect(limitListSpinner), getSelect(limitSpinner), text(atkText), text(defText),
                     getSelect(pScale),
                     getSelect(setcodeSpinner)
-                    , getSelect(categorySpinner), getSelect(otSpinner), getSelect(typeSpinner), getSelect(typeMonsterSpinner), getSelect(typeSTSpinner));
+                    , getSelect(categorySpinner), getSelect(otSpinner), getSelect(typeSpinner), getSelect(typeMonsterSpinner), getSelect(typeSTSpinner)
+                    , getSelect(typeMonsterSpinner2));
         }
     }
 
@@ -384,6 +389,7 @@ public class CardSearcher implements View.OnClickListener {
     private void resetMonster() {
         reset(pScale);
         reset(typeMonsterSpinner);
+        reset(typeMonsterSpinner2);
         reset(raceSpinner);
         reset(levelSpinner);
         reset(attributeSpinner);

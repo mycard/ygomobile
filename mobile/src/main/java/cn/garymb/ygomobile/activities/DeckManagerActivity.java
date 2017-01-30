@@ -67,10 +67,11 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
     private LimitList mLimitList;
     private File mYdkFile;
     private DeckItemTouchHelper mDeckItemTouchHelper;
-    private boolean isShowing = false;
     private AppCompatSpinner mDeckSpinner;
     private SimpleSpinnerAdapter mSimpleSpinnerAdapter;
     private String mPreLoad;
+    private CardDetail mCardDetail;
+    private Dialog mDialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -78,7 +79,7 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
         mDeckSpinner = bind(R.id.toolbar_list);
         mCardListAdapater.setOnAddCardListener(this);
         mRecyclerView.setPadding(mRecyclerView.getPaddingLeft(), 0, mRecyclerView.getPaddingRight(), mRecyclerView.getPaddingBottom());
-        mRecyclerView.setAdapter((mDeckAdapater = new DeckAdapater(this, mRecyclerView)));
+        mRecyclerView.setAdapter((mDeckAdapater = new DeckAdapater(this, mRecyclerView, getImageLoader())));
         mRecyclerView.setLayoutManager(new DeckLayoutManager(this, Constants.DECK_WIDTH_COUNT));
         mDeckItemTouchHelper = new DeckItemTouchHelper(mDeckAdapater);
         mDeckItemTouchHelper.setOnDragListner(this);
@@ -163,7 +164,7 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
 
     @Override
     public void onDragLongPress(int pos) {
-        if(pos<0) return;
+        if (pos < 0) return;
         Log.i("kk", "delete " + pos);
         if (mSettings.isDialogDelete()) {
 
@@ -306,7 +307,7 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
 
     @Override
     public void onItemClick(View view, int pos) {
-        if(isShowDrawer()){
+        if (isShowDrawer()) {
             return;
         }
         if (!Constants.DECK_SINGLE_PRESS_DRAG) {
@@ -319,7 +320,7 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
 
     @Override
     public void onItemLongClick(View view, int pos) {
-        if(isShowDrawer()){
+        if (isShowDrawer()) {
             return;
         }
         //拖拽中，就不显示
@@ -330,7 +331,7 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
     @Override
     public void onItemDoubleClick(View view, int pos) {
         //拖拽中，就不显示
-        if(isShowDrawer()){
+        if (isShowDrawer()) {
             return;
         }
         if (Constants.DECK_SINGLE_PRESS_DRAG) {
@@ -341,28 +342,30 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
         }
     }
 
-    private boolean isShowDrawer(){
+    private boolean isShowDrawer() {
         return mDrawerlayout.isDrawerOpen(Gravity.LEFT)
                 || mDrawerlayout.isDrawerOpen(Gravity.RIGHT);
     }
+
+    private boolean isShowCard(){
+        return mDialog!=null&&mDialog.isShowing();
+    }
+
     protected void showCardDialog(CardInfo cardInfo, int pos) {
         if (cardInfo != null) {
-            if (isShowing) return;
-            isShowing = true;
-            CardDetail cardDetail = new CardDetail(this);
-            cardDetail.showAdd();
-            AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AppTheme_Dialog_Translucent);
-            builder.setView(cardDetail.getView());
-            builder.setOnCancelListener((dlg) -> {
-                isShowing = false;
-            });
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                builder.setOnDismissListener((dlg) -> {
-                    isShowing = false;
-                });
+            if (isShowCard()) return;
+            if (mCardDetail == null) {
+                mCardDetail = new CardDetail(this, getImageLoader());
             }
-            final Dialog dialog = builder.show();
-            cardDetail.bind(cardInfo, mStringManager, new CardDetail.OnClickListener() {
+            mCardDetail.showAdd();
+            if (mDialog == null) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AppTheme_Dialog_Translucent);
+                builder.setView(mCardDetail.getView());
+                mDialog = builder.show();
+            }else {
+                mDialog.show();
+            }
+            mCardDetail.bind(cardInfo, mStringManager, new CardDetail.OnClickListener() {
                 @Override
                 public void onOpenUrl(CardInfo cardInfo) {
                     String uri = Constants.WIKI_SEARCH_URL + String.format("%08d", cardInfo.Code);
@@ -371,8 +374,7 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
 
                 @Override
                 public void onClose() {
-                    dialog.dismiss();
-                    isShowing = false;
+                    mDialog.dismiss();
                 }
 
                 @Override

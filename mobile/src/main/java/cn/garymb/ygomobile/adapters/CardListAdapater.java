@@ -22,13 +22,15 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> {
     private OnAddCardListener mOnAddCardListener;
     private LimitList mLimitList;
     private boolean mItemBg;
+    private ImageLoader imageLoader;
 
     public interface OnAddCardListener {
         void onAdd(int pos);
     }
 
-    public CardListAdapater(Context context) {
+    public CardListAdapater(Context context, ImageLoader imageLoader) {
         super(context);
+        this.imageLoader = imageLoader;
         mStringManager = StringManager.get();
     }
 
@@ -47,9 +49,9 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> {
     @Override
     protected View createView(int position, ViewGroup parent) {
         View view;
-        if(mItemBg){
+        if (mItemBg) {
             view = inflate(R.layout.item_search_card, parent, false);
-        }else{
+        } else {
             view = inflate(R.layout.item_search_card2, parent, false);
         }
         new ViewHolder(view);
@@ -64,7 +66,7 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> {
     protected void attach(View view, CardInfo item, int position) {
         ViewHolder holder = (ViewHolder) view.getTag(view.getId());
         holder.setPosition(position);
-        ImageLoader.get().bindImage(context, holder.cardImage, item.Code);
+        imageLoader.bindImage(holder.cardImage, item.Code);
         holder.cardName.setText(item.Name);
         if (item.isType(CardType.Monster)) {
             holder.cardLevel.setVisibility(View.VISIBLE);
