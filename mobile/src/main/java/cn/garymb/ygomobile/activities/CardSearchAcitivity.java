@@ -145,16 +145,21 @@ public class CardSearchAcitivity extends BaseActivity implements CardLoader.Call
 //        Log.d("kk", "find " + (cardInfos == null ? -1 : cardInfos.size()));
         mCardListAdapater.set(cardInfos);
         mCardListAdapater.notifyDataSetChanged();
+        if (cardInfos != null && cardInfos.size() > 0) {
+            mListView.setSelection(0);
+        }
     }
 
     @Override
     public void onResetSearch() {
 
     }
-    private boolean isShowDrawer(){
+
+    private boolean isShowDrawer() {
         return mDrawerlayout.isDrawerOpen(Gravity.LEFT)
                 || mDrawerlayout.isDrawerOpen(Gravity.RIGHT);
     }
+
     @Override
     public void onSearchStart(LimitList limitList) {
         if (mDrawerlayout.isDrawerOpen(Constants.CARD_SEARCH_GRAVITY)) {
@@ -195,7 +200,7 @@ public class CardSearchAcitivity extends BaseActivity implements CardLoader.Call
     }
 
     protected void onCardClick(CardInfo cardInfo, int pos) {
-        if(isShowDrawer())return;
+        if (isShowDrawer()) return;
         showCard(cardInfo);
     }
 

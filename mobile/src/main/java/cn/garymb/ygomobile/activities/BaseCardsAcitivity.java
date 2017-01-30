@@ -1,13 +1,11 @@
 package cn.garymb.ygomobile.activities;
 
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -23,7 +21,6 @@ import cn.garymb.ygomobile.bean.CardInfo;
 import cn.garymb.ygomobile.core.CardLoader;
 import cn.garymb.ygomobile.core.CardSearcher;
 import cn.garymb.ygomobile.lite.R;
-import cn.garymb.ygomobile.plus.VUiKit;
 import cn.ygo.ocgcore.LimitManager;
 import cn.ygo.ocgcore.StringManager;
 
@@ -131,6 +128,9 @@ abstract class BaseCardsAcitivity extends BaseActivity implements CardLoader.Cal
 //        Log.d("kk", "find " + (cardInfos == null ? -1 : cardInfos.size()));
         mCardListAdapater.set(cardInfos);
         mCardListAdapater.notifyDataSetChanged();
+        if (cardInfos != null && cardInfos.size() > 0) {
+            mListView.setSelection(0);
+        }
     }
 
     @Override
