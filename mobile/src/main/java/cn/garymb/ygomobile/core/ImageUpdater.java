@@ -3,7 +3,6 @@ package cn.garymb.ygomobile.core;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.util.Log;
 
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -15,6 +14,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -22,9 +22,11 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import cn.garymb.ygomobile.Constants;
+import cn.garymb.ygomobile.bean.CardInfo;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.plus.VUiKit;
 import cn.garymb.ygomobile.utils.IOUtils;
+import cn.ygo.ocgcore.enums.CardType;
 
 /**
  * Created by keyongyu on 2017/1/31.
@@ -35,10 +37,9 @@ public class ImageUpdater implements DialogInterface.OnCancelListener {
     private CardLoader mCardLoader;
     private final static int SubThreads = 4;
     private int mDownloading = 0;
-    private final List<Long> mCardStatus = new ArrayList<>();
+    private final List<Item> mCardStatus = new ArrayList<>();
     private ExecutorService mExecutorService = Executors.newFixedThreadPool(SubThreads);
     private OkHttpClient mOkHttpClient;
-    private File mPicsPath;
     private ProgressDialog mDialog;
     private int mIndex;
     private int mCount;
@@ -53,7 +54,6 @@ public class ImageUpdater implements DialogInterface.OnCancelListener {
         mOkHttpClient = new OkHttpClient();
         mOkHttpClient.setConnectTimeout(30, TimeUnit.SECONDS);
         mOkHttpClient.setReadTimeout(30, TimeUnit.SECONDS);
-        mPicsPath = new File(AppsSettings.get().getResourcePath(), Constants.CORE_IMAGE_PATH);
     }
 
     public boolean isRunning() {
@@ -82,7 +82,6 @@ public class ImageUpdater implements DialogInterface.OnCancelListener {
         mIndex = 0;
         mDownloading = 0;
         mStop = false;
-        mPicsPath = new File(AppsSettings.get().getResourcePath(), Constants.CORE_IMAGE_PATH);
         File zip = new File(AppsSettings.get().getResourcePath(), Constants.CORE_PICS_ZIP);
         if (mDialog != null) {
             mDialog.show();
@@ -90,7 +89,6 @@ public class ImageUpdater implements DialogInterface.OnCancelListener {
             mDialog = ProgressDialog.show(mContext, null, mContext.getString(R.string.download_image_progress, mCompleted, mCount), true, true);
             mDialog.setOnCancelListener(this);
         }
-        IOUtils.createNoMedia(mPicsPath.getAbsolutePath());
         if (mZipFile == null) {
             if (zip.exists()) {
                 try {
@@ -101,9 +99,9 @@ public class ImageUpdater implements DialogInterface.OnCancelListener {
         }
 //        Log.i("kk", "download " + mCompleted + "/" + mCount);
         for (int i = 0; i < SubThreads; i++) {
-            long id = nextCard();
-            if (id > 0) {
-                if (!submit(id)) {
+            Item item = nextCard();
+            if (item != null) {
+                if (!submit(item)) {
                     i--;
                 }
             }
@@ -122,16 +120,14 @@ public class ImageUpdater implements DialogInterface.OnCancelListener {
         }
     }
 
-    private boolean submit(long id) {
-        if (id > 0) {
+    private boolean submit(Item item) {
+        if (item != null) {
 //            Log.i("kk", "submit " + id);
             if (!mExecutorService.isShutdown()) {
                 synchronized (mCardStatus) {
                     mDownloading++;
                 }
-                String url = String.format(Constants.IMAGE_URL, id + "");
-                File file = new File(mPicsPath, id + Constants.IMAGE_URL_EX);
-                mExecutorService.submit(new DownloadTask(id, url, file));
+                mExecutorService.submit(new DownloadTask(item));
                 return true;
             }
         }
@@ -139,25 +135,22 @@ public class ImageUpdater implements DialogInterface.OnCancelListener {
     }
 
     private class DownloadTask implements Runnable {
-        String url;
-        File file;
+        Item item;
         File tmpFile;
-        long mCode;
 
-        private DownloadTask(long code, String url, File file) {
-            this.url = url;
-            this.file = file;
-            mCode = code;
-            this.tmpFile = new File(file.getAbsolutePath() + ".tmp");
+        private DownloadTask(Item item) {
+            this.item = item;
+            this.tmpFile = new File(item.file + ".tmp");
         }
 
         private boolean existImage() {
-            if (file.exists()) {
-                return true;
+            File img = new File(item.file);
+            if (item.isField) {
+                return img.exists();
             }
-            String name = Constants.CORE_IMAGE_PATH + "/" + mCode;
+            String name = Constants.CORE_IMAGE_PATH + "/" + item.code;
             for (String ex : Constants.IMAGE_EX) {
-                File file = new File(mPicsPath, mCode + ex);
+                File file = new File(img.getParentFile(), item.code + ex);
                 if (file.exists()) {
                     return true;
                 }
@@ -183,8 +176,11 @@ public class ImageUpdater implements DialogInterface.OnCancelListener {
             if (needNext) {
                 if (existImage()) {
                 } else {
-                    if (download(url, tmpFile) && tmpFile.exists()) {
-                        tmpFile.renameTo(file);
+                    if (download(item.url, tmpFile) && tmpFile.exists()) {
+                        File file = new File(item.file);
+                        if (!file.exists()) {
+                            tmpFile.renameTo(file);
+                        }
                     }
                 }
                 synchronized (mCardStatus) {
@@ -202,9 +198,9 @@ public class ImageUpdater implements DialogInterface.OnCancelListener {
                 }
             }
             if (needNext) {
-                long id = nextCard();
-                if (id > 0) {
-                    submit(id);
+                Item item = nextCard();
+                if (item != null) {
+                    submit(item);
                 } else {
                     //当前没任务
                     synchronized (mCardStatus) {
@@ -249,11 +245,11 @@ public class ImageUpdater implements DialogInterface.OnCancelListener {
         return ok;
     }
 
-    private long nextCard() {
+    private Item nextCard() {
         synchronized (mCardStatus) {
 //            Log.i("kk", "submit " + mIndex);
             if (mIndex >= mCount) {
-                return -1;
+                return null;
             }
             mIndex++;
             return mCardStatus.get(mIndex);
@@ -261,7 +257,7 @@ public class ImageUpdater implements DialogInterface.OnCancelListener {
     }
 
     private void onEnd() {
-        synchronized (mCardStatus){
+        synchronized (mCardStatus) {
             mCardStatus.clear();
         }
         if (mDialog != null) {
@@ -280,9 +276,36 @@ public class ImageUpdater implements DialogInterface.OnCancelListener {
         if (!mCardLoader.isOpen()) {
             mCardLoader.openDb();
         }
-        List<Long> ids = mCardLoader.readAllCardCodes();
+        Map<Long, Long> cards = mCardLoader.readAllCardCodes();
         mCardStatus.clear();
-        mCardStatus.addAll(ids);
-        mCount = ids.size();
+        File picsPath = new File(AppsSettings.get().getResourcePath(), Constants.CORE_IMAGE_PATH);
+        File fieldPath = new File(AppsSettings.get().getResourcePath(), Constants.CORE_IMAGE_FIELD_PATH);
+        IOUtils.createNoMedia(picsPath.getAbsolutePath());
+        IOUtils.createNoMedia(fieldPath.getAbsolutePath());
+        for (Map.Entry<Long, Long> e : cards.entrySet()) {
+            if (CardInfo.isType(e.getValue(), CardType.Field)) {
+                String png = new File(fieldPath, e.getKey() + Constants.IMAGE_FIELD_URL_EX).getAbsolutePath();
+                String pngUrl = String.format(Constants.IMAGE_FIELD_URL, e.getKey() + "");
+                mCardStatus.add(new Item(pngUrl, png, e.getKey(), true));
+            }
+            String jpg = new File(picsPath, e.getKey() + Constants.IMAGE_URL_EX).getAbsolutePath();
+            String jpgUrl = String.format(Constants.IMAGE_URL, e.getKey() + "");
+            mCardStatus.add(new Item(jpgUrl, jpg, e.getKey(), false));
+        }
+        mCount = mCardStatus.size();
+    }
+
+    private static class Item {
+        String url;
+        String file;
+        long code;
+        boolean isField;
+
+        public Item(String url, String file, long code, boolean isField) {
+            this.url = url;
+            this.file = file;
+            this.code = code;
+            this.isField = isField;
+        }
     }
 }

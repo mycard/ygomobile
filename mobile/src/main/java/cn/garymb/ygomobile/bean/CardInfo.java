@@ -14,9 +14,11 @@ public class CardInfo extends Card implements Parcelable {
     public static final String TAG = "CardInfo";
     public static final String SQL_BASE;
     public static final String _ID = "_id";
-    public static final String SQL_CODE_BASE = "select "+_ID+" from datas";
+    public static final String COL_TYPE = "type";
+    public static final String SQL_CODE_BASE = "select " + _ID + ","+COL_TYPE+" from datas";
     public static final String COL_ID = "datas." + _ID;
     public static final String COL_STAR = "star";
+
 
     static {
         StringBuilder stringBuilder = new StringBuilder("select datas." + _ID + ",ot,alias,setcode,type,level,race,attribute,atk,def,category");

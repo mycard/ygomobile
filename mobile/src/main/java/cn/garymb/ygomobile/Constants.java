@@ -59,6 +59,7 @@ public interface Constants {
     String CORE_DECK_PATH = "deck";
     String CORE_SINGLE_PATH = "single";
     String CORE_IMAGE_PATH = "pics";
+    String CORE_IMAGE_FIELD_PATH = "pics/field";
     String CORE_SCRIPT_PATH = "script";
     String CORE_REPLAY_PATH = "replay";
     String CORE_SCRIPTS_ZIP = "scripts.zip";
@@ -138,7 +139,9 @@ public interface Constants {
     String ACTION_OPEN_GAME = "ygomobile.intent.action.GAME";
     String ACTION_RELOAD = "ygomobile.intent.action.RELOAD";
     String IMAGE_URL = "https://github.com/Ygoproco/Live-images/raw/master/pics/%s.jpg";
+    String IMAGE_FIELD_URL = "https://github.com/Ygoproco/Live-images/raw/master/pics/field/%s.png";
     String IMAGE_URL_EX = ".jpg";
+    String IMAGE_FIELD_URL_EX = ".png";
     /**
      * https://m.ygomobile.com/deck?ydk=卡组名&main=124563789,12456487&extra=123,145&side=4564,4546
      * ygomobile://m.ygomobile.com/deck?ydk=卡组名&main=124563789,12456487&extra=123,145&side=4564,4546

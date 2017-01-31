@@ -121,7 +121,7 @@ public class IOUtils {
             if (update || !tofile.exists()) {
                 if (Constants.DEBUG)
                     Log.i(TAG, "copy1:" + assets + "-->" + tofile);
-                createFolder(tofile);
+                createFolderByFile(tofile);
                 copyToFile(am.open(assets), tofile.getAbsolutePath());
             }
             return 1;
@@ -134,11 +134,11 @@ public class IOUtils {
                 if (isDirectory(context, path)) {
                     if (Constants.DEBUG)
                         Log.i(TAG, "copy dir:" + path + "-->" + join(toPath, file));
-                    createFolder(new File(toPath, file));
+                    createFolderByFile(new File(toPath, file));
                     count += copyFilesFromAssets(context, path, join(toPath, file), update);
                 } else {
                     File f = new File(join(toPath, file));
-                    createFolder(f);
+                    createFolderByFile(f);
                     if (update || !f.exists()) {
                         if (Constants.DEBUG)
                             Log.d(TAG, "copy2:" + path + "-->" + f.getAbsolutePath());
@@ -153,15 +153,15 @@ public class IOUtils {
             return count;
         }
     }
-
-    public static void createFolder(File file) {
-        if (file.isDirectory()) {
-            file.mkdirs();
-            return;
-        }
+    public static void createFolderByFile(File file) {
         File dir = file.getParentFile();
         if (dir != null && !dir.exists()) {
             dir.mkdirs();
+        }
+    }
+    public static void createFolder(File file) {
+        if (!file.exists()) {
+            file.mkdirs();
         }
     }
 
