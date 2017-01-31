@@ -340,6 +340,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             mDrawerlayout.closeDrawer(Gravity.LEFT);
             return;
         }
+        if(mServerAdapater.isEditMode()){
+            mServerAdapater.setEditMode(false);
+        }
         if (System.currentTimeMillis() - exitLasttime <= 3000) {
             super.onBackPressed();
         } else {

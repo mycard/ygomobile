@@ -15,7 +15,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -126,15 +125,17 @@ class FileAdapter extends BaseAdapterPlus<File> {
                 return null;
             }
             Pattern p = null;
-            try {
-                p = Pattern.compile(mFilefilter, Pattern.CASE_INSENSITIVE);
-            } catch (Exception e) {
+            if (mFilefilter != null) {
                 try {
-                    p = Pattern.compile(mFilefilter.replace("*.", "[\\S\\s]*?\\."), Pattern.CASE_INSENSITIVE);
-                } catch (Exception e2) {
-                    Log.e("file", "load files", e2);
-                }
+                    p = Pattern.compile(mFilefilter, Pattern.CASE_INSENSITIVE);
+                } catch (Exception e) {
+                    try {
+                        p = Pattern.compile(mFilefilter.replace("*.", "[\\S\\s]*?\\."), Pattern.CASE_INSENSITIVE);
+                    } catch (Exception e2) {
+                        Log.e("file", "load files", e2);
+                    }
 
+                }
             }
             final Pattern finalP = p;
             File[] files = mCurPath.listFiles((pathname) -> {

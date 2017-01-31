@@ -16,7 +16,7 @@
         android:inputType="textNoSuggestions"
         android:imeOptions="actionDone"
         android:singleLine="true"
-        android:textColor="?android:attr/colorPressedHighlight" />
+        android:textColor="@android:color/holo_blue_bright" />
 
     <ListView
         android:id="@+id/room_list"
