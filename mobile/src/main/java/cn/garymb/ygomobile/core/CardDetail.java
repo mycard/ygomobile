@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import cn.garymb.ygomobile.activities.PhotoViewActivity;
 import cn.garymb.ygomobile.bean.CardInfo;
 import cn.garymb.ygomobile.core.loader.ImageLoader;
 import cn.garymb.ygomobile.lite.R;
@@ -90,6 +91,9 @@ public class CardDetail extends BaseAdapterPlus.BaseViewHolder {
 
     public void bind(CardInfo cardInfo, StringManager stringManager, final OnClickListener listener) {
         imageLoader.bindImage(cardImage, cardInfo.Code, null, true);
+        cardImage.setOnClickListener((v)->{
+            PhotoViewActivity.showImage(context, cardInfo.Code, cardInfo.Name);
+        });
         name.setText(cardInfo.Name);
         desc.setText(cardInfo.Desc);
         cardcode.setText(String.format("%08d", cardInfo.Code));

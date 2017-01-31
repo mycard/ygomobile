@@ -54,6 +54,7 @@ dependencies {
     compile 'org.jdeferred:jdeferred-android-aar:1.2.4'
     compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'com.android.support:recyclerview-v7:25.+'
+    compile 'com.github.chrisbanes.photoview:library:1.2.4'
     compile 'com.android.support:design:25.+'
     compile 'com.android.support:appcompat-v7:25.+'
     compile 'com.android.support:support-vector-drawable:25.+'
