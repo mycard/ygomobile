@@ -3,6 +3,7 @@ package cn.garymb.ygomobile.core;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.widget.Toast;
 
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -47,6 +48,9 @@ public class ImageUpdater implements DialogInterface.OnCancelListener {
     private boolean isRun = false;
     private boolean mStop = false;
     private ZipFile mZipFile;
+    private int mError = 0;
+
+    File mPicsPath;
 
     public ImageUpdater(Context context) {
         mContext = context;
@@ -54,6 +58,7 @@ public class ImageUpdater implements DialogInterface.OnCancelListener {
         mOkHttpClient = new OkHttpClient();
         mOkHttpClient.setConnectTimeout(30, TimeUnit.SECONDS);
         mOkHttpClient.setReadTimeout(30, TimeUnit.SECONDS);
+        mPicsPath = new File(AppsSettings.get().getResourcePath(), Constants.CORE_IMAGE_PATH);
     }
 
     public boolean isRunning() {
@@ -82,6 +87,7 @@ public class ImageUpdater implements DialogInterface.OnCancelListener {
         mIndex = 0;
         mDownloading = 0;
         mStop = false;
+        mError = 0;
         File zip = new File(AppsSettings.get().getResourcePath(), Constants.CORE_PICS_ZIP);
         if (mDialog != null) {
             mDialog.show();
@@ -144,13 +150,14 @@ public class ImageUpdater implements DialogInterface.OnCancelListener {
         }
 
         private boolean existImage() {
-            File img = new File(item.file);
+            String name;
             if (item.isField) {
-                return img.exists();
+                name = Constants.CORE_IMAGE_FIELD_PATH + "/" + item.code;
+            } else {
+                name = "" + item.code;
             }
-            String name = Constants.CORE_IMAGE_PATH + "/" + item.code;
             for (String ex : Constants.IMAGE_EX) {
-                File file = new File(img.getParentFile(), item.code + ex);
+                File file = new File(mPicsPath, name + ex);
                 if (file.exists()) {
                     return true;
                 }
@@ -158,7 +165,7 @@ public class ImageUpdater implements DialogInterface.OnCancelListener {
             if (mZipFile != null) {
                 ZipEntry entry = null;
                 for (String ex : Constants.IMAGE_EX) {
-                    entry = mZipFile.getEntry(name + ex);
+                    entry = mZipFile.getEntry(Constants.CORE_IMAGE_PATH + "/" + name + ex);
                     if (entry != null) {
                         return true;
                     }
@@ -180,6 +187,10 @@ public class ImageUpdater implements DialogInterface.OnCancelListener {
                         File file = new File(item.file);
                         if (!file.exists()) {
                             tmpFile.renameTo(file);
+                        }
+                    } else {
+                        synchronized (mCardStatus) {
+                            mError++;
                         }
                     }
                 }
@@ -269,7 +280,15 @@ public class ImageUpdater implements DialogInterface.OnCancelListener {
                 mZipFile.close();
             } catch (IOException e) {
             }
+            mZipFile = null;
         }
+        VUiKit.post(() -> {
+            if (mError == 0) {
+                Toast.makeText(mContext, R.string.downloading_images_ok, Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(mContext, mContext.getString(R.string.download_image_error, mError), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void loadCardsLocked() {
@@ -278,8 +297,9 @@ public class ImageUpdater implements DialogInterface.OnCancelListener {
         }
         Map<Long, Long> cards = mCardLoader.readAllCardCodes();
         mCardStatus.clear();
-        File picsPath = new File(AppsSettings.get().getResourcePath(), Constants.CORE_IMAGE_PATH);
-        File fieldPath = new File(AppsSettings.get().getResourcePath(), Constants.CORE_IMAGE_FIELD_PATH);
+        mPicsPath = new File(AppsSettings.get().getResourcePath(), Constants.CORE_IMAGE_PATH);
+        File picsPath = mPicsPath;
+        File fieldPath = new File(mPicsPath, Constants.CORE_IMAGE_FIELD_PATH);
         IOUtils.createNoMedia(picsPath.getAbsolutePath());
         IOUtils.createNoMedia(fieldPath.getAbsolutePath());
         for (Map.Entry<Long, Long> e : cards.entrySet()) {

@@ -165,4 +165,6 @@
     <string name="download_images">检查更新卡图</string>
     <string name="downloading_images">上次任务正在停止，请稍后再试</string>
     <string name="download_image_progress" formatted="false">正在下载卡图 %d/%d</string>
+    <string name="download_image_error" formatted="false">共 %d 张图片下载失败</string>
+    <string name="downloading_images_ok">图片下载完成</string>
 </resources>

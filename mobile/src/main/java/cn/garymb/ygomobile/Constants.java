@@ -59,7 +59,7 @@ public interface Constants {
     String CORE_DECK_PATH = "deck";
     String CORE_SINGLE_PATH = "single";
     String CORE_IMAGE_PATH = "pics";
-    String CORE_IMAGE_FIELD_PATH = "pics/field";
+    String CORE_IMAGE_FIELD_PATH = "field";
     String CORE_SCRIPT_PATH = "script";
     String CORE_REPLAY_PATH = "replay";
     String CORE_SCRIPTS_ZIP = "scripts.zip";
