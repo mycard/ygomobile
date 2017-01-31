@@ -253,13 +253,13 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
                 //endregion
                 //region 怪兽
                 if (c1.Level != c2.Level) {
-                    return c1.Level - c2.Level > 0;
+                    return c1.Level - c2.Level < 0;
                 }
                 if (c1.Attack != c2.Attack) {
-                    return c1.Attack - c2.Attack > 0;
+                    return c1.Attack - c2.Attack < 0;
                 }
                 if (c1.Defense != c2.Defense) {
-                    return c1.Defense - c2.Defense > 0;
+                    return c1.Defense - c2.Defense < 0;
                 }
                 if (c1.Attribute != c2.Attribute) {
                     return c1.Attribute - c2.Attribute > 0;
