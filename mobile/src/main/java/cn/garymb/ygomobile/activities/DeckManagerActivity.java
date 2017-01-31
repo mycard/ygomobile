@@ -165,7 +165,8 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
     @Override
     public void onDragLongPress(int pos) {
         if (pos < 0) return;
-        Log.i("kk", "delete " + pos);
+        if (Constants.DEBUG)
+            Log.d("kk", "delete " + pos);
         if (mSettings.isDialogDelete()) {
 
             DeckItem deckItem = mDeckAdapater.getItem(pos);
@@ -347,8 +348,8 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
                 || mDrawerlayout.isDrawerOpen(Gravity.RIGHT);
     }
 
-    private boolean isShowCard(){
-        return mDialog!=null&&mDialog.isShowing();
+    private boolean isShowCard() {
+        return mDialog != null && mDialog.isShowing();
     }
 
     protected void showCardDialog(CardInfo cardInfo, int pos) {
@@ -362,7 +363,7 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
                 AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AppTheme_Dialog_Translucent);
                 builder.setView(mCardDetail.getView());
                 mDialog = builder.show();
-            }else {
+            } else {
                 mDialog.show();
             }
             mCardDetail.bind(cardInfo, mStringManager, new CardDetail.OnClickListener() {

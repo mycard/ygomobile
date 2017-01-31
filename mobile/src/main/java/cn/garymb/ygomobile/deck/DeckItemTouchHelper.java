@@ -8,6 +8,9 @@ import android.util.Log;
 
 import java.util.List;
 
+import cn.garymb.ygomobile.Constants;
+import cn.garymb.ygomobile.lite.R;
+
 import static android.support.v7.widget.helper.ItemTouchHelper.ACTION_STATE_DRAG;
 import static android.support.v7.widget.helper.ItemTouchHelper.ACTION_STATE_IDLE;
 
@@ -20,7 +23,11 @@ public class DeckItemTouchHelper extends ItemTouchHelper2.Callback {
     public DeckItemTouchHelper(DeckAdapater deckAdapater) {
         this.mDeckDrager = new DeckDrager(deckAdapater);
         this.deckAdapater = deckAdapater;
-        setDragSize(10, 10);
+        int size = (int) deckAdapater.getContext().getResources().getDimension(R.dimen.drag_rect);
+        //长按手抖范围
+        setDragSize(size, size);
+        //长按时间
+        setLongTime(Constants.LONG_PRESS_DRAG);
 //        setDragSize();
     }
 
@@ -105,6 +112,8 @@ public class DeckItemTouchHelper extends ItemTouchHelper2.Callback {
         super.onSelectedChanged(viewHolder, actionState);
         if (actionState == ACTION_STATE_DRAG) {
             mDeckDrager.onDragStart();
+            if (Constants.DEBUG)
+                Log.d("kk", "start drag");
         } else if (actionState == ACTION_STATE_IDLE) {
             mDeckDrager.onDragEnd();
         }

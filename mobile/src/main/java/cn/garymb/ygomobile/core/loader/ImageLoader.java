@@ -38,7 +38,7 @@ public class ImageLoader implements Closeable {
     private static final String TAG = ImageLoader.class.getSimpleName();
     private ZipFile mZipFile;
     private LruBitmapPool mLruBitmapPool;
-//    private ExecutorService mExecutorService = Executors.newSingleThreadExecutor();
+    //    private ExecutorService mExecutorService = Executors.newSingleThreadExecutor();
     private boolean isClose = false;
     private Context mContext;
 
@@ -85,7 +85,7 @@ public class ImageLoader implements Closeable {
         return null;
     }
 
-    private void bind(byte[] data, ImageView imageview, boolean isbpg, long code, Drawable pre,boolean isBig) {
+    private void bind(byte[] data, ImageView imageview, boolean isbpg, long code, Drawable pre, boolean isBig) {
         DrawableTypeRequest<byte[]> resource = with(mContext).load(data);
         if (pre != null) {
             resource.placeholder(pre);
@@ -95,14 +95,14 @@ public class ImageLoader implements Closeable {
 //        if(isbpg){
 //            resource.override(Constants.CORE_SKIN_CARD_COVER_SIZE[0], Constants.CORE_SKIN_CARD_COVER_SIZE[1]);
 //        }
-        resource.signature(new StringSignature(code+"_"+isBig));
+        resource.signature(new StringSignature(code + "_" + isBig));
         if (isbpg) {
             resource.decoder(new BpgResourceDecoder("bpg@" + code));
         }
         resource.into(imageview);
     }
 
-    public void bind(final File file, ImageView imageview, boolean isbpg, long code, Drawable pre,boolean isBig) {
+    public void bind(final File file, ImageView imageview, boolean isbpg, long code, Drawable pre, boolean isBig) {
         try {
             DrawableTypeRequest<File> resource = with(mContext).load(file);
             if (pre != null) {
@@ -113,7 +113,7 @@ public class ImageLoader implements Closeable {
 //            if(isbpg){
 //                resource.override(Constants.CORE_SKIN_CARD_COVER_SIZE[0], Constants.CORE_SKIN_CARD_COVER_SIZE[1]);
 //            }
-            resource.signature(new StringSignature(code+"_"+isBig));
+            resource.signature(new StringSignature(code + "_" + isBig));
             if (isbpg) {
                 resource.decoder(new BpgResourceDecoder("bpg@" + code));
             }
@@ -221,6 +221,8 @@ public class ImageLoader implements Closeable {
             }
         }
         if (!bind) {
+            File outFile = new File(AppsSettings.get().getCoreSkinPath(), Constants.UNKNOWN_IMAGE);
+            bind(outFile, imageview, outFile.getName().endsWith(Constants.BPG), 0, null, false);
 //            bind(String.format(Constants.IMAGE_URL, "" + code), imageview, code, pre,isBig);
         }
     }

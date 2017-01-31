@@ -156,7 +156,7 @@ public class ItemTouchHelper2 extends RecyclerView.ItemDecoration
 
     static final String TAG = "ItemTouchHelper";
 
-    static final boolean DEBUG = true;
+    static final boolean DEBUG = false;
 
     static final int ACTIVE_POINTER_ID_NONE = -1;
 
@@ -871,6 +871,7 @@ public class ItemTouchHelper2 extends RecyclerView.ItemDecoration
                 < viewHolder.itemView.getWidth() * threshold) {
             return;
         }
+        mCallback.cancelLongPress();
         List<ViewHolder> swapTargets = findSwapTargets(viewHolder);
         if (swapTargets.size() == 0) {
             return;
@@ -1693,6 +1694,14 @@ public class ItemTouchHelper2 extends RecyclerView.ItemDecoration
         public abstract boolean onMove(RecyclerView recyclerView,
                                        ViewHolder viewHolder, ViewHolder target);
 
+        public void cancelLongPress(){
+            if (!isLongPressMode() && !isLongPressCancel) {
+                isLongPressCancel = true;
+                endLongPressMode();
+                if (DEBUG)
+                    Log.w("kk", "cancel enter long press");
+            }
+        }
         /**
          * Returns whether ItemTouchHelper should start a drag and drop operation if an item is
          * long pressed.

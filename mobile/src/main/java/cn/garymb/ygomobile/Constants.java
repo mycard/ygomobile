@@ -119,7 +119,7 @@ public interface Constants {
     /***
      * 长按删除
      */
-    long LONG_PRESS_DRAG = 800;
+    long LONG_PRESS_DRAG = 500;
     /***
      * adb shell am start -n cn.garymb.ygomobile/cn.garymb.ygomobile.activities.MainActivity -a ygomobile.intent.action.DECK --es android.intent.extra.TEXT 青眼白龙.ydk
      * <p>

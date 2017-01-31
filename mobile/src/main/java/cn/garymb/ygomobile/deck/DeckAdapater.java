@@ -3,6 +3,7 @@ package cn.garymb.ygomobile.deck;
 import android.content.Context;
 import android.os.SystemClock;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,6 +61,7 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
     private LimitList mLimitList;
     private ImageLoader imageLoader;
     private boolean showHead = false;
+    private String mDeckMd5;
 
     public DeckAdapater(Context context, RecyclerView recyclerView, ImageLoader imageLoader) {
         this.context = context;
@@ -460,6 +462,7 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
         if (deck != null) {
             loadData(deck);
         }
+        mDeckMd5 = DeckItemUtils.makeMd5(mItems);
     }
 
     public DeckInfo read(CardLoader cardLoader, File file, LimitList limitList) {
@@ -496,6 +499,9 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
         DeckItemUtils.makeItems(deck, this);
     }
 
+    public boolean isChanged(){
+        return !TextUtils.equals(mDeckMd5,  DeckItemUtils.makeMd5(mItems));
+    }
     @Override
     public DeckViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = mLayoutInflater.inflate(R.layout.item_deck_card, parent, false);

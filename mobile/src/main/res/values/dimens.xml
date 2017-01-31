@@ -36,4 +36,6 @@
     <dimen name="nav_icon_height">100dp</dimen>
     <dimen name="logo_size">160dp</dimen>
     <dimen name="cardinfo_title_height">58dp</dimen>
+
+    <dimen name="drag_rect">4dp</dimen>
 </resources>

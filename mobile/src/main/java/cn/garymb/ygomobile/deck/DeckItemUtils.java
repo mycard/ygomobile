@@ -24,6 +24,10 @@ import cn.garymb.ygomobile.utils.IOUtils;
 import cn.ygo.ocgcore.LimitList;
 
 class DeckItemUtils {
+
+    public static String makeMd5(List<DeckItem> items){
+        return null;
+    }
     public static Deck toDeck(List<DeckItem> items, File file) {
         Deck deck;
         if (file == null) {
