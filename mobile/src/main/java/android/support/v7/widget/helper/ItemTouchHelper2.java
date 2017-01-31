@@ -1827,8 +1827,10 @@ public class ItemTouchHelper2 extends RecyclerView.ItemDecoration
                     if (DEBUG)
                         Log.i(TAG, "enter delete");
                     mLongPressMode = true;
-                    if (mOnDragListner != null && mSelectId >= 0) {
-                        mOnDragListner.onDragLongPress(mSelectId);
+                    if(!isLongPressCancel) {
+                        if (mOnDragListner != null && mSelectId >= 0) {
+                            mOnDragListner.onDragLongPress(mSelectId);
+                        }
                     }
                 } else {
                     if (DEBUG)
