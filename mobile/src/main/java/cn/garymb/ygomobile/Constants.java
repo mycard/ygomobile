@@ -103,7 +103,7 @@ public interface Constants {
     int DECK_EXTRA_COUNT = (DECK_SIDE_MAX / DECK_WIDTH_COUNT * DECK_WIDTH_COUNT < DECK_SIDE_MAX) ? DECK_WIDTH_COUNT * 2 : DECK_WIDTH_COUNT;
     int DECK_SIDE_COUNT = DECK_EXTRA_COUNT;
     String ALIPAY_URL = "https://d.alipay.com/i/index.htm?b=RECEIVE_AC&u=q/aSHOGFuYbRrZ6hHTW46iruN3EhgSHvvlAZMt5oSaM=";
-    String DOWNLOAD_HOME="http://yun.baidu.com/share/home?uk=3121448261";
+    String DOWNLOAD_HOME = "http://yun.baidu.com/share/home?uk=3121448261";
     String URL_HELP = "http://www.jianshu.com/p/a43f5d951a25";
     String WIKI_SEARCH_URL = "http://www.ourocg.cn/S.aspx?key=";
 
@@ -137,7 +137,8 @@ public interface Constants {
      */
     String ACTION_OPEN_GAME = "ygomobile.intent.action.GAME";
     String ACTION_RELOAD = "ygomobile.intent.action.RELOAD";
-    String IMAGE_URL="https://github.com/Ygoproco/Live-images/raw/master/pics/%s.jpg";
+    String IMAGE_URL = "https://github.com/Ygoproco/Live-images/raw/master/pics/%s.jpg";
+    String IMAGE_URL_EX = ".jpg";
     /**
      * https://m.ygomobile.com/deck?ydk=卡组名&main=124563789,12456487&extra=123,145&side=4564,4546
      * ygomobile://m.ygomobile.com/deck?ydk=卡组名&main=124563789,12456487&extra=123,145&side=4564,4546
@@ -146,9 +147,9 @@ public interface Constants {
      * ygomobile://m.ygomobile.com/game?host=127.0.0.1&port=233&user=player&room=1235$123
      */
     String PATH_DECK = "/deck";
-    String SCHEME_HTTP="http";
-    String SCHEME_APP="ygomobile";
-    String URI_HOST="m.ygomobile.com";
+    String SCHEME_HTTP = "http";
+    String SCHEME_APP = "ygomobile";
+    String URI_HOST = "m.ygomobile.com";
 
     String QUERY_YDK = "ydk";
     String QUERY_NAME = "name";

@@ -28,6 +28,7 @@ import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.adapters.ServerLists;
 import cn.garymb.ygomobile.bean.Deck;
 import cn.garymb.ygomobile.core.AppsSettings;
+import cn.garymb.ygomobile.core.ImageUpdater;
 import cn.garymb.ygomobile.core.ResCheckTask;
 import cn.garymb.ygomobile.core.YGOStarter;
 import cn.garymb.ygomobile.lite.R;
@@ -49,6 +50,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private ServerLists.ServerAdapater mServerAdapater;
     protected DrawerLayout mDrawerlayout;
     private View editView;
+    private ImageUpdater mImageUpdater;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +65,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 this, mDrawerlayout, toolbar, R.string.search_open, R.string.search_close);
         mDrawerlayout.addDrawerListener(toggle);
         toggle.syncState();
+        mImageUpdater=new ImageUpdater(this);
         NavigationView navigationView = bind(R.id.nav_main);
         navigationView.setNavigationItemSelectedListener(this);
         mAppsSettings = AppsSettings.get();
@@ -104,6 +107,13 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                         .setTitle(getString(R.string.settings_about_change_log))
                         .setCancelable(false)
                         .loadUrl("file:///android_asset/changelog.html", Color.TRANSPARENT)
+                        .hideButton()
+                        .setCloseLinster((dlg,rs)->{
+                            //mImageUpdater
+                            if(!mImageUpdater.isRunning()) {
+                                mImageUpdater.start();
+                            }
+                        })
                         .show();
             } else {
                 doOpenDeck(getIntent());
@@ -308,13 +318,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 //                }
             }
             break;
-            case R.id.action_update:
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.DOWNLOAD_HOME));
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                try {
-                    startActivity(intent);
-                } catch (Exception e) {
-                    e.printStackTrace();
+            case R.id.action_update_images:
+                if(!mImageUpdater.isRunning()) {
+                    mImageUpdater.start();
+                }else{
+                    Toast.makeText(this, R.string.downloading_images, Toast.LENGTH_SHORT).show();
                 }
                 break;
             default:

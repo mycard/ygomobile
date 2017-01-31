@@ -51,6 +51,7 @@ public class DialogPlus {
 
     public DialogPlus hideButton() {
         mLeft.setVisibility(View.GONE);
+        mRight.setVisibility(View.GONE);
         return this;
     }
 

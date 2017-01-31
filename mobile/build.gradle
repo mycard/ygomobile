@@ -58,4 +58,5 @@ dependencies {
     compile 'com.android.support:design:25.+'
     compile 'com.android.support:appcompat-v7:25.+'
     compile 'com.android.support:support-vector-drawable:25.+'
+    compile 'com.squareup.okhttp:okhttp:2.0.0'
 }

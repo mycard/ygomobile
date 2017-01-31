@@ -32,7 +32,7 @@ public class CardLoader implements ICardLoader {
     private String defSQL = CardInfo.SQL_BASE + " limit " + Constants.DEFAULT_CARD_COUNT + ";";
     private LimitList mLimitList;
     private static final String TAG = CardLoader.class.getSimpleName();
-
+    private final static boolean DEBUG = false;
     public interface CallBack {
         void onSearchStart(LimitList limitList);
 
@@ -125,6 +125,28 @@ public class CardLoader implements ICardLoader {
 
     public LimitList getLimitList() {
         return mLimitList;
+    }
+
+    public List<Long> readAllCardCodes() {
+        Cursor reader = null;
+        try {
+            reader = db.rawQuery(CardInfo.SQL_CODE_BASE+(DEBUG?" limit 100":""), null);
+        } catch (Exception e) {
+            Log.e(TAG, "query", e);
+        }
+        List<Long> tmp = new ArrayList<>();
+        if (reader != null) {
+            if (reader.moveToFirst()) {
+                int index = reader.getColumnIndex(CardInfo._ID);
+                do {
+                    long id = reader.getLong(index);
+                    tmp.add(id);
+
+                } while (reader.moveToNext());
+            }
+            reader.close();
+        }
+        return tmp;
     }
 
     private void loadData(String sql, long setcode, LimitList limitList) {
