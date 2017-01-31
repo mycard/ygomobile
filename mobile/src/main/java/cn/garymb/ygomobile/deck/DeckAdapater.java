@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.SystemClock;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -499,9 +500,12 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
         DeckItemUtils.makeItems(deck, this);
     }
 
-    public boolean isChanged(){
-        return !TextUtils.equals(mDeckMd5,  DeckItemUtils.makeMd5(mItems));
+    public boolean isChanged() {
+        String md5 = DeckItemUtils.makeMd5(mItems);
+        Log.d("kk", mDeckMd5 + "/" + md5);
+        return !TextUtils.equals(mDeckMd5, md5);
     }
+
     @Override
     public DeckViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = mLayoutInflater.inflate(R.layout.item_deck_card, parent, false);

@@ -446,17 +446,21 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
         } else if (mDrawerlayout.isDrawerOpen(Gravity.LEFT)) {
             mDrawerlayout.closeDrawer(Gravity.LEFT);
         } else if (!isExit) {
-            if (mYdkFile != null && mYdkFile.exists()) {
-                DialogPlus builder = new DialogPlus(this);
-                builder.setTitle(R.string.question);
-                builder.setMessage(R.string.quit_deck_tip);
-                builder.setMessageGravity(Gravity.CENTER_HORIZONTAL);
-                builder.setLeftButtonListener((dlg, s) -> {
-                    dlg.dismiss();
-                    isExit = true;
-                    finish();
-                });
-                builder.show();
+            if (mDeckAdapater.isChanged()) {
+                if (mYdkFile != null && mYdkFile.exists()) {
+                    DialogPlus builder = new DialogPlus(this);
+                    builder.setTitle(R.string.question);
+                    builder.setMessage(R.string.quit_deck_tip);
+                    builder.setMessageGravity(Gravity.CENTER_HORIZONTAL);
+                    builder.setLeftButtonListener((dlg, s) -> {
+                        dlg.dismiss();
+                        isExit = true;
+                        finish();
+                    });
+                    builder.show();
+                }
+            } else {
+                super.onBackPressed();
             }
         } else {
             super.onBackPressed();

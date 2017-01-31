@@ -21,12 +21,50 @@ import cn.garymb.ygomobile.bean.Deck;
 import cn.garymb.ygomobile.bean.DeckInfo;
 import cn.garymb.ygomobile.core.CardLoader;
 import cn.garymb.ygomobile.utils.IOUtils;
+import cn.garymb.ygomobile.utils.MD5Util;
 import cn.ygo.ocgcore.LimitList;
 
 class DeckItemUtils {
 
     public static String makeMd5(List<DeckItem> items){
-        return null;
+        StringBuilder stringBuilder=new StringBuilder();
+        stringBuilder.append("#main");
+        for (int i = DeckItem.MainStart; i < DeckItem.ExtraStart + Constants.DECK_MAIN_MAX; i++) {
+            DeckItem deckItem = items.get(i);
+            if (deckItem.getType() == DeckItemType.Space) {
+                break;
+            }
+            CardInfo cardInfo = deckItem.getCardInfo();
+            if (cardInfo != null) {
+                stringBuilder.append("\n");
+                stringBuilder.append(cardInfo.Code);
+            }
+        }
+        stringBuilder.append("\n#extra");
+        for (int i = DeckItem.ExtraStart; i < DeckItem.ExtraStart + Constants.DECK_EXTRA_MAX; i++) {
+            DeckItem deckItem = items.get(i);
+            if (deckItem.getType() == DeckItemType.Space) {
+                break;
+            }
+            CardInfo cardInfo = deckItem.getCardInfo();
+            if (cardInfo != null) {
+                stringBuilder.append("\n");
+                stringBuilder.append(cardInfo.Code);
+            }
+        }
+        stringBuilder.append("\n!side");
+        for (int i = DeckItem.SideStart; i < DeckItem.SideStart + Constants.DECK_SIDE_MAX; i++) {
+            DeckItem deckItem = items.get(i);
+            if (deckItem.getType() == DeckItemType.Space) {
+                break;
+            }
+            CardInfo cardInfo = deckItem.getCardInfo();
+            if (cardInfo != null) {
+                stringBuilder.append("\n");
+                stringBuilder.append(cardInfo.Code);
+            }
+        }
+        return MD5Util.getStringMD5(stringBuilder.toString());
     }
     public static Deck toDeck(List<DeckItem> items, File file) {
         Deck deck;
