@@ -57,6 +57,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/button_bg"
                 android:text="@android:string/ok"
+                tools:visibility="visible"
                 android:textColor="@android:color/white"/>
 
             <View
@@ -72,6 +73,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/button_bg"
                 android:text="@android:string/cancel"
+                tools:visibility="visible"
                 android:textColor="@android:color/white"
                 android:visibility="gone"/>
 

@@ -74,6 +74,8 @@ public class DialogPlus {
     }
 
     public DialogPlus setRightButtonListener(DialogInterface.OnClickListener clickListener) {
+        mCancelView.setVisibility(View.VISIBLE);
+        mRight.setVisibility(View.VISIBLE);
         mRight.setOnClickListener((v) -> {
             if (clickListener != null) {
                 clickListener.onClick(mDialog, DialogInterface.BUTTON_NEUTRAL);
@@ -83,6 +85,7 @@ public class DialogPlus {
     }
 
     public DialogPlus setLeftButtonListener(DialogInterface.OnClickListener clickListener) {
+        mLeft.setVisibility(View.VISIBLE);
         mLeft.setOnClickListener((v) -> {
             if (clickListener != null) {
                 clickListener.onClick(mDialog, DialogInterface.BUTTON_POSITIVE);

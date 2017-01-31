@@ -63,7 +63,7 @@ abstract class BaseCardsAcitivity extends BaseActivity implements CardLoader.Cal
         toggle.setDrawerIndicatorEnabled(false);
         mDrawerlayout.addDrawerListener(toggle);
         toggle.setToolbarNavigationClickListener((v) -> {
-            onBack();
+            onBackHome();
         });
         toggle.syncState();
     }
@@ -112,21 +112,17 @@ abstract class BaseCardsAcitivity extends BaseActivity implements CardLoader.Cal
 
     @Override
     protected void onBackHome() {
-        onBack();
-    }
-
-    private boolean onBack() {
         if (mDrawerlayout.isDrawerOpen(Constants.CARD_SEARCH_GRAVITY)) {
             mDrawerlayout.closeDrawer(Constants.CARD_SEARCH_GRAVITY);
-            return true;
+            return;
         }
         if (mDrawerlayout.isDrawerOpen(Gravity.LEFT)) {
             mDrawerlayout.closeDrawer(Gravity.LEFT);
-            return true;
+            return;
         }
         finish();
-        return true;
     }
+
 
     protected abstract View getMainView();
 

@@ -440,6 +440,26 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
 //    }
 
     @Override
+    protected void onBackHome() {
+        if (mDeckAdapater.isChanged()) {
+            if (mYdkFile != null && mYdkFile.exists()) {
+                DialogPlus builder = new DialogPlus(this);
+                builder.setTitle(R.string.question);
+                builder.setMessage(R.string.quit_deck_tip);
+                builder.setMessageGravity(Gravity.CENTER_HORIZONTAL);
+                builder.setLeftButtonListener((dlg, s) -> {
+                    dlg.dismiss();
+                    isExit = true;
+                    finish();
+                });
+                builder.show();
+            }
+        } else {
+            super.onBackHome();
+        }
+    }
+
+    @Override
     public void onBackPressed() {
         if (mDrawerlayout.isDrawerOpen(Gravity.RIGHT)) {
             mDrawerlayout.closeDrawer(Gravity.RIGHT);
@@ -509,15 +529,16 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
                 break;
             case R.id.action_save:
                 if (mYdkFile == null) {
-                    inputDeckName();
+                    inputDeckName(null);
                 } else {
                     save();
                 }
                 break;
             case R.id.action_rename:
-                inputDeckName();
+                inputDeckName(null);
                 break;
             case R.id.action_deck_new: {
+                final String old = mYdkFile == null ? null : mYdkFile.getAbsolutePath();
                 setCurYdkFile(null);
                 DialogPlus builder = new DialogPlus(this);
                 builder.setTitle(R.string.question);
@@ -525,12 +546,17 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
                 builder.setMessageGravity(Gravity.CLIP_HORIZONTAL);
                 builder.setLeftButtonListener((dlg, rs) -> {
                     dlg.dismiss();
-                    inputDeckName();
+                    inputDeckName(old);
+                });
+                builder.setRightButtonListener((dlg, rs) -> {
+                    dlg.dismiss();
+                    loadDeck(null);
+                    inputDeckName(old);
                 });
                 builder.setCloseLinster((dlg, rs) -> {
                     dlg.dismiss();
                     loadDeck(null);
-                    inputDeckName();
+                    inputDeckName(old);
                 });
                 builder.show();
             }
@@ -727,7 +753,7 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
         }
     }
 
-    private void inputDeckName() {
+    private void inputDeckName(String old) {
         DialogPlus builder = new DialogPlus(this);
 //        AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.intpu_name);
@@ -739,6 +765,12 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
             editText.setText(mYdkFile.getName());
         }
         builder.setView(editText);
+        builder.setCloseLinster((dlg, rs) -> {
+            dlg.dismiss();
+            if (old != null) {
+                loadDeck(new File(old));
+            }
+        });
         builder.setLeftButtonListener((dlg, s) -> {
             CharSequence name = editText.getText();
             if (!TextUtils.isEmpty(name)) {
