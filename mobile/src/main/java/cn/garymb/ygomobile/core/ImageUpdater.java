@@ -78,45 +78,48 @@ public class ImageUpdater implements DialogInterface.OnCancelListener {
     public void start() {
         if (isRunning()) return;
         isRun = true;
-        synchronized (mCardStatus) {
-            if (mCardStatus.size() == 0) {
-                loadCardsLocked();
-            }
-        }
         mCompleted = 0;
         mIndex = 0;
         mDownloading = 0;
         mStop = false;
         mError = 0;
-        File zip = new File(AppsSettings.get().getResourcePath(), Constants.CORE_PICS_ZIP);
-        if (mDialog != null) {
-            mDialog.show();
-        } else {
-            mDialog = ProgressDialog.show(mContext, null, mContext.getString(R.string.download_image_progress, mCompleted, mCount), true, true);
-            mDialog.setOnCancelListener(this);
-        }
-        if (mZipFile == null) {
-            if (zip.exists()) {
-                try {
-                    mZipFile = new ZipFile(zip);
-                } catch (IOException e) {
+        VUiKit.defer().when(()->{
+            synchronized (mCardStatus) {
+                if (mCardStatus.size() == 0) {
+                    loadCardsLocked();
                 }
             }
-        }
+        }).done((res)->{
+            File zip = new File(AppsSettings.get().getResourcePath(), Constants.CORE_PICS_ZIP);
+            if (mDialog != null) {
+                mDialog.show();
+            } else {
+                mDialog = ProgressDialog.show(mContext, null, mContext.getString(R.string.download_image_progress, mCompleted, mCount), true, true);
+                mDialog.setOnCancelListener(this);
+            }
+            if (mZipFile == null) {
+                if (zip.exists()) {
+                    try {
+                        mZipFile = new ZipFile(zip);
+                    } catch (IOException e) {
+                    }
+                }
+            }
 //        Log.i("kk", "download " + mCompleted + "/" + mCount);
-        for (int i = 0; i < SubThreads; i++) {
-            Item item = nextCard();
-            if (item != null) {
-                if (!submit(item)) {
-                    i--;
+            for (int i = 0; i < SubThreads; i++) {
+                Item item = nextCard();
+                if (item != null) {
+                    if (!submit(item)) {
+                        i--;
+                    }
                 }
             }
-        }
-        synchronized (mCardStatus) {
-            if (mDownloading <= 0) {
-                onEnd();
+            synchronized (mCardStatus) {
+                if (mDownloading <= 0) {
+                    onEnd();
+                }
             }
-        }
+        });
     }
 
     @Override
@@ -139,6 +142,9 @@ public class ImageUpdater implements DialogInterface.OnCancelListener {
         }
         return false;
     }
+
+    private long lasttime = 0;
+    private static final long MIN_TIME = 100;
 
     private class DownloadTask implements Runnable {
         Item item;
@@ -200,7 +206,14 @@ public class ImageUpdater implements DialogInterface.OnCancelListener {
                     if (mDialog != null) {
                         VUiKit.post(() -> {
 //                            Log.d("kk", mCompleted+"/"+mCount);
-                            mDialog.setMessage(mContext.getString(R.string.download_image_progress, mCompleted, mCount));
+                            if (mCompleted != mCount) {
+                                if (System.currentTimeMillis() - lasttime > MIN_TIME) {
+                                    lasttime = System.currentTimeMillis();
+                                    mDialog.setMessage(mContext.getString(R.string.download_image_progress, mCompleted, mCount));
+                                }
+                            } else {
+                                mDialog.setMessage(mContext.getString(R.string.download_image_progress, mCompleted, mCount));
+                            }
                         });
                     }
                 }
