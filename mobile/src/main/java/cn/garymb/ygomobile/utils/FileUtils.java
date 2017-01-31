@@ -1,6 +1,7 @@
 package cn.garymb.ygomobile.utils;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStreamReader;
@@ -33,21 +34,32 @@ public class FileUtils {
 
     public static boolean writeLines(String file, List<String> lines, String encoding, String newLine) {
         FileOutputStream outputStream = null;
+        File tmp = new File(file + ".tmp");
+        boolean ok = false;
         try {
-            outputStream = new FileOutputStream(file);
             byte[] newL = newLine.getBytes(encoding);
             if (lines != null) {
+                outputStream = new FileOutputStream(tmp);
                 for (String line : lines) {
                     if (line != null) {
                         outputStream.write(line.getBytes(encoding));
                     }
                     outputStream.write(newL);
                 }
+                outputStream.flush();
+                ok = true;
             }
         } catch (Exception e) {
             return false;
         } finally {
             IOUtils.close(outputStream);
+        }
+        if (ok) {
+            File f = new File(file);
+            if (f.exists()) {
+                f.delete();
+            }
+            tmp.renameTo(f);
         }
         return true;
     }

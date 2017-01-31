@@ -8,14 +8,10 @@ import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-import cn.garymb.ygomobile.core.AppsSettings;
 import cn.garymb.ygomobile.utils.IOUtils;
-
-import static cn.garymb.ygomobile.Constants.CORE_SYSTEM_PATH;
 
 public class ConfigManager {
 
@@ -56,8 +52,10 @@ public class ConfigManager {
         }
         OutputStreamWriter out = null;
         FileOutputStream outputStream = null;
+        File tmp = new File(file.getAbsolutePath() + ".tmp");
+        boolean ok = false;
         try {
-            outputStream = new FileOutputStream(file);
+            outputStream = new FileOutputStream(tmp);
             out = new OutputStreamWriter(outputStream, "utf-8");
             BufferedWriter writer = new BufferedWriter(out);
             int count = mLines.size();
@@ -68,11 +66,18 @@ public class ConfigManager {
                 }
             }
             writer.flush();
+            ok = true;
         } catch (Exception e) {
 
         } finally {
             IOUtils.close(out);
             IOUtils.close(outputStream);
+        }
+        if (ok) {
+            if(file.exists()) {
+                file.delete();
+            }
+            tmp.renameTo(file);
         }
     }
 
