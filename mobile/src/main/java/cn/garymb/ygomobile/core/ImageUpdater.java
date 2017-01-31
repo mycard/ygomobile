@@ -170,6 +170,12 @@ public class ImageUpdater implements DialogInterface.OnCancelListener {
                         }
                     }
                 }
+            }else{
+                synchronized (mCardStatus) {
+                    if (mDownloading <= 0) {
+                        onEnd();
+                    }
+                }
             }
         }
     }
