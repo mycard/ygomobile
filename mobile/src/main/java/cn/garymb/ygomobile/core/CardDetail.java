@@ -89,7 +89,7 @@ public class CardDetail extends BaseAdapterPlus.BaseViewHolder {
     }
 
     public void bind(CardInfo cardInfo, StringManager stringManager, final OnClickListener listener) {
-        imageLoader.bindImage(cardImage, cardInfo.Code);
+        imageLoader.bindImage(cardImage, cardInfo.Code, null, true);
         name.setText(cardInfo.Name);
         desc.setText(cardInfo.Desc);
         cardcode.setText(String.format("%08d", cardInfo.Code));

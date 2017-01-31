@@ -6,10 +6,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.io.File;
-
-import cn.garymb.ygomobile.Constants;
-import cn.garymb.ygomobile.core.AppsSettings;
 import cn.garymb.ygomobile.core.loader.ImageLoader;
 import cn.garymb.ygomobile.lite.R;
 
@@ -58,13 +54,13 @@ class DeckViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void useDefault(ImageLoader imageLoader, int w, int h) {
-//        cardImage.setImageResource(R.drawable.unknown);
-        File outFile = new File(AppsSettings.get().getCoreSkinPath(), Constants.UNKNOWN_IMAGE);
-        ViewGroup.LayoutParams layoutParams = cardImage.getLayoutParams();
-        if (layoutParams != null) {
-            layoutParams.height = h;
-        }
-        imageLoader.bind(outFile, cardImage, outFile.getName().endsWith(Constants.BPG), 0, null);
+        cardImage.setImageResource(R.drawable.unknown);
+//        File outFile = new File(AppsSettings.get().getCoreSkinPath(), Constants.UNKNOWN_IMAGE);
+//        ViewGroup.LayoutParams layoutParams = cardImage.getLayoutParams();
+//        if (layoutParams != null) {
+//            layoutParams.height = h;
+//        }
+//        imageLoader.bind(outFile, cardImage, outFile.getName().endsWith(Constants.BPG), 0, null);
     }
 
     protected <T extends View> T findViewById(int id) {

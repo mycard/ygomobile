@@ -19,6 +19,7 @@ import com.bumptech.glide.load.resource.gifbitmap.GifBitmapWrapper;
 import com.bumptech.glide.load.resource.gifbitmap.GifBitmapWrapperResource;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
+import com.bumptech.glide.signature.StringSignature;
 
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
@@ -92,20 +93,24 @@ public class ImageLoader implements Closeable {
         return null;
     }
 
-    private void bind(byte[] data, ImageView imageview, boolean isbpg, long code, Drawable pre) {
+    private void bind(byte[] data, ImageView imageview, boolean isbpg, long code, Drawable pre,boolean isBig) {
         DrawableTypeRequest<byte[]> resource = with(mContext).load(data);
         if (pre != null) {
             resource.placeholder(pre);
         } else {
             resource.placeholder(R.drawable.unknown);
         }
+//        if(isbpg){
+//            resource.override(Constants.CORE_SKIN_CARD_COVER_SIZE[0], Constants.CORE_SKIN_CARD_COVER_SIZE[1]);
+//        }
+        resource.signature(new StringSignature(code+"_"+isBig));
         if (isbpg) {
             resource.decoder(new BpgResourceDecoder("bpg@" + code));
         }
         resource.into(imageview);
     }
 
-    public void bind(final File file, ImageView imageview, boolean isbpg, long code, Drawable pre) {
+    public void bind(final File file, ImageView imageview, boolean isbpg, long code, Drawable pre,boolean isBig) {
         try {
             DrawableTypeRequest<File> resource = with(mContext).load(file);
             if (pre != null) {
@@ -113,6 +118,10 @@ public class ImageLoader implements Closeable {
             } else {
                 resource.placeholder(R.drawable.unknown);
             }
+//            if(isbpg){
+//                resource.override(Constants.CORE_SKIN_CARD_COVER_SIZE[0], Constants.CORE_SKIN_CARD_COVER_SIZE[1]);
+//            }
+            resource.signature(new StringSignature(code+"_"+isBig));
             if (isbpg) {
                 resource.decoder(new BpgResourceDecoder("bpg@" + code));
             }
@@ -122,7 +131,7 @@ public class ImageLoader implements Closeable {
         }
     }
 
-    public void bind(final String url, ImageView imageview, long code, Drawable pre) {
+    public void bind(final String url, ImageView imageview, long code, Drawable pre,boolean isBig) {
         DrawableTypeRequest<Uri> resource = with(mContext).load(Uri.parse(url));
         if (pre != null) {
             resource.placeholder(pre);
@@ -130,6 +139,8 @@ public class ImageLoader implements Closeable {
             resource.placeholder(R.drawable.unknown);
         }
         resource.error(R.drawable.unknown);
+        resource.override(Constants.CORE_SKIN_CARD_COVER_SIZE[0], Constants.CORE_SKIN_CARD_COVER_SIZE[1]);
+        resource.signature(new StringSignature(code+"_"+isBig));
 //
         resource.into(new GlideDrawableImageViewTarget(imageview) {
             @Override
@@ -176,6 +187,10 @@ public class ImageLoader implements Closeable {
     }
 
     public void bindImage(ImageView imageview, long code, Drawable pre) {
+        bindImage(imageview, code, pre, false);
+    }
+
+    public void bindImage(ImageView imageview, long code, Drawable pre, boolean isBig) {
         String name = Constants.CORE_IMAGE_PATH + "/" + code;
         String path = AppsSettings.get().getResourcePath();
         boolean bind = false;
@@ -186,7 +201,7 @@ public class ImageLoader implements Closeable {
                 file = new File(mContext.getCacheDir(), name + ex);
             }
             if (file.exists()) {
-                bind(file, imageview, Constants.BPG.equals(ex), code, pre);
+                bind(file, imageview, Constants.BPG.equals(ex), code, pre, isBig);
                 bind = true;
                 return;
             }
@@ -205,7 +220,7 @@ public class ImageLoader implements Closeable {
                         inputStream = mZipFile.getInputStream(entry);
                         outputStream = new ByteArrayOutputStream();
                         IOUtils.copy(inputStream, outputStream);
-                        bind(outputStream.toByteArray(), imageview, Constants.BPG.equals(ex), code, pre);
+                        bind(outputStream.toByteArray(), imageview, Constants.BPG.equals(ex), code, pre, isBig);
                         bind = true;
                         break;
                     }
@@ -217,7 +232,7 @@ public class ImageLoader implements Closeable {
             }
         }
         if (!bind) {
-            bind(String.format(Constants.IMAGE_URL, "" + code), imageview, code, pre);
+            bind(String.format(Constants.IMAGE_URL, "" + code), imageview, code, pre,isBig);
         }
     }
 }
