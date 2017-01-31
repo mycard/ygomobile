@@ -60,6 +60,10 @@ public class DialogPlus {
         return this;
     }
 
+    public boolean isShowing() {
+        return mDialog != null && mDialog.isShowing();
+    }
+
     public DialogPlus setCloseLinster(DialogInterface.OnClickListener clickListener) {
         closeView.setOnClickListener((v) -> {
             if (clickListener != null) {
@@ -114,7 +118,7 @@ public class DialogPlus {
     }
 
     public DialogPlus setTitle(String text) {
-        if(mTitleView!=null) {
+        if (mTitleView != null) {
             mTitleView.setText(text);
         }
         return this;

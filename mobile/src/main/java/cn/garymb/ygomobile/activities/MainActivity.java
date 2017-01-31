@@ -109,6 +109,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                         .loadUrl("file:///android_asset/changelog.html", Color.TRANSPARENT)
                         .hideButton()
                         .setCloseLinster((dlg,rs)->{
+                            dlg.dismiss();
                             //mImageUpdater
                             if(!mImageUpdater.isRunning()) {
                                 mImageUpdater.start();

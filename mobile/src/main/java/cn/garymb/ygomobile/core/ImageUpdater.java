@@ -3,6 +3,7 @@ package cn.garymb.ygomobile.core;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.util.Log;
 
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -17,6 +18,8 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
 
 import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.lite.R;
@@ -33,7 +36,7 @@ public class ImageUpdater implements DialogInterface.OnCancelListener {
     private final static int SubThreads = 4;
     private int mDownloading = 0;
     private final List<Long> mCardStatus = new ArrayList<>();
-    private ExecutorService mExecutorService = Executors.newSingleThreadExecutor();
+    private ExecutorService mExecutorService = Executors.newFixedThreadPool(SubThreads);
     private OkHttpClient mOkHttpClient;
     private File mPicsPath;
     private ProgressDialog mDialog;
@@ -42,6 +45,7 @@ public class ImageUpdater implements DialogInterface.OnCancelListener {
     private int mCompleted;
     private boolean isRun = false;
     private boolean mStop = false;
+    private ZipFile mZipFile;
 
     public ImageUpdater(Context context) {
         mContext = context;
@@ -79,6 +83,7 @@ public class ImageUpdater implements DialogInterface.OnCancelListener {
         mDownloading = 0;
         mStop = false;
         mPicsPath = new File(AppsSettings.get().getResourcePath(), Constants.CORE_IMAGE_PATH);
+        File zip = new File(AppsSettings.get().getResourcePath(), Constants.CORE_PICS_ZIP);
         if (mDialog != null) {
             mDialog.show();
         } else {
@@ -86,6 +91,14 @@ public class ImageUpdater implements DialogInterface.OnCancelListener {
             mDialog.setOnCancelListener(this);
         }
         IOUtils.createNoMedia(mPicsPath.getAbsolutePath());
+        if (mZipFile == null) {
+            if (zip.exists()) {
+                try {
+                    mZipFile = new ZipFile(zip);
+                } catch (IOException e) {
+                }
+            }
+        }
 //        Log.i("kk", "download " + mCompleted + "/" + mCount);
         for (int i = 0; i < SubThreads; i++) {
             long id = nextCard();
@@ -118,7 +131,7 @@ public class ImageUpdater implements DialogInterface.OnCancelListener {
                 }
                 String url = String.format(Constants.IMAGE_URL, id + "");
                 File file = new File(mPicsPath, id + Constants.IMAGE_URL_EX);
-                mExecutorService.submit(new DownloadTask(url, file));
+                mExecutorService.submit(new DownloadTask(id, url, file));
                 return true;
             }
         }
@@ -129,34 +142,64 @@ public class ImageUpdater implements DialogInterface.OnCancelListener {
         String url;
         File file;
         File tmpFile;
+        long mCode;
 
-        private DownloadTask(String url, File file) {
+        private DownloadTask(long code, String url, File file) {
             this.url = url;
             this.file = file;
+            mCode = code;
             this.tmpFile = new File(file.getAbsolutePath() + ".tmp");
+        }
+
+        private boolean existImage() {
+            if (file.exists()) {
+                return true;
+            }
+            String name = Constants.CORE_IMAGE_PATH + "/" + mCode;
+            for (String ex : Constants.IMAGE_EX) {
+                File file = new File(mPicsPath, mCode + ex);
+                if (file.exists()) {
+                    return true;
+                }
+            }
+            if (mZipFile != null) {
+                ZipEntry entry = null;
+                for (String ex : Constants.IMAGE_EX) {
+                    entry = mZipFile.getEntry(name + ex);
+                    if (entry != null) {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
 
         @Override
         public void run() {
-            if (file.exists()) {
-
-            } else {
-                if (download(url, tmpFile) && tmpFile.exists()) {
-                    tmpFile.renameTo(file);
-                }
-            }
-            synchronized (mCardStatus) {
-                mDownloading--;
-                mCompleted++;
-                if (mDialog != null) {
-                    VUiKit.post(() -> {
-                        mDialog.setMessage(mContext.getString(R.string.download_image_progress, mCompleted, mCount));
-                    });
-                }
-            }
             boolean needNext;
             synchronized (mCardStatus) {
                 needNext = !mStop;
+            }
+            if (needNext) {
+                if (existImage()) {
+                } else {
+                    if (download(url, tmpFile) && tmpFile.exists()) {
+                        tmpFile.renameTo(file);
+                    }
+                }
+                synchronized (mCardStatus) {
+                    mDownloading--;
+                    mCompleted++;
+                    if (mDialog != null) {
+                        VUiKit.post(() -> {
+//                            Log.d("kk", mCompleted+"/"+mCount);
+                            mDialog.setMessage(mContext.getString(R.string.download_image_progress, mCompleted, mCount));
+                        });
+                    }
+                }
+                synchronized (mCardStatus) {
+                    needNext = !mStop;
+                }
             }
             if (needNext) {
                 long id = nextCard();
@@ -170,7 +213,7 @@ public class ImageUpdater implements DialogInterface.OnCancelListener {
                         }
                     }
                 }
-            }else{
+            } else {
                 synchronized (mCardStatus) {
                     if (mDownloading <= 0) {
                         onEnd();
@@ -190,7 +233,7 @@ public class ImageUpdater implements DialogInterface.OnCancelListener {
             if (response.isSuccessful()) {
                 inputStream = response.body().byteStream();
                 outputStream = new FileOutputStream(file);
-                byte[] tmp = new byte[4096];
+                byte[] tmp = new byte[8192];
                 int len;
                 while ((len = inputStream.read(tmp)) != -1) {
                     outputStream.write(tmp, 0, len);
@@ -218,10 +261,19 @@ public class ImageUpdater implements DialogInterface.OnCancelListener {
     }
 
     private void onEnd() {
+        synchronized (mCardStatus){
+            mCardStatus.clear();
+        }
         if (mDialog != null) {
             mDialog.dismiss();
         }
         isRun = false;
+        if (mZipFile != null) {
+            try {
+                mZipFile.close();
+            } catch (IOException e) {
+            }
+        }
     }
 
     private void loadCardsLocked() {

@@ -189,9 +189,6 @@ public class ImageLoader implements Closeable {
         File zip = new File(path, Constants.CORE_PICS_ZIP);
         for (String ex : Constants.IMAGE_EX) {
             File file = new File(AppsSettings.get().getResourcePath(), name + ex);
-            if (!file.exists()) {
-                file = new File(mContext.getCacheDir(), name + ex);
-            }
             if (file.exists()) {
                 bind(file, imageview, Constants.BPG.equals(ex), code, pre, isBig);
                 bind = true;
