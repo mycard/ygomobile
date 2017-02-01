@@ -1444,7 +1444,6 @@ void Game::SaveConfig() {
 	BufferIO::EncodeUTF8(gameConf.lastdeck, lastdeck);
 	android::setLastDeck(appMain, lastdeck);
 }
-
 void Game::ShowCardInfo(int code) {
 	CardData cd;
 	wchar_t formatBuffer[256];

@@ -39,37 +39,34 @@ bool MenuHandler::OnEvent(const irr::SEvent& event) {
 				break;
 			}
 			case BUTTON_JOIN_HOST: {
-
 				char ip[20];
 				const wchar_t* pstr = mainGame->ebJoinHost->getText();
-					//error handling
-					BufferIO::CopyWStr(pstr, ip, 16);
+				BufferIO::CopyWStr(pstr, ip, 16);
 				unsigned int remote_addr = htonl(inet_addr(ip));
-				if (remote_addr == -1) {//TEST 233
-				//int status;
-				char hostname[100];
- 					char port[6];
-				BufferIO::CopyWStr(pstr, hostname, 100);
- 					BufferIO::CopyWStr(mainGame->ebJoinPort->getText(), port, 6);
- 					struct evutil_addrinfo hints;
+				if(remote_addr == -1) {
+					char hostname[100];
+					char port[6];
+					BufferIO::CopyWStr(pstr, hostname, 100);
+					BufferIO::CopyWStr(mainGame->ebJoinPort->getText(), port, 6);
+					struct evutil_addrinfo hints;
 					struct evutil_addrinfo *answer = NULL;
 					memset(&hints, 0, sizeof(hints));
- 					hints.ai_family = AF_INET;
- 					hints.ai_socktype = SOCK_STREAM;
- 					hints.ai_protocol = IPPROTO_TCP;
- 					hints.ai_flags = EVUTIL_AI_ADDRCONFIG;
+					hints.ai_family = AF_INET;
+					hints.ai_socktype = SOCK_STREAM;
+					hints.ai_protocol = IPPROTO_TCP;
+					hints.ai_flags = EVUTIL_AI_ADDRCONFIG;
 					int status=evutil_getaddrinfo(hostname, port, &hints, &answer);
 					if(status != 0) {
- 						mainGame->gMutex.Lock();
- 						mainGame->env->addMessageBox(L"", dataManager.GetSysString(1412));
- 						mainGame->gMutex.Unlock();
+						mainGame->gMutex.Lock();
+						mainGame->env->addMessageBox(L"", dataManager.GetSysString(1412));
+						mainGame->gMutex.Unlock();
 						break;
- 				} else {
- 						sockaddr_in * sin = ((struct sockaddr_in *)answer->ai_addr);
- 						evutil_inet_ntop(AF_INET, &(sin->sin_addr), ip, 20);
+					} else {
+						sockaddr_in * sin = ((struct sockaddr_in *)answer->ai_addr);
+						evutil_inet_ntop(AF_INET, &(sin->sin_addr), ip, 20);
 						remote_addr = htonl(inet_addr(ip));
+					}
 				}
-				}//TEST 233
 				unsigned int remote_port = _wtoi(mainGame->ebJoinPort->getText());
 				BufferIO::CopyWStr(pstr, mainGame->gameConf.lasthost, 100);
 				BufferIO::CopyWStr(mainGame->ebJoinPort->getText(), mainGame->gameConf.lastport, 20);
@@ -184,10 +181,10 @@ bool MenuHandler::OnEvent(const irr::SEvent& event) {
 			}
 			case BUTTON_LOAD_REPLAY: {
 				mainGame->soundEffectPlayer->doPressButton();
-				if(mainGame->lstReplayList->getSelected() == -1)
-					break;
-				if(!ReplayMode::cur_replay.OpenReplay(mainGame->lstReplayList->getListItem(mainGame->lstReplayList->getSelected())))
-					break;
+					if(mainGame->lstReplayList->getSelected() == -1)
+						break;
+					if(!ReplayMode::cur_replay.OpenReplay(mainGame->lstReplayList->getListItem(mainGame->lstReplayList->getSelected())))
+						break;
 				mainGame->imgCard->setImage(imageManager.tCover[0]);
 				mainGame->imgCard->setScaleImage(true);
 				mainGame->wCardImg->setVisible(true);

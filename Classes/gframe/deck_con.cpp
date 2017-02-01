@@ -40,6 +40,7 @@ static int parse_filter(const wchar_t* pstr, unsigned int* type) {
 	*type = 0;
 	return 0;
 }
+
 static bool check_set_code(const CardDataC& data, int set_code) {
 	unsigned long long sc = data.setcode;
 	if (data.alias) {
@@ -57,6 +58,7 @@ static bool check_set_code(const CardDataC& data, int set_code) {
 	}
 	return res;
 }
+
 bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 #ifdef _IRR_ANDROID_PLATFORM_
 	irr::SEvent transferEvent;
@@ -887,7 +889,7 @@ void DeckBuilder::FilterCards() {
 			} else {
 				if(wcsstr(text.name, pstr) == 0 && wcsstr(text.text, pstr) == 0
 					&& (!set_code || !check_set_code(data, set_code)))
-						continue;
+					continue;
 			}
 		}
 		results.push_back(ptr);

@@ -418,16 +418,18 @@ bool ClientField::OnEvent(const irr::SEvent& event) {
 				mainGame->soundEffectPlayer->doPressButton();
 				if (mainGame->dInfo.curMsg == MSG_SELECT_OPTION) {
 					DuelClient::SetResponseI(selected_option);
+				} else if (mainGame->dInfo.curMsg == MSG_SELECT_IDLECMD) {
+					int index = 0;
+					while(activatable_cards[index] != command_card || activatable_descs[index].first != select_options[selected_option]) index++;
+					DuelClient::SetResponseI((index << 16) + 5);
+				} else if (mainGame->dInfo.curMsg == MSG_SELECT_BATTLECMD) {
+					int index = 0;
+					while(activatable_cards[index] != command_card || activatable_descs[index].first != select_options[selected_option]) index++;
+					DuelClient::SetResponseI(index << 16);
 				} else {
 					int index = 0;
 					while(activatable_cards[index] != command_card || activatable_descs[index].first != select_options[selected_option]) index++;
-					if (mainGame->dInfo.curMsg == MSG_SELECT_IDLECMD) {
-					DuelClient::SetResponseI((index << 16) + 5);
-				} else if (mainGame->dInfo.curMsg == MSG_SELECT_BATTLECMD) {
-					DuelClient::SetResponseI(index << 16);
-				} else {
 					DuelClient::SetResponseI(index);
-					}
 				}
 				mainGame->HideElement(mainGame->wOptions, true);
 				break;
@@ -846,7 +848,6 @@ bool ClientField::OnEvent(const irr::SEvent& event) {
 								respbuf[i] = sort_list[i] - 1;
 							DuelClient::SetResponseB(respbuf, select_max);
 							mainGame->HideElement(mainGame->wCardSelect, true);
-							//merge 8c65ee
 							sort_list.clear();
 						}
 					}
@@ -874,7 +875,7 @@ bool ClientField::OnEvent(const irr::SEvent& event) {
 					break;
 				} else {
 					mainGame->HideElement(mainGame->wCardSelect);
-					if (mainGame->dInfo.curMsg == MSG_SELECT_CHAIN && !chain_forced)
+					if(mainGame->dInfo.curMsg == MSG_SELECT_CHAIN && !chain_forced)
 						ShowCancelOrFinishButton(1);
 					break;
 				}
@@ -906,9 +907,7 @@ bool ClientField::OnEvent(const irr::SEvent& event) {
 			}
 			case CHECK_RACE: {
 				int rac = 0, filter = 0x1, count = 0;
-				//merge bfa234
 				for(int i = 0; i < 24; ++i, filter <<= 1) {
-//				for(int i = 0; i < 23; ++i, filter <<= 1) {
 					if(mainGame->chkRace[i]->isChecked()) {
 						rac |= filter;
 						count++;
@@ -961,6 +960,7 @@ bool ClientField::OnEvent(const irr::SEvent& event) {
 				for(int i = 0; i < 5; ++i) {
 					// draw selectable_cards[i + pos] in btnCardSelect[i]
 					mainGame->stCardPos[i]->enableOverrideColor(false);
+					// image
 					if(selectable_cards[i + pos]->code)
 						mainGame->btnCardSelect[i]->setImage(imageManager.GetTexture(selectable_cards[i + pos]->code));
 					else if(conti_selecting)
@@ -968,9 +968,8 @@ bool ClientField::OnEvent(const irr::SEvent& event) {
 					else
 						mainGame->btnCardSelect[i]->setImage(imageManager.tCover[0]);
 					mainGame->btnCardSelect[i]->setRelativePosition(rect<s32>((30 + i * 125)  * mainGame->xScale, 55 * mainGame->xScale, (30 + 120 + i * 125)  * mainGame->xScale, 225  * mainGame->yScale));
+					// text
 					wchar_t formatBuffer[2048];
-//					myswprintf(formatBuffer, L"%ls[%d]", dataManager.FormatLocation(selectable_cards[i + pos]->location),
-//					           selectable_cards[i + pos]->sequence + 1);
 					if(sort_list.size()) {
 						if(sort_list[pos + i] > 0)
 							myswprintf(formatBuffer, L"%d", sort_list[pos + i]);
@@ -988,12 +987,12 @@ bool ClientField::OnEvent(const irr::SEvent& event) {
 								selectable_cards[i + pos]->sequence + 1);
 					}
 					mainGame->stCardPos[i]->setText(formatBuffer);
+					// color
 					if(conti_selecting)
 						mainGame->stCardPos[i]->setBackgroundColor(0xffffffff);
 					else if(selectable_cards[i + pos]->location == LOCATION_OVERLAY) {
 						if(selectable_cards[i + pos]->owner != selectable_cards[i + pos]->overlayTarget->controler)
 							mainGame->stCardPos[i]->setOverrideColor(0xff0000ff);
-						// BackgroundColor: controller of the xyz monster
 						if(selectable_cards[i + pos]->is_selected)
 							mainGame->stCardPos[i]->setBackgroundColor(0xffffff00);
 						else if(selectable_cards[i + pos]->overlayTarget->controler)
@@ -1162,7 +1161,7 @@ bool ClientField::OnEvent(const irr::SEvent& event) {
 			if (x < (200 * mainGame->xScale) && y < (270 * mainGame->yScale)) {
 				mainGame->textFont->setTransparency(true);
 				break;
-			 }
+			 }//touch the pic of detail to refresh textfonts
 			if(x < 300 * mainGame->xScale)
 				break;
 			if(mainGame->gameConf.control_mode == 1) {
@@ -1380,7 +1379,7 @@ bool ClientField::OnEvent(const irr::SEvent& event) {
 					int command_flag = 0;
 					if(conti_cards.size() == 0)
 						break;
-						command_flag |= COMMAND_OPERATION;
+					command_flag |= COMMAND_OPERATION;
 					list_command = 1;
 					ShowMenu(command_flag, x, y);
 					break;
@@ -1689,7 +1688,6 @@ bool ClientField::OnEvent(const irr::SEvent& event) {
 			bool should_show_tip = false;
 			s32 x = event.MouseInput.X;
 			s32 y = event.MouseInput.Y;
-			//hovered_location = 0;
 			irr::core::position2di pos(x, y);
 			wchar_t formatBuffer[2048];
 			if(x < 300) {

@@ -2380,7 +2380,7 @@ int32 field::process_single_event() {
 		for(auto ovit = starget->xyz_materials.begin(); ovit != starget->xyz_materials.end(); ++ovit) {
 			pr = (*ovit)->xmaterial_effect.equal_range(ev);
 			for(; pr.first != pr.second; ++pr.first) {
-			effect* peffect = pr.first->second;
+				effect* peffect = pr.first->second;
 				if(peffect->type & EFFECT_TYPE_FIELD)
 					continue;
 				process_single_event(peffect, *elit, tp, ntp, tev, ntev);
@@ -2401,74 +2401,74 @@ int32 field::process_single_event() {
 	return TRUE;
 }
 int32 field::process_single_event(effect* peffect, const tevent& e, effect_vector& tp, effect_vector& ntp, event_list& tev, event_list& ntev) {
-			if(!(peffect->type & EFFECT_TYPE_ACTIONS))
+	if(!(peffect->type & EFFECT_TYPE_ACTIONS))
 		return FALSE;
-			if((peffect->type & EFFECT_TYPE_FLIP) && (e.event_value & (NO_FLIP_EFFECT >> 16)))
+	if((peffect->type & EFFECT_TYPE_FLIP) && (e.event_value & (NO_FLIP_EFFECT >> 16)))
 		return FALSE;
-			//continuous & trigger (single)
-			if(peffect->type & EFFECT_TYPE_CONTINUOUS) {
-				uint8 owner_player = peffect->get_handler_player();
-				if(peffect->is_activateable(owner_player, e)) {
-					if(peffect->is_flag(EFFECT_FLAG_DELAY) && (core.chain_solving || core.conti_solving)) {
-						if(owner_player == infos.turn_player) {
-							core.delayed_tp.push_back(peffect);
-							core.delayed_tev.push_back(e);
-						} else {
-							core.delayed_ntp.push_back(peffect);
-							core.delayed_ntev.push_back(e);
-						}
-					} else {
-						if(owner_player == infos.turn_player) {
-							tp.push_back(peffect);
-							tev.push_back(e);
-						} else {
-							ntp.push_back(peffect);
-							ntev.push_back(e);
-						}
-					}
+	//continuous & trigger (single)
+	if(peffect->type & EFFECT_TYPE_CONTINUOUS) {
+		uint8 owner_player = peffect->get_handler_player();
+		if(peffect->is_activateable(owner_player, e)) {
+			if(peffect->is_flag(EFFECT_FLAG_DELAY) && (core.chain_solving || core.conti_solving)) {
+				if(owner_player == infos.turn_player) {
+					core.delayed_tp.push_back(peffect);
+					core.delayed_tev.push_back(e);
+				} else {
+					core.delayed_ntp.push_back(peffect);
+					core.delayed_ntev.push_back(e);
 				}
 			} else {
+				if(owner_player == infos.turn_player) {
+					tp.push_back(peffect);
+					tev.push_back(e);
+				} else {
+					ntp.push_back(peffect);
+					ntev.push_back(e);
+				}
+			}
+		}
+	} else {
 		card* phandler = peffect->get_handler();
 		if(!peffect->is_condition_check(phandler->current.controler, e))
 			return FALSE;
 		peffect->s_range = phandler->current.location;
 		peffect->o_range = phandler->current.sequence;
-				chain newchain;
-				newchain.flag = 0;
-				newchain.chain_id = infos.field_id++;
-				newchain.evt = e;
-				newchain.triggering_effect = peffect;
+		chain newchain;
+		newchain.flag = 0;
+		newchain.chain_id = infos.field_id++;
+		newchain.evt = e;
+		newchain.triggering_effect = peffect;
 		newchain.triggering_controler = phandler->current.controler;
 		newchain.triggering_location = phandler->current.location;
 		newchain.triggering_sequence = phandler->current.sequence;
 		if(peffect->is_flag(EFFECT_FLAG_EVENT_PLAYER) && (e.event_player == 0 || e.event_player == 1))
 			newchain.triggering_player = e.event_player;
-				else {
+		else {
 			if(phandler->current.reason & REASON_TEMPORARY)
 				newchain.triggering_player = phandler->previous.controler;
-					else
-						newchain.triggering_player = newchain.triggering_controler;
-				}
+			else
+				newchain.triggering_player = newchain.triggering_controler;
+		}
 		if(core.flip_delayed && e.event_code == EVENT_FLIP) {
-					if (peffect->type & EFFECT_TYPE_TRIGGER_O)
-						core.new_ochain_b.push_back(newchain);
-					else
-						core.new_fchain_b.push_back(newchain);
-				} else {
-					if (peffect->type & EFFECT_TYPE_TRIGGER_O)
-						core.new_ochain.push_back(newchain);
-					else
-						core.new_fchain.push_back(newchain);
-				}
+			if (peffect->type & EFFECT_TYPE_TRIGGER_O)
+				core.new_ochain_b.push_back(newchain);
+			else
+				core.new_fchain_b.push_back(newchain);
+		} else {
+			if (peffect->type & EFFECT_TYPE_TRIGGER_O)
+				core.new_ochain.push_back(newchain);
+			else
+				core.new_fchain.push_back(newchain);
+		}
 		phandler->create_relation(newchain);
-				effect* deffect;
+		effect* deffect;
 		if(deffect = phandler->is_affected_by_effect(EFFECT_DISABLE_EFFECT)) {
-					effect* negeff = pduel->new_effect();
-					negeff->owner = deffect->owner;
-					negeff->type = EFFECT_TYPE_SINGLE;
-					negeff->code = EFFECT_DISABLE_CHAIN;
-					negeff->value = newchain.chain_id;
-					negeff->reset_flag = RESET_EVENT | deffect->get_value();
+			effect* negeff = pduel->new_effect();
+			negeff->owner = deffect->owner;
+			negeff->type = EFFECT_TYPE_SINGLE;
+			negeff->code = EFFECT_DISABLE_CHAIN;
+			negeff->value = newchain.chain_id;
+			negeff->reset_flag = RESET_EVENT | deffect->get_value();
 			phandler->add_effect(negeff);
 		}
 	}
@@ -2964,7 +2964,7 @@ int32 field::process_battle_command(uint16 step) {
 		return FALSE;
 	}
 	case 4: {
-		// confirm attack_target(replay start point)
+		// select attack target(replay start point)
 		core.attack_player = FALSE;
 		core.select_cards.clear();
 		auto atype = get_attack_target(core.attacker, &core.select_cards, core.chain_attack);
@@ -3205,7 +3205,7 @@ int32 field::process_battle_command(uint16 step) {
 		return FALSE;
 	}
 	case 20: {
-		//infos.phase = PHASE_DAMAGE;
+		// start of PHASE_DAMAGE;
 		pduel->write_buffer8(MSG_DAMAGE_STEP_START);
 		raise_single_event(core.attacker, 0, EVENT_BATTLE_START, 0, 0, 0, 0, 0);
 		if(core.attack_target)
@@ -3277,7 +3277,7 @@ int32 field::process_battle_command(uint16 step) {
 		return FALSE;
 	}
 	case 24: {
-		//infos.phase = PHASE_DAMAGE_CAL;
+		// PHASE_DAMAGE_CAL;
 		calculate_battle_damage(0, 0, 0);
 		raise_single_event(core.attacker, 0, EVENT_PRE_DAMAGE_CALCULATE, 0, 0, 0, 0, 0);
 		if(core.attack_target)
@@ -3685,7 +3685,7 @@ int32 field::process_damage_step(uint16 step, uint32 new_attack) {
 		pduel->write_buffer8(MSG_ATTACK);
 		pduel->write_buffer32(core.attacker->get_info_location());
 		if(core.attack_target)
-		pduel->write_buffer32(core.attack_target->get_info_location());
+			pduel->write_buffer32(core.attack_target->get_info_location());
 		else
 			pduel->write_buffer32(0);
 		infos.phase = PHASE_DAMAGE;
@@ -3694,9 +3694,9 @@ int32 field::process_damage_step(uint16 step, uint32 new_attack) {
 		core.attacker->attacked_count++;
 		if(core.attack_target) {
 			core.pre_field[1] = core.attack_target->fieldid_r;
-		if(core.attack_target->is_position(POS_FACEDOWN)) {
-			change_position(core.attack_target, 0, PLAYER_NONE, core.attack_target->current.position >> 1, 0, TRUE);
-			adjust_all();
+			if(core.attack_target->is_position(POS_FACEDOWN)) {
+				change_position(core.attack_target, 0, PLAYER_NONE, core.attack_target->current.position >> 1, 0, TRUE);
+				adjust_all();
 			}
 		}
 		else
@@ -4513,31 +4513,31 @@ int32 field::solve_continuous(uint16 step, effect * peffect, uint8 triggering_pl
 		return TRUE;
 	}
 	case 4: {
-			if(core.conti_player == PLAYER_NONE)
+		if(core.conti_player == PLAYER_NONE)
+			core.conti_player = infos.turn_player;
+		if(core.conti_player == infos.turn_player) {
+			if(core.delayed_tp.size()) {
+				core.sub_solving_event.push_back(core.delayed_tev.front());
+				add_process(PROCESSOR_SOLVE_CONTINUOUS, 0, core.delayed_tp.front(), 0, infos.turn_player, 0);
+				core.delayed_tp.pop_front();
+				core.delayed_tev.pop_front();
+			} else
+				core.conti_player = 1 - infos.turn_player;
+		}
+		if(core.conti_player == 1 - infos.turn_player) {
+			if(core.delayed_ntp.size()) {
+				core.sub_solving_event.push_back(core.delayed_ntev.front());
+				add_process(PROCESSOR_SOLVE_CONTINUOUS, 0, core.delayed_ntp.front(), 0, 1 - infos.turn_player, 0);
+				core.delayed_ntp.pop_front();
+				core.delayed_ntev.pop_front();
+			} else if(core.delayed_tp.size()) {
 				core.conti_player = infos.turn_player;
-			if(core.conti_player == infos.turn_player) {
-				if(core.delayed_tp.size()) {
-					core.sub_solving_event.push_back(core.delayed_tev.front());
-					add_process(PROCESSOR_SOLVE_CONTINUOUS, 0, core.delayed_tp.front(), 0, infos.turn_player, 0);
-					core.delayed_tp.pop_front();
-					core.delayed_tev.pop_front();
-				} else
-					core.conti_player = 1 - infos.turn_player;
-			}
-			if(core.conti_player == 1 - infos.turn_player) {
-				if(core.delayed_ntp.size()) {
-					core.sub_solving_event.push_back(core.delayed_ntev.front());
-					add_process(PROCESSOR_SOLVE_CONTINUOUS, 0, core.delayed_ntp.front(), 0, 1 - infos.turn_player, 0);
-					core.delayed_ntp.pop_front();
-					core.delayed_ntev.pop_front();
-				} else if(core.delayed_tp.size()) {
-					core.conti_player = infos.turn_player;
-					core.sub_solving_event.push_back(core.delayed_tev.front());
-					add_process(PROCESSOR_SOLVE_CONTINUOUS, 0, core.delayed_tp.front(), 0, infos.turn_player, 0);
-					core.delayed_tp.pop_front();
-					core.delayed_tev.pop_front();
-				} else
-					core.conti_player = PLAYER_NONE;
+				core.sub_solving_event.push_back(core.delayed_tev.front());
+				add_process(PROCESSOR_SOLVE_CONTINUOUS, 0, core.delayed_tp.front(), 0, infos.turn_player, 0);
+				core.delayed_tp.pop_front();
+				core.delayed_tev.pop_front();
+			} else
+				core.conti_player = PLAYER_NONE;
 		}
 		return TRUE;
 	}
@@ -5099,7 +5099,7 @@ int32 field::adjust_step(uint16 step) {
 			for(uint8 i = 0; i < 5; ++i) {
 				pcard = player[tp].list_mzone[i];
 				if(!pcard) continue;
-				if((pcard->get_type()&TYPE_TRAPMONSTER) && pcard->is_affected_by_effect(EFFECT_DISABLE_TRAPMONSTER)) {
+				if((pcard->get_type() & TYPE_TRAPMONSTER) && pcard->is_affected_by_effect(EFFECT_DISABLE_TRAPMONSTER)) {
 					pcard->reset(RESET_TURN_SET, RESET_EVENT);
 					refresh_location_info_instant();
 					move_to_field(pcard, tp, tp, LOCATION_SZONE, pcard->current.position, FALSE, 2);
@@ -5114,51 +5114,51 @@ int32 field::adjust_step(uint16 step) {
 		//1-5 control
 		core.control_adjust_set[0].clear();
 		core.control_adjust_set[1].clear();
-				for(uint8 p = 0; p < 2; ++p) {
-					for(uint8 i = 0; i < 5; ++i) {
+		for(uint8 p = 0; p < 2; ++p) {
+			for(uint8 i = 0; i < 5; ++i) {
 				card* pcard = player[p].list_mzone[i];
 				if(!pcard) continue;
 				uint8 cur = pcard->current.controler;
 				uint8 ref = pcard->refresh_control_status();
 				if(cur != ref && pcard->is_capable_change_control())
 					core.control_adjust_set[p].insert(pcard);
-					}
-				}
+			}
+		}
 		if(core.control_adjust_set[0].size() || core.control_adjust_set[1].size()) {
 			core.re_adjust = TRUE;
 			add_process(PROCESSOR_CONTROL_ADJUST, 0, 0, 0, 0, 0);
-			}
+		}
 		core.last_control_changed_id = infos.field_id;
 		return FALSE;
 	}
 	case 5: {
 		//remove brainwashing
 		if(core.global_flag & GLOBALFLAG_BRAINWASHING_CHECK) {
-		core.control_adjust_set[0].clear();
-		core.control_adjust_set[1].clear();
+			core.control_adjust_set[0].clear();
+			core.control_adjust_set[1].clear();
 			effect_set eset;
 			uint32 res = 0;
 			filter_field_effect(EFFECT_REMOVE_BRAINWASHING, &eset, FALSE);
 			res = eset.size() ? TRUE : FALSE;
 			if(res) {
-		for(uint8 p = 0; p < 2; ++p) {
-			for(uint8 i = 0; i < 5; ++i) {
+				for(uint8 p = 0; p < 2; ++p) {
+					for(uint8 i = 0; i < 5; ++i) {
 						card* pcard = player[p].list_mzone[i];
 						// remove EFFECT_SET_CONTROL
 						if(pcard && pcard->is_affected_by_effect(EFFECT_REMOVE_BRAINWASHING)) {
 							pcard->reset(EFFECT_SET_CONTROL, RESET_CODE);
 							if(p != pcard->owner && pcard->is_capable_change_control())
-					core.control_adjust_set[p].insert(pcard);
+								core.control_adjust_set[p].insert(pcard);
+						}
+					}
 				}
 			}
-		}
-			}
 			core.remove_brainwashing = res;
-		if(core.control_adjust_set[0].size() || core.control_adjust_set[1].size()) {
-			core.re_adjust = TRUE;
-			add_process(PROCESSOR_CONTROL_ADJUST, 0, 0, 0, 0, 0);
+			if(core.control_adjust_set[0].size() || core.control_adjust_set[1].size()) {
+				core.re_adjust = TRUE;
+				add_process(PROCESSOR_CONTROL_ADJUST, 0, 0, 0, 0, 0);
+			}
 		}
-	}
 		core.units.begin()->step = 8;
 		return FALSE;
 	}

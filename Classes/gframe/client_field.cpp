@@ -376,6 +376,7 @@ void ClientField::ShowSelectCard(bool buttonok, bool chain) {
 	}
 	for(size_t i = 0; i < ct; ++i) {
 		mainGame->stCardPos[i]->enableOverrideColor(false);
+		// image
 		if(selectable_cards[i]->code)
 			mainGame->imageLoading.insert(std::make_pair(mainGame->btnCardSelect[i], selectable_cards[i]->code));
 		else if(conti_selecting)
@@ -386,6 +387,7 @@ void ClientField::ShowSelectCard(bool buttonok, bool chain) {
 		mainGame->btnCardSelect[i]->setPressed(false);
 		mainGame->btnCardSelect[i]->setVisible(true);
 		if(mainGame->dInfo.curMsg != MSG_SORT_CHAIN && mainGame->dInfo.curMsg != MSG_SORT_CARD) {
+			// text
 			wchar_t formatBuffer[2048];
 			if(conti_selecting)
 				myswprintf(formatBuffer, L"%ls", DataManager::unknown_string);
@@ -397,6 +399,7 @@ void ClientField::ShowSelectCard(bool buttonok, bool chain) {
 				myswprintf(formatBuffer, L"%ls[%d]", dataManager.FormatLocation(selectable_cards[i]->location, selectable_cards[i]->sequence),
 					selectable_cards[i]->sequence + 1);
 			mainGame->stCardPos[i]->setText(formatBuffer);
+			// color
 			if(conti_selecting)
 				mainGame->stCardPos[i]->setBackgroundColor(0xffffffff);
 			else if(selectable_cards[i]->location == LOCATION_OVERLAY) {
@@ -1506,8 +1509,8 @@ void ClientField::UpdateDeclarableCodeType(bool enter) {
 					mainGame->lstANCard->insertItem(0, cit->second.name, -1);
 					ancard.insert(ancard.begin(), cit->first);
 				} else {
-				mainGame->lstANCard->addItem(cit->second.name);
-				ancard.push_back(cit->first);
+					mainGame->lstANCard->addItem(cit->second.name);
+					ancard.push_back(cit->first);
 				}
 			}
 		}
@@ -1538,8 +1541,8 @@ void ClientField::UpdateDeclarableCodeOpcode(bool enter) {
 					mainGame->lstANCard->insertItem(0, cit->second.name, -1);
 					ancard.insert(ancard.begin(), cit->first);
 				} else {
-				mainGame->lstANCard->addItem(cit->second.name);
-				ancard.push_back(cit->first);
+					mainGame->lstANCard->addItem(cit->second.name);
+					ancard.push_back(cit->first);
 				}
 			}
 		}
