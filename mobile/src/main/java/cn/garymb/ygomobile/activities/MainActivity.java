@@ -13,21 +13,16 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
-import java.io.File;
-
-import cn.garymb.ygodata.YGOGameOptions;
 import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.adapters.ServerLists;
-import cn.garymb.ygomobile.bean.Deck;
 import cn.garymb.ygomobile.core.AppsSettings;
+import cn.garymb.ygomobile.core.GameUriManager;
 import cn.garymb.ygomobile.core.ImageUpdater;
 import cn.garymb.ygomobile.core.ResCheckTask;
 import cn.garymb.ygomobile.core.YGOStarter;
@@ -36,12 +31,7 @@ import cn.garymb.ygomobile.plus.DialogPlus;
 import cn.garymb.ygomobile.plus.VUiKit;
 import cn.garymb.ygomobile.settings.SettingsActivity;
 
-import static cn.garymb.ygomobile.Constants.ACTION_OPEN_DECK;
-import static cn.garymb.ygomobile.Constants.ACTION_OPEN_GAME;
 import static cn.garymb.ygomobile.Constants.ACTION_RELOAD;
-import static cn.garymb.ygomobile.Constants.PATH_DECK;
-import static cn.garymb.ygomobile.Constants.PATH_ROOM;
-import static cn.garymb.ygomobile.Constants.QUERY_NAME;
 
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
     private boolean enableStart;
@@ -51,6 +41,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     protected DrawerLayout mDrawerlayout;
     private View editView;
     private ImageUpdater mImageUpdater;
+    private GameUriManager mGameUriManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +56,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 this, mDrawerlayout, toolbar, R.string.search_open, R.string.search_close);
         mDrawerlayout.addDrawerListener(toggle);
         toggle.syncState();
-        mImageUpdater=new ImageUpdater(this);
+        mImageUpdater = new ImageUpdater(this);
         NavigationView navigationView = bind(R.id.nav_main);
         navigationView.setNavigationItemSelectedListener(this);
         mAppsSettings = AppsSettings.get();
@@ -108,16 +99,16 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                         .setCancelable(false)
                         .loadUrl("file:///android_asset/changelog.html", Color.TRANSPARENT)
                         .hideButton()
-                        .setCloseLinster((dlg,rs)->{
+                        .setCloseLinster((dlg, rs) -> {
                             dlg.dismiss();
                             //mImageUpdater
-                            if(!mImageUpdater.isRunning()) {
+                            if (!mImageUpdater.isRunning()) {
                                 mImageUpdater.start();
                             }
                         })
                         .show();
             } else {
-                doOpenDeck(getIntent());
+                getGameUriManager().doIntent(getIntent());
             }
         });
     }
@@ -126,6 +117,13 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     protected void onResume() {
         super.onResume();
         YGOStarter.onResumed(this);
+    }
+
+    private GameUriManager getGameUriManager() {
+        if (mGameUriManager == null) {
+            mGameUriManager = new GameUriManager(this);
+        }
+        return mGameUriManager;
     }
 
     @Override
@@ -138,10 +136,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 } else {
                     enableStart = true;
                 }
-                doOpenDeck(getIntent());
+                getGameUriManager().doIntent(getIntent());
             });
         } else {
-            doOpenDeck(intent);
+            getGameUriManager().doIntent(intent);
         }
     }
 
@@ -149,92 +147,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     protected void onDestroy() {
         YGOStarter.onDestroy(this);
         super.onDestroy();
-    }
-
-    private void doOpenDeck(Intent intent) {
-        if (ACTION_OPEN_DECK.equals(intent.getAction())) {
-            if (intent.getData() != null) {
-                doUri(intent.getData());
-            } else {
-                String name = intent.getStringExtra(Intent.EXTRA_TEXT);
-                doOpenPath(name);
-            }
-        } else if (Intent.ACTION_VIEW.equals(intent.getAction())) {
-            if (intent.getData() != null) {
-                doUri(intent.getData());
-            } else {
-                finish();
-            }
-        } else if (ACTION_OPEN_GAME.equals(intent.getAction())) {
-            try {
-                YGOGameOptions options = new YGOGameOptions();
-                options.mServerAddr = intent.getStringExtra(Constants.QUERY_HOST);
-                options.mUserName = intent.getStringExtra(Constants.QUERY_USER);
-                options.mPort = intent.getIntExtra(Constants.QUERY_PORT, 0);
-                options.mRoomName = intent.getStringExtra(Constants.QUERY_ROOM);
-                YGOStarter.startGame(this, options);
-            } catch (Exception e) {
-                Toast.makeText(this, R.string.start_game_error, Toast.LENGTH_SHORT).show();
-                finish();
-            }
-        }
-    }
-
-    private void doUri(Uri uri) {
-        if ("file".equalsIgnoreCase(uri.getScheme())) {
-            File file = new File(uri.getPath());
-            Intent startdeck = new Intent(this, DeckManagerActivity.class);
-            startdeck.putExtra(Intent.EXTRA_TEXT, file.getAbsolutePath());
-            startActivity(startdeck);
-        } else {
-            String host = uri.getHost();
-            if (!Constants.URI_HOST.equalsIgnoreCase(host)) {
-                return;
-            }
-            String path = uri.getPath();
-            if (PATH_DECK.equals(path)) {
-                String name = uri.getQueryParameter(QUERY_NAME);
-                if (!TextUtils.isEmpty(name)) {
-                    doOpenPath(name);
-                } else {
-                    Deck deckInfo = new Deck(uri);
-                    File file = deckInfo.saveTemp(AppsSettings.get().getDeckDir());
-                    Intent startdeck = new Intent(this, DeckManagerActivity.class);
-                    startdeck.putExtra(Intent.EXTRA_TEXT, file.getAbsolutePath());
-                    startActivity(startdeck);
-                }
-            } else if (PATH_ROOM.equals(path)) {
-                try {
-                    YGOGameOptions options = new YGOGameOptions();
-                    options.mServerAddr = uri.getQueryParameter(Constants.QUERY_HOST);
-                    options.mUserName = uri.getQueryParameter(Constants.QUERY_USER);
-                    options.mPort = Integer.parseInt(uri.getQueryParameter(Constants.QUERY_PORT));
-                    options.mRoomName = uri.getQueryParameter(Constants.QUERY_ROOM);
-                    YGOStarter.startGame(this, options);
-                } catch (Exception e) {
-                    Toast.makeText(this, R.string.start_game_error, Toast.LENGTH_SHORT).show();
-                    finish();
-                }
-            }
-        }
-    }
-
-    private void doOpenPath(String name) {
-        File deck = null;
-        if (!TextUtils.isEmpty(name)) {
-            deck = new File(name);
-            if (!deck.exists()) {
-                deck = new File(AppsSettings.get().getDeckDir(), name);
-            }
-        }
-        if (deck != null && deck.exists()) {
-            Intent startdeck = new Intent(this, DeckManagerActivity.class);
-            startdeck.putExtra(Intent.EXTRA_TEXT, deck.getAbsolutePath());
-            startActivity(startdeck);
-        } else {
-            Log.w("kk", "no find " + name);
-            finish();
-        }
     }
 
     @Override
@@ -320,9 +232,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             }
             break;
             case R.id.action_update_images:
-                if(!mImageUpdater.isRunning()) {
+                if (!mImageUpdater.isRunning()) {
                     mImageUpdater.start();
-                }else{
+                } else {
                     Toast.makeText(this, R.string.downloading_images, Toast.LENGTH_SHORT).show();
                 }
                 break;
@@ -349,7 +261,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             mDrawerlayout.closeDrawer(Gravity.LEFT);
             return;
         }
-        if(mServerAdapater.isEditMode()){
+        if (mServerAdapater.isEditMode()) {
             mServerAdapater.setEditMode(false);
         }
         if (System.currentTimeMillis() - exitLasttime <= 3000) {

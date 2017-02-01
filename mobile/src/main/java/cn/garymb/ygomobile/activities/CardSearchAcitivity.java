@@ -80,12 +80,10 @@ public class CardSearchAcitivity extends BaseActivity implements CardLoader.Call
             mCardLoader.openDb();
         }).done((rs) -> {
             dlg.dismiss();
-            onInit();
+            isLoad = true;
+            mCardLoader.loadData();
+            mCardSelector.initItems();
         });
-    }
-
-    protected int getDimen(int id) {
-        return (int) getResources().getDimension(id);
     }
 
     protected void setListeners() {
@@ -133,12 +131,6 @@ public class CardSearchAcitivity extends BaseActivity implements CardLoader.Call
         }
         finish();
         return true;
-    }
-
-    protected void onInit() {
-        isLoad = true;
-        mCardLoader.loadData();
-        mCardSelector.initItems();
     }
 
     @Override
