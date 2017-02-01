@@ -2,6 +2,7 @@ package cn.garymb.ygomobile.core;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -88,7 +89,7 @@ public class CardSearcher implements View.OnClickListener {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 long value = getSelect(limitListSpinner);
-                if (value == 0) {
+                if (value < 0) {
                     limitSpinner.setVisibility(View.INVISIBLE);
                 } else {
                     limitSpinner.setVisibility(View.VISIBLE);
@@ -201,14 +202,22 @@ public class CardSearcher implements View.OnClickListener {
 
     private void initLimitListSpinners(Spinner spinner) {
         List<SimpleSpinnerItem> items = new ArrayList<>();
-        List<Integer> ids = mLimitManager.getLists();
-        items.add(new SimpleSpinnerItem(0, getString(R.string.label_limitlist)));
+        List<LimitList> limitLists = mLimitManager.getLimitLists();
+        items.add(new SimpleSpinnerItem(-1, getString(R.string.label_limitlist)));
         int index = -1;
-        int i = 1;
-        for (Integer id : ids) {
-            LimitList list = mLimitManager.getLimitFromIndex(id);
-            items.add(new SimpleSpinnerItem(id, list.getName()));
-            i++;
+        int count = mLimitManager.getCount();
+        LimitList cur = null;
+        if (dataLoader != null) {
+            cur = dataLoader.getLimitList();
+        }
+        for (int i = 0; i < count; i++) {
+            LimitList list = limitLists.get(i);
+            items.add(new SimpleSpinnerItem(i, list.getName()));
+            if (cur != null) {
+                if (TextUtils.equals(cur.getName(), list.getName())) {
+                    index = i + 1;
+                }
+            }
         }
         SimpleSpinnerAdapter adapter = new SimpleSpinnerAdapter(mContext);
         adapter.setColor(Color.WHITE);
@@ -378,7 +387,23 @@ public class CardSearcher implements View.OnClickListener {
         suffixWord.setText(null);
         reset(otSpinner);
         reset(limitSpinner);
-        reset(limitListSpinner);
+//        reset(limitListSpinner);
+        LimitList cur = null;
+        if (dataLoader != null) {
+            cur = dataLoader.getLimitList();
+        }
+        int count = mLimitManager.getCount();
+        for (int i = 0; i < count; i++) {
+            LimitList list = mLimitManager.getLimit(i);
+            if (cur != null) {
+                if (TextUtils.equals(cur.getName(), list.getName())) {
+                    if (i < limitListSpinner.getCount() - 1) {
+                        limitListSpinner.setSelection(i + 1);
+                    }
+                    break;
+                }
+            }
+        }
         reset(typeSpinner);
         reset(typeSTSpinner);
         reset(setcodeSpinner);
