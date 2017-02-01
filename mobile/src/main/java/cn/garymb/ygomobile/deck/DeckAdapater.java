@@ -24,6 +24,7 @@ import cn.garymb.ygomobile.bean.DeckInfo;
 import cn.garymb.ygomobile.core.CardLoader;
 import cn.garymb.ygomobile.core.loader.ImageLoader;
 import cn.garymb.ygomobile.lite.R;
+import cn.garymb.ygomobile.utils.CardSort;
 import cn.ygo.ocgcore.LimitList;
 import cn.ygo.ocgcore.enums.CardType;
 import cn.ygo.ocgcore.enums.LimitType;
@@ -158,140 +159,9 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
         if (d1.getType() == d2.getType()) {
             CardInfo c1 = d1.getCardInfo();
             CardInfo c2 = d2.getCardInfo();
-            if (c1 == null) {
-                return c2 != null;
-            }
-            if (c2 == null) {
-                return false;
-            }
-//            boolean log = c1.Code == 74003290||c2.Code == 74003290;
-            if (c1.isType(CardType.Spell)) {
-                //region 魔法
-                if (c2.isType(CardType.Monster)) {
-                    return true;
-                }
-                if (c2.isType(CardType.Trap)) {
-                    return false;
-                }
-                if (c1.onlyType(CardType.Spell)) {
-                    if (!c2.onlyType(CardType.Spell)) {
-                        return false;
-                    }
-                } else {
-                    if (c2.onlyType(CardType.Spell)) {
-                        return true;
-                    }
-                }
-//                if (c2.isType(CardType.Spell)) {
-//                    if (c1.Type - c2.Type > 0) {
-//                        return true;
-//                    }
-//                }
-                //endregion
-            } else if (c1.isType(CardType.Trap)) {
-                //region 陷阱
-                if (c2.isType(CardType.Monster) || c2.isType(CardType.Spell)) {
-                    return true;
-                }
-                if (c1.onlyType(CardType.Trap)) {
-                    if (!c2.onlyType(CardType.Trap)) {
-                        return false;
-                    }
-                } else {
-                    if (c2.onlyType(CardType.Trap)) {
-                        return true;
-                    }
-                }
-//                if (c2.isType(CardType.Trap)) {
-//                    if (c1.Type - c2.Type > 0) {
-//                        return true;
-//                    }
-//                }
-                //endregion
-            } else if (c1.isType(CardType.Monster)) {
-                if (c2.isSpellTrap()) {
-                    return false;
-                }
-                //region 额外
-                if (c1.isType(CardType.Fusion)) {
-                    if (!c2.isExtraCard()) {
-                        return true;
-                    }
-                    if (c2.isType(CardType.Synchro) || c2.isType(CardType.Xyz)) {
-                        return false;
-                    }
-                    if (c2.isType(CardType.Fusion)) {
-                        if (c1.Type - c2.Type > 0) {
-                            return true;
-                        }
-                    }
-                } else if (c1.isType(CardType.Synchro)) {
-                    if (!c2.isExtraCard()) {
-                        return true;
-                    }
-                    if (c2.isType(CardType.Fusion)) {
-                        return true;
-                    }
-                    if (c2.isType(CardType.Xyz)) {
-                        return false;
-                    }
-                    if (c2.isType(CardType.Synchro)) {
-                        if (c1.Type - c2.Type > 0) {
-                            return true;
-                        }
-                    }
-                } else if (c1.isType(CardType.Xyz)) {
-                    if (!c2.isExtraCard()) {
-                        return true;
-                    }
-                    if (c2.isType(CardType.Fusion) || c2.isType(CardType.Synchro)) {
-                        return true;
-                    }
-                    if (c2.isType(CardType.Xyz)) {
-                        if (c1.Type - c2.Type > 0) {
-                            return true;
-                        }
-                    }
-                }
-                //endregion
-                //region 怪兽
-                if (c1.Level != c2.Level) {
-                    return c1.Level - c2.Level < 0;
-                }
-                if (c1.Attack != c2.Attack) {
-                    return c1.Attack - c2.Attack < 0;
-                }
-                if (c1.Defense != c2.Defense) {
-                    return c1.Defense - c2.Defense < 0;
-                }
-                if (c1.Attribute != c2.Attribute) {
-                    return c1.Attribute - c2.Attribute > 0;
-                }
-                if (c1.Race != c2.Race) {
-                    return c1.Race - c2.Race > 0;
-                }
-                if (c1.Ot != c2.Ot) {
-                    return c1.Ot - c2.Ot > 0;
-                }
-//                if (c1.Type != c2.Type) {
-//                    return c1.Type - c2.Type > 0;
-//                }
-                //endregion
-            } else {
-                return false;
-            }
-            return (c1.Code - c2.Code) > 0;
+            return CardSort.ASC.compare(c1, c2) < 0;
         }
-
-        return (d1.getType().
-
-                ordinal()
-
-                - d2.getType().
-
-                ordinal()
-
-        ) > 0;
+        return (d1.getType().ordinal() - d2.getType().ordinal()) > 0;
     }
 
     private int sortMain() {
@@ -471,6 +341,8 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
     }
 
     public boolean save(File file) {
+        //保存了，记录状态
+        mDeckMd5 = DeckItemUtils.makeMd5(mItems);
         return DeckItemUtils.save(mItems, file);
     }
 
