@@ -11,6 +11,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.bean.CardInfo;
@@ -32,6 +33,7 @@ public class CardLoader implements ICardLoader {
     private String defSQL = CardInfo.SQL_BASE + " limit " + Constants.DEFAULT_CARD_COUNT + ";";
     private LimitList mLimitList;
     private static final String TAG = CardLoader.class.getSimpleName();
+    private final static boolean DEBUG = false;
 
     public interface CallBack {
         void onSearchStart(LimitList limitList);
@@ -125,6 +127,38 @@ public class CardLoader implements ICardLoader {
 
     public LimitList getLimitList() {
         return mLimitList;
+    }
+
+    public Map<Long, Long> readAllCardCodes() {
+        Cursor reader = null;
+        try {
+            reader = db.rawQuery(CardInfo.SQL_CODE_BASE, null);
+        } catch (Exception e) {
+            Log.e(TAG, "query", e);
+        }
+        Map<Long, Long> tmp = new HashMap<>();
+        if (DEBUG) {
+            tmp.put(269012L, 524290L);
+            tmp.put(27551L, 131076L);
+            tmp.put(32864L, 131076L);
+            tmp.put(62121L, 131076L);
+            tmp.put(135598L, 131076L);
+        } else {
+            if (reader != null) {
+                if (reader.moveToFirst()) {
+                    int index = reader.getColumnIndex(CardInfo._ID);
+                    int typeIndex = reader.getColumnIndex(CardInfo.COL_TYPE);
+                    do {
+                        long id = reader.getLong(index);
+                        long type = typeIndex >= 0 ? reader.getLong(typeIndex) : 0;
+                        tmp.put(id, type);
+
+                    } while (reader.moveToNext());
+                }
+                reader.close();
+            }
+        }
+        return tmp;
     }
 
     private void loadData(String sql, long setcode, LimitList limitList) {

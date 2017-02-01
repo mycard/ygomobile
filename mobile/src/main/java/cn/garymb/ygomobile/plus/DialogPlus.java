@@ -51,12 +51,17 @@ public class DialogPlus {
 
     public DialogPlus hideButton() {
         mLeft.setVisibility(View.GONE);
+        mRight.setVisibility(View.GONE);
         return this;
     }
 
     public DialogPlus setCancelable(boolean cancelable) {
         mBuilder.setCancelable(cancelable);
         return this;
+    }
+
+    public boolean isShowing() {
+        return mDialog != null && mDialog.isShowing();
     }
 
     public DialogPlus setCloseLinster(DialogInterface.OnClickListener clickListener) {
@@ -69,6 +74,8 @@ public class DialogPlus {
     }
 
     public DialogPlus setRightButtonListener(DialogInterface.OnClickListener clickListener) {
+        mCancelView.setVisibility(View.VISIBLE);
+        mRight.setVisibility(View.VISIBLE);
         mRight.setOnClickListener((v) -> {
             if (clickListener != null) {
                 clickListener.onClick(mDialog, DialogInterface.BUTTON_NEUTRAL);
@@ -78,6 +85,7 @@ public class DialogPlus {
     }
 
     public DialogPlus setLeftButtonListener(DialogInterface.OnClickListener clickListener) {
+        mLeft.setVisibility(View.VISIBLE);
         mLeft.setOnClickListener((v) -> {
             if (clickListener != null) {
                 clickListener.onClick(mDialog, DialogInterface.BUTTON_POSITIVE);
@@ -113,7 +121,7 @@ public class DialogPlus {
     }
 
     public DialogPlus setTitle(String text) {
-        if(mTitleView!=null) {
+        if (mTitleView != null) {
             mTitleView.setText(text);
         }
         return this;

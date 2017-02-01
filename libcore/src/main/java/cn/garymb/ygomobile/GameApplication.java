@@ -19,10 +19,17 @@ public abstract class GameApplication extends Application implements IrrlichtBri
     private SoundPool mSoundEffectPool;
     private Map<String, Integer> mSoundIdMap;
 
+    private static GameApplication sGameApplication;
+
     @Override
     public void onCreate() {
         super.onCreate();
+        sGameApplication = this;
         initSoundEffectPool();
+    }
+
+    public static GameApplication get() {
+        return sGameApplication;
     }
 
     @Override
@@ -66,11 +73,11 @@ public abstract class GameApplication extends Application implements IrrlichtBri
 
     public abstract boolean isSensorRefresh();
 
-    public boolean canNdkCash(){
+    public boolean canNdkCash() {
         return true;
     }
 
-    public void attachGame(Activity activity){
+    public void attachGame(Activity activity) {
 
     }
 

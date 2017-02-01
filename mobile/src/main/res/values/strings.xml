@@ -165,4 +165,9 @@
     <string name="deck_share_fail">share deck fail</string>
     <string name="choose_game_path">choose game folder</string>
     <string name="download_home">NetDisk Page</string>
+    <string name="download_images">Check Images</string>
+    <string name="downloading_images">Downloading images</string>
+    <string name="download_image_progress" formatted="false">Downloading card image %d/%d</string>
+    <string name="download_image_error" formatted="false">Download fail %d</string>
+    <string name="downloading_images_ok">Download images ok</string>
 </resources>

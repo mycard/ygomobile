@@ -6,15 +6,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.io.File;
-
-import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.bean.CardInfo;
 import cn.garymb.ygomobile.core.loader.ImageLoader;
 import cn.garymb.ygomobile.deck.ImageTop;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.plus.BaseAdapterPlus;
-import cn.garymb.ygomobile.core.AppsSettings;
 import cn.ygo.ocgcore.LimitList;
 import cn.ygo.ocgcore.StringManager;
 import cn.ygo.ocgcore.enums.CardType;
@@ -26,13 +22,15 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> {
     private OnAddCardListener mOnAddCardListener;
     private LimitList mLimitList;
     private boolean mItemBg;
+    private ImageLoader imageLoader;
 
     public interface OnAddCardListener {
         void onAdd(int pos);
     }
 
-    public CardListAdapater(Context context) {
+    public CardListAdapater(Context context, ImageLoader imageLoader) {
         super(context);
+        this.imageLoader = imageLoader;
         mStringManager = StringManager.get();
     }
 
@@ -51,9 +49,9 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> {
     @Override
     protected View createView(int position, ViewGroup parent) {
         View view;
-        if(mItemBg){
+        if (mItemBg) {
             view = inflate(R.layout.item_search_card, parent, false);
-        }else{
+        } else {
             view = inflate(R.layout.item_search_card2, parent, false);
         }
         new ViewHolder(view);
@@ -68,7 +66,7 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> {
     protected void attach(View view, CardInfo item, int position) {
         ViewHolder holder = (ViewHolder) view.getTag(view.getId());
         holder.setPosition(position);
-        ImageLoader.get().bindImage(context, holder.cardImage, item.Code);
+        imageLoader.bindImage(holder.cardImage, item.Code);
         holder.cardName.setText(item.Name);
         if (item.isType(CardType.Monster)) {
             holder.cardLevel.setVisibility(View.VISIBLE);
@@ -159,8 +157,8 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> {
             view_bar = findViewById(R.id.view_bar);
             rightImage = findViewById(R.id.right_top);
             codeView = findViewById(R.id.card_code);
-            File outFile = new File(AppsSettings.get().getCoreSkinPath(), Constants.UNKNOWN_IMAGE);
-            ImageLoader.get().bind(context, outFile, cardImage, outFile.getName().endsWith(Constants.BPG), 0, null);
+//            File outFile = new File(AppsSettings.get().getCoreSkinPath(), Constants.UNKNOWN_IMAGE);
+//            ImageLoader.get().bind(context, outFile, cardImage, outFile.getName().endsWith(Constants.BPG), 0, null);
         }
     }
 }

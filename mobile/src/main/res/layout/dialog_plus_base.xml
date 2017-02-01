@@ -5,10 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/window"
     android:orientation="vertical"
-    android:paddingLeft="16dp"
-    android:paddingRight="16dp"
-    android:background="@android:color/transparent"
     android:theme="@style/AppTheme.PopupOverlay.Dark"
     >
 
@@ -16,7 +14,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="0dp"
-        android:background="@drawable/window"
         android:orientation="vertical"
         android:paddingTop="20dp">
 
@@ -39,8 +36,8 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="?attr/colorAccent"
                 android:visibility="gone"
-                tools:visibility="visible"
-                tools:text="hello"/>
+                tools:text="hello"
+                tools:visibility="visible"/>
         </FrameLayout>
 
         <LinearLayout
@@ -60,6 +57,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/button_bg"
                 android:text="@android:string/ok"
+                tools:visibility="visible"
                 android:textColor="@android:color/white"/>
 
             <View
@@ -75,6 +73,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/button_bg"
                 android:text="@android:string/cancel"
+                tools:visibility="visible"
                 android:textColor="@android:color/white"
                 android:visibility="gone"/>
 
@@ -87,8 +86,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="5dp">
+        android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/title"
@@ -106,10 +104,10 @@
             android:id="@+id/close"
             android:layout_width="@dimen/item_height"
             android:layout_height="@dimen/item_height"
-            android:layout_marginRight="10dp"
-            app:srcCompat="@drawable/ic_close_black_24dp"
             android:layout_alignParentRight="true"
-            android:background="@android:color/transparent" />
+            android:layout_marginRight="10dp"
+            android:background="@android:color/transparent"
+            app:srcCompat="@drawable/ic_close_black_24dp"/>
     </RelativeLayout>
 
 </FrameLayout>

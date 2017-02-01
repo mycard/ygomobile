@@ -3,6 +3,8 @@ package cn.garymb.ygomobile.deck;
 import android.content.Context;
 import android.os.SystemClock;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,10 +60,13 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
     private DeckItem mRemoveItem;
     private int mRemoveIndex;
     private LimitList mLimitList;
+    private ImageLoader imageLoader;
     private boolean showHead = false;
+    private String mDeckMd5;
 
-    public DeckAdapater(Context context, RecyclerView recyclerView) {
+    public DeckAdapater(Context context, RecyclerView recyclerView, ImageLoader imageLoader) {
         this.context = context;
+        this.imageLoader = imageLoader;
         this.recyclerView = recyclerView;
         mLayoutInflater = LayoutInflater.from(context);
         mRandom = new Random(System.currentTimeMillis() + SystemClock.elapsedRealtime());
@@ -78,7 +83,7 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
     }
 
     private int scaleHeight(int width) {
-        return width * Constants.CORE_SKIN_CARD_COVER_SIZE[1] / Constants.CORE_SKIN_CARD_COVER_SIZE[0];
+        return Math.round((float) width * ((float) Constants.CORE_SKIN_CARD_COVER_SIZE[1] / (float) Constants.CORE_SKIN_CARD_COVER_SIZE[0]));
     }
 
     public Map<Long, Integer> getCardCount() {
@@ -251,13 +256,13 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
                 //endregion
                 //region 怪兽
                 if (c1.Level != c2.Level) {
-                    return c1.Level - c2.Level > 0;
+                    return c1.Level - c2.Level < 0;
                 }
                 if (c1.Attack != c2.Attack) {
-                    return c1.Attack - c2.Attack > 0;
+                    return c1.Attack - c2.Attack < 0;
                 }
                 if (c1.Defense != c2.Defense) {
-                    return c1.Defense - c2.Defense > 0;
+                    return c1.Defense - c2.Defense < 0;
                 }
                 if (c1.Attribute != c2.Attribute) {
                     return c1.Attribute - c2.Attribute > 0;
@@ -458,6 +463,7 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
         if (deck != null) {
             loadData(deck);
         }
+        mDeckMd5 = DeckItemUtils.makeMd5(mItems);
     }
 
     public DeckInfo read(CardLoader cardLoader, File file, LimitList limitList) {
@@ -468,9 +474,10 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
         return DeckItemUtils.save(mItems, file);
     }
 
-    public Deck toDeck(File file){
+    public Deck toDeck(File file) {
         return DeckItemUtils.toDeck(mItems, file);
     }
+
     private <T> int length(List<T> list) {
         return list == null ? 0 : list.size();
     }
@@ -491,6 +498,12 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
         mSideTrapCount = 0;
         mItems.clear();
         DeckItemUtils.makeItems(deck, this);
+    }
+
+    public boolean isChanged() {
+        String md5 = DeckItemUtils.makeMd5(mItems);
+        Log.d("kk", mDeckMd5 + "/" + md5);
+        return !TextUtils.equals(mDeckMd5, md5);
     }
 
     @Override
@@ -564,12 +577,12 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
     }
 
     public void showHeadView() {
-        showHead=true;
+        showHead = true;
         notifyItemChanged(DeckItem.HeadView);
     }
 
     public void hideHeadView() {
-        showHead=false;
+        showHead = false;
         notifyItemChanged(DeckItem.HeadView);
     }
 
@@ -583,9 +596,9 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
         DeckItem item = mItems.get(position);
         holder.setItemType(item.getType());
         if (position == DeckItem.HeadView) {
-            if(showHead){
+            if (showHead) {
                 holder.headView.setVisibility(View.VISIBLE);
-            }else{
+            } else {
                 holder.headView.setVisibility(View.INVISIBLE);
             }
             holder.cardImage.setVisibility(View.GONE);
@@ -608,15 +621,17 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
 
             holder.textlayout.setVisibility(View.VISIBLE);
         } else {
-            if (holder.cardImage.getMeasuredHeight() > 0) {
-                mHeight = holder.cardImage.getMeasuredHeight();
-                mWidth = holder.cardImage.getMeasuredWidth();
-                if (mHeight <= 0 && mWidth >= 0) {
-                    mHeight = scaleHeight(mWidth);
-                }
-            }
             if (mHeight <= 0) {
-                makeHeight();
+                if (holder.cardImage.getMeasuredWidth() > 0) {
+                    mWidth = holder.cardImage.getMeasuredWidth();
+                    if (mWidth >= 0) {
+                        mHeight = scaleHeight(mWidth);
+                    }
+                }
+                if (mHeight <= 0) {
+                    makeHeight();
+                }
+//                Log.i("kk", "w=" + mWidth + ",h=" + mHeight);
             }
 //            holder.cardImage.setLayoutParams(new RelativeLayout.LayoutParams(holder.cardImage.getMeasuredWidth(), mHeight));
             holder.textlayout.setVisibility(View.GONE);
@@ -648,12 +663,12 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
                     } else {
                         holder.rightImage.setVisibility(View.GONE);
                     }
-                    holder.useDefault();
-                    ImageLoader.get().bindImage(context, holder.cardImage, cardInfo.Code);
+//                    holder.useDefault();
+                    imageLoader.bindImage(holder.cardImage, cardInfo.Code);
                 } else {
                     holder.setCardType(0);
                     holder.rightImage.setVisibility(View.GONE);
-                    holder.useDefault();
+                    holder.useDefault(imageLoader, mWidth, mHeight);
                 }
             }
         }

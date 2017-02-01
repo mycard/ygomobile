@@ -2,6 +2,7 @@ package cn.garymb.ygomobile.deck;
 
 import android.content.Context;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 
 public class DeckLayoutManager extends GridLayoutManager {
     private Context context;
@@ -20,4 +21,12 @@ public class DeckLayoutManager extends GridLayoutManager {
         });
     }
 
+    @Override
+    public void onLayoutChildren(RecyclerView.Recycler recycler, RecyclerView.State state) {
+        try {
+            super.onLayoutChildren(recycler, state);
+        }catch (Exception e){
+
+        }
+    }
 }

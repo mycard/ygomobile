@@ -7,9 +7,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.io.File;
-
-import cn.garymb.ygomobile.Constants;
+import cn.garymb.ygomobile.activities.PhotoViewActivity;
 import cn.garymb.ygomobile.bean.CardInfo;
 import cn.garymb.ygomobile.core.loader.ImageLoader;
 import cn.garymb.ygomobile.lite.R;
@@ -39,6 +37,7 @@ public class CardDetail extends BaseAdapterPlus.BaseViewHolder {
     private View addSide;
     private TextView cardcode;
     private View lb_setcode;
+    private ImageLoader imageLoader;
 
     public interface OnClickListener {
         void onOpenUrl(CardInfo cardInfo);
@@ -50,9 +49,10 @@ public class CardDetail extends BaseAdapterPlus.BaseViewHolder {
         void onClose();
     }
 
-    public CardDetail(Context context) {
+    public CardDetail(Context context, ImageLoader imageLoader) {
         super(LayoutInflater.from(context).inflate(R.layout.dialog_cardinfo, null));
         cardImage = bind(R.id.card_image);
+        this.imageLoader = imageLoader;
         name = bind(R.id.text_name);
         desc = bind(R.id.text_desc);
         close = bind(R.id.btn_close);
@@ -69,7 +69,7 @@ public class CardDetail extends BaseAdapterPlus.BaseViewHolder {
         addSide = bind(R.id.btn_add_side);
         otView = bind(R.id.card_ot);
         attrView = bind(R.id.card_attribute);
-        lb_setcode=bind(R.id.label_setcode);
+        lb_setcode = bind(R.id.label_setcode);
     }
 
     public ImageView getCardImage() {
@@ -90,15 +90,16 @@ public class CardDetail extends BaseAdapterPlus.BaseViewHolder {
     }
 
     public void bind(CardInfo cardInfo, StringManager stringManager, final OnClickListener listener) {
-        File outFile = new File(AppsSettings.get().getCoreSkinPath(), Constants.UNKNOWN_IMAGE);
-        ImageLoader.get().bind(view.getContext(), outFile, cardImage, outFile.getName().endsWith(Constants.BPG), 0,null);
-        ImageLoader.get().bindImage(context, cardImage, cardInfo.Code);
+        imageLoader.bindImage(cardImage, cardInfo.Code, null, true);
+        cardImage.setOnClickListener((v)->{
+            PhotoViewActivity.showImage(context, cardInfo.Code, cardInfo.Name);
+        });
         name.setText(cardInfo.Name);
         desc.setText(cardInfo.Desc);
         cardcode.setText(String.format("%08d", cardInfo.Code));
-        type.setText(cardInfo.getAllTypeString(stringManager).replace("/","|"));
+        type.setText(cardInfo.getAllTypeString(stringManager).replace("/", "|"));
         attrView.setText(stringManager.getAttributeString(cardInfo.Attribute));
-        otView.setText(stringManager.getOtString(cardInfo.Ot, ""+cardInfo.Ot));
+        otView.setText(stringManager.getOtString(cardInfo.Ot, "" + cardInfo.Ot));
         long[] sets = cardInfo.getSetCode();
         setname.setText("");
         int index = 0;
@@ -111,10 +112,10 @@ public class CardDetail extends BaseAdapterPlus.BaseViewHolder {
                 index++;
             }
         }
-        if(TextUtils.isEmpty(setname.getText())){
+        if (TextUtils.isEmpty(setname.getText())) {
             setname.setVisibility(View.INVISIBLE);
             lb_setcode.setVisibility(View.INVISIBLE);
-        }else{
+        } else {
             setname.setVisibility(View.VISIBLE);
             lb_setcode.setVisibility(View.VISIBLE);
         }

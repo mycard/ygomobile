@@ -6,7 +6,7 @@ import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
+import com.bumptech.glide.DrawableTypeRequest;
 import com.bumptech.glide.load.ResourceDecoder;
 import com.bumptech.glide.load.engine.Resource;
 import com.bumptech.glide.load.engine.bitmap_recycle.LruBitmapPool;
@@ -17,6 +17,7 @@ import com.bumptech.glide.load.resource.gifbitmap.GifBitmapWrapperResource;
 import com.bumptech.glide.signature.StringSignature;
 
 import java.io.ByteArrayOutputStream;
+import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,20 +25,25 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import cn.garymb.ygomobile.Constants;
-import cn.garymb.ygomobile.core.IrrlichtBridge;
 import cn.garymb.ygomobile.core.AppsSettings;
+import cn.garymb.ygomobile.core.IrrlichtBridge;
+import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.utils.BitmapUtil;
 import cn.garymb.ygomobile.utils.IOUtils;
 
 import static cn.garymb.ygomobile.Constants.CORE_SKIN_BG_SIZE;
+import static com.bumptech.glide.Glide.with;
 
-public class ImageLoader {
+public class ImageLoader implements Closeable {
     private static final String TAG = ImageLoader.class.getSimpleName();
-    private static ImageLoader sImageLoader = new ImageLoader();
     private ZipFile mZipFile;
     private LruBitmapPool mLruBitmapPool;
+    //    private ExecutorService mExecutorService = Executors.newSingleThreadExecutor();
+    private boolean isClose = false;
+    private Context mContext;
 
-    private ImageLoader() {
+    public ImageLoader(Context context) {
+        mContext = context;
         mLruBitmapPool = new LruBitmapPool(100);
     }
 
@@ -63,8 +69,12 @@ public class ImageLoader {
         }
     }
 
-    public static ImageLoader get() {
-        return sImageLoader;
+    @Override
+    public void close() throws IOException {
+        isClose = true;
+//        if (!mExecutorService.isShutdown()) {
+//            mExecutorService.shutdown();
+//        }
     }
 
     private Bitmap loadImage(String path, int w, int h) {
@@ -75,43 +85,113 @@ public class ImageLoader {
         return null;
     }
 
-    public void bind(Context context, byte[] data, ImageView imageview, boolean isbpg, long code, Drawable pre) {
-        if (isbpg) {
-            Glide.with(context).load(data).placeholder(pre).decoder(new BpgResourceDecoder("bpg@" + code)).into(imageview);
+    private void bind(byte[] data, ImageView imageview, boolean isbpg, long code, Drawable pre, boolean isBig) {
+        DrawableTypeRequest<byte[]> resource = with(mContext).load(data);
+        if (pre != null) {
+            resource.placeholder(pre);
         } else {
-            Glide.with(context).load(data).placeholder(pre).into(imageview);
+            resource.placeholder(R.drawable.unknown);
         }
+//        if(isbpg){
+//            resource.override(Constants.CORE_SKIN_CARD_COVER_SIZE[0], Constants.CORE_SKIN_CARD_COVER_SIZE[1]);
+//        }
+        resource.signature(new StringSignature(code + "_" + isBig));
+        if (isbpg) {
+            resource.decoder(new BpgResourceDecoder("bpg@" + code));
+        }
+        resource.into(imageview);
     }
 
-    public void bind(Context context, final File file, ImageView imageview, boolean isbpg, long code, Drawable pre) {
+    public void bind(final File file, ImageView imageview, boolean isbpg, long code, Drawable pre, boolean isBig) {
         try {
-            if (isbpg) {
-                Glide.with(context).load(file).placeholder(pre).signature(new StringSignature(file.getName() + file.lastModified()))
-                        .decoder(new BpgResourceDecoder("bpg@" + code)).into(imageview);
+            DrawableTypeRequest<File> resource = with(mContext).load(file);
+            if (pre != null) {
+                resource.placeholder(pre);
             } else {
-                Glide.with(context).load(file).placeholder(pre).signature(new StringSignature(file.getName() + file.lastModified()))
-                        .into(imageview);
+                resource.placeholder(R.drawable.unknown);
             }
+//            if(isbpg){
+//                resource.override(Constants.CORE_SKIN_CARD_COVER_SIZE[0], Constants.CORE_SKIN_CARD_COVER_SIZE[1]);
+//            }
+            resource.signature(new StringSignature(code + "_" + isBig));
+            if (isbpg) {
+                resource.decoder(new BpgResourceDecoder("bpg@" + code));
+            }
+            resource.into(imageview);
         } catch (Exception e) {
             Log.e(TAG, "bind", e);
         }
     }
 
-    public void bindImage(Context context, ImageView imageview, long code) {
-        bindImage(context, imageview, code, null);
+//    private void bind(final String url, ImageView imageview, long code, Drawable pre,boolean isBig) {
+//        DrawableTypeRequest<Uri> resource = with(mContext).load(Uri.parse(url));
+//        if (pre != null) {
+//            resource.placeholder(pre);
+//        } else {
+//            resource.placeholder(R.drawable.unknown);
+//        }
+//        resource.error(R.drawable.unknown);
+//        resource.override(Constants.CORE_SKIN_CARD_COVER_SIZE[0], Constants.CORE_SKIN_CARD_COVER_SIZE[1]);
+//        resource.signature(new StringSignature(code+"_"+isBig));
+////
+//        resource.into(new GlideDrawableImageViewTarget(imageview) {
+//            @Override
+//            public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> animation) {
+//                super.onResourceReady(resource, animation);
+//                if (resource != null && !isClose) {
+//                    if (resource instanceof GlideBitmapDrawable) {
+//                        GlideBitmapDrawable glideBitmapDrawable = (GlideBitmapDrawable) resource;
+//                        Bitmap bitmap = glideBitmapDrawable.getBitmap();
+//                        if (bitmap != null) {
+//                            File file = new File(AppsSettings.get().getResourcePath(), Constants.CORE_IMAGE_PATH + "/" + code + ".jpg");
+//                            if (!file.exists()) {
+//                                File tmp = new File(AppsSettings.get().getResourcePath(), Constants.CORE_IMAGE_PATH + "/" + code + ".tmp");
+//                                if (!tmp.exists()) {
+//                                    if (!mExecutorService.isShutdown()) {
+//                                        mExecutorService.submit(() -> {
+//                                            File dir = file.getParentFile();
+//                                            if (!dir.exists()) {
+//                                                dir.mkdirs();
+//                                            }
+//                                            try {
+//                                                file.createNewFile();
+//                                                FileOutputStream outputStream = new FileOutputStream(file);
+//                                                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+//                                                outputStream.flush();
+//                                                outputStream.close();
+//                                                tmp.renameTo(file);
+//                                            } catch (Exception e) {
+//                                            }
+//
+//                                        });
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//        });
+//    }
+
+    public void bindImage(ImageView imageview, long code) {
+        bindImage(imageview, code, null);
     }
 
-    public void bindImage(Context context, ImageView imageview, long code, Drawable pre) {
+    public void bindImage(ImageView imageview, long code, Drawable pre) {
+        bindImage(imageview, code, pre, false);
+    }
+
+    public void bindImage(ImageView imageview, long code, Drawable pre, boolean isBig) {
         String name = Constants.CORE_IMAGE_PATH + "/" + code;
         String path = AppsSettings.get().getResourcePath();
+        boolean bind = false;
         File zip = new File(path, Constants.CORE_PICS_ZIP);
         for (String ex : Constants.IMAGE_EX) {
             File file = new File(AppsSettings.get().getResourcePath(), name + ex);
-            if (!file.exists()) {
-                file = new File(context.getCacheDir(), name + ex);
-            }
             if (file.exists()) {
-                bind(context, file, imageview, Constants.BPG.equals(ex), code, pre);
+                bind(file, imageview, Constants.BPG.equals(ex), code, pre, isBig);
+                bind = true;
                 return;
             }
         }
@@ -129,47 +209,21 @@ public class ImageLoader {
                         inputStream = mZipFile.getInputStream(entry);
                         outputStream = new ByteArrayOutputStream();
                         IOUtils.copy(inputStream, outputStream);
-                        bind(context, outputStream.toByteArray(), imageview, Constants.BPG.equals(ex), code, pre);
+                        bind(outputStream.toByteArray(), imageview, Constants.BPG.equals(ex), code, pre, isBig);
+                        bind = true;
+                        break;
                     }
                 }
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             } finally {
                 IOUtils.close(inputStream);
             }
-//            File cache = null;
-//            ZipFile zipFile = null;
-//            String file = zip.getAbsolutePath();
-//            InputStream inputStream = null;
-//            OutputStream outputStream = null;
-//            try {
-//                zipFile = new ZipFile(file);
-//                ZipEntry entry = null;
-//                for (String ex : Constants.IMAGE_EX) {
-//                    entry = zipFile.getEntry(name + ex);
-//                    if (entry != null) {
-//                        inputStream = zipFile.getInputStream(entry);
-//                        cache = new File(context.getCacheDir(), name + ex);
-//                        IOUtils.createFolder(cache);
-//                        if (!cache.exists()) {
-//                            cache.createNewFile();
-//                        }
-//                        outputStream = new FileOutputStream(cache);
-//                        IOUtils.copy(inputStream, outputStream);
-//                        break;
-//                    }
-//                }
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            } finally {
-//                IOUtils.close(outputStream);
-//                IOUtils.close(inputStream);
-//                IOUtils.closeZip(zipFile);
-//            }
-//            if (cache == null) {
-//                cache = new File(AppsSettings.get().getCoreSkinPath(), Constants.CORE_SKIN_COVER);
-//            }
-//            Glide.with(context).load(cache).into(imageview);
+        }
+        if (!bind) {
+            File outFile = new File(AppsSettings.get().getCoreSkinPath(), Constants.UNKNOWN_IMAGE);
+            bind(outFile, imageview, outFile.getName().endsWith(Constants.BPG), 0, null, false);
+//            bind(String.format(Constants.IMAGE_URL, "" + code), imageview, code, pre,isBig);
         }
     }
 }

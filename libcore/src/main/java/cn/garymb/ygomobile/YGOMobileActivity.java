@@ -11,10 +11,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Resources;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -83,24 +79,33 @@ public class YGOMobileActivity extends NativeActivity implements
     private NativeCrashHandler mNativeCrashHandler;
     private FullScreenUtils mFullScreenUtils;
 
+    private GameApplication app() {
+        if (mApp == null) {
+            synchronized (this) {
+                if (mApp == null) {
+                    if (GameApplication.get() != null) {
+                        mApp = GameApplication.get();
+                    } else {
+                        mApp = (GameApplication) getApplication();
+                    }
+                }
+            }
+        }
+        return mApp;
+    }
+
     @SuppressWarnings("WrongConstant")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getApplication() instanceof GameApplication) {
-            mApp = (GameApplication) getApplication();
-        } else {
-            finish();
-            return;
-        }
         mNativeCrashHandler = new NativeCrashHandler();
-        mFullScreenUtils = new FullScreenUtils(this, mApp.isImmerSiveMode());
+        mFullScreenUtils = new FullScreenUtils(this, app().isImmerSiveMode());
         mFullScreenUtils.fullscreen();
         mFullScreenUtils.onCreate();
         if (sChainControlXPostion < 0) {
             initPostion();
         }
-        if (mApp.isLockSreenOrientation()) {
+        if (app().isLockSreenOrientation()) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         }
         initExtraView();
@@ -108,8 +113,10 @@ public class YGOMobileActivity extends NativeActivity implements
         mNetController = new NetworkController(getApplicationContext());
         handleExternalCommand(getIntent());
     }
+
     private PowerManager mPM;
     private PowerManager.WakeLock mLock;
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -121,7 +128,7 @@ public class YGOMobileActivity extends NativeActivity implements
         }
         mLock.acquire();
         //注册
-        if (mApp.canNdkCash()) {
+        if (app().canNdkCash()) {
             mNativeCrashHandler.registerForNativeCrash(this);
             registNdkCash = true;
         }
@@ -131,7 +138,9 @@ public class YGOMobileActivity extends NativeActivity implements
     protected void onPause() {
         super.onPause();
         if (mLock != null) {
-            mLock.release();
+            if(mLock.isHeld()) {
+                mLock.release();
+            }
         }
         if (registNdkCash) {
             mNativeCrashHandler.unregisterForNativeCrash();
@@ -148,11 +157,11 @@ public class YGOMobileActivity extends NativeActivity implements
 
     private void initPostion() {
         final Resources res = getResources();
-        sChainControlXPostion = (int) (CHAIN_CONTROL_PANEL_X_POSITION_LEFT_EDGE * mApp
+        sChainControlXPostion = (int) (CHAIN_CONTROL_PANEL_X_POSITION_LEFT_EDGE * app()
                 .getXScale());
-        sChainControlYPostion = (int) (mApp.getSmallerSize()
+        sChainControlYPostion = (int) (app().getSmallerSize()
                 - CHAIN_CONTROL_PANEL_Y_REVERT_POSITION
-                * mApp.getYScale() - (res
+                * app().getYScale() - (res
                 .getDimensionPixelSize(R.dimen.chain_control_button_height) * 2 + res
                 .getDimensionPixelSize(R.dimen.chain_control_margin)));
     }
@@ -178,9 +187,9 @@ public class YGOMobileActivity extends NativeActivity implements
     }
 
     private void fullscreen() {
-        if (mApp.isImmerSiveMode()) {
+        if (app().isImmerSiveMode()) {
             mFullScreenUtils.fullscreen();
-            mApp.attachGame(this);
+            app().attachGame(this);
         }
     }
 
@@ -295,7 +304,7 @@ public class YGOMobileActivity extends NativeActivity implements
 
     @Override
     public ByteBuffer getNativeInitOptions() {
-        NativeInitOptions options = mApp.getNativeInitOptions();
+        NativeInitOptions options = app().getNativeInitOptions();
         return options.toNativeBuffer();
     }
 

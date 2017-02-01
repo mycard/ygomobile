@@ -172,6 +172,7 @@ public class SettingFragment extends PreferenceFragmentPlus {
 
     @Override
     protected void onChooseFileOk(Preference preference, String file) {
+        if(preference==null)return;
         String key = preference.getKey();
         if (Constants.DEBUG)
             Log.i("kk", "onChooseFileOk:" + key + ",file=" + file);

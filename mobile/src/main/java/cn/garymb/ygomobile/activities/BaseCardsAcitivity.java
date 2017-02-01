@@ -1,13 +1,11 @@
 package cn.garymb.ygomobile.activities;
 
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -15,6 +13,7 @@ import android.widget.ListView;
 
 import com.bumptech.glide.Glide;
 
+import java.io.IOException;
 import java.util.List;
 
 import cn.garymb.ygomobile.Constants;
@@ -22,8 +21,8 @@ import cn.garymb.ygomobile.adapters.CardListAdapater;
 import cn.garymb.ygomobile.bean.CardInfo;
 import cn.garymb.ygomobile.core.CardLoader;
 import cn.garymb.ygomobile.core.CardSearcher;
+import cn.garymb.ygomobile.core.loader.ImageLoader;
 import cn.garymb.ygomobile.lite.R;
-import cn.garymb.ygomobile.plus.VUiKit;
 import cn.ygo.ocgcore.LimitManager;
 import cn.ygo.ocgcore.StringManager;
 
@@ -34,7 +33,7 @@ abstract class BaseCardsAcitivity extends BaseActivity implements CardLoader.Cal
     protected CardListAdapater mCardListAdapater;
     protected CardLoader mCardLoader;
     protected boolean isLoad = false;
-
+    private ImageLoader mImageLoader;
     protected StringManager mStringManager = StringManager.get();
     protected LimitManager mLimitManager = LimitManager.get();
 
@@ -45,12 +44,13 @@ abstract class BaseCardsAcitivity extends BaseActivity implements CardLoader.Cal
         Toolbar toolbar = bind(R.id.toolbar);
         setSupportActionBar(toolbar);
         enableBackHome();
+        mImageLoader = new ImageLoader(this);
         mDrawerlayout = bind(R.id.drawer_layout);
         ViewGroup group = bind(R.id.layout_main);
         group.addView(getMainView(), new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
         mListView = (ListView) findViewById(R.id.list_cards);
-        mCardListAdapater = new CardListAdapater(this);
+        mCardListAdapater = new CardListAdapater(this, mImageLoader);
         mListView.setAdapter(mCardListAdapater);
         setListeners();
 
@@ -62,14 +62,14 @@ abstract class BaseCardsAcitivity extends BaseActivity implements CardLoader.Cal
                 this, mDrawerlayout, toolbar, R.string.search_open, R.string.search_close);
         toggle.setDrawerIndicatorEnabled(false);
         mDrawerlayout.addDrawerListener(toggle);
-        toggle.setToolbarNavigationClickListener((v)->{
-            onBack();
+        toggle.setToolbarNavigationClickListener((v) -> {
+            onBackHome();
         });
         toggle.syncState();
     }
 
-    protected int getDimen(int id){
-        return (int)getResources().getDimension(id);
+    protected int getDimen(int id) {
+        return (int) getResources().getDimension(id);
     }
 
     protected void setListeners() {
@@ -106,23 +106,23 @@ abstract class BaseCardsAcitivity extends BaseActivity implements CardLoader.Cal
         });
     }
 
-    @Override
-    protected void onBackHome() {
-        onBack();
+    public ImageLoader getImageLoader() {
+        return mImageLoader;
     }
 
-    private boolean onBack(){
+    @Override
+    protected void onBackHome() {
         if (mDrawerlayout.isDrawerOpen(Constants.CARD_SEARCH_GRAVITY)) {
             mDrawerlayout.closeDrawer(Constants.CARD_SEARCH_GRAVITY);
-            return true;
+            return;
         }
         if (mDrawerlayout.isDrawerOpen(Gravity.LEFT)) {
             mDrawerlayout.closeDrawer(Gravity.LEFT);
-            return true;
+            return;
         }
         finish();
-        return true;
     }
+
 
     protected abstract View getMainView();
 
@@ -131,6 +131,19 @@ abstract class BaseCardsAcitivity extends BaseActivity implements CardLoader.Cal
 //        Log.d("kk", "find " + (cardInfos == null ? -1 : cardInfos.size()));
         mCardListAdapater.set(cardInfos);
         mCardListAdapater.notifyDataSetChanged();
+        if (cardInfos != null && cardInfos.size() > 0) {
+            mListView.setSelection(0);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        try {
+            mImageLoader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        super.onDestroy();
     }
 
     @Override

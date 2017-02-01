@@ -2,15 +2,12 @@ package cn.garymb.ygomobile.deck;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.io.File;
-
-import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.core.loader.ImageLoader;
 import cn.garymb.ygomobile.lite.R;
-import cn.garymb.ygomobile.core.AppsSettings;
 
 class DeckViewHolder extends RecyclerView.ViewHolder {
     private long mCardType;
@@ -46,14 +43,24 @@ class DeckViewHolder extends RecyclerView.ViewHolder {
     public void setSize(int height) {
         if (height > 0) {
             cardImage.setMinimumHeight(height);
+            cardImage.setMaxHeight(height);
             rightImage.setMaxWidth(height / 5);
             rightImage.setMaxHeight(height / 5);
+            ViewGroup.LayoutParams layoutParams = cardImage.getLayoutParams();
+            if (layoutParams != null) {
+                layoutParams.height = height;
+            }
         }
     }
 
-    public void useDefault() {
-        File outFile = new File(AppsSettings.get().getCoreSkinPath(), Constants.UNKNOWN_IMAGE);
-        ImageLoader.get().bind(view.getContext(), outFile, cardImage, outFile.getName().endsWith(Constants.BPG), 0, null);
+    public void useDefault(ImageLoader imageLoader, int w, int h) {
+        cardImage.setImageResource(R.drawable.unknown);
+//        File outFile = new File(AppsSettings.get().getCoreSkinPath(), Constants.UNKNOWN_IMAGE);
+//        ViewGroup.LayoutParams layoutParams = cardImage.getLayoutParams();
+//        if (layoutParams != null) {
+//            layoutParams.height = h;
+//        }
+//        imageLoader.bind(outFile, cardImage, outFile.getName().endsWith(Constants.BPG), 0, null);
     }
 
     protected <T extends View> T findViewById(int id) {
