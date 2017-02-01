@@ -57,7 +57,7 @@ int32 scriptlib::duel_get_turn_count(lua_State *L) {
 			return 0;
 		lua_pushinteger(L, pduel->game_field->infos.turn_id_by_player[playerid]);
 	} else
-	lua_pushinteger(L, pduel->game_field->infos.turn_id);
+		lua_pushinteger(L, pduel->game_field->infos.turn_id);
 	return 1;
 }
 int32 scriptlib::duel_get_draw_count(lua_State *L) {
@@ -1083,7 +1083,7 @@ int32 scriptlib::duel_swap_control(lua_State *L) {
 		reset_count = lua_tointeger(L, 4) & 0xff;
 	}
 	if(pcard1)
-	pduel->game_field->swap_control(pduel->game_field->core.reason_effect, pduel->game_field->core.reason_player, pcard1, pcard2, reset_phase, reset_count);
+		pduel->game_field->swap_control(pduel->game_field->core.reason_effect, pduel->game_field->core.reason_player, pcard1, pcard2, reset_phase, reset_count);
 	else
 		pduel->game_field->swap_control(pduel->game_field->core.reason_effect, pduel->game_field->core.reason_player, &pgroup1->container, &pgroup2->container, reset_phase, reset_count);
 	pduel->game_field->core.subunits.back().type = PROCESSOR_SWAP_CONTROL_S;
@@ -1366,7 +1366,6 @@ int32 scriptlib::duel_negate_effect(lua_State *L) {
 	lua_pushboolean(L, pduel->game_field->disable_chain(c));
 	return 1;
 }
-// negate the effects activated on field
 int32 scriptlib::duel_negate_related_chain(lua_State *L) {
 	check_param_count(L, 2);
 	check_param(L, PARAM_TYPE_CARD, 1);

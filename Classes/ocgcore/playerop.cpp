@@ -942,15 +942,15 @@ int32 field::announce_card(int16 step, uint8 playerid, uint32 ttype) {
 			pduel->write_buffer8(MSG_ANNOUNCE_CARD);
 			pduel->write_buffer8(playerid);
 			pduel->write_buffer32(ttype);
+		} else {
+			pduel->write_buffer8(MSG_ANNOUNCE_CARD_FILTER);
+			pduel->write_buffer8(playerid);
+			pduel->write_buffer8(core.select_options.size());
+			for(uint32 i = 0; i < core.select_options.size(); ++i)
+				pduel->write_buffer32(core.select_options[i]);
+		}
+		return FALSE;
 	} else {
-		pduel->write_buffer8(MSG_ANNOUNCE_CARD_FILTER);
-		pduel->write_buffer8(playerid);
-		pduel->write_buffer8(core.select_options.size());
-		for(uint32 i = 0; i < core.select_options.size(); ++i)
-			pduel->write_buffer32(core.select_options[i]);
-	}
-	return FALSE;
-	}else {
 		int32 code = returns.ivalue[0];
 		card_data data;
 		read_card(code, &data);

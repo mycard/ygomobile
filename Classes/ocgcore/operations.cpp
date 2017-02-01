@@ -253,7 +253,7 @@ void field::release(card* target, effect* reason_effect, uint32 reason, uint32 r
 	tset.insert(target);
 	release(&tset, reason_effect, reason, reason_player);
 }
-// set current.reason and send to locations other than LOCATION_ONFIELD
+// set current.reason, operation_param
 // send-to in scripts: here->PROCESSOR_SENDTO, step 0
 void field::send_to(card_set* targets, effect* reason_effect, uint32 reason, uint32 reason_player, uint32 playerid, uint32 destination, uint32 sequence, uint32 position) {
 	if(destination & LOCATION_ONFIELD)
@@ -645,6 +645,10 @@ int32 field::pay_lp_cost(uint32 step, uint8 playerid, uint32 cost) {
 	}
 	return TRUE;
 }
+// rplayer rmoves counter from pcard or the field
+// s,o: binary value indicating the available side
+// from pcard: Card.RemoveCounter() -> here -> card::remove_counter() -> the script should raise EVENT_REMOVE_COUNTER if necessary
+// from the field: Duel.RemoveCounter() -> here -> field::select_counter() -> the system raises EVENT_REMOVE_COUNTER automatically
 int32 field::remove_counter(uint16 step, uint32 reason, card* pcard, uint8 rplayer, uint8 s, uint8 o, uint16 countertype, uint16 count) {
 	switch(step) {
 	case 0: {
@@ -984,21 +988,21 @@ int32 field::swap_control(uint16 step, effect* reason_effect, uint8 reason_playe
 			card* pcard2 = *cit2++;
 			uint8 l1 = pcard1->current.location, l2 = pcard2->current.location;
 			uint8 s1 = pcard1->current.sequence, s2 = pcard2->current.sequence;
-		remove_card(pcard1);
-		remove_card(pcard2);
-		add_card(p2, pcard1, l2, s2);
-		add_card(p1, pcard2, l1, s1);
-		pcard1->reset(RESET_CONTROL, RESET_EVENT);
-		pcard2->reset(RESET_CONTROL, RESET_EVENT);
+			remove_card(pcard1);
+			remove_card(pcard2);
+			add_card(p2, pcard1, l2, s2);
+			add_card(p1, pcard2, l1, s1);
+			pcard1->reset(RESET_CONTROL, RESET_EVENT);
+			pcard2->reset(RESET_CONTROL, RESET_EVENT);
 			set_control(pcard1, p2, reset_phase, reset_count);
 			set_control(pcard2, p1, reset_phase, reset_count);
-		pcard1->set_status(STATUS_ATTACK_CANCELED, TRUE);
-		pcard2->set_status(STATUS_ATTACK_CANCELED, TRUE);
-		pduel->write_buffer8(MSG_SWAP);
-		pduel->write_buffer32(pcard1->data.code);
-		pduel->write_buffer32(pcard2->get_info_location());
-		pduel->write_buffer32(pcard2->data.code);
-		pduel->write_buffer32(pcard1->get_info_location());
+			pcard1->set_status(STATUS_ATTACK_CANCELED, TRUE);
+			pcard2->set_status(STATUS_ATTACK_CANCELED, TRUE);
+			pduel->write_buffer8(MSG_SWAP);
+			pduel->write_buffer32(pcard1->data.code);
+			pduel->write_buffer32(pcard2->get_info_location());
+			pduel->write_buffer32(pcard2->data.code);
+			pduel->write_buffer32(pcard1->get_info_location());
 		}
 		core.units.begin()->step = 0;
 		return FALSE;
@@ -3174,7 +3178,6 @@ int32 field::release(uint16 step, group * targets, effect * reason_effect, uint3
 int32 field::send_to(uint16 step, group * targets, card * target) {
 	uint8 playerid = (target->operation_param >> 16) & 0xff;
 	uint8 dest = (target->operation_param >> 8) & 0xff;
-	//uint8 seq = (target->operation_param) & 0xff;
 	if(targets->container.find(target) == targets->container.end())
 		return TRUE;
 	if(target->current.location == dest && target->current.controler == playerid) {
@@ -3250,7 +3253,6 @@ int32 field::send_to(uint16 step, group * targets, effect * reason_effect, uint3
 		card_set leave_p, destroying;
 		for(auto cit = targets->container.begin(); cit != targets->container.end(); ++cit) {
 			card* pcard = *cit;
-			// REASON_RULE or (REASON_EFFECT + REASON_DESTROY) => not battle destroyed
 			if((pcard->current.location & LOCATION_ONFIELD) && !pcard->is_status(STATUS_SUMMON_DISABLED) && !pcard->is_status(STATUS_ACTIVATE_DISABLED)) {
 				raise_single_event(pcard, 0, EVENT_LEAVE_FIELD_P, pcard->current.reason_effect, pcard->current.reason, pcard->current.reason_player, 0, 0);
 				leave_p.insert(pcard);
@@ -3486,6 +3488,7 @@ int32 field::send_to(uint16 step, group * targets, effect * reason_effect, uint3
 		return FALSE;
 	}
 	case 7: {
+		// crystal beast redirection
 		exargs* param = (exargs*)targets;
 		card* pcard = *param->cvit;
 		uint32 flag;
@@ -3800,6 +3803,9 @@ int32 field::discard_deck(uint16 step, uint8 playerid, uint8 count, uint32 reaso
 	}
 	return TRUE;
 }
+// move a card from anywhere to field, including sp_summon, Duel.MoveToField(), Duel.ReturnToField()
+// ret: 0 = default, 1 = return after temporarily banished, 2 = trap_monster return to LOCATION_SZONE
+// call move_card() in step 2
 int32 field::move_to_field(uint16 step, card * target, uint32 enable, uint32 ret, uint32 is_equip) {
 	uint32 move_player = (target->to_field_param >> 24) & 0xff;
 	uint32 playerid = (target->to_field_param >> 16) & 0xff;
@@ -3920,6 +3926,7 @@ int32 field::move_to_field(uint16 step, card * target, uint32 enable, uint32 ret
 		pduel->write_buffer32(target->get_info_location());
 		if(target->overlay_target)
 			target->overlay_target->xyz_remove(target);
+		// call move_card()
 		move_card(playerid, target, location, target->temp.sequence);
 		target->current.position = returns.ivalue[0];
 		if((target->previous.location & LOCATION_ONFIELD) && (location & LOCATION_ONFIELD))
@@ -3979,9 +3986,9 @@ int32 field::change_position(uint16 step, group * targets, effect * reason_effec
 			uint8 flag = pcard->position_param >> 16;
 			if((pcard->current.location != LOCATION_MZONE && pcard->current.location != LOCATION_SZONE)
 					|| pcard->get_status(STATUS_SUMMONING | STATUS_SPSUMMON_STEP)
-			        || !pcard->is_affect_by_effect(reason_effect) || npos == opos
-			        || (!(pcard->data.type & TYPE_TOKEN) && (opos & POS_FACEUP) &&  (npos & POS_FACEDOWN) && !pcard->is_capable_turn_set(reason_player))
-			        || (reason_effect && pcard->is_affected_by_effect(EFFECT_CANNOT_CHANGE_POS_E))) {
+					|| !pcard->is_affect_by_effect(reason_effect) || npos == opos
+					|| (!(pcard->data.type & TYPE_TOKEN) && (opos & POS_FACEUP) &&  (npos & POS_FACEDOWN) && !pcard->is_capable_turn_set(reason_player))
+					|| (reason_effect && pcard->is_affected_by_effect(EFFECT_CANNOT_CHANGE_POS_E))) {
 				targets->container.erase(pcard);
 			} else {
 				if((pcard->data.type & TYPE_TOKEN) && (npos & POS_FACEDOWN))

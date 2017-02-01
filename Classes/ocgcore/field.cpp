@@ -151,7 +151,7 @@ void field::reload_field_info() {
 		pduel->write_buffer32(peffect->description);
 	}
 }
-// Debug.AddCard() will call this function directly
+// The core of moving cards, and Debug.AddCard() will call this function directly.
 // check Fusion/S/X monster redirection by the rule, set fieldid_r
 void field::add_card(uint8 playerid, card* pcard, uint8 location, uint8 sequence) {
 	if (pcard->current.location != 0)
@@ -276,8 +276,13 @@ void field::remove_card(card* pcard) {
 	pcard->current.location = 0;
 	pcard->current.sequence = 0;
 }
+// moving cards:
+// 1. draw()
+// 2. discard_deck()
+// 3. swap_control()
+// 4. control_adjust()
+// 5. move_card()
 // check Fusion/S/X monster redirection by the rule
-// it will call remove_card(), add_card()
 void field::move_card(uint8 playerid, card* pcard, uint8 location, uint8 sequence) {
 	if (!is_location_useable(playerid, location, sequence))
 		return;
@@ -489,8 +494,9 @@ int32 field::is_location_useable(uint8 playerid, uint8 location, uint8 sequence)
 		return FALSE;
 	return TRUE;
 }
-// return: usable count of LOCATION_MZONE or real LOCATION_SZONE
-// store local flag in list
+// uplayer: request player, PLAYER_NONE means ignoring EFFECT_MAX_MZONE, EFFECT_MAX_SZONE
+// list: store local flag in list
+// return: usable count of LOCATION_MZONE or real LOCATION_SZONE of plaerid requested by uplayer (may be negative)
 int32 field::get_useable_count(uint8 playerid, uint8 location, uint8 uplayer, uint32 reason, uint32* list) {
 	if (location != LOCATION_MZONE && location != LOCATION_SZONE)
 		return 0;
@@ -1113,6 +1119,7 @@ int32 field::filter_matching_card(int32 findex, uint8 self, uint32 location1, ui
 	}
 	return FALSE;
 }
+// Duel.GetFieldGroup(), Duel.GetFieldGroupCount()
 int32 field::filter_field_card(uint8 self, uint32 location1, uint32 location2, group* pgroup) {
 	if(self != 0 && self != 1)
 		return 0;
@@ -1249,6 +1256,7 @@ int32 field::check_release_list(uint8 playerid, int32 count, int32 use_con, int3
 	}
 	return FALSE;
 }
+// return: the max release count of mg or all monsters on field
 int32 field::get_summon_release_list(card* target, card_set* release_list, card_set* ex_list, card_set* ex_list_sum, group* mg, uint32 ex) {
 	uint8 p = target->current.controler;
 	uint32 rcount = 0;
@@ -1536,7 +1544,7 @@ void field::remove_unique_card(card* pcard) {
 	if(pcard->unique_pos[1])
 		core.unique_cards[1 - con].erase(pcard);
 }
-
+// return: pcard->unique_effect or 0
 effect* field::check_unique_onfield(card* pcard, uint8 controler, uint8 location) {
 	if(!pcard->unique_code)
 		return 0;
@@ -2270,7 +2278,7 @@ int32 field::check_with_sum_greater_limit_m(const card_vector& mats, int32 acc, 
 int32 field::check_xyz_material(card* scard, int32 findex, int32 lv, int32 min, int32 max, group* mg) {
 	get_xyz_material(scard, findex, lv, max, mg);
 	if(!(core.global_flag & GLOBALFLAG_TUNE_MAGICIAN))
-	return (int32)core.xmaterial_lst.size() >= min;
+		return (int32)core.xmaterial_lst.size() >= min;
 	for(auto cit = core.xmaterial_lst.begin(); cit != core.xmaterial_lst.end(); ++cit)
 		cit->second->sum_param = 0;
 	int32 digit = 1;
@@ -2370,7 +2378,7 @@ int32 field::is_player_can_summon(uint32 sumtype, uint8 playerid, card * pcard) 
 		pduel->lua->add_param(pcard, PARAM_TYPE_CARD);
 		pduel->lua->add_param(playerid, PARAM_TYPE_INT);
 		pduel->lua->add_param(sumtype, PARAM_TYPE_INT);
-		if (pduel->lua->check_condition(eset[i]->target, 4))
+		if(pduel->lua->check_condition(eset[i]->target, 4))
 			return FALSE;
 	}
 	return TRUE;

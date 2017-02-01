@@ -156,11 +156,11 @@ void ClientCard::UpdateInfo(char* buf) {
 		is_public = BufferIO::ReadInt32(buf);
 	if(flag & QUERY_LSCALE) {
 		lscale = BufferIO::ReadInt32(buf);
-			myswprintf(lscstring, L"%d", lscale);
+		myswprintf(lscstring, L"%d", lscale);
 	}
 	if(flag & QUERY_RSCALE) {
 		rscale = BufferIO::ReadInt32(buf);
-			myswprintf(rscstring, L"%d", rscale);
+		myswprintf(rscstring, L"%d", rscale);
 	}
 }
 void ClientCard::ClearTarget() {

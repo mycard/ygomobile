@@ -250,9 +250,7 @@ const wchar_t* DataManager::FormatRace(int race) {
 	wchar_t* p = racBuffer;
 	unsigned filter = 1;
 	int i = 1020;
-	//merge 2ba578
 	for(; filter != 0x1000000; filter <<= 1, ++i) {
-//	for(; filter != 0x800000; filter <<= 1, ++i) {
 		if(race & filter) {
 			BufferIO::CopyWStrRef(GetSysString(i), p, 16);
 			*p = L'|';
