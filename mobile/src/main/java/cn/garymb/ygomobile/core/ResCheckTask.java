@@ -19,11 +19,8 @@ import cn.garymb.ygomobile.utils.FileUtils;
 import cn.garymb.ygomobile.utils.IOUtils;
 import cn.garymb.ygomobile.utils.SystemUtils;
 import cn.ygo.ocgcore.ConfigManager;
-import cn.ygo.ocgcore.LimitManager;
-import cn.ygo.ocgcore.StringManager;
 
 import static cn.garymb.ygomobile.Constants.ASSETS_PATH;
-import static cn.garymb.ygomobile.Constants.CORE_SYSTEM_PATH;
 
 public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
     private static final String TAG = "ResCheckTask";
@@ -164,10 +161,12 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
             }
             setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.cards_cdb)));
             copyCdbFile(needsUpdate);
-            if (IOUtils.hasAssets(mContext, getDatapath(Constants.CORE_PICS_ZIP))) {
-                setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.images)));
-                IOUtils.copyFilesFromAssets(mContext, getDatapath(Constants.CORE_PICS_ZIP),
-                        resPath, needsUpdate);
+            if(isNewVersion) {
+                if (IOUtils.hasAssets(mContext, getDatapath(Constants.CORE_PICS_ZIP))) {
+                    setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.images)));
+                    IOUtils.copyFilesFromAssets(mContext, getDatapath(Constants.CORE_PICS_ZIP),
+                            resPath, needsUpdate);
+                }
             }
         } catch (Exception e) {
             if (Constants.DEBUG)

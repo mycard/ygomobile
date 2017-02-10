@@ -125,6 +125,7 @@ public class CardLoader implements ICardLoader {
         loadData(defSQL, 0, mLimitList);
     }
 
+    @Override
     public LimitList getLimitList() {
         return mLimitList;
     }
@@ -290,7 +291,7 @@ public class CardLoader implements ICardLoader {
             stringBuilder.append(" or (level >>24 & 255)=" + pscale + ")");
         }
 
-        LimitList limitList = mLimitManager.getLimitFromIndex((int) limitlist);
+        LimitList limitList = mLimitManager.getLimit((int) limitlist);
         LimitType cardLimitType = LimitType.valueOf(limit);
         if (limitList != null) {
             List<Long> ids;

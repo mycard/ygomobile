@@ -8,10 +8,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.core.AppsSettings;
@@ -20,9 +17,11 @@ import cn.garymb.ygomobile.utils.MD5Util;
 
 public class LimitManager {
     private static LimitManager sManager = new LimitManager();
-    private Map<Integer, LimitList> mListMap = new HashMap<>();
+    private final List<LimitList> mLimitLists = new ArrayList<>();
     private volatile boolean isLoad = false;
     private String lastMd5;
+    private int mCount;
+
     private LimitManager() {
 
     }
@@ -36,26 +35,18 @@ public class LimitManager {
     }
 
     public int getCount() {
-        return mListMap.size();
+        return mCount;
     }
 
-    public List<Integer> getLists() {
-        List<Integer> ids = new ArrayList<>();
-        ids.addAll(mListMap.keySet());
-        Collections.sort(ids, (o1, o2) -> {
-            return o1 - o2;
-        });
-        return ids;
+    public List<LimitList> getLimitLists(){
+        return mLimitLists;
     }
-
     public LimitList getLimit(int postion) {
-        return mListMap.get(getLists().get(postion));
+        if (postion >= 0 && postion <= getCount()) {
+            return mLimitLists.get(postion);
+        }
+        return null;
     }
-
-    public LimitList getLimitFromIndex(int pos) {
-        return mListMap.get(Integer.valueOf(pos));
-    }
-
 
     public boolean load() {
         File stringfile = new File(AppsSettings.get().getResourcePath(),
@@ -76,11 +67,10 @@ public class LimitManager {
         if (file.isDirectory() || !file.exists()) {
             return false;
         }
-        mListMap.clear();
+        mLimitLists.clear();
         isLoad = false;
         InputStreamReader in = null;
         FileInputStream inputStream = null;
-        List<LimitList> limitListList = new ArrayList<>();
         try {
             inputStream = new FileInputStream(file);
             in = new InputStreamReader(inputStream, "utf-8");
@@ -88,7 +78,6 @@ public class LimitManager {
             String line = null;
             String name = null;
             LimitList tmp = null;
-            int index = 1;
             while ((line = reader.readLine()) != null) {
                 if (line.startsWith("#")) {
                     continue;
@@ -96,9 +85,8 @@ public class LimitManager {
                 if (line.startsWith("!")) {
                     name = line.substring(1);
                     if (tmp != null) {
-                        mListMap.put(index, tmp);
+                        mLimitLists.add(tmp);
                     }
-                    index++;
                     tmp = new LimitList(name);
                 } else if (tmp != null) {
                     String[] words = line.trim().split("[\t| ]+");
@@ -126,25 +114,7 @@ public class LimitManager {
             IOUtils.close(inputStream);
             IOUtils.close(in);
         }
-//        Collections.sort(limitListList, (o1, o2) -> {
-//            if (o1.getName() == null || o2.getName() == null) {
-//                return 0;
-//            }
-//            String date1 = o1.getName().split("\\b")[0];
-//            String date2 = o2.getName().split("\\b")[0];
-//
-//            String[] dates1 = date1.split("\\.");
-//            String[] dates2 = date2.split("\\.");
-//            if( == 0){
-//                return
-//            }
-//            return date2.compareTo(date1);
-//        });
-//        int i = 0;
-//        for (LimitList limitList : limitListList) {
-//            i++;
-//            mListMap.put(Integer.valueOf(i), limitList);
-//        }
+        mCount = mLimitLists.size();
         isLoad = true;
         return true;
     }

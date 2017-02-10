@@ -112,7 +112,7 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
             StringManager.get().load();//loadFile(stringfile.getAbsolutePath());
             LimitManager.get().load();//loadFile(stringfile.getAbsolutePath());
             if (mLimitManager.getCount() > 0) {
-                mCardLoader.setLimitList(mLimitManager.getLimitFromIndex(0));
+                mCardLoader.setLimitList(mLimitManager.getLimit(0));
             }
             mCardLoader.openDb();
             File file = new File(mSettings.getResourcePath(), Constants.CORE_DECK_PATH + "/" + mSettings.getLastDeck() + Constants.YDK_FILE_EX);
@@ -691,13 +691,13 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
         return null;
     }
 
-    private LimitList getSelectLimitList(Spinner spinner) {
-        int val = (int) SimpleSpinnerAdapter.getSelect(spinner);
-        if (val > 0) {
-            return mLimitManager.getLimitFromIndex(val);
-        }
-        return null;
-    }
+//    private LimitList getSelectLimitList(Spinner spinner) {
+//        int val = (int) SimpleSpinnerAdapter.getSelect(spinner);
+//        if (val > 0) {
+//            return mLimitManager.getLimit(val);
+//        }
+//        return null;
+//    }
 
     private File[] getYdkFiles() {
         File dir = new File(mSettings.getResourcePath(), Constants.CORE_DECK_PATH);
@@ -732,26 +732,26 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
         }
     }
 
-    private void initLimitListSpinners(Spinner spinner) {
-        List<SimpleSpinnerItem> items = new ArrayList<>();
-        List<Integer> ids = mLimitManager.getLists();
-        int index = -1;
-        int i = 0;
-        for (Integer id : ids) {
-            LimitList list = mLimitManager.getLimitFromIndex(id);
-            if (list == mLimitList) {
-                index = i;
-            }
-            items.add(new SimpleSpinnerItem(id, list.getName()));
-            i++;
-        }
-        SimpleSpinnerAdapter adapter = new SimpleSpinnerAdapter(this);
-        adapter.set(items);
-        spinner.setAdapter(adapter);
-        if (index >= 0) {
-            spinner.setSelection(index);
-        }
-    }
+//    private void initLimitListSpinners(Spinner spinner) {
+//        List<SimpleSpinnerItem> items = new ArrayList<>();
+//        List<Integer> ids = mLimitManager.getLists();
+//        int index = -1;
+//        int i = 0;
+//        for (Integer id : ids) {
+//            LimitList list = mLimitManager.getLimitFromIndex(id);
+//            if (list == mLimitList) {
+//                index = i;
+//            }
+//            items.add(new SimpleSpinnerItem(id, list.getName()));
+//            i++;
+//        }
+//        SimpleSpinnerAdapter adapter = new SimpleSpinnerAdapter(this);
+//        adapter.set(items);
+//        spinner.setAdapter(adapter);
+//        if (index >= 0) {
+//            spinner.setSelection(index);
+//        }
+//    }
 
     private void inputDeckName(String old) {
         DialogPlus builder = new DialogPlus(this);

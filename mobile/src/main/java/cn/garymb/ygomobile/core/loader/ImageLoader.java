@@ -90,8 +90,9 @@ public class ImageLoader implements Closeable {
         if (pre != null) {
             resource.placeholder(pre);
         } else {
-            resource.placeholder(R.drawable.unknown);
+//            resource.placeholder(R.drawable.unknown);
         }
+        resource.animate(R.anim.push_in);
 //        if(isbpg){
 //            resource.override(Constants.CORE_SKIN_CARD_COVER_SIZE[0], Constants.CORE_SKIN_CARD_COVER_SIZE[1]);
 //        }
@@ -108,8 +109,9 @@ public class ImageLoader implements Closeable {
             if (pre != null) {
                 resource.placeholder(pre);
             } else {
-                resource.placeholder(R.drawable.unknown);
+//                resource.placeholder(R.drawable.unknown);
             }
+            resource.animate(R.anim.push_in);
 //            if(isbpg){
 //                resource.override(Constants.CORE_SKIN_CARD_COVER_SIZE[0], Constants.CORE_SKIN_CARD_COVER_SIZE[1]);
 //            }
@@ -221,8 +223,9 @@ public class ImageLoader implements Closeable {
             }
         }
         if (!bind) {
-            File outFile = new File(AppsSettings.get().getCoreSkinPath(), Constants.UNKNOWN_IMAGE);
-            bind(outFile, imageview, outFile.getName().endsWith(Constants.BPG), 0, null, false);
+            imageview.setImageResource(R.drawable.unknown);
+//            File outFile = new File(AppsSettings.get().getCoreSkinPath(), Constants.UNKNOWN_IMAGE);
+//            bind(outFile, imageview, outFile.getName().endsWith(Constants.BPG), 0, null, false);
 //            bind(String.format(Constants.IMAGE_URL, "" + code), imageview, code, pre,isBig);
         }
     }

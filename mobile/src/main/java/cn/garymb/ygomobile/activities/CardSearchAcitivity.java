@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -75,7 +76,7 @@ public class CardSearchAcitivity extends BaseActivity implements CardLoader.Call
             StringManager.get().load();//loadFile(stringfile.getAbsolutePath());
             LimitManager.get().load();//loadFile(stringfile.getAbsolutePath());
             if (mLimitManager.getCount() > 0) {
-                mCardLoader.setLimitList(mLimitManager.getLimitFromIndex(0));
+                mCardLoader.setLimitList(mLimitManager.getLimit(0));
             }
             mCardLoader.openDb();
         }).done((rs) -> {
@@ -168,6 +169,7 @@ public class CardSearchAcitivity extends BaseActivity implements CardLoader.Call
         if (mDrawerlayout.isDrawerOpen(Constants.CARD_SEARCH_GRAVITY)) {
             mDrawerlayout.closeDrawer(Constants.CARD_SEARCH_GRAVITY);
         }
+//        Log.i("kk", "list=" + limitList);
         mCardListAdapater.setLimitList(limitList);
     }
 
@@ -210,12 +212,14 @@ public class CardSearchAcitivity extends BaseActivity implements CardLoader.Call
     protected void onCardLongClick(View view, CardInfo cardInfo, int pos) {
 
     }
+
     private CardDetail mCardDetail;
     private Dialog mDialog;
 
-    private boolean isShowCard(){
-        return mDialog!=null&&mDialog.isShowing();
+    private boolean isShowCard() {
+        return mDialog != null && mDialog.isShowing();
     }
+
     protected void showCard(CardInfo cardInfo) {
         if (isShowCard()) return;
         if (cardInfo != null) {
@@ -227,7 +231,7 @@ public class CardSearchAcitivity extends BaseActivity implements CardLoader.Call
                 builder.setView(mCardDetail.getView());
                 mDialog = builder.show();
             }
-            if(!mDialog.isShowing()) {
+            if (!mDialog.isShowing()) {
                 mDialog.show();
             }
             mCardDetail.bind(cardInfo, mStringManager, new CardDetail.OnClickListener() {

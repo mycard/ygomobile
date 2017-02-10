@@ -1,6 +1,5 @@
 package cn.ygo.ocgcore;
 
-import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -99,9 +98,9 @@ public class LimitList {
     public String toString() {
         return "LimitList{" +
                 "name='" + name + '\'' +
-                ", forbidden=" + forbidden +
-                ", limit=" + limit +
-                ", semiLimit=" + semiLimit +
+                ", forbidden=" + forbidden.size() +
+                ", limit=" + limit.size() +
+                ", semiLimit=" + semiLimit.size() +
                 '}';
     }
 }
