@@ -77,9 +77,9 @@ bool Game::Initialize() {
 	xScale = android::getScreenHeight(app) / 1024.0;
 	yScale = android::getScreenWidth(app) / 640.0;
 /*	if (xScale < yScale) {
-		xScale = android::getScreenWidth(app) / 1024.0;
-		yScale = android::getScreenHeight(app) / 640.0;
-	}//start ygocore when mobile is in landscape mode, or using Android tablets or TV.*/
+*		xScale = android::getScreenWidth(app) / 1024.0;
+*		yScale = android::getScreenHeight(app) / 640.0;
+*	}//start ygocore when mobile is in landscape mode, or using Android tablets or TV.*/
 	char log_scale[256] = {0};
 	sprintf(log_scale, "xScale = %f, yScale = %f", xScale, yScale);
 	Printer::log(log_scale);
@@ -511,15 +511,18 @@ bool Game::Initialize() {
 	//system
 	irr::gui::IGUITab* tabSystem = wInfos->addTab(dataManager.GetSysString(1273));
 	chkAutoPos = env->addCheckBox(false, rect<s32>(20 * xScale, 20 * yScale, 280 * xScale, 45 * yScale), tabSystem, -1, dataManager.GetSysString(1274));
-	chkAutoPos->setChecked(true);
+	chkAutoPos->setChecked(gameConf.chkAutoPos != 0);
 	chkRandomPos = env->addCheckBox(false, rect<s32>(40 * xScale, 50 * yScale, 300 * xScale, 75 * yScale), tabSystem, -1, dataManager.GetSysString(1275));
+	chkRandomPos->setChecked(gameConf.chkRandomPos != 0);
 	chkAutoChain = env->addCheckBox(false, rect<s32>(20 * xScale, 80 * yScale, 280 * xScale, 105 * yScale), tabSystem, -1, dataManager.GetSysString(1276));
-	chkAutoChain->setChecked(true);
+	chkAutoChain->setChecked(gameConf.chkAutoChain != 0);
 	chkWaitChain = env->addCheckBox(false, rect<s32>(20 * xScale, 110 * yScale, 280 * xScale, 135 * yScale), tabSystem, -1, dataManager.GetSysString(1277));
-	chkIgnore1 = env->addCheckBox(false, rect<s32>(20 * xScale, 170 * yScale, 280 * xScale, 195 * yScale), tabSystem, -1, dataManager.GetSysString(1290));
-	chkIgnore2 = env->addCheckBox(false, rect<s32>(20 * xScale, 200 * yScale, 280 * xScale, 225 * yScale), tabSystem, -1, dataManager.GetSysString(1291));
-	chkIgnore2->setChecked(false);
-	chkHideSetname = env->addCheckBox(false, rect<s32>(20, 260, 280, 285), tabSystem, -1, dataManager.GetSysString(1354));
+	chkWaitChain->setChecked(gameConf.chkWaitChain != 0);
+	chkIgnore1 = env->addCheckBox(false, rect<s32>(20 * xScale, 170 * yScale, 300 * xScale, 195 * yScale), tabSystem, -1, dataManager.GetSysString(1290));
+	chkIgnore1->setChecked(gameConf.chkIgnore1 != 0);
+	chkIgnore2 = env->addCheckBox(false, rect<s32>(20 * xScale, 200 * yScale, 290 * xScale, 225 * yScale), tabSystem, -1, dataManager.GetSysString(1291));
+	chkIgnore2->setChecked(gameConf.chkIgnore2 != 0);
+	chkHideSetname = env->addCheckBox(false, rect<s32>(20 * xScale, 260 * yScale, 280 * xScale, 285 * yScale), tabSystem, -1, dataManager.GetSysString(1354));
 	chkHideSetname->setChecked(gameConf.chkHideSetname != 0);
 	//
 	wHand = env->addWindow(rect<s32>(500 * xScale, 450 * yScale, 825 * xScale, 605 * yScale), false, L"");
@@ -1032,6 +1035,7 @@ bool Game::Initialize() {
 	device->setEventReceiver(&menuHandler);
 	LoadConfig();
 	env->getSkin()->setFont(guiFont);
+	env->getSkin()->setSize(EGDS_CHECK_BOX_WIDTH, (gameConf.textfontsize + 10) * yScale);
 	env->setFocus(wMainMenu);
 	for (u32 i = 0; i < EGDC_COUNT; ++i) {
 		SColor col = env->getSkin()->getColor((EGUI_DEFAULT_COLOR)i);
@@ -1416,6 +1420,7 @@ void Game::LoadConfig() {
 	gameConf.antialias = 0;
 	gameConf.serverport = 7911;
 	gameConf.textfontsize = 16;
+	gameConf.nickname[0] = 0;
 	gameConf.gamename[0] = 0;
 	BufferIO::DecodeUTF8(android::getLastDeck(appMain).c_str(), wstr);
 	BufferIO::CopyWStr(wstr, gameConf.lastdeck, 64);
@@ -1429,7 +1434,7 @@ void Game::LoadConfig() {
 	//settings
 	gameConf.chkAutoPos = 1;
 	gameConf.chkRandomPos = 0;
-	gameConf.chkAutoChain = 1;
+	gameConf.chkAutoChain = 0;
 	gameConf.chkWaitChain = 0;
 	gameConf.chkIgnore1 = 0;
 	gameConf.chkIgnore2 = 0;
@@ -1440,9 +1445,9 @@ void Game::LoadConfig() {
 }
 
 void Game::SaveConfig() {
-	char lastdeck[256] = {0};
-	BufferIO::EncodeUTF8(gameConf.lastdeck, lastdeck);
-	android::setLastDeck(appMain, lastdeck);
+	char linebuf[256];	
+	BufferIO::EncodeUTF8(gameConf.lastdeck, linebuf);
+	android::setLastDeck(appMain, linebuf);
 }
 void Game::ShowCardInfo(int code) {
 	CardData cd;
