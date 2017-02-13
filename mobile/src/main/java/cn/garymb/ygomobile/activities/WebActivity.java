@@ -7,8 +7,8 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.webkit.WebChromeClient;
 import android.webkit.WebView;
+
 
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.plus.WebViewPlus;
@@ -27,7 +27,7 @@ public class WebActivity extends BaseActivity {
         enableBackHome();
         mWebViewPlus = bind(R.id.webbrowser);
         mWebViewPlus.enableHtml5();
-        mWebViewPlus.setWebChromeClient(new WebChromeClient() {
+        mWebViewPlus.setWebChromeClient(new WebViewPlus.DefWebChromeClient() {
             @Override
             public void onReceivedTitle(WebView view, String title) {
                 super.onReceivedTitle(view, title);

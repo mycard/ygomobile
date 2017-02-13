@@ -162,7 +162,7 @@ public class SettingFragment extends PreferenceFragmentPlus {
     protected void onChooseFileFail(Preference preference) {
         super.onChooseFileFail(preference);
         //空指针异常
-        if(preference==null)return;
+        if (preference == null) return;
         String key = preference.getKey();
         if (PREF_USE_EXTRA_CARD_CARDS.equals(key)) {
             mSettings.setUseExtraCards(false);
@@ -172,11 +172,11 @@ public class SettingFragment extends PreferenceFragmentPlus {
 
     @Override
     protected void onChooseFileOk(Preference preference, String file) {
-        if(preference==null)return;
+        if (preference == null) return;
         String key = preference.getKey();
         if (Constants.DEBUG)
             Log.i("kk", "onChooseFileOk:" + key + ",file=" + file);
-        if (SETTINGS_COVER.equals(key) || SETTINGS_CARD_BG.equals(key)) {
+        if (SETTINGS_COVER.equals(key) || SETTINGS_CARD_BG.equals(key) || PREF_GAME_FONT.equals(key)) {
             super.onChooseFileOk(preference, file);
             onPreferenceClick(preference);
         } else if (PREF_GAME_PATH.equalsIgnoreCase(preference.getKey())) {

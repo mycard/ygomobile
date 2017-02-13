@@ -8,10 +8,11 @@ import android.util.AttributeSet;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 import android.webkit.DownloadListener;
-import android.webkit.WebResourceRequest;
+import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+
 
 public class WebViewPlus extends WebView {
     private Context context;
@@ -71,7 +72,6 @@ public class WebViewPlus extends WebView {
 
         CookieSyncManager.createInstance(context);
         CookieManager.getInstance().setAcceptCookie(true);
-        CookieManager.setAcceptFileSchemeCookies(true);
         if (Build.VERSION.SDK_INT >= 21) {
             CookieManager.getInstance().setAcceptThirdPartyCookies(this, true);
         }
@@ -97,10 +97,8 @@ public class WebViewPlus extends WebView {
         public boolean shouldOverrideUrlLoading(WebView view, String url) {
             return false;
         }
+    }
+    public static class DefWebChromeClient extends WebChromeClient {
 
-        @Override
-        public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
-            return false;
-        }
     }
 }

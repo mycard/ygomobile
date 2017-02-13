@@ -8,12 +8,19 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
+import android.text.Html;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.activities.WebActivity;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.plus.DialogPlus;
 import cn.garymb.ygomobile.plus.PreferenceFragmentPlus;
+import cn.garymb.ygomobile.plus.VUiKit;
+import cn.garymb.ygomobile.utils.IOUtils;
 import cn.garymb.ygomobile.utils.SystemUtils;
 
 public class AboutFragment extends PreferenceFragmentPlus {
@@ -47,6 +54,33 @@ public class AboutFragment extends PreferenceFragmentPlus {
     public boolean onPreferenceClick(Preference preference) {
         String key = preference.getKey();
         if ("pref_key_change_log".equals(key)) {
+//            VUiKit.defer().when(() -> {
+//                String html = null;
+//                InputStream inputStream = null;
+//                ByteArrayOutputStream byteArrayOutputStream = null;
+//                try {
+//                    inputStream = getContext().getAssets().open("changelog.html");
+//                    byteArrayOutputStream = new ByteArrayOutputStream();
+//                    byte[] data = new byte[4096];
+//                    int len;
+//                    while ((len = inputStream.read(data)) != -1) {
+//                        byteArrayOutputStream.write(data, 0, len);
+//                    }
+//                    html = byteArrayOutputStream.toString();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                } finally {
+//
+//                    IOUtils.close(byteArrayOutputStream);
+//                    IOUtils.close(inputStream);
+//                }
+//                return html;
+//            }).done((html) -> {
+//                new DialogPlus(getActivity())
+//                        .setTitle(getString(R.string.settings_about_change_log))
+//                        .loadHtml(html, Color.TRANSPARENT)
+//                        .show();
+//            });
             new DialogPlus(getActivity())
                     .setTitle(getString(R.string.settings_about_change_log))
                     .loadUrl("file:///android_asset/changelog.html", Color.TRANSPARENT)
@@ -55,7 +89,7 @@ public class AboutFragment extends PreferenceFragmentPlus {
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.ALIPAY_URL));
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
-        }else if("pref_key_about_check_update".equals(key)){
+        } else if ("pref_key_about_check_update".equals(key)) {
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.DOWNLOAD_HOME));
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             try {

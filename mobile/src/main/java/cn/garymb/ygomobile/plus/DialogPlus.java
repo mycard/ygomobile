@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,6 +31,8 @@ public class DialogPlus {
     private Button mRight;
     private View mContentView;
     private int mMaxHeight;
+    private String mUrl;
+    private WebViewPlus mWebView;
 
     public DialogPlus(Context context) {
         this.context = context;
@@ -113,7 +116,7 @@ public class DialogPlus {
         return this;
     }
 
-    public DialogPlus setMessage(String text) {
+    public DialogPlus setMessage(CharSequence text) {
         TextView textView = bind(R.id.text);
         textView.setVisibility(View.VISIBLE);
         textView.setText(text);
@@ -174,13 +177,16 @@ public class DialogPlus {
     }
 
     public Dialog show() {
-        if (mDialog != null) {
+        if (mDialog == null) {
+            mDialog = mBuilder.show();
+        } else {
             if (!mDialog.isShowing()) {
                 mDialog.show();
             }
-            return mDialog;
         }
-        mDialog = mBuilder.show();
+        if (mWebView != null && !TextUtils.isEmpty(mUrl)) {
+            mWebView.loadUrl(mUrl);
+        }
         return mDialog;
     }
 
@@ -198,19 +204,41 @@ public class DialogPlus {
         return (T) mContentView.findViewById(id);
     }
 
+    public DialogPlus loadHtml(String html, int bgColor) {
+        if (mWebView == null) {
+            FrameLayout frameLayout = new FrameLayout(context);
+            WebViewPlus webView = new WebViewPlus(context);
+            webView.setBackgroundColor(bgColor);
+            FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT);
+            layoutParams.gravity = Gravity.CENTER_HORIZONTAL;
+            frameLayout.addView(webView, layoutParams);
+            setView(frameLayout);
+            setLeftButtonListener((dlg, v) -> {
+                dlg.dismiss();
+            });
+            mWebView = webView;
+            webView.loadData(html, "text/html", "UTF-8");
+        }
+        return this;
+    }
+
     public DialogPlus loadUrl(String url, int bgColor) {
-        FrameLayout frameLayout = new FrameLayout(context);
-        WebView webView = new WebViewPlus(context);
-        webView.setBackgroundColor(bgColor);
-        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT);
-        layoutParams.gravity = Gravity.CENTER_HORIZONTAL;
-        frameLayout.addView(webView, layoutParams);
-        setView(frameLayout);
-        setLeftButtonListener((dlg, v) -> {
-            dlg.dismiss();
-        });
-        webView.loadUrl(url);
+        if (mWebView == null) {
+            FrameLayout frameLayout = new FrameLayout(context);
+            WebViewPlus webView = new WebViewPlus(context);
+            webView.setBackgroundColor(bgColor);
+            FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT);
+            layoutParams.gravity = Gravity.CENTER_HORIZONTAL;
+            frameLayout.addView(webView, layoutParams);
+            setView(frameLayout);
+            setLeftButtonListener((dlg, v) -> {
+                dlg.dismiss();
+            });
+            mWebView = webView;
+        }
+        mUrl = url;
         return this;
     }
 }

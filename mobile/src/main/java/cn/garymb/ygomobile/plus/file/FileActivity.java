@@ -153,12 +153,10 @@ public class FileActivity extends BaseActivity implements AdapterView.OnItemClic
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         File file = mFileAdapter.getItemById(id);
         if (file != null && file.isDirectory()) {
-            if (mFileOpenInfo.getType() == FileOpenType.SelectFolder||mFileAdapter.isParent(file)) {
-                if (mFileAdapter.setPath(file.getAbsolutePath())) {
-                    mFileAdapter.loadFiles();
-                }
-                return;
+            if (mFileAdapter.setPath(file.getAbsolutePath())) {
+                mFileAdapter.loadFiles();
             }
+            return;
         }
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.question);

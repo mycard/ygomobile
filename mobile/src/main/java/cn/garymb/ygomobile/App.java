@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.support.v7.app.AppCompatDelegate;
 import android.widget.TextView;
 
+
 import cn.garymb.ygomobile.core.AppsSettings;
 
 public class App extends GameApplication {
@@ -14,6 +15,8 @@ public class App extends GameApplication {
         super.onCreate();
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         AppsSettings.init(this);
+//        QbSdk.initX5Environment(this, null);
+//        QbSdk.setCurrentID("");
     }
 
     @Override
