@@ -334,7 +334,7 @@ bool Game::Initialize() {
 	btnHostCancel = env->addButton(rect<s32>(260 * xScale, 385 * yScale, 370 * xScale, 410 * yScale), wCreateHost, BUTTON_HOST_CANCEL, dataManager.GetSysString(1212));
 	//host(single)
 #ifdef _IRR_ANDROID_PLATFORM_
-	wHostPrepare = env->addWindow(rect<s32>(0 * xScale, 0 * yScale, 512 * xScale, 540 * yScale), false, dataManager.GetSysString(1250));
+	wHostPrepare = env->addWindow(rect<s32>(250 * xScale, 30 * yScale, 780 * xScale, 550 * yScale), false, dataManager.GetSysString(1250));
 	wHostPrepare->setDraggable(false);
 	wHostPrepare->getCloseButton()->setVisible(false);
 	wHostPrepare->setVisible(false);
@@ -726,7 +726,7 @@ bool Game::Initialize() {
 	btnRepos = env->addButton(rect<s32>(1 * xScale, 206 * yScale, 99 * xScale, 246 * yScale), wCmdMenu, BUTTON_CMD_REPOS, dataManager.GetSysString(1154));
 	btnAttack = env->addButton(rect<s32>(1 * xScale, 247 * yScale, 99 * xScale, 288 * yScale), wCmdMenu, BUTTON_CMD_ATTACK, dataManager.GetSysString(1157));
 	btnShowList = env->addButton(rect<s32>(1 * xScale, 289 * yScale, 99 * xScale, 329 * yScale), wCmdMenu, BUTTON_CMD_SHOWLIST, dataManager.GetSysString(1158));
-	btnOperation = env->addButton(rect<s32>(1 * xScale, 169 * yScale, 99 * xScale, 189 * yScale), wCmdMenu, BUTTON_CMD_ACTIVATE, dataManager.GetSysString(1161));
+	btnOperation = env->addButton(rect<s32>(1 * xScale, 169 * yScale, 100 * xScale, 209 * yScale), wCmdMenu, BUTTON_CMD_ACTIVATE, dataManager.GetSysString(1161));
 	btnReset = env->addButton(rect<s32>(1 * xScale, 190 * yScale , 99 * xScale, 210 * yScale), wCmdMenu, BUTTON_CMD_RESET, dataManager.GetSysString(1162));
 #else
 	btnActivate = env->addButton(rect<s32>(1 * xScale, 1 * yScale, 99 * xScale, 21 * yScale), wCmdMenu, BUTTON_CMD_ACTIVATE, dataManager.GetSysString(1150));
