@@ -75,8 +75,8 @@ public class CardSearchAcitivity extends BaseActivity implements CardLoader.Call
         VUiKit.defer().when(() -> {
             StringManager.get().load();//loadFile(stringfile.getAbsolutePath());
             LimitManager.get().load();//loadFile(stringfile.getAbsolutePath());
-            if (mLimitManager.getCount() > 0) {
-                mCardLoader.setLimitList(mLimitManager.getLimit(0));
+            if (mLimitManager.getCount() > 1) {
+                mCardLoader.setLimitList(mLimitManager.getLimit(1));
             }
             mCardLoader.openDb();
         }).done((rs) -> {
@@ -165,7 +165,14 @@ public class CardSearchAcitivity extends BaseActivity implements CardLoader.Call
     }
 
     @Override
-    public void onSearchStart(LimitList limitList) {
+    public void onSearchStart() {
+        if (mDrawerlayout.isDrawerOpen(Constants.CARD_SEARCH_GRAVITY)) {
+            mDrawerlayout.closeDrawer(Constants.CARD_SEARCH_GRAVITY);
+        }
+    }
+
+    @Override
+    public void onLimitListChanged(LimitList limitList) {
         if (mDrawerlayout.isDrawerOpen(Constants.CARD_SEARCH_GRAVITY)) {
             mDrawerlayout.closeDrawer(Constants.CARD_SEARCH_GRAVITY);
         }

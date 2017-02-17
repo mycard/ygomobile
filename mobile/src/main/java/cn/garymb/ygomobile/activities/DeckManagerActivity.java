@@ -111,8 +111,8 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
         VUiKit.defer().when(() -> {
             StringManager.get().load();//loadFile(stringfile.getAbsolutePath());
             LimitManager.get().load();//loadFile(stringfile.getAbsolutePath());
-            if (mLimitManager.getCount() > 0) {
-                mCardLoader.setLimitList(mLimitManager.getLimit(0));
+            if (mLimitManager.getCount() > 1) {
+                mCardLoader.setLimitList(mLimitManager.getLimit(1));
             }
             mCardLoader.openDb();
             File file = new File(mSettings.getResourcePath(), Constants.CORE_DECK_PATH + "/" + mSettings.getLastDeck() + Constants.YDK_FILE_EX);
@@ -140,16 +140,28 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
         }).done((rs) -> {
             isLoad = true;
             dlg.dismiss();
-            setLimitList(mLimitManager.getCount() > 0 ? mLimitManager.getLimit(0) : null);
             mCardSelector.initItems();
             isLoad = true;
             setCurYdkFile(mYdkFile, false);
             initDecksListSpinners(mDeckSpinner);
             mDeckAdapater.setDeck(rs);
             mDeckAdapater.notifyDataSetChanged();
-
         });
+    }
 
+    @Override
+    public void onLimitListChanged(LimitList limitList) {
+        boolean nochanged = mLimitList != null && TextUtils.equals(mLimitList.getName(), limitList.getName());
+        mLimitList = limitList;
+        if (!nochanged) {
+            mDeckAdapater.setLimitList(mLimitList);
+            runOnUiThread(()->{
+                mDeckAdapater.notifyItemRangeChanged(DeckItem.MainStart, DeckItem.MainEnd);
+                mDeckAdapater.notifyItemRangeChanged(DeckItem.ExtraStart, DeckItem.ExtraEnd);
+                mDeckAdapater.notifyItemRangeChanged(DeckItem.SideStart, DeckItem.SideEnd);
+            });
+        }
+        mCardListAdapater.setLimitList(limitList);
     }
 
     @Override
@@ -199,17 +211,6 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
 
     }
 
-    private void setLimitList(LimitList limitList) {
-        boolean nochanged = mLimitList != null && TextUtils.equals(mLimitList.getName(), limitList.getName());
-        mLimitList = limitList;
-        if (!nochanged) {
-            mDeckAdapater.setLimitList(mLimitList);
-            mDeckAdapater.notifyDataSetChanged();
-        }
-        mCardListAdapater.setLimitList(limitList);
-        mCardLoader.setLimitList(mLimitList);
-    }
-
     private void loadDeck(File file) {
         loadDeck(file, false);
     }
@@ -251,8 +252,7 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
     }
 
     @Override
-    public void onSearchStart(LimitList limitList) {
-        setLimitList(limitList);
+    public void onSearchStart() {
         hideDrawers();
     }
 

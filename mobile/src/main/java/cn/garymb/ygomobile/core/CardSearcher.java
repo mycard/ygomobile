@@ -132,20 +132,32 @@ public class CardSearcher implements View.OnClickListener {
         });
     }
 
-
     public void initItems() {
         initOtSpinners(otSpinner);
         initLimitSpinners(limitSpinner);
         initLimitListSpinners(limitListSpinner);
+        limitListSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (dataLoader != null) {
+                    dataLoader.setLimitList(mLimitManager.getLimit(position));
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
         initTypeSpinners(typeSpinner, new CardType[]{CardType.None, CardType.Monster, CardType.Spell, CardType.Trap});
         initTypeSpinners(typeMonsterSpinner, new CardType[]{CardType.None, CardType.Normal, CardType.Effect, CardType.Fusion, CardType.Ritual,
-                CardType.Synchro, CardType.Pendulum, CardType.Xyz, CardType.Spirit, CardType.Union,
-                CardType.Dual, CardType.Tuner, CardType.Flip, CardType.Toon, CardType.Token
+                                                            CardType.Synchro, CardType.Pendulum, CardType.Xyz, CardType.Spirit, CardType.Union,
+                                                            CardType.Dual, CardType.Tuner, CardType.Flip, CardType.Toon, CardType.Token
         });
         initTypeSpinners(typeMonsterSpinner2, new CardType[]{CardType.None, CardType.Pendulum, CardType.Tuner, CardType.Effect, CardType.Normal
         });
         initTypeSpinners(typeSTSpinner, new CardType[]{CardType.None, CardType.Normal, CardType.QuickPlay, CardType.Ritual,
-                CardType.Continuous, CardType.Equip, CardType.Field, CardType.Counter
+                                                       CardType.Continuous, CardType.Equip, CardType.Field, CardType.Counter
         });
         initLevelSpinners(levelSpinner);
         initPscaleSpinners(pScale);
@@ -203,7 +215,6 @@ public class CardSearcher implements View.OnClickListener {
     private void initLimitListSpinners(Spinner spinner) {
         List<SimpleSpinnerItem> items = new ArrayList<>();
         List<LimitList> limitLists = mLimitManager.getLimitLists();
-        items.add(new SimpleSpinnerItem(-1, getString(R.string.label_limitlist)));
         int index = -1;
         int count = mLimitManager.getCount();
         LimitList cur = null;
@@ -212,10 +223,14 @@ public class CardSearcher implements View.OnClickListener {
         }
         for (int i = 0; i < count; i++) {
             LimitList list = limitLists.get(i);
-            items.add(new SimpleSpinnerItem(i, list.getName()));
+            if (i == 0) {
+                items.add(new SimpleSpinnerItem(i, getString(R.string.label_limitlist)));
+            } else {
+                items.add(new SimpleSpinnerItem(i, list.getName()));
+            }
             if (cur != null) {
                 if (TextUtils.equals(cur.getName(), list.getName())) {
-                    index = i + 1;
+                    index = i;
                 }
             }
         }

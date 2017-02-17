@@ -68,6 +68,7 @@ public class LimitManager {
             return false;
         }
         mLimitLists.clear();
+        mLimitLists.add(new LimitList(null));
         isLoad = false;
         InputStreamReader in = null;
         FileInputStream inputStream = null;

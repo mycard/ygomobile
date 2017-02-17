@@ -36,7 +36,9 @@ public class CardLoader implements ICardLoader {
     private final static boolean DEBUG = false;
 
     public interface CallBack {
-        void onSearchStart(LimitList limitList);
+        void onSearchStart();
+
+        void onLimitListChanged(LimitList limitList);
 
         void onSearchResult(List<CardInfo> cardInfos);
 
@@ -47,8 +49,12 @@ public class CardLoader implements ICardLoader {
         this.context = context;
     }
 
+    @Override
     public void setLimitList(LimitList limitList) {
         mLimitList = limitList;
+        if (mCallBack != null) {
+            mCallBack.onLimitListChanged(limitList);
+        }
     }
 
     public HashMap<Long, CardInfo> readCards(List<Long> ids, LimitList limitList) {
@@ -122,7 +128,7 @@ public class CardLoader implements ICardLoader {
     }
 
     public void loadData() {
-        loadData(defSQL, 0, mLimitList);
+        loadData(defSQL, 0);
     }
 
     @Override
@@ -162,15 +168,14 @@ public class CardLoader implements ICardLoader {
         return tmp;
     }
 
-    private void loadData(String sql, long setcode, LimitList limitList) {
+    private void loadData(String sql, long setcode) {
         if (!isOpen()) {
             return;
         }
         if (Constants.DEBUG)
             Log.i(TAG, sql);
-        mLimitList = limitList;
         if (mCallBack != null) {
-            mCallBack.onSearchStart(limitList);
+            mCallBack.onSearchStart();
         }
         ProgressDialog wait = ProgressDialog.show(context, null, context.getString(R.string.searching));
         VUiKit.defer().when(() -> {
@@ -216,6 +221,7 @@ public class CardLoader implements ICardLoader {
             mCallBack.onResetSearch();
         }
     }
+
 
     @Override
     public void search(String prefixWord, String suffixWord,
@@ -320,6 +326,7 @@ public class CardLoader implements ICardLoader {
             }
         }
         stringBuilder.append(" order by " + CardInfo.COL_STAR + " desc,atk desc," + CardInfo.COL_ID);
-        loadData(stringBuilder.toString(), setcode, (limitList == null ? mLimitList : limitList));
+        setLimitList((limitList == null ? mLimitList : limitList));
+        loadData(stringBuilder.toString(), setcode);
     }
 }

@@ -8,5 +8,6 @@ public interface ICardLoader{
                 String atk, String def,long pscale,
                 long setcode, long category, long ot, long... types);
     void onReset();
+    void setLimitList(LimitList limit);
     LimitList getLimitList();
 }
