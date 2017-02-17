@@ -136,19 +136,6 @@ public class CardSearcher implements View.OnClickListener {
         initOtSpinners(otSpinner);
         initLimitSpinners(limitSpinner);
         initLimitListSpinners(limitListSpinner);
-        limitListSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (dataLoader != null) {
-                    dataLoader.setLimitList(mLimitManager.getLimit(position));
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
         initTypeSpinners(typeSpinner, new CardType[]{CardType.None, CardType.Monster, CardType.Spell, CardType.Trap});
         initTypeSpinners(typeMonsterSpinner, new CardType[]{CardType.None, CardType.Normal, CardType.Effect, CardType.Fusion, CardType.Ritual,
                                                             CardType.Synchro, CardType.Pendulum, CardType.Xyz, CardType.Spirit, CardType.Union,

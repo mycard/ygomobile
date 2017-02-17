@@ -69,6 +69,7 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
     private DeckItemTouchHelper mDeckItemTouchHelper;
     private AppCompatSpinner mDeckSpinner;
     private SimpleSpinnerAdapter mSimpleSpinnerAdapter;
+    private AppCompatSpinner mLimitSpinner;
     private String mPreLoad;
     private CardDetail mCardDetail;
     private Dialog mDialog;
@@ -77,6 +78,7 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mDeckSpinner = bind(R.id.toolbar_list);
+        mLimitSpinner = bind(R.id.sp_limit_list);
         mCardListAdapater.setOnAddCardListener(this);
         mRecyclerView.setPadding(mRecyclerView.getPaddingLeft(), 0, mRecyclerView.getPaddingRight(), mRecyclerView.getPaddingBottom());
         mRecyclerView.setAdapter((mDeckAdapater = new DeckAdapater(this, mRecyclerView, getImageLoader())));
@@ -141,8 +143,10 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
             isLoad = true;
             dlg.dismiss();
             mCardSelector.initItems();
+            mLimitList = mCardLoader.getLimitList();
             isLoad = true;
             setCurYdkFile(mYdkFile, false);
+            initLimitListSpinners(mLimitSpinner);
             initDecksListSpinners(mDeckSpinner);
             mDeckAdapater.setDeck(rs);
             mDeckAdapater.notifyDataSetChanged();
@@ -151,17 +155,7 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
 
     @Override
     public void onLimitListChanged(LimitList limitList) {
-        boolean nochanged = mLimitList != null && TextUtils.equals(mLimitList.getName(), limitList.getName());
-        mLimitList = limitList;
-        if (!nochanged) {
-            mDeckAdapater.setLimitList(mLimitList);
-            runOnUiThread(()->{
-                mDeckAdapater.notifyItemRangeChanged(DeckItem.MainStart, DeckItem.MainEnd);
-                mDeckAdapater.notifyItemRangeChanged(DeckItem.ExtraStart, DeckItem.ExtraEnd);
-                mDeckAdapater.notifyItemRangeChanged(DeckItem.SideStart, DeckItem.SideEnd);
-            });
-        }
-        mCardListAdapater.setLimitList(limitList);
+
     }
 
     @Override
@@ -732,7 +726,7 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
         }
     }
 
-//    private void initLimitListSpinners(Spinner spinner) {
+    //    private void initLimitListSpinners(Spinner spinner) {
 //        List<SimpleSpinnerItem> items = new ArrayList<>();
 //        List<Integer> ids = mLimitManager.getLists();
 //        int index = -1;
@@ -751,7 +745,62 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
 //        if (index >= 0) {
 //            spinner.setSelection(index);
 //        }
-//    }
+    private void initLimitListSpinners(Spinner spinner) {
+        List<SimpleSpinnerItem> items = new ArrayList<>();
+        List<LimitList> limitLists = mLimitManager.getLimitLists();
+        int index = -1;
+        int count = mLimitManager.getCount();
+        LimitList cur = mLimitList;
+        for (int i = 0; i < count; i++) {
+            LimitList list = limitLists.get(i);
+            if (i == 0) {
+                items.add(new SimpleSpinnerItem(i, getString(R.string.label_limitlist)));
+            } else {
+                items.add(new SimpleSpinnerItem(i, list.getName()));
+            }
+            if (cur != null) {
+                if (TextUtils.equals(cur.getName(), list.getName())) {
+                    index = i;
+                }
+            }
+        }
+        SimpleSpinnerAdapter adapter = new SimpleSpinnerAdapter(this);
+        adapter.setColor(Color.WHITE);
+        adapter.set(items);
+        spinner.setAdapter(adapter);
+        if (index >= 0) {
+            spinner.setSelection(index);
+        }
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                setLimitList(mLimitManager.getLimit(position));
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
+    private void setLimitList(LimitList limitList) {
+        if (limitList == null) return;
+        boolean nochanged = mLimitList != null && TextUtils.equals(mLimitList.getName(), limitList.getName());
+        mLimitList = limitList;
+        if (!nochanged) {
+            mDeckAdapater.setLimitList(mLimitList);
+            runOnUiThread(() -> {
+                mDeckAdapater.notifyItemRangeChanged(DeckItem.MainStart, DeckItem.MainEnd);
+                mDeckAdapater.notifyItemRangeChanged(DeckItem.ExtraStart, DeckItem.ExtraEnd);
+                mDeckAdapater.notifyItemRangeChanged(DeckItem.SideStart, DeckItem.SideEnd);
+            });
+        }
+        mCardListAdapater.setLimitList(limitList);
+        runOnUiThread(() -> {
+            mCardListAdapater.notifyDataSetChanged();
+        });
+    }
 
     private void inputDeckName(String old) {
         DialogPlus builder = new DialogPlus(this);

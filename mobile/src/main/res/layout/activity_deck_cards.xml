@@ -16,6 +16,7 @@
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
             <LinearLayout
                 android:id="@+id/layout_main"
                 android:layout_width="match_parent"
@@ -23,6 +24,7 @@
                 android:background="@drawable/bg3"
                 android:orientation="vertical">
             </LinearLayout>
+
             <include
                 layout="@layout/content_toolbar_list"/>
         </FrameLayout>
@@ -34,21 +36,36 @@
             android:background="@android:color/transparent"
             android:orientation="vertical">
 
-            <FrameLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/left">
+                android:background="@drawable/left"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/item_height"
+                    android:layout_marginBottom="4dp"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="10dp">
+
+                    <android.support.v7.widget.AppCompatSpinner
+                        android:id="@+id/sp_limit_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        />
+                </LinearLayout>
 
                 <ListView
                     android:id="@+id/list_cards"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginRight="8dp"
-                    android:layout_marginTop="10dp"
                     android:divider="@android:color/transparent"
                     android:dividerHeight="4dp"
                     android:scrollbars="none"/>
-            </FrameLayout>
+            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout

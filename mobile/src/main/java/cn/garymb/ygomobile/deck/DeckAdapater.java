@@ -337,6 +337,7 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
     }
 
     public DeckInfo read(CardLoader cardLoader, File file, LimitList limitList) {
+        setLimitList(limitList);
         return DeckItemUtils.readDeck(cardLoader, file, limitList);
     }
 
