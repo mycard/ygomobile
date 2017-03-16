@@ -264,6 +264,20 @@ void Game::DrawCard(ClientCard* pcard) {
 		matManager.mCard.setTexture(0, imageManager.tCover[1]);
 	driver->setMaterial(matManager.mCard);
 	driver->drawVertexPrimitiveList(matManager.vCardBack, 4, matManager.iRectangle, 2);
+	if(pcard->is_selectable && (pcard->location & 0xe)) {//½»»»Æğ
+		float cv[4] = {1.0f, 1.0f, 0.0f, 1.0f};
+		if((pcard->location == LOCATION_HAND && pcard->code) || ((pcard->location & 0xc) && (pcard->position & POS_FACEUP)))
+			DrawSelectionLine(matManager.vCardOutline, !pcard->is_selected, 2, cv);
+		else
+			DrawSelectionLine(matManager.vCardOutliner, !pcard->is_selected, 2, cv);
+	}
+	if(pcard->is_highlighting) {
+		float cv[4] = {0.0f, 1.0f, 1.0f, 1.0f};
+		if((pcard->location == LOCATION_HAND && pcard->code) || ((pcard->location & 0xc) && (pcard->position & POS_FACEUP)))
+			DrawSelectionLine(matManager.vCardOutline, true, 2, cv);
+		else
+			DrawSelectionLine(matManager.vCardOutliner, true, 2, cv);
+	}//½»»»ÖÕ
 	if(pcard->is_showequip) {
 		matManager.mTexture.setTexture(0, imageManager.tEquip);
 		driver->setMaterial(matManager.mTexture);
@@ -277,20 +291,20 @@ void Game::DrawCard(ClientCard* pcard) {
 		driver->setMaterial(matManager.mTexture);
 		driver->drawVertexPrimitiveList(matManager.vNegate, 4, matManager.iRectangle, 2);
 	}
-	if(pcard->is_selectable && (pcard->location & 0xe)) {
-		float cv[4] = {1.0f, 1.0f, 0.0f, 1.0f};
-		if((pcard->location == LOCATION_HAND && pcard->code) || ((pcard->location & 0xc) && (pcard->position & POS_FACEUP)))
-			DrawSelectionLine(matManager.vCardOutline, !pcard->is_selected, 2, cv);
-		else
-			DrawSelectionLine(matManager.vCardOutliner, !pcard->is_selected, 2, cv);
-	}
-	if(pcard->is_highlighting) {
-		float cv[4] = {0.0f, 1.0f, 1.0f, 1.0f};
-		if((pcard->location == LOCATION_HAND && pcard->code) || ((pcard->location & 0xc) && (pcard->position & POS_FACEUP)))
-			DrawSelectionLine(matManager.vCardOutline, true, 2, cv);
-		else
-			DrawSelectionLine(matManager.vCardOutliner, true, 2, cv);
-	}
+/*	if(pcard->is_selectable && (pcard->location & 0xe)) {
+*		float cv[4] = {1.0f, 1.0f, 0.0f, 1.0f};
+*		if((pcard->location == LOCATION_HAND && pcard->code) || ((pcard->location & 0xc) && (pcard->position & POS_FACEUP)))
+*			DrawSelectionLine(matManager.vCardOutline, !pcard->is_selected, 2, cv);
+*		else
+*			DrawSelectionLine(matManager.vCardOutliner, !pcard->is_selected, 2, cv);
+*	}
+*	if(pcard->is_highlighting) {
+*		float cv[4] = {0.0f, 1.0f, 1.0f, 1.0f};
+*		if((pcard->location == LOCATION_HAND && pcard->code) || ((pcard->location & 0xc) && (pcard->position & POS_FACEUP)))
+*			DrawSelectionLine(matManager.vCardOutline, true, 2, cv);
+*		else
+*			DrawSelectionLine(matManager.vCardOutliner, true, 2, cv);
+	}*/
 	if(pcard->cmdFlag & COMMAND_ATTACK) {
 		matManager.mTexture.setTexture(0, imageManager.tAttack);
 		driver->setMaterial(matManager.mTexture);
