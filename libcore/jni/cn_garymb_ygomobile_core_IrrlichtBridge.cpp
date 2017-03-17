@@ -214,13 +214,13 @@ static void* join_game_thread(void* param) {
 	event.GUIEvent.EventType = irr::gui::EGET_BUTTON_CLICKED;
 	event.GUIEvent.Caller = ygo::mainGame->btnLanMode;
 	ygo::mainGame->device->postEventFromUser(event);
-	if (bRoomCreate) {
-		//TODO: wait for wLanWindow show. if network connection faster than wLanWindow, wLanWindow will still show on duel scene.
-		usleep(500);
-		event.GUIEvent.Caller = ygo::mainGame->btnJoinHost;
-		ygo::mainGame->device->postEventFromUser(event);
-	}
-	exit: ygo::mainGame->gMutex.Unlock();
+//	if (bRoomCreate) {
+ 		//TODO: wait for wLanWindow show. if network connection faster than wLanWindow, wLanWindow will still show on duel scene.
+ 		usleep(500);
+ 		event.GUIEvent.Caller = ygo::mainGame->btnJoinHost;
+ 		ygo::mainGame->device->postEventFromUser(event);
+ //	}
+ 	exit: ygo::mainGame->gMutex.Unlock();
 
 	free(param);
 	return NULL;
