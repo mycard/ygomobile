@@ -47,6 +47,7 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
     private int mExtraFusionCount;
     private int mExtraXyzCount;
     private int mExtraSynchroCount;
+    private int mExtraLinkCount;
     private int mSideMonsterCount;
     private int mSideSpellCount;
     private int mSideTrapCount;
@@ -250,6 +251,8 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
                     mExtraSynchroCount++;
                 } else if (cardInfo.isType(CardType.Xyz)) {
                     mExtraXyzCount++;
+                } else if (cardInfo.isType(CardType.Link)) {
+                    mExtraLinkCount++;
                 }
                 break;
             case SideCard:
@@ -293,6 +296,8 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
                     mExtraSynchroCount--;
                 } else if (cardInfo.isType(CardType.Xyz)) {
                     mExtraXyzCount--;
+                } else if (cardInfo.isType(CardType.Link)) {
+                    mExtraLinkCount--;
                 }
                 break;
             case SideCard:
@@ -366,6 +371,7 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
         mExtraFusionCount = 0;
         mExtraXyzCount = 0;
         mExtraSynchroCount = 0;
+        mExtraLinkCount = 0;
         mSideMonsterCount = 0;
         mSideSpellCount = 0;
         mSideTrapCount = 0;
@@ -394,7 +400,8 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
     }
 
     private String getExtraString() {
-        return getString(R.string.deck_extra, mExtraCount, mExtraFusionCount, mExtraSynchroCount, mExtraXyzCount);
+
+        return getString(R.string.deck_extra, mExtraCount, mExtraFusionCount, mExtraSynchroCount, mExtraXyzCount,mExtraLinkCount);
     }
 
     private String getSideString() {

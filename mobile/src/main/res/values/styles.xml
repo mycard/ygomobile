@@ -62,4 +62,13 @@
 
     <style name="AppTheme.PopupOverlay.Dark" parent="ThemeOverlay.AppCompat.Dark">
     </style>
+
+    <style name="Link_Marker">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:baselineAligned">false</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:weightSum">1</item>
+    </style>
 </resources>

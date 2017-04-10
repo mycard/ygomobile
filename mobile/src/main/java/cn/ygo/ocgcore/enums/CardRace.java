@@ -25,7 +25,8 @@ public enum CardRace {
     Psycho(0x100000),
     DivineBeast(0x200000),
     Creatorgod(0x400000),
-    Wyrm(0x800000);
+    Wyrm(0x800000),
+    Cyverse(0x1000000);
 
     private long value = 0;
 

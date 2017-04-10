@@ -38,6 +38,7 @@
                 android:visibility="gone"
                 tools:text="hello"
                 tools:visibility="visible"/>
+
         </FrameLayout>
 
         <LinearLayout
@@ -98,7 +99,7 @@
             android:text="@android:string/dialog_alert_title"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
             android:textColor="@color/item_title"
-            android:textIsSelectable="true"/>
+            android:textIsSelectable="true" />
 
         <ImageButton
             android:id="@+id/close"

@@ -51,7 +51,7 @@ public class Card extends CardData implements Parcelable {
     }
 
     public static boolean isExtraCard(long Type) {
-        return (isType(Type, CardType.Fusion) || isType(Type, CardType.Synchro) || isType(Type, CardType.Xyz));
+        return (isType(Type, CardType.Fusion) || isType(Type, CardType.Synchro) || isType(Type, CardType.Xyz) || isType(Type, CardType.Link));
     }
 
     public boolean isSpellTrap() {
@@ -59,7 +59,7 @@ public class Card extends CardData implements Parcelable {
     }
 
     public boolean isExtraCard() {
-        return (isType(CardType.Fusion) || isType(CardType.Synchro) || isType(CardType.Xyz));
+        return (isType(CardType.Fusion) || isType(CardType.Synchro) || isType(CardType.Xyz)|| isType(Type, CardType.Link));
     }
 
     public long[] getSetCode() {

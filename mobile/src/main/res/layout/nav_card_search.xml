@@ -90,7 +90,28 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:visibility="invisible"/>
+                    android:visibility="invisible" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/label_width_small"
+                android:orientation="horizontal">
+
+                <android.support.v7.widget.AppCompatSpinner
+                    android:id="@+id/sp_category"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"/>
+
+                <Button
+                    android:id="@+id/btn_linkmarker"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="linkmarker"
+                    android:visibility="visible" />
+
             </LinearLayout>
 
             <com.toptoche.searchablespinnerlibrary.SearchableSpinner
@@ -99,10 +120,6 @@
                 android:layout_height="@dimen/label_width_small"
                 app:searchTitle="@string/label_set"/>
 
-            <android.support.v7.widget.AppCompatSpinner
-                android:id="@+id/sp_category"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/label_width_small"/>
 
             <LinearLayout
                 android:layout_width="match_parent"

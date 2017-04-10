@@ -70,7 +70,11 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> {
         holder.cardName.setText(item.Name);
         if (item.isType(CardType.Monster)) {
             holder.cardLevel.setVisibility(View.VISIBLE);
-            holder.layout_atkdef.setVisibility(View.VISIBLE);
+            holder.layout_atk.setVisibility(View.VISIBLE);
+            holder.layout_def.setVisibility(View.VISIBLE);
+            if(item.isType(CardType.Link)){
+                holder.cardLevel.setVisibility(View.INVISIBLE);
+            }
 //            holder.view_bar.setVisibility(View.VISIBLE);
             String star = "";
             for (int i = 0; i < item.Level; i++) {
@@ -83,13 +87,25 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> {
                 holder.cardLevel.setTextColor(getColor(R.color.star));
             }
             holder.cardAtk.setText((item.Attack < 0 ? "?" : String.valueOf(item.Attack)));
-            holder.cardDef.setText((item.Defense < 0 ? "?" : String.valueOf(item.Defense)));
+            if(item.isType(CardType.Link)) {
+                holder.cardDef.setText(item.Level < 0 ? "?" : "LINK-" + String.valueOf(item.Level));
+                holder.TextDef.setText("");
+            } else {
+                holder.cardDef.setText((item.Defense < 0 ? "?" : String.valueOf(item.Defense)));
+/*            }
+                if(item.isType(CardType.Link)) {
+                    holder.TextDef.setText(" ");
+*/
+            }
+
+
         } else {
 //            if (!showCode) {
 //                holder.view_bar.setVisibility(View.INVISIBLE);
 //            }
             holder.cardLevel.setVisibility(View.INVISIBLE);
-            holder.layout_atkdef.setVisibility(View.GONE);
+            holder.layout_atk.setVisibility(View.GONE);
+            holder.layout_def.setVisibility(View.GONE);
         }
         if (mImageTop == null) {
             mImageTop = new ImageTop(context);
@@ -122,8 +138,12 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> {
         TextView cardType;
         TextView cardAtk;
         TextView cardDef;
+        TextView TextDef;
+
+
         ImageView rightImage;
-        View layout_atkdef;
+        View layout_atk;
+        View layout_def;
         View view_bar;
         TextView codeView;
         private int position;
@@ -153,10 +173,12 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> {
             cardAtk = findViewById(R.id.card_atk);
             cardDef = findViewById(R.id.card_def);
             cardLevel = findViewById(R.id.card_level);
-            layout_atkdef = findViewById(R.id.layout_atkdef);
+           layout_atk = findViewById(R.id.layout_atk);
+           layout_def = findViewById(R.id.layout_def);
             view_bar = findViewById(R.id.view_bar);
             rightImage = findViewById(R.id.right_top);
             codeView = findViewById(R.id.card_code);
+            TextDef = findViewById(R.id.TextDef);
 //            File outFile = new File(AppsSettings.get().getCoreSkinPath(), Constants.UNKNOWN_IMAGE);
 //            ImageLoader.get().bind(context, outFile, cardImage, outFile.getName().endsWith(Constants.BPG), 0, null);
         }

@@ -9,7 +9,8 @@ namespace ygo {
 
 void Game::DrawSelectionLine(irr::video::S3DVertex* vec, bool strip, int width, float* cv) {
 #ifdef _IRR_ANDROID_PLATFORM_
-	glLineWidth(width+2);
+	glLineWidth(width+4);
+	driver->setMaterial(matManager.mOutLine);
 	if(strip) {
 		if(linePattern < 15) {
 			driver->draw3DLine(vec[0].Pos, vec[0].Pos + (vec[1].Pos - vec[0].Pos) * (linePattern + 1) / 15.0);

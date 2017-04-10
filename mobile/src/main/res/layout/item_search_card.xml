@@ -119,7 +119,7 @@
                 />
 
             <LinearLayout
-                android:id="@+id/layout_atkdef"
+                android:id="@+id/layout_atk"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content">
 
@@ -148,7 +148,16 @@
                     android:layout_width="5dp"
                     android:layout_height="1dp"/>
 
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layout_def"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
                 <TextView
+                    android:id="@+id/TextDef"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:maxLines="1"
@@ -170,5 +179,6 @@
                     android:textColor="@android:color/holo_blue_bright" />
             </LinearLayout>
         </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
-</LinearLayout>
+

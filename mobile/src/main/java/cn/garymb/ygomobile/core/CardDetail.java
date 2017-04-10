@@ -27,6 +27,7 @@ public class CardDetail extends BaseAdapterPlus.BaseViewHolder {
     private TextView race;
     private TextView cardAtk;
     private TextView cardDef;
+
     private TextView setname;
     private TextView otView;
     private TextView attrView;
@@ -62,6 +63,7 @@ public class CardDetail extends BaseAdapterPlus.BaseViewHolder {
         faq = bind(R.id.btn_faq);
         cardAtk = bind(R.id.card_atk);
         cardDef = bind(R.id.card_def);
+
         monsterlayout = bind(R.id.layout_monster);
         race = bind(R.id.card_race);
         setname = bind(R.id.card_setname);
@@ -120,7 +122,11 @@ public class CardDetail extends BaseAdapterPlus.BaseViewHolder {
             lb_setcode.setVisibility(View.VISIBLE);
         }
         if (cardInfo.isType(CardType.Monster)) {
-            level.setVisibility(View.VISIBLE);
+            if (cardInfo.isType(CardType.Link)) {
+                level.setVisibility(View.INVISIBLE);
+            }else {
+                level.setVisibility(View.VISIBLE);
+            }
             monsterlayout.setVisibility(View.VISIBLE);
             race.setVisibility(View.VISIBLE);
             String star = "";
@@ -130,11 +136,15 @@ public class CardDetail extends BaseAdapterPlus.BaseViewHolder {
             level.setText(star);
             if (cardInfo.isType(CardType.Xyz)) {
                 level.setTextColor(context.getResources().getColor(R.color.star_rank));
-            } else {
-                level.setTextColor(context.getResources().getColor(R.color.star));
-            }
+                } else {
+                    level.setTextColor(context.getResources().getColor(R.color.star));
+                }
             cardAtk.setText((cardInfo.Attack < 0 ? "?" : String.valueOf(cardInfo.Attack)));
-            cardDef.setText((cardInfo.Defense < 0 ? "?" : String.valueOf(cardInfo.Defense)));
+            if (cardInfo.isType(CardType.Link)) {
+                cardDef.setText((cardInfo.Level < 0 ? "?" : "LINK-"+String.valueOf(cardInfo.Level)));
+            } else {
+                cardDef.setText((cardInfo.Defense < 0 ? "?" : String.valueOf(cardInfo.Defense)));
+            }
             race.setText(stringManager.getRaceString(cardInfo.Race));
         } else {
             race.setVisibility(View.GONE);
