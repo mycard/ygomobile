@@ -1,12 +1,18 @@
 package cn.garymb.ygomobile.core;
 
+
+import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Color;
 import android.text.TextUtils;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 
 import java.util.ArrayList;
@@ -27,7 +33,10 @@ import cn.ygo.ocgcore.enums.CardRace;
 import cn.ygo.ocgcore.enums.CardType;
 import cn.ygo.ocgcore.enums.LimitType;
 
+import static cn.garymb.ygomobile.lite.R.layout.item_linkmarker;
+
 public class CardSearcher implements View.OnClickListener {
+
     private EditText prefixWord;
     private EditText suffixWord;
     private Spinner otSpinner;
@@ -46,6 +55,7 @@ public class CardSearcher implements View.OnClickListener {
     private EditText atkText;
     private EditText defText;
     private Spinner pScale;
+    private Button LinkMarkerButton;
     private Button searchButton;
     private Button resetButton;
     private View view;
@@ -55,6 +65,29 @@ public class CardSearcher implements View.OnClickListener {
     protected StringManager mStringManager;
     protected LimitManager mLimitManager;
     protected AppsSettings mSettings;
+
+    private Button button_1;
+    private Button button_2;
+    private Button button_3;
+    private Button button_4;
+    private Button button_5;
+    private Button button_6;
+    private Button button_7;
+    private Button button_8;
+    private Button button_9;
+
+    String Btn_1 = "0";
+    String Btn_2 = "0";
+    String Btn_3 = "0";
+    String Btn_4 = "0";
+    String Btn_5 = "0";
+    String Btn_6 = "0";
+    String Btn_7 = "0";
+    String Btn_8 = "0";
+    String Btn_9 = "0";
+
+
+
 
     public CardSearcher(View view, ICardLoader dataLoader) {
         this.view = view;
@@ -79,12 +112,152 @@ public class CardSearcher implements View.OnClickListener {
         attributeSpinner = findViewById(R.id.sp_attribute);
         atkText = findViewById(R.id.edt_atk);
         defText = findViewById(R.id.edt_def);
+        LinkMarkerButton = findViewById(R.id.btn_linkmarker);
         searchButton = findViewById(R.id.btn_search);
         resetButton = findViewById(R.id.btn_reset);
         layout_monster = findViewById(R.id.layout_monster);
         pScale = findViewById(R.id.sp_scale);
+        LinkMarkerButton.setOnClickListener(this);
         searchButton.setOnClickListener(this);
         resetButton.setOnClickListener(this);
+
+    LinkMarkerButton.setOnClickListener(new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Dialog builder = new Dialog(v.getContext());
+            builder.show();
+            LayoutInflater inflater = LayoutInflater.from(v.getContext());
+            View viewDialog = inflater.inflate(item_linkmarker, null);
+            button_1 = (Button) viewDialog.findViewById(R.id.button_1);
+            button_2 = (Button) viewDialog.findViewById(R.id.button_2);
+            button_3 = (Button) viewDialog.findViewById(R.id.button_3);
+            button_4 = (Button) viewDialog.findViewById(R.id.button_4);
+            button_5 = (Button) viewDialog.findViewById(R.id.button_5);
+            button_6 = (Button) viewDialog.findViewById(R.id.button_6);
+            button_7 = (Button) viewDialog.findViewById(R.id.button_7);
+            button_8 = (Button) viewDialog.findViewById(R.id.button_8);
+            button_9 = (Button) viewDialog.findViewById(R.id.button_9);
+
+            button_1.setOnClickListener(new OnClickListener(){
+                @Override
+                public void onClick(View v) {
+                    if(Btn_1.equals("0")){
+                        button_1.setBackgroundResource(R.drawable.left_bottom_1);
+                        Btn_1 = "1";
+                    } else {
+                        button_1.setBackgroundResource(R.drawable.left_bottom_0);
+                        Btn_1 = "0";
+                    }
+                }
+            });
+            button_2.setOnClickListener(new OnClickListener(){
+                @Override
+                public void onClick(View v) {
+                    if(Btn_2.equals("0")){
+                        button_2.setBackgroundResource(R.drawable.bottom_1);
+                        Btn_2 = "1";
+                    } else {
+                        button_2.setBackgroundResource(R.drawable.bottom_0);
+                        Btn_2 = "0";
+                    }
+                }
+            });
+            button_3.setOnClickListener(new OnClickListener(){
+                @Override
+                public void onClick(View v) {
+                    if(Btn_3.equals("0")){
+                        button_3.setBackgroundResource(R.drawable.right_bottom_1);
+                        Btn_3 = "1";
+                    } else {
+                        button_3.setBackgroundResource(R.drawable.right_bottom_0);
+                        Btn_3 = "0";
+                    }
+                }
+            });
+            button_4.setOnClickListener(new OnClickListener(){
+                @Override
+                public void onClick(View v) {
+                    if(Btn_4.equals("0")){
+                        button_4.setBackgroundResource(R.drawable.left_1);
+                        Btn_4 = "1";
+                    } else {
+                        button_4.setBackgroundResource(R.drawable.left_0);
+                        Btn_4 = "0";
+                    }
+                }
+            });
+            button_6.setOnClickListener(new OnClickListener(){
+                @Override
+                public void onClick(View v) {
+                    if(Btn_6.equals("0")){
+                        button_6.setBackgroundResource(R.drawable.right_1);
+                        Btn_6 = "1";
+                    } else {
+                        button_6.setBackgroundResource(R.drawable.right_0);
+                        Btn_6 = "0";
+                    }
+                }
+            });
+            button_7.setOnClickListener(new OnClickListener(){
+                @Override
+                public void onClick(View v) {
+                    if(Btn_7.equals("0")){
+                        button_7.setBackgroundResource(R.drawable.left_top_1);
+                        Btn_7 = "1";
+                    } else {
+                        button_7.setBackgroundResource(R.drawable.left_top_0);
+                        Btn_7 = "0";
+                    }
+                }
+            });
+            button_8.setOnClickListener(new OnClickListener(){
+                @Override
+                public void onClick(View v) {
+                    if(Btn_8.equals("0")){
+                        button_8.setBackgroundResource(R.drawable.top_1);
+                        Btn_8 = "1";
+                    } else {
+                        button_8.setBackgroundResource(R.drawable.top_0);
+                        Btn_8 = "0";
+                    }
+                }
+            });
+            button_9.setOnClickListener(new OnClickListener(){
+                @Override
+                public void onClick(View v) {
+                    if(Btn_9.equals("0")){
+                        button_9.setBackgroundResource(R.drawable.right_top_1);
+                        Btn_9 = "1";
+                    } else {
+                        button_9.setBackgroundResource(R.drawable.right_top_0);
+                        Btn_9 = "0";
+                    }
+                }
+            });
+
+            button_5.setOnClickListener(new OnClickListener(){
+                @Override
+                public void onClick(View v) {
+                    if(Btn_5.equals("0")){
+                        defText.setText(Integer.parseInt( Btn_9 + Btn_8 + Btn_7 + Btn_6 + "0" + Btn_4 + Btn_3 + Btn_2 + Btn_1,2)+"");
+
+                    }
+                }
+            });
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(600,600);
+            builder.setContentView(viewDialog, layoutParams);
+        }
+
+
+
+
+
+
+
+
+    });
+
+
         limitListSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -110,18 +283,21 @@ public class CardSearcher implements View.OnClickListener {
                     raceSpinner.setVisibility(View.GONE);
                     typeSTSpinner.setVisibility(View.INVISIBLE);
                     pScale.setVisibility(View.INVISIBLE);
+                    LinkMarkerButton.setVisibility(View.INVISIBLE);
                     resetMonster();
                 } else if (value == CardType.Spell.value() || value == CardType.Trap.value()) {
                     layout_monster.setVisibility(View.INVISIBLE);
                     raceSpinner.setVisibility(View.GONE);
                     typeSTSpinner.setVisibility(View.VISIBLE);
                     pScale.setVisibility(View.INVISIBLE);
+                    LinkMarkerButton.setVisibility(View.INVISIBLE);
                     resetMonster();
                 } else {
                     layout_monster.setVisibility(View.VISIBLE);
                     raceSpinner.setVisibility(View.VISIBLE);
                     typeSTSpinner.setVisibility(View.GONE);
                     pScale.setVisibility(View.VISIBLE);
+                    LinkMarkerButton.setVisibility(View.VISIBLE);
                 }
             }
 
