@@ -240,9 +240,11 @@ public class CardSearcher implements View.OnClickListener {
                 public void onClick(View v) {
                     if(Btn_5.equals("0")){
                         defText.setText(Integer.parseInt( Btn_9 + Btn_8 + Btn_7 + Btn_6 + "0" + Btn_4 + Btn_3 + Btn_2 + Btn_1,2)+"");
-
+                        builder.dismiss();
                     }
+
                 }
+
             });
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(600,600);
             builder.setContentView(viewDialog, layoutParams);

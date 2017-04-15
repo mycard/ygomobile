@@ -108,6 +108,7 @@
     <string name="label_set">Card Set</string>
     <string name="label_level">Level/Rank</string>
     <string name="label_attr">Attribute</string>
+    <string name="linkmarker">LINKMARKER</string>>
     <string name="label_category">Category</string>
     <string name="searching">Search Cards</string>
     <string name="card_faq">FAQ</string>
