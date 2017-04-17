@@ -76,15 +76,16 @@ public class CardSearcher implements View.OnClickListener {
     private Button button_8;
     private Button button_9;
 
-    String Btn_1 = "0";
-    String Btn_2 = "0";
-    String Btn_3 = "0";
-    String Btn_4 = "0";
-    String Btn_5 = "0";
-    String Btn_6 = "0";
-    String Btn_7 = "0";
-    String Btn_8 = "0";
-    String Btn_9 = "0";
+    String Btn_1;
+    String Btn_2;
+    String Btn_3;
+    String Btn_4;
+    String Btn_5;
+    String Btn_6;
+    String Btn_7;
+    String Btn_8;
+    String Btn_9;
+
 
 
 
@@ -121,9 +122,21 @@ public class CardSearcher implements View.OnClickListener {
         searchButton.setOnClickListener(this);
         resetButton.setOnClickListener(this);
 
+
+
     LinkMarkerButton.setOnClickListener(new OnClickListener() {
+
         @Override
         public void onClick(View v) {
+            Btn_1 = "0" ;
+            Btn_2 = "0" ;
+            Btn_3 = "0" ;
+            Btn_4 = "0" ;
+            Btn_5 = "0" ;
+            Btn_6 = "0" ;
+            Btn_7 = "0" ;
+            Btn_8 = "0" ;
+            Btn_9 = "0" ;
             Dialog builder = new Dialog(v.getContext());
             builder.show();
             LayoutInflater inflater = LayoutInflater.from(v.getContext());
