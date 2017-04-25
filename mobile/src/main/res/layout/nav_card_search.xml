@@ -28,6 +28,7 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/hit_keyword1"
                 android:inputType="textNoSuggestions"
+                android:imeOptions="actionDone"
                 android:maxLines="1"
                 android:singleLine="true"
                 android:textColorHint="@color/gold"/>
