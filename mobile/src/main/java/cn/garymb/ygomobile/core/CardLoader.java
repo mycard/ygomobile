@@ -181,6 +181,7 @@ public class CardLoader implements ICardLoader {
         VUiKit.defer().when(() -> {
             Cursor reader = null;
             try {
+                Log.d(TAG, "query:"+sql);
                 reader = db.rawQuery(sql, null);
             } catch (Exception e) {
                 Log.e(TAG, "query", e);
@@ -228,7 +229,7 @@ public class CardLoader implements ICardLoader {
                        long attribute, long level, long race,
                        long limitlist, long limit,
                        String atk, String def, long pscale,
-                       long setcode, long category, long ot, long... types) {
+                       long setcode, long category, long ot, boolean islink, long... types) {
         StringBuilder stringBuilder = new StringBuilder(CardInfo.SQL_BASE);
         String w = null;
         if (!TextUtils.isEmpty(prefixWord) && !TextUtils.isEmpty(suffixWord)) {
@@ -255,7 +256,13 @@ public class CardLoader implements ICardLoader {
             stringBuilder.append(" and atk=" + (TextUtils.isDigitsOnly(atk) ? atk : -2));
         }
         if (!TextUtils.isEmpty(def)) {
-            stringBuilder.append(" and def=" + (TextUtils.isDigitsOnly(def) ? def : -2));
+            if(islink){
+                int link = Integer.parseInt(def,2);
+                stringBuilder.append(" and (def & " + link+") = "+link);
+                stringBuilder.append(" and (type & " + CardType.Link.value() + ") =" + CardType.Link.value());
+            }else{
+                stringBuilder.append(" and def=" + (TextUtils.isDigitsOnly(def) ? def : -2));
+            }
         }
         if (ot > 0) {
             stringBuilder.append(" and ot=" + ot);

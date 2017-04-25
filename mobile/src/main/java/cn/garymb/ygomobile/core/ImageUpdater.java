@@ -83,6 +83,15 @@ public class ImageUpdater implements DialogInterface.OnCancelListener {
         mDownloading = 0;
         mStop = false;
         mError = 0;
+        if (mDialog != null) {
+            if(!mDialog.isShowing()) {
+                mDialog.show();
+            }
+        } else {
+            mDialog = ProgressDialog.show(mContext, null, mContext.getString(R.string.download_image_progress, mCompleted, mCount), true, true);
+            mDialog.setOnCancelListener(this);
+            mDialog.show();
+        }
         VUiKit.defer().when(()->{
             synchronized (mCardStatus) {
                 if (mCardStatus.size() == 0) {
@@ -91,12 +100,6 @@ public class ImageUpdater implements DialogInterface.OnCancelListener {
             }
         }).done((res)->{
             File zip = new File(AppsSettings.get().getResourcePath(), Constants.CORE_PICS_ZIP);
-            if (mDialog != null) {
-                mDialog.show();
-            } else {
-                mDialog = ProgressDialog.show(mContext, null, mContext.getString(R.string.download_image_progress, mCompleted, mCount), true, true);
-                mDialog.setOnCancelListener(this);
-            }
             if (mZipFile == null) {
                 if (zip.exists()) {
                     try {

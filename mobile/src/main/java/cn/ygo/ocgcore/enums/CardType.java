@@ -8,8 +8,8 @@ public enum CardType {
     Ritual(0x80),
     Synchro(0x2000),
     Pendulum(0x1000000L),
-    Xyz(0x800000),
-    Link(0x4000000),
+    Xyz(0x800000L),
+    Link(0x4000000L),
 
     Spirit(0x200),
     Union(0x400),
