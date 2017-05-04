@@ -141,16 +141,20 @@ public class YGOStarter {
         }
         activityShowInfo.isFirst = false;
     }
+    private static long lasttime = 0;
 
     public static void startGame(Activity activity, YGOGameOptions options) {
-        showLoadingBg(activity);
-        Toast.makeText(activity, R.string.load_game, Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(activity, YGOMobileActivity.class);
-        if (options != null) {
-            intent.putExtra(YGOGameOptions.YGO_GAME_OPTIONS_BUNDLE_KEY, options);
+        if(System.currentTimeMillis() - lasttime >= 1000) {
+            lasttime = System.currentTimeMillis();
+            showLoadingBg(activity);
+            Toast.makeText(activity, R.string.load_game, Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(activity, YGOMobileActivity.class);
+            if (options != null) {
+                intent.putExtra(YGOGameOptions.YGO_GAME_OPTIONS_BUNDLE_KEY, options);
+            }
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            activity.startActivity(intent);
         }
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        activity.startActivity(intent);
     }
 
     private static HashMap<Activity, ActivityShowInfo> Infos = new HashMap<>();

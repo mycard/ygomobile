@@ -30,6 +30,7 @@ import cn.garymb.ygomobile.core.IrrlichtBridge;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.utils.BitmapUtil;
 import cn.garymb.ygomobile.utils.IOUtils;
+import cn.garymb.ygomobile.utils.MD5Util;
 
 import static cn.garymb.ygomobile.Constants.CORE_SKIN_BG_SIZE;
 import static com.bumptech.glide.Glide.with;
@@ -96,7 +97,7 @@ public class ImageLoader implements Closeable {
 //        if(isbpg){
 //            resource.override(Constants.CORE_SKIN_CARD_COVER_SIZE[0], Constants.CORE_SKIN_CARD_COVER_SIZE[1]);
 //        }
-        resource.signature(new StringSignature(code + "_" + isBig));
+        resource.signature(new StringSignature(MD5Util.getStringMD5(data.length+"_"+code + "_" + isBig)));
         if (isbpg) {
             resource.decoder(new BpgResourceDecoder("bpg@" + code));
         }
@@ -115,7 +116,7 @@ public class ImageLoader implements Closeable {
 //            if(isbpg){
 //                resource.override(Constants.CORE_SKIN_CARD_COVER_SIZE[0], Constants.CORE_SKIN_CARD_COVER_SIZE[1]);
 //            }
-            resource.signature(new StringSignature(code + "_" + isBig));
+            resource.signature(new StringSignature(MD5Util.getStringMD5(file.length()+code + "_" + isBig)));
             if (isbpg) {
                 resource.decoder(new BpgResourceDecoder("bpg@" + code));
             }
