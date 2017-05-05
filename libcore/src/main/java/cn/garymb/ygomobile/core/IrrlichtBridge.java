@@ -24,38 +24,39 @@ import static cn.garymb.ygomobile.utils.ByteUtils.byte2uint;
  * @author mabin
  */
 public final class IrrlichtBridge {
-    static {
+
+    public IrrlichtBridge(){
         System.loadLibrary("YGOMobile");
     }
 
     public static int sNativeHandle;
 
-    public static native byte[] nativeBpgImage(byte[] data);
+    public native byte[] nativeBpgImage(byte[] data);
 
-    private static native void nativeInsertText(int handle, String text);
+    private native void nativeInsertText(int handle, String text);
 
-    private static native void nativeRefreshTexture(int handle);
+    private native void nativeRefreshTexture(int handle);
 
-    private static native void nativeIgnoreChain(int handle, boolean begin);
+    private native void nativeIgnoreChain(int handle, boolean begin);
 
-    private static native void nativeReactChain(int handle, boolean begin);
+    private native void nativeReactChain(int handle, boolean begin);
 
-    private static native void nativeCancelChain(int handle);
+    private native void nativeCancelChain(int handle);
 
-    private static native void nativeSetCheckBoxesSelection(int handle, int idx);
+    private native void nativeSetCheckBoxesSelection(int handle, int idx);
 
-    private static native void nativeSetComboBoxSelection(int handle, int idx);
+    private native void nativeSetComboBoxSelection(int handle, int idx);
 
-    private static native void nativeJoinGame(int handle, ByteBuffer buffer, int length);
+    private native void nativeJoinGame(int handle, ByteBuffer buffer, int length);
 
-    public static native String getAccessKey();
+    public native String getAccessKey();
 
-    public static native String getSecretKey();
+    public native String getSecretKey();
 
     private static final boolean DEBUG = false;
     private static final String TAG = IrrlichtBridge.class.getSimpleName();
 
-    public static Bitmap getBpgImage(InputStream inputStream, Bitmap.Config config) {
+    public Bitmap getBpgImage(InputStream inputStream, Bitmap.Config config) {
         ByteArrayOutputStream outputStream = null;
         try {
             outputStream = new ByteArrayOutputStream();
@@ -85,7 +86,7 @@ public final class IrrlichtBridge {
     /***
      *
      */
-    public static Bitmap getBpgImage(byte[] bpg, Bitmap.Config config) {
+    public Bitmap getBpgImage(byte[] bpg, Bitmap.Config config) {
         try {
             //解码后
             byte[] data = nativeBpgImage(bpg);
@@ -111,35 +112,35 @@ public final class IrrlichtBridge {
         }
     }
 
-    public static void cancelChain() {
+    public void cancelChain() {
         nativeCancelChain(sNativeHandle);
     }
 
-    public static void ignoreChain(boolean begin) {
+    public void ignoreChain(boolean begin) {
         nativeIgnoreChain(sNativeHandle, begin);
     }
 
-    public static void reactChain(boolean begin) {
+    public void reactChain(boolean begin) {
         nativeReactChain(sNativeHandle, begin);
     }
 
-    public static void insertText(String text) {
+    public void insertText(String text) {
         nativeInsertText(sNativeHandle, text);
     }
 
-    public static void setComboBoxSelection(int idx) {
+    public void setComboBoxSelection(int idx) {
         nativeSetComboBoxSelection(sNativeHandle, idx);
     }
 
-    public static void refreshTexture() {
+    public void refreshTexture() {
         nativeRefreshTexture(sNativeHandle);
     }
 
-    public static void setCheckBoxesSelection(int idx) {
+    public void setCheckBoxesSelection(int idx) {
         nativeSetCheckBoxesSelection(sNativeHandle, idx);
     }
 
-    public static void joinGame(ByteBuffer options, int length) {
+    public void joinGame(ByteBuffer options, int length) {
         nativeJoinGame(sNativeHandle, options, length);
     }
 

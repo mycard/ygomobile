@@ -93,6 +93,19 @@ public class YGOMobileActivity extends NativeActivity implements
         }
         return mApp;
     }
+    private IrrlichtBridge mIrrlichtBridge;
+
+    private IrrlichtBridge getIrrlichtBridge(){
+        if(mIrrlichtBridge == null) {
+            synchronized (this) {
+                if(mIrrlichtBridge == null) {
+                    mIrrlichtBridge=new IrrlichtBridge();
+                }
+            }
+        }
+        return mIrrlichtBridge;
+    }
+
 
     @SuppressWarnings("WrongConstant")
     @Override
@@ -151,7 +164,7 @@ public class YGOMobileActivity extends NativeActivity implements
         if (System.currentTimeMillis() - lastRefresh >= MAX_REFRESH) {
             lastRefresh = System.currentTimeMillis();
             Toast.makeText(this, R.string.refresh_textures, Toast.LENGTH_SHORT).show();
-            IrrlichtBridge.refreshTexture();
+            getIrrlichtBridge().refreshTexture();
         }
     }
 
@@ -179,7 +192,7 @@ public class YGOMobileActivity extends NativeActivity implements
             if (DEBUG)
                 Log.i(TAG, "receive from mycard:" + options.toString());
             ByteBuffer buffer = options.toByteBuffer();
-            IrrlichtBridge.joinGame(buffer, buffer.position());
+            getIrrlichtBridge().joinGame(buffer, buffer.position());
         } else {
             if (DEBUG)
                 Log.i(TAG, "receive from mycard:null");
@@ -234,9 +247,9 @@ public class YGOMobileActivity extends NativeActivity implements
             if (DEBUG)
                 Log.d(TAG, "showComboBoxCompat: receive selection: " + idx);
             if (mCompatGUIMode == ComboBoxCompat.COMPAT_GUI_MODE_COMBOBOX) {
-                IrrlichtBridge.setComboBoxSelection(idx);
+                getIrrlichtBridge().setComboBoxSelection(idx);
             } else if (mCompatGUIMode == ComboBoxCompat.COMPAT_GUI_MODE_CHECKBOXES_PANEL) {
-                IrrlichtBridge.setCheckBoxesSelection(idx);
+                getIrrlichtBridge().setCheckBoxesSelection(idx);
             }
         }
         mGlobalComboBox.dismiss();
@@ -248,22 +261,22 @@ public class YGOMobileActivity extends NativeActivity implements
             case OverlayView.MODE_CANCEL_CHAIN_OPTIONS:
                 if (DEBUG)
                     Log.d(TAG, "Constants.MODE_CANCEL_CHAIN_OPTIONS: " + action);
-                IrrlichtBridge.cancelChain();
+                getIrrlichtBridge().cancelChain();
                 break;
             case OverlayView.MODE_REFRESH_OPTION:
                 if (DEBUG)
                     Log.d(TAG, "Constants.MODE_REFRESH_OPTION: " + action);
-                IrrlichtBridge.refreshTexture();
+                getIrrlichtBridge().refreshTexture();
                 break;
             case OverlayView.MODE_REACT_CHAIN_OPTION:
                 if (DEBUG)
                     Log.d(TAG, "Constants.MODE_REACT_CHAIN_OPTION: " + action);
-                IrrlichtBridge.reactChain(action);
+                getIrrlichtBridge().reactChain(action);
                 break;
             case OverlayView.MODE_IGNORE_CHAIN_OPTION:
                 if (DEBUG)
                     Log.d(TAG, "Constants.MODE_IGNORE_CHAIN_OPTION: " + action);
-                IrrlichtBridge.ignoreChain(action);
+                getIrrlichtBridge().ignoreChain(action);
                 break;
             default:
                 break;
@@ -273,7 +286,7 @@ public class YGOMobileActivity extends NativeActivity implements
     @Override
     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
         final String text = v.getText().toString();
-        IrrlichtBridge.insertText(text);
+        getIrrlichtBridge().insertText(text);
         mGlobalEditText.dismiss();
         return false;
     }
