@@ -12,7 +12,8 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:exported="true"
             android:label="YGOMobile"
-            android:launchMode="singleTask"
+            android:process=":game"
+            android:launchMode="singleTop"
             android:screenOrientation="sensorLandscape"
             android:theme="@android:style/Theme.Holo.NoActionBar.Fullscreen"
             android:windowSoftInputMode="adjustPan">

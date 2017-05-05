@@ -185,6 +185,15 @@ public class YGOMobileActivity extends NativeActivity implements
         handleExternalCommand(intent);
     }
 
+    @Override
+    public void finish() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            super.finishAffinity();
+        }else{
+            super.finish();
+        }
+    }
+
     private void handleExternalCommand(Intent intent) {
         YGOGameOptions options = intent
                 .getParcelableExtra(YGOGameOptions.YGO_GAME_OPTIONS_BUNDLE_KEY);
