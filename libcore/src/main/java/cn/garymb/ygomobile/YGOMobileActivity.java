@@ -39,6 +39,9 @@ import cn.garymb.ygomobile.widget.EditWindowCompat;
 import cn.garymb.ygomobile.widget.overlay.OverlayOvalView;
 import cn.garymb.ygomobile.widget.overlay.OverlayView;
 
+import static cn.garymb.ygomobile.core.IrrlichtBridge.ACTION_START;
+import static cn.garymb.ygomobile.core.IrrlichtBridge.ACTION_STOP;
+
 /**
  * @author mabin
  */
@@ -113,6 +116,9 @@ public class YGOMobileActivity extends NativeActivity implements
         mPM = (PowerManager) getSystemService(Context.POWER_SERVICE);
         mNetController = new NetworkController(getApplicationContext());
         handleExternalCommand(getIntent());
+        sendBroadcast(new Intent(ACTION_START)
+                .putExtra(IrrlichtBridge.EXTRA_PID, android.os.Process.myPid())
+                .setPackage(getPackageName()));
     }
 
     private PowerManager mPM;
@@ -176,7 +182,9 @@ public class YGOMobileActivity extends NativeActivity implements
     @Override
     public void finish() {
         super.finish();
-        android.os.Process.killProcess(android.os.Process.myPid());
+        sendBroadcast(new Intent(ACTION_STOP)
+                .putExtra(IrrlichtBridge.EXTRA_PID, android.os.Process.myPid())
+                .setPackage(getPackageName()));
     }
 
     private void handleExternalCommand(Intent intent) {

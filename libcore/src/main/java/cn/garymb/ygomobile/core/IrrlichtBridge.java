@@ -24,7 +24,10 @@ import static cn.garymb.ygomobile.utils.ByteUtils.byte2uint;
  * @author mabin
  */
 public final class IrrlichtBridge {
-
+    public static final String ACTION_START = "cn.garymb.ygomobile.game.start";
+    public static final String ACTION_STOP = "cn.garymb.ygomobile.game.stop";
+    public static final String EXTRA_PID = "extras.mypid";
+    public static int gPid;
     static {
         System.loadLibrary("YGOMobile");
     }

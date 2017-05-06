@@ -24,6 +24,7 @@ import cn.garymb.ygomobile.adapters.ServerLists;
 import cn.garymb.ygomobile.core.AppsSettings;
 import cn.garymb.ygomobile.core.GameUriManager;
 import cn.garymb.ygomobile.core.ImageUpdater;
+import cn.garymb.ygomobile.core.IrrlichtBridge;
 import cn.garymb.ygomobile.core.ResCheckTask;
 import cn.garymb.ygomobile.core.YGOStarter;
 import cn.garymb.ygomobile.lite.R;
@@ -117,6 +118,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     protected void onResume() {
         super.onResume();
         YGOStarter.onResumed(this);
+        sendBroadcast(new Intent(IrrlichtBridge.ACTION_STOP).setPackage(getPackageName()));
     }
 
     private GameUriManager getGameUriManager() {

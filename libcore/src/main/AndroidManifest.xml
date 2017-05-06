@@ -22,6 +22,13 @@
                 android:name="android.app.lib_name"
                 android:value="YGOMobile"/>
         </activity>
+        <receiver android:name="cn.garymb.ygomobile.GameReceiver"
+                  android:process=":game" >
+            <intent-filter>
+                <action android:name="cn.garymb.ygomobile.game.start"/>
+                <action android:name="cn.garymb.ygomobile.game.stop"/>
+            </intent-filter>
+        </receiver>
         <activity
             android:name="com.github.nativehandler.NativeCrashActivity"
             android:configChanges="keyboard|keyboardHidden|orientation"

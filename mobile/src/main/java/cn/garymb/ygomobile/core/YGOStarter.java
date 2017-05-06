@@ -70,6 +70,7 @@ public class YGOStarter {
         if (activityShowInfo == null) {
             return;
         }
+        activityShowInfo.isRunning = true;
 //        Log.i("checker", "show:" + activity);
 //        activityShowInfo.oldRequestedOrientation = activity.getRequestedOrientation();
         activityShowInfo.rootOld = activityShowInfo.mRoot.getBackground();
@@ -140,11 +141,13 @@ public class YGOStarter {
             hideLoadingBg(activity, activityShowInfo);
         }
         activityShowInfo.isFirst = false;
+        activityShowInfo.isRunning = false;
     }
+
     private static long lasttime = 0;
 
     public static void startGame(Activity activity, YGOGameOptions options) {
-        if(System.currentTimeMillis() - lasttime >= 1000) {
+        if (System.currentTimeMillis() - lasttime >= 1000) {
             lasttime = System.currentTimeMillis();
             showLoadingBg(activity);
             Toast.makeText(activity, R.string.load_game, Toast.LENGTH_SHORT).show();
@@ -168,5 +171,6 @@ public class YGOStarter {
         Drawable rootOld;
         boolean isFirst = true;
         int oldRequestedOrientation;
+        boolean isRunning = false;
     }
 }
