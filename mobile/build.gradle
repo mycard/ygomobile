@@ -6,11 +6,11 @@ android {
     buildToolsVersion "25"
 
     defaultConfig {
-        applicationId "cn.garymb.ygomobile.newrule"
+        applicationId "cn.garymb.ygomobile"
         minSdkVersion 14
         targetSdkVersion 22
-        versionCode 310112
-        versionName "3.1.1"
+        versionCode 310120
+        versionName "TEST VERSION"
         vectorDrawables.useSupportLibrary = true
     }
     compileOptions {
@@ -42,7 +42,7 @@ android {
     }
     lintOptions {
 //        checkReleaseBuilds false
-//        abortOnError false
+        abortOnError false
     }
 }
 

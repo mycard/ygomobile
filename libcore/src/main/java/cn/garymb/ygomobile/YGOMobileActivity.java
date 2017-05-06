@@ -39,6 +39,9 @@ import cn.garymb.ygomobile.widget.EditWindowCompat;
 import cn.garymb.ygomobile.widget.overlay.OverlayOvalView;
 import cn.garymb.ygomobile.widget.overlay.OverlayView;
 
+import static cn.garymb.ygomobile.core.IrrlichtBridge.ACTION_START;
+import static cn.garymb.ygomobile.core.IrrlichtBridge.ACTION_STOP;
+
 /**
  * @author mabin
  */
@@ -94,6 +97,7 @@ public class YGOMobileActivity extends NativeActivity implements
         return mApp;
     }
 
+
     @SuppressWarnings("WrongConstant")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,6 +116,9 @@ public class YGOMobileActivity extends NativeActivity implements
         mPM = (PowerManager) getSystemService(Context.POWER_SERVICE);
         mNetController = new NetworkController(getApplicationContext());
         handleExternalCommand(getIntent());
+        sendBroadcast(new Intent(ACTION_START)
+                .putExtra(IrrlichtBridge.EXTRA_PID, android.os.Process.myPid())
+                .setPackage(getPackageName()));
     }
 
     private PowerManager mPM;
@@ -138,7 +145,7 @@ public class YGOMobileActivity extends NativeActivity implements
     protected void onPause() {
         super.onPause();
         if (mLock != null) {
-            if(mLock.isHeld()) {
+            if (mLock.isHeld()) {
                 mLock.release();
             }
         }
@@ -170,6 +177,14 @@ public class YGOMobileActivity extends NativeActivity implements
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         handleExternalCommand(intent);
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        sendBroadcast(new Intent(ACTION_STOP)
+                .putExtra(IrrlichtBridge.EXTRA_PID, android.os.Process.myPid())
+                .setPackage(getPackageName()));
     }
 
     private void handleExternalCommand(Intent intent) {

@@ -2,6 +2,7 @@ package cn.garymb.ygomobile.core;
 
 
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
@@ -26,6 +27,7 @@ import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.YGOMobileActivity;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.plus.ViewTargetPlus;
+import cn.garymb.ygomobile.utils.ComponentUtils;
 
 
 public class YGOStarter {
@@ -70,6 +72,7 @@ public class YGOStarter {
         if (activityShowInfo == null) {
             return;
         }
+        activityShowInfo.isRunning = true;
 //        Log.i("checker", "show:" + activity);
 //        activityShowInfo.oldRequestedOrientation = activity.getRequestedOrientation();
         activityShowInfo.rootOld = activityShowInfo.mRoot.getBackground();
@@ -140,14 +143,18 @@ public class YGOStarter {
             hideLoadingBg(activity, activityShowInfo);
         }
         activityShowInfo.isFirst = false;
+        activityShowInfo.isRunning = false;
     }
+
     private static long lasttime = 0;
 
     public static void startGame(Activity activity, YGOGameOptions options) {
-        if(System.currentTimeMillis() - lasttime >= 1000) {
+        if (System.currentTimeMillis() - lasttime >= 1000) {
             lasttime = System.currentTimeMillis();
             showLoadingBg(activity);
-            Toast.makeText(activity, R.string.load_game, Toast.LENGTH_SHORT).show();
+            if(!ComponentUtils.isActivityRunning(activity, new ComponentName(activity, YGOMobileActivity.class))) {
+                Toast.makeText(activity, R.string.load_game, Toast.LENGTH_SHORT).show();
+            }
             Intent intent = new Intent(activity, YGOMobileActivity.class);
             if (options != null) {
                 intent.putExtra(YGOGameOptions.YGO_GAME_OPTIONS_BUNDLE_KEY, options);
@@ -168,5 +175,6 @@ public class YGOStarter {
         Drawable rootOld;
         boolean isFirst = true;
         int oldRequestedOrientation;
+        boolean isRunning = false;
     }
 }

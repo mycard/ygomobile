@@ -1,5 +1,6 @@
 package cn.garymb.ygomobile.activities;
 
+import android.content.ComponentName;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
@@ -20,16 +21,19 @@ import android.view.View;
 import android.widget.Toast;
 
 import cn.garymb.ygomobile.Constants;
+import cn.garymb.ygomobile.YGOMobileActivity;
 import cn.garymb.ygomobile.adapters.ServerLists;
 import cn.garymb.ygomobile.core.AppsSettings;
 import cn.garymb.ygomobile.core.GameUriManager;
 import cn.garymb.ygomobile.core.ImageUpdater;
+import cn.garymb.ygomobile.core.IrrlichtBridge;
 import cn.garymb.ygomobile.core.ResCheckTask;
 import cn.garymb.ygomobile.core.YGOStarter;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.plus.DialogPlus;
 import cn.garymb.ygomobile.plus.VUiKit;
 import cn.garymb.ygomobile.settings.SettingsActivity;
+import cn.garymb.ygomobile.utils.ComponentUtils;
 
 import static cn.garymb.ygomobile.Constants.ACTION_RELOAD;
 
@@ -117,6 +121,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     protected void onResume() {
         super.onResume();
         YGOStarter.onResumed(this);
+        //如果游戏Activity已经不存在了，则
+        if(!ComponentUtils.isActivityRunning(this, new ComponentName(this, YGOMobileActivity.class))) {
+            sendBroadcast(new Intent(IrrlichtBridge.ACTION_STOP).setPackage(getPackageName()));
+        }
     }
 
     private GameUriManager getGameUriManager() {
