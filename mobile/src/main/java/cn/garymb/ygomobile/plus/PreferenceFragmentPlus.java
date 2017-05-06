@@ -199,7 +199,7 @@ public abstract class PreferenceFragmentPlus extends BasePreferenceFragment {
     public static class SharedPreferencesPlus implements SharedPreferences {
 
         public static SharedPreferencesPlus create(Context context, String name) {
-            return create(context, name, Context.MODE_PRIVATE);
+            return create(context, name, Context.MODE_PRIVATE|Context.MODE_MULTI_PROCESS);
         }
 
         public static SharedPreferencesPlus create(Context context, String name, int mode) {

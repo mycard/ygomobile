@@ -15,6 +15,7 @@
             android:process=":game"
             android:launchMode="singleTop"
             android:screenOrientation="sensorLandscape"
+            android:taskAffinity="cn.garymb.ygomobile.game"
             android:theme="@android:style/Theme.Holo.NoActionBar.Fullscreen"
             android:windowSoftInputMode="adjustPan">
             <meta-data

@@ -58,7 +58,7 @@ public class ImageLoader implements Closeable {
         @Override
         public Resource<GifBitmapWrapper> decode(ImageVideoWrapper source, int width, int height) throws IOException {
 //            Log.i("kk", "decode source:"+source);
-            Bitmap bitmap = null;//IrrlichtBridge.getBpgImage(source.getStream(), Bitmap.Config.RGB_565);
+            Bitmap bitmap = IrrlichtBridge.getBpgImage(source.getStream(), Bitmap.Config.RGB_565);
 //            Log.i("kk", "decode bitmap:"+bitmap);
             BitmapResource resource = new BitmapResource(bitmap, mLruBitmapPool);
             return new GifBitmapWrapperResource(new GifBitmapWrapper(resource, null));
