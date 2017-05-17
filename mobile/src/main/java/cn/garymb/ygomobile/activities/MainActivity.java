@@ -34,6 +34,7 @@ import cn.garymb.ygomobile.plus.DialogPlus;
 import cn.garymb.ygomobile.plus.VUiKit;
 import cn.garymb.ygomobile.settings.SettingsActivity;
 import cn.garymb.ygomobile.utils.ComponentUtils;
+import cn.garymb.ygomobile.utils.NetUtils;
 
 import static cn.garymb.ygomobile.Constants.ACTION_RELOAD;
 
@@ -106,8 +107,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                         .setCloseLinster((dlg, rs) -> {
                             dlg.dismiss();
                             //mImageUpdater
-                            if (!mImageUpdater.isRunning()) {
-                                mImageUpdater.start();
+                            if (NetUtils.isConnected(getContext())) {
+                                if (!mImageUpdater.isRunning()) {
+                                    mImageUpdater.start();
+                                }
                             }
                         })
                         .show();

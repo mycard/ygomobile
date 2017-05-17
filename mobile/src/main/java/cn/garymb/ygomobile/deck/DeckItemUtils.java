@@ -26,8 +26,8 @@ import cn.ygo.ocgcore.LimitList;
 
 class DeckItemUtils {
 
-    public static String makeMd5(List<DeckItem> items){
-        StringBuilder stringBuilder=new StringBuilder();
+    public static String makeMd5(List<DeckItem> items) {
+        StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("#main");
         for (int i = DeckItem.MainStart; i < DeckItem.ExtraStart + Constants.DECK_MAIN_MAX; i++) {
             DeckItem deckItem = items.get(i);
@@ -37,7 +37,9 @@ class DeckItemUtils {
             CardInfo cardInfo = deckItem.getCardInfo();
             if (cardInfo != null) {
                 stringBuilder.append("\n");
-                stringBuilder.append(cardInfo.Code);
+                if(!cardInfo.isExtraCard()) {
+                    stringBuilder.append(cardInfo.Code);
+                }
             }
         }
         stringBuilder.append("\n#extra");
@@ -49,7 +51,9 @@ class DeckItemUtils {
             CardInfo cardInfo = deckItem.getCardInfo();
             if (cardInfo != null) {
                 stringBuilder.append("\n");
-                stringBuilder.append(cardInfo.Code);
+                if(cardInfo.isExtraCard()) {
+                    stringBuilder.append(cardInfo.Code);
+                }
             }
         }
         stringBuilder.append("\n!side");
@@ -66,6 +70,7 @@ class DeckItemUtils {
         }
         return MD5Util.getStringMD5(stringBuilder.toString());
     }
+
     public static Deck toDeck(List<DeckItem> items, File file) {
         Deck deck;
         if (file == null) {
@@ -81,7 +86,9 @@ class DeckItemUtils {
                 }
                 CardInfo cardInfo = deckItem.getCardInfo();
                 if (cardInfo != null) {
-                    deck.addMain(cardInfo.Code);
+                    if(!cardInfo.isExtraCard()) {
+                        deck.addMain(cardInfo.Code);
+                    }
                 }
             }
             for (int i = DeckItem.ExtraStart; i < DeckItem.ExtraStart + Constants.DECK_EXTRA_MAX; i++) {
@@ -91,7 +98,9 @@ class DeckItemUtils {
                 }
                 CardInfo cardInfo = deckItem.getCardInfo();
                 if (cardInfo != null) {
-                    deck.addExtra(cardInfo.Code);
+                    if(cardInfo.isExtraCard()) {
+                        deck.addExtra(cardInfo.Code);
+                    }
                 }
             }
             for (int i = DeckItem.SideStart; i < DeckItem.SideStart + Constants.DECK_SIDE_MAX; i++) {
@@ -131,8 +140,11 @@ class DeckItemUtils {
                     break;
                 }
                 CardInfo cardInfo = deckItem.getCardInfo();
-                if (cardInfo != null)
-                    writer.write(("\n" + cardInfo.Code).toCharArray());
+                if (cardInfo != null) {
+                    if (!cardInfo.isExtraCard()) {
+                        writer.write(("\n" + cardInfo.Code).toCharArray());
+                    }
+                }
             }
             writer.write("\n#extra".toCharArray());
             for (int i = DeckItem.ExtraStart; i < DeckItem.ExtraStart + Constants.DECK_EXTRA_MAX; i++) {
@@ -141,8 +153,11 @@ class DeckItemUtils {
                     break;
                 }
                 CardInfo cardInfo = deckItem.getCardInfo();
-                if (cardInfo != null)
-                    writer.write(("\n" + cardInfo.Code).toCharArray());
+                if (cardInfo != null) {
+                    if(cardInfo.isExtraCard()) {
+                        writer.write(("\n" + cardInfo.Code).toCharArray());
+                    }
+                }
             }
             writer.write("\n!side".toCharArray());
             for (int i = DeckItem.SideStart; i < DeckItem.SideStart + Constants.DECK_SIDE_MAX; i++) {
