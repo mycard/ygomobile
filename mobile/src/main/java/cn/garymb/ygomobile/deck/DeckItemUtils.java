@@ -29,7 +29,7 @@ class DeckItemUtils {
     public static String makeMd5(List<DeckItem> items) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("#main");
-        for (int i = DeckItem.MainStart; i < DeckItem.ExtraStart + Constants.DECK_MAIN_MAX; i++) {
+        for (int i = DeckItem.MainStart; i < DeckItem.MainStart + Constants.DECK_MAIN_MAX; i++) {
             DeckItem deckItem = items.get(i);
             if (deckItem.getType() == DeckItemType.Space) {
                 break;
@@ -37,9 +37,9 @@ class DeckItemUtils {
             CardInfo cardInfo = deckItem.getCardInfo();
             if (cardInfo != null) {
                 stringBuilder.append("\n");
-                if(!cardInfo.isExtraCard()) {
-                    stringBuilder.append(cardInfo.Code);
-                }
+//                if(!cardInfo.isExtraCard()) {
+                stringBuilder.append(cardInfo.Code);
+//                }
             }
         }
         stringBuilder.append("\n#extra");
@@ -51,9 +51,9 @@ class DeckItemUtils {
             CardInfo cardInfo = deckItem.getCardInfo();
             if (cardInfo != null) {
                 stringBuilder.append("\n");
-                if(cardInfo.isExtraCard()) {
-                    stringBuilder.append(cardInfo.Code);
-                }
+//                if(cardInfo.isExtraCard()) {
+                stringBuilder.append(cardInfo.Code);
+//                }
             }
         }
         stringBuilder.append("\n!side");
@@ -79,16 +79,16 @@ class DeckItemUtils {
             deck = new Deck(file.getName());
         }
         try {
-            for (int i = DeckItem.MainStart; i < DeckItem.ExtraStart + Constants.DECK_MAIN_MAX; i++) {
+            for (int i = DeckItem.MainStart; i < DeckItem.MainStart + Constants.DECK_MAIN_MAX; i++) {
                 DeckItem deckItem = items.get(i);
                 if (deckItem.getType() == DeckItemType.Space) {
                     break;
                 }
                 CardInfo cardInfo = deckItem.getCardInfo();
                 if (cardInfo != null) {
-                    if(!cardInfo.isExtraCard()) {
-                        deck.addMain(cardInfo.Code);
-                    }
+//                    if(!cardInfo.isExtraCard()) {
+                    deck.addMain(cardInfo.Code);
+//                    }
                 }
             }
             for (int i = DeckItem.ExtraStart; i < DeckItem.ExtraStart + Constants.DECK_EXTRA_MAX; i++) {
@@ -98,9 +98,9 @@ class DeckItemUtils {
                 }
                 CardInfo cardInfo = deckItem.getCardInfo();
                 if (cardInfo != null) {
-                    if(cardInfo.isExtraCard()) {
-                        deck.addExtra(cardInfo.Code);
-                    }
+//                    if(cardInfo.isExtraCard()) {
+                    deck.addExtra(cardInfo.Code);
+//                    }
                 }
             }
             for (int i = DeckItem.SideStart; i < DeckItem.SideStart + Constants.DECK_SIDE_MAX; i++) {
@@ -134,16 +134,14 @@ class DeckItemUtils {
             writer = new OutputStreamWriter(outputStream, "utf-8");
             writer.write("#created by ygomobile".toCharArray());
             writer.write("\n#main".toCharArray());
-            for (int i = DeckItem.MainStart; i < DeckItem.ExtraStart + Constants.DECK_MAIN_MAX; i++) {
+            for (int i = DeckItem.MainStart; i < DeckItem.MainStart + Constants.DECK_MAIN_MAX; i++) {
                 DeckItem deckItem = items.get(i);
                 if (deckItem.getType() == DeckItemType.Space) {
                     break;
                 }
                 CardInfo cardInfo = deckItem.getCardInfo();
                 if (cardInfo != null) {
-                    if (!cardInfo.isExtraCard()) {
-                        writer.write(("\n" + cardInfo.Code).toCharArray());
-                    }
+                    writer.write(("\n" + cardInfo.Code).toCharArray());
                 }
             }
             writer.write("\n#extra".toCharArray());
@@ -154,9 +152,7 @@ class DeckItemUtils {
                 }
                 CardInfo cardInfo = deckItem.getCardInfo();
                 if (cardInfo != null) {
-                    if(cardInfo.isExtraCard()) {
-                        writer.write(("\n" + cardInfo.Code).toCharArray());
-                    }
+                    writer.write(("\n" + cardInfo.Code).toCharArray());
                 }
             }
             writer.write("\n!side".toCharArray());
@@ -166,8 +162,9 @@ class DeckItemUtils {
                     break;
                 }
                 CardInfo cardInfo = deckItem.getCardInfo();
-                if (cardInfo != null)
+                if (cardInfo != null) {
                     writer.write(("\n" + cardInfo.Code).toCharArray());
+                }
             }
             writer.flush();
             outputStream.flush();
