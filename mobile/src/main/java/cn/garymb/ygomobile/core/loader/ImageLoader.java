@@ -100,8 +100,9 @@ public class ImageLoader implements Closeable {
         if (pre != null) {
             resource.placeholder(pre);
         } else {
-//            resource.placeholder(R.drawable.unknown);
+            resource.placeholder(R.drawable.unknown);
         }
+        resource.error(R.drawable.unknown);
         resource.animate(R.anim.push_in);
 //        if(isbpg){
 //            resource.override(Constants.CORE_SKIN_CARD_COVER_SIZE[0], Constants.CORE_SKIN_CARD_COVER_SIZE[1]);
@@ -119,8 +120,9 @@ public class ImageLoader implements Closeable {
             if (pre != null) {
                 resource.placeholder(pre);
             } else {
-//                resource.placeholder(R.drawable.unknown);
+                resource.placeholder(R.drawable.unknown);
             }
+            resource.error(R.drawable.unknown);
             resource.animate(R.anim.push_in);
 //            if(isbpg){
 //                resource.override(Constants.CORE_SKIN_CARD_COVER_SIZE[0], Constants.CORE_SKIN_CARD_COVER_SIZE[1]);
@@ -145,45 +147,44 @@ public class ImageLoader implements Closeable {
         resource.error(R.drawable.unknown);
         resource.override(Constants.CORE_SKIN_CARD_COVER_SIZE[0], Constants.CORE_SKIN_CARD_COVER_SIZE[1]);
         resource.signature(new StringSignature(code + "_" + isBig));
+        resource.into(new GlideDrawableImageViewTarget(imageview));
+//            @Override
+//            public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> animation) {
+//                super.onResourceReady(resource, animation);
+//                if (resource != null && !isClose) {
+//                    if (resource instanceof GlideBitmapDrawable) {
+//                        GlideBitmapDrawable glideBitmapDrawable = (GlideBitmapDrawable) resource;
+//                        Bitmap bitmap = glideBitmapDrawable.getBitmap();
+//                        if (bitmap != null) {
+//                            File file = new File(AppsSettings.get().getResourcePath(), Constants.CORE_IMAGE_PATH + "/" + code + ".jpg");
+//                            if (!file.exists()) {
+//                                File tmp = new File(AppsSettings.get().getResourcePath(), Constants.CORE_IMAGE_PATH + "/" + code + ".tmp");
+//                                if (!tmp.exists()) {
+//                                    if (!mExecutorService.isShutdown()) {
+//                                        mExecutorService.submit(() -> {
+//                                            File dir = file.getParentFile();
+//                                            if (!dir.exists()) {
+//                                                dir.mkdirs();
+//                                            }
+//                                            try {
+//                                                file.createNewFile();
+//                                                FileOutputStream outputStream = new FileOutputStream(file);
+//                                                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+//                                                outputStream.flush();
+//                                                outputStream.close();
+//                                                tmp.renameTo(file);
+//                                            } catch (Exception e) {
+//                                            }
 //
-        resource.into(new GlideDrawableImageViewTarget(imageview) {
-            @Override
-            public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> animation) {
-                super.onResourceReady(resource, animation);
-                if (resource != null && !isClose) {
-                    if (resource instanceof GlideBitmapDrawable) {
-                        GlideBitmapDrawable glideBitmapDrawable = (GlideBitmapDrawable) resource;
-                        Bitmap bitmap = glideBitmapDrawable.getBitmap();
-                        if (bitmap != null) {
-                            File file = new File(AppsSettings.get().getResourcePath(), Constants.CORE_IMAGE_PATH + "/" + code + ".jpg");
-                            if (!file.exists()) {
-                                File tmp = new File(AppsSettings.get().getResourcePath(), Constants.CORE_IMAGE_PATH + "/" + code + ".tmp");
-                                if (!tmp.exists()) {
-                                    if (!mExecutorService.isShutdown()) {
-                                        mExecutorService.submit(() -> {
-                                            File dir = file.getParentFile();
-                                            if (!dir.exists()) {
-                                                dir.mkdirs();
-                                            }
-                                            try {
-                                                file.createNewFile();
-                                                FileOutputStream outputStream = new FileOutputStream(file);
-                                                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
-                                                outputStream.flush();
-                                                outputStream.close();
-                                                tmp.renameTo(file);
-                                            } catch (Exception e) {
-                                            }
-
-                                        });
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        });
+//                                        });
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//        });
     }
 
     public void bindImage(ImageView imageview, long code) {
@@ -233,7 +234,6 @@ public class ImageLoader implements Closeable {
             }
         }
         if (!bind) {
-            imageview.setImageResource(R.drawable.unknown);
             if (NetUtils.isWifiConnected(imageview.getContext())) {
                 bind(String.format(Constants.IMAGE_URL, "" + code), imageview, code, pre, isBig);
             }
