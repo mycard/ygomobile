@@ -48,3 +48,6 @@ libYGOMobile.so
 /mobile/assets/*.cdb
 /*.zip
 /*.cdb
+/mobile/assets/data/textures/Thumbs.db
+/mobile/src/main/res/drawable-xhdpi/Thumbs.db
+Thumbs.db
