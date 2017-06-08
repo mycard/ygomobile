@@ -42,7 +42,7 @@
                 android:textColor="@color/white"
                 android:id="@+id/textView2" />
 
-            <TextView
+            <Button
                 android:id="@+id/nav_donation"
                 android:layout_width="124dp"
                 android:layout_height="wrap_content"

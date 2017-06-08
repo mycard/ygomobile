@@ -32,7 +32,8 @@ public enum CardCategory {
     LVCHANGE(0x8000000),//改变等级效果
     NEGATE(0x10000000),//使发动无效效果
     ANNOUNCE(0x20000000),//發動時宣言卡名的效果
-    FUSION_SUMMON(0x40000000);
+    FUSION_SUMMON(0x40000000),
+    NEGATE_EFFECT(0x80000000L);//效果无效
     private long value = 0;
 
     private CardCategory(long value) {

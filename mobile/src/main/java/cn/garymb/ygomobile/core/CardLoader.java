@@ -253,15 +253,25 @@ public class CardLoader implements ICardLoader {
             stringBuilder.append(" and (level & 255) =" + level);
         }
         if (!TextUtils.isEmpty(atk)) {
-            stringBuilder.append(" and atk=" + (TextUtils.isDigitsOnly(atk) ? atk : -2));
+            if(atk.contains("-")){
+                String[]atks = atk.split("-");
+                stringBuilder.append(" and atk>=" + atks[0] + " and atk <=" + atks[1]);
+            }else {
+                stringBuilder.append(" and atk=" + (TextUtils.isDigitsOnly(atk) ? atk : -2));
+            }
         }
         if (!TextUtils.isEmpty(def)) {
             if(islink){
                 int link = Integer.parseInt(def,2);
                 stringBuilder.append(" and (def & " + link+") = "+link);
                 stringBuilder.append(" and (type & " + CardType.Link.value() + ") =" + CardType.Link.value());
-            }else{
-                stringBuilder.append(" and def=" + (TextUtils.isDigitsOnly(def) ? def : -2));
+            }else {
+                if (def.contains("-")) {
+                    String[] defs = def.split("-");
+                    stringBuilder.append(" and def>=" + defs[0] + " and def <=" + defs[1]);
+                } else {
+                    stringBuilder.append(" and def=" + (TextUtils.isDigitsOnly(def) ? def : -2));
+                }
             }
         }
         if (ot > 0) {

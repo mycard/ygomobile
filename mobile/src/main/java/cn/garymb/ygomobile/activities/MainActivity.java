@@ -1,6 +1,7 @@
 package cn.garymb.ygomobile.activities;
 
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
@@ -18,7 +19,10 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.WebView;
 import android.widget.Toast;
+
+import java.net.URLEncoder;
 
 import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.YGOMobileActivity;
@@ -34,8 +38,10 @@ import cn.garymb.ygomobile.plus.DialogPlus;
 import cn.garymb.ygomobile.plus.VUiKit;
 import cn.garymb.ygomobile.settings.SettingsActivity;
 import cn.garymb.ygomobile.utils.ComponentUtils;
+import cn.garymb.ygomobile.utils.NetUtils;
 
 import static cn.garymb.ygomobile.Constants.ACTION_RELOAD;
+import static cn.garymb.ygomobile.Constants.ALIPAY_URL;
 
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
     private boolean enableStart;
@@ -71,13 +77,15 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         mServerAdapater.loadData();
         //侧边
         navigationView.getHeaderView(0).findViewById(R.id.nav_donation).setOnClickListener((v) -> {
-            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.ALIPAY_URL));
+
+            openAliPay2Pay(ALIPAY_URL);
+            /*Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.ALIPAY_URL));
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             try {
                 startActivity(Intent.createChooser(intent, getString(R.string.donation)));
             } catch (Exception e) {
 
-            }
+            }*/
         });
         YGOStarter.onCreated(this);
         mServerAdapater.setOnEditListener((edit) -> {
@@ -106,8 +114,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                         .setCloseLinster((dlg, rs) -> {
                             dlg.dismiss();
                             //mImageUpdater
-                            if (!mImageUpdater.isRunning()) {
-                                mImageUpdater.start();
+                            if (NetUtils.isConnected(getContext())) {
+                                if (!mImageUpdater.isRunning()) {
+                                    mImageUpdater.start();
+                                }
                             }
                         })
                         .show();
@@ -278,6 +288,45 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             Toast.makeText(this, R.string.back_tip, Toast.LENGTH_SHORT).show();
             exitLasttime = System.currentTimeMillis();
         }
+    }
+
+    /**
+     * 支付
+     *
+     * @param qrCode
+*/
+    private void openAliPay2Pay(String qrCode) {
+        if (openAlipayPayPage(this, qrCode)) {
+            Toast.makeText(this, "感谢您的支持", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, "呀，没装支付宝", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public static boolean openAlipayPayPage(Context context, String qrcode) {
+        try {
+            qrcode = URLEncoder.encode(ALIPAY_URL, "utf-8");
+        } catch (Exception e) {
+        }
+        try {
+            final String alipayqr = "alipayqr://platformapi/startapp?saId=10000007&clientVersion=3.7.0.0718&qrcode=" + qrcode;
+            openUri(context, alipayqr + "%3F_s%3Dweb-other&_t=" + System.currentTimeMillis());
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    /**
+     * 发送一个intent
+     *
+     * @param context
+     * @param s
+     */
+    private static void openUri(Context context, String s) {
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(s));
+        context.startActivity(intent);
     }
 
 }

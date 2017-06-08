@@ -171,5 +171,5 @@
     <string name="download_image_progress" formatted="false">Downloading card image %d/%d</string>
     <string name="download_image_error" formatted="false">Download fail %d</string>
     <string name="downloading_images_ok">Download images ok</string>
-    <string name="tip_istunning">游戏已经在运行了</string>
+    <string name="tip_istunning">YGOPro is Running</string>
 </resources>

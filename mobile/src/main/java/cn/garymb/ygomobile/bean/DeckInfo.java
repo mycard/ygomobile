@@ -68,6 +68,14 @@ public class DeckInfo {
                 '}';
     }
 
+    public String toLongString(){
+        return "DeckInfo{" +
+                "mainCards=" + mainCards +
+                ", extraCards=" + extraCards +
+                ", sideCards=" + sideCards +
+                '}';
+    }
+
     public List<CardInfo> getMainCards() {
         return mainCards;
     }

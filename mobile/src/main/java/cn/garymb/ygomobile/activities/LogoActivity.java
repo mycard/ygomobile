@@ -3,6 +3,7 @@ package cn.garymb.ygomobile.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
@@ -16,8 +17,27 @@ import cn.garymb.ygomobile.lite.BuildConfig;
 import cn.garymb.ygomobile.lite.R;
 
 public class LogoActivity extends Activity {
-
+   Handler handler;
+    Runnable runnable;
     @Override
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_logo);
+        handler = new Handler();
+        runnable = new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                startActivity(new Intent(LogoActivity.this,MainActivity.class));
+                finish();
+            }
+        };
+        handler.postDelayed(runnable,1500);
+        Toast.makeText(LogoActivity.this, R.string.logo_text, Toast.LENGTH_SHORT).show();
+    }
+  /*  @Override
     protected void onCreate(Bundle savedInstanceState) {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         super.onCreate(savedInstanceState);
@@ -52,6 +72,6 @@ public class LogoActivity extends Activity {
         });
         image.setAnimation(anim);
         anim.start();
-    }
+    }*/
 }
 

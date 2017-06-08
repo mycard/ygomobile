@@ -29,13 +29,7 @@
         tools:replace="android:allowBackup">
         <activity
             android:name="cn.garymb.ygomobile.activities.LogoActivity"
-            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
-            android:label="@string/app_name"
-            android:launchMode="singleTop"
-            android:screenOrientation="portrait"
-            android:stateNotNeeded="true"
-            android:theme="@style/AppTheme.Logo"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustResize">
+            android:theme="@style/TranslucentTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>

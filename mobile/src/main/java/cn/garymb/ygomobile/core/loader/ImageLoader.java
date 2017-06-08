@@ -3,6 +3,7 @@ package cn.garymb.ygomobile.core.loader;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.util.Log;
 import android.widget.ImageView;
 
@@ -12,15 +13,22 @@ import com.bumptech.glide.load.engine.Resource;
 import com.bumptech.glide.load.engine.bitmap_recycle.LruBitmapPool;
 import com.bumptech.glide.load.model.ImageVideoWrapper;
 import com.bumptech.glide.load.resource.bitmap.BitmapResource;
+import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
 import com.bumptech.glide.load.resource.gifbitmap.GifBitmapWrapper;
 import com.bumptech.glide.load.resource.gifbitmap.GifBitmapWrapperResource;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.bumptech.glide.signature.StringSignature;
 
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -31,6 +39,7 @@ import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.utils.BitmapUtil;
 import cn.garymb.ygomobile.utils.IOUtils;
 import cn.garymb.ygomobile.utils.MD5Util;
+import cn.garymb.ygomobile.utils.NetUtils;
 
 import static cn.garymb.ygomobile.Constants.CORE_SKIN_BG_SIZE;
 import static com.bumptech.glide.Glide.with;
@@ -39,7 +48,7 @@ public class ImageLoader implements Closeable {
     private static final String TAG = ImageLoader.class.getSimpleName();
     private ZipFile mZipFile;
     private LruBitmapPool mLruBitmapPool;
-    //    private ExecutorService mExecutorService = Executors.newSingleThreadExecutor();
+    private ExecutorService mExecutorService = Executors.newSingleThreadExecutor();
     private boolean isClose = false;
     private Context mContext;
 
@@ -97,7 +106,7 @@ public class ImageLoader implements Closeable {
 //        if(isbpg){
 //            resource.override(Constants.CORE_SKIN_CARD_COVER_SIZE[0], Constants.CORE_SKIN_CARD_COVER_SIZE[1]);
 //        }
-        resource.signature(new StringSignature(MD5Util.getStringMD5(data.length+"_"+code + "_" + isBig)));
+        resource.signature(new StringSignature(MD5Util.getStringMD5(data.length + "_" + code + "_" + isBig)));
         if (isbpg) {
             resource.decoder(new BpgResourceDecoder("bpg@" + code));
         }
@@ -116,7 +125,7 @@ public class ImageLoader implements Closeable {
 //            if(isbpg){
 //                resource.override(Constants.CORE_SKIN_CARD_COVER_SIZE[0], Constants.CORE_SKIN_CARD_COVER_SIZE[1]);
 //            }
-            resource.signature(new StringSignature(MD5Util.getStringMD5(file.length()+code + "_" + isBig)));
+            resource.signature(new StringSignature(MD5Util.getStringMD5(file.length() + code + "_" + isBig)));
             if (isbpg) {
                 resource.decoder(new BpgResourceDecoder("bpg@" + code));
             }
@@ -126,56 +135,56 @@ public class ImageLoader implements Closeable {
         }
     }
 
-//    private void bind(final String url, ImageView imageview, long code, Drawable pre,boolean isBig) {
-//        DrawableTypeRequest<Uri> resource = with(mContext).load(Uri.parse(url));
-//        if (pre != null) {
-//            resource.placeholder(pre);
-//        } else {
-//            resource.placeholder(R.drawable.unknown);
-//        }
-//        resource.error(R.drawable.unknown);
-//        resource.override(Constants.CORE_SKIN_CARD_COVER_SIZE[0], Constants.CORE_SKIN_CARD_COVER_SIZE[1]);
-//        resource.signature(new StringSignature(code+"_"+isBig));
-////
-//        resource.into(new GlideDrawableImageViewTarget(imageview) {
-//            @Override
-//            public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> animation) {
-//                super.onResourceReady(resource, animation);
-//                if (resource != null && !isClose) {
-//                    if (resource instanceof GlideBitmapDrawable) {
-//                        GlideBitmapDrawable glideBitmapDrawable = (GlideBitmapDrawable) resource;
-//                        Bitmap bitmap = glideBitmapDrawable.getBitmap();
-//                        if (bitmap != null) {
-//                            File file = new File(AppsSettings.get().getResourcePath(), Constants.CORE_IMAGE_PATH + "/" + code + ".jpg");
-//                            if (!file.exists()) {
-//                                File tmp = new File(AppsSettings.get().getResourcePath(), Constants.CORE_IMAGE_PATH + "/" + code + ".tmp");
-//                                if (!tmp.exists()) {
-//                                    if (!mExecutorService.isShutdown()) {
-//                                        mExecutorService.submit(() -> {
-//                                            File dir = file.getParentFile();
-//                                            if (!dir.exists()) {
-//                                                dir.mkdirs();
-//                                            }
-//                                            try {
-//                                                file.createNewFile();
-//                                                FileOutputStream outputStream = new FileOutputStream(file);
-//                                                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
-//                                                outputStream.flush();
-//                                                outputStream.close();
-//                                                tmp.renameTo(file);
-//                                            } catch (Exception e) {
-//                                            }
+    private void bind(final String url, ImageView imageview, long code, Drawable pre, boolean isBig) {
+        DrawableTypeRequest<Uri> resource = with(mContext).load(Uri.parse(url));
+        if (pre != null) {
+            resource.placeholder(pre);
+        } else {
+            resource.placeholder(R.drawable.unknown);
+        }
+        resource.error(R.drawable.unknown);
+        resource.override(Constants.CORE_SKIN_CARD_COVER_SIZE[0], Constants.CORE_SKIN_CARD_COVER_SIZE[1]);
+        resource.signature(new StringSignature(code + "_" + isBig));
 //
-//                                        });
-//                                    }
-//                                }
-//                            }
-//                        }
-//                    }
-//                }
-//            }
-//        });
-//    }
+        resource.into(new GlideDrawableImageViewTarget(imageview) {
+            @Override
+            public void onResourceReady(GlideDrawable resource, GlideAnimation<? super GlideDrawable> animation) {
+                super.onResourceReady(resource, animation);
+                if (resource != null && !isClose) {
+                    if (resource instanceof GlideBitmapDrawable) {
+                        GlideBitmapDrawable glideBitmapDrawable = (GlideBitmapDrawable) resource;
+                        Bitmap bitmap = glideBitmapDrawable.getBitmap();
+                        if (bitmap != null) {
+                            File file = new File(AppsSettings.get().getResourcePath(), Constants.CORE_IMAGE_PATH + "/" + code + ".jpg");
+                            if (!file.exists()) {
+                                File tmp = new File(AppsSettings.get().getResourcePath(), Constants.CORE_IMAGE_PATH + "/" + code + ".tmp");
+                                if (!tmp.exists()) {
+                                    if (!mExecutorService.isShutdown()) {
+                                        mExecutorService.submit(() -> {
+                                            File dir = file.getParentFile();
+                                            if (!dir.exists()) {
+                                                dir.mkdirs();
+                                            }
+                                            try {
+                                                file.createNewFile();
+                                                FileOutputStream outputStream = new FileOutputStream(file);
+                                                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+                                                outputStream.flush();
+                                                outputStream.close();
+                                                tmp.renameTo(file);
+                                            } catch (Exception e) {
+                                            }
+
+                                        });
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
 
     public void bindImage(ImageView imageview, long code) {
         bindImage(imageview, code, null);
@@ -225,9 +234,9 @@ public class ImageLoader implements Closeable {
         }
         if (!bind) {
             imageview.setImageResource(R.drawable.unknown);
-//            File outFile = new File(AppsSettings.get().getCoreSkinPath(), Constants.UNKNOWN_IMAGE);
-//            bind(outFile, imageview, outFile.getName().endsWith(Constants.BPG), 0, null, false);
-//            bind(String.format(Constants.IMAGE_URL, "" + code), imageview, code, pre,isBig);
+            if (NetUtils.isWifiConnected(imageview.getContext())) {
+                bind(String.format(Constants.IMAGE_URL, "" + code), imageview, code, pre, isBig);
+            }
         }
     }
 }
