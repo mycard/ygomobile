@@ -8,21 +8,27 @@
               android:layout_marginRight="10dp"
               android:background="@android:color/transparent"
               android:orientation="horizontal">
+    <Button
+        android:id="@+id/lastone"
+        android:layout_width="25dp"
+        android:layout_height="150dp"
+        android:layout_gravity="left|center"
+        android:background="@drawable/left_1"
+        />
 
     <FrameLayout
-        android:layout_width="match_parent"
+        android:layout_width="310dp"
         android:layout_height="wrap_content">
 
         <LinearLayout
             android:id="@+id/detail"
-            android:layout_width="match_parent"
+            android:layout_width="308dp"
             android:layout_height="wrap_content"
             android:background="@drawable/blue"
             android:orientation="vertical"
             android:paddingBottom="10dp"
             android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            >
+            android:paddingRight="10dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -34,17 +40,17 @@
                     android:id="@+id/btn_faq"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:layout_marginLeft="5dp"
                     android:background="@drawable/addto"
+                    android:gravity="center"
                     android:paddingLeft="16dp"
                     android:paddingRight="16dp"
-                    android:gravity="center"
                     android:shadowColor="@color/black"
                     android:text="@string/card_faq"
                     android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                     android:textColor="@color/colorAccentDark"
                     android:textSize="14sp"
-                    android:textStyle="bold"
-                    android:layout_marginLeft="5dp" />
+                    android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/btn_add_main"
@@ -59,13 +65,13 @@
                     android:textSize="14sp"
                     android:textStyle="bold"
                     android:visibility="invisible"
-                    tools:visibility="visible"/>
+                    tools:visibility="visible" />
 
                 <TextView
                     android:id="@+id/btn_add_side"
                     android:layout_width="wrap_content"
-                    android:layout_marginLeft="4dp"
                     android:layout_height="match_parent"
+                    android:layout_marginLeft="4dp"
                     android:background="@drawable/addto"
                     android:gravity="center"
                     android:text="@string/card_add_side"
@@ -74,18 +80,19 @@
                     android:textSize="14sp"
                     android:textStyle="bold"
                     android:visibility="invisible"
-                    tools:visibility="visible"/>
+                    tools:visibility="visible" />
 
                 <View
                     android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="1dp"/>
+                    android:layout_height="1dp"
+                    android:layout_weight="1" />
+
                 <ImageButton
                     android:id="@+id/btn_close"
                     android:layout_width="@dimen/button_width_small"
                     android:layout_height="@dimen/button_width_small"
                     android:background="@android:color/transparent"
-                    app:srcCompat="@drawable/ic_close_black_24dp"/>
+                    app:srcCompat="@drawable/ic_close_black_24dp" />
             </LinearLayout>
 
             <TextView
@@ -105,7 +112,7 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Title"
                 android:textColor="@color/item_title"
                 android:textIsSelectable="true"
-                tools:text="name"/>
+                tools:text="name" />
 
             <TextView
                 android:id="@+id/card_level"
@@ -117,14 +124,15 @@
                 android:singleLine="true"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@color/star"
-                tools:text="★★★★"/>
+                tools:text="★★★★" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="2dp"
                 android:layout_marginTop="2dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:weightSum="1">
 
                 <ImageView
                     android:id="@+id/card_image"
@@ -132,12 +140,13 @@
                     android:layout_height="@dimen/card_height2"
                     android:layout_gravity="center_vertical"
                     android:scaleType="fitXY"
-                    android:src="@android:drawable/sym_def_app_icon"/>
+                    android:src="@android:drawable/sym_def_app_icon" />
 
                 <ScrollView
-                    android:layout_width="match_parent"
+                    android:layout_width="140dp"
                     android:layout_height="match_parent"
                     android:scrollbars="none">
+
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -154,12 +163,12 @@
                             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                             android:textColor="@color/colorAccent"
                             android:textIsSelectable="true"
-                            tools:text="12345678"/>
+                            tools:text="12345678" />
 
                         <View
                             android:layout_width="match_parent"
                             android:layout_height="1dp"
-                            android:background="@color/white"/>
+                            android:background="@color/white" />
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -171,7 +180,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="@string/label_ot"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-                                android:textColor="@color/item_title"/>
+                                android:textColor="@color/item_title" />
 
                             <TextView
                                 android:id="@+id/card_ot"
@@ -181,7 +190,9 @@
                                 android:singleLine="true"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                                 android:textColor="@android:color/holo_blue_bright"
-                                tools:text="Test"/>
+                                tools:text="Test" />
+
+
                         </LinearLayout>
 
                         <TextView
@@ -189,7 +200,7 @@
                             android:layout_height="wrap_content"
                             android:text="@string/label_type"
                             android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-                            android:textColor="@color/item_title"/>
+                            android:textColor="@color/item_title" />
 
                         <TextView
                             android:id="@+id/card_type"
@@ -198,7 +209,7 @@
                             android:maxLines="2"
                             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                             android:textColor="@android:color/holo_blue_bright"
-                            tools:text="A\nXYZ"/>
+                            tools:text="A\nXYZ" />
 
                         <TextView
                             android:id="@+id/label_setcode"
@@ -207,7 +218,7 @@
                             android:text="@string/label_set"
                             android:textAppearance="@style/TextAppearance.AppCompat.Caption"
                             android:textColor="@color/item_title"
-                            android:visibility="invisible"/>
+                            android:visibility="invisible" />
 
                         <TextView
                             android:id="@+id/card_setname"
@@ -216,7 +227,7 @@
                             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                             android:textColor="@android:color/holo_blue_bright"
                             android:visibility="invisible"
-                            tools:text="Test"/>
+                            tools:text="Test" />
 
                         <LinearLayout
                             android:id="@+id/layout_monster"
@@ -234,7 +245,7 @@
                                     android:layout_height="wrap_content"
                                     android:text="@string/label_attr"
                                     android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-                                    android:textColor="@color/item_title"/>
+                                    android:textColor="@color/item_title" />
 
                                 <TextView
                                     android:id="@+id/card_attribute"
@@ -246,7 +257,7 @@
                                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                                     android:textColor="@android:color/holo_blue_bright"
                                     android:textIsSelectable="true"
-                                    tools:text="Test"/>
+                                    tools:text="Test" />
                             </LinearLayout>
 
                             <LinearLayout
@@ -259,7 +270,7 @@
                                     android:layout_height="wrap_content"
                                     android:text="@string/label_race"
                                     android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-                                    android:textColor="@color/item_title"/>
+                                    android:textColor="@color/item_title" />
 
                                 <TextView
                                     android:id="@+id/card_race"
@@ -271,7 +282,7 @@
                                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                                     android:textColor="@android:color/holo_blue_bright"
                                     android:textIsSelectable="true"
-                                    tools:text="Test"/>
+                                    tools:text="Test" />
                             </LinearLayout>
 
 
@@ -280,7 +291,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="1dp"
                                 android:layout_marginTop="10dp"
-                                android:background="@color/white"/>
+                                android:background="@color/white" />
 
                             <LinearLayout
                                 android:id="@+id/layout_atkdef2"
@@ -299,7 +310,7 @@
                                     android:singleLine="true"
                                     android:text="0"
                                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                                    android:textColor="@android:color/holo_blue_bright"/>
+                                    android:textColor="@android:color/holo_blue_bright" />
 
                                 <TextView
                                     android:layout_width="wrap_content"
@@ -308,7 +319,7 @@
                                     android:singleLine="true"
                                     android:text="/"
                                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                                    android:textColor="@android:color/holo_blue_bright"/>
+                                    android:textColor="@android:color/holo_blue_bright" />
 
                                 <TextView
                                     android:id="@+id/card_def"
@@ -320,7 +331,7 @@
                                     android:singleLine="true"
                                     android:text="0"
                                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                                    android:textColor="@android:color/holo_blue_bright"/>
+                                    android:textColor="@android:color/holo_blue_bright" />
                             </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
@@ -338,16 +349,23 @@
                     android:id="@+id/text_desc"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
                     android:gravity="left|top"
-                    android:paddingBottom="10dp"
                     android:minHeight="@dimen/card_desc_height"
+                    android:paddingBottom="10dp"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                     android:textColor="@android:color/holo_blue_light"
                     android:textIsSelectable="true"
-                    tools:text="desc"
-                    android:layout_margin="5dp" />
+                    tools:text="desc" />
             </ScrollView>
         </LinearLayout>
-
     </FrameLayout>
+
+    <Button
+        android:id="@+id/nextone"
+        android:layout_width="25dp"
+        android:layout_height="150dp"
+        android:layout_gravity="right|center"
+        android:background="@drawable/right_1"/>
+
 </LinearLayout>

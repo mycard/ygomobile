@@ -14,7 +14,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
@@ -25,11 +27,13 @@ import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.adapters.CardListAdapater;
 import cn.garymb.ygomobile.bean.CardInfo;
 import cn.garymb.ygomobile.core.CardDetail;
+import cn.garymb.ygomobile.core.CardLisTe;
 import cn.garymb.ygomobile.core.CardLoader;
 import cn.garymb.ygomobile.core.CardSearcher;
 import cn.garymb.ygomobile.core.loader.ImageLoader;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.plus.VUiKit;
+import cn.ygo.ocgcore.Card;
 import cn.ygo.ocgcore.LimitList;
 import cn.ygo.ocgcore.LimitManager;
 import cn.ygo.ocgcore.StringManager;
@@ -90,7 +94,7 @@ public class CardSearchAcitivity extends BaseActivity implements CardLoader.Call
     protected void setListeners() {
         mListView.setOnItemClickListener((adapterView, view, pos, id) -> {
             CardInfo cardInfo = mCardListAdapater.getItemById(id);
-            onCardClick(cardInfo, pos);
+            onCardClick(cardInfo, pos, mCardListAdapater);
         });
         mListView.setOnItemLongClickListener((adapterView, view, pos, id) -> {
             CardInfo cardInfo = mCardListAdapater.getItemById(id);
@@ -211,9 +215,9 @@ public class CardSearchAcitivity extends BaseActivity implements CardLoader.Call
         }
     }
 
-    protected void onCardClick(CardInfo cardInfo, int pos) {
+    protected void onCardClick(CardInfo cardInfo, int pos, CardLisTe clt) {
         if (isShowDrawer()) return;
-        showCard(cardInfo);
+        showCard(clt, pos);
     }
 
     protected void onCardLongClick(View view, CardInfo cardInfo, int pos) {
@@ -227,8 +231,14 @@ public class CardSearchAcitivity extends BaseActivity implements CardLoader.Call
         return mDialog != null && mDialog.isShowing();
     }
 
-    protected void showCard(CardInfo cardInfo) {
-        if (isShowCard()) return;
+    protected void showCard(CardLisTe clt,final int position) {
+        CardInfo cardInfo = clt.getCard(position);
+        if(cardInfo==null){
+            Log.i("CardInfo","CardInfo为空");
+        }else{
+            Log.i("CardInfo","CardInfo不为空");
+        }
+      // if (isShowCard()) return;
         if (cardInfo != null) {
             if (mCardDetail == null) {
                 mCardDetail = new CardDetail(this, mImageLoader);
@@ -256,6 +266,36 @@ public class CardSearchAcitivity extends BaseActivity implements CardLoader.Call
                 @Override
                 public void onAddSideCard(CardInfo cardInfo) {
 
+                }
+
+                @Override
+                public void onLastone(android.widget.Button lastone) {
+                    int i = position;
+                    if(i!=0){
+                        i--;
+                    }
+                    if(position==0){
+                        Toast.makeText(CardSearchAcitivity.this, "已经是第一张啦", Toast.LENGTH_SHORT).show();
+                        lastone.setVisibility(View.GONE);
+                    }else{
+                        lastone.setVisibility(View.VISIBLE);
+                    }
+                    showCard(clt,position);
+                }
+
+                @Override
+                public void onNextone(android.widget.Button nextone){
+                    int i = position;
+                    if(i!=clt.getCardSize()-1) {
+                        i++;
+                    }
+                    if(position==clt.getCardSize()-1){
+                        Toast.makeText(CardSearchAcitivity.this, "已经是最后一张啦", Toast.LENGTH_SHORT).show();
+                        nextone.setVisibility(View.GONE);
+                    }else{
+                        nextone.setVisibility(View.VISIBLE);
+                    }
+                    showCard(clt,position);
                 }
 
                 @Override

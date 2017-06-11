@@ -2,8 +2,10 @@ package cn.garymb.ygomobile.core;
 
 import android.content.Context;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -40,6 +42,9 @@ public class CardDetail extends BaseAdapterPlus.BaseViewHolder {
     private View lb_setcode;
     private ImageLoader imageLoader;
 
+    private Button lastone;
+    private Button nextone;
+
     public interface OnClickListener {
         void onOpenUrl(CardInfo cardInfo);
 
@@ -48,6 +53,10 @@ public class CardDetail extends BaseAdapterPlus.BaseViewHolder {
         void onAddSideCard(CardInfo cardInfo);
 
         void onClose();
+
+        void onLastone(Button lastone);
+
+        void onNextone(Button nextone);
     }
 
     public CardDetail(Context context, ImageLoader imageLoader) {
@@ -72,6 +81,9 @@ public class CardDetail extends BaseAdapterPlus.BaseViewHolder {
         otView = bind(R.id.card_ot);
         attrView = bind(R.id.card_attribute);
         lb_setcode = bind(R.id.label_setcode);
+
+        lastone = bind(R.id.lastone);
+        nextone = bind(R.id.nextone);
     }
 
     public ImageView getCardImage() {
@@ -171,8 +183,30 @@ public class CardDetail extends BaseAdapterPlus.BaseViewHolder {
                 listener.onOpenUrl(cardInfo);
             }
         });
-    }
 
+        lastone.setOnClickListener((v) -> {
+            if(listener==null){
+                Log.i("Listener左箭头","Listener为空");
+            }else{
+                Log.i("Listener左箭头","左箭头被点击");
+            }
+            if (listener != null) {
+                listener.onLastone(lastone);
+            }
+        });
+
+        nextone.setOnClickListener((v) -> {
+            if(listener==null){
+                Log.i("Listener右箭头","Listener为空");
+            }else{
+                Log.i("Listener右箭头","右箭头被点击");
+            }
+            if (listener != null) {
+                listener.onNextone(nextone);
+            }
+        });
+
+    }
 
     private <T extends View> T bind(int id) {
         return (T) findViewById(id);

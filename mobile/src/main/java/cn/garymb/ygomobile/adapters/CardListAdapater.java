@@ -9,6 +9,7 @@ import android.widget.TextView;
 import cn.garymb.ygomobile.bean.CardInfo;
 import cn.garymb.ygomobile.core.loader.ImageLoader;
 import cn.garymb.ygomobile.deck.ImageTop;
+import cn.garymb.ygomobile.core.CardLisTe;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.plus.BaseAdapterPlus;
 import cn.ygo.ocgcore.LimitList;
@@ -16,13 +17,25 @@ import cn.ygo.ocgcore.StringManager;
 import cn.ygo.ocgcore.enums.CardType;
 import cn.ygo.ocgcore.enums.LimitType;
 
-public class CardListAdapater extends BaseAdapterPlus<CardInfo> {
+import static android.R.attr.id;
+
+public class CardListAdapater extends BaseAdapterPlus<CardInfo> implements CardLisTe{
     private StringManager mStringManager;
     private ImageTop mImageTop;
     private OnAddCardListener mOnAddCardListener;
     private LimitList mLimitList;
     private boolean mItemBg;
     private ImageLoader imageLoader;
+
+    @Override
+    public int getCardSize() {
+        return getItems().size();
+    }
+
+    @Override
+    public CardInfo getCard(int posotion) {
+        return getItemById(id);
+    }
 
     public interface OnAddCardListener {
         void onAdd(int pos);

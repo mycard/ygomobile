@@ -21,6 +21,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -370,6 +371,16 @@ public class DeckManagerActivity extends BaseCardsAcitivity implements RecyclerV
                 @Override
                 public void onClose() {
                     mDialog.dismiss();
+                }
+
+                @Override
+                public void onLastone(Button lastone) {
+
+                }
+
+                @Override
+                public void onNextone(Button nextone) {
+
                 }
 
                 @Override
