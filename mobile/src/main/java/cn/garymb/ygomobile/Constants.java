@@ -122,9 +122,9 @@ public interface Constants {
      */
     long LONG_PRESS_DRAG = 500;
     /***
-     * adb shell am start -n cn.garymb.ygomobile/cn.garymb.ygomobile.activities.MainActivity -a ygomobile.intent.action.DECK --es android.intent.extra.TEXT 青眼白龙.ydk
+     * adb shell am start -n cn.garymb.ygomobile/cn.garymb.ygomobile.ui.home.MainActivity -a ygomobile.intent.action.DECK --es android.intent.extra.TEXT 青眼白龙.ydk
      * <p>
-     * adb shell am start -n cn.garymb.ygomobile/cn.garymb.ygomobile.activities.MainActivity -a ygomobile.intent.action.DECK --es android.intent.extra.TEXT /sdcard/ygocore/deck/青眼白龙.ydk
+     * adb shell am start -n cn.garymb.ygomobile/cn.garymb.ygomobile.ui.home.MainActivity -a ygomobile.intent.action.DECK --es android.intent.extra.TEXT /sdcard/ygocore/deck/青眼白龙.ydk
      */
     String ACTION_OPEN_DECK = "ygomobile.intent.action.DECK";
     /***

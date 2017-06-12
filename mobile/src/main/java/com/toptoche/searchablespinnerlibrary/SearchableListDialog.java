@@ -1,6 +1,5 @@
 package com.toptoche.searchablespinnerlibrary;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.SearchManager;
@@ -24,7 +23,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import cn.garymb.ygomobile.lite.R;
-import cn.garymb.ygomobile.plus.DialogPlus;
+import cn.garymb.ygomobile.ui.plus.DialogPlus;
 
 public class SearchableListDialog extends DialogFragment implements
         SearchView.OnQueryTextListener, SearchView.OnCloseListener {

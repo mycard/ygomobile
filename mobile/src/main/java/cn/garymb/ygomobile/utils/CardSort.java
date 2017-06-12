@@ -3,7 +3,7 @@ package cn.garymb.ygomobile.utils;
 import java.util.Comparator;
 
 import cn.garymb.ygomobile.bean.CardInfo;
-import cn.ygo.ocgcore.enums.CardType;
+import ocgcore.enums.CardType;
 
 
 public class CardSort implements Comparator<CardInfo> {

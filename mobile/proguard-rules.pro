@@ -20,3 +20,5 @@
 -keep class * implements com.bumptech.glide.module.GlideModule{
     *;
 }
+-keepattributes *Annotation*,InnerClasses
+-keepattributes Signature

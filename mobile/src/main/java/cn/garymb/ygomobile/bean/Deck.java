@@ -4,15 +4,14 @@ import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.text.TextUtils;
-import android.util.Log;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 import cn.garymb.ygomobile.Constants;
-import cn.garymb.ygomobile.deck.DeckItem;
-import cn.garymb.ygomobile.deck.DeckUtils;
+import cn.garymb.ygomobile.ui.cards.deck.DeckItem;
+import cn.garymb.ygomobile.ui.cards.deck.DeckUtils;
 
 import static cn.garymb.ygomobile.Constants.QUERY_EXTRA;
 import static cn.garymb.ygomobile.Constants.QUERY_MAIN;

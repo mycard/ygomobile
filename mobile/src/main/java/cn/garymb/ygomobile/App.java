@@ -3,10 +3,6 @@ package cn.garymb.ygomobile;
 
 import android.app.Activity;
 import android.support.v7.app.AppCompatDelegate;
-import android.widget.TextView;
-
-
-import cn.garymb.ygomobile.core.AppsSettings;
 
 public class App extends GameApplication {
 

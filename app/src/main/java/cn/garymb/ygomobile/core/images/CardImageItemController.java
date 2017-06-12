@@ -1,4 +1,4 @@
-package cn.garymb.ygomobile.core.loader;
+package cn.garymb.ygomobile.loader;
 
 import cn.garymb.ygomobile.R;
 import cn.garymb.ygomobile.utils.BitmapUtils;

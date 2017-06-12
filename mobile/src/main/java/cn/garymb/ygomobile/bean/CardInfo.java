@@ -6,9 +6,9 @@ import android.os.Parcelable;
 import android.text.TextUtils;
 import android.util.Log;
 
-import cn.ygo.ocgcore.Card;
-import cn.ygo.ocgcore.StringManager;
-import cn.ygo.ocgcore.enums.CardType;
+import ocgcore.bean.Card;
+import ocgcore.StringManager;
+import ocgcore.enums.CardType;
 
 public class CardInfo extends Card implements Parcelable {
     public static final String TAG = "CardInfo";

@@ -1,4 +1,4 @@
-package cn.garymb.ygomobile.core.loader;
+package cn.garymb.ygomobile.loader;
 
 
 public interface ImageFileDownloadedCallback {
