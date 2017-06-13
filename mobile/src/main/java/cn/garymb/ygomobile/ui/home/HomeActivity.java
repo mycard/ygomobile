@@ -9,6 +9,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -44,7 +45,8 @@ abstract class HomeActivity extends BaseActivity implements NavigationView.OnNav
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        setupActionBar();
+        Toolbar toolbar = $(R.id.toolbar);
+        setSupportActionBar(toolbar);
         setExitAnimEnable(false);
         mServerList = $(R.id.list_server);
         mDrawerlayout = $(R.id.drawer_layout);
@@ -62,7 +64,7 @@ abstract class HomeActivity extends BaseActivity implements NavigationView.OnNav
 
         //nav
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, mDrawerlayout, $(R.id.toolbar), R.string.search_open, R.string.search_close);
+                this, mDrawerlayout, toolbar, R.string.search_open, R.string.search_close);
         mDrawerlayout.addDrawerListener(toggle);
         toggle.syncState();
         NavigationView navigationView = $(R.id.nav_main);

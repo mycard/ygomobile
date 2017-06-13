@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -68,6 +67,7 @@ class CardSearchActivityImpl extends BaseActivity implements CardLoader.CallBack
             onBack();
         });
         toggle.syncState();
+        //
         mCardLoader = new CardLoader(this);
         mCardLoader.setCallBack(this);
         mCardSelector = new CardSearcher($(R.id.nav_view_list), mCardLoader);
@@ -90,12 +90,10 @@ class CardSearchActivityImpl extends BaseActivity implements CardLoader.CallBack
 
     protected void setListeners() {
         mListView.setOnItemClickListener((adapterView, view, pos, id) -> {
-            CardInfo cardInfo = mCardListAdapater.getItemById(id);
-            onCardClick(cardInfo, pos, mCardListAdapater);
+            onCardClick(pos, mCardListAdapater);
         });
         mListView.setOnItemLongClickListener((adapterView, view, pos, id) -> {
-            CardInfo cardInfo = mCardListAdapater.getItemById(id);
-            onCardLongClick(view, cardInfo, pos);
+            onCardLongClick(view, pos);
             return true;
         });
 
@@ -177,7 +175,6 @@ class CardSearchActivityImpl extends BaseActivity implements CardLoader.CallBack
         if (mDrawerlayout.isDrawerOpen(Constants.CARD_SEARCH_GRAVITY)) {
             mDrawerlayout.closeDrawer(Constants.CARD_SEARCH_GRAVITY);
         }
-//        Log.i("kk", "list=" + limitList);
         mCardListAdapater.setLimitList(limitList);
     }
 
@@ -212,12 +209,12 @@ class CardSearchActivityImpl extends BaseActivity implements CardLoader.CallBack
         }
     }
 
-    protected void onCardClick(CardInfo cardInfo, int pos, CardLisTe clt) {
+    protected void onCardClick(int pos, CardListProvider clt) {
         if (isShowDrawer()) return;
-        showCard(clt, pos);
+        showCard(clt, clt.getCard(pos), pos);
     }
 
-    protected void onCardLongClick(View view, CardInfo cardInfo, int pos) {
+    protected void onCardLongClick(View view, int pos) {
 
     }
 
@@ -228,17 +225,10 @@ class CardSearchActivityImpl extends BaseActivity implements CardLoader.CallBack
         return mDialog != null && mDialog.isShowing();
     }
 
-    protected void showCard(CardLisTe clt, final int position) {
-        CardInfo cardInfo = clt.getCard(position);
-        if (cardInfo == null) {
-            Log.i("CardInfo", "CardInfo为空");
-        } else {
-            Log.i("CardInfo", "CardInfo不为空");
-        }
-        // if (isShowCard()) return;
+    protected void showCard(CardListProvider provider,CardInfo cardInfo, final int position) {
         if (cardInfo != null) {
             if (mCardDetail == null) {
-                mCardDetail = new CardDetail(this, mImageLoader);
+                mCardDetail = new CardDetail(this, mImageLoader, mStringManager);
             }
             if (mDialog == null) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AppTheme_Dialog_Translucent);
@@ -248,7 +238,7 @@ class CardSearchActivityImpl extends BaseActivity implements CardLoader.CallBack
             if (!mDialog.isShowing()) {
                 mDialog.show();
             }
-            mCardDetail.bind(cardInfo, mStringManager, new CardDetail.OnClickListener() {
+            mCardDetail.bind(cardInfo, position, provider, new CardDetail.DefaultOnClickListener(){
                 @Override
                 public void onOpenUrl(CardInfo cardInfo) {
                     String uri = Constants.WIKI_SEARCH_URL + String.format("%08d", cardInfo.Code);
@@ -258,46 +248,6 @@ class CardSearchActivityImpl extends BaseActivity implements CardLoader.CallBack
                 @Override
                 public void onClose() {
                     mDialog.dismiss();
-                }
-
-                @Override
-                public void onAddSideCard(CardInfo cardInfo) {
-
-                }
-
-                @Override
-                public void onLastone(android.widget.Button lastone) {
-                    int i = position;
-                    if (i != 0) {
-                        i--;
-                    }
-                    if (position == 0) {
-                        Toast.makeText(getContext(), "已经是第一张啦", Toast.LENGTH_SHORT).show();
-                        lastone.setVisibility(View.GONE);
-                    } else {
-                        lastone.setVisibility(View.VISIBLE);
-                    }
-                    showCard(clt, position);
-                }
-
-                @Override
-                public void onNextone(android.widget.Button nextone) {
-                    int i = position;
-                    if (i != clt.getCardSize() - 1) {
-                        i++;
-                    }
-                    if (position == clt.getCardSize() - 1) {
-                        Toast.makeText(getContext(), "已经是最后一张啦", Toast.LENGTH_SHORT).show();
-                        nextone.setVisibility(View.GONE);
-                    } else {
-                        nextone.setVisibility(View.VISIBLE);
-                    }
-                    showCard(clt, position);
-                }
-
-                @Override
-                public void onAddMainCard(CardInfo cardInfo) {
-
                 }
             });
         }

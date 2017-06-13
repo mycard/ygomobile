@@ -47,7 +47,9 @@ import cn.garymb.ygomobile.ui.cards.deck.DeckLayoutManager;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.ui.activities.WebActivity;
 import cn.garymb.ygomobile.ui.plus.DialogPlus;
+
 import android.support.v7.widget.RecyclerViewItemListener;
+
 import cn.garymb.ygomobile.ui.plus.VUiKit;
 import cn.garymb.ygomobile.ui.adapters.SimpleSpinnerAdapter;
 import cn.garymb.ygomobile.ui.adapters.SimpleSpinnerItem;
@@ -276,7 +278,9 @@ class DeckManagerActivityImpl extends BaseCardsAcitivity implements RecyclerView
 //        if(isShowDrawer()){
 //            return;
 //        }
-        showCardDialog(cardInfo, pos);
+        if (cardInfo != null) {
+            showCardDialog(mCardListAdapater, cardInfo, pos);
+        }
     }
 
     @Override
@@ -307,10 +311,7 @@ class DeckManagerActivityImpl extends BaseCardsAcitivity implements RecyclerView
             return;
         }
         if (!Constants.DECK_SINGLE_PRESS_DRAG) {
-            DeckItem deckItem = mDeckAdapater.getItem(pos);
-            if (deckItem != null) {
-                showCardDialog(deckItem.getCardInfo(), pos);
-            }
+            showDeckCard(view, pos);
         }
     }
 
@@ -331,10 +332,14 @@ class DeckManagerActivityImpl extends BaseCardsAcitivity implements RecyclerView
             return;
         }
         if (Constants.DECK_SINGLE_PRESS_DRAG) {
-            DeckItem deckItem = mDeckAdapater.getItem(pos);
-            if (deckItem != null) {
-                showCardDialog(deckItem.getCardInfo(), pos);
-            }
+            showDeckCard(view, pos);
+        }
+    }
+
+    private void showDeckCard(View view, int pos) {
+        DeckItem deckItem = mDeckAdapater.getItem(pos);
+        if (deckItem != null && deckItem.getCardInfo() != null) {
+            showCardDialog(mDeckAdapater, deckItem.getCardInfo(), mDeckAdapater.getCardPosByView(pos));
         }
     }
 
@@ -347,11 +352,11 @@ class DeckManagerActivityImpl extends BaseCardsAcitivity implements RecyclerView
         return mDialog != null && mDialog.isShowing();
     }
 
-    protected void showCardDialog(CardInfo cardInfo, int pos) {
+    protected void showCardDialog(CardListProvider provider, CardInfo cardInfo, int pos) {
         if (cardInfo != null) {
             if (isShowCard()) return;
             if (mCardDetail == null) {
-                mCardDetail = new CardDetail(this, getImageLoader());
+                mCardDetail = new CardDetail(this, getImageLoader(), mStringManager);
             }
             mCardDetail.showAdd();
             if (mDialog == null) {
@@ -361,7 +366,7 @@ class DeckManagerActivityImpl extends BaseCardsAcitivity implements RecyclerView
             } else {
                 mDialog.show();
             }
-            mCardDetail.bind(cardInfo, mStringManager, new CardDetail.OnClickListener() {
+            mCardDetail.bind(cardInfo, pos, provider, new CardDetail.OnClickListener() {
                 @Override
                 public void onOpenUrl(CardInfo cardInfo) {
                     String uri = Constants.WIKI_SEARCH_URL + String.format("%08d", cardInfo.Code);
@@ -371,16 +376,6 @@ class DeckManagerActivityImpl extends BaseCardsAcitivity implements RecyclerView
                 @Override
                 public void onClose() {
                     mDialog.dismiss();
-                }
-
-                @Override
-                public void onLastone(Button lastone) {
-
-                }
-
-                @Override
-                public void onNextone(Button nextone) {
-
                 }
 
                 @Override

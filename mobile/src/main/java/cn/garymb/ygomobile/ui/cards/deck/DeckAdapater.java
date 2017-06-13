@@ -24,13 +24,14 @@ import cn.garymb.ygomobile.bean.DeckInfo;
 import cn.garymb.ygomobile.loader.CardLoader;
 import cn.garymb.ygomobile.loader.ImageLoader;
 import cn.garymb.ygomobile.lite.R;
+import cn.garymb.ygomobile.ui.cards.CardListProvider;
 import cn.garymb.ygomobile.utils.CardSort;
 import ocgcore.bean.LimitList;
 import ocgcore.enums.CardType;
 import ocgcore.enums.LimitType;
 
 
-public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
+public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> implements CardListProvider {
     private final List<DeckItem> mItems = new ArrayList<>();
     private Map<Long, Integer> mCount = new HashMap<>();
     private Context context;
@@ -179,6 +180,50 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
             }
         }
         return len;
+    }
+
+    @Override
+    public int getCardsCount() {
+        return mMainCount + mExtraCount + mSideCount;
+    }
+
+    @Override
+    public CardInfo getCard(int posotion) {
+        int count = mMainCount;
+        int index = 0;
+        if (posotion < count) {
+            index = DeckItem.MainStart + posotion;
+        }else {
+            count += mExtraCount;
+            if (posotion < count) {
+                index = DeckItem.ExtraStart + (posotion - mMainCount);
+            }else{
+                count += mSideCount;
+                if (posotion < count) {
+                    index = DeckItem.SideStart + (posotion - mMainCount - mExtraCount);
+                }
+            }
+        }
+        DeckItem deckItem = getItem(index);
+//        Log.d("CardDetail", "posotion=" + posotion + ",index=" + index+",main=" + mMainCount + ",extra=" + mExtraCount + ",side=" + mSideCount);
+        if (deckItem != null) {
+            return deckItem.getCardInfo();
+        }
+        return null;
+    }
+
+    public int getCardPosByView(int pos) {
+        //调整pos 前面的数量和当前的位置
+        int index;
+        if (pos < DeckItem.MainEnd) {
+            index = pos - DeckItem.MainStart;
+        } else if (pos < DeckItem.ExtraEnd) {
+            index = mMainCount + (pos - DeckItem.ExtraStart);
+        } else {
+            index = mMainCount + mExtraCount + (pos - DeckItem.SideStart);
+        }
+//        Log.d("CardDetail", "adapter " + pos + ",index=" + index + ",main=" + mMainCount + ",extra=" + mExtraCount + ",side=" + mSideCount);
+        return index;
     }
 
     private int sortExtra() {
@@ -401,7 +446,7 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> {
 
     private String getExtraString() {
 
-        return getString(R.string.deck_extra, mExtraCount, mExtraFusionCount, mExtraSynchroCount, mExtraXyzCount,mExtraLinkCount);
+        return getString(R.string.deck_extra, mExtraCount, mExtraFusionCount, mExtraSynchroCount, mExtraXyzCount, mExtraLinkCount);
     }
 
     private String getSideString() {

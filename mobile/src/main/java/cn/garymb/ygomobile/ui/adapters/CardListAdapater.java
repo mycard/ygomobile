@@ -7,19 +7,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import cn.garymb.ygomobile.bean.CardInfo;
-import cn.garymb.ygomobile.loader.ImageLoader;
-import cn.garymb.ygomobile.ui.cards.deck.ImageTop;
-import cn.garymb.ygomobile.ui.cards.CardLisTe;
 import cn.garymb.ygomobile.lite.R;
-
-import ocgcore.bean.LimitList;
+import cn.garymb.ygomobile.loader.ImageLoader;
+import cn.garymb.ygomobile.ui.cards.CardListProvider;
+import cn.garymb.ygomobile.ui.cards.deck.ImageTop;
 import ocgcore.StringManager;
+import ocgcore.bean.LimitList;
 import ocgcore.enums.CardType;
 import ocgcore.enums.LimitType;
 
-import static android.R.attr.id;
-
-public class CardListAdapater extends BaseAdapterPlus<CardInfo> implements CardLisTe{
+public class CardListAdapater extends BaseAdapterPlus<CardInfo> implements CardListProvider {
     private StringManager mStringManager;
     private ImageTop mImageTop;
     private OnAddCardListener mOnAddCardListener;
@@ -28,13 +25,13 @@ public class CardListAdapater extends BaseAdapterPlus<CardInfo> implements CardL
     private ImageLoader imageLoader;
 
     @Override
-    public int getCardSize() {
-        return getItems().size();
+    public int getCardsCount() {
+        return getCount();
     }
 
     @Override
     public CardInfo getCard(int posotion) {
-        return getItemById(id);
+        return getItem(posotion);
     }
 
     public interface OnAddCardListener {

@@ -117,7 +117,7 @@ public class CardInfo extends Card implements Parcelable {
 
     @Override
     public String toString() {
-        return "CardInfo{" + Code + Name + '}';
+        return "Card{" + Code +":"+ Name + '}';
     }
 
     @Override

@@ -139,7 +139,7 @@ public class ImageLoader implements Closeable {
         }
         resource.error(R.drawable.unknown);
         resource.override(Constants.CORE_SKIN_CARD_COVER_SIZE[0], Constants.CORE_SKIN_CARD_COVER_SIZE[1]);
-        resource.signature(new StringSignature(code + "_" + isBig));
+        resource.signature(new StringSignature(""+code));
         resource.into(new GlideDrawableImageViewTarget(imageview));
     }
 

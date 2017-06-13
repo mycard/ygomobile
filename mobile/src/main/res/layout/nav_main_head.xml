@@ -4,7 +4,7 @@
               android:layout_height="@dimen/nav_head_height"
               xmlns:tools="http://schemas.android.com/tools"
               android:paddingTop="24dp"
-              tools:showIn="@layout/activity_main"
+              tools:showIn="@layout/activity_home"
               android:orientation="vertical">
 
     <LinearLayout
