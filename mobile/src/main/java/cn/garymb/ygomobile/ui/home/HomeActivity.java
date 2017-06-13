@@ -48,8 +48,7 @@ import cn.garymb.ygomobile.ui.preference.SettingsActivity;
 
 import static cn.garymb.ygomobile.Constants.ALIPAY_URL;
 
-abstract class HomeActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener,
-        RecyclerViewItemListener.OnItemListener {
+abstract class HomeActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
     protected DrawerLayout mDrawerlayout;
     protected SwipeMenuRecyclerView mServerList;
     private ServerListAdapter mServerListAdapter;
@@ -88,7 +87,6 @@ abstract class HomeActivity extends BaseActivity implements NavigationView.OnNav
                 .setOnClickListener((v) -> {
                     openAliPay2Pay(ALIPAY_URL);
                 });
-        mServerList.addOnItemTouchListener(new RecyclerViewItemListener(mServerList, this));
         //event
         EventBus.getDefault().register(this);
     }
@@ -100,21 +98,23 @@ abstract class HomeActivity extends BaseActivity implements NavigationView.OnNav
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onServerInfoEvent(ServerInfoEvent messageEvent) {
-        if (messageEvent.delete) {
+    public void onServerInfoEvent(ServerInfoEvent event) {
+        if (event.delete) {
             DialogPlus dialogPlus = new DialogPlus(getContext());
             dialogPlus.setTitle(R.string.question);
             dialogPlus.setMessage(R.string.delete_server_info);
             dialogPlus.setMessageGravity(Gravity.CENTER_HORIZONTAL);
             dialogPlus.setLeftButtonListener((dialog, which) -> {
-                mServerListManager.delete(messageEvent.position);
+                mServerListManager.delete(event.position);
                 dialog.dismiss();
             });
             dialogPlus.setCancelable(false);
             dialogPlus.setCloseLinster(null);
             dialogPlus.show();
+        } else if (event.join) {
+            joinRoom(event.position);
         } else {
-            mServerListManager.showEditDialog(messageEvent.position);
+            mServerListManager.showEditDialog(event.position);
         }
     }
 
@@ -215,8 +215,7 @@ abstract class HomeActivity extends BaseActivity implements NavigationView.OnNav
     }
 
 
-    @Override
-    public void onItemClick(View view, int position) {
+    public void joinRoom(int position) {
         ServerInfo serverInfo = mServerListAdapter.getItem(position);
         if (serverInfo == null) {
             return;
@@ -293,16 +292,6 @@ abstract class HomeActivity extends BaseActivity implements NavigationView.OnNav
         builder.setOnCancelListener((dlg) -> {
         });
         builder.show();
-    }
-
-    @Override
-    public void onItemLongClick(View view, int pos) {
-
-    }
-
-    @Override
-    public void onItemDoubleClick(View view, int pos) {
-
     }
 
     void joinGame(ServerInfo serverInfo, String name) {

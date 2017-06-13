@@ -3,6 +3,7 @@ package cn.garymb.ygomobile.ui.events;
 public class ServerInfoEvent {
     public int position;
     public boolean delete;
+    public boolean join;
 
     public ServerInfoEvent() {
     }

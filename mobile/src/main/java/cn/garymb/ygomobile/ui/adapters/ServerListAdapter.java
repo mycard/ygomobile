@@ -1,6 +1,7 @@
 package cn.garymb.ygomobile.ui.adapters;
 
 import android.content.Context;
+import android.view.View;
 import android.view.ViewGroup;
 
 import org.greenrobot.eventbus.EventBus;
@@ -31,6 +32,14 @@ public class ServerListAdapter extends BaseRecyclerAdapterPlus<ServerInfo, Serve
     }
 
     public void bindMenu(ServerInfoViewHolder holder, int position) {
+        if (holder.contentView != null) {
+            holder.contentView.setOnClickListener((v) -> {
+                ServerInfoEvent event = new ServerInfoEvent(position, false);
+                event.join = true;
+                EventBus.getDefault().post(event);
+                holder.mMenuLayout.smoothCloseMenu();
+            });
+        }
         if (holder.btnEdit != null) {
             holder.btnEdit.setOnClickListener((v) -> {
                 EventBus.getDefault().post(new ServerInfoEvent(position, false));

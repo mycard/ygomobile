@@ -3,6 +3,7 @@ package cn.garymb.ygomobile.ui.home;
 import android.view.View;
 import android.widget.TextView;
 
+import com.tubb.smrv.SwipeHorizontalMenuLayout;
 import com.tubb.smrv.SwipeMenuLayout;
 
 import cn.garymb.ygomobile.lite.R;
@@ -18,9 +19,11 @@ public class ServerInfoViewHolder extends BaseRecyclerAdapterPlus.BaseViewHolder
         btnEdit = $(R.id.btn_edit);
         btnDelete = $(R.id.btn_delete);
         mMenuLayout = $(R.id.swipe_layout);
+        contentView = $(R.id.smContentView);
     }
 
-    public final SwipeMenuLayout mMenuLayout;
+    public final SwipeHorizontalMenuLayout mMenuLayout;
+    public final View contentView;
     public final TextView serverName;
     public final TextView userName;
     public final TextView serverIp;
