@@ -172,4 +172,6 @@
     <string name="download_image_error" formatted="false">共 %d 张图片下载失败</string>
     <string name="downloading_images_ok">图片下载完成</string>
     <string name="tip_istunning">游戏已运行</string>
+    <string name="edit">编辑</string>
+    <string name="delete">删除</string>
 </resources>

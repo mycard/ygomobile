@@ -548,7 +548,7 @@ class DeckManagerActivityImpl extends BaseCardsAcitivity implements RecyclerView
                 DialogPlus builder = new DialogPlus(this);
                 builder.setTitle(R.string.question);
                 builder.setMessage(R.string.question_keep_cur_deck);
-                builder.setMessageGravity(Gravity.CLIP_HORIZONTAL);
+                builder.setMessageGravity(Gravity.CENTER_HORIZONTAL);
                 builder.setLeftButtonListener((dlg, rs) -> {
                     dlg.dismiss();
                     inputDeckName(old);
@@ -570,7 +570,7 @@ class DeckManagerActivityImpl extends BaseCardsAcitivity implements RecyclerView
                 DialogPlus builder = new DialogPlus(this);
                 builder.setTitle(R.string.question);
                 builder.setMessage(R.string.question_clear_deck);
-                builder.setMessageGravity(Gravity.CLIP_HORIZONTAL);
+                builder.setMessageGravity(Gravity.CENTER_HORIZONTAL);
                 builder.setLeftButtonListener((dlg, rs) -> {
                     mDeckAdapater.setDeck(new DeckInfo());
                     mDeckAdapater.notifyDataSetChanged();
@@ -583,7 +583,7 @@ class DeckManagerActivityImpl extends BaseCardsAcitivity implements RecyclerView
                 DialogPlus builder = new DialogPlus(this);
                 builder.setTitle(R.string.question);
                 builder.setMessage(R.string.question_delete_deck);
-                builder.setMessageGravity(Gravity.CLIP_HORIZONTAL);
+                builder.setMessageGravity(Gravity.CENTER_HORIZONTAL);
                 builder.setLeftButtonListener((dlg, rs) -> {
                     if (mYdkFile != null && mYdkFile.exists()) {
                         mYdkFile.delete();

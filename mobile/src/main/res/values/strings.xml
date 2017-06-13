@@ -175,4 +175,6 @@
     <string name="download_image_error" formatted="false">Download fail %d</string>
     <string name="downloading_images_ok">Download images ok</string>
     <string name="tip_istunning">YGOPro is Running</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
 </resources>

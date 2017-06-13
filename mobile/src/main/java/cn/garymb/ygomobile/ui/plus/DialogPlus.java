@@ -70,6 +70,8 @@ public class DialogPlus {
         closeView.setOnClickListener((v) -> {
             if (clickListener != null) {
                 clickListener.onClick(mDialog, DialogInterface.BUTTON_NEGATIVE);
+            }else{
+                mDialog.dismiss();
             }
         });
         return this;
@@ -81,6 +83,8 @@ public class DialogPlus {
         mRight.setOnClickListener((v) -> {
             if (clickListener != null) {
                 clickListener.onClick(mDialog, DialogInterface.BUTTON_NEUTRAL);
+            }else{
+                mDialog.dismiss();
             }
         });
         return this;

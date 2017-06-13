@@ -38,4 +38,7 @@
     <dimen name="cardinfo_title_height">58dp</dimen>
 
     <dimen name="drag_rect">4dp</dimen>
+
+    <dimen name="item_menu_width">80dp</dimen>
+    <dimen name="item_menu_height">80dp</dimen>
 </resources>

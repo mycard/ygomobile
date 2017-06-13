@@ -1,7 +1,5 @@
 apply plugin: 'com.android.application'
 apply plugin: 'me.tatarka.retrolambda'
-apply plugin: 'com.jakewharton.butterknife'
-apply plugin: 'android-apt'
 
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
@@ -61,7 +59,5 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     //
     compile 'org.greenrobot:eventbus:3.0.0'
-    //
-    compile 'com.jakewharton:butterknife:8.4.0'
-    apt 'com.jakewharton:butterknife-compiler:8.4.0'
+    compile 'com.tubb.smrv:swipemenu-recyclerview:5.4.0'
 }
