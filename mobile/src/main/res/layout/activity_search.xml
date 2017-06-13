@@ -23,7 +23,7 @@
             <include
                 layout="@layout/content_toolbar"/>
 
-            <ListView
+            <com.tubb.smrv.SwipeMenuRecyclerView
                 android:id="@+id/list_cards"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

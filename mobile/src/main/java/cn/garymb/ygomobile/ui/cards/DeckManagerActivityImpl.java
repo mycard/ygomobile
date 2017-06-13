@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.RecyclerViewItemListener;
 import android.support.v7.widget.helper.ItemTouchHelper2;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -21,10 +22,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.io.IOException;
@@ -33,37 +37,33 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import cn.garymb.ygomobile.AppsSettings;
 import cn.garymb.ygomobile.Constants;
-import cn.garymb.ygomobile.ui.adapters.CardListAdapater;
 import cn.garymb.ygomobile.bean.CardInfo;
 import cn.garymb.ygomobile.bean.Deck;
 import cn.garymb.ygomobile.bean.DeckInfo;
-import cn.garymb.ygomobile.AppsSettings;
+import cn.garymb.ygomobile.lite.R;
+import cn.garymb.ygomobile.ui.activities.WebActivity;
+import cn.garymb.ygomobile.ui.adapters.SimpleSpinnerAdapter;
+import cn.garymb.ygomobile.ui.adapters.SimpleSpinnerItem;
 import cn.garymb.ygomobile.ui.cards.deck.DeckAdapater;
 import cn.garymb.ygomobile.ui.cards.deck.DeckItem;
 import cn.garymb.ygomobile.ui.cards.deck.DeckItemTouchHelper;
 import cn.garymb.ygomobile.ui.cards.deck.DeckItemType;
 import cn.garymb.ygomobile.ui.cards.deck.DeckLayoutManager;
-import cn.garymb.ygomobile.lite.R;
-import cn.garymb.ygomobile.ui.activities.WebActivity;
+import cn.garymb.ygomobile.ui.events.CardInfoEvent;
 import cn.garymb.ygomobile.ui.plus.DialogPlus;
-
-import android.support.v7.widget.RecyclerViewItemListener;
-
 import cn.garymb.ygomobile.ui.plus.VUiKit;
-import cn.garymb.ygomobile.ui.adapters.SimpleSpinnerAdapter;
-import cn.garymb.ygomobile.ui.adapters.SimpleSpinnerItem;
 import cn.garymb.ygomobile.utils.IOUtils;
 import cn.garymb.ygomobile.utils.ShareUtil;
-import ocgcore.bean.LimitList;
 import ocgcore.LimitManager;
 import ocgcore.StringManager;
+import ocgcore.bean.LimitList;
 import ocgcore.enums.LimitType;
 
 import static cn.garymb.ygomobile.Constants.YDK_FILE_EX;
 
-class DeckManagerActivityImpl extends BaseCardsAcitivity implements RecyclerViewItemListener.OnItemListener,
-        CardListAdapater.OnAddCardListener, ItemTouchHelper2.OnDragListner {
+class DeckManagerActivityImpl extends BaseCardsAcitivity implements RecyclerViewItemListener.OnItemListener, ItemTouchHelper2.OnDragListner {
     private RecyclerView mRecyclerView;
     private DeckAdapater mDeckAdapater;
     private AppsSettings mSettings = AppsSettings.get();
@@ -82,7 +82,6 @@ class DeckManagerActivityImpl extends BaseCardsAcitivity implements RecyclerView
         super.onCreate(savedInstanceState);
         mDeckSpinner = $(R.id.toolbar_list);
         mLimitSpinner = $(R.id.sp_limit_list);
-        mCardListAdapater.setOnAddCardListener(this);
         mRecyclerView.setPadding(mRecyclerView.getPaddingLeft(), 0, mRecyclerView.getPaddingRight(), mRecyclerView.getPaddingBottom());
         mRecyclerView.setAdapter((mDeckAdapater = new DeckAdapater(this, mRecyclerView, getImageLoader())));
         mRecyclerView.setLayoutManager(new DeckLayoutManager(this, Constants.DECK_WIDTH_COUNT));
@@ -154,16 +153,18 @@ class DeckManagerActivityImpl extends BaseCardsAcitivity implements RecyclerView
             mDeckAdapater.setDeck(rs);
             mDeckAdapater.notifyDataSetChanged();
         });
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
     }
 
     @Override
     public void onLimitListChanged(LimitList limitList) {
 
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
     }
 
     @Override
@@ -262,22 +263,10 @@ class DeckManagerActivityImpl extends BaseCardsAcitivity implements RecyclerView
     }
 
     @Override
-    public void onAdd(int pos) {
-        CardInfo cardInfo = mCardListAdapater.getItem(pos);
-        if (cardInfo != null) {
-            if (mDeckAdapater.getMainCount() >= Constants.DECK_MAIN_MAX) {
-                addSideCard(cardInfo);
-            } else {
-                addMainCard(cardInfo);
-            }
+    protected void onCardClick(View view, CardInfo cardInfo, int pos) {
+        if (mCardListAdapater.isShowMenu(view)) {
+            return;
         }
-    }
-
-    @Override
-    protected void onCardClick(CardInfo cardInfo, int pos) {
-//        if(isShowDrawer()){
-//            return;
-//        }
         if (cardInfo != null) {
             showCardDialog(mCardListAdapater, cardInfo, pos);
         }
@@ -285,7 +274,20 @@ class DeckManagerActivityImpl extends BaseCardsAcitivity implements RecyclerView
 
     @Override
     protected void onCardLongClick(View view, CardInfo cardInfo, int pos) {
+        mCardListAdapater.showMenu(view);
+    }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onCardInfoEvent(CardInfoEvent event) {
+        int pos = event.position;
+        CardInfo cardInfo = mCardListAdapater.getItem(pos);
+        if (cardInfo == null) {
+            return;
+        } else if (event.toMain) {
+            addMainCard(cardInfo);
+        } else {
+            addSideCard(cardInfo);
+        }
     }
 
     @Override

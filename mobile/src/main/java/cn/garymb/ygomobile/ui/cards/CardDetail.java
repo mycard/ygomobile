@@ -177,7 +177,7 @@ public class CardDetail extends BaseAdapterPlus.BaseViewHolder {
     }
 
     public void bind(CardInfo cardInfo, final int position, final CardListProvider provider, final OnClickListener listener) {
-        Log.d("CardDetail", "bind " + position+",cardInfo="+cardInfo);
+//        Log.d("CardDetail", "bind " + position+",cardInfo="+cardInfo);
         if (cardInfo != null) {
             setCardInfo(cardInfo);
         }
@@ -214,18 +214,35 @@ public class CardDetail extends BaseAdapterPlus.BaseViewHolder {
 
         lastone.setOnClickListener((v) -> {
             if (position == 0) {
+                lastone.setVisibility(View.INVISIBLE);
                 Toast.makeText(getContext(), "已经是第一张啦", Toast.LENGTH_SHORT).show();
             } else {
+                nextone.setVisibility(View.VISIBLE);
                 final int index = position - 1;
                 bind(provider.getCard(index), index, provider, listener);
+                if(position == 1){
+                    lastone.setVisibility(View.INVISIBLE);
+                    Toast.makeText(getContext(), "已经是第一张啦", Toast.LENGTH_SHORT).show();
+                }else{
+                    lastone.setVisibility(View.VISIBLE);
+                }
             }
         });
 
         nextone.setOnClickListener((v) -> {
+            lastone.setVisibility(View.VISIBLE);
             if (position < provider.getCardsCount() - 1) {
                 final int index = position + 1;
+                lastone.setVisibility(View.VISIBLE);
                 bind(provider.getCard(index), index, provider, listener);
+                if(position == provider.getCardsCount() - 1){
+                    nextone.setVisibility(View.INVISIBLE);
+                    Toast.makeText(getContext(), "已经是最后一张啦", Toast.LENGTH_SHORT).show();
+                }else{
+                    nextone.setVisibility(View.VISIBLE);
+                }
             } else {
+                nextone.setVisibility(View.INVISIBLE);
                 Toast.makeText(getContext(), "已经是最后一张啦", Toast.LENGTH_SHORT).show();
             }
         });

@@ -7,14 +7,14 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.FastScrollLinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.RecyclerViewItemListener;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AbsListView;
-import android.widget.ListView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
@@ -22,23 +22,23 @@ import java.io.IOException;
 import java.util.List;
 
 import cn.garymb.ygomobile.Constants;
-import cn.garymb.ygomobile.ui.adapters.CardListAdapater;
 import cn.garymb.ygomobile.bean.CardInfo;
+import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.loader.CardLoader;
 import cn.garymb.ygomobile.loader.ImageLoader;
-import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.ui.activities.BaseActivity;
 import cn.garymb.ygomobile.ui.activities.WebActivity;
+import cn.garymb.ygomobile.ui.adapters.CardListAdapter;
 import cn.garymb.ygomobile.ui.plus.VUiKit;
-import ocgcore.bean.LimitList;
 import ocgcore.LimitManager;
 import ocgcore.StringManager;
+import ocgcore.bean.LimitList;
 
 class CardSearchActivityImpl extends BaseActivity implements CardLoader.CallBack {
     protected DrawerLayout mDrawerlayout;
-    private ListView mListView;
+    private RecyclerView mListView;
     protected CardSearcher mCardSelector;
-    protected CardListAdapater mCardListAdapater;
+    protected CardListAdapter mCardListAdapater;
     protected CardLoader mCardLoader;
     protected boolean isLoad = false;
     protected StringManager mStringManager = StringManager.get();
@@ -54,9 +54,10 @@ class CardSearchActivityImpl extends BaseActivity implements CardLoader.CallBack
         enableBackHome();
         mDrawerlayout = $(R.id.drawer_layout);
         mImageLoader = new ImageLoader(this);
-        mListView = (ListView) findViewById(R.id.list_cards);
-        mCardListAdapater = new CardListAdapater(this, mImageLoader);
+        mListView = $(R.id.list_cards);
+        mCardListAdapater = new CardListAdapter(this, mImageLoader);
         mCardListAdapater.setItemBg(true);
+        mListView.setLayoutManager(new FastScrollLinearLayoutManager(this));
         mListView.setAdapter(mCardListAdapater);
 //
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -89,33 +90,37 @@ class CardSearchActivityImpl extends BaseActivity implements CardLoader.CallBack
     }
 
     protected void setListeners() {
-        mListView.setOnItemClickListener((adapterView, view, pos, id) -> {
-            onCardClick(pos, mCardListAdapater);
-        });
-        mListView.setOnItemLongClickListener((adapterView, view, pos, id) -> {
-            onCardLongClick(view, pos);
-            return true;
-        });
-
-        mListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+        mListView.addOnItemTouchListener(new RecyclerViewItemListener(mListView, new RecyclerViewItemListener.OnItemListener() {
             @Override
-            public void onScrollStateChanged(AbsListView absListView, int scrollState) {
-                switch (scrollState) {
-                    case SCROLL_STATE_IDLE:
-                        Glide.with(getContext()).resumeRequests();
-                        break;
-                    case SCROLL_STATE_TOUCH_SCROLL:
-                        Glide.with(getContext()).pauseRequests();
-                        break;
-                    case SCROLL_STATE_FLING:
-                        Glide.with(getContext()).resumeRequests();
-                        break;
-                }
+            public void onItemClick(View view, int pos) {
+                onCardClick(pos, mCardListAdapater);
             }
 
             @Override
-            public void onScroll(AbsListView absListView, int i, int i1, int i2) {
+            public void onItemLongClick(View view, int pos) {
+                onCardLongClick(view, pos);
+            }
 
+            @Override
+            public void onItemDoubleClick(View view, int pos) {
+
+            }
+        }));
+        mListView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                switch (newState) {
+                    case RecyclerView.SCROLL_STATE_IDLE:
+                        Glide.with(getContext()).resumeRequests();
+                        break;
+                    case RecyclerView.SCROLL_STATE_DRAGGING:
+                        Glide.with(getContext()).pauseRequests();
+                        break;
+                    case RecyclerView.SCROLL_STATE_SETTLING:
+                        Glide.with(getContext()).resumeRequests();
+                        break;
+                }
             }
         });
     }
@@ -149,7 +154,7 @@ class CardSearchActivityImpl extends BaseActivity implements CardLoader.CallBack
         mCardListAdapater.set(cardInfos);
         mCardListAdapater.notifyDataSetChanged();
         if (cardInfos != null && cardInfos.size() > 0) {
-            mListView.setSelection(0);
+            mListView.smoothScrollToPosition(0);
         }
     }
 

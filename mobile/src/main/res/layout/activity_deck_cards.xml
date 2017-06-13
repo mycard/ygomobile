@@ -40,6 +40,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/left"
+                android:paddingTop="2dp"
+                android:paddingLeft="4dp"
+                android:paddingRight="4dp"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -57,13 +60,13 @@
                         />
                 </LinearLayout>
 
-                <ListView
+                <com.tubb.smrv.SwipeMenuRecyclerView
                     android:id="@+id/list_cards"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginRight="8dp"
                     android:divider="@android:color/transparent"
                     android:dividerHeight="4dp"
+                    android:padding="2dp"
                     android:scrollbars="none"/>
             </LinearLayout>
         </LinearLayout>
