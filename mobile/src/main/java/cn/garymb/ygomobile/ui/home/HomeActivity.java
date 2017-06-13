@@ -9,10 +9,16 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerViewItemListener;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.tubb.smrv.SwipeMenuRecyclerView;
@@ -21,12 +27,19 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.List;
+
+import cn.garymb.ygodata.YGOGameOptions;
+import cn.garymb.ygomobile.AppsSettings;
 import cn.garymb.ygomobile.Constants;
+import cn.garymb.ygomobile.YGOStarter;
+import cn.garymb.ygomobile.bean.ServerInfo;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.ui.activities.AboutActivity;
 import cn.garymb.ygomobile.ui.activities.BaseActivity;
 import cn.garymb.ygomobile.ui.activities.WebActivity;
 import cn.garymb.ygomobile.ui.adapters.ServerListAdapter;
+import cn.garymb.ygomobile.ui.adapters.SimpleListAdapter;
 import cn.garymb.ygomobile.ui.cards.CardSearchAcitivity;
 import cn.garymb.ygomobile.ui.cards.DeckManagerActivity;
 import cn.garymb.ygomobile.ui.events.ServerInfoEvent;
@@ -35,7 +48,8 @@ import cn.garymb.ygomobile.ui.preference.SettingsActivity;
 
 import static cn.garymb.ygomobile.Constants.ALIPAY_URL;
 
-abstract class HomeActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
+abstract class HomeActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener,
+        RecyclerViewItemListener.OnItemListener {
     protected DrawerLayout mDrawerlayout;
     protected SwipeMenuRecyclerView mServerList;
     private ServerListAdapter mServerListAdapter;
@@ -74,6 +88,7 @@ abstract class HomeActivity extends BaseActivity implements NavigationView.OnNav
                 .setOnClickListener((v) -> {
                     openAliPay2Pay(ALIPAY_URL);
                 });
+        mServerList.addOnItemTouchListener(new RecyclerViewItemListener(mServerList, this));
         //event
         EventBus.getDefault().register(this);
     }
@@ -199,6 +214,105 @@ abstract class HomeActivity extends BaseActivity implements NavigationView.OnNav
         }
     }
 
+
+    @Override
+    public void onItemClick(View view, int position) {
+        ServerInfo serverInfo = mServerListAdapter.getItem(position);
+        if (serverInfo == null) {
+            return;
+        }
+        //进入房间
+        DialogPlus builder = new DialogPlus(getContext());
+        builder.setTitle(R.string.intput_room_name);
+        builder.setView(R.layout.dialog_room_name);
+        EditText editText = builder.findViewById(R.id.room_name);
+        ListView listView = builder.findViewById(R.id.room_list);
+        SimpleListAdapter simpleListAdapter = new SimpleListAdapter(getContext());
+        simpleListAdapter.set(AppsSettings.get().getLastRoomList());
+        listView.setAdapter(simpleListAdapter);
+        listView.setOnItemClickListener((a, v, pos, index) -> {
+//                builder.dismiss();
+            String name = simpleListAdapter.getItemById(index);
+            editText.setText(name);
+//                joinGame(serverInfo, name);
+        });
+        editText.setOnEditorActionListener((v, actionId,
+                                            event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                builder.dismiss();
+                String name = editText.getText().toString();
+                if (!TextUtils.isEmpty(name)) {
+                    List<String> items = simpleListAdapter.getItems();
+                    int index = items.indexOf(name);
+                    if (index >= 0) {
+                        items.remove(index);
+                        items.add(0, name);
+                    } else {
+                        items.add(0, name);
+                    }
+                    AppsSettings.get().setLastRoomList(items);
+                    simpleListAdapter.notifyDataSetChanged();
+                }
+                joinGame(serverInfo, name);
+                return true;
+            }
+            return false;
+        });
+        listView.setOnItemLongClickListener((a, v, i, index) -> {
+            String name = simpleListAdapter.getItemById(index);
+            int pos = simpleListAdapter.findItem(name);
+            if (pos >= 0) {
+                simpleListAdapter.remove(pos);
+                simpleListAdapter.notifyDataSetChanged();
+                AppsSettings.get().setLastRoomList(simpleListAdapter.getItems());
+            }
+            return true;
+        });
+        builder.setLeftButtonText(R.string.join_game);
+        builder.setLeftButtonListener((dlg, i) -> {
+            dlg.dismiss();
+            //保存名字
+            String name = editText.getText().toString();
+            if (!TextUtils.isEmpty(name)) {
+                List<String> items = simpleListAdapter.getItems();
+                int index = items.indexOf(name);
+                if (index >= 0) {
+                    items.remove(index);
+                    items.add(0, name);
+                } else {
+                    items.add(0, name);
+                }
+                AppsSettings.get().setLastRoomList(items);
+                simpleListAdapter.notifyDataSetChanged();
+            }
+            joinGame(serverInfo, name);
+        });
+        builder.setCloseLinster((dlg, vs) -> {
+            dlg.dismiss();
+        });
+        builder.setOnCancelListener((dlg) -> {
+        });
+        builder.show();
+    }
+
+    @Override
+    public void onItemLongClick(View view, int pos) {
+
+    }
+
+    @Override
+    public void onItemDoubleClick(View view, int pos) {
+
+    }
+
+    void joinGame(ServerInfo serverInfo, String name) {
+        YGOGameOptions options = new YGOGameOptions();
+        options.mServerAddr = serverInfo.getServerAddr();
+        options.mUserName = serverInfo.getPlayerName();
+        options.mPort = serverInfo.getPort();
+        options.mRoomName = name;
+        YGOStarter.startGame(this, options);
+    }
 
     protected abstract void openGame();
 

@@ -40,7 +40,7 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
 
     </style>
-    <style name="AppTheme.Dialog" parent="Theme.AppCompat.Dialog">
+    <style name="AppTheme.Dialog" parent="Theme.AppCompat.Dialog.Alert">
 
     </style>
     <style name="ProcessDialog" parent="AppTheme.Dialog">
