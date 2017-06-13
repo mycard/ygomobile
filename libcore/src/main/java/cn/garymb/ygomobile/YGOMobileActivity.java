@@ -296,18 +296,13 @@ public class YGOMobileActivity extends NativeActivity implements
     ///////////////////C++
 
     @Override
-    public void toggleOverlayView(boolean isShow) {
+    public void toggleOverlayView(final boolean isShow) {
         if (mOverlayShowRequest != isShow) {
-            handler.post(() -> {
-//                mOverlayShowRequest = isShow;
-//                if (isShow) {
-//                    mOverlayView.showAtScreen(0, 0);
-//                    mChainOverlayView.showAtScreen(sChainControlXPostion,
-//                            sChainControlYPostion);
-//                } else {
-//                    mOverlayView.removeFromScreen();
-//                    mChainOverlayView.removeFromScreen();
-//                }
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    mOverlayShowRequest = isShow;
+                }
             });
         }
     }
@@ -324,42 +319,51 @@ public class YGOMobileActivity extends NativeActivity implements
     }
 
     @Override
-    public void toggleIME(String hint, boolean isShow) {
-        handler.post(() -> {
-            if (isShow) {
+    public void toggleIME(final String hint, final boolean isShow) {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                if (isShow) {
 //                if (mOverlayShowRequest) {
 //                    mOverlayView.hide();
 //                    mChainOverlayView.hide();
 //                }
-                mGlobalEditText.fillContent(hint);
-                mGlobalEditText.showAtLocation(mContentView,
-                        Gravity.BOTTOM, 0, 0);
-            } else {
-                mGlobalEditText.dismiss();
+                    mGlobalEditText.fillContent(hint);
+                    mGlobalEditText.showAtLocation(mContentView,
+                            Gravity.BOTTOM, 0, 0);
+                } else {
+                    mGlobalEditText.dismiss();
+                }
             }
         });
     }
 
     @Override
-    public void showComboBoxCompat(String[] items, boolean isShow, int mode) {
-        handler.post(() -> {
-            mCompatGUIMode = mode;
-            if (DEBUG)
-                Log.i(TAG, "showComboBoxCompat： isShow = " + isShow);
-            if (isShow) {
-                mGlobalComboBox.fillContent(items);
-                mGlobalComboBox.showAtLocation(mContentView,
-                        Gravity.BOTTOM, 0, 0);
+    public void showComboBoxCompat(final String[] items, final boolean isShow, final int mode) {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                mCompatGUIMode = mode;
+                if (DEBUG)
+                    Log.i(TAG, "showComboBoxCompat： isShow = " + isShow);
+                if (isShow) {
+                    mGlobalComboBox.fillContent(items);
+                    mGlobalComboBox.showAtLocation(mContentView,
+                            Gravity.BOTTOM, 0, 0);
+                }
             }
         });
     }
 
     @Override
     public void performHapticFeedback() {
-        handler.post(() -> {
-            mContentView.performHapticFeedback(
-                    HapticFeedbackConstants.LONG_PRESS,
-                    HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                mContentView.performHapticFeedback(
+                        HapticFeedbackConstants.LONG_PRESS,
+                        HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+            }
         });
     }
 

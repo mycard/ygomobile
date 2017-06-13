@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="StringFormatInvalid"
+    >
     <string name="app_name">YGOMobile</string>
     <string name="action_settings">设置</string>
     <string name="action_game">启动游戏</string>

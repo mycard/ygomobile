@@ -75,6 +75,7 @@ import java.util.List;
  * Most of the time, you only need to override <code>onChildDraw</code> but due to limitations of
  * platform prior to Honeycomb, you may need to implement <code>onChildDrawOver</code> as well.
  */
+@SuppressWarnings("RestrictedApi")
 public class ItemTouchHelper2 extends RecyclerView.ItemDecoration
         implements RecyclerView.OnChildAttachStateChangeListener {
     public interface OnDragListner {

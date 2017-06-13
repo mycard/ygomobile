@@ -46,7 +46,7 @@ import cn.garymb.ygomobile.utils.NetUtils;
 import static cn.garymb.ygomobile.Constants.ACTION_RELOAD;
 import static cn.garymb.ygomobile.Constants.ALIPAY_URL;
 
-public class MainActivityImpl extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
+class MainActivityImpl extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
     private boolean enableStart;
     private RecyclerView mServerList;
     private AppsSettings mAppsSettings;

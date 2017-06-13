@@ -5,14 +5,13 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.widget.Toast;
 
-import com.squareup.okhttp.OkHttpClient;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.Response;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URI;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -42,7 +41,6 @@ public class ImageUpdater implements DialogInterface.OnCancelListener {
     private int mDownloading = 0;
     private final List<Item> mCardStatus = new ArrayList<>();
     private ExecutorService mExecutorService = Executors.newFixedThreadPool(SubThreads);
-    private OkHttpClient mOkHttpClient;
     private ProgressDialog mDialog;
     private int mIndex;
     private int mCount;
@@ -57,9 +55,6 @@ public class ImageUpdater implements DialogInterface.OnCancelListener {
     public ImageUpdater(Context context) {
         mContext = context;
         mCardLoader = new CardLoader(context);
-        mOkHttpClient = new OkHttpClient();
-        mOkHttpClient.setConnectTimeout(30, TimeUnit.SECONDS);
-        mOkHttpClient.setReadTimeout(30, TimeUnit.SECONDS);
         mPicsPath = new File(AppsSettings.get().getResourcePath(), Constants.CORE_IMAGE_PATH);
     }
 
@@ -86,7 +81,7 @@ public class ImageUpdater implements DialogInterface.OnCancelListener {
         mStop = false;
         mError = 0;
         if (mDialog != null) {
-            if(!mDialog.isShowing()) {
+            if (!mDialog.isShowing()) {
                 mDialog.show();
             }
         } else {
@@ -94,13 +89,13 @@ public class ImageUpdater implements DialogInterface.OnCancelListener {
             mDialog.setOnCancelListener(this);
             mDialog.show();
         }
-        VUiKit.defer().when(()->{
+        VUiKit.defer().when(() -> {
             synchronized (mCardStatus) {
                 if (mCardStatus.size() == 0) {
                     loadCardsLocked();
                 }
             }
-        }).done((res)->{
+        }).done((res) -> {
             File zip = new File(AppsSettings.get().getResourcePath(), Constants.CORE_PICS_ZIP);
             if (mZipFile == null) {
                 if (zip.exists()) {
@@ -251,25 +246,33 @@ public class ImageUpdater implements DialogInterface.OnCancelListener {
     private boolean download(String url, File file) {
         FileOutputStream outputStream = null;
         InputStream inputStream = null;
-        Request request = new Request.Builder().url(url).build();
+        HttpURLConnection mConnection = null;
         boolean ok = false;
         try {
-            Response response = mOkHttpClient.newCall(request).execute();
-            if (response.isSuccessful()) {
-                inputStream = response.body().byteStream();
+            mConnection = (HttpURLConnection) new URL(url).openConnection();
+            mConnection.setConnectTimeout(30 * 1000);
+            mConnection.setReadTimeout(15 * 1000);
+            mConnection.setUseCaches(false);
+            mConnection.connect();
+            if (mConnection.getResponseCode() == 200) {
+                inputStream = mConnection.getInputStream();
                 outputStream = new FileOutputStream(file);
                 byte[] tmp = new byte[8192];
                 int len;
                 while ((len = inputStream.read(tmp)) != -1) {
                     outputStream.write(tmp, 0, len);
                 }
+                outputStream.flush();
                 ok = true;
             }
         } catch (IOException e) {
-            e.printStackTrace();
+
         } finally {
             IOUtils.close(inputStream);
             IOUtils.close(outputStream);
+            if (mConnection != null) {
+                mConnection.disconnect();
+            }
         }
         return ok;
     }
