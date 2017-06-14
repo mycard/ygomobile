@@ -5,108 +5,133 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import cn.garymb.ygomobile.lite.R;
 
-public class DialogPlus {
+public class DialogPlus extends Dialog {
     private Context context;
-    private AlertDialog.Builder mBuilder;
     private LayoutInflater mLayoutInflater;
     private View mView;
+    //
     private TextView mTitleView;
     private View closeView;
     private FrameLayout mFrameLayout;
     private Button mLeft;
-    private Dialog mDialog;
-    private View mCancelView;
     private Button mRight;
     private View mContentView;
-    private int mMaxHeight;
-    private String mUrl;
+    private int mMaxHeight, mMaxWidth;
+    private String mUrl, mHtml;
+    private View mCancelLayout, mButtonLayout, mTitleLayout;
     private WebViewPlus mWebView;
+    private final GestureDetector mGestureDetector;
+    private GestureDetector.OnGestureListener mOnGestureListener;
 
     public DialogPlus(Context context) {
+        this(context, R.style.AppTheme_Dialog_Translucent);
+    }
+
+    public DialogPlus(Context context, int style) {
+        super(context, style);
         this.context = context;
-        mBuilder = new AlertDialog.Builder(context, R.style.AppTheme_Dialog_Translucent);
+        this.mGestureDetector = new GestureDetector(context, new ViewGestureListener());
         mMaxHeight = (int) (context.getResources().getDisplayMetrics().heightPixels * 0.7f);
+        mMaxWidth = (int) (context.getResources().getDisplayMetrics().widthPixels * 0.8f);
         mLayoutInflater = LayoutInflater.from(context);
         mView = mLayoutInflater.inflate(R.layout.dialog_plus_base, null);
-        mBuilder.setView(mView);
-        mTitleView = bind(R.id.title);
-        closeView = bind(R.id.close);
-        mFrameLayout = bind(R.id.container);
-        mLeft = bind(R.id.button_ok);
-        mRight = bind(R.id.button_cancel);
-        mCancelView = bind(R.id.space_cancel);
+        super.setContentView(mView);
+        mTitleView = $(R.id.title);
+        closeView = $(R.id.close);
+        mFrameLayout = $(R.id.container);
+        mLeft = $(R.id.button_ok);
+        mRight = $(R.id.button_cancel);
+        mCancelLayout = $(R.id.layout_cancel);
+        mButtonLayout = $(R.id.layout_button);
+        mTitleLayout = $(R.id.layout_title);
         setCloseLinster((dlg, id) -> {
             dlg.dismiss();
         });
     }
 
+    public void setOnGestureListener(GestureDetector.OnGestureListener onGestureListener) {
+        mOnGestureListener = onGestureListener;
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        return mGestureDetector.onTouchEvent(event);
+    }
+
     public DialogPlus hideButton() {
-        mLeft.setVisibility(View.GONE);
-        mRight.setVisibility(View.GONE);
+        if (mButtonLayout != null) {
+            mButtonLayout.setVisibility(View.GONE);
+        }
         return this;
     }
 
-    public DialogPlus setCancelable(boolean cancelable) {
-        mBuilder.setCancelable(cancelable);
+    public DialogPlus hideTitleBar() {
+        if (mTitleLayout != null) {
+            mTitleLayout.setVisibility(View.GONE);
+        }
         return this;
-    }
-
-    public boolean isShowing() {
-        return mDialog != null && mDialog.isShowing();
     }
 
     public DialogPlus setCloseLinster(DialogInterface.OnClickListener clickListener) {
-        closeView.setOnClickListener((v) -> {
-            if (clickListener != null) {
-                clickListener.onClick(mDialog, DialogInterface.BUTTON_NEGATIVE);
-            }else{
-                mDialog.dismiss();
-            }
-        });
+        if (closeView != null) {
+            closeView.setOnClickListener((v) -> {
+                if (clickListener != null) {
+                    clickListener.onClick(this, DialogInterface.BUTTON_NEGATIVE);
+                } else {
+                    dismiss();
+                }
+            });
+        }
         return this;
     }
 
     public DialogPlus setRightButtonListener(DialogInterface.OnClickListener clickListener) {
-        mCancelView.setVisibility(View.VISIBLE);
-        mRight.setVisibility(View.VISIBLE);
-        mRight.setOnClickListener((v) -> {
-            if (clickListener != null) {
-                clickListener.onClick(mDialog, DialogInterface.BUTTON_NEUTRAL);
-            }else{
-                mDialog.dismiss();
-            }
-        });
+        if (mRight != null) {
+            mCancelLayout.setVisibility(View.VISIBLE);
+            mRight.setVisibility(View.VISIBLE);
+            mRight.setOnClickListener((v) -> {
+                if (clickListener != null) {
+                    clickListener.onClick(this, DialogInterface.BUTTON_NEUTRAL);
+                } else {
+                    dismiss();
+                }
+            });
+        }
         return this;
     }
 
     public DialogPlus setLeftButtonListener(DialogInterface.OnClickListener clickListener) {
-        mLeft.setVisibility(View.VISIBLE);
-        mLeft.setOnClickListener((v) -> {
-            if (clickListener != null) {
-                clickListener.onClick(mDialog, DialogInterface.BUTTON_POSITIVE);
-            }
-        });
+        if (mLeft != null) {
+            mLeft.setVisibility(View.VISIBLE);
+            mLeft.setOnClickListener((v) -> {
+                if (clickListener != null) {
+                    clickListener.onClick(this, DialogInterface.BUTTON_POSITIVE);
+                } else {
+                    dismiss();
+                }
+            });
+        }
         return this;
     }
 
-    public DialogPlus setOnCancelListener(DialogInterface.OnCancelListener clickListener) {
-        mBuilder.setOnCancelListener(clickListener);
-        return this;
-    }
-
-    public DialogPlus setTitle(int id) {
-        return setTitle(context.getString(id));
+    @Override
+    public void setTitle(int id) {
+        setTitle(context.getString(id));
     }
 
     public DialogPlus setMessage(int id) {
@@ -138,9 +163,11 @@ public class DialogPlus {
     }
 
     public DialogPlus setRightButtonText(String text) {
-        mRight.setVisibility(View.VISIBLE);
-        mRight.setText(text);
-        mCancelView.setVisibility(View.VISIBLE);
+        if (mRight != null) {
+            mCancelLayout.setVisibility(View.VISIBLE);
+            mRight.setVisibility(View.VISIBLE);
+            mRight.setText(text);
+        }
         return this;
     }
 
@@ -149,99 +176,158 @@ public class DialogPlus {
     }
 
     public DialogPlus setLeftButtonText(String text) {
-        mLeft.setText(text);
+        if (mLeft != null) {
+            mLeft.setVisibility(View.VISIBLE);
+            mLeft.setText(text);
+        }
         return this;
     }
 
-    public DialogPlus setView(int id) {
+    public void setView(int id) {
         View view = mLayoutInflater.inflate(id, null);
-        return setContentView(view);
+        setView(view);
+    }
+
+    public DialogPlus setView(View view) {
+        super.setContentView(view);
+        mContentView = view;
+        mView = null;
+        mTitleView = null;
+        closeView = null;
+        mFrameLayout = null;
+        mLeft = null;
+        mRight = null;
+        mCancelLayout = null;
+        mButtonLayout = null;
+        mTitleLayout = null;
+        return this;
+    }
+
+    @Override
+    public void setContentView(int id) {
+        View view = mLayoutInflater.inflate(id, null);
+        setContentView(view);
+    }
+
+    @Override
+    public void setContentView(View view) {
+        this.mContentView = view;
+        if (mFrameLayout != null) {
+            mFrameLayout.removeAllViews();
+            mFrameLayout.addView(view);
+        }
+    }
+
+    @Override
+    public void show() {
+        super.show();
+        if (mWebView != null)
+            if (!TextUtils.isEmpty(mUrl)) {
+                mWebView.loadUrl(mUrl);
+            } else if (!TextUtils.isEmpty(mHtml)) {
+                mWebView.loadData(mHtml, "text/html", "UTF-8");
+            }
+    }
+
+    private <T extends View> T $(int id) {
+        return (T) mView.findViewById(id);
+    }
+
+    public <T extends View> T bind(int id) {
+        return (T) mContentView.findViewById(id);
     }
 
     public View getContentView() {
         return mContentView;
     }
 
-    public DialogPlus setView(View view) {
-        setContentView(view);
-        return this;
+    public WebViewPlus getWebView() {
+        return mWebView;
     }
 
-    public DialogPlus setContentView(int id) {
-        View view = mLayoutInflater.inflate(id, null);
-        return setContentView(view);
-    }
-
-    public DialogPlus setContentView(View view) {
-        this.mContentView = view;
-        mFrameLayout.removeAllViews();
-        mFrameLayout.addView(view);
-        return this;
-    }
-
-    public Dialog show() {
-        if (mDialog == null) {
-            mDialog = mBuilder.show();
-        } else {
-            if (!mDialog.isShowing()) {
-                mDialog.show();
-            }
-        }
-        if (mWebView != null && !TextUtils.isEmpty(mUrl)) {
-            mWebView.loadUrl(mUrl);
-        }
-        return mDialog;
-    }
-
-    public void dismiss() {
-        if (mDialog != null && mDialog.isShowing()) {
-            mDialog.dismiss();
-        }
-    }
-
-    private <T extends View> T bind(int id) {
-        return (T) mView.findViewById(id);
-    }
-
-    public <T extends View> T findViewById(int id) {
-        return (T) mContentView.findViewById(id);
+    private WebViewPlus initWebView() {
+        FrameLayout frameLayout = new FrameLayout(context);
+        WebViewPlus webView = new WebViewPlus(context);
+        FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
+                mMaxWidth, ViewGroup.LayoutParams.WRAP_CONTENT);
+        layoutParams.gravity = Gravity.CENTER_HORIZONTAL;
+        frameLayout.addView(webView, layoutParams);
+        setContentView(frameLayout);
+        setLeftButtonListener((dlg, v) -> {
+            dlg.dismiss();
+        });
+        return webView;
     }
 
     public DialogPlus loadHtml(String html, int bgColor) {
         if (mWebView == null) {
-            FrameLayout frameLayout = new FrameLayout(context);
-            WebViewPlus webView = new WebViewPlus(context);
-            webView.setBackgroundColor(bgColor);
-            FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT);
-            layoutParams.gravity = Gravity.CENTER_HORIZONTAL;
-            frameLayout.addView(webView, layoutParams);
-            setView(frameLayout);
-            setLeftButtonListener((dlg, v) -> {
-                dlg.dismiss();
-            });
-            mWebView = webView;
-            webView.loadData(html, "text/html", "UTF-8");
+            mWebView = initWebView();
+            mWebView.setBackgroundColor(bgColor);
         }
+        mHtml = html;
         return this;
     }
 
     public DialogPlus loadUrl(String url, int bgColor) {
         if (mWebView == null) {
-            FrameLayout frameLayout = new FrameLayout(context);
-            WebViewPlus webView = new WebViewPlus(context);
-            webView.setBackgroundColor(bgColor);
-            FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT);
-            layoutParams.gravity = Gravity.CENTER_HORIZONTAL;
-            frameLayout.addView(webView, layoutParams);
-            setView(frameLayout);
-            setLeftButtonListener((dlg, v) -> {
-                dlg.dismiss();
-            });
-            mWebView = webView;
+            mWebView = initWebView();
+            mWebView.setBackgroundColor(bgColor);
         }
         mUrl = url;
         return this;
+    }
+
+    private class ViewGestureListener implements GestureDetector.OnGestureListener {
+        // 用户轻触触摸屏，由1个MotionEvent ACTION_DOWN触发
+        @Override
+        public boolean onDown(MotionEvent e) {
+            if (mOnGestureListener != null) {
+                return mOnGestureListener.onDown(e);
+            }
+            return false;
+        }
+
+        @Override
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+            if (mOnGestureListener != null) {
+                return mOnGestureListener.onFling(e1, e2, velocityX, velocityY);
+            }
+            return false;
+        }
+
+        @Override
+        // 用户长按触摸屏，由多个MotionEvent ACTION_DOWN触发
+        public void onLongPress(MotionEvent e) {
+            if (mOnGestureListener != null) {
+                mOnGestureListener.onLongPress(e);
+            }
+        }
+
+        @Override
+        // 用户按下触摸屏，并拖动，由1个MotionEvent ACTION_DOWN, 多个ACTION_MOVE触发
+        public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+            if (mOnGestureListener != null) {
+                return mOnGestureListener.onScroll(e1, e2, distanceX, distanceY);
+            }
+            return false;
+        }
+
+        @Override
+        // 用户轻触触摸屏，尚未松开或拖动，由一个1个MotionEvent ACTION_DOWN触发
+        // 注意和onDown()的区别，强调的是没有松开或者拖动的状态
+        public void onShowPress(MotionEvent e) {
+            if (mOnGestureListener != null) {
+                mOnGestureListener.onShowPress(e);
+            }
+        }
+
+        @Override
+        // 用户（轻触触摸屏后）松开，由一个1个MotionEvent ACTION_UP触发
+        public boolean onSingleTapUp(MotionEvent e) {
+            if (mOnGestureListener != null) {
+                return mOnGestureListener.onSingleTapUp(e);
+            }
+            return false;
+        }
     }
 }

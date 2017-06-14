@@ -45,7 +45,6 @@ public class MainActivity extends HomeActivity {
             if (isNew) {
                 new DialogPlus(this)
                         .setTitle(getString(R.string.settings_about_change_log))
-                        .setCancelable(false)
                         .loadUrl("file:///android_asset/changelog.html", Color.TRANSPARENT)
                         .hideButton()
                         .setCloseLinster((dlg, rs) -> {

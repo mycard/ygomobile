@@ -75,7 +75,7 @@
             android:maxLines="1"
             android:singleLine="true"
             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-            android:textColor="@android:color/holo_blue_dark"
+            android:textColor="@color/holo_blue_bright"
             android:textSize="15sp"
             tools:text="[A/XYZ]"/>
 
@@ -101,7 +101,7 @@
                 android:maxLines="1"
                 android:singleLine="true"
                 android:textAppearance="@style/TextAppearance.AppCompat.Caption"
-                android:textColor="@android:color/holo_blue_bright"
+                android:textColor="@color/holo_blue_bright"
                 tools:text="123456789"/>
 
             <TextView
@@ -142,7 +142,7 @@
                     android:singleLine="true"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                     tools:text="2500"
-                    android:textColor="@android:color/holo_blue_bright" />
+                    android:textColor="@color/holo_blue_bright" />
 
                 <View
                     android:layout_width="5dp"
@@ -176,7 +176,7 @@
                     android:singleLine="true"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                     tools:text="2500"
-                    android:textColor="@android:color/holo_blue_bright" />
+                    android:textColor="@color/holo_blue_bright" />
             </LinearLayout>
         </LinearLayout>
         </LinearLayout>

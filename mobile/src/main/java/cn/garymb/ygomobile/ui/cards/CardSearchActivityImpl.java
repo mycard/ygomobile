@@ -14,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 
 import com.bumptech.glide.Glide;
@@ -29,6 +30,8 @@ import cn.garymb.ygomobile.loader.ImageLoader;
 import cn.garymb.ygomobile.ui.activities.BaseActivity;
 import cn.garymb.ygomobile.ui.activities.WebActivity;
 import cn.garymb.ygomobile.ui.adapters.CardListAdapter;
+import cn.garymb.ygomobile.ui.plus.AOnGestureListener;
+import cn.garymb.ygomobile.ui.plus.DialogPlus;
 import cn.garymb.ygomobile.ui.plus.VUiKit;
 import ocgcore.LimitManager;
 import ocgcore.StringManager;
@@ -224,37 +227,52 @@ class CardSearchActivityImpl extends BaseActivity implements CardLoader.CallBack
     }
 
     private CardDetail mCardDetail;
-    private Dialog mDialog;
+    private DialogPlus mDialog;
 
     private boolean isShowCard() {
         return mDialog != null && mDialog.isShowing();
     }
 
-    protected void showCard(CardListProvider provider,CardInfo cardInfo, final int position) {
+    protected void showCard(CardListProvider provider, CardInfo cardInfo, final int position) {
         if (cardInfo != null) {
             if (mCardDetail == null) {
                 mCardDetail = new CardDetail(this, mImageLoader, mStringManager);
+                mCardDetail.setOnCardClickListener(new CardDetail.DefaultOnCardClickListener() {
+                    @Override
+                    public void onOpenUrl(CardInfo cardInfo) {
+                        String uri = Constants.WIKI_SEARCH_URL + String.format("%08d", cardInfo.Code);
+                        WebActivity.open(getContext(), cardInfo.Name, uri);
+                    }
+
+                    @Override
+                    public void onClose() {
+                        mDialog.dismiss();
+                    }
+                });
             }
             if (mDialog == null) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AppTheme_Dialog_Translucent);
-                builder.setView(mCardDetail.getView());
-                mDialog = builder.show();
+                mDialog = new DialogPlus(this);
+                mDialog.setView(mCardDetail.getView());
+                mDialog.hideButton();
+                mDialog.hideTitleBar();
+                mDialog.setOnGestureListener(new AOnGestureListener(){
+                    @Override
+                    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+                        if(isLeftFling(e1, e2, velocityX, velocityY)){
+                            mCardDetail.onNextCard();
+                            return true;
+                        }else if(isRightFling(e1, e2, velocityX, velocityY)){
+                            mCardDetail.onPreCard();
+                            return true;
+                        }
+                        return super.onFling(e1, e2, velocityX, velocityY);
+                    }
+                });
             }
             if (!mDialog.isShowing()) {
                 mDialog.show();
             }
-            mCardDetail.bind(cardInfo, position, provider, new CardDetail.DefaultOnClickListener(){
-                @Override
-                public void onOpenUrl(CardInfo cardInfo) {
-                    String uri = Constants.WIKI_SEARCH_URL + String.format("%08d", cardInfo.Code);
-                    WebActivity.open(getContext(), cardInfo.Name, uri);
-                }
-
-                @Override
-                public void onClose() {
-                    mDialog.dismiss();
-                }
-            });
+            mCardDetail.bind(cardInfo, position, provider);
         }
     }
 

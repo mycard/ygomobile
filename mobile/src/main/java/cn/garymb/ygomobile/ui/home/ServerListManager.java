@@ -100,12 +100,12 @@ public class ServerListManager {
 
     public void showEditDialog(int position) {
         final boolean isAdd = position < 0;
-        DialogPlus builder = new DialogPlus(getContext());
-        builder.setView(R.layout.dialog_server_edit);
-        ServerInfoViewHolder editViewHolder = new ServerInfoViewHolder(builder.getContentView());
-        final Dialog dialog = builder.show();
+        final  DialogPlus dialog = new DialogPlus(getContext());
+        dialog.setContentView(R.layout.dialog_server_edit);
+        dialog.show();
+        ServerInfoViewHolder editViewHolder = new ServerInfoViewHolder(dialog.getContentView());
         if (isAdd) {
-            builder.setTitle(R.string.action_add_server);
+            dialog.setTitle(R.string.action_add_server);
         } else {
             ServerInfo serverInfo = mAdapter.getItem(position);
             if (serverInfo != null) {
@@ -114,9 +114,9 @@ public class ServerListManager {
                 editViewHolder.userName.setText(serverInfo.getPlayerName());
                 editViewHolder.serverPort.setText(String.valueOf(serverInfo.getPort()));
             }
-            builder.setTitle(R.string.server_info_edit);
+            dialog.setTitle(R.string.server_info_edit);
         }
-        builder.setLeftButtonListener((dlg, v) -> {
+        dialog.setLeftButtonListener((dlg, v) -> {
             //保存
             String serverName = "" + editViewHolder.serverName.getText();
             ServerInfo info;

@@ -66,7 +66,9 @@ public class CardListAdapter extends BaseRecyclerAdapterPlus<CardInfo, ViewHolde
             Object tag = view.getTag(view.getId());
             if (tag != null && tag instanceof ViewHolder) {
                 ViewHolder viewHolder = (ViewHolder) tag;
-                viewHolder.mMenuLayout.smoothCloseMenu();
+                if (viewHolder.mMenuLayout.isMenuOpen()) {
+                    viewHolder.mMenuLayout.smoothCloseMenu();
+                }
             }
         }
     }

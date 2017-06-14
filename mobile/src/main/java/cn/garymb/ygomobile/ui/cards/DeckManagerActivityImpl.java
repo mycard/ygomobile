@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -52,6 +53,7 @@ import cn.garymb.ygomobile.ui.cards.deck.DeckItemTouchHelper;
 import cn.garymb.ygomobile.ui.cards.deck.DeckItemType;
 import cn.garymb.ygomobile.ui.cards.deck.DeckLayoutManager;
 import cn.garymb.ygomobile.ui.events.CardInfoEvent;
+import cn.garymb.ygomobile.ui.plus.AOnGestureListener;
 import cn.garymb.ygomobile.ui.plus.DialogPlus;
 import cn.garymb.ygomobile.ui.plus.VUiKit;
 import cn.garymb.ygomobile.utils.IOUtils;
@@ -75,7 +77,7 @@ class DeckManagerActivityImpl extends BaseCardsAcitivity implements RecyclerView
     private AppCompatSpinner mLimitSpinner;
     private String mPreLoad;
     private CardDetail mCardDetail;
-    private Dialog mDialog;
+    private DialogPlus mDialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -359,37 +361,53 @@ class DeckManagerActivityImpl extends BaseCardsAcitivity implements RecyclerView
             if (isShowCard()) return;
             if (mCardDetail == null) {
                 mCardDetail = new CardDetail(this, getImageLoader(), mStringManager);
+                mCardDetail.setOnCardClickListener(new CardDetail.OnCardClickListener() {
+                    @Override
+                    public void onOpenUrl(CardInfo cardInfo) {
+                        String uri = Constants.WIKI_SEARCH_URL + String.format("%08d", cardInfo.Code);
+                        WebActivity.open(getContext(), cardInfo.Name, uri);
+                    }
+
+                    @Override
+                    public void onClose() {
+                        mDialog.dismiss();
+                    }
+
+                    @Override
+                    public void onAddSideCard(CardInfo cardInfo) {
+                        addSideCard(cardInfo);
+                    }
+
+                    @Override
+                    public void onAddMainCard(CardInfo cardInfo) {
+                        addMainCard(cardInfo);
+                    }
+                });
             }
             mCardDetail.showAdd();
             if (mDialog == null) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.AppTheme_Dialog_Translucent);
-                builder.setView(mCardDetail.getView());
-                mDialog = builder.show();
-            } else {
+                mDialog = new DialogPlus(this);
+                mDialog.setView(mCardDetail.getView());
+                mDialog.hideButton();
+                mDialog.hideTitleBar();
+                mDialog.setOnGestureListener(new AOnGestureListener(){
+                    @Override
+                    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+                        if(isLeftFling(e1, e2, velocityX, velocityY)){
+                            mCardDetail.onNextCard();
+                            return true;
+                        }else if(isRightFling(e1, e2, velocityX, velocityY)){
+                            mCardDetail.onPreCard();
+                            return true;
+                        }
+                        return super.onFling(e1, e2, velocityX, velocityY);
+                    }
+                });
+            }
+            if(!mDialog.isShowing()) {
                 mDialog.show();
             }
-            mCardDetail.bind(cardInfo, pos, provider, new CardDetail.OnClickListener() {
-                @Override
-                public void onOpenUrl(CardInfo cardInfo) {
-                    String uri = Constants.WIKI_SEARCH_URL + String.format("%08d", cardInfo.Code);
-                    WebActivity.open(getContext(), cardInfo.Name, uri);
-                }
-
-                @Override
-                public void onClose() {
-                    mDialog.dismiss();
-                }
-
-                @Override
-                public void onAddSideCard(CardInfo cardInfo) {
-                    addSideCard(cardInfo);
-                }
-
-                @Override
-                public void onAddMainCard(CardInfo cardInfo) {
-                    addMainCard(cardInfo);
-                }
-            });
+            mCardDetail.bind(cardInfo, pos, provider);
         }
     }
 

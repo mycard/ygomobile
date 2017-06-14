@@ -37,19 +37,25 @@ public class ServerListAdapter extends BaseRecyclerAdapterPlus<ServerInfo, Serve
                 ServerInfoEvent event = new ServerInfoEvent(position, false);
                 event.join = true;
                 EventBus.getDefault().post(event);
-                holder.mMenuLayout.smoothCloseMenu();
+                if (holder.mMenuLayout.isMenuOpen()) {
+                    holder.mMenuLayout.smoothCloseMenu();
+                }
             });
         }
         if (holder.btnEdit != null) {
             holder.btnEdit.setOnClickListener((v) -> {
                 EventBus.getDefault().post(new ServerInfoEvent(position, false));
-                holder.mMenuLayout.smoothCloseMenu();
+                if (holder.mMenuLayout.isMenuOpen()) {
+                    holder.mMenuLayout.smoothCloseMenu();
+                }
             });
         }
         if (holder.btnDelete != null) {
             holder.btnDelete.setOnClickListener((v) -> {
                 EventBus.getDefault().post(new ServerInfoEvent(position, true));
-                holder.mMenuLayout.smoothCloseMenu();
+                if (holder.mMenuLayout.isMenuOpen()) {
+                    holder.mMenuLayout.smoothCloseMenu();
+                }
             });
         }
     }

@@ -209,7 +209,7 @@ public class SettingFragment extends PreferenceFragmentPlus {
                 ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutParams.gravity = Gravity.CENTER_HORIZONTAL;
         frameLayout.addView(imageView, layoutParams);
-        builder.setView(frameLayout);
+        builder.setContentView(frameLayout);
         builder.setLeftButtonText(R.string.settings);
         builder.setLeftButtonListener((dlg, s) -> {
             showImageCropChooser(preference, getString(R.string.dialog_select_image), outFile,

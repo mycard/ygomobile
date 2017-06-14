@@ -95,14 +95,14 @@ public class SearchableListDialog extends DialogFragment implements
         setData(rootView);
 
         DialogPlus alertDialog = new DialogPlus(getActivity());
-        alertDialog.setView(rootView);
+        alertDialog.setContentView(rootView);
         alertDialog.hideButton();
         String strTitle = _strTitle == null ? "Select Item" : _strTitle;
         alertDialog.setTitle(strTitle);
-        final Dialog dialog = alertDialog.show();
-        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams
+        alertDialog.show();
+        alertDialog.getWindow().setSoftInputMode(WindowManager.LayoutParams
                 .SOFT_INPUT_STATE_HIDDEN);
-        return dialog;
+        return alertDialog;
     }
 
     // Crash on orientation change #7

@@ -2,21 +2,16 @@ package cn.garymb.ygomobile.ui.cards;
 
 import android.content.Context;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import cn.garymb.ygomobile.Constants;
-import cn.garymb.ygomobile.lite.BuildConfig;
 import cn.garymb.ygomobile.ui.activities.PhotoViewActivity;
 import cn.garymb.ygomobile.bean.CardInfo;
 import cn.garymb.ygomobile.loader.ImageLoader;
 import cn.garymb.ygomobile.lite.R;
-import cn.garymb.ygomobile.ui.activities.WebActivity;
 import cn.garymb.ygomobile.ui.adapters.BaseAdapterPlus;
 import ocgcore.StringManager;
 import ocgcore.enums.CardType;
@@ -46,13 +41,16 @@ public class CardDetail extends BaseAdapterPlus.BaseViewHolder {
     private TextView cardcode;
     private View lb_setcode;
     private ImageLoader imageLoader;
+    private View mImageOpen,atkdefView;
 
-    private Button lastone;
-    private Button nextone;
     private Context mContext;
     private StringManager mStringManager;
+    private int curPosition;
+    private CardInfo mCardInfo;
+    private CardListProvider mProvider;
+    private OnCardClickListener mListener;
 
-    public interface OnClickListener {
+    public interface OnCardClickListener {
         void onOpenUrl(CardInfo cardInfo);
 
         void onAddMainCard(CardInfo cardInfo);
@@ -77,6 +75,8 @@ public class CardDetail extends BaseAdapterPlus.BaseViewHolder {
         faq = bind(R.id.btn_faq);
         cardAtk = bind(R.id.card_atk);
         cardDef = bind(R.id.card_def);
+        atkdefView = bind(R.id.layout_atkdef2);
+        mImageOpen = bind(R.id.image_control);
 
         monsterlayout = bind(R.id.layout_monster);
         race = bind(R.id.card_race);
@@ -87,8 +87,45 @@ public class CardDetail extends BaseAdapterPlus.BaseViewHolder {
         attrView = bind(R.id.card_attribute);
         lb_setcode = bind(R.id.label_setcode);
 
-        lastone = bind(R.id.lastone);
-        nextone = bind(R.id.nextone);
+
+        close.setOnClickListener((v) -> {
+            if (mListener != null) {
+                mListener.onClose();
+            }
+        });
+        addMain.setOnClickListener((v) -> {
+            if (mListener != null) {
+                CardInfo cardInfo = getCardInfo();
+                if (cardInfo == null) {
+                    return;
+                }
+                mListener.onAddMainCard(cardInfo);
+            }
+        });
+        addSide.setOnClickListener((v) -> {
+            if (mListener != null) {
+                CardInfo cardInfo = getCardInfo();
+                if (cardInfo == null) {
+                    return;
+                }
+                mListener.onAddSideCard(cardInfo);
+            }
+        });
+        faq.setOnClickListener((v) -> {
+            if (mListener != null) {
+                CardInfo cardInfo = getCardInfo();
+                if (cardInfo == null) {
+                    return;
+                }
+                mListener.onOpenUrl(cardInfo);
+            }
+        });
+        bind(R.id.lastone).setOnClickListener((v)->{
+            onPreCard();
+        });
+        bind(R.id.nextone).setOnClickListener((v)->{
+            onNextCard();
+        });
     }
 
     public ImageView getCardImage() {
@@ -112,10 +149,15 @@ public class CardDetail extends BaseAdapterPlus.BaseViewHolder {
         return mContext;
     }
 
+    public void setOnCardClickListener(OnCardClickListener listener) {
+        mListener = listener;
+    }
+
     private void setCardInfo(CardInfo cardInfo) {
         if (cardInfo == null) return;
+        mCardInfo = cardInfo;
         imageLoader.bindImage(cardImage, cardInfo.Code, null, true);
-        cardImage.setOnClickListener((v) -> {
+        mImageOpen.setOnClickListener((v) -> {
             PhotoViewActivity.showImage(context, cardInfo.Code, cardInfo.Name);
         });
         name.setText(cardInfo.Name);
@@ -130,7 +172,7 @@ public class CardDetail extends BaseAdapterPlus.BaseViewHolder {
         for (long set : sets) {
             if (set > 0) {
                 if (index != 0) {
-                    setname.append(" | ");
+                    setname.append("\n");
                 }
                 setname.append("" + mStringManager.getSetName(set));
                 index++;
@@ -150,6 +192,7 @@ public class CardDetail extends BaseAdapterPlus.BaseViewHolder {
             } else {
                 level.setVisibility(View.VISIBLE);
             }
+            atkdefView.setVisibility(View.VISIBLE);
             monsterlayout.setVisibility(View.VISIBLE);
             race.setVisibility(View.VISIBLE);
             String star = "";
@@ -170,90 +213,67 @@ public class CardDetail extends BaseAdapterPlus.BaseViewHolder {
             }
             race.setText(mStringManager.getRaceString(cardInfo.Race));
         } else {
+            atkdefView.setVisibility(View.GONE);
             race.setVisibility(View.GONE);
             monsterlayout.setVisibility(View.GONE);
             level.setVisibility(View.GONE);
         }
     }
 
-    public void bind(CardInfo cardInfo, final int position, final CardListProvider provider, final OnClickListener listener) {
-//        Log.d("CardDetail", "bind " + position+",cardInfo="+cardInfo);
+    public void bind(CardInfo cardInfo, final int position, final CardListProvider provider) {
+        curPosition = position;
+        mProvider = provider;
         if (cardInfo != null) {
             setCardInfo(cardInfo);
         }
+    }
 
-        close.setOnClickListener((v) -> {
-            if (listener != null) {
-                listener.onClose();
-            }
-        });
-        addMain.setOnClickListener((v) -> {
-            if (listener != null) {
-                if (cardInfo == null) {
-                    return;
-                }
-                listener.onAddMainCard(cardInfo);
-            }
-        });
-        addSide.setOnClickListener((v) -> {
-            if (listener != null) {
-                if (cardInfo == null) {
-                    return;
-                }
-                listener.onAddSideCard(cardInfo);
-            }
-        });
-        faq.setOnClickListener((v) -> {
-            if (listener != null) {
-                if (cardInfo == null) {
-                    return;
-                }
-                listener.onOpenUrl(cardInfo);
-            }
-        });
+    public int getCurPosition() {
+        return curPosition;
+    }
 
-        lastone.setOnClickListener((v) -> {
-            if (position == 0) {
-                lastone.setVisibility(View.INVISIBLE);
+    public CardListProvider getProvider() {
+        return mProvider;
+    }
+
+    public CardInfo getCardInfo() {
+        return mCardInfo;
+    }
+
+    public void onPreCard(){
+        int position = getCurPosition();
+        CardListProvider provider = getProvider();
+        if (position == 0) {
+            Toast.makeText(getContext(), "已经是第一张啦", Toast.LENGTH_SHORT).show();
+        } else {
+            final int index = position - 1;
+            bind(provider.getCard(index), index, provider);
+            if(position == 1){
                 Toast.makeText(getContext(), "已经是第一张啦", Toast.LENGTH_SHORT).show();
-            } else {
-                nextone.setVisibility(View.VISIBLE);
-                final int index = position - 1;
-                bind(provider.getCard(index), index, provider, listener);
-                if(position == 1){
-                    lastone.setVisibility(View.INVISIBLE);
-                    Toast.makeText(getContext(), "已经是第一张啦", Toast.LENGTH_SHORT).show();
-                }else{
-                    lastone.setVisibility(View.VISIBLE);
-                }
             }
-        });
+        }
+    }
 
-        nextone.setOnClickListener((v) -> {
-            lastone.setVisibility(View.VISIBLE);
-            if (position < provider.getCardsCount() - 1) {
-                final int index = position + 1;
-                lastone.setVisibility(View.VISIBLE);
-                bind(provider.getCard(index), index, provider, listener);
-                if(position == provider.getCardsCount() - 1){
-                    nextone.setVisibility(View.INVISIBLE);
-                    Toast.makeText(getContext(), "已经是最后一张啦", Toast.LENGTH_SHORT).show();
-                }else{
-                    nextone.setVisibility(View.VISIBLE);
-                }
-            } else {
-                nextone.setVisibility(View.INVISIBLE);
+    public void onNextCard(){
+        int position = getCurPosition();
+        CardListProvider provider = getProvider();
+        if (position < provider.getCardsCount() - 1) {
+            final int index = position + 1;
+            bind(provider.getCard(index), index, provider);
+            if(position == provider.getCardsCount() - 1){
                 Toast.makeText(getContext(), "已经是最后一张啦", Toast.LENGTH_SHORT).show();
             }
-        });
+        } else {
+            Toast.makeText(getContext(), "已经是最后一张啦", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private <T extends View> T bind(int id) {
         return (T) findViewById(id);
     }
 
-    public static class DefaultOnClickListener implements OnClickListener {
-        public DefaultOnClickListener() {
+    public static class DefaultOnCardClickListener implements OnCardClickListener {
+        public DefaultOnCardClickListener() {
         }
 
         @Override

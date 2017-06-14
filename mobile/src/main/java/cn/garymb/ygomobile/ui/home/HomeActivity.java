@@ -223,9 +223,9 @@ abstract class HomeActivity extends BaseActivity implements NavigationView.OnNav
         //进入房间
         DialogPlus builder = new DialogPlus(getContext());
         builder.setTitle(R.string.intput_room_name);
-        builder.setView(R.layout.dialog_room_name);
-        EditText editText = builder.findViewById(R.id.room_name);
-        ListView listView = builder.findViewById(R.id.room_list);
+        builder.setContentView(R.layout.dialog_room_name);
+        EditText editText = builder.bind(R.id.room_name);
+        ListView listView = builder.bind(R.id.room_list);
         SimpleListAdapter simpleListAdapter = new SimpleListAdapter(getContext());
         simpleListAdapter.set(AppsSettings.get().getLastRoomList());
         listView.setAdapter(simpleListAdapter);
