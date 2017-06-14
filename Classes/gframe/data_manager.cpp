@@ -31,6 +31,11 @@ bool DataManager::LoadDB(const char* file) {
 			cd.type = sqlite3_column_int(pStmt, 4);
 			cd.attack = sqlite3_column_int(pStmt, 5);
 			cd.defense = sqlite3_column_int(pStmt, 6);
+			if(cd.type & TYPE_LINK) {
+				cd.link_marker = cd.defense;
+				cd.defense = 0;
+			} else
+				cd.link_marker = 0;
 			unsigned int level = sqlite3_column_int(pStmt, 7);
 			cd.level = level & 0xff;
 			cd.lscale = (level >> 24) & 0xff;
@@ -250,7 +255,7 @@ const wchar_t* DataManager::FormatRace(int race) {
 	wchar_t* p = racBuffer;
 	unsigned filter = 1;
 	int i = 1020;
-	for(; filter != 0x1000000; filter <<= 1, ++i) {
+	for(; filter != 0x2000000; filter <<= 1, ++i) {
 		if(race & filter) {
 			BufferIO::CopyWStrRef(GetSysString(i), p, 16);
 			*p = L'|';
@@ -267,7 +272,7 @@ const wchar_t* DataManager::FormatType(int type) {
 	wchar_t* p = tpBuffer;
 	unsigned filter = 1;
 	int i = 1050;
-	for(; filter != 0x2000000; filter <<= 1, ++i) {
+	for(; filter != 0x8000000; filter <<= 1, ++i) {
 		if(type & filter) {
 			BufferIO::CopyWStrRef(GetSysString(i), p, 16);
 			*p = L'|';
@@ -285,7 +290,7 @@ const wchar_t* DataManager::FormatSetName(unsigned long long setcode) {
 	for(int i = 0; i < 4; ++i) {
 		const wchar_t* setname = GetSetName((setcode >> i * 16) & 0xffff);
 		if(setname) {
-			BufferIO::CopyWStrRef(setname, p, 16);
+			BufferIO::CopyWStrRef(setname, p, 32);
 			*p = L'|';
 			*++p = 0;
 		}
@@ -295,6 +300,26 @@ const wchar_t* DataManager::FormatSetName(unsigned long long setcode) {
 	else
 		return unknown_string;
 	return scBuffer;
+}
+const wchar_t* DataManager::FormatLinkMarker(int link_marker) {
+	wchar_t* p = lmBuffer;
+	if(link_marker & LINK_MARKER_TOP_LEFT)
+		BufferIO::CopyWStrRef(L"[\u2196]", p, 4);
+	if(link_marker & LINK_MARKER_TOP)
+		BufferIO::CopyWStrRef(L"[\u2191]", p, 4);
+	if(link_marker & LINK_MARKER_TOP_RIGHT)
+		BufferIO::CopyWStrRef(L"[\u2197]", p, 4);
+	if(link_marker & LINK_MARKER_LEFT)
+		BufferIO::CopyWStrRef(L"[\u2190]", p, 4);
+	if(link_marker & LINK_MARKER_RIGHT)
+		BufferIO::CopyWStrRef(L"[\u2192]", p, 4);
+	if(link_marker & LINK_MARKER_BOTTOM_LEFT)
+		BufferIO::CopyWStrRef(L"[\u2199]", p, 4);
+	if(link_marker & LINK_MARKER_BOTTOM)
+		BufferIO::CopyWStrRef(L"[\u2193]", p, 4);
+	if(link_marker & LINK_MARKER_BOTTOM_RIGHT)
+		BufferIO::CopyWStrRef(L"[\u2198]", p, 4);
+	return lmBuffer;
 }
 int DataManager::CardReader(int code, void* pData) {
 	if(!dataManager.GetData(code, (CardData*)pData))

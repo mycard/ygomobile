@@ -27,8 +27,10 @@ bool ImageManager::Initial(const path dir) {
 	tBackGround = driver->getTexture((dir + path("/textures/bg.jpg")).c_str());
 	tBackGround_menu = driver->getTexture((dir + path("/textures/bg_menu.jpg")).c_str());
 	tBackGround_deck = driver->getTexture((dir + path("/textures/bg_deck.jpg")).c_str());
-	tField = driver->getTexture((dir + path("/textures/field2.png")).c_str());
-	tFieldTransparent = driver->getTexture((dir + path("/textures/field-transparent2.png")).c_str());
+	tField[0] = driver->getTexture((dir + path("/textures/field2.png")).c_str());
+	tFieldTransparent[0] = driver->getTexture((dir + path("/textures/field-transparent2.png")).c_str());
+	tField[1] = driver->getTexture((dir + path("/textures/field3.png")).c_str());
+	tFieldTransparent[1] = driver->getTexture((dir + path("/textures/field-transparent3.png")).c_str());
 	int i = 0;
 	char buff[100];
 	for (; i < 14; i++) {
@@ -41,7 +43,6 @@ bool ImageManager::Initial(const path dir) {
 	}
 	support_types.push_back(std::string("jpg"));
 	support_types.push_back(std::string("png"));
-	//support_types.push_back(std::string("bmp"));
 	support_types.push_back(std::string("bpg"));
 	return true;
 }
@@ -138,14 +139,14 @@ irr::video::ITexture* ImageManager::GetTextureField(int code) {
 	auto tit = tFields.find(code);
 	if(tit == tFields.end()) {
 		char file[256];
-		sprintf(file, "expansions/pics/field/%d.png", code);
+		sprintf(file, "field/%s/%d.jpg", irr::android::getCardImagePath(mainGame->appMain).c_str(), code);
 		irr::video::ITexture* img = driver->getTexture(file);
 		if(img == NULL) {
-			sprintf(file, "expansions/pics/field/%d.jpg", code);
+			sprintf(file, "field/%s/%d.jpg", irr::android::getCardImagePath(mainGame->appMain).c_str(), code);
 			img = driver->getTexture(file);
 		}
 		if(img == NULL) {
-			sprintf(file, "pics/field/%d.png", code);
+			sprintf(file,  "field/%s/%d.png", irr::android::getCardImagePath(mainGame->appMain).c_str(), code);
 			img = driver->getTexture(file);
 		}
 		if(img == NULL) {
