@@ -246,7 +246,16 @@ public class CardDetail extends BaseAdapterPlus.BaseViewHolder {
         if (position == 0) {
             Toast.makeText(getContext(), "已经是第一张啦", Toast.LENGTH_SHORT).show();
         } else {
-            final int index = position - 1;
+			int index = position ;
+            do{
+				if(index==0){
+                    Toast.makeText(getContext(), "已经是第一张啦", Toast.LENGTH_SHORT).show();
+                    return;
+				}else{
+                    index--;
+				}
+			}while(provider.getCard(index)==null||provider.getCard(index).Name==null||provider.getCard(position).Name.equals(provider.getCard(index).Name));
+			
             bind(provider.getCard(index), index, provider);
             if(position == 1){
                 Toast.makeText(getContext(), "已经是第一张啦", Toast.LENGTH_SHORT).show();
@@ -258,7 +267,16 @@ public class CardDetail extends BaseAdapterPlus.BaseViewHolder {
         int position = getCurPosition();
         CardListProvider provider = getProvider();
         if (position < provider.getCardsCount() - 1) {
-            final int index = position + 1;
+			int index = position ;
+            do{			
+				if(index==provider.getCardsCount() - 1){
+                    Toast.makeText(getContext(), "已经是最后一张啦", Toast.LENGTH_SHORT).show();
+					return;
+				}else{
+                    index++;
+				}
+			}while(provider.getCard(index)==null||provider.getCard(index).Name==null||provider.getCard(position).Name.equals(provider.getCard(index).Name));
+			
             bind(provider.getCard(index), index, provider);
             if(position == provider.getCardsCount() - 1){
                 Toast.makeText(getContext(), "已经是最后一张啦", Toast.LENGTH_SHORT).show();
