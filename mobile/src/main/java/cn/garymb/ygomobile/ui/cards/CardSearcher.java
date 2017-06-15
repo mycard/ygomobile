@@ -553,7 +553,7 @@ public class CardSearcher implements View.OnClickListener {
         if (dataLoader != null) {
             dataLoader.search(text(prefixWord), text(suffixWord), getSelect(attributeSpinner)
                     , getSelect(levelSpinner), getSelect(raceSpinner), getSelect(limitListSpinner), getSelect(limitSpinner),
-                    text(atkText), isLink?mLinkStr:text(defText),
+                    text(atkText), isLink ? mLinkStr : text(defText),
                     getSelect(pScale),
                     getSelect(setcodeSpinner)
                     , getSelect(categorySpinner), getSelect(otSpinner), isLink, getSelect(typeSpinner), getSelect(typeMonsterSpinner), getSelect(typeSTSpinner)
@@ -572,21 +572,8 @@ public class CardSearcher implements View.OnClickListener {
         reset(otSpinner);
         reset(limitSpinner);
 //        reset(limitListSpinner);
-        LimitList cur = null;
-        if (dataLoader != null) {
-            cur = dataLoader.getLimitList();
-        }
-        int count = mLimitManager.getCount();
-        for (int i = 0; i < count; i++) {
-            LimitList list = mLimitManager.getLimit(i);
-            if (cur != null) {
-                if (TextUtils.equals(cur.getName(), list.getName())) {
-                    if (i < limitListSpinner.getCount() - 1) {
-                        limitListSpinner.setSelection(i + 1);
-                    }
-                    break;
-                }
-            }
+        if (limitListSpinner.getAdapter().getCount() > 1) {
+            limitListSpinner.setSelection(1);
         }
         reset(typeSpinner);
         reset(typeSTSpinner);
