@@ -839,7 +839,7 @@ class DeckManagerActivityImpl extends BaseCardsAcitivity implements RecyclerView
         if (mYdkFile != null) {
             editText.setText(mYdkFile.getName());
         }
-        builder.setView(editText);
+        builder.setContentView(editText);
         builder.setCloseLinster((dlg, rs) -> {
             dlg.dismiss();
             if (old != null) {

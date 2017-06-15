@@ -58,7 +58,7 @@
                 android:layout_gravity="left"
                 android:gravity="center"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-                android:textColor="?attr/colorAccent"
+                android:textColor="@color/holo_blue_bright"
                 android:visibility="gone"
                 tools:text="hello"
                 tools:visibility="visible"/>

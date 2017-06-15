@@ -139,13 +139,13 @@ public class DialogPlus extends Dialog {
     }
 
     public DialogPlus setMessageGravity(int g) {
-        TextView textView = bind(R.id.text);
+        TextView textView = $(R.id.text);
         textView.setGravity(g);
         return this;
     }
 
     public DialogPlus setMessage(CharSequence text) {
-        TextView textView = bind(R.id.text);
+        TextView textView = $(R.id.text);
         textView.setVisibility(View.VISIBLE);
         textView.setText(text);
         return this;
