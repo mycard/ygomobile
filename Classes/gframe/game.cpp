@@ -25,7 +25,7 @@
 #include <COGLESDriver.h>
 #endif
 
-const unsigned short PRO_VERSION = 0x133D;
+const unsigned short PRO_VERSION = 0x2338;
 
 namespace ygo {
 
@@ -236,12 +236,12 @@ bool Game::Initialize() {
 	lstHostList->setItemHeight(18 * yScale);
 	btnLanRefresh = env->addButton(rect<s32>(240 * xScale, 325 * yScale, 340 * xScale, 350 * yScale), wLanWindow, BUTTON_LAN_REFRESH, dataManager.GetSysString(1217));
 	env->addStaticText(dataManager.GetSysString(1221), rect<s32>(10 * xScale, 360 * yScale, 220 * xScale, 380 * yScale), false, false, wLanWindow);
-	ebJoinHost = env->addEditBox(gameConf.lasthost, rect<s32>(110 * xScale, 355 * yScale, 250 * xScale, 380 * yScale), true, wLanWindow);
+	ebJoinHost = env->addEditBox(gameConf.lasthost, rect<s32>(110 * xScale, 355 * yScale, 350 * xScale, 380 * yScale), true, wLanWindow);
 	ebJoinHost->setTextAlignment(irr::gui::EGUIA_CENTER, irr::gui::EGUIA_CENTER);
-	ebJoinPort = env->addEditBox(gameConf.lastport, rect<s32>(260 * xScale, 355 * yScale, 320 * xScale, 380 * yScale), true, wLanWindow);
+	ebJoinPort = env->addEditBox(gameConf.lastport, rect<s32>(360 * xScale, 355 * yScale, 420 * xScale, 380 * yScale), true, wLanWindow);
 	ebJoinPort->setTextAlignment(irr::gui::EGUIA_CENTER, irr::gui::EGUIA_CENTER);
 	env->addStaticText(dataManager.GetSysString(1222), rect<s32>(10 * xScale, 390 * yScale, 220 * xScale, 410 * yScale), false, false, wLanWindow);
-	ebJoinPass = env->addEditBox(gameConf.roompass, rect<s32>(110 * xScale, 385 * yScale, 250 * xScale, 410 * yScale), true, wLanWindow);
+	ebJoinPass = env->addEditBox(gameConf.roompass, rect<s32>(110 * xScale, 385 * yScale, 420 * xScale, 410 * yScale), true, wLanWindow);
 	ebJoinPass->setTextAlignment(irr::gui::EGUIA_CENTER, irr::gui::EGUIA_CENTER);
 	btnJoinHost = env->addButton(rect<s32>(460 * xScale, 355 * yScale, 570 * xScale, 380 * yScale), wLanWindow, BUTTON_JOIN_HOST, dataManager.GetSysString(1223));
 	btnJoinCancel = env->addButton(rect<s32>(460 * xScale, 385 * yScale, 570 * xScale, 410 * yScale), wLanWindow, BUTTON_JOIN_CANCEL, dataManager.GetSysString(1212));
@@ -289,7 +289,13 @@ bool Game::Initialize() {
 #endif
 	ebTimeLimit->setTextAlignment(irr::gui::EGUIA_CENTER, irr::gui::EGUIA_CENTER);
 	env->addStaticText(dataManager.GetSysString(1228), rect<s32>(20 * xScale, 150 * yScale, 320 * xScale, 170 * yScale), false, false, wCreateHost);
-	chkEnablePriority = env->addCheckBox(false, rect<s32>(20 * xScale, 180 * yScale, 360 * xScale, 200 * yScale), wCreateHost, -1, dataManager.GetSysString(1236));
+	env->addStaticText(dataManager.GetSysString(1236), rect<s32>(20 * xScale, 180 * yScale, 220 * xScale, 200 * yScale), false, false, wCreateHost);
+	cbDuelRule = env->addComboBox(rect<s32>(140 * xScale, 175 * yScale, 300 * xScale, 200 * yScale), wCreateHost);
+	cbDuelRule->addItem(dataManager.GetSysString(1260));
+	cbDuelRule->addItem(dataManager.GetSysString(1261));
+	cbDuelRule->addItem(dataManager.GetSysString(1262));
+	cbDuelRule->addItem(dataManager.GetSysString(1263));
+	cbDuelRule->setSelected(DEFAULT_DUEL_RULE - 1);
 	chkNoCheckDeck = env->addCheckBox(false, rect<s32>(20 * xScale, 210 * yScale, 170 * xScale, 230 * yScale), wCreateHost, -1, dataManager.GetSysString(1229));
 	chkNoShuffleDeck = env->addCheckBox(false, rect<s32>(180 * xScale, 210 * yScale, 360 * xScale, 230 * yScale), wCreateHost, -1, dataManager.GetSysString(1230));
 	env->addStaticText(dataManager.GetSysString(1231), rect<s32>(20 * xScale, 240 * yScale, 320 * xScale, 260 * yScale), false, false, wCreateHost);
@@ -436,6 +442,30 @@ bool Game::Initialize() {
 	btnDP->setEnabled(false);
 	btnDP->setPressed(true);
 	btnDP->setVisible(false);
+	btnSP = env->addButton(rect<s32>(0 * xScale, 0 * yScale, 50 * xScale, 30 * yScale), wPhase, -1, L"\xff33\xff30");
+	btnSP->setEnabled(false);
+	btnSP->setPressed(true);
+	btnSP->setVisible(false);
+	btnM1 = env->addButton(rect<s32>(160 * xScale, 0 * yScale, 210 * xScale, 30 * yScale), wPhase, -1, L"\xff2d\xff11");
+	btnM1->setEnabled(false);
+	btnM1->setPressed(true);
+	btnM1->setVisible(false);
+	btnBP = env->addButton(rect<s32>(160 * xScale, 0 * yScale, 210 * xScale, 30 * yScale), wPhase, BUTTON_BP, L"\xff22\xff30");
+	btnBP->setVisible(false);
+	btnM2 = env->addButton(rect<s32>(160 * xScale, 0 * yScale, 210 * xScale, 30 * yScale), wPhase, BUTTON_M2, L"\xff2d\xff12");
+	btnM2->setVisible(false);
+	btnEP = env->addButton(rect<s32>(320 * xScale, 0 * yScale, 370 * xScale, 30 * yScale), wPhase, BUTTON_EP, L"\xff25\xff30");
+	btnEP->setVisible(false);
+	btnShuffle = env->addButton(rect<s32>(0 * xScale, 0 * yScale, 50 * xScale, 30 * yScale), wPhase, BUTTON_CMD_SHUFFLE, dataManager.GetSysString(1307));
+	btnShuffle->setVisible(false);
+#else
+	//phase
+	wPhase = env->addStaticText(L"", rect<s32>(480 * xScale, 310 * yScale, 855 * xScale, 330 * yScale));
+	wPhase->setVisible(false);
+	btnDP = env->addButton(rect<s32>(0 * xScale, 0 * yScale, 50 * xScale, 30 * yScale), wPhase, -1, L"\xff24\xff30");
+	btnDP->setEnabled(false);
+	btnDP->setPressed(true);
+	btnDP->setVisible(false);
 	btnSP = env->addButton(rect<s32>(65 * xScale, 0 * yScale, 115 * xScale, 30 * yScale), wPhase, -1, L"\xff33\xff30");
 	btnSP->setEnabled(false);
 	btnSP->setPressed(true);
@@ -451,30 +481,6 @@ bool Game::Initialize() {
 	btnEP = env->addButton(rect<s32>(325 * xScale, 0 * yScale, 375 * xScale, 30 * yScale), wPhase, BUTTON_EP, L"\xff25\xff30");
 	btnEP->setVisible(false);
 	btnShuffle = env->addButton(rect<s32>(0, 0, 50 * xScale, 30 * yScale), wPhase, BUTTON_CMD_SHUFFLE, dataManager.GetSysString(1307));
-	btnShuffle->setVisible(false);
-#else
-	//phase
-	wPhase = env->addStaticText(L"", rect<s32>(475 * xScale, 310 * yScale, 850 * xScale, 330 * yScale));
-	wPhase->setVisible(false);
-	btnDP = env->addButton(rect<s32>(0 * xScale, 0 * yScale, 50 * xScale, 20 * yScale), wPhase, -1, L"\xff24\xff30");
-	btnDP->setEnabled(false);
-	btnDP->setPressed(true);
-	btnDP->setVisible(false);
-	btnSP = env->addButton(rect<s32>(65 * xScale, 0 * yScale, 115 * xScale, 20 * yScale), wPhase, -1, L"\xff33\xff30");
-	btnSP->setEnabled(false);
-	btnSP->setPressed(true);
-	btnSP->setVisible(false);
-	btnM1 = env->addButton(rect<s32>(130 * xScale, 0 * yScale, 180 * xScale, 20 * yScale), wPhase, -1, L"\xff2d\xff11");
-	btnM1->setEnabled(false);
-	btnM1->setPressed(true);
-	btnM1->setVisible(false);
-	btnBP = env->addButton(rect<s32>(195 * xScale, 0 * yScale, 245 * xScale, 20 * yScale), wPhase, BUTTON_BP, L"\xff22\xff30");
-	btnBP->setVisible(false);
-	btnM2 = env->addButton(rect<s32>(260 * xScale, 0 * yScale, 310 * xScale, 20 * yScale), wPhase, BUTTON_M2, L"\xff2d\xff12");
-	btnM2->setVisible(false);
-	btnEP = env->addButton(rect<s32>(325 * xScale, 0 * yScale, 375 * xScale, 20 * yScale), wPhase, BUTTON_EP, L"\xff25\xff30");
-	btnEP->setVisible(false);
-	btnShuffle = env->addButton(rect<s32>(0, 0, 50 * xScale, 20 * yScale), wPhase, BUTTON_CMD_SHUFFLE, dataManager.GetSysString(1307));
     btnShuffle->setVisible(false);
 #endif
 	//tab
@@ -510,17 +516,19 @@ bool Game::Initialize() {
 	btnClearLog = env->addButton(rect<s32>(160 * xScale, 300 * yScale, 260 * xScale, 325 * yScale), tabLog, BUTTON_CLEAR_LOG, dataManager.GetSysString(1272));
 	//system
 	irr::gui::IGUITab* tabSystem = wInfos->addTab(dataManager.GetSysString(1273));
-	chkAutoPos = env->addCheckBox(false, rect<s32>(20 * xScale, 20 * yScale, 280 * xScale, 45 * yScale), tabSystem, -1, dataManager.GetSysString(1274));
-	chkAutoPos->setChecked(gameConf.chkAutoPos != 0);
-	chkRandomPos = env->addCheckBox(false, rect<s32>(40 * xScale, 50 * yScale, 300 * xScale, 75 * yScale), tabSystem, -1, dataManager.GetSysString(1275));
+	chkMAutoPos = env->addCheckBox(false, rect<s32>(20 * xScale, 20 * yScale, 280 * xScale, 45 * yScale), tabSystem, -1, dataManager.GetSysString(1274));
+	chkMAutoPos->setChecked(gameConf.chkMAutoPos != 0);
+	chkSTAutoPos = env->addCheckBox(false, rect<s32>(20 * xScale, 50 * yScale, 280 * xScale, 75 * yScale), tabSystem, -1, dataManager.GetSysString(1278));
+	chkSTAutoPos->setChecked(gameConf.chkSTAutoPos != 0);
+	chkRandomPos = env->addCheckBox(false, rect<s32>(40 * xScale, 80 * yScale, 300 * xScale, 105 * yScale), tabSystem, -1, dataManager.GetSysString(1275));
 	chkRandomPos->setChecked(gameConf.chkRandomPos != 0);
-	chkAutoChain = env->addCheckBox(false, rect<s32>(20 * xScale, 80 * yScale, 280 * xScale, 105 * yScale), tabSystem, -1, dataManager.GetSysString(1276));
+	chkAutoChain = env->addCheckBox(false, rect<s32>(20 * xScale, 110 * yScale, 280 * xScale, 135 * yScale), tabSystem, -1, dataManager.GetSysString(1276));
 	chkAutoChain->setChecked(gameConf.chkAutoChain != 0);
-	chkWaitChain = env->addCheckBox(false, rect<s32>(20 * xScale, 110 * yScale, 280 * xScale, 135 * yScale), tabSystem, -1, dataManager.GetSysString(1277));
+	chkWaitChain = env->addCheckBox(false, rect<s32>(20 * xScale, 140 * yScale, 280 * xScale, 165 * yScale), tabSystem, -1, dataManager.GetSysString(1277));
 	chkWaitChain->setChecked(gameConf.chkWaitChain != 0);
-	chkIgnore1 = env->addCheckBox(false, rect<s32>(20 * xScale, 170 * yScale, 300 * xScale, 195 * yScale), tabSystem, -1, dataManager.GetSysString(1290));
+	chkIgnore1 = env->addCheckBox(false, rect<s32>(20 * xScale, 200 * yScale, 280 * xScale, 225 * yScale), tabSystem, -1, dataManager.GetSysString(1290));
 	chkIgnore1->setChecked(gameConf.chkIgnore1 != 0);
-	chkIgnore2 = env->addCheckBox(false, rect<s32>(20 * xScale, 200 * yScale, 290 * xScale, 225 * yScale), tabSystem, -1, dataManager.GetSysString(1291));
+	chkIgnore2 = env->addCheckBox(false, rect<s32>(20 * xScale, 230 * yScale, 280 * xScale, 255 * yScale), tabSystem, -1, dataManager.GetSysString(1291));
 	chkIgnore2->setChecked(gameConf.chkIgnore2 != 0);
 	chkHideSetname = env->addCheckBox(false, rect<s32>(20 * xScale, 260 * yScale, 280 * xScale, 285 * yScale), tabSystem, -1, dataManager.GetSysString(1354));
 	chkHideSetname->setChecked(gameConf.chkHideSetname != 0);
@@ -688,6 +696,7 @@ bool Game::Initialize() {
 	lstANCard = env->addListBox(rect<s32>(20 * xScale, 50 * yScale, 190 * xScale, 160 * yScale), wANCard, LISTBOX_ANCARD, true);
 #endif
 	ebANCard->setTextAlignment(irr::gui::EGUIA_CENTER, irr::gui::EGUIA_CENTER);
+	lstANCard = env->addListBox(rect<s32>(20  * xScale, 50 * yScale, 190  * xScale, 160 * yScale), wANCard, LISTBOX_ANCARD, true);
 	btnANCardOK = env->addButton(rect<s32>(60 * xScale, 165 * yScale, 150 * xScale, 190 * yScale), wANCard, BUTTON_ANCARD_OK, dataManager.GetSysString(1211));
 	//announce attribute
 	wANAttribute = env->addWindow(rect<s32>(500 * xScale, 200 * yScale, 830 * xScale, 285 * yScale), false, dataManager.GetSysString(562));
@@ -697,10 +706,10 @@ bool Game::Initialize() {
 		chkAttribute[i] = env->addCheckBox(false, rect<s32>((10 + (i % 4) * 80) * xScale, (25 + (i / 4) * 25) * yScale, (90 + (i % 4) * 80) * xScale, (50 + (i / 4) * 25) * yScale),
 		                                   wANAttribute, CHECK_ATTRIBUTE, dataManager.FormatAttribute(filter));
 	//announce race
-	wANRace = env->addWindow(rect<s32>(480 * xScale, 200 * yScale, 850 * xScale, 385 * yScale), false, dataManager.GetSysString(563));
+	wANRace = env->addWindow(rect<s32>(480 * xScale, 200 * yScale, 850 * xScale, 410 * yScale), false, dataManager.GetSysString(563));
 	wANRace->getCloseButton()->setVisible(false);
 	wANRace->setVisible(false);
-	for(int filter = 0x1, i = 0; i < 24; filter <<= 1, ++i)
+	for(int filter = 0x1, i = 0; i < 25; filter <<= 1, ++i)
 		chkRace[i] = env->addCheckBox(false, rect<s32>((10 + (i % 4) * 90) * xScale, (25 + (i / 4) * 25) * yScale, (100 + (i % 4) * 90) * xScale, (50 + (i / 4) * 25) * yScale),
 		                              wANRace, CHECK_RACE, dataManager.FormatRace(filter));
 	//selection hint
@@ -708,10 +717,10 @@ bool Game::Initialize() {
 	stHintMsg->setBackgroundColor(0xc0ffffff);
 	stHintMsg->setTextAlignment(irr::gui::EGUIA_CENTER, irr::gui::EGUIA_CENTER);
 	stHintMsg->setVisible(false);
-	stTip = env->addStaticText(L"", rect<s32>(0 * xScale, 0 * yScale, 150 * xScale, 150 * yScale), false, true, 0, -1, true);
+/*	stTip = env->addStaticText(L"", rect<s32>(0 * xScale, 0 * yScale, 150 * xScale, 150 * yScale), false, true, 0, -1, true);
 	stTip->setBackgroundColor(0xc0ffffff);
 	stTip->setTextAlignment(irr::gui::EGUIA_CENTER, irr::gui::EGUIA_CENTER);
-	stTip->setVisible(false);
+	stTip->setVisible(false);*/
 	//cmd menu
 	wCmdMenu = env->addWindow(rect<s32>(10 * xScale, 10 * yScale, 110 * xScale, 179 * yScale), false, L"");
 	wCmdMenu->setDrawTitlebar(false);
@@ -729,16 +738,16 @@ bool Game::Initialize() {
 	btnOperation = env->addButton(rect<s32>(1 * xScale, 169 * yScale, 100 * xScale, 209 * yScale), wCmdMenu, BUTTON_CMD_ACTIVATE, dataManager.GetSysString(1161));
 	btnReset = env->addButton(rect<s32>(1 * xScale, 190 * yScale , 99 * xScale, 210 * yScale), wCmdMenu, BUTTON_CMD_RESET, dataManager.GetSysString(1162));
 #else
-	btnActivate = env->addButton(rect<s32>(1 * xScale, 1 * yScale, 99 * xScale, 21 * yScale), wCmdMenu, BUTTON_CMD_ACTIVATE, dataManager.GetSysString(1150));
-	btnSummon = env->addButton(rect<s32>(1 * xScale, 22 * yScale, 99 * xScale, 42 * yScale), wCmdMenu, BUTTON_CMD_SUMMON, dataManager.GetSysString(1151));
-	btnSPSummon = env->addButton(rect<s32>(1 * xScale, 43 * yScale, 99 * xScale, 63 * yScale), wCmdMenu, BUTTON_CMD_SPSUMMON, dataManager.GetSysString(1152));
-	btnMSet = env->addButton(rect<s32>(1 * xScale, 64 * yScale, 99 * xScale, 84 * yScale), wCmdMenu, BUTTON_CMD_MSET, dataManager.GetSysString(1153));
-	btnSSet = env->addButton(rect<s32>(1 * xScale, 85 * yScale, 99 * xScale, 105 * yScale), wCmdMenu, BUTTON_CMD_SSET, dataManager.GetSysString(1153));
-	btnRepos = env->addButton(rect<s32>(1 * xScale, 106 * yScale, 99 * xScale, 126 * yScale), wCmdMenu, BUTTON_CMD_REPOS, dataManager.GetSysString(1154));
-	btnAttack = env->addButton(rect<s32>(1 * xScale, 127 * yScale, 99 * xScale, 147 * yScale), wCmdMenu, BUTTON_CMD_ATTACK, dataManager.GetSysString(1157));
-	btnShowList = env->addButton(rect<s32>(1 * xScale, 148 * yScale, 99 * xScale, 168 * yScale), wCmdMenu, BUTTON_CMD_SHOWLIST, dataManager.GetSysString(1158));
-	btnOperation = env->addButton(rect<s32>(1 * xScale, 169 * yScale, 99 * xScale, 189 * yScale), wCmdMenu, BUTTON_CMD_ACTIVATE, dataManager.GetSysString(1161));
-	btnReset = env->addButton(rect<s32>(1 * xScale, 190 * yScale, 99 * xScale, 210 * yScale), wCmdMenu, BUTTON_CMD_RESET, dataManager.GetSysString(1162));
+	btnActivate = env->addButton(rect<s32>(1, 1, 99, 21), wCmdMenu, BUTTON_CMD_ACTIVATE, dataManager.GetSysString(1150));
+	btnSummon = env->addButton(rect<s32>(1, 22, 99, 42), wCmdMenu, BUTTON_CMD_SUMMON, dataManager.GetSysString(1151));
+	btnSPSummon = env->addButton(rect<s32>(1, 43, 99, 63), wCmdMenu, BUTTON_CMD_SPSUMMON, dataManager.GetSysString(1152));
+	btnMSet = env->addButton(rect<s32>(1, 64, 99, 84), wCmdMenu, BUTTON_CMD_MSET, dataManager.GetSysString(1153));
+	btnSSet = env->addButton(rect<s32>(1, 85, 99, 105), wCmdMenu, BUTTON_CMD_SSET, dataManager.GetSysString(1153));
+	btnRepos = env->addButton(rect<s32>(1, 106, 99, 126), wCmdMenu, BUTTON_CMD_REPOS, dataManager.GetSysString(1154));
+	btnAttack = env->addButton(rect<s32>(1, 127, 99, 147), wCmdMenu, BUTTON_CMD_ATTACK, dataManager.GetSysString(1157));
+	btnShowList = env->addButton(rect<s32>(1, 148, 99, 168), wCmdMenu, BUTTON_CMD_SHOWLIST, dataManager.GetSysString(1158));
+	btnOperation = env->addButton(rect<s32>(1, 169, 99, 189), wCmdMenu, BUTTON_CMD_ACTIVATE, dataManager.GetSysString(1161));
+	btnReset = env->addButton(rect<s32>(1, 190, 99, 210), wCmdMenu, BUTTON_CMD_RESET, dataManager.GetSysString(1162));
 #endif
 	//deck edit
 	wDeckEdit = env->addStaticText(L"", rect<s32>(309 * xScale, 8 * yScale, 605 * xScale, 130 * yScale), true, false, 0, -1, true);
@@ -797,9 +806,9 @@ bool Game::Initialize() {
 	cbCardType->addItem(dataManager.GetSysString(1313));
 	cbCardType->addItem(dataManager.GetSysString(1314));
 #ifdef _IRR_ANDROID_PLATFORM_
-	cbCardType2 = CAndroidGUIComboBox::addAndroidComboBox(env, rect<s32>(125 * xScale, 3 * yScale, 200 * xScale, 23 * yScale), wFilter, -1);
+	cbCardType2 = CAndroidGUIComboBox::addAndroidComboBox(env, rect<s32>(125 * xScale, 3 * yScale, 200 * xScale, 23 * yScale), wFilter, COMBOBOX_SECONDTYPE);
 #else
-	cbCardType2 = env->addComboBox(rect<s32>(125 * xScale, 3 * yScale, 200 * xScale, 23 * yScale), wFilter, -1);
+	cbCardType2 = env->addComboBox(rect<s32>(125 * xScale, 3 * yScale, 200 * xScale, 23 * yScale), wFilter, COMBOBOX_SECONDTYPE);
 #endif
 	cbCardType2->addItem(dataManager.GetSysString(1310), 0);
 	env->addStaticText(dataManager.GetSysString(1315), rect<s32>(205 * xScale, 5 * yScale, 280 * xScale, 25 * yScale), false, false, wFilter);
@@ -827,12 +836,12 @@ bool Game::Initialize() {
 		cbAttribute->addItem(dataManager.FormatAttribute(filter), filter);
 	env->addStaticText(dataManager.GetSysString(1321), rect<s32>(10 * xScale, 51 * yScale, 70 * xScale, 71 * yScale), false, false, wFilter);
 #ifdef _IRR_ANDROID_PLATFORM_
-	cbRace = CAndroidGUIComboBox::addAndroidComboBox(env, rect<s32>(60 * xScale, 49 * yScale, 190 * xScale, 69 * yScale), wFilter, -1);
+	cbRace = CAndroidGUIComboBox::addAndroidComboBox(env, rect<s32>(60 * xScale, (40 + 75 / 6) * yScale, 190 * xScale, (60 + 75 / 6) * yScale), wFilter, -1);
 #else
-	cbRace = env->addComboBox(rect<s32>(60 * xScale, 49 * yScale, 190 * xScale, 69 * yScale), wFilter, -1);
+	cbRace = env->addComboBox(rect<s32>(60, 40 + 75 / 6, 190, 60 + 75 / 6), wFilter, -1);
 #endif
 	cbRace->addItem(dataManager.GetSysString(1310), 0);
-	for(int filter = 0x1; filter != 0x1000000; filter <<= 1)
+	for(int filter = 0x1; filter != 0x2000000; filter <<= 1)
 		cbRace->addItem(dataManager.FormatRace(filter), filter);
 	env->addStaticText(dataManager.GetSysString(1322), rect<s32>(205 * xScale, 28 * yScale, 280 * xScale, 48 * yScale), false, false, wFilter);
 #ifdef _IRR_ANDROID_PLATFORM_
@@ -850,16 +859,16 @@ bool Game::Initialize() {
 	ebDefense->setTextAlignment(irr::gui::EGUIA_CENTER, irr::gui::EGUIA_CENTER);
 	env->addStaticText(dataManager.GetSysString(1324), rect<s32>(10 * xScale, 74 * yScale, 80 * xScale, 94 * yScale), false, false, wFilter);
 #ifdef _IRR_ANDROID_PLATFORM_
-	ebStar = CAndroidGUIEditBox::addAndroidEditBox(L"", true, env, rect<s32>(60 * xScale, (60 + 100 / 6) * yScale, 190 * xScale, (80 + 100 / 6) * yScale), wFilter);
+	ebStar = CAndroidGUIEditBox::addAndroidEditBox(L"", true, env, rect<s32>(60 * xScale, (60 + 100 / 6) * yScale, 100 * xScale, (80 + 100 / 6) * yScale), wFilter);
 #else
-	ebStar = env->addEditBox(L"", rect<s32>(60 * xScale, (60 + 100 / 6) * yScale, 190 * xScale, (80 + 100 / 6) * yScale), true, wFilter);
+	ebStar = env->addEditBox(L"", rect<s32>(60 * xScale, (60 + 100 / 6) * yScale, 100 * xScale, (80 + 100 / 6) * yScale), true, wFilter);
 #endif
 	ebStar->setTextAlignment(irr::gui::EGUIA_CENTER, irr::gui::EGUIA_CENTER);
-	env->addStaticText(dataManager.GetSysString(1336), rect<s32>(10 * xScale, (82 + 125 / 6) * yScale, 80 * xScale, (102 + 125 / 6) * yScale), false, false, wFilter);
+	env->addStaticText(dataManager.GetSysString(1336), rect<s32>(101 * xScale, (62 + 100 / 6) * yScale, 150 * xScale, (82 + 100 / 6) * yScale), false, false, wFilter);
 #ifdef _IRR_ANDROID_PLATFORM_
-	ebScale = CAndroidGUIEditBox::addAndroidEditBox(L"", true, env, rect<s32>(60 * xScale, (80 + 125 / 6)  * yScale, 190 * xScale, (100 + 125 / 6) * yScale), wFilter);
+	ebScale = CAndroidGUIEditBox::addAndroidEditBox(L"", true, env, rect<s32>(150 * xScale, (60 + 100 / 6)  * yScale, 190 * xScale, (80 + 100 / 6) * yScale), wFilter);
 #else
-	ebScale = env->addEditBox(L"", rect<s32>(60, 80 + 125 / 6, 190, 100 + 125 / 6), true, wFilter);
+	ebScale = env->addEditBox(L"", rect<s32>(150, 60 + 100 / 6, 190, 80 + 100 / 6), true, wFilter);
 #endif
 	ebScale->setTextAlignment(irr::gui::EGUIA_CENTER, irr::gui::EGUIA_CENTER);
 	env->addStaticText(dataManager.GetSysString(1325), rect<s32>(205 * xScale, (62 + 100 / 6) * yScale, 280 * xScale, (82 + 100 / 6) * yScale), false, false, wFilter);
@@ -893,6 +902,24 @@ bool Game::Initialize() {
 	scrFilter->setVisible(false);
 
 #ifdef _IRR_ANDROID_PLATFORM_
+     //LINK MARKER SEARCH
+	 btnMarksFilter = env->addButton(rect<s32>(60 * xScale, (80 + 125 / 6) * yScale, 190 * xScale, (100 + 125 / 6) * yScale), wFilter, BUTTON_MARKS_FILTER, dataManager.GetSysString(1374));
+ 	wLinkMarks = env->addWindow(rect<s32>(700 * xScale, 30 * yScale, 820 * xScale, 150 * yScale), false, dataManager.strBuffer);
+	wLinkMarks->getCloseButton()->setVisible(false);
+	wLinkMarks->setDrawTitlebar(false);
+	wLinkMarks->setDraggable(false);
+	wLinkMarks->setVisible(false);
+	btnMarksOK = env->addButton(recti(45 * xScale, 45 * yScale, 75 * xScale, 75 * yScale), wLinkMarks, BUTTON_MARKERS_OK, dataManager.GetSysString(1211));
+	btnMark[0] = env->addButton(recti(10 * xScale, 10 * yScale, 40 * xScale, 40 * yScale), wLinkMarks, -1, L"\u2196");
+	btnMark[1] = env->addButton(recti(45 * xScale, 10 * yScale, 75 * xScale, 40 * yScale), wLinkMarks, -1, L"\u2191");
+	btnMark[2] = env->addButton(recti(80 * xScale, 10 * yScale, 110 * xScale, 40 * yScale), wLinkMarks, -1, L"\u2197");
+	btnMark[3] = env->addButton(recti(10 * xScale, 45 * yScale, 40 * xScale, 75 * yScale), wLinkMarks, -1, L"\u2190");
+	btnMark[4] = env->addButton(recti(80 * xScale, 45 * yScale, 110 * xScale, 75 * yScale), wLinkMarks, -1, L"\u2192");
+	btnMark[5] = env->addButton(recti(10 * xScale, 80 * yScale, 40 * xScale, 110 * yScale), wLinkMarks, -1, L"\u2199");
+	btnMark[6] = env->addButton(recti(45 * xScale, 80 * yScale, 75 * xScale, 110 * yScale), wLinkMarks, -1, L"\u2193");
+	btnMark[7] = env->addButton(recti(80 * xScale, 80 * yScale, 110 * xScale, 110 * yScale), wLinkMarks, -1, L"\u2198");
+	for(int i=0;i<8;i++)
+		btnMark[i]->setIsPushButton(true);
 	//replay window
 	wReplay = env->addWindow(rect<s32>(220 * xScale, 100 * yScale, 800 * xScale, 520 * yScale), false, dataManager.GetSysString(1202));
 	wReplay->getCloseButton()->setVisible(false);
@@ -941,10 +968,13 @@ bool Game::Initialize() {
 	wChat->setDraggable(false);
 	wChat->setDrawTitlebar(false);
 	wChat->setVisible(false);
+	//swap
+	btnSpectatorSwap = env->addButton(rect<s32>(205 * xScale, 100 * yScale, 305 * xScale, 135 * yScale), 0, BUTTON_REPLAY_SWAP, dataManager.GetSysString(1346));
+	btnSpectatorSwap->setVisible(false);
 	//chain buttons
-		btnChainIgnore = env->addButton(rect<s32>(205 * xScale, 100 * yScale, 295 * xScale, 135 * yScale), 0, BUTTON_CHAIN_IGNORE, dataManager.GetSysString(1292));
-		btnChainAlways = env->addButton(rect<s32>(205 * xScale, 140 * yScale, 295 * xScale, 175 * yScale), 0, BUTTON_CHAIN_ALWAYS, dataManager.GetSysString(1293));
-		btnChainWhenAvail = env->addButton(rect<s32>(205 * xScale, 180 * yScale, 295 * xScale, 215 * yScale), 0, BUTTON_CHAIN_WHENAVAIL, dataManager.GetSysString(1294));
+		btnChainIgnore = env->addButton(rect<s32>(205 * xScale, 100 * yScale, 305 * xScale, 135 * yScale), 0, BUTTON_CHAIN_IGNORE, dataManager.GetSysString(1292));
+		btnChainAlways = env->addButton(rect<s32>(205 * xScale, 140 * yScale, 305 * xScale, 175 * yScale), 0, BUTTON_CHAIN_ALWAYS, dataManager.GetSysString(1293));
+		btnChainWhenAvail = env->addButton(rect<s32>(205 * xScale, 180 * yScale, 305 * xScale, 215 * yScale), 0, BUTTON_CHAIN_WHENAVAIL, dataManager.GetSysString(1294));
 		btnChainIgnore->setIsPushButton(true);
 		btnChainAlways->setIsPushButton(true);
 		btnChainWhenAvail->setIsPushButton(true);
@@ -952,7 +982,7 @@ bool Game::Initialize() {
 		btnChainAlways->setVisible(false);
 		btnChainWhenAvail->setVisible(false);
 		//cancel or finish
-		btnCancelOrFinish = env->addButton(rect<s32>(205 * xScale, 230 * yScale, 295 * xScale, 280 * yScale), 0, BUTTON_CANCEL_OR_FINISH, dataManager.GetSysString(1295));
+		btnCancelOrFinish = env->addButton(rect<s32>(205 * xScale, 230 * yScale, 305 * xScale, 280 * yScale), 0, BUTTON_CANCEL_OR_FINISH, dataManager.GetSysString(1295));
 		btnCancelOrFinish->setVisible(false);
 #else
 	//replay window
@@ -960,13 +990,12 @@ bool Game::Initialize() {
 	wReplay->getCloseButton()->setVisible(false);
 	wReplay->setVisible(false);
 	lstReplayList = env->addListBox(rect<s32>(10, 30, 350, 400), wReplay, LISTBOX_REPLAY_LIST, true);
-	lstReplayList->setItemHeight(18 * yScale);
+	lstReplayList->setItemHeight(18);
 	btnLoadReplay = env->addButton(rect<s32>(460, 355, 570, 380), wReplay, BUTTON_LOAD_REPLAY, dataManager.GetSysString(1348));
 	btnReplayCancel = env->addButton(rect<s32>(460, 385, 570, 410), wReplay, BUTTON_CANCEL_REPLAY, dataManager.GetSysString(1347));
 	env->addStaticText(dataManager.GetSysString(1349), rect<s32>(360, 30, 570, 50), false, true, wReplay);
 	stReplayInfo = env->addStaticText(L"", rect<s32>(360, 60, 570, 350), false, true, wReplay);
 	env->addStaticText(dataManager.GetSysString(1353), rect<s32>(360, 275, 570, 295), false, true, wReplay);
-
 	ebRepStartTurn = env->addEditBox(L"", rect<s32>(360, 300, 460, 320), true, wReplay, -1);
 	ebRepStartTurn->setTextAlignment(irr::gui::EGUIA_CENTER, irr::gui::EGUIA_CENTER);
 	//single play window
@@ -974,7 +1003,7 @@ bool Game::Initialize() {
 	wSinglePlay->getCloseButton()->setVisible(false);
 	wSinglePlay->setVisible(false);
 	lstSinglePlayList = env->addListBox(rect<s32>(10, 30, 350, 400), wSinglePlay, LISTBOX_SINGLEPLAY_LIST, true);
-	lstSinglePlayList->setItemHeight(18 * yScale);
+	lstSinglePlayList->setItemHeight(18);
 	btnLoadSinglePlay = env->addButton(rect<s32>(460, 355, 570, 380), wSinglePlay, BUTTON_LOAD_SINGLEPLAY, dataManager.GetSysString(1211));
 	btnSinglePlayCancel = env->addButton(rect<s32>(460, 385, 570, 410), wSinglePlay, BUTTON_CANCEL_SINGLEPLAY, dataManager.GetSysString(1210));
 	env->addStaticText(dataManager.GetSysString(1352), rect<s32>(360, 30, 570, 50), false, true, wSinglePlay);
@@ -1003,7 +1032,10 @@ bool Game::Initialize() {
 	wChat->setDraggable(false);
 	wChat->setDrawTitlebar(false);
 	wChat->setVisible(false);
-	ebChatInput = env->addEditBox(L"", rect<s32>(3 * xScale, 2 * yScale, 710 * xScale, 22 * yScale), true, wChat, EDITBOX_CHAT);
+	ebChatInput = env->addEditBox(L"", rect<s32>(3, 2, 710, 22), true, wChat, EDITBOX_CHAT);
+	//swap
+	btnSpectatorSwap = env->addButton(rect<s32>(205, 100, 295, 135), 0, BUTTON_REPLAY_SWAP, dataManager.GetSysString(1346));
+	btnSpectatorSwap->setVisible(false);
 	//chain buttons
 	btnChainIgnore = env->addButton(rect<s32>(205, 100, 295, 135), 0, BUTTON_CHAIN_IGNORE, dataManager.GetSysString(1292));
 	btnChainAlways = env->addButton(rect<s32>(205, 140, 295, 175), 0, BUTTON_CHAIN_ALWAYS, dataManager.GetSysString(1293));
@@ -1025,7 +1057,7 @@ bool Game::Initialize() {
 	ebChatInput = env->addEditBox(L"", rect<s32>(3, 2, 710, 22), true, wChat, EDITBOX_CHAT);
 #endif
 	//
-	btnLeaveGame = env->addButton(rect<s32>(205 * xScale, 5 * yScale, 295 * xScale, 80 * yScale), 0, BUTTON_LEAVE_GAME, L"");
+	btnLeaveGame = env->addButton(rect<s32>(205 * xScale, 5 * yScale, 305 * xScale, 80 * yScale), 0, BUTTON_LEAVE_GAME, L"");
 	btnLeaveGame->setVisible(false);
 	//tip
 	stTip = env->addStaticText(L"", rect<s32>(0 * xScale, 0 * yScale, 150 * xScale, 150 * yScale), false, true, 0, -1, true);
@@ -1417,7 +1449,7 @@ void Game::RefreshSingleplay() {
 }
 void Game::LoadConfig() {
 	wchar_t wstr[256];
-	gameConf.antialias = 0;
+	gameConf.antialias = 1;
 	gameConf.serverport = 7911;
 	gameConf.textfontsize = 16;
 	gameConf.nickname[0] = 0;
@@ -1432,7 +1464,8 @@ void Game::LoadConfig() {
 	gameConf.lastport[0] = 0;
 	gameConf.roompass[0] = 0;
 	//settings
-	gameConf.chkAutoPos = 1;
+	gameConf.chkMAutoPos = 0;
+	gameConf.chkSTAutoPos = 1;
 	gameConf.chkRandomPos = 0;
 	gameConf.chkAutoChain = 0;
 	gameConf.chkWaitChain = 0;
@@ -1442,6 +1475,7 @@ void Game::LoadConfig() {
 	gameConf.control_mode = 0;
 	gameConf.draw_field_spell = 1;
 	gameConf.separate_clear_button = 1;
+	gameConf.auto_search_limit = -1;
 }
 
 void Game::SaveConfig() {
@@ -1480,21 +1514,30 @@ void Game::ShowCardInfo(int code) {
 	if(cd.type & TYPE_MONSTER) {
 		myswprintf(formatBuffer, L"[%ls] %ls/%ls", dataManager.FormatType(cd.type), dataManager.FormatRace(cd.race), dataManager.FormatAttribute(cd.attribute));
 		stInfo->setText(formatBuffer);
-		int form = 0x2605;
-		if(cd.type & TYPE_XYZ) ++form ;
-		formatBuffer[0] = L'[';
-		formatBuffer[1] = form;
-		myswprintf((wchar_t*)&formatBuffer[2], L"%d]",cd.level);
-		wchar_t adBuffer[16];
-		if(cd.attack < 0 && cd.defense < 0)
-			myswprintf(adBuffer, L"?/?");
-		else if(cd.attack < 0)
-			myswprintf(adBuffer, L"?/%d", cd.defense);
-		else if(cd.defense < 0)
-			myswprintf(adBuffer, L"%d/?", cd.attack);
-		else
-			myswprintf(adBuffer, L"%d/%d", cd.attack, cd.defense);
-		wcscat(formatBuffer, adBuffer);
+		if(!(cd.type & TYPE_LINK)) {
+			wchar_t* form = L"\u2605";
+			if(cd.type & TYPE_XYZ) form = L"\u2606";
+			myswprintf(formatBuffer, L"[%ls%d] ", form, cd.level);
+			wchar_t adBuffer[16];
+			if(cd.attack < 0 && cd.defense < 0)
+				myswprintf(adBuffer, L"?/?");
+			else if(cd.attack < 0)
+				myswprintf(adBuffer, L"?/%d", cd.defense);
+			else if(cd.defense < 0)
+				myswprintf(adBuffer, L"%d/?", cd.attack);
+			else
+				myswprintf(adBuffer, L"%d/%d", cd.attack, cd.defense);
+			wcscat(formatBuffer, adBuffer);
+		} else {
+			myswprintf(formatBuffer, L"[LINK-%d] ", cd.level);
+			wchar_t adBuffer[16];
+			if(cd.attack < 0)
+				myswprintf(adBuffer, L"?/-   ");
+			else
+				myswprintf(adBuffer, L"%d/-   ", cd.attack);
+			wcscat(formatBuffer, adBuffer);
+			wcscat(formatBuffer, dataManager.FormatLinkMarker(cd.link_marker));
+		}
 		if(cd.type & TYPE_PENDULUM) {
 			wchar_t scaleBuffer[16];
 			myswprintf(scaleBuffer, L"   %d/%d", cd.lscale, cd.rscale);
@@ -1550,13 +1593,32 @@ void Game::AddChatMsg(wchar_t* msg, int player) {
 		chatMsg[0].append(L"[System]: ");
 		break;
 	case 9: //error message
-		chatMsg[0].append(L"[Script error:] ");
+		chatMsg[0].append(L"[Script Error]: ");
 		break;
 	default: //from watcher or unknown
 		if(player < 11 || player > 19)
 			chatMsg[0].append(L"[---]: ");
 	}
 	chatMsg[0].append(msg);
+}
+void Game::AddDebugMsg(char* msg)
+{
+	if (enable_log & 0x1) {
+		wchar_t wbuf[1024];
+		BufferIO::DecodeUTF8(msg, wbuf);
+		mainGame->AddChatMsg(wbuf, 9);
+	}
+	if (enable_log & 0x2) {
+		FILE* fp = fopen("error.log", "at");
+		if (!fp)
+			return;
+		time_t nowtime = time(NULL);
+		struct tm *localedtime = localtime(&nowtime);
+		char timebuf[40];
+		strftime(timebuf, 40, "%Y-%m-%d %H:%M:%S", localedtime);
+		fprintf(fp, "[%s][Script Error]: %s\n", timebuf, msg);
+		fclose(fp);
+	}
 }
 void Game::ClearTextures() {
 	matManager.mCard.setTexture(0, 0);
@@ -1596,6 +1658,7 @@ void Game::CloseDuelWindow() {
 	stHintMsg->setVisible(false);
 	btnSideOK->setVisible(false);
 	btnLeaveGame->setVisible(false);
+	btnSpectatorSwap->setVisible(false);
 	btnChainIgnore->setVisible(false);
 	btnChainAlways->setVisible(false);
 	btnChainWhenAvail->setVisible(false);

@@ -35,6 +35,7 @@ public:
 	const wchar_t* FormatRace(int race);
 	const wchar_t* FormatType(int type);
 	const wchar_t* FormatSetName(unsigned long long setcode);
+	const wchar_t* FormatLinkMarker(int link_marker);
 
 	std::unordered_map<unsigned int, CardDataC> _datas;
 	std::unordered_map<unsigned int, CardString> _strings;
@@ -49,6 +50,7 @@ public:
 	wchar_t racBuffer[128];
 	wchar_t tpBuffer[128];
 	wchar_t scBuffer[128];
+	wchar_t lmBuffer[32];
 
 	static wchar_t strBuffer[4096];
 	static const wchar_t* unknown_string;

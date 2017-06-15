@@ -73,6 +73,8 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 			break;
 		if(mainGame->wQuery->isVisible() && id != BUTTON_YES && id != BUTTON_NO)
 			break;
+		if(mainGame->wLinkMarks->isVisible() && id != BUTTON_MARKERS_OK)
+			break;
 		switch(event.GUIEvent.EventType) {
 		case irr::gui::EGET_BUTTON_CLICKED: {
 			switch(id) {
@@ -172,19 +174,7 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 				break;
 			}
 			case BUTTON_START_FILTER: {
-				mainGame->soundEffectPlayer->doPressButton();
-				filter_type = mainGame->cbCardType->getSelected();
-				filter_type2 = mainGame->cbCardType2->getItemData(mainGame->cbCardType2->getSelected());
-				filter_lm = mainGame->cbLimit->getSelected();
-				if(filter_type == 1) {
-					filter_attrib = mainGame->cbAttribute->getItemData(mainGame->cbAttribute->getSelected());
-					filter_race = mainGame->cbRace->getItemData(mainGame->cbRace->getSelected());
-					filter_atk = parse_filter(mainGame->ebAttack->getText(), &filter_atktype);
-					filter_def = parse_filter(mainGame->ebDefense->getText(), &filter_deftype);
-					filter_lv = parse_filter(mainGame->ebStar->getText(), &filter_lvtype);
-					filter_scl = parse_filter(mainGame->ebScale->getText(), &filter_scltype);
-				}
-				FilterCards();
+				StartFilter();
 				if(!mainGame->gameConf.separate_clear_button)
 					ClearFilter();
 				break;
@@ -263,6 +253,31 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 				is_clearing = false;
 				break;
 			}
+			case BUTTON_MARKS_FILTER: {
+				mainGame->PopupElement(mainGame->wLinkMarks);
+				break;
+			}
+			case BUTTON_MARKERS_OK: {
+				filter_marks = 0;
+				if (mainGame->btnMark[0]->isPressed())
+					filter_marks |= 0100;
+				if (mainGame->btnMark[1]->isPressed())
+					filter_marks |= 0200;
+				if (mainGame->btnMark[2]->isPressed())
+					filter_marks |= 0400;
+				if (mainGame->btnMark[3]->isPressed())
+					filter_marks |= 0010;
+				if (mainGame->btnMark[4]->isPressed())
+					filter_marks |= 0040;
+				if (mainGame->btnMark[5]->isPressed())
+					filter_marks |= 0001;
+				if (mainGame->btnMark[6]->isPressed())
+					filter_marks |= 0002;
+				if (mainGame->btnMark[7]->isPressed())
+					filter_marks |= 0004;
+				mainGame->HideElement(mainGame->wLinkMarks);
+				break;
+			}
 			}
 			break;
 		}
@@ -279,12 +294,17 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 		case irr::gui::EGET_EDITBOX_ENTER: {
 			switch(id) {
 			case EDITBOX_KEYWORD: {
-				irr::SEvent me;
-				me.EventType = irr::EET_GUI_EVENT;
-				me.GUIEvent.EventType = irr::gui::EGET_BUTTON_CLICKED;
-				me.GUIEvent.Caller = mainGame->btnStartFilter;
-				me.GUIEvent.Element = mainGame->btnStartFilter;
-				mainGame->device->postEventFromUser(me);
+				StartFilter();
+				break;
+			}
+			}
+			break;
+		}
+		case irr::gui::EGET_EDITBOX_CHANGED: {
+			switch(id) {
+			case EDITBOX_KEYWORD: {
+				if(mainGame->gameConf.auto_search_limit >= 0 && (wcslen(mainGame->ebCardName->getText()) >= mainGame->gameConf.auto_search_limit))
+					StartFilter();
 				break;
 			}
 			}
@@ -340,6 +360,8 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 					mainGame->cbCardType2->addItem(dataManager.GetSysString(1063), TYPE_MONSTER + TYPE_SYNCHRO);
 					mainGame->cbCardType2->addItem(dataManager.GetSysString(1073), TYPE_MONSTER + TYPE_XYZ);
 					mainGame->cbCardType2->addItem(dataManager.GetSysString(1074), TYPE_MONSTER + TYPE_PENDULUM);
+					mainGame->cbCardType2->addItem(dataManager.GetSysString(1076), TYPE_MONSTER + TYPE_LINK);
+					mainGame->cbCardType2->addItem(dataManager.GetSysString(1075), TYPE_MONSTER + TYPE_SPSUMMON);
 					myswprintf(normaltuner, L"%ls|%ls", dataManager.GetSysString(1054), dataManager.GetSysString(1062));
 					mainGame->cbCardType2->addItem(normaltuner, TYPE_MONSTER + TYPE_NORMAL + TYPE_TUNER);
 					myswprintf(normalpen, L"%ls|%ls", dataManager.GetSysString(1054), dataManager.GetSysString(1074));
@@ -393,6 +415,17 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 			case COMBOBOX_SORTTYPE: {
 				SortList();
 				mainGame->env->setFocus(0);
+				break;
+			}
+			case COMBOBOX_SECONDTYPE: {
+				if (mainGame->cbCardType->getSelected() == 1) {
+					if (mainGame->cbCardType2->getSelected() == 8) {
+						mainGame->ebDefense->setEnabled(false);
+						mainGame->ebDefense->setText(L"");
+					} else {
+						mainGame->ebDefense->setEnabled(true);
+					}
+				}
 				break;
 			}
 			}
@@ -451,7 +484,8 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 			if(!is_draging)
 				break;
 			if(!mainGame->is_siding) {
-				if((hovered_pos == 1 && (draging_pointer->second.type & 0x802040)) || (hovered_pos == 2 && !(draging_pointer->second.type & 0x802040)))
+				if((hovered_pos == 1 && (draging_pointer->second.type & (TYPE_FUSION | TYPE_SYNCHRO | TYPE_XYZ | TYPE_LINK)))
+					|| (hovered_pos == 2 && !(draging_pointer->second.type & (TYPE_FUSION | TYPE_SYNCHRO | TYPE_XYZ | TYPE_LINK))))
 					hovered_pos = 0;
 				if((hovered_pos == 1 || (hovered_pos == 0 && click_pos == 1)) && deckManager.current_deck.main.size() < 60) {
 					if(hovered_seq == -1)
@@ -477,7 +511,9 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 				} else if (hovered_pos == 4)
 					is_draging = false;
 			} else {
-				if((hovered_pos == 1 && (draging_pointer->second.type & 0x802040)) || (hovered_pos == 2 && !(draging_pointer->second.type & 0x802040)) || hovered_pos == 4)
+				if((hovered_pos == 1 && (draging_pointer->second.type & (TYPE_FUSION | TYPE_SYNCHRO | TYPE_XYZ | TYPE_LINK)))
+					|| (hovered_pos == 2 && !(draging_pointer->second.type & (TYPE_FUSION | TYPE_SYNCHRO | TYPE_XYZ | TYPE_LINK)))
+					|| hovered_pos == 4)
 					hovered_pos = 0;
 				if((hovered_pos == 1 || (hovered_pos == 0 && click_pos == 1)) && deckManager.current_deck.main.size() < 65) {
 					if(hovered_seq == -1)
@@ -533,11 +569,11 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 						deckManager.current_deck.side.push_back(draging_pointer);
 					}
 				} else {
-					if((draging_pointer->second.type & 0x802040) && deckManager.current_deck.extra.size() < 20) {
+					if((draging_pointer->second.type & (TYPE_FUSION | TYPE_SYNCHRO | TYPE_XYZ | TYPE_LINK)) && deckManager.current_deck.extra.size() < 20) {
 						deckManager.current_deck.side.erase(deckManager.current_deck.side.begin() + hovered_seq);
 						deckManager.current_deck.extra.push_back(draging_pointer);
 					}
-					if(!(draging_pointer->second.type & 0x802040) && deckManager.current_deck.main.size() < 64) {
+					if(!(draging_pointer->second.type & (TYPE_FUSION | TYPE_SYNCHRO | TYPE_XYZ | TYPE_LINK)) && deckManager.current_deck.main.size() < 64) {
 						deckManager.current_deck.side.erase(deckManager.current_deck.side.begin() + hovered_seq);
 						deckManager.current_deck.main.push_back(draging_pointer);
 					}
@@ -571,10 +607,10 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 				if(!is_draging)
 					deckManager.current_deck.side.erase(deckManager.current_deck.side.begin() + hovered_seq);
 				else {
-					if((draging_pointer->second.type & 0x802040) && deckManager.current_deck.extra.size() < 15) {
+					if((draging_pointer->second.type & (TYPE_FUSION | TYPE_SYNCHRO | TYPE_XYZ | TYPE_LINK)) && deckManager.current_deck.extra.size() < 15) {
 						deckManager.current_deck.extra.push_back(draging_pointer);
 						is_draging = false;
-					} else if(!(draging_pointer->second.type & 0x802040) && deckManager.current_deck.main.size() < 60) {
+					} else if(!(draging_pointer->second.type & (TYPE_FUSION | TYPE_SYNCHRO | TYPE_XYZ | TYPE_LINK)) && deckManager.current_deck.main.size() < 60) {
 						deckManager.current_deck.main.push_back(draging_pointer);
 						is_draging = false;
 					}
@@ -604,9 +640,9 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 							limit--;
 					if(limit <= 0)
 						break;
-					if((draging_pointer->second.type & 0x802040) && deckManager.current_deck.extra.size() < 15) {
+					if((draging_pointer->second.type & (TYPE_FUSION | TYPE_SYNCHRO | TYPE_XYZ | TYPE_LINK)) && deckManager.current_deck.extra.size() < 15) {
 						deckManager.current_deck.extra.push_back(draging_pointer);
-					} else if(!(draging_pointer->second.type & 0x802040) && deckManager.current_deck.main.size() < 60) {
+					} else if(!(draging_pointer->second.type & (TYPE_FUSION | TYPE_SYNCHRO | TYPE_XYZ | TYPE_LINK)) && deckManager.current_deck.main.size() < 60) {
 						deckManager.current_deck.main.push_back(draging_pointer);
 					} else if (deckManager.current_deck.side.size() < 15) {
 						deckManager.current_deck.side.push_back(draging_pointer);
@@ -657,15 +693,15 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 				if (deckManager.current_deck.side.size() < 15)
 					deckManager.current_deck.side.push_back(draging_pointer);
 				else {
-					if ((draging_pointer->second.type & 0x802040) && deckManager.current_deck.extra.size() < 15)
+					if ((draging_pointer->second.type & (TYPE_FUSION | TYPE_SYNCHRO | TYPE_XYZ | TYPE_LINK)) && deckManager.current_deck.extra.size() < 15)
 						deckManager.current_deck.extra.push_back(draging_pointer);
-					else if (!(draging_pointer->second.type & 0x802040) && deckManager.current_deck.main.size() < 60)
+					else if (!(draging_pointer->second.type & (TYPE_FUSION | TYPE_SYNCHRO | TYPE_XYZ | TYPE_LINK)) && deckManager.current_deck.main.size() < 60)
 						deckManager.current_deck.main.push_back(draging_pointer);
 				}
 			} else {
-				if ((draging_pointer->second.type & 0x802040) && deckManager.current_deck.extra.size() < 15)
+				if ((draging_pointer->second.type & (TYPE_FUSION | TYPE_SYNCHRO | TYPE_XYZ | TYPE_LINK)) && deckManager.current_deck.extra.size() < 15)
 					deckManager.current_deck.extra.push_back(draging_pointer);
-				else if (!(draging_pointer->second.type & 0x802040) && deckManager.current_deck.main.size() < 60)
+				else if (!(draging_pointer->second.type & (TYPE_FUSION | TYPE_SYNCHRO | TYPE_XYZ | TYPE_LINK)) && deckManager.current_deck.main.size() < 60)
 					deckManager.current_deck.main.push_back(draging_pointer);
 				else if (deckManager.current_deck.side.size() < 15)
 					deckManager.current_deck.side.push_back(draging_pointer);
@@ -792,6 +828,20 @@ bool DeckBuilder::OnEvent(const irr::SEvent& event) {
 	}
 	return false;
 }
+void DeckBuilder::StartFilter() {
+	filter_type = mainGame->cbCardType->getSelected();
+	filter_type2 = mainGame->cbCardType2->getItemData(mainGame->cbCardType2->getSelected());
+	filter_lm = mainGame->cbLimit->getSelected();
+	if(filter_type == 1) {
+		filter_attrib = mainGame->cbAttribute->getItemData(mainGame->cbAttribute->getSelected());
+		filter_race = mainGame->cbRace->getItemData(mainGame->cbRace->getSelected());
+		filter_atk = parse_filter(mainGame->ebAttack->getText(), &filter_atktype);
+		filter_def = parse_filter(mainGame->ebDefense->getText(), &filter_deftype);
+		filter_lv = parse_filter(mainGame->ebStar->getText(), &filter_lvtype);
+		filter_scl = parse_filter(mainGame->ebScale->getText(), &filter_scltype);
+	}
+	FilterCards();
+}
 void DeckBuilder::FilterCards() {
 	results.clear();
 	const wchar_t* pstr = mainGame->ebCardName->getText();
@@ -834,7 +884,8 @@ void DeckBuilder::FilterCards() {
 			if(filter_deftype) {
 				if((filter_deftype == 1 && data.defense != filter_def) || (filter_deftype == 2 && data.defense < filter_def)
 				        || (filter_deftype == 3 && data.defense <= filter_def) || (filter_deftype == 4 && (data.defense > filter_def || data.defense < 0))
-				        || (filter_deftype == 5 && (data.defense >= filter_def || data.defense < 0)) || (filter_deftype == 6 && data.defense != -2))
+				        || (filter_deftype == 5 && (data.defense >= filter_def || data.defense < 0)) || (filter_deftype == 6 && data.defense != -2)
+				        || (data.type & TYPE_LINK))
 					continue;
 			}
 			if(filter_lvtype) {
@@ -868,6 +919,8 @@ void DeckBuilder::FilterCards() {
 		}
 		if(filter_effect && !(data.category & filter_effect))
 			continue;
+		if(filter_marks && (data.link_marker & filter_marks)!= filter_marks)
+			continue;
 		if(filter_lm) {
 			if(filter_lm <= 3 && (!filterList->count(ptr->first) || (*filterList)[ptr->first] != filter_lm - 1))
 				continue;
@@ -882,12 +935,12 @@ void DeckBuilder::FilterCards() {
 		}
 		if(pstr) {
 			if(pstr[0] == L'$') {
-				if(wcsstr(text.name, &pstr[1]) == 0)
+				if(!CardNameContains(text.name, &pstr[1]))
 					continue;
 			} else if(pstr[0] == L'@' && set_code) {
 				if(!check_set_code(data, set_code)) continue;
 			} else {
-				if(wcsstr(text.name, pstr) == 0 && wcsstr(text.text, pstr) == 0
+				if(!CardNameContains(text.name, pstr) && wcsstr(text.text, pstr) == 0
 					&& (!set_code || !check_set_code(data, set_code)))
 					continue;
 			}
@@ -917,6 +970,8 @@ void DeckBuilder::ClearSearch() {
 	mainGame->ebScale->setEnabled(false);
 	mainGame->ebCardName->setText(L"");
 	ClearFilter();
+	results.clear();
+	myswprintf(result_string, L"%d", 0);
 }
 void DeckBuilder::ClearFilter() {
 	mainGame->cbAttribute->setSelected(0);
@@ -929,6 +984,9 @@ void DeckBuilder::ClearFilter() {
 	filter_effect = 0;
 	for(int i = 0; i < 32; ++i)
 		mainGame->chkCategory[i]->setChecked(false);
+	filter_marks = 0;
+	for(int i = 0; i < 8; i++)
+		mainGame->btnMark[i]->setPressed(false);
 }
 void DeckBuilder::SortList() {
 	auto left = results.begin();
@@ -954,5 +1012,46 @@ void DeckBuilder::SortList() {
 		break;
 	}
 }
-
+static inline wchar_t NormalizeChar(wchar_t c) {
+	/*
+	// Convert all symbols and punctuations to space.
+	if (c != 0 && c < 128 && !isalnum(c)) {
+		return ' ';
+	}
+	*/
+	// Convert latin chararacters to uppercase to ignore case.
+	if (c < 128 && isalpha(c)) {
+		return toupper(c);
+	}
+	// Remove some accentued characters that are not supported by the editbox.
+	if (c >= 232 && c <= 235) {
+		return 'E';
+	}
+	if (c >= 238 && c <= 239) {
+		return 'I';
+	}
+	return c;
+}
+bool DeckBuilder::CardNameContains(const wchar_t *haystack, const wchar_t *needle)
+{
+	if (!needle[0]) {
+		return true;
+	}
+	int i = 0;
+	int j = 0;
+	while (haystack[i]) {
+		wchar_t ca = NormalizeChar(haystack[i]);
+		wchar_t cb = NormalizeChar(needle[j]);
+		if (ca == cb) {
+			j++;
+			if (!needle[j]) {
+				return true;
+			}
+		} else {
+			j = 0;
+		}
+		i++;
+	}
+	return false;
+}
 }

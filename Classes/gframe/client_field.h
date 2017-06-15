@@ -45,7 +45,7 @@ public:
 	std::vector<int> select_options;
 	std::vector<ChainInfo> chains;
 	int extra_p_count[2];
-	
+
 	size_t selected_option;
 	ClientCard* attacker;
 	ClientCard* attack_target;
@@ -130,7 +130,6 @@ public:
 	ClientCard* command_card;
 	ClientCard* highlighting_card;
 	int list_command;
-	wchar_t formatBuffer[2048];
 
 	virtual bool OnEvent(const irr::SEvent& event);
 	void GetHoverField(int x, int y);
