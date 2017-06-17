@@ -274,7 +274,7 @@ class DeckManagerActivityImpl extends BaseCardsAcitivity implements RecyclerView
 
     @Override
     protected void onCardLongClick(View view, CardInfo cardInfo, int pos) {
-        mCardListAdapater.showMenu(view);
+      //  mCardListAdapater.showMenu(view);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
