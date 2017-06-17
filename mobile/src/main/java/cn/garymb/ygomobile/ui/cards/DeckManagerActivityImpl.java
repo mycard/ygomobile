@@ -1,7 +1,5 @@
 package cn.garymb.ygomobile.ui.cards;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -573,7 +571,7 @@ class DeckManagerActivityImpl extends BaseCardsAcitivity implements RecyclerView
                     loadDeck(null);
                     inputDeckName(old);
                 });
-                builder.setCloseLinster((dlg, rs) -> {
+                builder.setOnCloseLinster((dlg) -> {
                     dlg.dismiss();
                     loadDeck(null);
                     inputDeckName(old);
@@ -840,7 +838,7 @@ class DeckManagerActivityImpl extends BaseCardsAcitivity implements RecyclerView
             editText.setText(mYdkFile.getName());
         }
         builder.setContentView(editText);
-        builder.setCloseLinster((dlg, rs) -> {
+        builder.setOnCloseLinster((dlg) -> {
             dlg.dismiss();
             if (old != null) {
                 loadDeck(new File(old));

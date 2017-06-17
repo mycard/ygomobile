@@ -1,6 +1,5 @@
 package cn.garymb.ygomobile.ui.home;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.widget.Toast;
@@ -10,14 +9,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
-import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
@@ -26,6 +23,7 @@ import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.bean.CardInfo;
 import cn.garymb.ygomobile.loader.CardLoader;
 import cn.garymb.ygomobile.lite.R;
+import cn.garymb.ygomobile.ui.plus.DialogPlus;
 import cn.garymb.ygomobile.ui.plus.VUiKit;
 import cn.garymb.ygomobile.utils.IOUtils;
 import ocgcore.enums.CardType;
@@ -41,7 +39,7 @@ public class ImageUpdater implements DialogInterface.OnCancelListener {
     private int mDownloading = 0;
     private final List<Item> mCardStatus = new ArrayList<>();
     private ExecutorService mExecutorService = Executors.newFixedThreadPool(SubThreads);
-    private ProgressDialog mDialog;
+    private DialogPlus mDialog;
     private int mIndex;
     private int mCount;
     private int mCompleted;
@@ -85,8 +83,8 @@ public class ImageUpdater implements DialogInterface.OnCancelListener {
                 mDialog.show();
             }
         } else {
-            mDialog = ProgressDialog.show(mContext, null, mContext.getString(R.string.download_image_progress, mCompleted, mCount), true, true);
-            mDialog.setOnCancelListener(this);
+            mDialog = DialogPlus.show(mContext, mContext.getString(R.string.download_images), mContext.getString(R.string.download_image_progress, mCompleted, mCount), true);
+            mDialog.setOnCloseLinster(this);
             mDialog.show();
         }
         VUiKit.defer().when(() -> {
@@ -127,6 +125,7 @@ public class ImageUpdater implements DialogInterface.OnCancelListener {
         synchronized (mCardStatus) {
             mStop = true;
         }
+        dialog.dismiss();
     }
 
     private boolean submit(Item item) {

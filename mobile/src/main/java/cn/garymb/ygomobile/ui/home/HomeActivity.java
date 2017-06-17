@@ -9,13 +9,11 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerViewItemListener;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -109,7 +107,7 @@ abstract class HomeActivity extends BaseActivity implements NavigationView.OnNav
                 dialog.dismiss();
             });
             dialogPlus.setCancelable(false);
-            dialogPlus.setCloseLinster(null);
+            dialogPlus.setOnCloseLinster(null);
             dialogPlus.show();
         } else if (event.join) {
             joinRoom(event.position);
@@ -286,7 +284,7 @@ abstract class HomeActivity extends BaseActivity implements NavigationView.OnNav
             }
             joinGame(serverInfo, name);
         });
-        builder.setCloseLinster((dlg, vs) -> {
+        builder.setOnCloseLinster((dlg) -> {
             dlg.dismiss();
         });
         builder.setOnCancelListener((dlg) -> {

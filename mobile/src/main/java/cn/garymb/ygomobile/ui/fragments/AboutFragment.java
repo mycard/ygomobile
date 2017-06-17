@@ -74,7 +74,7 @@ public class AboutFragment extends PreferenceFragmentPlus {
 //                        .show();
 //            });
             new DialogPlus(getActivity())
-                    .setTitle(getString(R.string.settings_about_change_log))
+                    .setTitleText(getString(R.string.settings_about_change_log))
                     .loadUrl("file:///android_asset/changelog.html", Color.TRANSPARENT)
                     .show();
         } else if ("pref_key_open_alipay".equals(key)) {

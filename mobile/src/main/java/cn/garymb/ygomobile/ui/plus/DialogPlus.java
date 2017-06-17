@@ -1,11 +1,10 @@
 package cn.garymb.ygomobile.ui.plus;
 
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.GestureDetector;
 import android.view.Gravity;
@@ -13,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -27,13 +25,14 @@ public class DialogPlus extends Dialog {
     //
     private TextView mTitleView;
     private View closeView;
-    private FrameLayout mFrameLayout;
+    private ViewGroup mFrameLayout;
     private Button mLeft;
     private Button mRight;
     private View mContentView;
     private int mMaxHeight, mMaxWidth;
     private String mUrl, mHtml;
     private View mCancelLayout, mButtonLayout, mTitleLayout;
+    private View mProgressBar;
     private WebViewPlus mWebView;
     private final GestureDetector mGestureDetector;
     private GestureDetector.OnGestureListener mOnGestureListener;
@@ -59,7 +58,8 @@ public class DialogPlus extends Dialog {
         mCancelLayout = $(R.id.layout_cancel);
         mButtonLayout = $(R.id.layout_button);
         mTitleLayout = $(R.id.layout_title);
-        setCloseLinster((dlg, id) -> {
+        mProgressBar = $(R.id.pb1);
+        setOnCloseLinster((dlg) -> {
             dlg.dismiss();
         });
     }
@@ -87,11 +87,11 @@ public class DialogPlus extends Dialog {
         return this;
     }
 
-    public DialogPlus setCloseLinster(DialogInterface.OnClickListener clickListener) {
+    public DialogPlus setOnCloseLinster(OnCancelListener clickListener) {
         if (closeView != null) {
             closeView.setOnClickListener((v) -> {
                 if (clickListener != null) {
-                    clickListener.onClick(this, DialogInterface.BUTTON_NEGATIVE);
+                    clickListener.onCancel(this);
                 } else {
                     dismiss();
                 }
@@ -129,9 +129,41 @@ public class DialogPlus extends Dialog {
         return this;
     }
 
+    public static DialogPlus show(Context context, CharSequence title,
+                                  CharSequence message,
+                                  boolean cancelable) {
+        return show(context, title, message, cancelable, null);
+    }
+
+    public static DialogPlus show(Context context, CharSequence title,
+                                  CharSequence message,
+                                  boolean cancelable, OnCancelListener cancelListener) {
+        DialogPlus dialog = new DialogPlus(context);
+        dialog.setTitle(title);
+        dialog.setMessage(message);
+        dialog.setCancelable(cancelable);
+        dialog.setOnCancelListener(cancelListener);
+        dialog.hideButton();
+        dialog.showProgressBar();
+        dialog.show();
+        return dialog;
+    }
+
     @Override
     public void setTitle(int id) {
         setTitle(context.getString(id));
+    }
+
+    public DialogPlus showProgressBar(){
+        if(mProgressBar != null){
+            mProgressBar.setVisibility(View.VISIBLE);
+        }
+        return this;
+    }
+
+    @Override
+    public void setTitle(@Nullable CharSequence title) {
+        setTitleText(title == null ? null : title.toString());
     }
 
     public DialogPlus setMessage(int id) {
@@ -151,7 +183,7 @@ public class DialogPlus extends Dialog {
         return this;
     }
 
-    public DialogPlus setTitle(String text) {
+    public DialogPlus setTitleText(String text) {
         if (mTitleView != null) {
             mTitleView.setText(text);
         }

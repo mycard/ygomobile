@@ -44,10 +44,10 @@ public class MainActivity extends HomeActivity {
             }
             if (isNew) {
                 new DialogPlus(this)
-                        .setTitle(getString(R.string.settings_about_change_log))
+                        .setTitleText(getString(R.string.settings_about_change_log))
                         .loadUrl("file:///android_asset/changelog.html", Color.TRANSPARENT)
                         .hideButton()
-                        .setCloseLinster((dlg, rs) -> {
+                        .setOnCloseLinster((dlg) -> {
                             dlg.dismiss();
                             //mImageUpdater
                             if (NetUtils.isConnected(getContext())) {
