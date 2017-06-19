@@ -44,7 +44,9 @@
 
         <LinearLayout
             android:id="@+id/container"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:minWidth="200dp"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:minHeight="@dimen/button_width_small"
