@@ -15,6 +15,7 @@ ndk编译环境
 
 1.编译irrlicht库
 --------------------------
+    项目根目录运行命令行窗口
     cd irrlicht/source/Irrlicht/Android
     ndk-build -j4
     成功：irrlicht\lib\Android\armeabi-v7a\libIrrlicht.a
@@ -31,7 +32,7 @@ ndk编译环境
 
 2.编译ygo的so
 -------------------------
-    cd ../../../
+    项目根目录运行命令行窗口
     cd libcore
     ndk-build -j4
     成功：libcore\libs\armeabi-v7a\libYGOMobile.so
