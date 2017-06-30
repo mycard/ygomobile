@@ -246,7 +246,9 @@ public class DialogPlus extends Dialog {
         this.mContentView = view;
         if (mFrameLayout != null) {
             mFrameLayout.removeAllViews();
-            mFrameLayout.addView(view);
+            mFrameLayout.addView(view,new ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT));
         }
     }
 
