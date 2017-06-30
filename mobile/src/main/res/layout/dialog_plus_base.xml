@@ -14,6 +14,7 @@
         android:id="@+id/layout_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <TextView
             android:id="@+id/title"
             android:layout_width="wrap_content"
@@ -44,20 +45,21 @@
 
         <LinearLayout
             android:id="@+id/container"
-            android:layout_width="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:minWidth="200dp"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_gravity="center_horizontal"
             android:layout_weight="1"
             android:minHeight="@dimen/button_width_small"
+            android:minWidth="200dp"
             android:orientation="horizontal"
             >
+
             <ProgressBar
                 android:id="@+id/pb1"
+                style="?android:attr/progressBarStyleSmall"
                 android:layout_width="@dimen/button_width_small"
                 android:layout_height="@dimen/button_width_small"
                 android:layout_marginLeft="10dp"
-                style="?android:attr/progressBarStyleSmall"
                 android:visibility="gone"
                 tools:visibility="visible"/>
 
@@ -66,7 +68,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left|center_vertical"
-                android:gravity="center"
+                android:layout_marginLeft="10dp"
+                android:gravity="left"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 android:textColor="@color/holo_blue_bright"
                 android:visibility="gone"
@@ -80,8 +83,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal|bottom"
-            android:paddingTop="10dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingTop="10dp">
 
             <FrameLayout
                 android:layout_width="0dp"
@@ -100,12 +103,12 @@
             </FrameLayout>
 
             <FrameLayout
+                android:id="@+id/layout_cancel"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:id="@+id/layout_cancel"
-                tools:visibility="visible"
+                android:layout_weight="1"
                 android:visibility="gone"
-                android:layout_weight="1">
+                tools:visibility="visible">
 
                 <Button
                     android:id="@+id/button_cancel"

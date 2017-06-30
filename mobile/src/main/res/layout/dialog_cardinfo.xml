@@ -276,16 +276,17 @@
             </LinearLayout>
         </LinearLayout>
 
-        <FrameLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
-            android:background="@drawable/red">
+            android:background="@drawable/red"
+            android:orientation="vertical">
 
             <ScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingBottom="25dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"
                 android:scrollbars="none">
 
                 <TextView
@@ -305,14 +306,13 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
                 android:orientation="vertical">
 
                 <View
                     android:id="@+id/view_bar"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="4dp"
                     android:background="@color/white"/>
 
                 <FrameLayout
@@ -376,7 +376,7 @@
 
                 </FrameLayout>
             </LinearLayout>
-        </FrameLayout>
+        </LinearLayout>
 
     </LinearLayout>
 
