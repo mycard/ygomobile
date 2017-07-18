@@ -191,7 +191,7 @@ static void* join_game_thread(void* param) {
 	wchar_t wbuff[256];
 	char linelog[256];
 	BufferIO::DecodeUTF8(options.getIPAddr(), wbuff);
-	ygo::mainGame->ebJoinIP->setText(wbuff);
+	ygo::mainGame->ebJoinHost->setText(wbuff);
 
 	myswprintf(wbuff, L"%d", options.getPort());
 	BufferIO::EncodeUTF8(wbuff, linelog);

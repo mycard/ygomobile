@@ -3,7 +3,10 @@
 // For conditions of distribution and use, see copyright notice in Irrlicht.h
 
 #include "CEGLManager.h"
-
+#if defined(__ANDROID__) || defined(ANDROID)
+#include <android/native_window.h>
+typedef struct ANativeWindow*           EGLNativeWindowType;
+#endif
 #ifdef _IRR_COMPILE_WITH_EGL_MANAGER_
 
 #include "irrString.h"

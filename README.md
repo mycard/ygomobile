@@ -18,7 +18,8 @@ ndk编译环境
     项目根目录运行命令行窗口
     cd irrlicht/source/Irrlicht/Android
     ndk-build -j4
-    成功：irrlicht\lib\Android\armeabi-v7a\libIrrlicht.a
+    成功  irrlicht/source/Irrlicht/Android/obj/local/armeabi-v7a/libIrrlicht.a
+    复制到：irrlicht\lib\Android\armeabi-v7a\libIrrlicht.a
     大于62.5M才算成功
     如果要支持armeabi和x86的cpu，
     请编辑文件：irrlicht/source/Irrlicht/Android/jni/Application.mk

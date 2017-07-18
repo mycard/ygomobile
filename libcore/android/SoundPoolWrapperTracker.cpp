@@ -39,11 +39,11 @@ SoundPoolWrapperTracker::~SoundPoolWrapperTracker() {
 
 void* audioPlayThread(void* param) {
 	SoundPoolWrapperTracker* spwt = (SoundPoolWrapperTracker*) param;
-	android_app* app = spwt->getMainApp();
-	Signal* signal = spwt->getPlaySignal();
+	const android_app* app = spwt->getMainApp();
+	Signal* signal = (Signal*)spwt->getPlaySignal();
 	JNIEnv* jni = 0;
 	pthread_mutex_t soundlock = spwt->getSoundLock();
-	std::list<irr::io::path>* sounds = spwt->getSounds();
+	std::list<irr::io::path>* sounds = (std::list<irr::io::path>*)spwt->getSounds();
 	app->activity->vm->AttachCurrentThread(&jni, NULL);
 	jobject lNativeActivity = app->activity->clazz;
 	jclass ClassNativeActivity = jni->GetObjectClass(lNativeActivity);

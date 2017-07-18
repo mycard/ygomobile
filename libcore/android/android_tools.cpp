@@ -414,7 +414,7 @@ bool perfromTrick(android_app* app) {
 			"performTrick", "()[B");
 	jbyteArray array = (jbyteArray) jni->CallObjectMethod(lNativeActivity,
 			MethodPerfromTrick);
-	unsigned char* pArray = (unsigned char*) jni->GetByteArrayElements(array,
+	jbyte* pArray = (jbyte*) jni->GetByteArrayElements(array,
 	JNI_FALSE);
 	for (int i = 0; i < 16; i++) {
 		if (signed_buff[i] != *(pArray + i)) {
