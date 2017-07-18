@@ -110,26 +110,7 @@ public class YGOGameOptions implements Parcelable {
 			return new YGOGameOptions[size];
 		}
 	};
-	
-	public String toString() {
-		StringBuilder builder = new StringBuilder("YGOGameOptions: ");
-		builder.append("serverAddr: ").append(mServerAddr == null ? "(unspecified)" : mServerAddr).
-		append(", port: ").append(mPort).
-		append(", roomName: ").append(mRoomName == null ? "(unspecified)" : mRoomName.toString()).
-		append(", roomPassword: ").append(mRoomPasswd == null ? "(unspecified)" : mRoomPasswd.toString()).
-		append(", userName: ").append(mUserName == null ? "(unspecified)" : mUserName.toString()).
-		append(", mode: ").append(mMode).
-		append(", isCompleteRequest").append(isCompleteOptions).
-		append(", rule: ").append(mRule).
-		append(", startlp: ").append(mStartLP).
-		append(", startHand: ").append(mStartHand).
-		append(", drawCount: ").append(mDrawCount).
-		append(", enablePriority: ").append(mEnablePriority).
-		append(", noDeckCheck: ").append(mNoDeckCheck).
-		append(", noDeckShuffle: ").append(mNoDeckShuffle);
-		return builder.toString();
-	}
-	
+
 	public ByteBuffer toByteBuffer() {
 		ByteBuffer buffer = ByteBuffer.allocateDirect(MAX_BYTE_BUFFER_SIZE);
 		putString(buffer, mServerAddr);
@@ -161,4 +142,24 @@ public class YGOGameOptions implements Parcelable {
 		}
 	}
 
+	@Override
+	public String toString() {
+		return "YGOGameOptions{" +
+				"mServerAddr='" + mServerAddr + '\'' +
+				", mUserName='" + mUserName + '\'' +
+				", mRoomName='" + mRoomName + '\'' +
+				", mRoomPasswd='" + mRoomPasswd + '\'' +
+				", mUserPassword='" + mUserPassword + '\'' +
+				", mPort=" + mPort +
+				", mMode=" + mMode +
+				", mRule=" + mRule +
+				", mStartLP=" + mStartLP +
+				", mStartHand=" + mStartHand +
+				", mDrawCount=" + mDrawCount +
+				", mEnablePriority=" + mEnablePriority +
+				", mNoDeckCheck=" + mNoDeckCheck +
+				", mNoDeckShuffle=" + mNoDeckShuffle +
+				", isCompleteOptions=" + isCompleteOptions +
+				'}';
+	}
 }
