@@ -3,7 +3,7 @@ Android编译环境
 ---------------------
     下载Android Studio和Android sdk
     
-ndk编译环境
+ndk编译环境(路径不能太长)
 ---------------------
     第一次得编译irrlicht\source\Irrlicht\Android
     这个ndk的版本暂时不能换，下面根据自己系统下载（不懂的就下载第一个链接）
@@ -13,23 +13,12 @@ ndk编译环境
 
     解压并且配置环境变量，cmd窗口，输ndk-build --version，看到一堆数字和英文的版权就是ok了
 
-1.编译irrlicht库
+1.准备游戏资料
 --------------------------
-    项目根目录运行命令行窗口
-    cd irrlicht/source/Irrlicht/Android
-    ndk-build -j4
-    成功  irrlicht/source/Irrlicht/Android/obj/local/armeabi-v7a/libIrrlicht.a
-    复制到：irrlicht\lib\Android\armeabi-v7a\libIrrlicht.a
-    大于62.5M才算成功
-    如果要支持armeabi和x86的cpu，
-    请编辑文件：irrlicht/source/Irrlicht/Android/jni/Application.mk
-    修改行：
-    APP_ABI := armeabi-v7a
-    为
-    APP_ABI := armeabi
-    或者
-    APP_ABI := x86
-    *如果同时编译多个，可能出错
+    cd mobile\assets\data
+    fonts\ygo.ttf
+    cards.cdb
+    scripts.zip
 
 2.编译ygo的so
 -------------------------

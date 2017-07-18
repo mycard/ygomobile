@@ -11,7 +11,7 @@ namespace ygo {
 
 static void* audioPlayThread(void* param);
 
-SoundPoolWrapperTracker::SoundPoolWrapperTracker(android_app* app) :
+SoundPoolWrapperTracker::SoundPoolWrapperTracker(ANDROID_APP app) :
 		m_isTerminated(false), m_sounds(NULL) {
 	m_sounds = new std::list<irr::io::path>();
 	m_pPlaySignal = new Signal();
@@ -39,7 +39,7 @@ SoundPoolWrapperTracker::~SoundPoolWrapperTracker() {
 
 void* audioPlayThread(void* param) {
 	SoundPoolWrapperTracker* spwt = (SoundPoolWrapperTracker*) param;
-	const android_app* app = spwt->getMainApp();
+	ANDROID_APP app = spwt->getMainApp();
 	Signal* signal = (Signal*)spwt->getPlaySignal();
 	JNIEnv* jni = 0;
 	pthread_mutex_t soundlock = spwt->getSoundLock();

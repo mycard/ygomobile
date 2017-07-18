@@ -7,7 +7,7 @@ int enable_log = 0;
 bool exit_on_return = false;
 
 #ifdef _IRR_ANDROID_PLATFORM_
-void android_main(android_app* app) {
+void android_main(ANDROID_APP app) {
 	app->inputPollSource.process = android::process_input;
 	app_dummy();
 #else

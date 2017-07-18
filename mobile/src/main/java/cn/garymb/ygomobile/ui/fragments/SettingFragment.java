@@ -184,7 +184,7 @@ public class SettingFragment extends PreferenceFragmentPlus {
         } else if (PREF_GAME_PATH.equalsIgnoreCase(preference.getKey())) {
             if (!TextUtils.equals(mSettings.getResourcePath(), file)) {
 //                Toast.makeText(getActivity(), R.string.restart_app, Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(getContext(), MainActivity.class).setAction(ACTION_RELOAD));
+                startActivity(new Intent(getActivity(), MainActivity.class).setAction(ACTION_RELOAD));
                 getActivity().finish();
             }
             mSettings.setResourcePath(file);

@@ -305,6 +305,7 @@ int ZEXPORT gzputs(file, str)
 
 #if defined(STDC) || defined(Z_HAVE_STDARG_H)
 #include <stdarg.h>
+#include <unistd.h>
 
 /* -- see zlib.h -- */
 int ZEXPORTVA gzvprintf(gzFile file, const char *format, va_list va)

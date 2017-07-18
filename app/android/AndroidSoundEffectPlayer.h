@@ -19,7 +19,7 @@ namespace ygo {
 
 class AndroidSoundEffectPlayer: virtual public ygo::IYGOSoundEffectPlayer {
 public:
-	AndroidSoundEffectPlayer(android_app* app);
+	AndroidSoundEffectPlayer(ANDROID_APP app);
 	virtual ~AndroidSoundEffectPlayer();
 
 	virtual void doPlayerEnterEffect();

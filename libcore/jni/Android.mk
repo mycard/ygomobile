@@ -1,16 +1,17 @@
 LOCAL_PATH := $(call my-dir)/..
-IRRLICHT_PROJECT_PATH := $(LOCAL_PATH)
 
 include $(CLEAR_VARS)
-LOCAL_MODULE := Irrlicht
-LOCAL_SRC_FILES := $(IRRLICHT_PROJECT_PATH)/../irrlicht/lib/Android/$(TARGET_ARCH_ABI)/libIrrlicht.a
-include $(PREBUILT_STATIC_LIBRARY)
 
-include $(CLEAR_VARS)
+LOCAL_SHORT_COMMANDS := true
+
+#LOCAL_MODULE := Irrlicht
+#LOCAL_SRC_FILES := $(LOCAL_PATH)/../irrlicht/lib/Android/$(TARGET_ARCH_ABI)/libIrrlicht.a
+#include $(PREBUILT_STATIC_LIBRARY)
+#include $(CLEAR_VARS)
 
 LOCAL_MODULE := YGOMobile
 
-LOCAL_CFLAGS := -D_IRR_ANDROID_PLATFORM_ -pipe -fno-rtti -fno-exceptions -fstrict-aliasing -D_ANDROID -fPIC 
+LOCAL_CFLAGS := -D_IRR_ANDROID_PLATFORM_ -pipe -fno-rtti -fno-exceptions -fstrict-aliasing -D_ANDROID -fPIC
 
 ifndef NDEBUG
 LOCAL_CFLAGS += -g -D_DEBUG
@@ -27,8 +28,9 @@ LOCAL_CFLAGS += -mno-unaligned-access
 endif
 
 LOCAL_C_INCLUDES += $(LOCAL_PATH)
-LOCAL_C_INCLUDES := ../irrlicht/include
-LOCAL_C_INCLUDES += ../irrlicht/source/Irrlicht
+LOCAL_C_INCLUDES := $(LOCAL_PATH)/../irrlicht/include
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/../irrlicht/source
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/../irrlicht/source/Android
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../Classes/freetype/include
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../Classes/sqlite3
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../Classes/libevent/include
@@ -74,9 +76,9 @@ LOCAL_SRC_FILES := $(LOCAL_PATH)/android/android_tools.cpp \
 				$(LOCAL_PATH)/jni/cn_garymb_ygomobile_core_IrrlichtBridge.cpp \
 				$(LOCAL_PATH)/jni/NativeCrashHandler.cpp
 
-LOCAL_LDLIBS := -lEGL -llog -lGLESv1_CM -lGLESv2 -lz -landroid -lOpenSLES
+LOCAL_LDLIBS := -lEGL -llog -lGLESv1_CM -lGLESv2 -landroid -lOpenSLES
 
-LOCAL_STATIC_LIBRARIES := Irrlicht android_native_app_glue
+LOCAL_STATIC_LIBRARIES := Irrlicht
 LOCAL_STATIC_LIBRARIES += libssl_static
 LOCAL_STATIC_LIBRARIES += libcrypto_static
 LOCAL_STATIC_LIBRARIES += libevent2
@@ -87,8 +89,10 @@ LOCAL_STATIC_LIBRARIES += sqlite3
 LOCAL_STATIC_LIBRARIES += libft2
 
 include $(BUILD_SHARED_LIBRARY)
+$(call import-add-path,$(LOCAL_PATH)/../irrlicht/source)
 $(call import-add-path,$(LOCAL_PATH)/../Classes)
 $(call import-add-path,$(LOCAL_PATH)/android)
+$(call import-module,Android/jni)
 $(call import-module,openssl)
 $(call import-module,libevent)
 $(call import-module,sqlite3)

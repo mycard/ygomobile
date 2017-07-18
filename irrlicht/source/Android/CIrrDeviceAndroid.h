@@ -58,9 +58,9 @@ namespace irr
 
 	private:
 		
-		static void handleAndroidCommand(android_app* app, int32_t cmd);
+		static void handleAndroidCommand(ANDROID_APP app, int32_t cmd);
 
-		static s32 handleInput(android_app* app, AInputEvent* event);
+		static s32 handleInput(ANDROID_APP app, AInputEvent* event);
 
 		void createDriver();
 
@@ -68,7 +68,7 @@ namespace irr
 
 		video::SExposedVideoData& getExposedVideoData();
 
-		android_app* Android;
+		ANDROID_APP Android;
 		ASensorManager* SensorManager;
 		ASensorEventQueue* SensorEventQueue;
 

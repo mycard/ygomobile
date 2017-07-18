@@ -6,11 +6,17 @@ android {
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 21
+        targetSdkVersion 22
+        externalNativeBuild {
+            ndkBuild {
+                abiFilters "armeabi-v7a"
+                arguments 'APP_PLATFORM=android-14','NDK_OUT=obj','APP_ALLOW_MISSING_DEPS=true'
+            }
+        }
     }
-    sourceSets{
-        main{
-            jniLibs.srcDirs 'libs'
+    externalNativeBuild {
+        ndkBuild {
+            path file("jni/Android.mk")
         }
     }
 }

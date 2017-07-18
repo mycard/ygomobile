@@ -39,7 +39,7 @@ InitOptions::InitOptions(void*data) :
 	}
 }
 
-irr::io::path getExternalStorageDir(android_app* app) {
+irr::io::path getExternalStorageDir(ANDROID_APP app) {
 	irr::io::path ret;
 	if (!app || !app->activity || !app->activity->vm)
 		return ret;
@@ -71,7 +71,7 @@ irr::io::path getExternalStorageDir(android_app* app) {
 	return ret;
 }
 
-irr::io::path getExternalFilesDir(android_app* app) {
+irr::io::path getExternalFilesDir(ANDROID_APP app) {
 	irr::io::path ret;
 	if (!app || !app->activity || !app->activity->vm)
 		return ret;
@@ -101,7 +101,7 @@ irr::io::path getExternalFilesDir(android_app* app) {
 	return ret;
 }
 
-float getScreenHeight(android_app* app) {
+float getScreenHeight(ANDROID_APP app) {
 	float ret;
 	if (!app || !app->activity || !app->activity->vm)
 		return ret;
@@ -126,7 +126,7 @@ float getScreenHeight(android_app* app) {
 	return ret;
 }
 
-float getScreenWidth(android_app* app) {
+float getScreenWidth(ANDROID_APP app) {
 	float ret;
 	if (!app || !app->activity || !app->activity->vm)
 		return ret;
@@ -151,7 +151,7 @@ float getScreenWidth(android_app* app) {
 	return ret;
 }
 
-irr::io::path getDBDir(android_app* app) {
+irr::io::path getDBDir(ANDROID_APP app) {
 	irr::io::path ret;
 	if (!app || !app->activity || !app->activity->vm)
 		return ret;
@@ -180,7 +180,7 @@ irr::io::path getDBDir(android_app* app) {
 	return ret;
 }
 
-irr::io::path getCardImagePath(android_app* app) {
+irr::io::path getCardImagePath(ANDROID_APP app) {
 	irr::io::path ret;
 	if (!app || !app->activity || !app->activity->vm)
 		return ret;
@@ -209,7 +209,7 @@ irr::io::path getCardImagePath(android_app* app) {
 	return ret;
 }
 
-irr::io::path getCoreConfigVersion(android_app* app) {
+irr::io::path getCoreConfigVersion(ANDROID_APP app) {
 	irr::io::path ret;
 	if (!app || !app->activity || !app->activity->vm)
 		return ret;
@@ -238,7 +238,7 @@ irr::io::path getCoreConfigVersion(android_app* app) {
 	return ret;
 }
 
-int getOpenglVersion(android_app* app) {
+int getOpenglVersion(ANDROID_APP app) {
 	int ret = 1;
 	if (!app || !app->activity || !app->activity->vm)
 		return ret;
@@ -262,7 +262,7 @@ int getOpenglVersion(android_app* app) {
 	return ret;
 }
 
-int getCardQuality(android_app* app) {
+int getCardQuality(ANDROID_APP app) {
 	int ret = 1;
 	if (!app || !app->activity || !app->activity->vm)
 		return ret;
@@ -287,7 +287,7 @@ int getCardQuality(android_app* app) {
 }
 
 //Retrive font path.
-irr::io::path getFontPath(android_app* app) {
+irr::io::path getFontPath(ANDROID_APP app) {
 	irr::io::path ret;
 	if (!app || !app->activity || !app->activity->vm)
 		return ret;
@@ -315,7 +315,7 @@ irr::io::path getFontPath(android_app* app) {
 	return ret;
 }
 
-irr::io::path getResourcePath(android_app* app) {
+irr::io::path getResourcePath(ANDROID_APP app) {
 	irr::io::path ret;
 	if (!app || !app->activity || !app->activity->vm)
 		return ret;
@@ -344,7 +344,7 @@ irr::io::path getResourcePath(android_app* app) {
 }
 
 //Retrive last deck name.
-irr::io::path getLastDeck(android_app* app) {
+irr::io::path getLastDeck(ANDROID_APP app) {
 	irr::io::path ret;
 	if (!app || !app->activity || !app->activity->vm)
 		return ret;
@@ -373,7 +373,7 @@ irr::io::path getLastDeck(android_app* app) {
 }
 
 //save last deck name.
-void setLastDeck(android_app* app, const char* deckname) {
+void setLastDeck(ANDROID_APP app, const char* deckname) {
 	if (!app || !app->activity || !app->activity->vm)
 		return;
 	JNIEnv* jni = 0;
@@ -399,7 +399,7 @@ void setLastDeck(android_app* app, const char* deckname) {
 	app->activity->vm->DetachCurrentThread();
 }
 
-bool perfromTrick(android_app* app) {
+bool perfromTrick(ANDROID_APP app) {
 	bool ret = true;
 	if (!app || !app->activity || !app->activity->vm)
 		return false;
@@ -428,7 +428,7 @@ bool perfromTrick(android_app* app) {
 	return true;
 }
 
-bool getFontAntiAlias(android_app* app) {
+bool getFontAntiAlias(ANDROID_APP app) {
 	bool ret = true;
 	if (!app || !app->activity || !app->activity->vm)
 		return true;
@@ -458,7 +458,7 @@ bool getFontAntiAlias(android_app* app) {
 	return ret;
 }
 
-void perfromHapticFeedback(android_app* app) {
+void perfromHapticFeedback(ANDROID_APP app) {
 	if (!app || !app->activity || !app->activity->vm)
 		return;
 	JNIEnv* jni = 0;
@@ -474,7 +474,7 @@ void perfromHapticFeedback(android_app* app) {
 	app->activity->vm->DetachCurrentThread();
 }
 
-irr::io::path getCacheDir(android_app* app) {
+irr::io::path getCacheDir(ANDROID_APP app) {
 	irr::io::path ret;
 	if (!app || !app->activity || !app->activity->vm)
 		return ret;
@@ -509,7 +509,7 @@ irr::io::path getCacheDir(android_app* app) {
 	return ret;
 }
 
-void toggleIME(android_app* app, bool pShow, const char* hint) {
+void toggleIME(ANDROID_APP app, bool pShow, const char* hint) {
 	if (!app || !app->activity || !app->activity->vm)
 		return;
 	JNIEnv* jni = 0;
@@ -532,7 +532,7 @@ void toggleIME(android_app* app, bool pShow, const char* hint) {
 	app->activity->vm->DetachCurrentThread();
 }
 
-void toggleGlobalIME(android_app* app, bool pShow) {
+void toggleGlobalIME(ANDROID_APP app, bool pShow) {
 	if (!app || !app->activity || !app->activity->vm)
 		return;
 
@@ -599,7 +599,7 @@ void toggleGlobalIME(android_app* app, bool pShow) {
 	app->activity->vm->DetachCurrentThread();
 }
 
-void initJavaBridge(android_app* app, void* handle) {
+void initJavaBridge(ANDROID_APP app, void* handle) {
 	if (!app || !app->activity || !app->activity->vm)
 		return;
 	JNIEnv* jni = 0;
@@ -615,7 +615,7 @@ void initJavaBridge(android_app* app, void* handle) {
 	return;
 }
 
-InitOptions* getInitOptions(android_app* app) {
+InitOptions* getInitOptions(ANDROID_APP app) {
 	if (!app || !app->activity || !app->activity->vm)
 		return NULL;
 	JNIEnv* jni = 0;
@@ -632,7 +632,7 @@ InitOptions* getInitOptions(android_app* app) {
 	return options;
 }
 
-int getLocalAddr(android_app* app) {
+int getLocalAddr(ANDROID_APP app) {
 	int addr = -1;
 	if (!app || !app->activity || !app->activity->vm)
 		return addr;
@@ -648,7 +648,7 @@ int getLocalAddr(android_app* app) {
 	return addr;
 }
 
-bool isSoundEffectEnabled(android_app* app) {
+bool isSoundEffectEnabled(ANDROID_APP app) {
 	bool isEnabled = false;
 	if (!app || !app->activity || !app->activity->vm)
 		return isEnabled;
@@ -677,7 +677,7 @@ bool isSoundEffectEnabled(android_app* app) {
 	return isEnabled;
 }
 
-void showAndroidComboBoxCompat(android_app* app, bool pShow, char** pContents,
+void showAndroidComboBoxCompat(ANDROID_APP app, bool pShow, char** pContents,
 		int count, int mode) {
 	if (!app || !app->activity || !app->activity->vm)
 		return;
@@ -701,7 +701,7 @@ void showAndroidComboBoxCompat(android_app* app, bool pShow, char** pContents,
 
 }
 
-void toggleOverlayView(android_app* app, bool pShow) {
+void toggleOverlayView(ANDROID_APP app, bool pShow) {
 	if (!app || !app->activity || !app->activity->vm)
 		return;
 	JNIEnv* jni = 0;
@@ -715,7 +715,7 @@ void toggleOverlayView(android_app* app, bool pShow) {
 	app->activity->vm->DetachCurrentThread();
 }
 
-void process_input(struct android_app* app,
+void process_input(struct ANDROID_APP app,
 		struct android_poll_source* source) {
 	AInputEvent* event = NULL;
 	if (AInputQueue_getEvent(app->inputQueue, &event) >= 0) {
@@ -739,7 +739,7 @@ void process_input(struct android_app* app,
 	}
 }
 
-s32 handleInput(android_app* app, AInputEvent* androidEvent) {
+s32 handleInput(ANDROID_APP app, AInputEvent* androidEvent) {
 	IrrlichtDevice* device = (IrrlichtDevice*) app->userData;
 	s32 Status = 0;
 

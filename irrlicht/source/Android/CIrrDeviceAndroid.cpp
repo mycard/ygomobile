@@ -40,7 +40,7 @@ CIrrDeviceAndroid::CIrrDeviceAndroid(const SIrrlichtCreationParameters& param)
 #endif
 
 	// Get the interface to the native Android activity.
-	Android = (android_app*)(param.PrivateData);
+	Android = (ANDROID_APP)(param.PrivateData);
 
 	// Set the private data so we can use it in any static callbacks.
 	Android->userData = this;
@@ -197,7 +197,7 @@ E_DEVICE_TYPE CIrrDeviceAndroid::getType() const
 	return EIDT_ANDROID;
 }
 
-void CIrrDeviceAndroid::handleAndroidCommand(android_app* app, int32_t cmd)
+void CIrrDeviceAndroid::handleAndroidCommand(ANDROID_APP app, int32_t cmd)
 {
 	CIrrDeviceAndroid* device = (CIrrDeviceAndroid*)app->userData;
 
@@ -303,7 +303,7 @@ void CIrrDeviceAndroid::handleAndroidCommand(android_app* app, int32_t cmd)
 	}
 }
 
-s32 CIrrDeviceAndroid::handleInput(android_app* app, AInputEvent* androidEvent)
+s32 CIrrDeviceAndroid::handleInput(ANDROID_APP app, AInputEvent* androidEvent)
 {
 	CIrrDeviceAndroid* device = (CIrrDeviceAndroid*)app->userData;
 	s32 status = 0;

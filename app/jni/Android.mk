@@ -74,7 +74,7 @@ LOCAL_SRC_FILES := $(LOCAL_PATH)/android/android_tools.cpp \
 				$(LOCAL_PATH)/jni/cn_garymb_ygomobile_core_IrrlichtBridge.cpp \
 				$(LOCAL_PATH)/jni/NativeCrashHandler.cpp
 
-LOCAL_LDLIBS := -lEGL -llog -lGLESv1_CM -lGLESv2 -lz -landroid -lOpenSLES
+LOCAL_LDLIBS := -lEGL -llog -lGLESv1_CM -lGLESv2 -landroid -lOpenSLES
 
 LOCAL_STATIC_LIBRARIES := Irrlicht android_native_app_glue
 LOCAL_STATIC_LIBRARIES += libssl_static
