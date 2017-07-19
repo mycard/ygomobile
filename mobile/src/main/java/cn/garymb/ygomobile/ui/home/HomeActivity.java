@@ -41,6 +41,7 @@ import cn.garymb.ygomobile.ui.adapters.SimpleListAdapter;
 import cn.garymb.ygomobile.ui.cards.CardSearchAcitivity;
 import cn.garymb.ygomobile.ui.cards.DeckManagerActivity;
 import cn.garymb.ygomobile.ui.events.ServerInfoEvent;
+import cn.garymb.ygomobile.ui.online.MyCardActivity;
 import cn.garymb.ygomobile.ui.plus.DialogPlus;
 import cn.garymb.ygomobile.ui.preference.SettingsActivity;
 
@@ -179,6 +180,9 @@ abstract class HomeActivity extends BaseActivity implements NavigationView.OnNav
                 break;
             case R.id.action_deck_manager:
                 startActivity(new Intent(this, DeckManagerActivity.class));
+                break;
+            case R.id.action_mycard:
+                startActivity(new Intent(this, MyCardActivity.class));
                 break;
             case R.id.action_help: {
                 WebActivity.open(this, getString(R.string.help), Constants.URL_HELP);
