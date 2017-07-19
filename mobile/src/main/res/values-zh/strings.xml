@@ -30,7 +30,7 @@
     <string name="no_find_file_selectotr">没有找到文件选择器</string>
     <string name="no_find_image_selector">没有找到图片选择器</string>
     <string name="no_find_image_cutor">没有找到裁剪工具</string>
-    <string name="help">帮助</string>
+    <string name="help">教程</string>
     <string name="settings">设置</string>
     <string name="quit">退出</string>
     <string name="quit_tip">退出游戏?</string>
@@ -97,7 +97,7 @@
     <string name="label_limit">不限制</string>
     <string name="label_limitlist">禁卡表</string>
     <string name="label_type">卡片类型</string>
-    <string name="label_set">卡片系列</string>
+    <string name="label_set">字段</string>
     <string name="label_level">星数</string>
     <string name="label_attr">属性</string>
     <string name="label_category">效果分类</string>

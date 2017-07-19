@@ -87,7 +87,7 @@ abstract class HomeActivity extends BaseActivity implements NavigationView.OnNav
                 });
         //event
         EventBus.getDefault().register(this);
-        $(R.id.fab).setOnClickListener((v)->{
+        $(R.id.help).setOnClickListener((v)->{
             WebActivity.open(this, getString(R.string.help), Constants.URL_HELP);
         });
     }

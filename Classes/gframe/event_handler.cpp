@@ -36,7 +36,7 @@ bool ClientField::OnEvent(const irr::SEvent& event) {
 			case BUTTON_HAND2:
 			case BUTTON_HAND3: {
 				mainGame->wHand->setVisible(false);
-				if(mainGame->dInfo.curMsg == MSG_ROCK_PAPER_SCISSORS){
+				if(mainGame->dInfo.curMsg == MSG_ROCK_PAPER_SCISSORS) {
 					DuelClient::SetResponseI(id - BUTTON_HAND1 + 1);
 					DuelClient::SendResponse();
 				} else {
@@ -225,7 +225,6 @@ bool ClientField::OnEvent(const irr::SEvent& event) {
 							else
 								DuelClient::SendResponse();
 						}
-						break;
 					}
 					if (mainGame->wQuery->isVisible()) {
 						SetResponseSelectedCards();
@@ -697,6 +696,10 @@ bool ClientField::OnEvent(const irr::SEvent& event) {
 				}
 				list_command = COMMAND_LIST;
 				ShowSelectCard(true);
+				break;
+			}
+			case BUTTON_PHASE: {
+				mainGame->btnPhaseStatus->setPressed(true);
 				break;
 			}
 			case BUTTON_BP: {
@@ -1606,7 +1609,6 @@ bool ClientField::OnEvent(const irr::SEvent& event) {
 						else
 							DuelClient::SendResponse();
 					}
-					break;
 				}
 				if(mainGame->wQuery->isVisible()) {
 					SetResponseSelectedCards();
@@ -1733,7 +1735,6 @@ bool ClientField::OnEvent(const irr::SEvent& event) {
 						mplayer = 1;
 				}
 			}
-
 			if(hovered_location == LOCATION_HAND && (mainGame->dInfo.is_shuffling || mainGame->dInfo.curMsg == MSG_SHUFFLE_HAND))
 				mcard = 0;
 			if(mcard == 0 && mplayer < 0)
@@ -1753,17 +1754,7 @@ bool ClientField::OnEvent(const irr::SEvent& event) {
 						if(hovered_controler == 0)
 							mainGame->hideChat = false;
 					}
-					if(hovered_card->equipTarget)
-						hovered_card->equipTarget->is_showequip = false;
-					if(hovered_card->equipped.size())
-						for(auto cit = hovered_card->equipped.begin(); cit != hovered_card->equipped.end(); ++cit)
-							(*cit)->is_showequip = false;
-					if(hovered_card->cardTarget.size())
-						for(auto cit = hovered_card->cardTarget.begin(); cit != hovered_card->cardTarget.end(); ++cit)
-							(*cit)->is_showtarget = false;
-					if(hovered_card->ownerTarget.size())
-						for(auto cit = hovered_card->ownerTarget.begin(); cit != hovered_card->ownerTarget.end(); ++cit)
-							(*cit)->is_showtarget = false;
+					SetShowMark(hovered_card, false);
 				}
 				if(mcard) {
 					if(mcard != clicked_card)
@@ -1774,14 +1765,7 @@ bool ClientField::OnEvent(const irr::SEvent& event) {
 						if(hovered_controler == 0)
 							mainGame->hideChat = true;
 					}
-					if(mcard->equipTarget)
-						mcard->equipTarget->is_showequip = true;
-					for(auto cit = mcard->equipped.begin(); cit != mcard->equipped.end(); ++cit)
-						(*cit)->is_showequip = true;
-					for(auto cit = mcard->cardTarget.begin(); cit != mcard->cardTarget.end(); ++cit)
-						(*cit)->is_showtarget = true;
-					for(auto cit = mcard->ownerTarget.begin(); cit != mcard->ownerTarget.end(); ++cit)
-						(*cit)->is_showtarget = true;
+					SetShowMark(mcard, true);
 					if(mcard->code) {
 						mainGame->ShowCardInfo(mcard->code);
 						if(mcard->location & 0xe) {
@@ -2139,29 +2123,21 @@ void ClientField::GetHoverField(int x, int y) {
 				hovered_controler = 1;
 				hovered_location = LOCATION_DECK;
 			}
-		} else if(boardx >= matManager.vFieldContiAct[1].X && boardx <= matManager.vFieldContiAct[1].X 
-		    && boardy >= matManager.vFieldContiAct[0].Y && boardy <= matManager.vFieldContiAct[2].Y) {
+		} else if (boardx >= matManager.vFieldContiAct[0].X && boardx <= matManager.vFieldContiAct[1].X
+				&& boardy >= matManager.vFieldContiAct[0].Y && boardy <= matManager.vFieldContiAct[2].Y) {
 			hovered_controler = 0;
 			hovered_location = POSITION_HINT;
-		} else if(rule==0 && boardx >= matManager.vFieldRemove[1][rule][1].Pos.X && boardx <= matManager.vFieldRemove[1][rule][0].Pos.X
-			&& boardy >= matManager.vFieldRemove[1][rule][2].Pos.Y && boardy <= matManager.vFieldRemove[1][rule][0].Pos.Y) {
+		} else if(rule == 0 && boardx >= matManager.vFieldRemove[1][rule][1].Pos.X && boardx <= matManager.vFieldRemove[1][rule][0].Pos.X) {
+			if(boardy >= matManager.vFieldRemove[1][rule][2].Pos.Y && boardy <= matManager.vFieldRemove[1][rule][0].Pos.Y) {
 				hovered_controler = 1;
 				hovered_location = LOCATION_REMOVED;
-			} else if(boardy >= matManager.vFieldContiAct[0].X && boardy <= matManager.vFieldContiAct[2].X 
-			    && boardy >= matManager.vFieldContiAct[0].Y && boardy <= matManager.vFieldContiAct[2].Y) {
-				hovered_controler = 0;
-				hovered_location = POSITION_HINT;
-			
-		} else if(rule==1 && boardx >= matManager.vFieldSzone[1][7][rule][1].Pos.X && boardx <= matManager.vFieldSzone[1][7][rule][2].Pos.X
-			&& boardy >= matManager.vFieldSzone[1][7][rule][2].Pos.Y && boardy <= matManager.vFieldSzone[1][7][rule][0].Pos.Y) {
+			}
+		} else if(rule == 1 && boardx >= matManager.vFieldSzone[1][7][rule][1].Pos.X && boardx <= matManager.vFieldSzone[1][7][rule][2].Pos.X) {
+			if(boardy >= matManager.vFieldSzone[1][7][rule][2].Pos.Y && boardy <= matManager.vFieldSzone[1][7][rule][0].Pos.Y) {
 				hovered_controler = 1;
 				hovered_location = LOCATION_SZONE;
 				hovered_sequence = 7;
-			} else if(boardx >= matManager.vFieldContiAct[0].X && boardx <= matManager.vFieldContiAct[1].X
-				&& boardy >= matManager.vFieldContiAct[0].Y && boardy <= matManager.vFieldContiAct[2].Y) {
-				hovered_controler = 0;
-				hovered_location = POSITION_HINT;
-			
+			}
 		} else if(boardx >= matManager.vFieldDeck[0][0].Pos.X && boardx <= matManager.vFieldDeck[0][1].Pos.X) {
 			if(boardy >= matManager.vFieldDeck[0][0].Pos.Y && boardy <= matManager.vFieldDeck[0][2].Pos.Y) {
 				hovered_controler = 0;
@@ -2380,6 +2356,24 @@ void ClientField::ShowCancelOrFinishButton(int buttonOp) {
 		}
 	} else {
 		mainGame->btnCancelOrFinish->setVisible(false);
+	}
+}
+void ClientField::SetShowMark(ClientCard* pcard, bool enable) {
+	if(pcard->equipTarget)
+		pcard->equipTarget->is_showequip = enable;
+	for(auto cit = pcard->equipped.begin(); cit != pcard->equipped.end(); ++cit)
+		(*cit)->is_showequip = enable;
+	for(auto cit = pcard->cardTarget.begin(); cit != pcard->cardTarget.end(); ++cit)
+		(*cit)->is_showtarget = enable;
+	for(auto cit = pcard->ownerTarget.begin(); cit != pcard->ownerTarget.end(); ++cit)
+		(*cit)->is_showtarget = enable;
+	for(auto chit = chains.begin(); chit != chains.end(); ++chit) {
+		if(pcard == chit->chain_card) {
+			for(auto tgit = chit->target.begin(); tgit != chit->target.end(); ++tgit)
+				(*tgit)->is_showchaintarget = enable;
+		}
+		if(chit->target.find(pcard) != chit->target.end())
+			chit->chain_card->is_showchaintarget = enable;
 	}
 }
 void ClientField::SetResponseSelectedCards() const {
