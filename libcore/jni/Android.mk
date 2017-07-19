@@ -1,10 +1,10 @@
 LOCAL_PATH := $(call my-dir)/..
 IRRLICHT_PROJECT_PATH := $(LOCAL_PATH)
 
-include $(CLEAR_VARS)
-LOCAL_MODULE := Irrlicht
-LOCAL_SRC_FILES := $(IRRLICHT_PROJECT_PATH)/../irrlicht/lib/Android/$(TARGET_ARCH_ABI)/libIrrlicht.a
-include $(PREBUILT_STATIC_LIBRARY)
+#include $(CLEAR_VARS)
+#LOCAL_MODULE := Irrlicht
+#LOCAL_SRC_FILES := $(IRRLICHT_PROJECT_PATH)/../irrlicht/lib/Android/$(TARGET_ARCH_ABI)/libIrrlicht.a
+#include $(PREBUILT_STATIC_LIBRARY)
 
 include $(CLEAR_VARS)
 
@@ -27,8 +27,9 @@ LOCAL_CFLAGS += -mno-unaligned-access
 endif
 
 LOCAL_C_INCLUDES += $(LOCAL_PATH)
-LOCAL_C_INCLUDES := ../irrlicht/include
-LOCAL_C_INCLUDES += ../irrlicht/source/Irrlicht
+LOCAL_C_INCLUDES := $(LOCAL_PATH)/../irrlicht/include
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/../irrlicht/source/Irrlicht
+LOCAL_C_INCLUDES += $(LOCAL_PATH)/../irrlicht/source/Irrlicht/Android
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../Classes/freetype/include
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../Classes/sqlite3
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../Classes/libevent/include
@@ -76,7 +77,8 @@ LOCAL_SRC_FILES := $(LOCAL_PATH)/android/android_tools.cpp \
 
 LOCAL_LDLIBS := -lEGL -llog -lGLESv1_CM -lGLESv2 -lz -landroid -lOpenSLES
 
-LOCAL_STATIC_LIBRARIES := Irrlicht android_native_app_glue
+LOCAL_STATIC_LIBRARIES := Irrlicht
+LOCAL_STATIC_LIBRARIES += android_native_app_glue
 LOCAL_STATIC_LIBRARIES += libssl_static
 LOCAL_STATIC_LIBRARIES += libcrypto_static
 LOCAL_STATIC_LIBRARIES += libevent2
@@ -88,7 +90,9 @@ LOCAL_STATIC_LIBRARIES += libft2
 
 include $(BUILD_SHARED_LIBRARY)
 $(call import-add-path,$(LOCAL_PATH)/../Classes)
+$(call import-add-path,$(LOCAL_PATH)/../irrlicht/source)
 $(call import-add-path,$(LOCAL_PATH)/android)
+$(call import-module,Irrlicht/Android/jni)
 $(call import-module,openssl)
 $(call import-module,libevent)
 $(call import-module,sqlite3)

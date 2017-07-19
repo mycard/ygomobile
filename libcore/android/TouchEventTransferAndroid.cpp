@@ -172,7 +172,7 @@ void TouchEventTransferAndroid::set_long_click_handler(int mode) {
 	sev.sigev_notify = SIGEV_THREAD;
 	sev.sigev_notify_function = long_press_handler;
 	sev.sigev_notify_attributes = NULL;
-	sev.sigev_value.sival_ptr = mode;
+	sev.sigev_value.sival_ptr = (void*)mode;
 	if (timer_create(CLOCK_REALTIME, &sev, &long_press_tid) == -1) {
 		Printer::log("create timer failed!");
 	}

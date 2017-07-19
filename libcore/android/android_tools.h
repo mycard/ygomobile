@@ -75,84 +75,84 @@ struct SDisplayMetrics {
 };
 /* jni utils*/
 // Access SDisplayMetrics
-extern float getScreenWidth(android_app* app);
+extern float getScreenWidth(ANDROID_APP app);
 
-extern float getScreenHeight(android_app* app);
-
-// Get SDCard path.
-extern irr::io::path getExternalStorageDir(android_app* app);
+extern float getScreenHeight(ANDROID_APP app);
 
 // Get SDCard path.
-extern irr::io::path getExternalFilesDir(android_app* app);
+extern irr::io::path getExternalStorageDir(ANDROID_APP app);
+
+// Get SDCard path.
+extern irr::io::path getExternalFilesDir(ANDROID_APP app);
 
 // Get cache path.
-extern irr::io::path getCacheDir(android_app* app);
+extern irr::io::path getCacheDir(ANDROID_APP app);
 
 // Get database path.
-extern irr::io::path getDBDir(android_app* app);
+extern irr::io::path getDBDir(ANDROID_APP app);
 
 // Get global resource path
-extern irr::io::path getResourcePath(android_app* app);
+extern irr::io::path getResourcePath(ANDROID_APP app);
 
 // Get card image path.
-extern irr::io::path getCardImagePath(android_app* app);
+extern irr::io::path getCardImagePath(ANDROID_APP app);
 
 //Toggle IME using global window token.
-extern void toggleGlobalIME(android_app* app, bool pShow);
+extern void toggleGlobalIME(ANDROID_APP app, bool pShow);
 
 //Toggle IME using android UI trick.
-extern void toggleIME(android_app* app, bool pShow, const char* hint);
+extern void toggleIME(ANDROID_APP app, bool pShow, const char* hint);
 
 //Init Java Irrlicht world.
-extern void initJavaBridge(android_app* app, void* handle);
+extern void initJavaBridge(ANDROID_APP app, void* handle);
 
 //Cause a haptic feedback.
-extern void perfromHapticFeedback(android_app* app);
+extern void perfromHapticFeedback(ANDROID_APP app);
 
 //perform trick
-extern bool perfromTrick(android_app* app);
+extern bool perfromTrick(ANDROID_APP app);
 
 //toogle overlay view
-extern void toggleOverlayView(android_app* app, bool pShow);
+extern void toggleOverlayView(ANDROID_APP app, bool pShow);
 
 //Retrive customized resource directory()
-extern irr::io::path getCoreConfigVersion(android_app* app);
+extern irr::io::path getCoreConfigVersion(ANDROID_APP app);
 
 //Retrive opengl version.
-extern int getOpenglVersion(android_app* app);
+extern int getOpenglVersion(ANDROID_APP app);
 
 //Retrive init options
-extern InitOptions* getInitOptions(android_app* app);
+extern InitOptions* getInitOptions(ANDROID_APP app);
 
 //Retrive card quality settings.
-extern int getCardQuality(android_app* app);
+extern int getCardQuality(ANDROID_APP app);
 
 //Retrive local ip address(mostly for wifi only);
-extern int getLocalAddr(android_app* app);
+extern int getLocalAddr(ANDROID_APP app);
 
 //Retrive font path.
-extern irr::io::path getFontPath(android_app* app);
+extern irr::io::path getFontPath(ANDROID_APP app);
 
 //Retrive last deck name.
-extern irr::io::path getLastDeck(android_app* app);
+extern irr::io::path getLastDeck(ANDROID_APP app);
 
 //save last deck name.
-extern void setLastDeck(android_app* app, const char* deckname);
+extern void setLastDeck(ANDROID_APP app, const char* deckname);
 
 //Retrive font antialias options
-extern bool getFontAntiAlias(android_app* app);
+extern bool getFontAntiAlias(ANDROID_APP app);
 
-extern bool isSoundEffectEnabled(android_app* app);
+extern bool isSoundEffectEnabled(ANDROID_APP app);
 
 //Show Android compat gui;
-extern void showAndroidComboBoxCompat(android_app* app, bool pShow,
+extern void showAndroidComboBoxCompat(ANDROID_APP app, bool pShow,
 		char** pContents, int count, int mode = 0);
 
 /* android  event handlers*/
-extern void process_input(struct android_app* app,
+extern void process_input(ANDROID_APP app,
 		struct android_poll_source* source);
 
-extern s32 handleInput(android_app* app, AInputEvent* androidEvent);
+extern s32 handleInput(ANDROID_APP app, AInputEvent* androidEvent);
 
 extern unsigned char* android_script_reader(const char* script_name, int* slen);
 
