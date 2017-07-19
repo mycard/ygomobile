@@ -3,32 +3,24 @@ Android编译环境
 ---------------------
     下载Android Studio和Android sdk
     
-ndk编译环境
+ndk编译环境(请用迅雷，旋风，或者翻墙vpn下载)
 ---------------------
-    第一次得编译irrlicht\source\Irrlicht\Android
-    这个ndk的版本暂时不能换，下面根据自己系统下载（不懂的就下载第一个链接）
-    http://dl.google.com/android/ndk/android-ndk-r9d-windows-x86.zip
-    http://dl.google.com/android/ndk/android-ndk-r9d-darwin-x86.tar.bz2
-    http://dl.google.com/android/ndk/android-ndk-r9d-linux-x86.tar.bz2
+    https://dl.google.com/android/repository/android-ndk-r15b-windows-x86_64.zip
+    https://dl.google.com/android/repository/android-ndk-r15b-darwin-x86_64.zip
+    https://dl.google.com/android/repository/android-ndk-r15b-linux-x86_64.zip
+    
+重要
+---------------------------------------------
+    开始的NDK是R9版本，目前NDKR15编译已经通过。
+    根据自己的系统下载上面的压缩包，解压并且配置环境变量，cmd窗口，输ndk-build --version，看到一堆数字和英文的版权就是ok了
+    不懂环境变量？没关系，自己自动把下文的ndk-build前面，加上NDK解压的文件夹比如D:\NDK\ndk-build -j4
 
-    解压并且配置环境变量，cmd窗口，输ndk-build --version，看到一堆数字和英文的版权就是ok了
-
-1.编译irrlicht库
+1.准备数据
 --------------------------
-    项目根目录运行命令行窗口
-    cd irrlicht/source/Irrlicht/Android
-    ndk-build -j4
-    成功：irrlicht\lib\Android\armeabi-v7a\libIrrlicht.a
-    大于62.5M才算成功
-    如果要支持armeabi和x86的cpu，
-    请编辑文件：irrlicht/source/Irrlicht/Android/jni/Application.mk
-    修改行：
-    APP_ABI := armeabi-v7a
-    为
-    APP_ABI := armeabi
-    或者
-    APP_ABI := x86
-    *如果同时编译多个，可能出错
+    从官网发布的apk提取，或者自己提供，scripts.zip里面是script文件夹
+    mobile\assets\data\cards.cdb
+    mobile\assets\data\scripts.zip
+    mobile\assets\data\fonts\ygo.ttf
 
 2.编译ygo的so
 -------------------------
