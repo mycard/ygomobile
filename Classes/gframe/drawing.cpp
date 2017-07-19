@@ -620,16 +620,16 @@ void Game::DrawMisc() {
 		numFont->draw(dataManager.GetNumString(dField.deck[0].size()), recti(907 * mainGame->xScale, 562 * mainGame->yScale, 1021 * mainGame->xScale, 552 * mainGame->yScale) , 0xff000000, true, false, 0);
 		numFont->draw(dataManager.GetNumString(dField.deck[0].size()), recti(908 * mainGame->xScale, 563 * mainGame->yScale, 1023 * mainGame->xScale, 553 * mainGame->yScale), 0xffffff00, true, false, 0);
 	}
-    if (rule == 0) {
-	if(dField.grave[0].size()) {
+	if (rule == 0) {
+		if (dField.grave[0].size()) {
 		numFont->draw(dataManager.GetNumString(dField.grave[0].size()), recti(837 * mainGame->xScale, 375 * mainGame->yScale, 984 * mainGame->xScale, 380 * mainGame->yScale), 0xff000000, true, false, 0);
 		numFont->draw(dataManager.GetNumString(dField.grave[0].size()), recti(837 * mainGame->xScale, 376 * mainGame->yScale, 986 * mainGame->xScale, 381 * mainGame->yScale), 0xffffff00, true, false, 0);
-	}
-	if(dField.remove[0].size()) {
+		}
+		if (dField.remove[0].size()) {
 		numFont->draw(dataManager.GetNumString(dField.remove[0].size()), recti(1015 * mainGame->xScale, 375 * mainGame->yScale, 957 * mainGame->xScale, 380 * mainGame->yScale), 0xff000000, true, false, 0);
 		numFont->draw(dataManager.GetNumString(dField.remove[0].size()), recti(1015 * mainGame->xScale, 376 * mainGame->yScale, 959 * mainGame->xScale, 381 * mainGame->yScale), 0xffffff00, true, false, 0);
-	}
-} else {
+		}
+	} else {
 		if (dField.grave[0].size()) {
 			numFont->draw(dataManager.GetNumString(dField.grave[0].size()), recti(870 * mainGame->xScale, 456 * mainGame->yScale, 1002 * mainGame->xScale, 461 * mainGame->yScale), 0xff000000, true, false, 0);
 			numFont->draw(dataManager.GetNumString(dField.grave[0].size()), recti(870 * mainGame->xScale, 457 * mainGame->yScale, 1004 * mainGame->xScale, 462 * mainGame->yScale), 0xffffff00, true, false, 0);
@@ -668,7 +668,7 @@ void Game::DrawMisc() {
 			numFont->draw(dataManager.GetNumString(dField.remove[1].size()), recti(420 * mainGame->xScale, 310 * mainGame->yScale, 462 * mainGame->xScale, 281 * mainGame->yScale), 0xff000000, true, false, 0);
 			numFont->draw(dataManager.GetNumString(dField.remove[1].size()), recti(420 * mainGame->xScale, 311 * mainGame->yScale, 464 * mainGame->xScale, 282 * mainGame->yScale), 0xffffff00, true, false, 0);
 		}
- 	}
+	}
 }
 void Game::DrawStatus(ClientCard* pcard, int x1, int y1, int x2, int y2) {
 	adFont->draw(L"/", recti(x1 - 4, y1, x1 + 4, y1 + 20), 0xff000000, true, false, 0);
@@ -975,6 +975,11 @@ void Game::DrawSpec() {
 		}
 	}
 }
+void Game::DrawBackImage(irr::video::ITexture* texture) {
+	if(!texture)
+		return;
+	driver->draw2DImage(texture, recti(0, 0, 1024 * mainGame->xScale, 640 * mainGame->yScale), recti(0, 0, texture->getOriginalSize().Width, texture->getOriginalSize().Height));
+}
 void Game::ShowElement(irr::gui::IGUIElement * win, int autoframe) {
 	FadingUnit fu;
 	fu.fadingSize = win->getRelativePosition();
@@ -1152,6 +1157,7 @@ void Game::DrawDeckBd() {
 		if(deckBuilder.hovered_pos == 3 && deckBuilder.hovered_seq == (int)i)
 			driver->draw2DRectangleOutline(recti((313 + i * dx) * mainGame->xScale, 563 * mainGame->yScale, (359 + i * dx) * mainGame->xScale, 629 * mainGame->yScale));
 	}
+	//search result
 	driver->draw2DRectangle(recti(805 * mainGame->xScale, 137 * mainGame->yScale, 915 * mainGame->xScale, 157 * mainGame->yScale), 0x400000ff, 0x400000ff, 0x40000000, 0x40000000);
 	driver->draw2DRectangleOutline(recti(804 * mainGame->xScale, 136 * mainGame->yScale, 915 * mainGame->xScale, 157 * mainGame->yScale));
 	textFont->draw(dataManager.GetSysString(1333), recti(809 * mainGame->xScale, 136 * mainGame->yScale, 914 * mainGame->xScale, 156 * mainGame->yScale), 0xff000000, false, true);

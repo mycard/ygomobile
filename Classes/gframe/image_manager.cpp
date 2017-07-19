@@ -29,7 +29,11 @@ bool ImageManager::Initial(const path dir) {
 	tHand[2] = driver->getTexture((dir + path("/textures/f3.jpg")).c_str());
 	tBackGround = driver->getTexture((dir + path("/textures/bg.jpg")).c_str());
 	tBackGround_menu = driver->getTexture((dir + path("/textures/bg_menu.jpg")).c_str());
+	if(!tBackGround_menu)
+		tBackGround_menu = tBackGround;
 	tBackGround_deck = driver->getTexture((dir + path("/textures/bg_deck.jpg")).c_str());
+	if(!tBackGround_deck)
+		tBackGround_deck = tBackGround;
 	tField[0] = driver->getTexture((dir + path("/textures/field2.png")).c_str());
 	tFieldTransparent[0] = driver->getTexture((dir + path("/textures/field-transparent2.png")).c_str());
 	tField[1] = driver->getTexture((dir + path("/textures/field3.png")).c_str());

@@ -25,7 +25,7 @@
 #include <COGLESDriver.h>
 #endif
 
-const unsigned short PRO_VERSION = 0x233A;
+const unsigned short PRO_VERSION = 0x133E;
 
 namespace ygo {
 
@@ -463,6 +463,7 @@ bool Game::Initialize() {
 #endif
 	//tab
 	wInfos = env->addTabControl(rect<s32>(1 * xScale, 275 * yScale, 301 * xScale, 639 * yScale), 0, true);
+	wInfos->setTabExtraWidth(16);
 	wInfos->setVisible(false);
 	//info
 	irr::gui::IGUITab* tabInfo = wInfos->addTab(dataManager.GetSysString(1270));
@@ -492,24 +493,41 @@ bool Game::Initialize() {
 #endif
 	lstLog->setItemHeight(18 * yScale);
 	btnClearLog = env->addButton(rect<s32>(160 * xScale, 300 * yScale, 260 * xScale, 325 * yScale), tabLog, BUTTON_CLEAR_LOG, dataManager.GetSysString(1272));
+	//helper
+	irr::gui::IGUITab* tabHelper = wInfos->addTab(dataManager.GetSysString(1298));
+	int posX = 20 * xScale;
+	int posY = 20 * yScale;
+	chkMAutoPos = env->addCheckBox(false, rect<s32>(posX, posY, posX + 260 * xScale, posY + 25 * yScale), tabHelper, -1, dataManager.GetSysString(1274));
+	chkMAutoPos->setChecked(gameConf.chkMAutoPos != 0);
+	posY += 60;
+	chkSTAutoPos = env->addCheckBox(false, rect<s32>(posX, posY, posX + 260 * xScale, posY + 25 * yScale), tabHelper, -1, dataManager.GetSysString(1278));
+	chkSTAutoPos->setChecked(gameConf.chkSTAutoPos != 0);
+	posY += 60;
+	chkRandomPos = env->addCheckBox(false, rect<s32>(posX + 20 * xScale, posY, posX + (20 + 260) * xScale, posY + 25 * yScale), tabHelper, -1, dataManager.GetSysString(1275));
+	chkRandomPos->setChecked(gameConf.chkRandomPos != 0);
+	posY += 60;
+	chkAutoChain = env->addCheckBox(false, rect<s32>(posX, posY, posX + 260 * xScale, posY + 25 * yScale), tabHelper, -1, dataManager.GetSysString(1276));
+	chkAutoChain->setChecked(gameConf.chkAutoChain != 0);
+	posY += 60;
+	chkWaitChain = env->addCheckBox(false, rect<s32>(posX, posY, posX + 260 * xScale, posY + 25 * yScale), tabHelper, -1, dataManager.GetSysString(1277));
+	chkWaitChain->setChecked(gameConf.chkWaitChain != 0);
 	//system
 	irr::gui::IGUITab* tabSystem = wInfos->addTab(dataManager.GetSysString(1273));
-	chkMAutoPos = env->addCheckBox(false, rect<s32>(20 * xScale, 20 * yScale, 280 * xScale, 45 * yScale), tabSystem, -1, dataManager.GetSysString(1274));
-	chkMAutoPos->setChecked(gameConf.chkMAutoPos != 0);
-	chkSTAutoPos = env->addCheckBox(false, rect<s32>(20 * xScale, 50 * yScale, 280 * xScale, 75 * yScale), tabSystem, -1, dataManager.GetSysString(1278));
-	chkSTAutoPos->setChecked(gameConf.chkSTAutoPos != 0);
-	chkRandomPos = env->addCheckBox(false, rect<s32>(40 * xScale, 80 * yScale, 300 * xScale, 105 * yScale), tabSystem, -1, dataManager.GetSysString(1275));
-	chkRandomPos->setChecked(gameConf.chkRandomPos != 0);
-	chkAutoChain = env->addCheckBox(false, rect<s32>(20 * xScale, 110 * yScale, 280 * xScale, 135 * yScale), tabSystem, -1, dataManager.GetSysString(1276));
-	chkAutoChain->setChecked(gameConf.chkAutoChain != 0);
-	chkWaitChain = env->addCheckBox(false, rect<s32>(20 * xScale, 140 * yScale, 280 * xScale, 165 * yScale), tabSystem, -1, dataManager.GetSysString(1277));
-	chkWaitChain->setChecked(gameConf.chkWaitChain != 0);
-	chkIgnore1 = env->addCheckBox(false, rect<s32>(20 * xScale, 200 * yScale, 280 * xScale, 225 * yScale), tabSystem, -1, dataManager.GetSysString(1290));
+	posY = 20 * xScale;
+	chkIgnore1 = env->addCheckBox(false, rect<s32>(posX, posY, posX + 260, posY + 25 * yScale), tabSystem, -1, dataManager.GetSysString(1290));
 	chkIgnore1->setChecked(gameConf.chkIgnore1 != 0);
-	chkIgnore2 = env->addCheckBox(false, rect<s32>(20 * xScale, 230 * yScale, 280 * xScale, 255 * yScale), tabSystem, -1, dataManager.GetSysString(1291));
+	posY += 60;
+	chkIgnore2 = env->addCheckBox(false, rect<s32>(posX, posY, posX + 260, posY + 25 * yScale), tabSystem, -1, dataManager.GetSysString(1291));
 	chkIgnore2->setChecked(gameConf.chkIgnore2 != 0);
-	chkHideSetname = env->addCheckBox(false, rect<s32>(20 * xScale, 260 * yScale, 280 * xScale, 285 * yScale), tabSystem, -1, dataManager.GetSysString(1354));
+	posY += 60;
+	chkHideSetname = env->addCheckBox(false, rect<s32>(posX, posY, posX + 260, posY + 25 * yScale), tabSystem, -1, dataManager.GetSysString(1354));
 	chkHideSetname->setChecked(gameConf.chkHideSetname != 0);
+	posY += 60;
+	chkIgnoreDeckChanges = env->addCheckBox(false, rect<s32>(posX, posY, posX + 260 * xScale, posY + 25 * yScale), tabSystem, -1, dataManager.GetSysString(1357));
+	chkIgnoreDeckChanges->setChecked(gameConf.chkIgnoreDeckChanges != 0);
+	posY += 60;
+	chkAutoSearch = env->addCheckBox(false, rect<s32>(posX, posY, posX + 225 * xScale, posY + 25 * yScale), tabSystem, CHECKBOX_AUTO_SEARCH, dataManager.GetSysString(1358));
+	chkAutoSearch->setChecked(gameConf.auto_search_limit >= 0);
 	//
 	wHand = env->addWindow(rect<s32>(500 * xScale, 450 * yScale, 825 * xScale, 605 * yScale), false, L"");
 	wHand->getCloseButton()->setVisible(false);
@@ -522,7 +540,7 @@ bool Game::Initialize() {
 		btnHand[i]->setImageScale(core::vector2df(xScale, yScale));
 	}
 #ifdef _IRR_ANDROID_PLATFORM_
-	//
+	//first or second to go
 	wFTSelect = env->addWindow(rect<s32>(530 * xScale, 220 * yScale, 800 * xScale, 380 * yScale), false, L"");
 	wFTSelect->getCloseButton()->setVisible(false);
 	wFTSelect->setVisible(false);
@@ -869,7 +887,7 @@ bool Game::Initialize() {
 	wCategories->setVisible(false);
 	btnCategoryOK = env->addButton(rect<s32>(135 * xScale, 175 * yScale, 235 * xScale, 200 * yScale), wCategories, BUTTON_CATEGORY_OK, dataManager.GetSysString(1211));
 	for(int i = 0; i < 32; ++i)
-		chkCategory[i] = env->addCheckBox(false, recti((10 + (i % 4) * 90)  * xScale, (10 + (i / 4) * 20) * yScale, (100 + (i % 4) * 90) * xScale, (30 + (i / 4) * 20) * yScale), wCategories, -1, dataManager.GetSysString(1100 + i));
+		chkCategory[i] = env->addCheckBox(false, recti((10 + (i % 4) * 90)  * xScale, (10 + (i / 4) * 20) * yScale, (100 + (i % 4) * 90) * xScale, (40 + (i / 4) * 20) * yScale), wCategories, -1, dataManager.GetSysString(1100 + i));
 #ifdef _IRR_ANDROID_PLATFORM_
 	scrFilter = env->addScrollBar(false, recti(810 * xScale, 161 * yScale, 850 * xScale, 629 * yScale), 0, SCROLL_FILTER);
 #else
@@ -941,7 +959,7 @@ bool Game::Initialize() {
 	btnReplaySwap = env->addButton(rect<s32>(5 * xScale, 140 * yScale, 85 * xScale, 180 * yScale), wReplayControl, BUTTON_REPLAY_SWAP, dataManager.GetSysString(1346));
 	btnReplayExit = env->addButton(rect<s32>(5 * xScale, 185 * yScale, 85 * xScale, 225 * yScale), wReplayControl, BUTTON_REPLAY_EXIT, dataManager.GetSysString(1347));
 	//chat
-	wChat = env->addWindow(rect<s32>(305 * xScale, 615 * yScale, 1020 * xScale, 640 * yScale), false, L"");
+	wChat = env->addWindow(rect<s32>(305 * xScale, 610 * yScale, 1020 * xScale, 640 * yScale), false, L"");
 	wChat->getCloseButton()->setVisible(false);
 	wChat->setDraggable(false);
 	wChat->setDrawTitlebar(false);
@@ -959,12 +977,12 @@ bool Game::Initialize() {
 		btnChainIgnore->setVisible(false);
 		btnChainAlways->setVisible(false);
 		btnChainWhenAvail->setVisible(false);
-		//cancel or finish
-		btnCancelOrFinish = env->addButton(rect<s32>(205 * xScale, 230 * yScale, 305 * xScale, 280 * yScale), 0, BUTTON_CANCEL_OR_FINISH, dataManager.GetSysString(1295));
-		btnCancelOrFinish->setVisible(false);
 	//shuffle
-	btnShuffle = env->addButton(rect<s32>(205 * xScale, 230 * yScale, 305 * xScale, 265 * yScale), 0, BUTTON_CMD_SHUFFLE, dataManager.GetSysString(1297));
+	btnShuffle = env->addButton(rect<s32>(205 * xScale, 220 * yScale, 305 * xScale, 255 * yScale), 0, BUTTON_CMD_SHUFFLE, dataManager.GetSysString(1297));
 	btnShuffle->setVisible(false);
+	//cancel or finish
+	btnCancelOrFinish = env->addButton(rect<s32>(205 * xScale, 220 * yScale, 305 * xScale, 275 * yScale), 0, BUTTON_CANCEL_OR_FINISH, dataManager.GetSysString(1295));
+	btnCancelOrFinish->setVisible(false);
 #else
 	//replay window
 	wReplay = env->addWindow(rect<s32>(220, 100, 800, 520), false, dataManager.GetSysString(1202));
@@ -1027,12 +1045,12 @@ bool Game::Initialize() {
 	btnChainIgnore->setVisible(false);
 	btnChainAlways->setVisible(false);
 	btnChainWhenAvail->setVisible(false);
-	//cancel or finish
-	btnCancelOrFinish = env->addButton(rect<s32>(205, 230, 295, 265), 0, BUTTON_CANCEL_OR_FINISH, dataManager.GetSysString(1295));
-	btnCancelOrFinish->setVisible(false);
 	//shuffle
 	btnShuffle = env->addButton(rect<s32>(205, 230, 295, 265), 0, BUTTON_CMD_SHUFFLE, dataManager.GetSysString(1297));
 	btnShuffle->setVisible(false);
+	//cancel or finish
+	btnCancelOrFinish = env->addButton(rect<s32>(205, 230, 295, 265), 0, BUTTON_CANCEL_OR_FINISH, dataManager.GetSysString(1295));
+	btnCancelOrFinish->setVisible(false);
 	//leave/surrender/exit
 #endif
 #ifdef _IRR_ANDROID_PLATFORM_
@@ -1185,6 +1203,12 @@ void Game::MainLoop() {
 		if(imageManager.tBackGround) {
 			driver->draw2DImage(imageManager.tBackGround, recti(0 * xScale, 0 * yScale, 1024 * xScale, 640 * yScale), recti(0, 0, imageManager.tBackGround->getOriginalSize().Width, imageManager.tBackGround->getOriginalSize().Height));
 		}
+		if(imageManager.tBackGround_menu) {
+			driver->draw2DImage(imageManager.tBackGround_menu, recti(0 * xScale, 0 * yScale, 1024 * xScale, 640 * yScale), recti(0, 0, imageManager.tBackGround->getOriginalSize().Width, imageManager.tBackGround->getOriginalSize().Height));
+		}
+		if(imageManager.tBackGround_deck) {
+			driver->draw2DImage(imageManager.tBackGround_deck, recti(0 * xScale, 0 * yScale, 1024 * xScale, 640 * yScale), recti(0, 0, imageManager.tBackGround->getOriginalSize().Width, imageManager.tBackGround->getOriginalSize().Height));
+		}
 		driver->enableMaterial2D(false);
 #else
 		if(imageManager.tBackGround)
@@ -1192,6 +1216,7 @@ void Game::MainLoop() {
 #endif
 		gMutex.Lock();
 		if(dInfo.isStarted) {
+			DrawBackImage(imageManager.tBackGround);
 			DrawBackGround();
 			DrawCards();
 			DrawMisc();
@@ -1199,21 +1224,21 @@ void Game::MainLoop() {
 			driver->setMaterial(irr::video::IdentityMaterial);
 			driver->clearZBuffer();
 		} else if(is_building) {
-		if(imageManager.tBackGround_deck)
-				driver->draw2DImage(imageManager.tBackGround_deck, recti(0 * xScale, 0 * yScale, 1024 * xScale, 640 * yScale), recti(0, 0, imageManager.tBackGround->getOriginalSize().Width, imageManager.tBackGround->getOriginalSize().Height));
+			DrawBackImage(imageManager.tBackGround_deck);
 #ifdef _IRR_ANDROID_PLATFORM_
 			driver->enableMaterial2D(true);
 			DrawDeckBd();
 			driver->enableMaterial2D(false);
+		} else {
+			DrawBackImage(imageManager.tBackGround_menu);
 		}
 		driver->enableMaterial2D(true);
 		DrawGUI();
 		DrawSpec();
 		driver->enableMaterial2D(false);
 #else
-         } else {
-			if(imageManager.tBackGround_menu)
-				driver->draw2DImage(imageManager.tBackGround_menu, recti(0 * xScale, 0 * yScale, 1024 * xScale, 640 * yScale), recti(0, 0, imageManager.tBackGround->getOriginalSize().Width, imageManager.tBackGround->getOriginalSize().Height));
+		} else {
+			DrawBackImage(imageManager.tBackGround_menu);
 		}
 		DrawGUI();
 		DrawSpec();
@@ -1461,6 +1486,7 @@ void Game::LoadConfig() {
 	gameConf.draw_field_spell = 1;
 	gameConf.separate_clear_button = 1;
 	gameConf.auto_search_limit = -1;
+	gameConf.chkIgnoreDeckChanges = 0;
 }
 
 void Game::SaveConfig() {

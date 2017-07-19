@@ -15,6 +15,8 @@
 namespace ygo {
 
 bool ClientField::OnEvent(const irr::SEvent& event) {
+	if(OnCommonEvent(event))
+		return false;
 #ifdef _IRR_ANDROID_PLATFORM_
 	irr::SEvent transferEvent;
 	if (irr::android::TouchEventTransferAndroid::OnTransferCommon(event, false)) {
@@ -27,11 +29,6 @@ bool ClientField::OnEvent(const irr::SEvent& event) {
 		switch(event.GUIEvent.EventType) {
 		case irr::gui::EGET_BUTTON_CLICKED: {
 			switch(id) {
-			case BUTTON_CLEAR_LOG: {
-				mainGame->lstLog->clear();
-				mainGame->logParam.clear();
-				break;
-			}
 			case BUTTON_HAND1:
 			case BUTTON_HAND2:
 			case BUTTON_HAND3: {
@@ -931,29 +928,10 @@ bool ClientField::OnEvent(const irr::SEvent& event) {
 		}
 		case irr::gui::EGET_LISTBOX_CHANGED: {
 			switch(id) {
-			case LISTBOX_LOG: {
-				int sel = mainGame->lstLog->getSelected();
-				if(sel != -1 && (int)mainGame->logParam.size() >= sel && mainGame->logParam[sel]) {
-					mainGame->ShowCardInfo(mainGame->logParam[sel]);
-				}
-				break;
-			}
 			case LISTBOX_ANCARD: {
 				int sel = mainGame->lstANCard->getSelected();
 				if(sel != -1) {
 					mainGame->ShowCardInfo(ancard[sel]);
-				}
-				break;
-			}
-			}
-			break;
-		}
-		case irr::gui::EGET_LISTBOX_SELECTED_AGAIN: {
-			switch(id) {
-			case LISTBOX_LOG: {
-				int sel = mainGame->lstLog->getSelected();
-				if(sel != -1 && (int)mainGame->logParam.size() >= sel && mainGame->logParam[sel]) {
-					mainGame->wInfos->setActiveTab(0);
 				}
 				break;
 			}
@@ -1067,11 +1045,6 @@ bool ClientField::OnEvent(const irr::SEvent& event) {
 							mainGame->stDisplayPos[i]->setBackgroundColor(0xffffffff);
 					}
 				}
-				break;
-			}
-			case SCROLL_CARDTEXT: {
-				u32 pos = mainGame->scrCardText->getPos();
-				mainGame->SetStaticText(mainGame->stText, mainGame->stText->getRelativePosition().getWidth() - int(25 * mainGame->xScale), mainGame->textFont, mainGame->showingtext, pos);
 				break;
 			}
 			break;
@@ -1934,12 +1907,6 @@ bool ClientField::OnEvent(const irr::SEvent& event) {
 			}
 			break;
 		}
-		case irr::KEY_KEY_R: {
-			if(mainGame->gameConf.control_mode == 0
-				&& !event.KeyInput.PressedDown && !mainGame->HasFocus(EGUIET_EDIT_BOX))
-				mainGame->textFont->setTransparency(true);
-			break;
-		}
 		case irr::KEY_F1:
 		case irr::KEY_F2:
 		case irr::KEY_F3:
@@ -2011,15 +1978,101 @@ bool ClientField::OnEvent(const irr::SEvent& event) {
 			}
 			break;
 		}
+		default: break;
+		}
+		break;
+	}
+	default: break;
+	}
+	return false;
+}
+bool ClientField::OnCommonEvent(const irr::SEvent& event) {
+	switch(event.EventType) {
+	case irr::EET_GUI_EVENT: {
+		s32 id = event.GUIEvent.Caller->getID();
+		switch(event.GUIEvent.EventType) {
+		case irr::gui::EGET_BUTTON_CLICKED: {
+			switch(id) {
+			case BUTTON_CLEAR_LOG: {
+				mainGame->lstLog->clear();
+				mainGame->logParam.clear();
+				return true;
+				break;
+			}
+			}
+			break;
+		}
+		case irr::gui::EGET_CHECKBOX_CHANGED: {
+			switch(id) {
+			case CHECKBOX_AUTO_SEARCH: {
+				mainGame->gameConf.auto_search_limit = mainGame->chkAutoSearch->isChecked() ? 0 : -1;
+				return true;
+				break;
+			}
+			}
+			break;
+		}
+		case irr::gui::EGET_LISTBOX_CHANGED: {
+			switch(id) {
+			case LISTBOX_LOG: {
+				int sel = mainGame->lstLog->getSelected();
+				if(sel != -1 && (int)mainGame->logParam.size() >= sel && mainGame->logParam[sel]) {
+					mainGame->ShowCardInfo(mainGame->logParam[sel]);
+				}
+				return true;
+				break;
+			}
+			}
+			break;
+		}
+		case irr::gui::EGET_LISTBOX_SELECTED_AGAIN: {
+			switch(id) {
+			case LISTBOX_LOG: {
+				int sel = mainGame->lstLog->getSelected();
+				if(sel != -1 && (int)mainGame->logParam.size() >= sel && mainGame->logParam[sel]) {
+					mainGame->wInfos->setActiveTab(0);
+				}
+				return true;
+				break;
+			}
+			}
+			break;
+		}
+		case irr::gui::EGET_SCROLL_BAR_CHANGED: {
+			switch(id) {
+			case SCROLL_CARDTEXT: {
+				u32 pos = mainGame->scrCardText->getPos();
+				mainGame->SetStaticText(mainGame->stText, mainGame->stText->getRelativePosition().getWidth() - 25, mainGame->textFont, mainGame->showingtext, pos);
+				return true;
+				break;
+			}
+			}
+			break;
+		}
+		default: break;
+		}
+		break;
+	}
+	case irr::EET_KEY_INPUT_EVENT: {
+		switch(event.KeyInput.Key) {
+		case irr::KEY_KEY_R: {
+			if(mainGame->gameConf.control_mode == 0
+				&& !event.KeyInput.PressedDown && !mainGame->HasFocus(EGUIET_EDIT_BOX))
+				mainGame->textFont->setTransparency(true);
+			return true;
+			break;
+		}
 		case irr::KEY_F9: {
 			if(mainGame->gameConf.control_mode == 1
 				&& !event.KeyInput.PressedDown && !mainGame->HasFocus(EGUIET_EDIT_BOX))
 				mainGame->textFont->setTransparency(true);
+			return true;
 			break;
 		}
 		case irr::KEY_ESCAPE: {
 			if(!mainGame->HasFocus(EGUIET_EDIT_BOX))
 				mainGame->device->minimizeWindow();
+			return true;
 			break;
 		}
 		default: break;
