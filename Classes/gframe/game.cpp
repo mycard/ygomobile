@@ -32,7 +32,7 @@ namespace ygo {
 Game* mainGame;
 
 #ifdef _IRR_ANDROID_PLATFORM_
-bool Game::Initialize(android_app* app) {
+bool Game::Initialize(ANDROID_APP app) {
 	this->appMain = app;
 #else
 bool Game::Initialize() {

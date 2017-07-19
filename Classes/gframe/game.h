@@ -82,7 +82,7 @@ class Game {
 
 public:
 #ifdef _IRR_ANDROID_PLATFORM_
-	bool Initialize(android_app* app);
+	bool Initialize(ANDROID_APP app);
 #else
 	bool Initialize();
 #endif
@@ -417,7 +417,7 @@ public:
 	float yScale;
 	IYGOSoundEffectPlayer* soundEffectPlayer;
 #ifdef _IRR_ANDROID_PLATFORM_
-	android_app* appMain;
+	ANDROID_APP appMain;
 	int glversion;
 	bool isPSEnabled;
 	bool isNPOTSupported;

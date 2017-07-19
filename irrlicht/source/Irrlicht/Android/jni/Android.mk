@@ -18,7 +18,7 @@ ifeq ($(TARGET_ARCH_ABI), armeabi-v7a)
 LOCAL_CFLAGS += -mno-unaligned-access
 endif
 
-LOCAL_C_INCLUDES := ../../../include
+LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../include
 
 LOCAL_SRC_FILES := \
 					Android/CIrrDeviceAndroid.cpp \
@@ -369,16 +369,16 @@ include $(BUILD_STATIC_LIBRARY)
 
 $(call import-module,android/native_app_glue)
 
-ifeq ($(HOST_OS),cygwin)
-CP := $(CYGWIN_PATH)/bin/cp
-MKDIR := $(CYGWIN_PATH/bin/mkdir) -p
-else
-CP := copy
-MKDIR := mkdir
-endif
+#ifeq ($(HOST_OS),cygwin)
+#CP := $(CYGWIN_PATH)/bin/cp
+#MKDIR := $(CYGWIN_PATH/bin/mkdir) -p
+#else
+#CP := cp -f
+#MKDIR := mkdir -p 
+#endif
 
-all: $(IRRLICHT_LIB_PATH)
-$(IRRLICHT_LIB_PATH) : $(TARGET_OUT)/$(IRRLICHT_LIB_NAME)
-	$(MKDIR) "$(IRRLICHT_LIB_PATH)"
-	$(CP) $< $@
+#all: $(IRRLICHT_LIB_PATH)
+#$(IRRLICHT_LIB_PATH) : $(TARGET_OUT)/$(IRRLICHT_LIB_NAME)
+#	$(MKDIR) "$(IRRLICHT_LIB_PATH)"
+#	$(CP) "$(TARGET_OUT)/$(IRRLICHT_LIB_NAME)" "$(IRRLICHT_LIB_PATH)"
 

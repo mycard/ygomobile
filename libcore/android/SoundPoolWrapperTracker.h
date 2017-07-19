@@ -18,7 +18,7 @@ namespace ygo {
 
 class SoundPoolWrapperTracker: public ygo::IAudioTracker {
 public:
-	SoundPoolWrapperTracker(android_app* app);
+	SoundPoolWrapperTracker(ANDROID_APP app);
 
 	virtual ~SoundPoolWrapperTracker();
 
@@ -30,7 +30,7 @@ public:
 		return m_sounds;
 	}
 
-	inline const android_app* getMainApp() {
+	inline const ANDROID_APP getMainApp() {
 		return m_mainApp;
 	}
 
@@ -45,7 +45,7 @@ public:
 	volatile bool m_isTerminated;
 
 private:
-	android_app* m_mainApp;
+	ANDROID_APP m_mainApp;
 	pthread_t m_audioThread;
 	Signal* m_pPlaySignal;
 	pthread_mutex_t m_soundLock;
