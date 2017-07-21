@@ -8,12 +8,12 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 
 import cn.garymb.ygomobile.YGOStarter;
@@ -53,6 +53,10 @@ public class MyCardActivity extends BaseActivity implements MyCard.MyCardListene
         }
         mWebViewPlus.enableHtml5();
 
+        if (Build.VERSION.SDK_INT >= 21) {
+            mWebViewPlus.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
+        }
+
         mWebViewPlus.setWebChromeClient(new WebViewPlus.DefWebChromeClient() {
             @Override
             public void onReceivedTitle(WebView view, String title) {
@@ -66,7 +70,7 @@ public class MyCardActivity extends BaseActivity implements MyCard.MyCardListene
         });
         mMyCard.attachWeb(mWebViewPlus, this);
         try {
-            mWebViewPlus.loadUrl(mMyCard.getLoginUrl());
+            mWebViewPlus.loadUrl(mMyCard.getHomeUrl());
         } catch (Exception e) {
             e.printStackTrace();
         }
