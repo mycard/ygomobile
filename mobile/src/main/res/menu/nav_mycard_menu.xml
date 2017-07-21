@@ -1,6 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
+        android:id="@+id/action_home"
+        android:title="@string/mc_home"
+        />
+    <item
+        android:id="@+id/action_bbs"
+        android:title="@string/bbs"
+        />
+    <item
         android:id="@+id/action_new_room"
         android:icon="@drawable/ic_add"
         android:title="@string/new_room"

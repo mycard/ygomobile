@@ -176,4 +176,6 @@
     <string name="delete">删除</string>
     <string name="mycard">萌卡平台</string>
     <string name="new_room">新建房间</string>
+    <string name="mc_home">大厅</string>
+    <string name="bbs">论坛</string>
 </resources>

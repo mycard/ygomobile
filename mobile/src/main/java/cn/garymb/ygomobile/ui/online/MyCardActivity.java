@@ -74,7 +74,7 @@ public class MyCardActivity extends BaseActivity implements MyCard.MyCardListene
 
     @Override
     protected void onBackHome() {
-        if(mDrawerlayout.isDrawerOpen(Gravity.LEFT)){
+        if (mDrawerlayout.isDrawerOpen(Gravity.LEFT)) {
             closeDrawer();
             return;
         }
@@ -87,7 +87,7 @@ public class MyCardActivity extends BaseActivity implements MyCard.MyCardListene
 
     @Override
     public void onBackPressed() {
-        if(mDrawerlayout.isDrawerOpen(Gravity.LEFT)){
+        if (mDrawerlayout.isDrawerOpen(Gravity.LEFT)) {
             closeDrawer();
             return;
         }
@@ -132,28 +132,32 @@ public class MyCardActivity extends BaseActivity implements MyCard.MyCardListene
     }
 
     private boolean doMenu(int id) {
+        closeDrawer();
         switch (id) {
             case android.R.id.home:
-                onBackHome();
+                if (mMyCard.check(mWebViewPlus)) {
+                    onBackHome();
+                }
                 break;
             case R.id.action_deck_manager:
                 startActivity(new Intent(this, DeckManagerActivity.class));
                 closeDrawer();
                 break;
             case R.id.action_new_room:
-                if (TextUtils.isEmpty(mMyCard.getNewRoomUrl())) {
-                    try {
-                        mWebViewPlus.loadUrl(mMyCard.getLoginUrl());
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                } else {
+                if (mMyCard.check(mWebViewPlus)) {
                     mWebViewPlus.loadUrl(mMyCard.getNewRoomUrl());
                 }
-                closeDrawer();
                 break;
             case R.id.action_quit:
                 finish();
+                break;
+            case R.id.action_home:
+                onHome();
+                break;
+            case R.id.action_bbs:
+                if (mMyCard.check(mWebViewPlus)) {
+                    mWebViewPlus.loadUrl(mMyCard.getBBSUrl());
+                }
                 break;
             default:
                 return false;

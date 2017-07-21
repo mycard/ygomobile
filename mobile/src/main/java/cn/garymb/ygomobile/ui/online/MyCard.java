@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
+import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
 import android.webkit.JavascriptInterface;
@@ -154,6 +155,18 @@ public class MyCard {
         public User() {
 
         }
+    }
+
+    public boolean check(WebView webView){
+        if (TextUtils.isEmpty(getNewRoomUrl())) {
+            try {
+                webView.loadUrl(getLoginUrl());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return false;
+        }
+        return true;
     }
 
     public static class Ygopro {
