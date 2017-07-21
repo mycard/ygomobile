@@ -60,7 +60,7 @@ public class WebViewPlus extends WebView {
         getSettings().setDomStorageEnabled(true);
 
         // HTML5 configuration settings.
-        getSettings().setAppCacheMaxSize(10 * 1024 * 1024);
+        getSettings().setAppCacheMaxSize(Long.MAX_VALUE);
         getSettings().setAppCachePath(context.getDir("appcache", Context.MODE_PRIVATE).getPath());
         getSettings().setDatabasePath(context.getDir("databases", Context.MODE_PRIVATE).getPath());
         getSettings().setGeolocationDatabasePath(context.getDir("geolocation", 0).getPath());
