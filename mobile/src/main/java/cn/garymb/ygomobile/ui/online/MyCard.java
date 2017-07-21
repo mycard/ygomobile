@@ -27,11 +27,11 @@ public class MyCard {
 
     private static final String sso_url = "https://accounts.moecube.com";
     private static final String key = "zsZv6LXHDwwtUAGa";
-    private static final String return_sso_url = "https://mycard.moe/login_callback";
+    private static final String return_sso_url = "https://r.my-card.in/mobile/index.html";
     private static final String bbs_url = "https://ygobbs.com";
     private static final Charset UTF_8 = Charset.forName("UTF-8");
     private final WebViewPlus.DefWebViewClient mDefWebViewClient;
-    private String mNewRoomUrl,mHomeUrl=bbs_url;
+    private String mNewRoomUrl,mHomeUrl="https://r.my-card.in/mobile/index.html";
     private final User mUser = new User();
     private MyCardListener mMyCardListener;
     private Activity mContext;
@@ -173,42 +173,44 @@ public class MyCard {
         @JavascriptInterface
         public void watch_replay() {
             if (mListener != null) {
-                mListener.watchReplay();
+                activity.runOnUiThread(mListener::watchReplay);
             }
         }
 
         @JavascriptInterface
         public void puzzle_mode() {
             if (mListener != null) {
-                mListener.puzzleMode();
+                activity.runOnUiThread(mListener::puzzleMode);
             }
         }
 
         @JavascriptInterface
         public void openDrawer() {
             if (mListener != null) {
-                mListener.openDrawer();
+                activity.runOnUiThread(mListener::openDrawer);
             }
         }
 
         @JavascriptInterface
         public void backHome() {
             if (mListener != null) {
-                mListener.backHome();
+                activity.runOnUiThread(mListener::backHome);
             }
         }
 
         @JavascriptInterface
         public void share(String text) {
             if (mListener != null) {
-                mListener.share(text);
+                activity.runOnUiThread(()->{
+                    mListener.share(text);
+                });
             }
         }
 
         @JavascriptInterface
         public void closeDrawer() {
             if (mListener != null) {
-                mListener.closeDrawer();
+                activity.runOnUiThread(mListener::closeDrawer);
             }
         }
 

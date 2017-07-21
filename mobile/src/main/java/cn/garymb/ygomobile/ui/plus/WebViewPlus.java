@@ -78,6 +78,7 @@ public class WebViewPlus extends WebView {
         CookieManager.getInstance().setAcceptCookie(true);
         if (Build.VERSION.SDK_INT >= 21) {
             CookieManager.getInstance().setAcceptThirdPartyCookies(this, true);
+            getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
         }
         setDownloadListener(new DownloadListener() {
 

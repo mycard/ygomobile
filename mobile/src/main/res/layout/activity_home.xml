@@ -33,10 +33,10 @@
             <android.support.v7.widget.AppCompatButton
                 android:id="@+id/help"
                 android:layout_width="wrap_content"
-                android:layout_height="87dp"
-                android:layout_gravity="bottom|right"
+                android:layout_height="85dp"
+                android:layout_gravity="bottom|left"
                 android:layout_marginBottom="10dp"
-                android:layout_marginRight="10dp"
+                android:layout_marginLeft="10dp"
                 android:background="@drawable/help"
                 />
         </FrameLayout>

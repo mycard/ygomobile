@@ -1,6 +1,7 @@
 package cn.garymb.ygomobile.ui.online;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -11,6 +12,8 @@ import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.webkit.WebView;
 
 import cn.garymb.ygomobile.YGOStarter;
@@ -43,8 +46,13 @@ public class MyCardActivity extends BaseActivity implements MyCard.MyCardListene
         NavigationView navigationView = $(R.id.nav_main);
         navigationView.setNavigationItemSelectedListener(this);
         View navHead = navigationView.getHeaderView(0);
-
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(getResources().getColor(R.color.mediumPurple));
+        }
         mWebViewPlus.enableHtml5();
+
         mWebViewPlus.setWebChromeClient(new WebViewPlus.DefWebChromeClient() {
             @Override
             public void onReceivedTitle(WebView view, String title) {
@@ -66,6 +74,10 @@ public class MyCardActivity extends BaseActivity implements MyCard.MyCardListene
 
     @Override
     protected void onBackHome() {
+        if(mDrawerlayout.isDrawerOpen(Gravity.LEFT)){
+            closeDrawer();
+            return;
+        }
         if (mWebViewPlus.canGoBack()) {
             mWebViewPlus.goBack();
         } else {
@@ -75,6 +87,10 @@ public class MyCardActivity extends BaseActivity implements MyCard.MyCardListene
 
     @Override
     public void onBackPressed() {
+        if(mDrawerlayout.isDrawerOpen(Gravity.LEFT)){
+            closeDrawer();
+            return;
+        }
         if (mWebViewPlus.canGoBack()) {
             mWebViewPlus.goBack();
         } else {
@@ -125,16 +141,19 @@ public class MyCardActivity extends BaseActivity implements MyCard.MyCardListene
                 closeDrawer();
                 break;
             case R.id.action_new_room:
-                if(TextUtils.isEmpty(mMyCard.getNewRoomUrl())){
+                if (TextUtils.isEmpty(mMyCard.getNewRoomUrl())) {
                     try {
                         mWebViewPlus.loadUrl(mMyCard.getLoginUrl());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                }else {
+                } else {
                     mWebViewPlus.loadUrl(mMyCard.getNewRoomUrl());
                 }
                 closeDrawer();
+                break;
+            case R.id.action_quit:
+                finish();
                 break;
             default:
                 return false;
@@ -194,7 +213,7 @@ public class MyCardActivity extends BaseActivity implements MyCard.MyCardListene
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-        if(doMenu(item.getItemId())){
+        if (doMenu(item.getItemId())) {
             return true;
         }
         return false;
