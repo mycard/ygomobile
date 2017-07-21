@@ -3,6 +3,7 @@ package cn.garymb.ygomobile.ui.online;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.util.Base64;
@@ -19,6 +20,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 import cn.garymb.ygodata.YGOGameOptions;
 import cn.garymb.ygomobile.YGOStarter;
+import cn.garymb.ygomobile.ui.cards.DeckManagerActivity;
 import cn.garymb.ygomobile.ui.plus.WebViewPlus;
 
 public class MyCard {
@@ -36,6 +38,18 @@ public class MyCard {
 
     public interface MyCardListener {
         void onLogin(User user);
+
+        void watchReplay();
+
+        void puzzleMode();
+
+        void openDrawer();
+
+        void closeDrawer();
+
+        void backHome();
+
+        void share(String text);
 
         void onHome();
     }
@@ -82,10 +96,6 @@ public class MyCard {
         return mMyCardListener;
     }
 
-    public void setMyCardListener(MyCardListener myCardListener) {
-        mMyCardListener = myCardListener;
-    }
-
     public WebViewPlus.DefWebViewClient getWebViewClient() {
         return mDefWebViewClient;
     }
@@ -117,9 +127,10 @@ public class MyCard {
     }
 
     @SuppressLint("AddJavascriptInterface")
-    public void attachWeb(WebView webView) {
+    public void attachWeb(WebView webView, MyCardListener myCardListener) {
+        mMyCardListener = myCardListener;
         webView.setWebViewClient(getWebViewClient());
-        webView.addJavascriptInterface(new MyCard.Ygopro(mContext), "ygopro");
+        webView.addJavascriptInterface(new MyCard.Ygopro(mContext, myCardListener), "ygopro");
     }
 
     public static class User {
@@ -139,9 +150,58 @@ public class MyCard {
 
     public static class Ygopro {
         Activity activity;
+        MyCardListener mListener;
 
-        private Ygopro(Activity activity) {
+        private Ygopro(Activity activity, MyCardListener listener) {
             this.activity = activity;
+            mListener = listener;
+        }
+
+        @JavascriptInterface
+        public void edit_deck() {
+            activity.startActivity(new Intent(activity, DeckManagerActivity.class));
+        }
+
+        @JavascriptInterface
+        public void watch_replay() {
+            if (mListener != null) {
+                mListener.watchReplay();
+            }
+        }
+
+        @JavascriptInterface
+        public void puzzle_mode() {
+            if (mListener != null) {
+                mListener.puzzleMode();
+            }
+        }
+
+        @JavascriptInterface
+        public void openDrawer() {
+            if (mListener != null) {
+                mListener.openDrawer();
+            }
+        }
+
+        @JavascriptInterface
+        public void backHome() {
+            if (mListener != null) {
+                mListener.backHome();
+            }
+        }
+
+        @JavascriptInterface
+        public void share(String text) {
+            if (mListener != null) {
+                mListener.share(text);
+            }
+        }
+
+        @JavascriptInterface
+        public void closeDrawer() {
+            if (mListener != null) {
+                mListener.closeDrawer();
+            }
         }
 
         @JavascriptInterface

@@ -8,6 +8,7 @@
     android:layout_height="match_parent"
     android:clipToPadding="true"
     android:fitsSystemWindows="true"
+    tools:openDrawer="left"
     xmlns:tools="http://schemas.android.com/tools">
 
     <LinearLayout
