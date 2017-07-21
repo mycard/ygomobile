@@ -178,4 +178,5 @@
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
     <string name="mycard">MyCard</string>
+    <string name="new_room">新建房间</string>
 </resources>

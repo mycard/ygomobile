@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,6 +16,7 @@ import android.webkit.WebView;
 import cn.garymb.ygomobile.YGOStarter;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.ui.activities.BaseActivity;
+import cn.garymb.ygomobile.ui.cards.DeckManagerActivity;
 import cn.garymb.ygomobile.ui.plus.WebViewPlus;
 
 public class MyCardActivity extends BaseActivity implements MyCard.MyCardListener, NavigationView.OnNavigationItemSelectedListener {
@@ -118,6 +120,22 @@ public class MyCardActivity extends BaseActivity implements MyCard.MyCardListene
             case android.R.id.home:
                 onBackHome();
                 break;
+            case R.id.action_deck_manager:
+                startActivity(new Intent(this, DeckManagerActivity.class));
+                closeDrawer();
+                break;
+            case R.id.action_new_room:
+                if(TextUtils.isEmpty(mMyCard.getNewRoomUrl())){
+                    try {
+                        mWebViewPlus.loadUrl(mMyCard.getLoginUrl());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }else {
+                    mWebViewPlus.loadUrl(mMyCard.getNewRoomUrl());
+                }
+                closeDrawer();
+                break;
             default:
                 return false;
         }
@@ -131,7 +149,7 @@ public class MyCardActivity extends BaseActivity implements MyCard.MyCardListene
 
     @Override
     public void onHome() {
-        mWebViewPlus.loadUrl(mMyCard.getNewRoomUrl());
+        mWebViewPlus.loadUrl(mMyCard.getHomeUrl());
     }
 
     @Override

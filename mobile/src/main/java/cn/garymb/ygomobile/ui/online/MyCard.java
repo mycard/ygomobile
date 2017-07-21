@@ -31,7 +31,7 @@ public class MyCard {
     private static final String bbs_url = "https://ygobbs.com";
     private static final Charset UTF_8 = Charset.forName("UTF-8");
     private final WebViewPlus.DefWebViewClient mDefWebViewClient;
-    private String mNewRoomUrl;
+    private String mNewRoomUrl,mHomeUrl=bbs_url;
     private final User mUser = new User();
     private MyCardListener mMyCardListener;
     private Activity mContext;
@@ -76,7 +76,7 @@ public class MyCard {
                     }
                     Uri route = new Uri.Builder().path("/ygopro/rooms/new").appendQueryParameter("sso", sso).build();
                     Uri whole = Uri.parse("https://r.my-card.in/mobile/index.html").buildUpon().encodedFragment(route.toString()).build();
-                    Log.d("login", whole.toString());
+                    Log.d("webview", whole.toString());
                     mNewRoomUrl = whole.toString();
                     if (getMyCardListener() != null) {
                         getMyCardListener().onHome();
@@ -124,6 +124,14 @@ public class MyCard {
         requestBuilder.appendQueryParameter("sso", new String(payload, UTF_8));
         requestBuilder.appendQueryParameter("sig", signature);
         return requestBuilder.build().toString();
+    }
+
+    public String getHomeUrl() {
+        return mHomeUrl;
+    }
+
+    public String getBBSUrl() {
+        return bbs_url;
     }
 
     @SuppressLint("AddJavascriptInterface")

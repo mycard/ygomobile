@@ -175,4 +175,5 @@
     <string name="edit">编辑</string>
     <string name="delete">删除</string>
     <string name="mycard">萌卡平台</string>
+    <string name="new_room">新建房间</string>
 </resources>
