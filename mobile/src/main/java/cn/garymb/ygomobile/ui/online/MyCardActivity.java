@@ -16,7 +16,10 @@ import android.view.WindowManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
+import java.text.MessageFormat;
+
 import cn.garymb.ygomobile.YGOStarter;
+import cn.garymb.ygomobile.lite.BuildConfig;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.ui.activities.BaseActivity;
 import cn.garymb.ygomobile.ui.cards.DeckManagerActivity;
@@ -46,17 +49,20 @@ public class MyCardActivity extends BaseActivity implements MyCard.MyCardListene
         NavigationView navigationView = $(R.id.nav_main);
         navigationView.setNavigationItemSelectedListener(this);
         View navHead = navigationView.getHeaderView(0);
+        WebSettings settings = mWebViewPlus.getSettings();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.setStatusBarColor(getResources().getColor(R.color.mediumPurple));
+            settings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
         }
+        settings.setUserAgentString(settings.getUserAgentString() + MessageFormat.format(
+                " YGOMobile/{0} ({1} {2,number,#})",
+                BuildConfig.VERSION_NAME,
+                BuildConfig.APPLICATION_ID,
+                BuildConfig.VERSION_CODE
+        ));
         mWebViewPlus.enableHtml5();
-
-        if (Build.VERSION.SDK_INT >= 21) {
-            mWebViewPlus.getSettings().setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);
-        }
-
         mWebViewPlus.setWebChromeClient(new WebViewPlus.DefWebChromeClient() {
             @Override
             public void onReceivedTitle(WebView view, String title) {
