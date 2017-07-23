@@ -2,7 +2,6 @@ package cn.garymb.ygomobile;
 
 import android.app.Activity;
 import android.content.Context;
-import android.os.Environment;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -31,6 +30,7 @@ public class AppsSettings {
     private PreferenceFragmentPlus.SharedPreferencesPlus mSharedPreferences;
     private float mScreenHeight, mScreenWidth, mDensity;
     private static final String PREF_VERSION = "app_version";
+    private final File mAppDir;
 
     public static void init(Context context) {
         if (sAppsSettings == null) {
@@ -42,12 +42,14 @@ public class AppsSettings {
         return sAppsSettings;
     }
 
-    public File getSystemConfig(){
+    public File getSystemConfig() {
         return new File(getResourcePath(), String.format(CORE_SYSTEM_PATH, getCoreConfigVersion()));
     }
 
     private AppsSettings(Context context) {
         this.context = context;
+        mAppDir = context.getDir("ygopro", Context.MODE_PRIVATE);
+        mAppDir.mkdirs();
         mSharedPreferences = PreferenceFragmentPlus.SharedPreferencesPlus.create(context, context.getPackageName() + ".settings");
         mSharedPreferences.setAutoSave(true);
         update(context);
@@ -95,7 +97,7 @@ public class AppsSettings {
         return true;// mSharedPreferences.getBoolean(PREF_DECK_DELETE_DILAOG, PREF_DEF_DECK_DELETE_DILAOG);
     }
 
-    public int getFontSize(){
+    public int getFontSize() {
         return mSharedPreferences.getInt(PREF_FONT_SIZE, DEF_PREF_FONT_SIZE);
     }
 
@@ -309,17 +311,19 @@ public class AppsSettings {
     public String getResourcePath() {
         String defPath;
         try {
-            defPath = new File(Environment.getExternalStorageDirectory(), Constants.PREF_DEF_GAME_DIR).getAbsolutePath();
+            //data目录
+            defPath = mAppDir.getAbsolutePath();
         } catch (Exception e) {
             defPath = new File(context.getFilesDir(), Constants.PREF_DEF_GAME_DIR).getAbsolutePath();
         }
         return mSharedPreferences.getString(Constants.PREF_GAME_PATH, defPath);
     }
 
-    public void setResourcePath(String path){
-        if(TextUtils.equals(path, getResourcePath()))return;
+    public void setResourcePath(String path) {
+        if (TextUtils.equals(path, getResourcePath())) return;
         mSharedPreferences.putString(Constants.PREF_GAME_PATH, path);
     }
+
     public String getDeckDir() {
         return new File(getResourcePath(), Constants.CORE_DECK_PATH).getAbsolutePath();
     }
