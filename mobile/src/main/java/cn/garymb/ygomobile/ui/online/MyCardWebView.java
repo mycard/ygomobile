@@ -4,27 +4,31 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.webkit.CookieManager;
-import android.webkit.CookieSyncManager;
-import android.webkit.DownloadListener;
 import android.webkit.WebChromeClient;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import org.xwalk.core.XWalkDownloadListener;
 import org.xwalk.core.XWalkNavigationItem;
+import org.xwalk.core.XWalkPreferences;
 import org.xwalk.core.XWalkResourceClient;
 import org.xwalk.core.XWalkUIClient;
 import org.xwalk.core.XWalkView;
 
 import cn.garymb.ygomobile.lite.BuildConfig;
-import cn.garymb.ygomobile.ui.plus.WebViewPlus;
 
 public class MyCardWebView extends XWalkView {
+    static{
+        XWalkPreferences.setValue(XWalkPreferences.REMOTE_DEBUGGING, BuildConfig.DEBUG);
+        XWalkPreferences.setValue(XWalkPreferences.ENABLE_THEME_COLOR, false);
+        XWalkPreferences.setValue(XWalkPreferences.ENABLE_JAVASCRIPT, true);
+        XWalkPreferences.setValue(XWalkPreferences.ENABLE_EXTENSIONS, true);
+        XWalkPreferences.setValue(XWalkPreferences.ANIMATABLE_XWALK_VIEW, false);
+        XWalkPreferences.setValue(XWalkPreferences.ALLOW_UNIVERSAL_ACCESS_FROM_FILE, true);
+    }
     public MyCardWebView(Context context) {
         super(context);
     }
@@ -76,6 +80,7 @@ public class MyCardWebView extends XWalkView {
                 super.onReceivedTitle(view, title);
                 webChromeClient.onReceivedTitle(null, title);
             }
+
         });
     }
 

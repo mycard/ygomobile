@@ -1,6 +1,7 @@
 package cn.garymb.ygomobile.ui.online;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -9,6 +10,8 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.webkit.WebView;
 
 import cn.garymb.ygomobile.YGOStarter;
@@ -32,6 +35,11 @@ public class MyCardActivity extends BaseActivity implements MyCard.MyCardListene
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_online_mycard);
         enableBackHome();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(getResources().getColor(R.color.mediumPurple));
+        }
 
         YGOStarter.onCreated(this);
         mMyCard = new MyCard(this);
@@ -41,9 +49,7 @@ public class MyCardActivity extends BaseActivity implements MyCard.MyCardListene
         navigationView.setNavigationItemSelectedListener(this);
         View navHead = navigationView.getHeaderView(0);
 
-
         mWebViewPlus.enableHtml5();
-
         mWebViewPlus.setWebChromeClient(new WebViewPlus.DefWebChromeClient() {
             @Override
             public void onReceivedTitle(WebView view, String title) {
