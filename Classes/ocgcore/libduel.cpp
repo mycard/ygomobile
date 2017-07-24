@@ -708,22 +708,16 @@ int32 scriptlib::duel_set_chain_limit(lua_State *L) {
 	check_param_count(L, 1);
 	check_param(L, PARAM_TYPE_FUNCTION, 1);
 	duel* pduel = interpreter::get_duel_info(L);
-	if(pduel->game_field->core.chain_limit)
-		luaL_unref(L, LUA_REGISTRYINDEX, pduel->game_field->core.chain_limit);
 	int32 f = interpreter::get_function_handle(L, 1);
-	pduel->game_field->core.chain_limit = f;
-	pduel->game_field->core.chain_limp = pduel->game_field->core.reason_player;
+	pduel->game_field->core.chain_limit.push_back(processor::chain_limit_t(f, pduel->game_field->core.reason_player));
 	return 0;
 }
 int32 scriptlib::duel_set_chain_limit_p(lua_State *L) {
 	check_param_count(L, 1);
 	check_param(L, PARAM_TYPE_FUNCTION, 1);
 	duel* pduel = interpreter::get_duel_info(L);
-	if(pduel->game_field->core.chain_limit_p)
-		luaL_unref(L, LUA_REGISTRYINDEX, pduel->game_field->core.chain_limit_p);
 	int32 f = interpreter::get_function_handle(L, 1);
-	pduel->game_field->core.chain_limit_p = f;
-	pduel->game_field->core.chain_limp_p = pduel->game_field->core.reason_player;
+	pduel->game_field->core.chain_limit_p.push_back(processor::chain_limit_t(f, pduel->game_field->core.reason_player));
 	return 0;
 }
 int32 scriptlib::duel_get_chain_material(lua_State *L) {
@@ -2544,14 +2538,14 @@ int32 scriptlib::duel_set_target_card(lua_State *L) {
 			targets->container.insert(pcard);
 		else
 			targets->container = pgroup->container;
-	} else if(pduel->game_field->core.current_chain.size()) {
+	} else {
 		if(pcard) {
 			targets->container.insert(pcard);
-			pcard->create_relation(peffect);
+			pcard->create_relation(*ch);
 		} else {
 			targets->container.insert(pgroup->container.begin(), pgroup->container.end());
 			for(auto cit = pgroup->container.begin(); cit != pgroup->container.end(); ++cit)
-				(*cit)->create_relation(peffect);
+				(*cit)->create_relation(*ch);
 		}
 		if(peffect->is_flag(EFFECT_FLAG_CARD_TARGET)) {
 			if(pcard) {

@@ -2,6 +2,7 @@ package cn.garymb.ygomobile;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Environment;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -30,7 +31,6 @@ public class AppsSettings {
     private PreferenceFragmentPlus.SharedPreferencesPlus mSharedPreferences;
     private float mScreenHeight, mScreenWidth, mDensity;
     private static final String PREF_VERSION = "app_version";
-    private final File mAppDir;
 
     public static void init(Context context) {
         if (sAppsSettings == null) {
@@ -48,8 +48,6 @@ public class AppsSettings {
 
     private AppsSettings(Context context) {
         this.context = context;
-        mAppDir = context.getDir("ygopro", Context.MODE_PRIVATE);
-        mAppDir.mkdirs();
         mSharedPreferences = PreferenceFragmentPlus.SharedPreferencesPlus.create(context, context.getPackageName() + ".settings");
         mSharedPreferences.setAutoSave(true);
         update(context);
@@ -311,8 +309,7 @@ public class AppsSettings {
     public String getResourcePath() {
         String defPath;
         try {
-            //data目录
-            defPath = mAppDir.getAbsolutePath();
+            defPath = new File(Environment.getExternalStorageDirectory(), Constants.PREF_DEF_GAME_DIR).getAbsolutePath();
         } catch (Exception e) {
             defPath = new File(context.getFilesDir(), Constants.PREF_DEF_GAME_DIR).getAbsolutePath();
         }
