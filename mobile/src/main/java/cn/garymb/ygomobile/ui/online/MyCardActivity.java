@@ -16,6 +16,7 @@ import android.view.WindowManager;
 import android.webkit.WebView;
 
 import org.xwalk.core.XWalkUIClient;
+import java.text.MessageFormat;
 import org.xwalk.core.XWalkView;
 
 import cn.garymb.ygomobile.YGOStarter;
