@@ -10,6 +10,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -112,6 +113,10 @@ public class YGOStarter {
 //            Log.i("checker", "init:" + activity);
         }
         activityShowInfo.oldRequestedOrientation = activity.getRequestedOrientation();
+//        Log.w("checker", "activityShowInfo.oldRequestedOrientation=" + activityShowInfo.oldRequestedOrientation);
+        if(activityShowInfo.oldRequestedOrientation == ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED){
+            activityShowInfo.oldRequestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+        }
         activityShowInfo.mRoot = activity.getWindow().getDecorView();
         activityShowInfo.mViewTarget = new ViewTargetPlus(activityShowInfo.mRoot);
         activityShowInfo.mContentView = activityShowInfo.mRoot.findViewById(android.R.id.content);

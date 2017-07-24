@@ -1,6 +1,7 @@
 package cn.garymb.ygomobile.ui.online;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
