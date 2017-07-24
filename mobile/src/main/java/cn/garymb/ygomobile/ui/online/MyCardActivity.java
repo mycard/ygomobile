@@ -1,24 +1,15 @@
 package cn.garymb.ygomobile.ui.online;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
-
-import com.readystatesoftware.systembartint.SystemBarTintManager;
-
-import org.xwalk.core.XWalkView;
 
 import cn.garymb.ygomobile.YGOStarter;
 import cn.garymb.ygomobile.lite.R;

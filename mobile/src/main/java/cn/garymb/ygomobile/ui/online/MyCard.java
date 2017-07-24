@@ -9,8 +9,6 @@ import android.util.Log;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 
-import org.xwalk.core.XWalkView;
-
 import java.nio.charset.Charset;
 
 import cn.garymb.ygodata.YGOGameOptions;
