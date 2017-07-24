@@ -4,6 +4,7 @@ package cn.garymb.ygomobile.ui.plus;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.GestureDetector;
@@ -282,6 +283,7 @@ public class DialogPlus extends Dialog {
     private WebViewPlus initWebView() {
         FrameLayout frameLayout = new FrameLayout(context);
         WebViewPlus webView = new WebViewPlus(context);
+        webView.setBackgroundColor(Color.TRANSPARENT);
         FrameLayout.LayoutParams layoutParams = new FrameLayout.LayoutParams(
                 mMaxWidth, ViewGroup.LayoutParams.WRAP_CONTENT);
         layoutParams.gravity = Gravity.CENTER_HORIZONTAL;

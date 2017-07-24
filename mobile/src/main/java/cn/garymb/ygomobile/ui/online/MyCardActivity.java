@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,7 +15,11 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.webkit.WebView;
 
+import org.xwalk.core.XWalkUIClient;
+import org.xwalk.core.XWalkView;
+
 import cn.garymb.ygomobile.YGOStarter;
+import cn.garymb.ygomobile.lite.BuildConfig;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.ui.activities.BaseActivity;
 import cn.garymb.ygomobile.ui.cards.DeckManagerActivity;
@@ -50,19 +55,22 @@ public class MyCardActivity extends BaseActivity implements MyCard.MyCardListene
         View navHead = navigationView.getHeaderView(0);
 
         mWebViewPlus.enableHtml5();
-        mWebViewPlus.setWebChromeClient(new WebViewPlus.DefWebChromeClient() {
+        mWebViewPlus.setUIClient(new XWalkUIClient(mWebViewPlus){
             @Override
-            public void onReceivedTitle(WebView view, String title) {
+            public void onReceivedTitle(XWalkView view, String title) {
                 super.onReceivedTitle(view, title);
                 setTitle(title);
             }
+
+            @Override
+            public boolean onConsoleMessage(XWalkView view, String message, int lineNumber, String sourceId, ConsoleMessageType messageType) {
+                if (BuildConfig.DEBUG)
+                    Log.i("webview", sourceId + ":" + lineNumber + "\n" + message);
+                return super.onConsoleMessage(view, message, lineNumber, sourceId, messageType);
+            }
         });
         mMyCard.attachWeb(mWebViewPlus, this);
-        try {
-            mWebViewPlus.loadUrl(mMyCard.getHomeUrl());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        mWebViewPlus.loadUrl(mMyCard.getHomeUrl());
     }
 
     @Override
@@ -79,6 +87,21 @@ public class MyCardActivity extends BaseActivity implements MyCard.MyCardListene
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (mWebViewPlus != null) {
+            mWebViewPlus.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        if (mWebViewPlus != null) {
+            mWebViewPlus.onNewIntent(intent);
+        }
+    }
+
+    @Override
     public void onBackPressed() {
         onBackHome();
     }
@@ -86,7 +109,9 @@ public class MyCardActivity extends BaseActivity implements MyCard.MyCardListene
     @Override
     protected void onResume() {
         mWebViewPlus.resumeTimers();
-        mWebViewPlus.onShow();
+        if (!mWebViewPlus.isShown()) {
+            mWebViewPlus.onShow();
+        }
         YGOStarter.onResumed(this);
         super.onResume();
     }

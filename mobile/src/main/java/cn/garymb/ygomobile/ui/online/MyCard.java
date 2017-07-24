@@ -14,6 +14,7 @@ import java.nio.charset.Charset;
 import cn.garymb.ygodata.YGOGameOptions;
 import cn.garymb.ygomobile.YGOStarter;
 import cn.garymb.ygomobile.ui.cards.DeckManagerActivity;
+import cn.garymb.ygomobile.ui.plus.MyWebView;
 import cn.garymb.ygomobile.ui.plus.WebViewPlus;
 
 public class MyCard {
@@ -23,7 +24,7 @@ public class MyCard {
     private static final String return_sso_url = "https://r.my-card.in/mobile/index.html";
     private static final String bbs_url = "https://ygobbs.com";
     private static final Charset UTF_8 = Charset.forName("UTF-8");
-    private final WebViewPlus.DefWebViewClient mDefWebViewClient;
+    private final MyWebView.DefWebViewClient mDefWebViewClient;
     private String mHomeUrl = "https://r.my-card.in/mobile/index.html";
     private String mNewRoomUrl = "https://r.my-card.in/mobile/index.html#/ygopro/rooms/new";
     private final User mUser = new User();
@@ -50,7 +51,7 @@ public class MyCard {
 
     public MyCard(Activity context) {
         mContext = context;
-        mDefWebViewClient = new WebViewPlus.DefWebViewClient() {
+        mDefWebViewClient = new MyWebView.DefWebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 if (url.startsWith(return_sso_url)) {
@@ -69,7 +70,7 @@ public class MyCard {
                         getMyCardListener().onLogin(mUser);
                     }
                     return false;
-                    }
+                }
                 return super.shouldOverrideUrlLoading(view, url);
             }
         };
@@ -83,7 +84,7 @@ public class MyCard {
         return mMyCardListener;
     }
 
-    public WebViewPlus.DefWebViewClient getWebViewClient() {
+    public MyWebView.DefWebViewClient getWebViewClient() {
         return mDefWebViewClient;
     }
 
@@ -143,7 +144,7 @@ public class MyCard {
         }
     }
 
-    public boolean check(MyCardWebView webView){
+    public boolean check(MyCardWebView webView) {
         if (!mUser.login) {
             try {
                 webView.loadUrl(getHomeUrl());

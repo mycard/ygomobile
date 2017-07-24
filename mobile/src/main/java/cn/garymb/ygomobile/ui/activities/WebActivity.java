@@ -10,7 +10,9 @@ import android.webkit.WebView;
 
 
 import cn.garymb.ygomobile.lite.R;
+import cn.garymb.ygomobile.ui.plus.MyWebView;
 import cn.garymb.ygomobile.ui.plus.WebViewPlus;
+import cn.garymb.ygomobile.ui.plus.XWebView;
 
 public class WebActivity extends BaseActivity {
     private WebViewPlus mWebViewPlus;
@@ -26,7 +28,7 @@ public class WebActivity extends BaseActivity {
         enableBackHome();
         mWebViewPlus = $(R.id.webbrowser);
         mWebViewPlus.enableHtml5();
-        mWebViewPlus.setWebChromeClient(new WebViewPlus.DefWebChromeClient() {
+        mWebViewPlus.setWebChromeClient(new MyWebView.DefWebChromeClient() {
             @Override
             public void onReceivedTitle(WebView view, String title) {
                 super.onReceivedTitle(view, title);
@@ -91,15 +93,15 @@ public class WebActivity extends BaseActivity {
 
     @Override
     protected void onResume() {
-        mWebViewPlus.onResume();
         mWebViewPlus.resumeTimers();
+        mWebViewPlus.onShow();
         super.onResume();
     }
 
     @Override
     protected void onPause() {
-        mWebViewPlus.onPause();
         mWebViewPlus.pauseTimers();
+        mWebViewPlus.onHide();
         super.onPause();
     }
 
@@ -108,7 +110,7 @@ public class WebActivity extends BaseActivity {
         mWebViewPlus.stopLoading();
         mWebViewPlus.setWebChromeClient(null);
         mWebViewPlus.setWebViewClient(null);
-        mWebViewPlus.destroy();
+        mWebViewPlus.onDestroy();
         super.onDestroy();
     }
 
