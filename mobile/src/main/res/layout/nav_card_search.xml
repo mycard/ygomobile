@@ -28,7 +28,7 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/hit_keyword1"
                 android:inputType="textNoSuggestions"
-                android:imeOptions="actionDone"
+                android:imeOptions="actionSearch"
                 android:maxLines="1"
                 android:singleLine="true"
                 android:textColorHint="@color/gold"/>
@@ -45,6 +45,7 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/hit_keyword2"
                 android:inputType="textNoSuggestions"
+                android:imeOptions="actionSearch"
                 android:maxLines="1"
                 android:singleLine="true"
                 android:textColorHint="@color/gold"/>

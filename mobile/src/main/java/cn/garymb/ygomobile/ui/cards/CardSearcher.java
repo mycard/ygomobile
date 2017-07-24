@@ -8,11 +8,16 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.KeyEvent;
+import android.view.inputmethod.InputMethodManager;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -118,6 +123,21 @@ public class CardSearcher implements View.OnClickListener {
         searchButton.setOnClickListener(this);
         resetButton.setOnClickListener(this);
 
+        OnEditorActionListener searchListener = new OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if(actionId == EditorInfo.IME_ACTION_SEARCH){
+                    InputMethodManager imm = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                    search();
+                    return true;
+                }
+                return false;
+            }
+        };
+
+        prefixWord.setOnEditorActionListener(searchListener);
+        suffixWord.setOnEditorActionListener(searchListener);
 
         LinkMarkerButton.setOnClickListener(new OnClickListener() {
 
