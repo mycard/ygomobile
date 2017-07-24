@@ -16,6 +16,8 @@ import android.view.WindowManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 
+import com.readystatesoftware.systembartint.SystemBarTintManager;
+
 import org.xwalk.core.XWalkView;
 
 import cn.garymb.ygomobile.YGOStarter;
@@ -38,9 +40,8 @@ public class MyCardActivity extends BaseActivity implements MyCard.MyCardListene
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_online_mycard);
-        final Toolbar toolbar = $(R.id.toolbar);
-        setSupportActionBar(toolbar);
         enableBackHome();
+
         YGOStarter.onCreated(this);
         mMyCard = new MyCard(this);
         mWebViewPlus = $(R.id.webbrowser);
@@ -48,22 +49,15 @@ public class MyCardActivity extends BaseActivity implements MyCard.MyCardListene
         NavigationView navigationView = $(R.id.nav_main);
         navigationView.setNavigationItemSelectedListener(this);
         View navHead = navigationView.getHeaderView(0);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Window window = getWindow();
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(getResources().getColor(R.color.mediumPurple));
-        }
+
+
         mWebViewPlus.enableHtml5();
 
         mWebViewPlus.setWebChromeClient(new WebViewPlus.DefWebChromeClient() {
             @Override
             public void onReceivedTitle(WebView view, String title) {
                 super.onReceivedTitle(view, title);
-                if (toolbar != null) {
-                    toolbar.setSubtitle(title);
-                } else {
-                    setTitle(title);
-                }
+                setTitle(title);
             }
         });
         mMyCard.attachWeb(mWebViewPlus, this);
