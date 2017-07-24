@@ -367,6 +367,8 @@ void DuelClient::HandleSTOCPacketLan(char* data, unsigned int len) {
 		}
 		for(int i = 0; i < 4; ++i)
 			mainGame->chkHostPrepReady[i]->setChecked(false);
+		mainGame->btnHostPrepReady->setVisible(true);
+		mainGame->btnHostPrepNotReady->setVisible(false);
 		mainGame->dInfo.time_limit = pkt->info.time_limit;
 		mainGame->dInfo.time_left[0] = 0;
 		mainGame->dInfo.time_left[1] = 0;
@@ -419,9 +421,18 @@ void DuelClient::HandleSTOCPacketLan(char* data, unsigned int len) {
 				mainGame->chkHostPrepReady[selftype]->setChecked(false);
 				mainGame->btnHostPrepDuelist->setEnabled(false);
 				mainGame->btnHostPrepOB->setEnabled(true);
+				mainGame->btnHostPrepReady->setVisible(true);
+				mainGame->btnHostPrepNotReady->setVisible(false);
 			} else {
 				mainGame->btnHostPrepDuelist->setEnabled(true);
 				mainGame->btnHostPrepOB->setEnabled(false);
+				mainGame->btnHostPrepReady->setVisible(false);
+				mainGame->btnHostPrepNotReady->setVisible(false);
+			}
+			if(mainGame->chkHostPrepReady[0]->isChecked() && mainGame->chkHostPrepReady[1]->isChecked()) {
+				mainGame->btnHostPrepStart->setEnabled(true);
+			} else {
+				mainGame->btnHostPrepStart->setEnabled(false);
 			}
 		} else {
 			if(selftype < 4) {
@@ -443,8 +454,18 @@ void DuelClient::HandleSTOCPacketLan(char* data, unsigned int len) {
 			if(selftype < 4) {
 				mainGame->chkHostPrepReady[selftype]->setEnabled(true);
 				mainGame->btnHostPrepOB->setEnabled(true);
+				mainGame->btnHostPrepReady->setVisible(true);
+				mainGame->btnHostPrepNotReady->setVisible(false);
 			} else {
 				mainGame->btnHostPrepOB->setEnabled(false);
+				mainGame->btnHostPrepReady->setVisible(false);
+				mainGame->btnHostPrepNotReady->setVisible(false);
+			}
+			if(mainGame->chkHostPrepReady[0]->isChecked() && mainGame->chkHostPrepReady[1]->isChecked()
+				&& mainGame->chkHostPrepReady[2]->isChecked() && mainGame->chkHostPrepReady[3]->isChecked()) {
+				mainGame->btnHostPrepStart->setEnabled(true);
+			} else {
+				mainGame->btnHostPrepStart->setEnabled(false);
 			}
 		}
 		mainGame->dInfo.player_type = selftype;
@@ -689,11 +710,17 @@ void DuelClient::HandleSTOCPacketLan(char* data, unsigned int len) {
 			else if(pos == 3)
 				BufferIO::CopyWStr(prename, mainGame->dInfo.clientname_tag, 20);
 		} else if(state == PLAYERCHANGE_READY) {
-		    mainGame->soundEffectPlayer->doReady();
 			mainGame->chkHostPrepReady[pos]->setChecked(true);
+			if(pos == selftype) {
+				mainGame->btnHostPrepReady->setVisible(false);
+				mainGame->btnHostPrepNotReady->setVisible(true);
+			}
 		} else if(state == PLAYERCHANGE_NOTREADY) {
-		    mainGame->soundEffectPlayer->doUnReady();
 			mainGame->chkHostPrepReady[pos]->setChecked(false);
+			if(pos == selftype) {
+				mainGame->btnHostPrepReady->setVisible(true);
+				mainGame->btnHostPrepNotReady->setVisible(false);
+			}
 		} else if(state == PLAYERCHANGE_LEAVE) {
 			mainGame->soundEffectPlayer->doPlayerExit();
 			mainGame->stHostPrepDuelist[pos]->setText(L"");
@@ -705,6 +732,12 @@ void DuelClient::HandleSTOCPacketLan(char* data, unsigned int len) {
 			mainGame->stHostPrepDuelist[pos]->setText(L"");
 			mainGame->chkHostPrepReady[pos]->setChecked(false);
 			mainGame->stHostPrepOB->setText(watchbuf);
+		}
+		if(mainGame->chkHostPrepReady[0]->isChecked() && mainGame->chkHostPrepReady[1]->isChecked()
+			&& (!mainGame->dInfo.isTag || (mainGame->chkHostPrepReady[2]->isChecked() && mainGame->chkHostPrepReady[3]->isChecked()))) {
+			mainGame->btnHostPrepStart->setEnabled(true);
+		} else {
+			mainGame->btnHostPrepStart->setEnabled(false);
 		}
 		mainGame->gMutex.Unlock();
 		break;
@@ -765,7 +798,6 @@ int DuelClient::ClientAnalyze(char * msg, unsigned int len) {
 		android::toggleOverlayView(mainGame->appMain, false);
 #endif
 		mainGame->ShowElement(mainGame->wLanWindow);
-		mainGame->soundEffectPlayer->doMenuBGM();
 		mainGame->gMutex.Unlock();
 		event_base_loopbreak(client_base);
 		if(exit_on_return)
@@ -1130,9 +1162,16 @@ int DuelClient::ClientAnalyze(char * msg, unsigned int len) {
 			pcard->is_highlighting = true;
 			mainGame->dField.highlighting_card = pcard;
 		}
-		wchar_t ynbuf[256];
-		myswprintf(ynbuf, dataManager.GetSysString(200), dataManager.FormatLocation(l, s), dataManager.GetName(code));
-		myswprintf(textBuffer, L"%ls\n%ls", event_string, ynbuf);
+		int desc = BufferIO::ReadInt32(pbuf);
+		if(desc == 0) {
+			wchar_t ynbuf[256];
+			myswprintf(ynbuf, dataManager.GetSysString(200), dataManager.FormatLocation(l, s), dataManager.GetName(code));
+			myswprintf(textBuffer, L"%ls\n%ls", event_string, ynbuf);
+		} else if(desc < 2048) {
+			myswprintf(textBuffer, dataManager.GetSysString(desc), dataManager.GetName(code));
+		} else {
+			myswprintf(textBuffer, dataManager.GetDesc(desc), dataManager.GetName(code));
+		}
 		mainGame->gMutex.Lock();
 		mainGame->SetStaticText(mainGame->stQMessage, 310 * mainGame->xScale, mainGame->textFont, textBuffer);
 		mainGame->PopupElement(mainGame->wQuery);
@@ -1409,52 +1448,28 @@ int DuelClient::ClientAnalyze(char * msg, unsigned int len) {
 			if(positions & filter) count++;
 			filter <<= 1;
 		}
-		if (count == 4)
-			startpos = 10;
-		else if (count == 3)
-			startpos = 82;
-		else
-			startpos = 155;
-		if (positions & 0x1) {
-			mainGame->imageLoading.insert(
-					std::make_pair(mainGame->btnPSAU, code));
-			mainGame->btnPSAU->setRelativePosition(
-					rect<s32>(startpos * mainGame->xScale,
-							45 * mainGame->yScale,
-							(startpos + 140) * mainGame->xScale,
-							185 * mainGame->yScale));
+		if(count == 4) startpos = 10;
+		else if(count == 3) startpos = 82;
+		else startpos = 155;
+		if(positions & 0x1) {
+			mainGame->imageLoading.insert(std::make_pair(mainGame->btnPSAU, code));
+			mainGame->btnPSAU->setRelativePosition(rect<s32>(startpos * mainGame->xScale, 45 * mainGame->yScale, (startpos + 140) * mainGame->xScale, 185 * mainGame->yScale));
 			mainGame->btnPSAU->setVisible(true);
 			startpos += 145;
-		} else
-			mainGame->btnPSAU->setVisible(false);
-		if (positions & 0x2) {
-			mainGame->btnPSAD->setRelativePosition(
-					rect<s32>(startpos * mainGame->xScale,
-							45 * mainGame->yScale,
-							(startpos + 140) * mainGame->xScale,
-							185 * mainGame->yScale));
+		} else mainGame->btnPSAU->setVisible(false);
+		if(positions & 0x2) {
+			mainGame->btnPSAD->setRelativePosition(rect<s32>(startpos * mainGame->xScale, 45 * mainGame->yScale, (startpos + 140) * mainGame->xScale, 185 * mainGame->yScale));
 			mainGame->btnPSAD->setVisible(true);
 			startpos += 145;
-		} else
-			mainGame->btnPSAD->setVisible(false);
-		if (positions & 0x4) {
-			mainGame->imageLoading.insert(
-					std::make_pair(mainGame->btnPSDU, code));
-			mainGame->btnPSDU->setRelativePosition(
-					rect<s32>(startpos * mainGame->xScale,
-							45 * mainGame->yScale,
-							(startpos + 140) * mainGame->xScale,
-							185 * mainGame->yScale));
+		} else mainGame->btnPSAD->setVisible(false);
+		if(positions & 0x4) {
+			mainGame->imageLoading.insert(std::make_pair(mainGame->btnPSDU, code));
+			mainGame->btnPSDU->setRelativePosition(rect<s32>(startpos * mainGame->xScale, 45 * mainGame->yScale, (startpos + 140) * mainGame->xScale, 185 * mainGame->yScale));
 			mainGame->btnPSDU->setVisible(true);
 			startpos += 145;
-		} else
-			mainGame->btnPSDU->setVisible(false);
-		if (positions & 0x8) {
-			mainGame->btnPSDD->setRelativePosition(
-					rect<s32>(startpos * mainGame->xScale,
-							45 * mainGame->yScale,
-							(startpos + 140) * mainGame->xScale,
-							185 * mainGame->yScale));
+		} else mainGame->btnPSDU->setVisible(false);
+		if(positions & 0x8) {
+			mainGame->btnPSDD->setRelativePosition(rect<s32>(startpos * mainGame->xScale, 45 * mainGame->yScale, (startpos + 140) * mainGame->xScale, 185 * mainGame->yScale));
 			mainGame->btnPSDD->setVisible(true);
 			startpos += 145;
 		} else mainGame->btnPSDD->setVisible(false);

@@ -25,7 +25,7 @@
 #include <COGLESDriver.h>
 #endif
 
-const unsigned short PRO_VERSION = 0x133E;
+const unsigned short PRO_VERSION = 0x233B;
 
 namespace ygo {
 
@@ -388,12 +388,17 @@ bool Game::Initialize() {
 			rect<s32>(10 * xScale, 385 * yScale, 110 * xScale, 410 * yScale),
 			false, false, wHostPrepare);
 	cbDeckSelect = CAndroidGUIComboBox::addAndroidComboBox(env, rect<s32>(120 * xScale, 380 * yScale, 270 * xScale, 405 * yScale), wHostPrepare);
+	btnHostPrepReady = env->addButton(
+            rect<s32>(170 * xScale, 180 * yScale, 280 * xScale, 205 * yScale), wHostPrepare, BUTTON_HP_READY, dataManager.GetSysString(1218));
+	btnHostPrepNotReady = env->addButton(
+	        rect<s32>(170 * xScale, 180 * yScale, 280 * xScale, 205 * yScale), wHostPrepare, BUTTON_HP_NOTREADY, dataManager.GetSysString(1219));
+	btnHostPrepNotReady->setVisible(false);
 	btnHostPrepStart = env->addButton(
 			rect<s32>(280 * xScale, 380 * yScale, 390 * xScale, 405 * yScale),
 			wHostPrepare, BUTTON_HP_START, dataManager.GetSysString(1215));
 	btnHostPrepCancel = env->addButton(
 			rect<s32>(400 * xScale, 380 * yScale, 510 * xScale, 405 * yScale),
-			wHostPrepare, BUTTON_HP_CANCEL, dataManager.GetSysString(1212));
+			wHostPrepare, BUTTON_HP_CANCEL, dataManager.GetSysString(1210));
 #else
 	wHostPrepare = env->addWindow(rect<s32>(270 * xScale, 120 * yScale, 750 * xScale, 440 * yScale), false, dataManager.GetSysString(1250));
 	wHostPrepare->getCloseButton()->setVisible(false);
@@ -418,11 +423,16 @@ bool Game::Initialize() {
 	env->addStaticText(dataManager.GetSysString(1254), rect<s32>(10 * xScale, 235 * yScale, 110 * xScale, 255 * yScale), false, false, wHostPrepare);
 #ifdef _IRR_ANDROID_PLATFORM_
 	cbDeckSelect = CAndroidGUIComboBox::addAndroidComboBox(env, rect<s32>(120 * xScale, 230 * yScale, 270 * xScale, 255 * yScale), wHostPrepare);
+	cbDeckSelect->setMaxSelectionRows(10);
 #else
-	cbDeckSelect = env->addComboBox(rect<s32>(120 * xScale, 230 * yScale, 270 * xScale, 255 * yScale), wHostPrepare);
+	cbDeckSelect = env->addComboBox(rect<s32>(120, 230, 270, 255), wHostPrepare);
+	cbDeckSelect->setMaxSelectionRows(10);
 #endif
-	btnHostPrepStart = env->addButton(rect<s32>(230 * xScale, 280 * yScale, 340 * xScale, 305 * yScale), wHostPrepare, BUTTON_HP_START, dataManager.GetSysString(1215));
-	btnHostPrepCancel = env->addButton(rect<s32>(350 * xScale, 280 * yScale, 460 * xScale, 305 * yScale), wHostPrepare, BUTTON_HP_CANCEL, dataManager.GetSysString(1212));
+	btnHostPrepReady = env->addButton(rect<s32>(170, 180, 270, 205), wHostPrepare, BUTTON_HP_READY, dataManager.GetSysString(1218));
+	btnHostPrepNotReady = env->addButton(rect<s32>(170, 180, 270, 205), wHostPrepare, BUTTON_HP_NOTREADY, dataManager.GetSysString(1219));
+	btnHostPrepNotReady->setVisible(false);
+	btnHostPrepStart = env->addButton(rect<s32>(230, 280, 340, 305), wHostPrepare, BUTTON_HP_START, dataManager.GetSysString(1215));
+	btnHostPrepCancel = env->addButton(rect<s32>(350, 280, 460, 305), wHostPrepare, BUTTON_HP_CANCEL, dataManager.GetSysString(1210));
 #endif
 
 	//img

@@ -42,7 +42,7 @@ public class AppsSettings {
         return sAppsSettings;
     }
 
-    public File getSystemConfig(){
+    public File getSystemConfig() {
         return new File(getResourcePath(), String.format(CORE_SYSTEM_PATH, getCoreConfigVersion()));
     }
 
@@ -95,7 +95,7 @@ public class AppsSettings {
         return true;// mSharedPreferences.getBoolean(PREF_DECK_DELETE_DILAOG, PREF_DEF_DECK_DELETE_DILAOG);
     }
 
-    public int getFontSize(){
+    public int getFontSize() {
         return mSharedPreferences.getInt(PREF_FONT_SIZE, DEF_PREF_FONT_SIZE);
     }
 
@@ -316,10 +316,11 @@ public class AppsSettings {
         return mSharedPreferences.getString(Constants.PREF_GAME_PATH, defPath);
     }
 
-    public void setResourcePath(String path){
-        if(TextUtils.equals(path, getResourcePath()))return;
+    public void setResourcePath(String path) {
+        if (TextUtils.equals(path, getResourcePath())) return;
         mSharedPreferences.putString(Constants.PREF_GAME_PATH, path);
     }
+
     public String getDeckDir() {
         return new File(getResourcePath(), Constants.CORE_DECK_PATH).getAbsolutePath();
     }

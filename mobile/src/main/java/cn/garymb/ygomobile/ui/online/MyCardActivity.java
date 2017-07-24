@@ -8,12 +8,12 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 
 import org.xwalk.core.XWalkView;
@@ -68,7 +68,7 @@ public class MyCardActivity extends BaseActivity implements MyCard.MyCardListene
         });
         mMyCard.attachWeb(mWebViewPlus, this);
         try {
-            mWebViewPlus.loadUrl(mMyCard.getLoginUrl());
+            mWebViewPlus.loadUrl(mMyCard.getHomeUrl());
         } catch (Exception e) {
             e.printStackTrace();
         }
