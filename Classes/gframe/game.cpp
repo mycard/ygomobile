@@ -389,9 +389,11 @@ bool Game::Initialize() {
 			false, false, wHostPrepare);
 	cbDeckSelect = CAndroidGUIComboBox::addAndroidComboBox(env, rect<s32>(120 * xScale, 380 * yScale, 270 * xScale, 405 * yScale), wHostPrepare);
 	btnHostPrepReady = env->addButton(
-            rect<s32>(170 * xScale, 180 * yScale, 280 * xScale, 205 * yScale), wHostPrepare, BUTTON_HP_READY, dataManager.GetSysString(1218));
+            rect<s32>(170 * xScale, 180 * yScale, 280 * xScale, 205 * yScale),
+			wHostPrepare, BUTTON_HP_READY, dataManager.GetSysString(1218));
 	btnHostPrepNotReady = env->addButton(
-	        rect<s32>(170 * xScale, 180 * yScale, 280 * xScale, 205 * yScale), wHostPrepare, BUTTON_HP_NOTREADY, dataManager.GetSysString(1219));
+	        rect<s32>(170 * xScale, 180 * yScale, 280 * xScale, 205 * yScale),
+			wHostPrepare, BUTTON_HP_NOTREADY, dataManager.GetSysString(1219));
 	btnHostPrepNotReady->setVisible(false);
 	btnHostPrepStart = env->addButton(
 			rect<s32>(280 * xScale, 380 * yScale, 390 * xScale, 405 * yScale),
@@ -400,34 +402,33 @@ bool Game::Initialize() {
 			rect<s32>(400 * xScale, 380 * yScale, 510 * xScale, 405 * yScale),
 			wHostPrepare, BUTTON_HP_CANCEL, dataManager.GetSysString(1210));
 #else
-	wHostPrepare = env->addWindow(rect<s32>(270 * xScale, 120 * yScale, 750 * xScale, 440 * yScale), false, dataManager.GetSysString(1250));
+	wHostPrepare = env->addWindow(rect<s32>(270, 120, 750, 440), false, dataManager.GetSysString(1250));
 	wHostPrepare->getCloseButton()->setVisible(false);
 	wHostPrepare->setVisible(false);
-	btnHostPrepDuelist = env->addButton(rect<s32>(10 * xScale, 30 * yScale, 110 * xScale, 55 * yScale), wHostPrepare, BUTTON_HP_DUELIST, dataManager.GetSysString(1251));
+	btnHostPrepDuelist = env->addButton(rect<s32>(10, 30, 110, 55), wHostPrepare, BUTTON_HP_DUELIST, dataManager.GetSysString(1251));
 	for(int i = 0; i < 2; ++i) {
-		stHostPrepDuelist[i] = env->addStaticText(L"", rect<s32>(40 * xScale, (65 + i * 25) * yScale, 240 * xScale, (85 + i * 25) * yScale), true, false, wHostPrepare);
-		btnHostPrepKick[i] = env->addButton(rect<s32>(10 * xScale, (65 + i * 25) * yScale, 30 * xScale, (85 + i * 25) * yScale), wHostPrepare, BUTTON_HP_KICK, L"X");
-		chkHostPrepReady[i] = env->addCheckBox(false, rect<s32>(250 * xScale, (65 + i * 25) * yScale, 270 * xScale, (85 + i * 25) * yScale), wHostPrepare, CHECKBOX_HP_READY, L"");
+		stHostPrepDuelist[i] = env->addStaticText(L"", rect<s32>(40, 65 + i * 25, 240, 85 + i * 25), true, false, wHostPrepare);
+		btnHostPrepKick[i] = env->addButton(rect<s32>(10, 65 + i * 25, 30, 85 + i * 25), wHostPrepare, BUTTON_HP_KICK, L"X");
+		chkHostPrepReady[i] = env->addCheckBox(false, rect<s32>(250, 65 + i * 25, 270, 85 + i * 25), wHostPrepare, CHECKBOX_HP_READY, L"");
 		chkHostPrepReady[i]->setEnabled(false);
 	}
 	for(int i = 2; i < 4; ++i) {
-		stHostPrepDuelist[i] = env->addStaticText(L"", rect<s32>(40 * xScale, (75 + i * 25) * yScale, 240 * xScale, (95 + i * 25) * yScale), true, false, wHostPrepare);
-		btnHostPrepKick[i] = env->addButton(rect<s32>(10 * xScale, (75 + i * 25) * yScale, 30 * xScale, (95 + i * 25) * yScale), wHostPrepare, BUTTON_HP_KICK, L"X");
-		chkHostPrepReady[i] = env->addCheckBox(false, rect<s32>(250 * xScale, (75 + i * 25) * yScale, 270 * xScale, (95 + i * 25) * yScale), wHostPrepare, CHECKBOX_HP_READY, L"");
+		stHostPrepDuelist[i] = env->addStaticText(L"", rect<s32>(40, 75 + i * 25, 240, 95 + i * 25), true, false, wHostPrepare);
+		btnHostPrepKick[i] = env->addButton(rect<s32>(10, 75 + i * 25, 30, 95 + i * 25), wHostPrepare, BUTTON_HP_KICK, L"X");
+		chkHostPrepReady[i] = env->addCheckBox(false, rect<s32>(250, 75 + i * 25, 270, 95 + i * 25), wHostPrepare, CHECKBOX_HP_READY, L"");
 		chkHostPrepReady[i]->setEnabled(false);
 	}
-	btnHostPrepOB = env->addButton(rect<s32>(10 * xScale, 180 * yScale, 110 * xScale, 205 * yScale), wHostPrepare, BUTTON_HP_OBSERVER, dataManager.GetSysString(1252));
+	btnHostPrepOB = env->addButton(rect<s32>(10, 180, 110, 205), wHostPrepare, BUTTON_HP_OBSERVER, dataManager.GetSysString(1252));
 	myswprintf(dataManager.strBuffer, L"%ls%d", dataManager.GetSysString(1253), 0);
-	stHostPrepOB = env->addStaticText(dataManager.strBuffer, rect<s32>(10 * xScale, 210 * yScale, 270 * xScale, 230 * yScale), false, false, wHostPrepare);
-	stHostPrepRule = env->addStaticText(L"", rect<s32>(280 * xScale, 30 * yScale, 460 * xScale, 230 * yScale), false, true, wHostPrepare);
-	env->addStaticText(dataManager.GetSysString(1254), rect<s32>(10 * xScale, 235 * yScale, 110 * xScale, 255 * yScale), false, false, wHostPrepare);
+	stHostPrepOB = env->addStaticText(dataManager.strBuffer, rect<s32>(10, 210, 270, 230), false, false, wHostPrepare);
+	stHostPrepRule = env->addStaticText(L"", rect<s32>(280, 30, 460, 230), false, true, wHostPrepare);
+	env->addStaticText(dataManager.GetSysString(1254), rect<s32>(10, 235, 110, 255), false, false, wHostPrepare);
 #ifdef _IRR_ANDROID_PLATFORM_
 	cbDeckSelect = CAndroidGUIComboBox::addAndroidComboBox(env, rect<s32>(120 * xScale, 230 * yScale, 270 * xScale, 255 * yScale), wHostPrepare);
-	cbDeckSelect->setMaxSelectionRows(10);
 #else
 	cbDeckSelect = env->addComboBox(rect<s32>(120, 230, 270, 255), wHostPrepare);
-	cbDeckSelect->setMaxSelectionRows(10);
 #endif
+    cbDeckSelect->setMaxSelectionRows(10);
 	btnHostPrepReady = env->addButton(rect<s32>(170, 180, 270, 205), wHostPrepare, BUTTON_HP_READY, dataManager.GetSysString(1218));
 	btnHostPrepNotReady = env->addButton(rect<s32>(170, 180, 270, 205), wHostPrepare, BUTTON_HP_NOTREADY, dataManager.GetSysString(1219));
 	btnHostPrepNotReady->setVisible(false);

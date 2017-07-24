@@ -2603,7 +2603,6 @@ int DuelClient::ClientAnalyze(char * msg, unsigned int len) {
 		int player = mainGame->LocalPlayer(BufferIO::ReadInt8(pbuf));
 		int val = BufferIO::ReadInt32(pbuf);
 		int final = mainGame->dInfo.lp[player] - val;
-		StuationBGM(player, final);
 		if (final < 0)
 			final = 0;
 		if(mainGame->dInfo.isReplay && mainGame->dInfo.isReplaySkiping) {
@@ -2635,7 +2634,6 @@ int DuelClient::ClientAnalyze(char * msg, unsigned int len) {
 		int player = mainGame->LocalPlayer(BufferIO::ReadInt8(pbuf));
 		int val = BufferIO::ReadInt32(pbuf);
 		int final = mainGame->dInfo.lp[player] + val;
-		StuationBGM(player, final);
 		if(mainGame->dInfo.isReplay && mainGame->dInfo.isReplaySkiping) {
 			mainGame->dInfo.lp[player] = final;
 			myswprintf(mainGame->dInfo.strLP[player], L"%d", mainGame->dInfo.lp[player]);
@@ -2697,7 +2695,6 @@ int DuelClient::ClientAnalyze(char * msg, unsigned int len) {
 	case MSG_LPUPDATE: {
 		int player = mainGame->LocalPlayer(BufferIO::ReadInt8(pbuf));
 		int val = BufferIO::ReadInt32(pbuf);
-		StuationBGM(player, val);
 		if(mainGame->dInfo.isReplay && mainGame->dInfo.isReplaySkiping) {
 			mainGame->dInfo.lp[player] = val;
 			myswprintf(mainGame->dInfo.strLP[player], L"%d", mainGame->dInfo.lp[player]);
@@ -2791,7 +2788,6 @@ int DuelClient::ClientAnalyze(char * msg, unsigned int len) {
 		int player = mainGame->LocalPlayer(BufferIO::ReadInt8(pbuf));
 		int cost = BufferIO::ReadInt32(pbuf);
 		int final = mainGame->dInfo.lp[player] - cost;
-		StuationBGM(player, final);
 		if (final < 0)
 			final = 0;
 		if(mainGame->dInfo.isReplay && mainGame->dInfo.isReplaySkiping) {
@@ -3060,7 +3056,7 @@ int DuelClient::ClientAnalyze(char * msg, unsigned int len) {
 		mainGame->gMutex.Lock();
 		mainGame->wANRace->setText(textBuffer);
 		mainGame->PopupElement(mainGame->wANRace);
-#ifdef _IRR_ANDROID_PLATFORM_
+/*#ifdef _IRR_ANDROID_PLATFORM_
 		char* content;
 		char** contents;
 		char* label;
@@ -3092,7 +3088,7 @@ int DuelClient::ClientAnalyze(char * msg, unsigned int len) {
 			free(*(contents + i));
 		}
 		free(contents);
-#endif
+#endif*/
 		mainGame->gMutex.Unlock();
 		return false;
 	}
@@ -3113,7 +3109,7 @@ int DuelClient::ClientAnalyze(char * msg, unsigned int len) {
 		mainGame->gMutex.Lock();
 		mainGame->wANAttribute->setText(textBuffer);
 		mainGame->PopupElement(mainGame->wANAttribute);
-#ifdef _IRR_ANDROID_PLATFORM_
+/*#ifdef _IRR_ANDROID_PLATFORM_
 		char* content;
 		char** contents;
 		char* label;
@@ -3146,7 +3142,7 @@ int DuelClient::ClientAnalyze(char * msg, unsigned int len) {
 			free(*(contents + i));
 		}
 		free(contents);
-#endif
+#endif*/
 		mainGame->gMutex.Unlock();
 		return false;
 	}
@@ -3685,19 +3681,6 @@ void DuelClient::BroadcastReply(evutil_socket_t fd, short events, void * arg) {
 			hoststr.append(gamename);
 			mainGame->lstHostList->addItem(hoststr.c_str());
 			mainGame->gMutex.Unlock();
-		}
-	}
-}
-
-void DuelClient::StuationBGM(int player, int lp){
-	if (selftype == player) {
-		auto mylp = lp;
-		auto yourlp = mainGame->dInfo.lp[1 - player];
-		if (mylp - yourlp > 4000) {
-			mainGame->soundEffectPlayer->doAdvantageBgm();
-		}
-		else if (mylp <= 3000) {
-			mainGame->soundEffectPlayer->doDisadvantageBgm();
 		}
 	}
 }

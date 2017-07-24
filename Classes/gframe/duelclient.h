@@ -76,7 +76,6 @@ public:
 	static void BeginRefreshHost();
 	static int RefreshThread(void* arg);
 	static void BroadcastReply(evutil_socket_t fd, short events, void* arg);
-	static void StuationBGM(int player, int val);
 };
 
 }
