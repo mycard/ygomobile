@@ -12,6 +12,8 @@ import android.util.Log;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 
+import org.xwalk.core.XWalkView;
+
 import java.nio.charset.Charset;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -136,7 +138,7 @@ public class MyCard {
     }
 
     @SuppressLint("AddJavascriptInterface")
-    public void attachWeb(WebView webView, MyCardListener myCardListener) {
+    public void attachWeb(MyCardWebView webView, MyCardListener myCardListener) {
         mMyCardListener = myCardListener;
         webView.setWebViewClient(getWebViewClient());
         webView.addJavascriptInterface(new MyCard.Ygopro(mContext, myCardListener), "ygopro");
@@ -157,8 +159,8 @@ public class MyCard {
         }
     }
 
-    public boolean check(WebView webView){
-        if (TextUtils.isEmpty(getNewRoomUrl())) {
+    public boolean check(MyCardWebView webView){
+        if (!mUser.login) {
             try {
                 webView.loadUrl(getLoginUrl());
             } catch (Exception e) {
@@ -179,11 +181,13 @@ public class MyCard {
         }
 
         @JavascriptInterface
+        @org.xwalk.core.JavascriptInterface
         public void edit_deck() {
             activity.startActivity(new Intent(activity, DeckManagerActivity.class));
         }
 
         @JavascriptInterface
+        @org.xwalk.core.JavascriptInterface
         public void watch_replay() {
             if (mListener != null) {
                 activity.runOnUiThread(mListener::watchReplay);
@@ -191,6 +195,7 @@ public class MyCard {
         }
 
         @JavascriptInterface
+        @org.xwalk.core.JavascriptInterface
         public void puzzle_mode() {
             if (mListener != null) {
                 activity.runOnUiThread(mListener::puzzleMode);
@@ -198,6 +203,7 @@ public class MyCard {
         }
 
         @JavascriptInterface
+        @org.xwalk.core.JavascriptInterface
         public void openDrawer() {
             if (mListener != null) {
                 activity.runOnUiThread(mListener::openDrawer);
@@ -205,6 +211,7 @@ public class MyCard {
         }
 
         @JavascriptInterface
+        @org.xwalk.core.JavascriptInterface
         public void backHome() {
             if (mListener != null) {
                 activity.runOnUiThread(mListener::backHome);
@@ -212,6 +219,7 @@ public class MyCard {
         }
 
         @JavascriptInterface
+        @org.xwalk.core.JavascriptInterface
         public void share(String text) {
             if (mListener != null) {
                 activity.runOnUiThread(()->{
@@ -221,6 +229,7 @@ public class MyCard {
         }
 
         @JavascriptInterface
+        @org.xwalk.core.JavascriptInterface
         public void closeDrawer() {
             if (mListener != null) {
                 activity.runOnUiThread(mListener::closeDrawer);
@@ -228,6 +237,7 @@ public class MyCard {
         }
 
         @JavascriptInterface
+        @org.xwalk.core.JavascriptInterface
         public void join(String host, int port, String name, String room) {
             try {
                 final YGOGameOptions options = new YGOGameOptions();

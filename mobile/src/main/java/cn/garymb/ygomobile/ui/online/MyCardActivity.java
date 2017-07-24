@@ -16,6 +16,8 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.webkit.WebView;
 
+import org.xwalk.core.XWalkView;
+
 import cn.garymb.ygomobile.YGOStarter;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.ui.activities.BaseActivity;
@@ -28,7 +30,7 @@ public class MyCardActivity extends BaseActivity implements MyCard.MyCardListene
     //个人页面
     //排行榜
     //新建房间
-    private WebViewPlus mWebViewPlus;
+    private MyCardWebView mWebViewPlus;
     private MyCard mMyCard;
     protected DrawerLayout mDrawerlayout;
 
@@ -87,38 +89,28 @@ public class MyCardActivity extends BaseActivity implements MyCard.MyCardListene
 
     @Override
     public void onBackPressed() {
-        if (mDrawerlayout.isDrawerOpen(Gravity.LEFT)) {
-            closeDrawer();
-            return;
-        }
-        if (mWebViewPlus.canGoBack()) {
-            mWebViewPlus.goBack();
-        } else {
-            super.onBackPressed();
-        }
+        onBackHome();
     }
 
     @Override
     protected void onResume() {
-        mWebViewPlus.onResume();
         mWebViewPlus.resumeTimers();
+        mWebViewPlus.onShow();
         YGOStarter.onResumed(this);
         super.onResume();
     }
 
     @Override
     protected void onPause() {
-        mWebViewPlus.onPause();
         mWebViewPlus.pauseTimers();
+        mWebViewPlus.onHide();
         super.onPause();
     }
 
     @Override
     protected void onDestroy() {
         mWebViewPlus.stopLoading();
-        mWebViewPlus.setWebChromeClient(null);
-        mWebViewPlus.setWebViewClient(null);
-        mWebViewPlus.destroy();
+        mWebViewPlus.onDestroy();
         YGOStarter.onDestroy(this);
         super.onDestroy();
     }
