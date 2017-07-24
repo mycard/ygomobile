@@ -423,11 +423,7 @@ bool Game::Initialize() {
 	stHostPrepOB = env->addStaticText(dataManager.strBuffer, rect<s32>(10, 210, 270, 230), false, false, wHostPrepare);
 	stHostPrepRule = env->addStaticText(L"", rect<s32>(280, 30, 460, 230), false, true, wHostPrepare);
 	env->addStaticText(dataManager.GetSysString(1254), rect<s32>(10, 235, 110, 255), false, false, wHostPrepare);
-#ifdef _IRR_ANDROID_PLATFORM_
-	cbDeckSelect = CAndroidGUIComboBox::addAndroidComboBox(env, rect<s32>(120 * xScale, 230 * yScale, 270 * xScale, 255 * yScale), wHostPrepare);
-#else
 	cbDeckSelect = env->addComboBox(rect<s32>(120, 230, 270, 255), wHostPrepare);
-#endif
     cbDeckSelect->setMaxSelectionRows(10);
 	btnHostPrepReady = env->addButton(rect<s32>(170, 180, 270, 205), wHostPrepare, BUTTON_HP_READY, dataManager.GetSysString(1218));
 	btnHostPrepNotReady = env->addButton(rect<s32>(170, 180, 270, 205), wHostPrepare, BUTTON_HP_NOTREADY, dataManager.GetSysString(1219));
