@@ -63,7 +63,6 @@ LOCAL_C_INCLUDES := \
 	$(LOCAL_PATH)/.. \
 	$(LOCAL_PATH)/../include
 
-LOCAL_LDLIBS += -lz
 
 LOCAL_CFLAGS := -DMONOLITH
 

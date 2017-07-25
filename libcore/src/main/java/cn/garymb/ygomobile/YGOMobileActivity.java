@@ -24,8 +24,6 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.github.nativehandler.NativeCrashHandler;
-
 import java.nio.ByteBuffer;
 
 import cn.garymb.ygodata.YGOGameOptions;
@@ -76,10 +74,8 @@ public class YGOMobileActivity extends NativeActivity implements
     private volatile int mCompatGUIMode;
     private static int sChainControlXPostion = -1;
     private static int sChainControlYPostion = -1;
-    private boolean registNdkCash = false;
     private GameApplication mApp;
     private Handler handler = new Handler();
-    private NativeCrashHandler mNativeCrashHandler;
     private FullScreenUtils mFullScreenUtils;
 
     private GameApplication app() {
@@ -102,7 +98,6 @@ public class YGOMobileActivity extends NativeActivity implements
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mNativeCrashHandler = new NativeCrashHandler();
         mFullScreenUtils = new FullScreenUtils(this, app().isImmerSiveMode());
         mFullScreenUtils.fullscreen();
         mFullScreenUtils.onCreate();
@@ -135,10 +130,6 @@ public class YGOMobileActivity extends NativeActivity implements
         }
         mLock.acquire();
         //注册
-        if (app().canNdkCash()) {
-            mNativeCrashHandler.registerForNativeCrash(this);
-            registNdkCash = true;
-        }
     }
 
     @Override
@@ -148,9 +139,6 @@ public class YGOMobileActivity extends NativeActivity implements
             if (mLock.isHeld()) {
                 mLock.release();
             }
-        }
-        if (registNdkCash) {
-            mNativeCrashHandler.unregisterForNativeCrash();
         }
     }
 

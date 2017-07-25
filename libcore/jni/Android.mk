@@ -13,7 +13,7 @@ LOCAL_MODULE := YGOMobile
 LOCAL_CFLAGS := -D_IRR_ANDROID_PLATFORM_ -pipe -fno-rtti -fno-exceptions -fstrict-aliasing -D_ANDROID -fPIC 
 
 ifndef NDEBUG
-LOCAL_CFLAGS += -g -D_DEBUG
+LOCAL_CFLAGS += -g -D_DEBUG 
 else
 LOCAL_CFLAGS += -fexpensive-optimizations -O3 
 endif
@@ -72,10 +72,9 @@ LOCAL_SRC_FILES := $(LOCAL_PATH)/android/android_tools.cpp \
 				$(LOCAL_PATH)/../Classes/gframe/single_duel.cpp \
 				$(LOCAL_PATH)/../Classes/gframe/single_mode.cpp \
 				$(LOCAL_PATH)/../Classes/gframe/tag_duel.cpp \
-				$(LOCAL_PATH)/jni/cn_garymb_ygomobile_core_IrrlichtBridge.cpp \
-				$(LOCAL_PATH)/jni/NativeCrashHandler.cpp
+				$(LOCAL_PATH)/jni/cn_garymb_ygomobile_core_IrrlichtBridge.cpp
 
-LOCAL_LDLIBS := -lEGL -llog -lGLESv1_CM -lGLESv2 -lz -landroid -lOpenSLES
+LOCAL_LDLIBS := -lEGL -llog -lGLESv1_CM -lGLESv2 -landroid -lOpenSLES
 
 LOCAL_STATIC_LIBRARIES := Irrlicht
 LOCAL_STATIC_LIBRARIES += android_native_app_glue

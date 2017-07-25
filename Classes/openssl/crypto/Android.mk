@@ -477,7 +477,6 @@ local_c_includes := \
 	$(LOCAL_PATH)/../include \
 	$(LOCAL_PATH)/../include/openssl \
 
-LOCAL_LDLIBS += -lz
 
 local_c_flags := -DNO_WINDOWS_BRAINDEATH
 
@@ -489,7 +488,6 @@ local_c_flags := -DNO_WINDOWS_BRAINDEATH
 #LOCAL_SRC_FILES += $(local_src_files)
 #LOCAL_CFLAGS += $(local_c_flags)
 #LOCAL_C_INCLUDES += $(local_c_includes)
-#LOCAL_SHARED_LIBRARIES += libz
 #ifeq ($(TARGET_ARCH),arm)
 #	LOCAL_SRC_FILES += $(arm_src_files)
 #	LOCAL_CFLAGS += $(arm_cflags)
@@ -516,7 +514,6 @@ ifeq ($(WITH_HOST_DALVIK),true)
     LOCAL_CFLAGS += $(local_c_flags) -DPURIFY
     LOCAL_C_INCLUDES += $(local_c_includes)
     LOCAL_SRC_FILES += $(non_arm_src_files)
-    LOCAL_STATIC_LIBRARIES += libz
     LOCAL_LDLIBS += -ldl
     LOCAL_MODULE_TAGS := optional
     LOCAL_MODULE:= libcrypto
@@ -532,7 +529,6 @@ LOCAL_SRC_FILES += $(local_src_files)
 LOCAL_CFLAGS += $(local_c_flags) -DPURIFY
 LOCAL_C_INCLUDES += $(local_c_includes)
 LOCAL_SRC_FILES += $(non_arm_src_files)
-LOCAL_STATIC_LIBRARIES += libz
 LOCAL_LDLIBS += -ldl
 LOCAL_MODULE_TAGS := optional
 LOCAL_MODULE:= libcrypto_static

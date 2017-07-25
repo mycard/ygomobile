@@ -1,7 +1,6 @@
 #include <jni.h>
 #include "irrlicht.h"
 #include "../android/bufferio_android.h"
-#include "NativeCrashHandler.h"
 #include "../Classes/gframe/os.h"
 #include <unistd.h>
 #include <pthread.h>
@@ -371,7 +370,6 @@ jint JNI_OnLoad(JavaVM* vm, void* reserved) {
 	if (vm->GetEnv((void**) &venv, JNI_VERSION_1_6) != JNI_OK) {
 		return -1;
 	}
-	nativeCrashHandler_onLoad(vm);
 	return JNI_VERSION_1_6;
 }
 

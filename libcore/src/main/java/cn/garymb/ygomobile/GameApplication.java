@@ -73,6 +73,9 @@ public abstract class GameApplication extends Application implements IrrlichtBri
 
     public abstract boolean isSensorRefresh();
 
+    /**
+     * @deprecated
+     */
     public boolean canNdkCash() {
         return true;
     }

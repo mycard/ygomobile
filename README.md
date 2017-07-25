@@ -5,9 +5,9 @@ Android编译环境
     
 ndk编译环境(请用迅雷，旋风，或者翻墙vpn下载)
 ---------------------
-    https://dl.google.com/android/repository/android-ndk-r15b-windows-x86_64.zip
-    https://dl.google.com/android/repository/android-ndk-r15b-darwin-x86_64.zip
-    https://dl.google.com/android/repository/android-ndk-r15b-linux-x86_64.zip
+    Darwin: https://dl.google.com/android/ndk/android-ndk-r9d-darwin-x86_64.tar.bz2
+    Linux: https://dl.google.com/android/ndk/android-ndk-r9d-linux-x86_64.tar.bz2
+    Windows: https://dl.google.com/android/ndk/android-ndk-r9d-windows-x86_64.zip
     
 重要
 ---------------------------------------------
