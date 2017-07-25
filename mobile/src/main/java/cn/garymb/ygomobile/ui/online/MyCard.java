@@ -2,20 +2,33 @@ package cn.garymb.ygomobile.ui.online;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.util.Base64;
 import android.util.Log;
 import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 
+import org.json.JSONArray;
+
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.Arrays;
 
 import cn.garymb.ygodata.YGOGameOptions;
+import cn.garymb.ygomobile.AppsSettings;
 import cn.garymb.ygomobile.YGOStarter;
 import cn.garymb.ygomobile.ui.cards.DeckManagerActivity;
 import cn.garymb.ygomobile.ui.plus.MyWebView;
-import cn.garymb.ygomobile.ui.plus.WebViewPlus;
+
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertTrue;
 
 public class MyCard {
 
@@ -30,6 +43,7 @@ public class MyCard {
     private final User mUser = new User();
     private MyCardListener mMyCardListener;
     private Activity mContext;
+    private SharedPreferences lastModified;
 
     public interface MyCardListener {
         void onLogin(User user);
@@ -51,6 +65,7 @@ public class MyCard {
 
     public MyCard(Activity context) {
         mContext = context;
+        lastModified = context.getSharedPreferences("lastModified", Context.MODE_PRIVATE);
         mDefWebViewClient = new MyWebView.DefWebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -156,9 +171,11 @@ public class MyCard {
         return true;
     }
 
-    public static class Ygopro {
+    public class Ygopro {
         Activity activity;
         MyCardListener mListener;
+
+        private AppsSettings settings = AppsSettings.get();
 
         private Ygopro(Activity activity, MyCardListener listener) {
             this.activity = activity;
@@ -241,7 +258,119 @@ public class MyCard {
                 Log.e("webview", "startGame", e);
             }
         }
+
+        /*
+        * 列目录
+        * path: 文件夹路径
+        * return: 文件名数组的 JSON 字符串
+        * 失败抛异常或返回空数组
+        */
+        @JavascriptInterface
+        @org.xwalk.core.JavascriptInterface
+        public String readdir(String path) {
+            File file = new File(settings.getResourcePath(), path);
+            String[] result = file.list();
+            return new JSONArray(Arrays.asList(result)).toString();
+        }
+
+        /*
+        * 读取文件内容
+        * path: 文件绝对路径
+        * return: 文件内容的 base64
+        * 读取失败抛异常
+        */
+        @JavascriptInterface
+        @org.xwalk.core.JavascriptInterface
+        public String readFile(String path) throws IOException {
+            File file = new File(settings.getResourcePath(), path);
+            byte[] result = new byte[(int) file.length()];
+            BufferedInputStream stream = new BufferedInputStream(new FileInputStream(file));
+            assertEquals(result.length, stream.read(result, 0, result.length));
+            stream.close();
+            return Base64.encodeToString(result, Base64.NO_WRAP);
+        }
+
+        /*
+        * 写入内容到指定文件
+        * path: 文件路径
+        * data: 文件内容的 base64
+        * 写入失败抛异常
+        */
+        @JavascriptInterface
+        @org.xwalk.core.JavascriptInterface
+        public void writeFile(String path, String data) throws IOException {
+            File file = new File(settings.getResourcePath(), path);
+            FileOutputStream stream = new FileOutputStream(file);
+            stream.write(Base64.decode(data, Base64.NO_WRAP));
+            stream.close();
+        }
+
+        /*
+        * 删除文件
+        * 删除失败返回 false
+        */
+        @JavascriptInterface
+        @org.xwalk.core.JavascriptInterface
+        public boolean unlink(String path) {
+            File file = new File(settings.getResourcePath(), path);
+            lastModified.edit().remove(path).apply();
+            return file.delete();
+        }
+
+        /*
+        * 获取文件修改时间
+        * path: 文件绝对路径
+        * return: 修改时间
+        * 文件不存在返回 0
+        */
+        @JavascriptInterface
+        @org.xwalk.core.JavascriptInterface
+        public long getFileLastModified(String path) {
+            File file = new File(settings.getResourcePath(), path);
+            return getWrappedLastModified(path, file.lastModified());
+        }
+
+        /*
+        * 设置文件修改时间
+        * path: 文件绝对路径
+        * time: 时间
+        */
+        @JavascriptInterface
+        @org.xwalk.core.JavascriptInterface
+        public void setFileLastModified(String path, long time) {
+            File file = new File(settings.getResourcePath(), path);
+            if (file.setLastModified(time)) {
+                removeWrappedLastModified(path);
+            } else {
+                setWrappedLastModified(path, file.lastModified(), time);
+            }
+        }
+
+
+        // 由于 Android 上设置文件修改时间是不可靠的，这里做个wrap，如果设置失败，就自己存一份。
+        private void setWrappedLastModified(String path, long origin, long wrapped) {
+            lastModified.edit()
+                    .putLong("ORIGIN_" + path, origin)
+                    .putLong("WRAPPED_" + path, wrapped)
+                    .apply();
+        }
+
+        private long getWrappedLastModified(String path, long origin) {
+            if (lastModified.getLong("ORIGIN_" + path, 0) == origin) {
+                return lastModified.getLong("WRAPPED_" + path, 0);
+            } else {
+                removeWrappedLastModified(path);
+                return origin;
+            }
+        }
+
+        private void removeWrappedLastModified(String path) {
+            if (lastModified.contains("ORIGIN_" + path)) {
+                lastModified.edit()
+                        .remove("ORIGIN_" + path)
+                        .remove("WRAPPED_" + path)
+                        .apply();
+            }
+        }
     }
 }
-
-

@@ -1,7 +1,6 @@
 package cn.garymb.ygomobile.ui.online;
 
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,18 +13,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.webkit.WebView;
 
+import org.xwalk.core.XWalkSettings;
 import org.xwalk.core.XWalkUIClient;
-import java.text.MessageFormat;
 import org.xwalk.core.XWalkView;
+
+import java.text.MessageFormat;
 
 import cn.garymb.ygomobile.YGOStarter;
 import cn.garymb.ygomobile.lite.BuildConfig;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.ui.activities.BaseActivity;
 import cn.garymb.ygomobile.ui.cards.DeckManagerActivity;
-import cn.garymb.ygomobile.ui.plus.WebViewPlus;
 
 public class MyCardActivity extends BaseActivity implements MyCard.MyCardListener, NavigationView.OnNavigationItemSelectedListener {
     //大厅聊天
@@ -57,7 +56,16 @@ public class MyCardActivity extends BaseActivity implements MyCard.MyCardListene
         View navHead = navigationView.getHeaderView(0);
 
         mWebViewPlus.enableHtml5();
-        mWebViewPlus.setUIClient(new XWalkUIClient(mWebViewPlus){
+
+        XWalkSettings settings = mWebViewPlus.getSettings();
+        settings.setUserAgentString(settings.getUserAgentString() + MessageFormat.format(
+                " YGOMobile/{0} ({1} {2,number,#})",
+                BuildConfig.VERSION_NAME,
+                BuildConfig.APPLICATION_ID,
+                BuildConfig.VERSION_CODE
+        ));
+
+        mWebViewPlus.setUIClient(new XWalkUIClient(mWebViewPlus) {
             @Override
             public void onReceivedTitle(XWalkView view, String title) {
                 super.onReceivedTitle(view, title);
