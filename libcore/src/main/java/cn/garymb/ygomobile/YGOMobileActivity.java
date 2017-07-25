@@ -6,6 +6,7 @@
  */
 package cn.garymb.ygomobile;
 
+import android.app.ActivityManager;
 import android.app.NativeActivity;
 import android.content.Context;
 import android.content.Intent;
@@ -50,7 +51,7 @@ public class YGOMobileActivity extends NativeActivity implements
         TextView.OnEditorActionListener,
         OverlayOvalView.OnDuelOptionsSelectListener {
     private static final String TAG = YGOMobileActivity.class.getSimpleName();
-    private static final boolean DEBUG = false;
+    private static final boolean DEBUG = true;
     private static final int CHAIN_CONTROL_PANEL_X_POSITION_LEFT_EDGE = 205;
     private static final int CHAIN_CONTROL_PANEL_Y_REVERT_POSITION = 100;
     private static final int MAX_REFRESH = 30 * 1000;
@@ -168,6 +169,11 @@ public class YGOMobileActivity extends NativeActivity implements
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
     public void finish() {
         super.finish();
         sendBroadcast(new Intent(ACTION_STOP)
@@ -178,14 +184,20 @@ public class YGOMobileActivity extends NativeActivity implements
     private void handleExternalCommand(Intent intent) {
         YGOGameOptions options = intent
                 .getParcelableExtra(YGOGameOptions.YGO_GAME_OPTIONS_BUNDLE_KEY);
+        long time = intent.getLongExtra(YGOGameOptions.YGO_GAME_OPTIONS_BUNDLE_TIME, 0);
+        if (System.currentTimeMillis() - time >= YGOGameOptions.TIME_OUT) {
+            if (DEBUG)
+                Log.i(TAG, "command timeout");
+            return;
+        }
         if (options != null) {
             if (DEBUG)
-                Log.i(TAG, "receive from mycard:" + options.toString());
+                Log.i(TAG, "receive:" + time + ":" + options.toString());
             ByteBuffer buffer = options.toByteBuffer();
             IrrlichtBridge.joinGame(buffer, buffer.position());
         } else {
             if (DEBUG)
-                Log.i(TAG, "receive from mycard:null");
+                Log.i(TAG, "receive :null");
         }
     }
 

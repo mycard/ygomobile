@@ -164,6 +164,7 @@ public class YGOStarter {
             Intent intent = new Intent(activity, YGOMobileActivity.class);
             if (options != null) {
                 intent.putExtra(YGOGameOptions.YGO_GAME_OPTIONS_BUNDLE_KEY, options);
+                intent.putExtra(YGOGameOptions.YGO_GAME_OPTIONS_BUNDLE_TIME, System.currentTimeMillis());
             }
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             activity.startActivity(intent);

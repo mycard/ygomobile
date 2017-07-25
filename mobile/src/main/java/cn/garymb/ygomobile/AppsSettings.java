@@ -361,14 +361,16 @@ public class AppsSettings {
     public List<String> getLastRoomList() {
         List<String> names = new ArrayList<>();
         String json = mSharedPreferences.getString(Constants.PREF_LAST_ROOM_LIST, null);
-        try {
-            JSONArray array = new JSONArray(json);
-            int count = array.length();
-            for (int i = 0; i < count; i++) {
-                names.add(array.optString(i));
+        if(!TextUtils.isEmpty(json)) {
+            try {
+                JSONArray array = new JSONArray(json);
+                int count = array.length();
+                for (int i = 0; i < count; i++) {
+                    names.add(array.optString(i));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
 //        Log.i("kk", "read:" + names);
         return names;

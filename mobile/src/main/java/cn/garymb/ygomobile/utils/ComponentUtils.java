@@ -29,16 +29,20 @@ public class ComponentUtils {
     private static boolean isActivityRunningV21(Context context, ComponentName componentName) {
         ActivityManager am = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.AppTask> tasks = am.getAppTasks();
-        if(tasks != null){
+        if (tasks != null) {
             for (ActivityManager.AppTask taskInfo : tasks) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    if (componentName.equals(taskInfo.getTaskInfo().topActivity)) {
-                        return true;
+                try {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        if (componentName.equals(taskInfo.getTaskInfo().topActivity)) {
+                            return true;
+                        }
+                    } else {
+                        if (componentName.equals(taskInfo.getTaskInfo().baseIntent.getComponent())) {
+                            return true;
+                        }
                     }
-                }else{
-                    if (componentName.equals(taskInfo.getTaskInfo().baseIntent.getComponent())) {
-                        return true;
-                    }
+                } catch (Exception e) {
+                    //ignore
                 }
             }
         }
