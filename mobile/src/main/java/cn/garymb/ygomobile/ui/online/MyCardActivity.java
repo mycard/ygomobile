@@ -119,9 +119,7 @@ public class MyCardActivity extends BaseActivity implements MyCard.MyCardListene
     @Override
     protected void onResume() {
         mWebViewPlus.resumeTimers();
-        if (!mWebViewPlus.isShown()) {
-            mWebViewPlus.onShow();
-        }
+        mWebViewPlus.onShow();
         YGOStarter.onResumed(this);
         super.onResume();
     }
