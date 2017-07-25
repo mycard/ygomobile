@@ -96,7 +96,7 @@ CAndroidGUISkin::CAndroidGUISkin(EGUI_SKIN_TYPE type,
 		Colors[EGDC_ACTIVE_CAPTION] = 0xffd0d0d0;
 		Colors[EGDC_APP_WORKSPACE] = 0xc0646464; // unused
 		Colors[EGDC_BUTTON_TEXT] = 0xd0161616;
-		Colors[EGDC_GRAY_TEXT] = 0x3c141414;
+		Colors[EGDC_GRAY_TEXT] = 0x3c999999;
 		Colors[EGDC_HIGH_LIGHT] = 0x6c606060;
 		Colors[EGDC_HIGH_LIGHT_TEXT] = 0xd0e0e0e0;
 		Colors[EGDC_INACTIVE_BORDER] = 0xf0a5a5a5;
