@@ -154,6 +154,18 @@ public class MyCard {
         public User() {
 
         }
+
+        public String getJID() {
+            return username + "@mycard.moe";
+        }
+
+        public String getPassword() {
+            return String.valueOf(external_id);
+        }
+
+        public String getConference() {
+            return "ygopro_china_north@conference.mycard.moe";
+        }
     }
 
     public class Ygopro {
