@@ -28,18 +28,15 @@ import cn.garymb.ygomobile.ui.cards.DeckManagerActivity;
 import cn.garymb.ygomobile.ui.plus.MyWebView;
 
 import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertTrue;
 
 public class MyCard {
 
-    //    private static final String sso_url = "https://accounts.moecube.com";
-//    private static final String key = "zsZv6LXHDwwtUAGa";
-    private static final String return_sso_url = "https://r.my-card.in/mobile/index.html";
-    private static final String bbs_url = "https://ygobbs.com";
+    private static final String mHomeUrl = "https://mycard.moe/mobile/";
+    private static final String mArenaUrl = "https://mycard.moe/ygopro/arena/";
+    private static final String mCommunityUrl = "https://ygobbs.com/";
+    private static final String return_sso_url = "https://mycard.moe/mobile/?";
     private static final Charset UTF_8 = Charset.forName("UTF-8");
     private final MyWebView.DefWebViewClient mDefWebViewClient;
-    private String mHomeUrl = "https://r.my-card.in/mobile/index.html";
-    private String mNewRoomUrl = "https://r.my-card.in/mobile/index.html#/ygopro/rooms/new";
     private final User mUser = new User();
     private MyCardListener mMyCardListener;
     private Activity mContext;
@@ -91,8 +88,8 @@ public class MyCard {
         };
     }
 
-    public String getNewRoomUrl() {
-        return mNewRoomUrl;
+    public String getArenaUrl() {
+        return mArenaUrl;
     }
 
     public MyCardListener getMyCardListener() {
@@ -134,7 +131,7 @@ public class MyCard {
     }
 
     public String getBBSUrl() {
-        return bbs_url;
+        return mCommunityUrl;
     }
 
     @SuppressLint("AddJavascriptInterface")
@@ -157,18 +154,18 @@ public class MyCard {
         public User() {
 
         }
-    }
 
-    public boolean check(MyCardWebView webView) {
-        if (!mUser.login) {
-            try {
-                webView.loadUrl(getHomeUrl());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return false;
+        public String getJID() {
+            return username + "@mycard.moe";
         }
-        return true;
+
+        public String getPassword() {
+            return String.valueOf(external_id);
+        }
+
+        public String getConference() {
+            return "ygopro_china_north@conference.mycard.moe";
+        }
     }
 
     public class Ygopro {
