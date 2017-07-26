@@ -27,11 +27,7 @@ import cn.garymb.ygomobile.ui.activities.BaseActivity;
 import cn.garymb.ygomobile.ui.cards.DeckManagerActivity;
 
 public class MyCardActivity extends BaseActivity implements MyCard.MyCardListener, NavigationView.OnNavigationItemSelectedListener {
-    //大厅聊天
-    //房间列表
-    //个人页面
-    //排行榜
-    //新建房间
+
     private MyCardWebView mWebViewPlus;
     private MyCard mMyCard;
     protected DrawerLayout mDrawerlayout;
@@ -142,18 +138,14 @@ public class MyCardActivity extends BaseActivity implements MyCard.MyCardListene
         closeDrawer();
         switch (id) {
             case android.R.id.home:
-                if (mMyCard.check(mWebViewPlus)) {
-                    onBackHome();
-                }
+                mWebViewPlus.loadUrl(mMyCard.getHomeUrl());
                 break;
             case R.id.action_deck_manager:
                 startActivity(new Intent(this, DeckManagerActivity.class));
                 closeDrawer();
                 break;
-            case R.id.action_new_room:
-                if (mMyCard.check(mWebViewPlus)) {
-                    mWebViewPlus.loadUrl(mMyCard.getNewRoomUrl());
-                }
+            case R.id.action_arena:
+                mWebViewPlus.loadUrl(mMyCard.getArenaUrl());
                 break;
             case R.id.action_quit:
                 finish();
@@ -162,9 +154,7 @@ public class MyCardActivity extends BaseActivity implements MyCard.MyCardListene
                 onHome();
                 break;
             case R.id.action_bbs:
-                if (mMyCard.check(mWebViewPlus)) {
-                    mWebViewPlus.loadUrl(mMyCard.getBBSUrl());
-                }
+                mWebViewPlus.loadUrl(mMyCard.getBBSUrl());
                 break;
             default:
                 return false;

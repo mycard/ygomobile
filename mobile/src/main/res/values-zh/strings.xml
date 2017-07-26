@@ -175,7 +175,7 @@
     <string name="edit">编辑</string>
     <string name="delete">删除</string>
     <string name="mycard">萌卡平台</string>
-    <string name="new_room">新建房间</string>
+    <string name="arena">决斗数据库</string>
     <string name="mc_home">大厅</string>
-    <string name="bbs">论坛</string>
+    <string name="bbs">社区</string>
 </resources>

@@ -178,7 +178,7 @@
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
     <string name="mycard">MyCard</string>
-    <string name="new_room">New Room</string>
+    <string name="arena">Duelist DataBase</string>
     <string name="mc_home">Home</string>
-    <string name="bbs">BBS</string>
+    <string name="bbs">Community</string>
 </resources>
