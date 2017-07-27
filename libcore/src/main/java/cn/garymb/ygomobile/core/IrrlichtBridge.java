@@ -29,7 +29,11 @@ public final class IrrlichtBridge {
     public static final String EXTRA_PID = "extras.mypid";
     public static int gPid;
     static {
-        System.loadLibrary("YGOMobile");
+        try {
+            System.loadLibrary("YGOMobile");
+        }catch (Throwable e){
+            //ignore
+        }
     }
 
     private IrrlichtBridge() {

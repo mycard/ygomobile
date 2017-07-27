@@ -8,7 +8,6 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.util.Base64;
 import android.util.Log;
-import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
 
 import org.json.JSONArray;
@@ -179,13 +178,11 @@ public class MyCard {
             mListener = listener;
         }
 
-        @JavascriptInterface
         @org.xwalk.core.JavascriptInterface
         public void edit_deck() {
             activity.startActivity(new Intent(activity, DeckManagerActivity.class));
         }
 
-        @JavascriptInterface
         @org.xwalk.core.JavascriptInterface
         public void watch_replay() {
             if (mListener != null) {
@@ -193,7 +190,6 @@ public class MyCard {
             }
         }
 
-        @JavascriptInterface
         @org.xwalk.core.JavascriptInterface
         public void puzzle_mode() {
             if (mListener != null) {
@@ -201,7 +197,6 @@ public class MyCard {
             }
         }
 
-        @JavascriptInterface
         @org.xwalk.core.JavascriptInterface
         public void openDrawer() {
             if (mListener != null) {
@@ -209,7 +204,6 @@ public class MyCard {
             }
         }
 
-        @JavascriptInterface
         @org.xwalk.core.JavascriptInterface
         public void backHome() {
             if (mListener != null) {
@@ -217,7 +211,6 @@ public class MyCard {
             }
         }
 
-        @JavascriptInterface
         @org.xwalk.core.JavascriptInterface
         public void share(String text) {
             if (mListener != null) {
@@ -227,7 +220,6 @@ public class MyCard {
             }
         }
 
-        @JavascriptInterface
         @org.xwalk.core.JavascriptInterface
         public void closeDrawer() {
             if (mListener != null) {
@@ -235,7 +227,6 @@ public class MyCard {
             }
         }
 
-        @JavascriptInterface
         @org.xwalk.core.JavascriptInterface
         public void join(String host, int port, String name, String room) {
             try {
@@ -262,7 +253,6 @@ public class MyCard {
         * return: 文件名数组的 JSON 字符串
         * 失败抛异常或返回空数组
         */
-        @JavascriptInterface
         @org.xwalk.core.JavascriptInterface
         public String readdir(String path) {
             File file = new File(settings.getResourcePath(), path);
@@ -276,7 +266,6 @@ public class MyCard {
         * return: 文件内容的 base64
         * 读取失败抛异常
         */
-        @JavascriptInterface
         @org.xwalk.core.JavascriptInterface
         public String readFile(String path) throws IOException {
             File file = new File(settings.getResourcePath(), path);
@@ -293,7 +282,6 @@ public class MyCard {
         * data: 文件内容的 base64
         * 写入失败抛异常
         */
-        @JavascriptInterface
         @org.xwalk.core.JavascriptInterface
         public void writeFile(String path, String data) throws IOException {
             File file = new File(settings.getResourcePath(), path);
@@ -306,7 +294,6 @@ public class MyCard {
         * 删除文件
         * 删除失败返回 false
         */
-        @JavascriptInterface
         @org.xwalk.core.JavascriptInterface
         public boolean unlink(String path) {
             File file = new File(settings.getResourcePath(), path);
@@ -320,7 +307,6 @@ public class MyCard {
         * return: 修改时间
         * 文件不存在返回 0
         */
-        @JavascriptInterface
         @org.xwalk.core.JavascriptInterface
         public long getFileLastModified(String path) {
             File file = new File(settings.getResourcePath(), path);
@@ -332,7 +318,6 @@ public class MyCard {
         * path: 文件绝对路径
         * time: 时间
         */
-        @JavascriptInterface
         @org.xwalk.core.JavascriptInterface
         public void setFileLastModified(String path, long time) {
             File file = new File(settings.getResourcePath(), path);
