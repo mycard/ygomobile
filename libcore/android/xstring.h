@@ -132,7 +132,11 @@ template<int _WCharWidth> class TWCharTrait
 {
 public:
     typedef wchar_t        CharType ;
+#if defined(__i386__) || defined(__x86_64__)
+    typedef char32_t        UTF32;
+#else
     typedef wchar_t        UTF32;
+#endif
     typedef unsigned short UTF16;
     typedef unsigned char  UTF8;
     enum { WCharWidth = _WCharWidth , }; 
