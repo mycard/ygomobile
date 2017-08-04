@@ -322,6 +322,12 @@ public class CardSearcher implements View.OnClickListener {
                     pScale.setVisibility(View.VISIBLE);
                     LinkMarkerButton.setVisibility(View.VISIBLE);
                 }
+
+                reset(pScale);
+                reset(raceSpinner);
+                reset(typeSTSpinner);
+                reset(typeMonsterSpinner);
+                reset(typeMonsterSpinner2);
             }
 
             @Override

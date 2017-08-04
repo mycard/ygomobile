@@ -1,7 +1,5 @@
 package cn.garymb.ygomobile.ui.cards;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
