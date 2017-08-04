@@ -313,6 +313,15 @@ public class MyCard {
             return getWrappedLastModified(path, file.lastModified());
         }
 
+        @org.xwalk.core.JavascriptInterface
+        public void updateUser(String name,String headurl){
+            if(mListener!=null){
+                mUser.name = name;
+                mUser.avatar_url = headurl;
+                mUser.login = true;
+                mListener.onLogin(mUser);
+            }
+        }
         /*
         * 设置文件修改时间
         * path: 文件绝对路径
@@ -354,5 +363,6 @@ public class MyCard {
                         .apply();
             }
         }
+
     }
 }
