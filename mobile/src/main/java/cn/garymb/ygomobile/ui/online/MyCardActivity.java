@@ -38,7 +38,7 @@ public class MyCardActivity extends BaseActivity implements MyCard.MyCardListene
     private MyCard mMyCard;
     protected DrawerLayout mDrawerlayout;
     private ImageView mHeadView;
-    private TextView mNameView;
+    private TextView mNameView, mStatusView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -61,6 +61,7 @@ public class MyCardActivity extends BaseActivity implements MyCard.MyCardListene
         View navHead = navigationView.getHeaderView(0);
         mHeadView = (ImageView) navHead.findViewById(R.id.img_head);
         mNameView = (TextView) navHead.findViewById(R.id.tv_name);
+        mStatusView = (TextView) navHead.findViewById(R.id.tv_dp);
         mWebViewPlus.enableHtml5();
 
         XWalkSettings settings = mWebViewPlus.getSettings();
@@ -173,11 +174,13 @@ public class MyCardActivity extends BaseActivity implements MyCard.MyCardListene
     }
 
     @Override
-    public void onLogin(MyCard.User user) {
-        if(!TextUtils.isEmpty(user.avatar_url)){
-            Glide.with(this).load(Uri.parse(user.avatar_url)).into(mHeadView);
+    public void onLogin(String name, String icon, String statu) {
+
+        if(!TextUtils.isEmpty(icon)){
+            Glide.with(this).load(Uri.parse(icon)).into(mHeadView);
         }
-        mNameView.setText(user.name);
+        mNameView.setText(name);
+        mStatusView.setText(statu);
     }
 
     @Override
