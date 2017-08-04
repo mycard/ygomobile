@@ -17,6 +17,16 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="AppTheme.Mycard" parent="AppBaseTheme">
+        <item name="colorPrimary">@color/mediumPurple</item>
+        <item name="colorPrimaryDark">@color/mediumPurpleDark</item>
+        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
     <style name="TranslucentTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowBackground">@android:color/transparent</item>

@@ -8,6 +8,7 @@
     <color name="blackLinght">#AA000000</color>
     <color name="colorPrimary">#3F51B5</color>
     <color name="mediumPurple">#673AB7</color>
+    <color name="mediumPurpleDark">#572AA7</color>
     <color name="colorPrimaryDark">#2f41a5</color>
     <color name="gold">#b8be35</color>
     <color name="colorAccent">#EF3934</color>

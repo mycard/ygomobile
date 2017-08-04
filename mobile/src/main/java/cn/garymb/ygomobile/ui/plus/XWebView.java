@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.webkit.ConsoleMessage;
 import android.webkit.GeolocationPermissions;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
@@ -23,12 +22,13 @@ import org.xwalk.core.XWalkView;
 import cn.garymb.ygomobile.lite.BuildConfig;
 
 public class XWebView extends XWalkView {
-    static{
+    static {
         XWalkPreferences.setValue(XWalkPreferences.REMOTE_DEBUGGING, BuildConfig.DEBUG);
-        XWalkPreferences.setValue(XWalkPreferences.ENABLE_THEME_COLOR, false);
+        XWalkPreferences.setValue(XWalkPreferences.ENABLE_THEME_COLOR, true);
         XWalkPreferences.setValue(XWalkPreferences.ANIMATABLE_XWALK_VIEW, true);
         XWalkPreferences.setValue(XWalkPreferences.ALLOW_UNIVERSAL_ACCESS_FROM_FILE, true);
     }
+
     public XWebView(Context context) {
         super(context);
     }
@@ -121,6 +121,14 @@ public class XWebView extends XWalkView {
                 }
             }
         });
+    }
+
+    public void loadUrl(String url) {
+        super.load(url, null);
+    }
+
+    public void loadData(String data, String mimeType, String encoding) {
+        super.load(null, data);
     }
 
     public void goBack() {
