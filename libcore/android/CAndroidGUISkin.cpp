@@ -86,32 +86,32 @@ CAndroidGUISkin::CAndroidGUISkin(EGUI_SKIN_TYPE type,
 		Sizes[EGDS_TITLEBARTEXT_DISTANCE_Y] = 0;
 	} else {
 		//0x80a6a8af
-		Colors[EGDC_3D_DARK_SHADOW] = 0x60767982;
+		Colors[EGDC_3D_DARK_SHADOW] = 0xff090229;//左侧卡图背景底色
 		//Colors[EGDC_3D_FACE]			=	0xc0c9ccd4;		// tab background
-		Colors[EGDC_3D_FACE] = 0xc0cbd2d9; // tab background
-		Colors[EGDC_3D_SHADOW] = 0x50e4e8f1; // tab background, and left-top highlight
-		Colors[EGDC_3D_HIGH_LIGHT] = 0x40c7ccdc;
-		Colors[EGDC_3D_LIGHT] = 0x802e313a;
-		Colors[EGDC_ACTIVE_BORDER] = 0x80404040; // window title
-		Colors[EGDC_ACTIVE_CAPTION] = 0xffd0d0d0;
-		Colors[EGDC_APP_WORKSPACE] = 0xc0646464; // unused
-		Colors[EGDC_BUTTON_TEXT] = 0xd0161616;
-		Colors[EGDC_GRAY_TEXT] = 0x3c999999;
-		Colors[EGDC_HIGH_LIGHT] = 0x6c606060;
-		Colors[EGDC_HIGH_LIGHT_TEXT] = 0xd0e0e0e0;
-		Colors[EGDC_INACTIVE_BORDER] = 0xf0a5a5a5;
-		Colors[EGDC_INACTIVE_CAPTION] = 0xffd2d2d2;
-		Colors[EGDC_TOOLTIP] = 0xf00f2033;
-		Colors[EGDC_TOOLTIP_BACKGROUND] = 0xc0cbd2d9;
-		Colors[EGDC_SCROLLBAR] = 0xf0e0e0e0;
-		Colors[EGDC_WINDOW] = 0xf0f0f0f0;
-		Colors[EGDC_WINDOW_SYMBOL] = 0xd0161616;
-		Colors[EGDC_ICON] = 0xd0161616;
-		Colors[EGDC_ICON_HIGH_LIGHT] = 0xd0606060;
-		Colors[EGDC_GRAY_WINDOW_SYMBOL] = 0x3c101010;
-		Colors[EGDC_EDITABLE] = 0xf0ffffff;
-		Colors[EGDC_GRAY_EDITABLE] = 0xf0cccccc;
-		Colors[EGDC_FOCUSED_EDITABLE] = 0xf0fffff0;
+		Colors[EGDC_3D_FACE] = 0x6011113d; //主面板颜色
+		Colors[EGDC_3D_SHADOW] = 0xff090229; // 主面板左上高光,效果描述框下半部过渡色
+		Colors[EGDC_3D_HIGH_LIGHT] = 0x60045f6a;//布局高光线,窗体内层色
+		Colors[EGDC_3D_LIGHT] = 0xffa2d8f4;//按钮下侧和右侧的颜色
+		Colors[EGDC_ACTIVE_BORDER] = 0x8011113d; // 窗体标题栏色
+		Colors[EGDC_ACTIVE_CAPTION] = 0xffffffff;//窗体标题字色
+		Colors[EGDC_APP_WORKSPACE] = 0x00ff0000; // unused
+		Colors[EGDC_BUTTON_TEXT] = 0xffffffff;//主要界面的字
+		Colors[EGDC_GRAY_TEXT] = 0x3c999999;//选项不可用时的字
+		Colors[EGDC_HIGH_LIGHT] = 0xffa2d8f4;//被选中的字的背景色
+		Colors[EGDC_HIGH_LIGHT_TEXT] = 0x6011113d;//被选中高亮时的字色
+		Colors[EGDC_INACTIVE_BORDER] = 0x10000000;//窗体失去焦点时的标题栏底色
+		Colors[EGDC_INACTIVE_CAPTION] = 0xffff0000;//窗体失去焦点时的标题栏字色
+		Colors[EGDC_TOOLTIP] = 0x60ff0000;//
+		Colors[EGDC_TOOLTIP_BACKGROUND] = 0x6011113d;//
+		Colors[EGDC_SCROLLBAR] = 0xffa2d8f4;//滚动条底色
+		Colors[EGDC_WINDOW] = 0xff000039;//可动窗体的颜色ff002755-ff00011e
+		Colors[EGDC_WINDOW_SYMBOL] = 0xff00ffff;//打勾等的颜色
+		Colors[EGDC_ICON] = 0xffff0000;
+		Colors[EGDC_ICON_HIGH_LIGHT] = 0xffff0000;
+		Colors[EGDC_GRAY_WINDOW_SYMBOL] = 0xffb7b7f5;//不可动的打勾（对手准备.）
+		Colors[EGDC_EDITABLE] = 0x60045f6a;//输入框可用时的颜色
+		Colors[EGDC_GRAY_EDITABLE] = 0xff5a5a5a;//输入框不可用时的颜色
+		Colors[EGDC_FOCUSED_EDITABLE] = 0xffffffff;//输入状态的框色
 
 		Sizes[EGDS_SCROLLBAR_SIZE] = 14;
 		Sizes[EGDS_MENU_HEIGHT] = 48;
@@ -313,7 +313,7 @@ void CAndroidGUISkin::draw3DButtonPaneStandard(IGUIElement* element,
 		rect.LowerRightCorner.X += 1;
 		rect.LowerRightCorner.Y += 1;
 		draw3DSunkenPane(element,
-				getColor(EGDC_WINDOW).getInterpolated(0xFFFFFFFF, 0.9f), false,
+				getColor(EGDC_3D_FACE).getInterpolated(0xFFFFFFFF, 0.9f), false,
 				true, rect, clip);
 		return;
 	}
@@ -336,7 +336,7 @@ void CAndroidGUISkin::draw3DButtonPaneStandard(IGUIElement* element,
 	} else {
 		const video::SColor c1 = getColor(EGDC_3D_FACE);
 		const video::SColor c2 = c1.getInterpolated(
-				getColor(EGDC_3D_DARK_SHADOW), 0.4f);
+				getColor(EGDC_3D_DARK_SHADOW), 0.9f);
 		Driver->draw2DRectangle(rect, c1, c1, c2, c2, clip);
 	}
 }
@@ -404,48 +404,48 @@ void CAndroidGUISkin::draw3DSunkenPane(IGUIElement* element,
 		// draw flat sunken pane
 
 		rect.LowerRightCorner.Y = rect.UpperLeftCorner.Y + 1;
-		Driver->draw2DRectangle(getColor(EGDC_3D_SHADOW), rect, clip); // top
+		Driver->draw2DRectangle(getColor(EGDC_3D_LIGHT), rect, clip); // top
 
 		++rect.UpperLeftCorner.Y;
 		rect.LowerRightCorner.Y = r.LowerRightCorner.Y;
 		rect.LowerRightCorner.X = rect.UpperLeftCorner.X + 1;
-		Driver->draw2DRectangle(getColor(EGDC_3D_SHADOW), rect, clip); // left
+		Driver->draw2DRectangle(getColor(EGDC_3D_LIGHT), rect, clip); // left
 
 		rect = r;
 		++rect.UpperLeftCorner.Y;
 		rect.UpperLeftCorner.X = rect.LowerRightCorner.X - 1;
-		Driver->draw2DRectangle(getColor(EGDC_3D_HIGH_LIGHT), rect, clip); // right
+		Driver->draw2DRectangle(getColor(EGDC_3D_LIGHT), rect, clip); // right
 
 		rect = r;
 		++rect.UpperLeftCorner.X;
 		rect.UpperLeftCorner.Y = r.LowerRightCorner.Y - 1;
 		--rect.LowerRightCorner.X;
-		Driver->draw2DRectangle(getColor(EGDC_3D_HIGH_LIGHT), rect, clip); // bottom
+		Driver->draw2DRectangle(getColor(EGDC_3D_LIGHT), rect, clip); // bottom
 	} else {
 		// draw deep sunken pane
 		rect.LowerRightCorner.Y = rect.UpperLeftCorner.Y + 1;
-		Driver->draw2DRectangle(getColor(EGDC_3D_SHADOW), rect, clip); // top
+		Driver->draw2DRectangle(getColor(EGDC_3D_LIGHT), rect, clip); // top
 		++rect.UpperLeftCorner.X;
 		++rect.UpperLeftCorner.Y;
 		--rect.LowerRightCorner.X;
 		++rect.LowerRightCorner.Y;
-		Driver->draw2DRectangle(getColor(EGDC_3D_DARK_SHADOW), rect, clip);
+		Driver->draw2DRectangle(getColor(EGDC_3D_LIGHT), rect, clip);
 
 		rect.UpperLeftCorner.X = r.UpperLeftCorner.X;
 		rect.UpperLeftCorner.Y = r.UpperLeftCorner.Y + 1;
 		rect.LowerRightCorner.X = rect.UpperLeftCorner.X + 1;
 		rect.LowerRightCorner.Y = r.LowerRightCorner.Y;
-		Driver->draw2DRectangle(getColor(EGDC_3D_SHADOW), rect, clip); // left
+		Driver->draw2DRectangle(getColor(EGDC_3D_LIGHT), rect, clip); // left
 		++rect.UpperLeftCorner.X;
 		++rect.UpperLeftCorner.Y;
 		++rect.LowerRightCorner.X;
 		--rect.LowerRightCorner.Y;
-		Driver->draw2DRectangle(getColor(EGDC_3D_DARK_SHADOW), rect, clip);
+		Driver->draw2DRectangle(getColor(EGDC_3D_LIGHT), rect, clip);
 
 		rect = r;
 		rect.UpperLeftCorner.X = rect.LowerRightCorner.X - 1;
 		++rect.UpperLeftCorner.Y;
-		Driver->draw2DRectangle(getColor(EGDC_3D_HIGH_LIGHT), rect, clip); // right
+		Driver->draw2DRectangle(getColor(EGDC_3D_LIGHT), rect, clip); // right
 		--rect.UpperLeftCorner.X;
 		++rect.UpperLeftCorner.Y;
 		--rect.LowerRightCorner.X;

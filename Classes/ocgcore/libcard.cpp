@@ -311,11 +311,75 @@ int32 scriptlib::card_get_linked_zone(lua_State *L) {
 	lua_pushinteger(L, pcard->get_linked_zone());
 	return 1;
 }
+int32 scriptlib::card_get_mutual_linked_group(lua_State *L) {
+	check_param_count(L, 1);
+	check_param(L, PARAM_TYPE_CARD, 1);
+	card* pcard = *(card**)lua_touserdata(L, 1);
+	card::card_set cset;
+	pcard->get_mutual_linked_cards(&cset);
+	group* pgroup = pcard->pduel->new_group(cset);
+	interpreter::group2value(L, pgroup);
+	return 1;
+}
+int32 scriptlib::card_get_mutual_linked_group_count(lua_State *L) {
+	check_param_count(L, 1);
+	check_param(L, PARAM_TYPE_CARD, 1);
+	card* pcard = *(card**)lua_touserdata(L, 1);
+	card::card_set cset;
+	pcard->get_mutual_linked_cards(&cset);
+	lua_pushinteger(L, cset.size());
+	return 1;
+}
+int32 scriptlib::card_get_mutual_linked_zone(lua_State *L) {
+	check_param_count(L, 1);
+	check_param(L, PARAM_TYPE_CARD, 1);
+	card* pcard = *(card**)lua_touserdata(L, 1);
+	lua_pushinteger(L, pcard->get_mutual_linked_zone());
+	return 1;
+}
 int32 scriptlib::card_is_link_state(lua_State *L) {
 	check_param_count(L, 1);
 	check_param(L, PARAM_TYPE_CARD, 1);
 	card* pcard = *(card**) lua_touserdata(L, 1);
 	lua_pushboolean(L, pcard->is_link_state());
+	return 1;
+}
+int32 scriptlib::card_get_column_group(lua_State *L) {
+	check_param_count(L, 1);
+	check_param(L, PARAM_TYPE_CARD, 1);
+	card* pcard = *(card**) lua_touserdata(L, 1);
+	int32 left = 0;
+	int32 right = 0;
+	if(lua_gettop(L) >= 2)
+		left = lua_tointeger(L, 2);
+	if(lua_gettop(L) >= 3)
+		right = lua_tointeger(L, 3);
+	card::card_set cset;
+	pcard->get_column_cards(&cset, left, right);
+	group* pgroup = pcard->pduel->new_group(cset);
+	interpreter::group2value(L, pgroup);
+	return 1;
+}
+int32 scriptlib::card_get_column_group_count(lua_State *L) {
+	check_param_count(L, 1);
+	check_param(L, PARAM_TYPE_CARD, 1);
+	card* pcard = *(card**) lua_touserdata(L, 1);
+	int32 left = 0;
+	int32 right = 0;
+	if(lua_gettop(L) >= 2)
+		left = lua_tointeger(L, 2);
+	if(lua_gettop(L) >= 3)
+		right = lua_tointeger(L, 3);
+	card::card_set cset;
+	pcard->get_column_cards(&cset, left, right);
+	lua_pushinteger(L, cset.size());
+	return 1;
+}
+int32 scriptlib::card_is_all_column(lua_State *L) {
+	check_param_count(L, 1);
+	check_param(L, PARAM_TYPE_CARD, 1);
+	card* pcard = *(card**) lua_touserdata(L, 1);
+	lua_pushboolean(L, pcard->is_all_column());
 	return 1;
 }
 int32 scriptlib::card_get_attribute(lua_State *L) {
@@ -598,7 +662,7 @@ int32 scriptlib::card_get_destination(lua_State *L) {
 	check_param_count(L, 1);
 	check_param(L, PARAM_TYPE_CARD, 1);
 	card* pcard = *(card**) lua_touserdata(L, 1);
-	lua_pushinteger(L, (pcard->operation_param >> 8) & 0xff);
+	lua_pushinteger(L, pcard->sendto_param.location);
 	return 1;
 }
 int32 scriptlib::card_get_leave_field_dest(lua_State *L) {
@@ -1219,7 +1283,7 @@ int32 scriptlib::card_register_flag_effect(lua_State *L) {
 	peffect->code = code;
 	peffect->reset_flag = reset;
 	peffect->flag[0] = flag | EFFECT_FLAG_CANNOT_DISABLE;
-	peffect->reset_count |= count & 0xff;
+	peffect->reset_count = count;
 	peffect->label = lab;
 	peffect->description = desc;
 	pcard->add_effect(peffect);
@@ -1597,13 +1661,16 @@ int32 scriptlib::card_is_can_be_special_summoned(lua_State *L) {
 	uint32 sumpos = POS_FACEUP;
 	uint32 toplayer = sumplayer;
 	uint32 zone = 0xff;
+	uint32 nozoneusedcheck = 0;
 	if(lua_gettop(L) >= 7)
 		sumpos = lua_tointeger(L, 7);
 	if(lua_gettop(L) >= 8)
 		toplayer = lua_tointeger(L, 8);
 	if(lua_gettop(L) >= 9)
 		zone = lua_tointeger(L, 9);
-	if(pcard->is_can_be_special_summoned(peffect, sumtype, sumpos, sumplayer, toplayer, nocheck, nolimit, zone))
+	if(lua_gettop(L) >= 10)
+		nozoneusedcheck = lua_toboolean(L, 10);
+	if(pcard->is_can_be_special_summoned(peffect, sumtype, sumpos, sumplayer, toplayer, nocheck, nolimit, zone, nozoneusedcheck))
 		lua_pushboolean(L, 1);
 	else
 		lua_pushboolean(L, 0);
@@ -2128,6 +2195,13 @@ int32 scriptlib::card_set_counter_limit(lua_State *L) {
 	pcard->add_effect(peffect);
 	return 0;
 }
+int32 scriptlib::card_is_can_change_position(lua_State *L) {
+	check_param_count(L, 1);
+	check_param(L, PARAM_TYPE_CARD, 1);
+	card* pcard = *(card**)lua_touserdata(L, 1);
+	lua_pushboolean(L, pcard->is_capable_change_position_by_effect(pcard->pduel->game_field->core.reason_player));
+	return 1;
+}
 int32 scriptlib::card_is_can_turn_set(lua_State *L) {
 	check_param_count(L, 1);
 	check_param(L, PARAM_TYPE_CARD, 1);
@@ -2514,7 +2588,12 @@ int32 scriptlib::card_check_unique_onfield(lua_State *L) {
 	uint32 check_location = LOCATION_ONFIELD;
 	if(lua_gettop(L) > 2)
 		check_location = lua_tointeger(L, 3) & LOCATION_ONFIELD;
-	lua_pushboolean(L, pcard->pduel->game_field->check_unique_onfield(pcard, check_player, check_location) ? 0 : 1);
+	card* icard = 0;
+	if(lua_gettop(L) > 3) {
+		if(check_param(L, PARAM_TYPE_CARD, 4, TRUE))
+			icard = *(card**)lua_touserdata(L, 4);
+	}
+	lua_pushboolean(L, pcard->pduel->game_field->check_unique_onfield(pcard, check_player, check_location, icard) ? 0 : 1);
 	return 1;
 }
 int32 scriptlib::card_reset_negate_effect(lua_State *L) {
@@ -2553,7 +2632,7 @@ int32 scriptlib::card_check_mzone_from_ex(lua_State *L) {
 	duel* pduel = pcard->pduel;
 	field::card_set linked_cards;
 	uint32 linked_zone = pduel->game_field->core.duel_rule >= 4 ? pduel->game_field->get_linked_zone(playerid) | (1u << 5) | (1u << 6) : 0x1f;
-	pduel->game_field->get_cards_in_zone(&linked_cards, linked_zone, playerid);
+	pduel->game_field->get_cards_in_zone(&linked_cards, linked_zone, playerid, LOCATION_MZONE);
 	if(linked_cards.find(pcard) != linked_cards.end())
 		lua_pushboolean(L, 1);
 	else

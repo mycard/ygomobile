@@ -104,6 +104,24 @@ public:
 	public:
 		void addcard(card* pcard);
 	};
+	struct sendto_param_t {
+		void set(uint8 p, uint8 pos, uint8 loc, uint8 seq = 0) {
+			playerid = p;
+			position = pos;
+			location = loc;
+			sequence = seq;
+		}
+		void clear() {
+			playerid = 0;
+			position = 0;
+			location = 0;
+			sequence = 0;
+		}
+		uint8 playerid;
+		uint8 position;
+		uint8 location;
+		uint8 sequence;
+	};
 	int32 scrtype;
 	int32 ref_handle;
 	duel* pduel;
@@ -116,7 +134,7 @@ public:
 	uint8 summon_player;
 	uint32 summon_info;
 	uint32 status;
-	uint32 operation_param;
+	sendto_param_t sendto_param;
 	uint32 release_param;
 	uint32 sum_param;
 	uint32 position_param;
@@ -202,11 +220,15 @@ public:
 	uint32 get_linked_zone();
 	void get_linked_cards(card_set* cset);
 	uint32 get_mutual_linked_zone();
+	void get_mutual_linked_cards(card_set * cset);
 	int32 is_link_state();
 	int32 is_position(int32 pos);
 	void set_status(uint32 status, int32 enabled);
 	int32 get_status(uint32 status);
 	int32 is_status(uint32 status);
+	uint32 get_column_zone(int32 loc1, int32 left, int32 right);
+	void get_column_cards(card_set* cset, int32 left, int32 right);
+	int32 is_all_column();
 
 	void equip(card *target, uint32 send_msg = TRUE);
 	void unequip();
@@ -268,19 +290,19 @@ public:
 	int32 check_fusion_substitute(card* fcard);
 
 	int32 check_unique_code(card* pcard);
-	void get_unique_target(card_set* cset, int32 controler);
+	void get_unique_target(card_set* cset, int32 controler, card* icard = 0);
 	int32 check_cost_condition(int32 ecode, int32 playerid);
 	int32 check_cost_condition(int32 ecode, int32 playerid, int32 sumtype);
 	int32 is_summonable_card();
 	int32 is_fusion_summonable_card(uint32 summon_type);
 	int32 is_spsummonable(effect* peffect);
-	int32 is_summonable(effect* peffect, uint8 min_tribute, uint32 zone = 0x1f);
+	int32 is_summonable(effect* peffect, uint8 min_tribute, uint32 zone = 0x1f, uint32 releasable = 0xff00ff);
 	int32 is_can_be_summoned(uint8 playerid, uint8 ingore_count, effect* peffect, uint8 min_tribute, uint32 zone = 0x1f);
 	int32 get_summon_tribute_count();
 	int32 get_set_tribute_count();
 	int32 is_can_be_flip_summoned(uint8 playerid);
 	int32 is_special_summonable(uint8 playerid, uint32 summon_type);
-	int32 is_can_be_special_summoned(effect* reason_effect, uint32 sumtype, uint8 sumpos, uint8 sumplayer, uint8 toplayer, uint8 nocheck, uint8 nolimit, uint32 zone);
+	int32 is_can_be_special_summoned(effect* reason_effect, uint32 sumtype, uint8 sumpos, uint8 sumplayer, uint8 toplayer, uint8 nocheck, uint8 nolimit, uint32 zone, uint8 nozoneusedcheck = 0);
 	int32 is_setable_mzone(uint8 playerid, uint8 ignore_count, effect* peffect, uint8 min_tribute, uint32 zone = 0x1f);
 	int32 is_setable_szone(uint8 playerid, uint8 ignore_fd = 0);
 	int32 is_affect_by_effect(effect* peffect);
@@ -304,6 +326,7 @@ public:
 	int32 is_capable_attack();
 	int32 is_capable_attack_announce(uint8 playerid);
 	int32 is_capable_change_position(uint8 playerid);
+	int32 is_capable_change_position_by_effect(uint8 playerid);
 	int32 is_capable_turn_set(uint8 playerid);
 	int32 is_capable_change_control();
 	int32 is_control_can_be_changed(int32 ignore_mzone, uint32 zone);
@@ -462,7 +485,7 @@ public:
 #define STATUS_SUMMON_DISABLED		0x20000	//
 #define STATUS_ACTIVATE_DISABLED	0x40000	//
 #define STATUS_EFFECT_REPLACED		0x80000
-#define STATUS_UNION				0x100000
+#define STATUS_FUTURE_FUSION		0x100000
 #define STATUS_ATTACK_CANCELED		0x200000
 #define STATUS_INITIALIZING			0x400000
 #define STATUS_ACTIVATED			0x800000

@@ -76,6 +76,13 @@ void ClientField::Clear() {
 	reposable_cards.clear();
 	attackable_cards.clear();
 	disabled_field = 0;
+	panel = 0;
+	hovered_card = 0;
+	clicked_card = 0;
+	highlighting_card = 0;
+	hovered_controler = 0;
+	hovered_location = 0;
+	hovered_sequence = 0;
 	deck_act = false;
 	grave_act = false;
 	remove_act = false;
@@ -400,25 +407,25 @@ void ClientField::ShowSelectCard(bool buttonok, bool chain) {
 			mainGame->stCardPos[i]->setText(formatBuffer);
 			// color
 			if(conti_selecting)
-				mainGame->stCardPos[i]->setBackgroundColor(0xffffffff);
+				mainGame->stCardPos[i]->setBackgroundColor(0xff56649f);
 			else if(selectable_cards[i]->location == LOCATION_OVERLAY) {
 				if(selectable_cards[i]->owner != selectable_cards[i]->overlayTarget->controler)
 					mainGame->stCardPos[i]->setOverrideColor(0xff0000ff);
 				if(selectable_cards[i]->overlayTarget->controler)
-					mainGame->stCardPos[i]->setBackgroundColor(0xffd0d0d0);
-				else mainGame->stCardPos[i]->setBackgroundColor(0xffffffff);
+					mainGame->stCardPos[i]->setBackgroundColor(0xff5a5a5a);
+				else mainGame->stCardPos[i]->setBackgroundColor(0xff56649f);
 			} else if(selectable_cards[i]->location == LOCATION_DECK || selectable_cards[i]->location == LOCATION_EXTRA || selectable_cards[i]->location == LOCATION_REMOVED) {
 				if(selectable_cards[i]->position & POS_FACEDOWN)
 					mainGame->stCardPos[i]->setOverrideColor(0xff0000ff);
 				if(selectable_cards[i]->controler)
-					mainGame->stCardPos[i]->setBackgroundColor(0xffd0d0d0);
+					mainGame->stCardPos[i]->setBackgroundColor(0xff5a5a5a);
 				else
-					mainGame->stCardPos[i]->setBackgroundColor(0xffffffff);
+					mainGame->stCardPos[i]->setBackgroundColor(0xff56649f);
 			} else {
 				if(selectable_cards[i]->controler)
-					mainGame->stCardPos[i]->setBackgroundColor(0xffd0d0d0);
+					mainGame->stCardPos[i]->setBackgroundColor(0xff5a5a5a);
 				else
-					mainGame->stCardPos[i]->setBackgroundColor(0xffffffff);
+					mainGame->stCardPos[i]->setBackgroundColor(0xff56649f);
 			}
 		} else {
 			if(sort_list[i]) {
@@ -426,7 +433,7 @@ void ClientField::ShowSelectCard(bool buttonok, bool chain) {
 				myswprintf(formatBuffer, L"%d", sort_list[i]);
 				mainGame->stCardPos[i]->setText(formatBuffer);
 			} else mainGame->stCardPos[i]->setText(L"");
-			mainGame->stCardPos[i]->setBackgroundColor(0xffffffff);
+			mainGame->stCardPos[i]->setBackgroundColor(0xff56649f);
 		}
 		mainGame->stCardPos[i]->setVisible(true);
 		mainGame->stCardPos[i]->setRelativePosition(rect<s32>((startpos + i * 125) * mainGame->xScale, 30 * mainGame->yScale, (startpos + 120 + i * 125) * mainGame->xScale, 50 * mainGame->yScale));
@@ -473,12 +480,12 @@ void ClientField::ShowChainCard() {
 			if(selectable_cards[i]->owner != selectable_cards[i]->overlayTarget->controler)
 				mainGame->stCardPos[i]->setOverrideColor(0xff0000ff);
 			if(selectable_cards[i]->overlayTarget->controler)
-				mainGame->stCardPos[i]->setBackgroundColor(0xffd0d0d0);
-			else mainGame->stCardPos[i]->setBackgroundColor(0xffffffff);
+				mainGame->stCardPos[i]->setBackgroundColor(0xff5a5a5a);
+			else mainGame->stCardPos[i]->setBackgroundColor(0xff56649f);
 		} else {
 			if(selectable_cards[i]->controler)
-				mainGame->stCardPos[i]->setBackgroundColor(0xffd0d0d0);
-			else mainGame->stCardPos[i]->setBackgroundColor(0xffffffff);
+				mainGame->stCardPos[i]->setBackgroundColor(0xff5a5a5a);
+			else mainGame->stCardPos[i]->setBackgroundColor(0xff56649f);
 		}
 		mainGame->stCardPos[i]->setVisible(true);
 		mainGame->stCardPos[i]->setRelativePosition(rect<s32>((startpos + i * 125) * mainGame->xScale, 30 * mainGame->yScale, (startpos + 120 + i * 125) * mainGame->xScale, 50 * mainGame->yScale));
@@ -533,21 +540,21 @@ void ClientField::ShowLocationCard() {
 			if(display_cards[i]->owner != display_cards[i]->overlayTarget->controler)
 				mainGame->stDisplayPos[i]->setOverrideColor(0xff0000ff);
 			if(display_cards[i]->overlayTarget->controler)
-				mainGame->stDisplayPos[i]->setBackgroundColor(0xffd0d0d0);
+				mainGame->stDisplayPos[i]->setBackgroundColor(0xff5a5a5a);
 			else 
-				mainGame->stDisplayPos[i]->setBackgroundColor(0xffffffff);
+				mainGame->stDisplayPos[i]->setBackgroundColor(0xff56649f);
 		} else if(display_cards[i]->location == LOCATION_EXTRA || display_cards[i]->location == LOCATION_REMOVED) {
 			if(display_cards[i]->position & POS_FACEDOWN)
 				mainGame->stCardPos[i]->setOverrideColor(0xff0000ff);
 			if(display_cards[i]->controler)
-				mainGame->stCardPos[i]->setBackgroundColor(0xffd0d0d0);
+				mainGame->stCardPos[i]->setBackgroundColor(0xff5a5a5a);
 			else 
-				mainGame->stCardPos[i]->setBackgroundColor(0xffffffff);
+				mainGame->stCardPos[i]->setBackgroundColor(0xff56649f);
 		} else {
 			if(display_cards[i]->controler)
-				mainGame->stDisplayPos[i]->setBackgroundColor(0xffd0d0d0);
+				mainGame->stDisplayPos[i]->setBackgroundColor(0xff5a5a5a);
 			else 
-				mainGame->stDisplayPos[i]->setBackgroundColor(0xffffffff);
+				mainGame->stDisplayPos[i]->setBackgroundColor(0xff56649f);
 		}
 		mainGame->stDisplayPos[i]->setVisible(true);
 		mainGame->stDisplayPos[i]->setRelativePosition(rect<s32>((startpos + i * 125) * mainGame->xScale, 30 * mainGame->yScale, (startpos + 120 + i * 125) * mainGame->xScale, 50 * mainGame->yScale));

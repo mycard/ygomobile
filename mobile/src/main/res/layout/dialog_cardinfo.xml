@@ -177,8 +177,8 @@
                         android:layout_marginLeft="5dp"
                         android:singleLine="true"
                         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                        android:textColor="@color/holo_blue_bright"
-                        tools:text="Test"/>
+                        android:textColor="@color/white"
+                        tools:text="Test" />
 
 
                 </LinearLayout>
@@ -209,8 +209,8 @@
                             android:maxLines="1"
                             android:singleLine="true"
                             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                            android:textColor="@color/holo_blue_bright"
-                            tools:text="Test"/>
+                            android:textColor="@android:color/white"
+                            tools:text="Test" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -233,8 +233,8 @@
                             android:maxLines="1"
                             android:singleLine="true"
                             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                            android:textColor="@color/holo_blue_bright"
-                            tools:text="Test"/>
+                            android:textColor="@android:color/white"
+                            tools:text="Test" />
                     </LinearLayout>
                 </LinearLayout>
                 <TextView
@@ -251,7 +251,7 @@
                     android:lines="2"
                     android:maxLines="2"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:textColor="@color/holo_blue_bright"/>
+                    android:textColor="@color/holo_green_bright" />
 
                 <TextView
                     android:id="@+id/label_setcode"
@@ -270,9 +270,9 @@
                     android:lines="4"
                     android:maxLines="4"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:textColor="@color/holo_blue_bright"
+                    android:textColor="@color/holo_orange_bright"
                     android:visibility="invisible"
-                    tools:visibility="visible"/>
+                    tools:visibility="visible" />
             </LinearLayout>
         </LinearLayout>
 
@@ -298,9 +298,9 @@
                     android:minHeight="@dimen/card_desc_height"
                     android:paddingBottom="5dp"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-                    android:textColor="@color/holo_blue_light"
+                    android:textColor="@color/white"
                     android:textIsSelectable="true"
-                    tools:text="desc"/>
+                    tools:text="desc" />
             </ScrollView>
 
             <LinearLayout

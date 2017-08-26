@@ -49,7 +49,13 @@ public:
 	static int32 card_get_linked_group(lua_State *L);
 	static int32 card_get_linked_group_count(lua_State *L);
 	static int32 card_get_linked_zone(lua_State *L);
+	static int32 card_get_mutual_linked_group(lua_State *L);
+	static int32 card_get_mutual_linked_group_count(lua_State *L);
+	static int32 card_get_mutual_linked_zone(lua_State *L);
 	static int32 card_is_link_state(lua_State *L);
+	static int32 card_get_column_group(lua_State *L);
+	static int32 card_get_column_group_count(lua_State *L);
+	static int32 card_is_all_column(lua_State *L);
 	static int32 card_get_attribute(lua_State *L);
 	static int32 card_get_origin_attribute(lua_State *L);
 	static int32 card_get_fusion_attribute(lua_State *L);
@@ -217,6 +223,7 @@ public:
 	static int32 card_get_counter(lua_State *L);
 	static int32 card_enable_counter_permit(lua_State *L);
 	static int32 card_set_counter_limit(lua_State *L);
+	static int32 card_is_can_change_position(lua_State *L);
 	static int32 card_is_can_turn_set(lua_State *L);
 	static int32 card_is_can_add_counter(lua_State *L);
 	static int32 card_is_can_remove_counter(lua_State *L);

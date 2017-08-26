@@ -65,7 +65,7 @@ public interface Constants {
     String CORE_SCRIPTS_ZIP = "scripts.zip";
     String CORE_PICS_ZIP = "pics.zip";
     String CORE_SKIN_COVER = "cover.jpg";
-    String CORE_SKIN_BG = "bg.jpg";
+    String CORE_SKIN_BG = "bg_menu.jpg";
     String UNKNOWN_IMAGE = "unknown.jpg";
     String YDK_FILE_EX = ".ydk";
     int[] CORE_SKIN_BG_SIZE = new int[]{1024, 640};
@@ -104,7 +104,7 @@ public interface Constants {
     int DECK_EXTRA_COUNT = (DECK_SIDE_MAX / DECK_WIDTH_COUNT * DECK_WIDTH_COUNT < DECK_SIDE_MAX) ? DECK_WIDTH_COUNT * 2 : DECK_WIDTH_COUNT;
     int DECK_SIDE_COUNT = DECK_EXTRA_COUNT;
     String ALIPAY_URL = "HTTPS://QR.ALIPAY.COM/FKX04360PTBURPG1QZE9AA";
-    String DOWNLOAD_HOME = "http://yun.baidu.com/share/home?uk=3121448261";
+    String DOWNLOAD_HOME = "http://pan.baidu.com/s/1o7RMcMA";
     String URL_HELP = "http://www.jianshu.com/p/a43f5d951a25";
     String WIKI_SEARCH_URL = "http://www.ourocg.cn/S.aspx?key=";
 
