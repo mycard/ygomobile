@@ -29,14 +29,6 @@
                 <action android:name="cn.garymb.ygomobile.game.stop"/>
             </intent-filter>
         </receiver>
-        <activity
-            android:name="com.github.nativehandler.NativeCrashActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation"
-            android:exported="false"
-            android:process=":CrashHandler"
-            android:stateNotNeeded="true"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-
     </application>
 
 </manifest>

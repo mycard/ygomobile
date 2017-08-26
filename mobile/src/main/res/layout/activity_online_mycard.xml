@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<android.support.v4.widget.DrawerLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawer_layout"
@@ -9,8 +8,7 @@
     android:layout_height="match_parent"
     android:clipToPadding="false"
     android:fitsSystemWindows="true"
-    tools:openDrawer="left"
-    >
+    tools:openDrawer="left">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -19,7 +17,7 @@
         <cn.garymb.ygomobile.ui.online.MyCardWebView
             android:id="@+id/webbrowser"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent" />
     </FrameLayout>
 
     <android.support.design.widget.NavigationView
@@ -27,9 +25,9 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="left"
-        android:background="@drawable/left"
+        android:background="@color/white"
         app:headerLayout="@layout/nav_mycard_head"
         app:itemIconTint="@color/gold"
-        app:itemTextColor="@color/white"
-        app:menu="@menu/nav_mycard_menu"/>
+        app:itemTextColor="@color/mediumPurple"
+        app:menu="@menu/nav_mycard_menu" />
 </android.support.v4.widget.DrawerLayout>

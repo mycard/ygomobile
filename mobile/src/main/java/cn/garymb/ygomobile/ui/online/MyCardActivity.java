@@ -1,18 +1,24 @@
 package cn.garymb.ygomobile.ui.online;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 
 import org.xwalk.core.XWalkSettings;
 import org.xwalk.core.XWalkUIClient;
@@ -31,6 +37,8 @@ public class MyCardActivity extends BaseActivity implements MyCard.MyCardListene
     private MyCardWebView mWebViewPlus;
     private MyCard mMyCard;
     protected DrawerLayout mDrawerlayout;
+    private ImageView mHeadView;
+    private TextView mNameView, mStatusView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -47,10 +55,13 @@ public class MyCardActivity extends BaseActivity implements MyCard.MyCardListene
         mMyCard = new MyCard(this);
         mWebViewPlus = $(R.id.webbrowser);
         mDrawerlayout = $(R.id.drawer_layout);
+
         NavigationView navigationView = $(R.id.nav_main);
         navigationView.setNavigationItemSelectedListener(this);
         View navHead = navigationView.getHeaderView(0);
-
+        mHeadView = (ImageView) navHead.findViewById(R.id.img_head);
+        mNameView = (TextView) navHead.findViewById(R.id.tv_name);
+        mStatusView = (TextView) navHead.findViewById(R.id.tv_dp);
         mWebViewPlus.enableHtml5();
 
         XWalkSettings settings = mWebViewPlus.getSettings();
@@ -163,8 +174,13 @@ public class MyCardActivity extends BaseActivity implements MyCard.MyCardListene
     }
 
     @Override
-    public void onLogin(MyCard.User user) {
+    public void onLogin(String name, String icon, String statu) {
 
+        if(!TextUtils.isEmpty(icon)){
+            Glide.with(this).load(Uri.parse(icon)).into(mHeadView);
+        }
+        mNameView.setText(name);
+        mStatusView.setText(statu);
     }
 
     @Override

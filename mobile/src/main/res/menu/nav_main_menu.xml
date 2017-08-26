@@ -16,6 +16,7 @@
         android:title="@string/action_add_server"/>
     <item
         android:id="@+id/action_mycard"
+        android:icon="@drawable/ic_home_black"
         android:title="@string/mycard"/>
     <item
         android:id="@+id/action_update_images"

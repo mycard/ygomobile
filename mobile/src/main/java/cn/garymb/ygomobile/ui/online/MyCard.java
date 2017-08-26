@@ -42,7 +42,7 @@ public class MyCard {
     private SharedPreferences lastModified;
 
     public interface MyCardListener {
-        void onLogin(User user);
+        void onLogin(String name, String icon, String statu);
 
         void watchReplay();
 
@@ -78,7 +78,7 @@ public class MyCard {
                     mUser.moderator = info.getBooleanQueryParameter("moderator", false);
                     mUser.login = true;
                     if (getMyCardListener() != null) {
-                        getMyCardListener().onLogin(mUser);
+                        getMyCardListener().onLogin(mUser.name, mUser.avatar_url, null);
                     }
                     return false;
                 }
@@ -313,6 +313,16 @@ public class MyCard {
             return getWrappedLastModified(path, file.lastModified());
         }
 
+        @org.xwalk.core.JavascriptInterface
+        public void updateUser(String name, String headurl,String status) {
+            if (mListener != null) {
+                mUser.name = name;
+                mUser.avatar_url = headurl;
+                mUser.login = true;
+                mListener.onLogin(name, headurl, status);
+            }
+        }
+
         /*
         * 设置文件修改时间
         * path: 文件绝对路径
@@ -354,5 +364,6 @@ public class MyCard {
                         .apply();
             }
         }
+
     }
 }
