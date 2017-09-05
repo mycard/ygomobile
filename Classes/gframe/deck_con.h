@@ -23,6 +23,7 @@ public:
 	void FilterCards();
 	void StartFilter();
 	void ClearFilter();
+	void InstantSearch();
 	void ClearSearch();
 	void SortList();
 

@@ -818,9 +818,9 @@ bool Game::Initialize() {
 	cbCardType2->addItem(dataManager.GetSysString(1310), 0);
 	env->addStaticText(dataManager.GetSysString(1315), rect<s32>(205 * xScale, 5 * yScale, 280 * xScale, 25 * yScale), false, false, wFilter);
 #ifdef _IRR_ANDROID_PLATFORM_
-	cbLimit = CAndroidGUIComboBox::addAndroidComboBox(env, rect<s32>(260 * xScale, 3 * yScale, 390 * xScale, 23 * yScale), wFilter, -1);
+	cbLimit = CAndroidGUIComboBox::addAndroidComboBox(env, rect<s32>(260 * xScale, 3 * yScale, 390 * xScale, 23 * yScale), wFilter, COMBOBOX_LIMIT);
 #else
-	cbLimit = env->addComboBox(rect<s32>(260 * xScale, 3 * yScale, 390 * xScale, 23 * yScale), wFilter, -1);
+	cbLimit = env->addComboBox(rect<s32>(260 * xScale, 3 * yScale, 390 * xScale, 23 * yScale), wFilter, COMBOBOX_LIMIT);
 #endif
 	cbLimit->addItem(dataManager.GetSysString(1310));
 	cbLimit->addItem(dataManager.GetSysString(1316));
@@ -832,18 +832,18 @@ bool Game::Initialize() {
 	cbLimit->addItem(dataManager.GetSysString(1243));
 	env->addStaticText(dataManager.GetSysString(1319), rect<s32>(10 * xScale, 28 * yScale, 70 * xScale, 48 * yScale), false, false, wFilter);
 #ifdef _IRR_ANDROID_PLATFORM_
-	cbAttribute = CAndroidGUIComboBox::addAndroidComboBox(env, rect<s32>(60 * xScale, 26 * yScale, 190 * xScale, 46 * yScale), wFilter, -1);
+	cbAttribute = CAndroidGUIComboBox::addAndroidComboBox(env, rect<s32>(60 * xScale, 26 * yScale, 190 * xScale, 46 * yScale), wFilter, COMBOBOX_ATTRIBUTE);
 #else
-	cbAttribute = env->addComboBox(rect<s32>(60 * xScale, 26 * yScale, 190 * xScale, 46 * yScale), wFilter, -1);
+	cbAttribute = env->addComboBox(rect<s32>(60 * xScale, 26 * yScale, 190 * xScale, 46 * yScale), wFilter, COMBOBOX_ATTRIBUTE);
 #endif
 	cbAttribute->addItem(dataManager.GetSysString(1310), 0);
 	for(int filter = 0x1; filter != 0x80; filter <<= 1)
 		cbAttribute->addItem(dataManager.FormatAttribute(filter), filter);
 	env->addStaticText(dataManager.GetSysString(1321), rect<s32>(10 * xScale, 51 * yScale, 70 * xScale, 71 * yScale), false, false, wFilter);
 #ifdef _IRR_ANDROID_PLATFORM_
-	cbRace = CAndroidGUIComboBox::addAndroidComboBox(env, rect<s32>(60 * xScale, (40 + 75 / 6) * yScale, 190 * xScale, (60 + 75 / 6) * yScale), wFilter, -1);
+	cbRace = CAndroidGUIComboBox::addAndroidComboBox(env, rect<s32>(60 * xScale, (40 + 75 / 6) * yScale, 190 * xScale, (60 + 75 / 6) * yScale), wFilter, COMBOBOX_RACE);
 #else
-	cbRace = env->addComboBox(rect<s32>(60, 40 + 75 / 6, 190, 60 + 75 / 6), wFilter, -1);
+	cbRace = env->addComboBox(rect<s32>(60, 40 + 75 / 6, 190, 60 + 75 / 6), wFilter, COMBOBOX_RACE);
 #endif
 	cbRace->addItem(dataManager.GetSysString(1310), 0);
 	for(int filter = 0x1; filter != 0x2000000; filter <<= 1)

@@ -95,7 +95,7 @@ CAndroidGUISkin::CAndroidGUISkin(EGUI_SKIN_TYPE type,
 		Colors[EGDC_ACTIVE_BORDER] = 0x8011113d; // 窗体标题栏色
 		Colors[EGDC_ACTIVE_CAPTION] = 0xffffffff;//窗体标题字色
 		Colors[EGDC_APP_WORKSPACE] = 0x00ff0000; // unused
-		Colors[EGDC_BUTTON_TEXT] = 0xffffffff;//主要界面的字
+		Colors[EGDC_BUTTON_TEXT] = 0xffe0f3fc;//主要界面的字
 		Colors[EGDC_GRAY_TEXT] = 0x3c999999;//选项不可用时的字
 		Colors[EGDC_HIGH_LIGHT] = 0xffa2d8f4;//被选中的字的背景色
 		Colors[EGDC_HIGH_LIGHT_TEXT] = 0x6011113d;//被选中高亮时的字色
