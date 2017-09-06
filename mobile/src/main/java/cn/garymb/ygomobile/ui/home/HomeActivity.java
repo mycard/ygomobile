@@ -32,6 +32,7 @@ import cn.garymb.ygomobile.AppsSettings;
 import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.YGOStarter;
 import cn.garymb.ygomobile.bean.ServerInfo;
+import cn.garymb.ygomobile.lite.BuildConfig;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.ui.activities.AboutActivity;
 import cn.garymb.ygomobile.ui.activities.BaseActivity;
@@ -86,9 +87,13 @@ abstract class HomeActivity extends BaseActivity implements NavigationView.OnNav
                 .setOnClickListener((v) -> {
                     openAliPay2Pay(ALIPAY_URL);
                 });
+        MenuItem item = navigationView.getMenu().findItem(R.id.action_mycard);
+        if (item != null) {
+            item.setVisible(Constants.SHOW_MYCARD);
+        }
         //event
         EventBus.getDefault().register(this);
-        $(R.id.help).setOnClickListener((v)->{
+        $(R.id.help).setOnClickListener((v) -> {
             WebActivity.open(this, getString(R.string.help), Constants.URL_HELP);
         });
     }
@@ -182,7 +187,9 @@ abstract class HomeActivity extends BaseActivity implements NavigationView.OnNav
                 startActivity(new Intent(this, DeckManagerActivity.class));
                 break;
             case R.id.action_mycard:
-                startActivity(new Intent(this, MyCardActivity.class));
+                if(Constants.SHOW_MYCARD) {
+                    startActivity(new Intent(this, MyCardActivity.class));
+                }
                 break;
             case R.id.action_help: {
                 WebActivity.open(this, getString(R.string.help), Constants.URL_HELP);

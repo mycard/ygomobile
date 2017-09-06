@@ -97,15 +97,15 @@ public class XWebView extends WebView {
     }
 
     public void onDestroy() {
-        destroy();
+        super.destroy();
     }
 
     public void onShow() {
-        onResume();
+        super.onResume();
     }
 
     public void onHide() {
-        onHide();
+        super.onPause();
     }
 
     public static class DefWebViewClient extends WebViewClient {

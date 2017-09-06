@@ -166,4 +166,5 @@ public interface Constants {
     String QUERY_ROOM = "room";
 
     boolean NETWORK_IMAGE = false;
+    boolean SHOW_MYCARD = !"core".equals(BuildConfig.FLAVOR);
 }
