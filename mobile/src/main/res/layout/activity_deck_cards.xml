@@ -10,23 +10,32 @@
     <android.support.v4.widget.DrawerLayout
         android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:openDrawer="left">
+        android:layout_height="match_parent">
 
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <LinearLayout
-                android:id="@+id/layout_main"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/bg3"
-                android:orientation="vertical">
-            </LinearLayout>
-
             <include
                 layout="@layout/content_toolbar_list"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"/>
+
+                <LinearLayout
+                    android:id="@+id/layout_main"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/bg3"
+                    android:orientation="vertical">
+                </LinearLayout>
+            </LinearLayout>
         </FrameLayout>
 
         <LinearLayout
@@ -40,10 +49,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/left"
-                android:paddingTop="2dp"
+                android:orientation="vertical"
                 android:paddingLeft="4dp"
                 android:paddingRight="4dp"
-                android:orientation="vertical">
+                android:paddingTop="2dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"

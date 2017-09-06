@@ -21,7 +21,7 @@ class DeckViewHolder extends RecyclerView.ViewHolder {
         rightImage = findViewById(R.id.right_top);
         labelText = findViewById(R.id.label);
         textlayout = findViewById(R.id.layout_label);
-        headView = findViewById(R.id.head);
+        headView = null;//findViewById(R.id.head);
     }
 
     public DeckItemType getItemType() {
@@ -67,8 +67,21 @@ class DeckViewHolder extends RecyclerView.ViewHolder {
         return (T) view.findViewById(id);
     }
 
+    public void show() {
+        view.setVisibility(View.VISIBLE);
+    }
+
+    public void hide() {
+        view.setVisibility(View.GONE);
+    }
+
+    public void setHeadVisibility(int visibility) {
+        if (headView != null)
+        headView.setVisibility(visibility);
+    }
+
     private final View view;
-    public final View headView;
+    private final View headView;
     public final View textlayout;
     public final TextView labelText;
     public final ImageView cardImage;

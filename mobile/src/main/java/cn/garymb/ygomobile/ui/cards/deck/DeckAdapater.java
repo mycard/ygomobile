@@ -522,14 +522,14 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> implement
         holder.setItemType(item.getType());
         if (position == DeckItem.HeadView) {
             if (showHead) {
-                holder.headView.setVisibility(View.VISIBLE);
+                holder.setHeadVisibility(View.VISIBLE);
             } else {
-                holder.headView.setVisibility(View.INVISIBLE);
+                holder.setHeadVisibility(View.INVISIBLE);
             }
             holder.cardImage.setVisibility(View.GONE);
             return;
         } else {
-            holder.headView.setVisibility(View.GONE);
+            holder.setHeadVisibility(View.GONE);
         }
         if (item.getType() == DeckItemType.MainLabel || item.getType() == DeckItemType.SideLabel
                 || item.getType() == DeckItemType.ExtraLabel) {

@@ -5,10 +5,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-    <include
-        android:id="@+id/head"
-        layout="@layout/head_view"/>
-
     <LinearLayout
         android:id="@+id/layout_label"
         android:layout_width="match_parent"
@@ -32,9 +28,9 @@
         android:id="@+id/card_image"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="1px"
         android:layout_marginLeft="1px"
         android:layout_marginRight="1px"
-        android:layout_marginBottom="1px"
         tools:src="@drawable/unknown"/>
 
     <ImageView
