@@ -190,7 +190,7 @@ public class ImageLoader implements Closeable {
             }
         }
         if (!bind) {
-            if (NetUtils.isWifiConnected(imageview.getContext())) {
+            if (Constants.NETWORK_IMAGE && NetUtils.isWifiConnected(imageview.getContext())) {
                 bind(String.format(Constants.IMAGE_URL, "" + code), imageview, code, pre, isBig);
             }else{
                 imageview.setImageResource(R.drawable.unknown);

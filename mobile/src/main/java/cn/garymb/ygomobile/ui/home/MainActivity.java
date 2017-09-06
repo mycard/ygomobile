@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import java.net.URLEncoder;
 
+import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.GameUriManager;
 import cn.garymb.ygomobile.YGOMobileActivity;
 import cn.garymb.ygomobile.YGOStarter;
@@ -50,7 +51,7 @@ public class MainActivity extends HomeActivity {
                         .setOnCloseLinster((dlg) -> {
                             dlg.dismiss();
                             //mImageUpdater
-                            if (NetUtils.isConnected(getContext())) {
+                            if (Constants.NETWORK_IMAGE && NetUtils.isConnected(getContext())) {
                                 if (!mImageUpdater.isRunning()) {
                                     mImageUpdater.start();
                                 }

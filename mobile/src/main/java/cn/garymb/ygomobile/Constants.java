@@ -120,7 +120,7 @@ public interface Constants {
     /***
      * 长按删除
      */
-    long LONG_PRESS_DRAG = 500;
+    long LONG_PRESS_DRAG = 800;
     /***
      * adb shell am start -n cn.garymb.ygomobile/cn.garymb.ygomobile.ui.home.MainActivity -a ygomobile.intent.action.DECK --es android.intent.extra.TEXT 青眼白龙.ydk
      * <p>
@@ -164,4 +164,6 @@ public interface Constants {
     String QUERY_PORT = "port";
     String QUERY_USER = "user";
     String QUERY_ROOM = "room";
+
+    boolean NETWORK_IMAGE = false;
 }
