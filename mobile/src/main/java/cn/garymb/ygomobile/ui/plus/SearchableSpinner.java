@@ -1,4 +1,4 @@
-package com.toptoche.searchablespinnerlibrary;
+package cn.garymb.ygomobile.ui.plus;
 
 import android.app.Activity;
 import android.content.Context;
@@ -12,7 +12,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
-import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 
 import java.util.ArrayList;

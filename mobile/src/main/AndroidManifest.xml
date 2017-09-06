@@ -142,27 +142,6 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme"/>
-        <activity
-            android:name="cn.garymb.ygomobile.ui.online.MyCardActivity"
-            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
-            android:launchMode="singleTop"
-            android:theme="@style/AppTheme.Mycard"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"/>
-        <!-- sdk -->
-       <!-- <meta-data
-            android:name="QBSDKAppKey"
-            android:value="DMg0CJBYZE57LKjuKMALrVJS"/>
-        <activity
-            android:name="com.tencent.smtt.sdk.VideoActivity"
-            android:alwaysRetainTaskState="true"
-            android:configChanges="orientation|screenSize|keyboardHidden"
-            android:exported="false"
-            android:launchMode="singleTask">
-            <intent-filter>
-                <action android:name="com.tencent.smtt.tbs.video.PLAY"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-            </intent-filter>
-        </activity>-->
     </application>
 
 </manifest>

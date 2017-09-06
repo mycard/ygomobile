@@ -1,4 +1,4 @@
-package com.toptoche.searchablespinnerlibrary;
+package cn.garymb.ygomobile.ui.plus;
 
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -23,7 +23,6 @@ import java.io.Serializable;
 import java.util.List;
 
 import cn.garymb.ygomobile.lite.R;
-import cn.garymb.ygomobile.ui.plus.DialogPlus;
 
 public class SearchableListDialog extends DialogFragment implements
         SearchView.OnQueryTextListener, SearchView.OnCloseListener {

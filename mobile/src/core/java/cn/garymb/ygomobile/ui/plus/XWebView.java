@@ -17,21 +17,20 @@ import android.webkit.WebViewClient;
 
 import cn.garymb.ygomobile.lite.BuildConfig;
 
-
-public class MyWebView extends WebView {
+public class XWebView extends WebView {
     private Context context;
 
-    public MyWebView(Context context) {
+    public XWebView(Context context) {
         this(context, null);
     }
 
-    public MyWebView(Context context, AttributeSet attrs) {
+    public XWebView(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.context = context;
         init(context);
     }
 
-    public MyWebView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public XWebView(Context context, AttributeSet attrs, int defStyleAttr) {
         this(context, attrs);
     }
 

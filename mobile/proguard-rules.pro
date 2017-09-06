@@ -20,5 +20,22 @@
 -keep class * implements com.bumptech.glide.module.GlideModule{
     *;
 }
+-keep class net.kk.xml.**{
+    public *;
+    protected *;
+}
+-keep class ocgcore.**{
+    public *;
+    protected *;
+}
+-keep class cn.garymb.**{
+    public *;
+    protected *;
+}
 -keepattributes *Annotation*,InnerClasses
 -keepattributes Signature
+-keepattributes SourceFile,LineNumberTable
+-dontwarn android.support.**
+-dontwarn java.lang.invoke.**
+-dontwarn org.slf4j.**
+-dontwarn org.chromium.**

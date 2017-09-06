@@ -24,7 +24,7 @@ import cn.garymb.ygodata.YGOGameOptions;
 import cn.garymb.ygomobile.AppsSettings;
 import cn.garymb.ygomobile.YGOStarter;
 import cn.garymb.ygomobile.ui.cards.DeckManagerActivity;
-import cn.garymb.ygomobile.ui.plus.MyWebView;
+import cn.garymb.ygomobile.ui.plus.DefWebViewClient;
 
 import static junit.framework.Assert.assertEquals;
 
@@ -35,7 +35,7 @@ public class MyCard {
     private static final String mCommunityUrl = "https://ygobbs.com/";
     private static final String return_sso_url = "https://mycard.moe/mobile/?";
     private static final Charset UTF_8 = Charset.forName("UTF-8");
-    private final MyWebView.DefWebViewClient mDefWebViewClient;
+    private final DefWebViewClient mDefWebViewClient;
     private final User mUser = new User();
     private MyCardListener mMyCardListener;
     private Activity mContext;
@@ -62,7 +62,7 @@ public class MyCard {
     public MyCard(Activity context) {
         mContext = context;
         lastModified = context.getSharedPreferences("lastModified", Context.MODE_PRIVATE);
-        mDefWebViewClient = new MyWebView.DefWebViewClient() {
+        mDefWebViewClient = new DefWebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 if (url.startsWith(return_sso_url)) {
@@ -95,7 +95,7 @@ public class MyCard {
         return mMyCardListener;
     }
 
-    public MyWebView.DefWebViewClient getWebViewClient() {
+    public DefWebViewClient getWebViewClient() {
         return mDefWebViewClient;
     }
 

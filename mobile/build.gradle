@@ -12,16 +12,26 @@ android {
         versionCode 310147
         versionName "TEST VERSION"
         vectorDrawables.useSupportLibrary = true
-//        ndk {
-//            abiFilters "armeabi-v7a"
-//        }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    productFlavors {
+        core {
+        }
+        mycard {
+
+        }
+    }
     buildTypes {
+        debug {
+            shrinkResources false
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
         release {
+            shrinkResources false
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
@@ -72,5 +82,5 @@ dependencies {
     compile 'org.greenrobot:eventbus:3.0.0'
     compile 'com.tubb.smrv:swipemenu-recyclerview:5.4.0'
     //
-    compile(name: 'xwalk_core_library-22.52.561.4', ext: 'aar')
+    mycardCompile(name: 'xwalk_core_library-22.52.561.4', ext: 'aar')
 }
