@@ -117,7 +117,7 @@
 
             </LinearLayout>
 
-            <cn.garymb.ygomobile.ui.plus.SearchableSpinner
+            <cn.garymb.ygomobile.ui.widget.SearchableSpinner
                 android:id="@+id/sp_setcode"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/label_width_small"

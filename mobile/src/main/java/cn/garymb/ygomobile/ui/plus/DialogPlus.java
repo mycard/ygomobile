@@ -18,6 +18,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import cn.garymb.ygomobile.lite.R;
+import cn.garymb.ygomobile.ui.widget.WebViewPlus;
 
 public class DialogPlus extends Dialog {
     private Context context;

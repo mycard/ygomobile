@@ -32,7 +32,7 @@ import cn.garymb.ygomobile.AppsSettings;
 import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.YGOStarter;
 import cn.garymb.ygomobile.bean.ServerInfo;
-import cn.garymb.ygomobile.lite.BuildConfig;
+import cn.garymb.ygomobile.bean.events.ServerInfoEvent;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.ui.activities.AboutActivity;
 import cn.garymb.ygomobile.ui.activities.BaseActivity;
@@ -41,7 +41,6 @@ import cn.garymb.ygomobile.ui.adapters.ServerListAdapter;
 import cn.garymb.ygomobile.ui.adapters.SimpleListAdapter;
 import cn.garymb.ygomobile.ui.cards.CardSearchAcitivity;
 import cn.garymb.ygomobile.ui.cards.DeckManagerActivity;
-import cn.garymb.ygomobile.ui.events.ServerInfoEvent;
 import cn.garymb.ygomobile.ui.online.MyCardActivity;
 import cn.garymb.ygomobile.ui.plus.DialogPlus;
 import cn.garymb.ygomobile.ui.preference.SettingsActivity;
@@ -187,7 +186,7 @@ abstract class HomeActivity extends BaseActivity implements NavigationView.OnNav
                 startActivity(new Intent(this, DeckManagerActivity.class));
                 break;
             case R.id.action_mycard:
-                if(Constants.SHOW_MYCARD) {
+                if (Constants.SHOW_MYCARD) {
                     startActivity(new Intent(this, MyCardActivity.class));
                 }
                 break;

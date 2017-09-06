@@ -1,4 +1,4 @@
-package cn.garymb.ygomobile.ui.plus;
+package cn.garymb.ygomobile.ui.widget;
 
 import android.app.Activity;
 import android.content.Context;

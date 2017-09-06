@@ -1,4 +1,4 @@
-package cn.garymb.ygomobile.ui.events;
+package cn.garymb.ygomobile.bean.events;
 
 public class CardInfoEvent {
     public int position;

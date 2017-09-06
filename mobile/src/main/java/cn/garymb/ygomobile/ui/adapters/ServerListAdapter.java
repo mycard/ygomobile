@@ -1,14 +1,13 @@
 package cn.garymb.ygomobile.ui.adapters;
 
 import android.content.Context;
-import android.view.View;
 import android.view.ViewGroup;
 
 import org.greenrobot.eventbus.EventBus;
 
 import cn.garymb.ygomobile.bean.ServerInfo;
 import cn.garymb.ygomobile.lite.R;
-import cn.garymb.ygomobile.ui.events.ServerInfoEvent;
+import cn.garymb.ygomobile.bean.events.ServerInfoEvent;
 import cn.garymb.ygomobile.ui.home.ServerInfoViewHolder;
 
 public class ServerListAdapter extends BaseRecyclerAdapterPlus<ServerInfo, ServerInfoViewHolder> {

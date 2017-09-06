@@ -7,7 +7,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.tubb.smrv.SwipeHorizontalMenuLayout;
-import com.tubb.smrv.SwipeMenuLayout;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -16,7 +15,7 @@ import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.loader.ImageLoader;
 import cn.garymb.ygomobile.ui.cards.CardListProvider;
 import cn.garymb.ygomobile.ui.cards.deck.ImageTop;
-import cn.garymb.ygomobile.ui.events.CardInfoEvent;
+import cn.garymb.ygomobile.bean.events.CardInfoEvent;
 import ocgcore.StringManager;
 import ocgcore.bean.LimitList;
 import ocgcore.enums.CardType;

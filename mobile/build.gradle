@@ -76,9 +76,6 @@ dependencies {
     compile 'com.android.support:design:' + rootProject.ext.supportVersion
     compile 'com.android.support:appcompat-v7:' + rootProject.ext.supportVersion
     compile 'com.android.support:support-vector-drawable:' + rootProject.ext.supportVersion
-    compile('com.android.support.constraint:constraint-layout:1.0.2') {
-        exclude module: 'support-v4'
-    }
     //
     compile 'org.greenrobot:eventbus:3.0.0'
     compile 'com.tubb.smrv:swipemenu-recyclerview:5.4.0'

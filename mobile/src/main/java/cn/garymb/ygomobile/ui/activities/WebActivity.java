@@ -11,7 +11,7 @@ import android.webkit.WebView;
 
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.ui.plus.DefWebChromeClient;
-import cn.garymb.ygomobile.ui.plus.WebViewPlus;
+import cn.garymb.ygomobile.ui.widget.WebViewPlus;
 
 public class WebActivity extends BaseActivity {
     private WebViewPlus mWebViewPlus;

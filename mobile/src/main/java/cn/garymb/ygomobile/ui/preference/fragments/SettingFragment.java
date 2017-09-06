@@ -1,4 +1,4 @@
-package cn.garymb.ygomobile.ui.fragments;
+package cn.garymb.ygomobile.ui.preference.fragments;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
