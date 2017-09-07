@@ -5,17 +5,11 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.webkit.ConsoleMessage;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 import android.webkit.DownloadListener;
-import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
-
-import cn.garymb.ygomobile.lite.BuildConfig;
 
 public class XWebView extends WebView {
     private Context context;
@@ -108,26 +102,4 @@ public class XWebView extends WebView {
         super.onPause();
     }
 
-    public static class DefWebViewClient extends WebViewClient {
-        @Override
-        public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            return false;
-        }
-    }
-
-    public static class DefWebChromeClient extends WebChromeClient {
-        @Override
-        public void onConsoleMessage(String message, int lineNumber, String sourceID) {
-            super.onConsoleMessage(message, lineNumber, sourceID);
-            if (BuildConfig.DEBUG)
-                Log.i("webview", sourceID + ":" + lineNumber + "\n" + message);
-        }
-
-        @Override
-        public boolean onConsoleMessage(ConsoleMessage consoleMessage) {
-            if (BuildConfig.DEBUG)
-                Log.i("webview", consoleMessage.sourceId() + ":" + consoleMessage.lineNumber() + "\n" + consoleMessage.message());
-            return true;
-        }
-    }
 }

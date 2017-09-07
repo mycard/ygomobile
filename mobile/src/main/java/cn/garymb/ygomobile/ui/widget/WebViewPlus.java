@@ -14,4 +14,5 @@ public class WebViewPlus extends XWebView {
     public WebViewPlus(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
+
 }
