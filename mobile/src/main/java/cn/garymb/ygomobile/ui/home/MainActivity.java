@@ -20,6 +20,7 @@ import cn.garymb.ygomobile.core.IrrlichtBridge;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.ui.plus.DialogPlus;
 import cn.garymb.ygomobile.ui.plus.VUiKit;
+import cn.garymb.ygomobile.utils.AlipayPayUtils;
 import cn.garymb.ygomobile.utils.ComponentUtils;
 import cn.garymb.ygomobile.utils.NetUtils;
 
@@ -129,45 +130,5 @@ public class MainActivity extends HomeActivity {
         } else {
             Toast.makeText(this, R.string.downloading_images, Toast.LENGTH_SHORT).show();
         }
-    }
-
-    /**
-     * 支付
-     *
-     * @param qrCode
-     */
-    @Override
-    protected void openAliPay2Pay(String qrCode) {
-        if (openAlipayPayPage(this, qrCode)) {
-            Toast.makeText(this, "感谢您的支持", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(this, "呀，没装支付宝", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    public static boolean openAlipayPayPage(Context context, String qrcode) {
-        try {
-            qrcode = URLEncoder.encode(ALIPAY_URL, "utf-8");
-        } catch (Exception e) {
-        }
-        try {
-            final String alipayqr = "alipayqr://platformapi/startapp?saId=10000007&clientVersion=3.7.0.0718&qrcode=" + qrcode;
-            openUri(context, alipayqr + "%3F_s%3Dweb-other&_t=" + System.currentTimeMillis());
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
-
-    /**
-     * 发送一个intent
-     *
-     * @param context
-     * @param s
-     */
-    private static void openUri(Context context, String s) {
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(s));
-        context.startActivity(intent);
     }
 }

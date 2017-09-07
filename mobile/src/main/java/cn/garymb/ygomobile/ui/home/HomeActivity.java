@@ -1,8 +1,6 @@
 package cn.garymb.ygomobile.ui.home;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -21,10 +19,6 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.nightonke.boommenu.BoomButtons.BoomButton;
-import com.nightonke.boommenu.BoomButtons.TextOutsideCircleButton;
-import com.nightonke.boommenu.BoomMenuButton;
-import com.nightonke.boommenu.ButtonEnum;
 import com.tubb.smrv.SwipeMenuRecyclerView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -48,17 +42,18 @@ import cn.garymb.ygomobile.ui.adapters.SimpleListAdapter;
 import cn.garymb.ygomobile.ui.cards.CardSearchAcitivity;
 import cn.garymb.ygomobile.ui.cards.DeckManagerActivity;
 import cn.garymb.ygomobile.ui.online.MyCardActivity;
-import cn.garymb.ygomobile.ui.plus.DefaultOnBoomListener;
 import cn.garymb.ygomobile.ui.plus.DialogPlus;
 import cn.garymb.ygomobile.ui.preference.SettingsActivity;
+import cn.garymb.ygomobile.utils.AlipayPayUtils;
 
 import static cn.garymb.ygomobile.Constants.ALIPAY_URL;
 
-abstract class HomeActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
+abstract class HomeActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener,HomeActivityMenu.CallBack {
     protected DrawerLayout mDrawerlayout;
     protected SwipeMenuRecyclerView mServerList;
     private ServerListAdapter mServerListAdapter;
     private ServerListManager mServerListManager;
+    private HomeActivityMenu mHomeActivityMenu;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -91,7 +86,7 @@ abstract class HomeActivity extends BaseActivity implements NavigationView.OnNav
         navigationView.getHeaderView(0)
                 .findViewById(R.id.nav_donation)
                 .setOnClickListener((v) -> {
-                    openAliPay2Pay(ALIPAY_URL);
+                    AlipayPayUtils.openAlipayPayPage(this, ALIPAY_URL);
                 });
         MenuItem item = navigationView.getMenu().findItem(R.id.action_mycard);
         if (item != null) {
@@ -102,26 +97,7 @@ abstract class HomeActivity extends BaseActivity implements NavigationView.OnNav
 //        $(R.id.help).setOnClickListener((v) -> {
 //            WebActivity.open(this, getString(R.string.help), Constants.URL_HELP);
 //        });
-        BoomMenuButton bmb = $(R.id.bmb);
-        bmb.setButtonEnum(ButtonEnum.TextOutsideCircle);
-        bmb.setOnBoomListener(new DefaultOnBoomListener() {
-            @Override
-            public void onClicked(int index, BoomButton boomButton) {
-                Toast.makeText(getContext(), "click:" + index, Toast.LENGTH_SHORT).show();
-            }
-        });
-        for (int i = 0; i < bmb.getPiecePlaceEnum().pieceNumber(); i++) {
-            TextOutsideCircleButton.Builder builder = new TextOutsideCircleButton.Builder()
-                    .shadowColor(Color.TRANSPARENT)
-                    .normalColor(Color.TRANSPARENT)
-                    .normalText("index" + i)
-                    .textPadding(new Rect(0, 0, 0, 0))
-                    .imagePadding(new Rect(0, 0, 0, 0))
-                    .textTopMargin((int) getResources().getDimension(R.dimen.menu_text_top))
-                    .textSize((int) getResources().getDimension(R.dimen.menu_text_size))
-                    .normalImageRes(R.drawable.unknown);
-            bmb.addBuilder(builder);
-        }
+        mHomeActivityMenu = new HomeActivityMenu(this, $(R.id.bmb));
     }
 
     @Override
@@ -173,6 +149,21 @@ abstract class HomeActivity extends BaseActivity implements NavigationView.OnNav
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void addServerInfo() {
+        mServerListManager.addServer();
+    }
+
+    @Override
+    public HomeActivity getActivity() {
+        return this;
+    }
+
+    @Override
+    public void startActivity(Intent intent) {
+        super.startActivity(intent);
     }
 
     private boolean doMenu(int id) {
@@ -344,6 +335,4 @@ abstract class HomeActivity extends BaseActivity implements NavigationView.OnNav
     protected abstract void openGame();
 
     protected abstract void updateImages();
-
-    protected abstract void openAliPay2Pay(String qrCode);
 }

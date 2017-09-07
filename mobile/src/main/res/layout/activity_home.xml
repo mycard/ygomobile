@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <android.support.v4.widget.DrawerLayout
-    android:id="@+id/drawer_layout"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clipToPadding="true"
     android:fitsSystemWindows="true"
-    tools:openDrawer="left"
-    xmlns:tools="http://schemas.android.com/tools">
+    tools:openDrawer="left">
 
     <LinearLayout
         android:id="@+id/layout_main"
@@ -19,10 +19,12 @@
         android:orientation="vertical">
 
         <include
-            layout="@layout/content_toolbar" />
+            layout="@layout/content_toolbar"/>
+
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
             <com.tubb.smrv.SwipeMenuRecyclerView
                 android:id="@+id/list_server"
                 android:layout_width="match_parent"
@@ -34,14 +36,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|left"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
                 app:bmb_buttonEnum="textOutsideCircle"
                 app:bmb_buttonPlaceEnum="buttonPlace_sc_9_1"
-                app:bmb_piecePlaceEnum="piecePlace_dot_9_1"
-                android:layout_marginLeft="10dp"
-                android:layout_marginBottom="10dp"
+                app:bmb_dimColor="#90000000"
                 app:bmb_normalColor="@color/colorPrimary"
-                app:bmb_dimColor="#80000000"
+                app:bmb_piecePlaceEnum="piecePlace_dot_9_1"
                 >
+
                 <ImageView
                     android:layout_width="40dp"
                     android:layout_height="40dp"
@@ -56,9 +59,9 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="left"
+        android:background="@drawable/left"
         app:headerLayout="@layout/nav_main_head"
-        app:menu="@menu/nav_main_menu"
-        app:itemTextColor="@color/white"
         app:itemIconTint="@color/gold"
-        android:background="@drawable/left" />
+        app:itemTextColor="@color/white"
+        app:menu="@menu/nav_main_menu"/>
 </android.support.v4.widget.DrawerLayout>
