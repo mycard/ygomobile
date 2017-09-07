@@ -5,11 +5,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.Menu;
@@ -44,12 +41,8 @@ import cn.garymb.ygomobile.ui.cards.DeckManagerActivity;
 import cn.garymb.ygomobile.ui.online.MyCardActivity;
 import cn.garymb.ygomobile.ui.plus.DialogPlus;
 import cn.garymb.ygomobile.ui.preference.SettingsActivity;
-import cn.garymb.ygomobile.utils.AlipayPayUtils;
-
-import static cn.garymb.ygomobile.Constants.ALIPAY_URL;
 
 abstract class HomeActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener,HomeActivityMenu.CallBack {
-    protected DrawerLayout mDrawerlayout;
     protected SwipeMenuRecyclerView mServerList;
     private ServerListAdapter mServerListAdapter;
     private ServerListManager mServerListManager;
@@ -59,11 +52,8 @@ abstract class HomeActivity extends BaseActivity implements NavigationView.OnNav
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        Toolbar toolbar = $(R.id.toolbar);
-        setSupportActionBar(toolbar);
         setExitAnimEnable(false);
         mServerList = $(R.id.list_server);
-        mDrawerlayout = $(R.id.drawer_layout);
         mServerListAdapter = new ServerListAdapter(this);
         //server list
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -77,21 +67,6 @@ abstract class HomeActivity extends BaseActivity implements NavigationView.OnNav
         mServerListManager.syncLoadData();
 
         //nav
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, mDrawerlayout, toolbar, R.string.search_open, R.string.search_close);
-        mDrawerlayout.addDrawerListener(toggle);
-        toggle.syncState();
-        NavigationView navigationView = $(R.id.nav_main);
-        navigationView.setNavigationItemSelectedListener(this);
-        navigationView.getHeaderView(0)
-                .findViewById(R.id.nav_donation)
-                .setOnClickListener((v) -> {
-                    AlipayPayUtils.openAlipayPayPage(this, ALIPAY_URL);
-                });
-        MenuItem item = navigationView.getMenu().findItem(R.id.action_mycard);
-        if (item != null) {
-            item.setVisible(Constants.SHOW_MYCARD);
-        }
         //event
         EventBus.getDefault().register(this);
 //        $(R.id.help).setOnClickListener((v) -> {
@@ -136,7 +111,6 @@ abstract class HomeActivity extends BaseActivity implements NavigationView.OnNav
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (doMenu(item.getItemId())) {
-            closeDrawer();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -145,7 +119,6 @@ abstract class HomeActivity extends BaseActivity implements NavigationView.OnNav
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         if (doMenu(item.getItemId())) {
-            closeDrawer();
             return true;
         }
         return false;
@@ -225,10 +198,6 @@ abstract class HomeActivity extends BaseActivity implements NavigationView.OnNav
 
     @Override
     public void onBackPressed() {
-        if (mDrawerlayout.isDrawerOpen(Gravity.LEFT)) {
-            mDrawerlayout.closeDrawer(Gravity.LEFT);
-            return;
-        }
         if (System.currentTimeMillis() - exitLasttime <= 3000) {
             super.onBackPressed();
         } else {
@@ -236,13 +205,6 @@ abstract class HomeActivity extends BaseActivity implements NavigationView.OnNav
             exitLasttime = System.currentTimeMillis();
         }
     }
-
-    private void closeDrawer() {
-        if (mDrawerlayout.isDrawerOpen(Gravity.LEFT)) {
-            mDrawerlayout.closeDrawer(Gravity.LEFT);
-        }
-    }
-
 
     public void joinRoom(int position) {
         ServerInfo serverInfo = mServerListAdapter.getItem(position);

@@ -1,67 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<android.support.v4.widget.DrawerLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:clipToPadding="true"
     android:fitsSystemWindows="true"
-    tools:openDrawer="left">
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    android:background="@drawable/bg3">
 
-    <LinearLayout
-        android:id="@+id/layout_main"
+    <com.tubb.smrv.SwipeMenuRecyclerView
+        android:id="@+id/list_server"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/bg3"
-        android:orientation="vertical">
+        android:scrollbars="none"/>
 
-        <include
-            layout="@layout/content_toolbar"/>
-
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <com.tubb.smrv.SwipeMenuRecyclerView
-                android:id="@+id/list_server"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scrollbars="none"/>
-
-            <com.nightonke.boommenu.BoomMenuButton
-                android:id="@+id/bmb"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom|left"
-                android:layout_marginBottom="10dp"
-                android:layout_marginLeft="10dp"
-                app:bmb_buttonEnum="textOutsideCircle"
-                app:bmb_buttonPlaceEnum="buttonPlace_sc_9_1"
-                app:bmb_dimColor="#90000000"
-                app:bmb_normalColor="@color/colorPrimary"
-                app:bmb_piecePlaceEnum="piecePlace_dot_9_1"
-                >
-
-                <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_gravity="center"
-                    app:srcCompat="@drawable/ic_live_help_white"/>
-            </com.nightonke.boommenu.BoomMenuButton>
-        </FrameLayout>
-    </LinearLayout>
-
-    <android.support.design.widget.NavigationView
-        android:id="@+id/nav_main"
+    <com.nightonke.boommenu.BoomMenuButton
+        android:id="@+id/bmb"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="left"
-        android:background="@drawable/left"
-        app:headerLayout="@layout/nav_main_head"
-        app:itemIconTint="@color/gold"
-        app:itemTextColor="@color/white"
-        app:menu="@menu/nav_main_menu"/>
-</android.support.v4.widget.DrawerLayout>
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|left"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        app:bmb_buttonEnum="textOutsideCircle"
+        app:bmb_buttonPlaceEnum="buttonPlace_sc_9_1"
+        app:bmb_dimColor="#90000000"
+        app:bmb_normalColor="@color/colorPrimary"
+        app:bmb_piecePlaceEnum="piecePlace_dot_9_1"
+        >
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            app:srcCompat="@drawable/ic_live_help_white"/>
+    </com.nightonke.boommenu.BoomMenuButton>
+</FrameLayout>
