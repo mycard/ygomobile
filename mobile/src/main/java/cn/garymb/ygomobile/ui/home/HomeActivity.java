@@ -1,6 +1,8 @@
 package cn.garymb.ygomobile.ui.home;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -19,6 +21,10 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.nightonke.boommenu.BoomButtons.BoomButton;
+import com.nightonke.boommenu.BoomButtons.TextOutsideCircleButton;
+import com.nightonke.boommenu.BoomMenuButton;
+import com.nightonke.boommenu.ButtonEnum;
 import com.tubb.smrv.SwipeMenuRecyclerView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -42,6 +48,7 @@ import cn.garymb.ygomobile.ui.adapters.SimpleListAdapter;
 import cn.garymb.ygomobile.ui.cards.CardSearchAcitivity;
 import cn.garymb.ygomobile.ui.cards.DeckManagerActivity;
 import cn.garymb.ygomobile.ui.online.MyCardActivity;
+import cn.garymb.ygomobile.ui.plus.DefaultOnBoomListener;
 import cn.garymb.ygomobile.ui.plus.DialogPlus;
 import cn.garymb.ygomobile.ui.preference.SettingsActivity;
 
@@ -92,9 +99,29 @@ abstract class HomeActivity extends BaseActivity implements NavigationView.OnNav
         }
         //event
         EventBus.getDefault().register(this);
-        $(R.id.help).setOnClickListener((v) -> {
-            WebActivity.open(this, getString(R.string.help), Constants.URL_HELP);
+//        $(R.id.help).setOnClickListener((v) -> {
+//            WebActivity.open(this, getString(R.string.help), Constants.URL_HELP);
+//        });
+        BoomMenuButton bmb = $(R.id.bmb);
+        bmb.setButtonEnum(ButtonEnum.TextOutsideCircle);
+        bmb.setOnBoomListener(new DefaultOnBoomListener() {
+            @Override
+            public void onClicked(int index, BoomButton boomButton) {
+                Toast.makeText(getContext(), "click:" + index, Toast.LENGTH_SHORT).show();
+            }
         });
+        for (int i = 0; i < bmb.getPiecePlaceEnum().pieceNumber(); i++) {
+            TextOutsideCircleButton.Builder builder = new TextOutsideCircleButton.Builder()
+                    .shadowColor(Color.TRANSPARENT)
+                    .normalColor(Color.TRANSPARENT)
+                    .normalText("index" + i)
+                    .textPadding(new Rect(0, 0, 0, 0))
+                    .imagePadding(new Rect(0, 0, 0, 0))
+                    .textTopMargin((int) getResources().getDimension(R.dimen.menu_text_top))
+                    .textSize((int) getResources().getDimension(R.dimen.menu_text_size))
+                    .normalImageRes(R.drawable.unknown);
+            bmb.addBuilder(builder);
+        }
     }
 
     @Override

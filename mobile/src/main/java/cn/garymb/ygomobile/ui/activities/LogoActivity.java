@@ -6,29 +6,33 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.widget.Toast;
 
+import cn.garymb.ygomobile.lite.BuildConfig;
 import cn.garymb.ygomobile.ui.home.MainActivity;
 import cn.garymb.ygomobile.lite.R;
 
 public class LogoActivity extends Activity {
-   Handler handler;
+    Handler handler;
     Runnable runnable;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_logo);
-        handler = new Handler();
-        runnable = new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                startActivity(new Intent(LogoActivity.this,MainActivity.class));
-                finish();
-            }
-        };
-        handler.postDelayed(runnable,1500);
-        Toast.makeText(LogoActivity.this, R.string.logo_text, Toast.LENGTH_SHORT).show();
+        if(BuildConfig.DEBUG){
+            startActivity(new Intent(LogoActivity.this, MainActivity.class));
+            finish();
+        }else {
+            handler = new Handler();
+            runnable = new Runnable() {
+                @Override
+                public void run() {
+                    startActivity(new Intent(LogoActivity.this, MainActivity.class));
+                    finish();
+                }
+            };
+            handler.postDelayed(runnable, 1500);
+            Toast.makeText(LogoActivity.this, R.string.logo_text, Toast.LENGTH_SHORT).show();
+        }
     }
   /*  @Override
     protected void onCreate(Bundle savedInstanceState) {
