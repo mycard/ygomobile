@@ -30,6 +30,7 @@
         tools:replace="android:allowBackup">
         <activity
             android:name="cn.garymb.ygomobile.ui.activities.LogoActivity"
+            android:excludeFromRecents="true"
             android:theme="@style/TranslucentTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

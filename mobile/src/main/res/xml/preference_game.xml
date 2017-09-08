@@ -23,6 +23,10 @@
             android:persistent="true"
             android:title="@string/settings_game_card_quality"/>
         <CheckBoxPreference
+            android:key="pref_settings_only_game"
+            android:persistent="true"
+            android:title="@string/settings_pref_settings_only_game"/>
+        <CheckBoxPreference
             android:key="pref_key_game_sound_effect"
             android:persistent="true"
             android:title="@string/settings_game_enable_sound_effect"/>

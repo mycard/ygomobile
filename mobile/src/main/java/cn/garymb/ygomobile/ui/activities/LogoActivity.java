@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.widget.Toast;
 
+import cn.garymb.ygomobile.AppsSettings;
+import cn.garymb.ygomobile.YGOStarter;
 import cn.garymb.ygomobile.lite.BuildConfig;
 import cn.garymb.ygomobile.ui.home.MainActivity;
 import cn.garymb.ygomobile.lite.R;
@@ -18,6 +20,11 @@ public class LogoActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_logo);
+        if(AppsSettings.get().isOnlyGame()){
+            YGOStarter.startGame(this, null);
+            finish();
+            return;
+        }
         if(BuildConfig.DEBUG){
             startActivity(new Intent(LogoActivity.this, MainActivity.class));
             finish();

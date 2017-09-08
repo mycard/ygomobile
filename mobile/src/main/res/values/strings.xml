@@ -181,4 +181,5 @@
     <string name="arena">Duelist DataBase</string>
     <string name="mc_home">Home</string>
     <string name="bbs">Community</string>
+    <string name="settings_pref_settings_only_game">Only game</string>
 </resources>

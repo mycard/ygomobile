@@ -18,11 +18,13 @@ import cn.garymb.ygomobile.utils.SystemUtils;
 
 import static cn.garymb.ygomobile.Constants.CORE_SYSTEM_PATH;
 import static cn.garymb.ygomobile.Constants.DEF_PREF_FONT_SIZE;
+import static cn.garymb.ygomobile.Constants.DEF_PREF_ONLY_GAME;
 import static cn.garymb.ygomobile.Constants.PREF_DEF_IMMERSIVE_MODE;
 import static cn.garymb.ygomobile.Constants.PREF_DEF_SENSOR_REFRESH;
 import static cn.garymb.ygomobile.Constants.PREF_FONT_SIZE;
 import static cn.garymb.ygomobile.Constants.PREF_IMMERSIVE_MODE;
 import static cn.garymb.ygomobile.Constants.PREF_LOCK_SCREEN;
+import static cn.garymb.ygomobile.Constants.PREF_ONLY_GAME;
 import static cn.garymb.ygomobile.Constants.PREF_SENSOR_REFRESH;
 
 public class AppsSettings {
@@ -97,6 +99,10 @@ public class AppsSettings {
 
     public int getFontSize() {
         return mSharedPreferences.getInt(PREF_FONT_SIZE, DEF_PREF_FONT_SIZE);
+    }
+
+    public boolean isOnlyGame(){
+        return mSharedPreferences.getBoolean(PREF_ONLY_GAME, DEF_PREF_ONLY_GAME);
     }
 
     public float getXScale() {

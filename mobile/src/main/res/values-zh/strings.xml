@@ -178,4 +178,5 @@
     <string name="arena">决斗数据库</string>
     <string name="mc_home">大厅</string>
     <string name="bbs">社区</string>
+    <string name="settings_pref_settings_only_game">直接进入游戏</string>
 </resources>

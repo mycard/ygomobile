@@ -81,6 +81,10 @@ public interface Constants {
     String PREF_FONT_SIZE = "pref_settings_font_size";
     int DEF_PREF_FONT_SIZE = 14;
 
+
+    String PREF_ONLY_GAME = "pref_settings_only_game";
+    boolean DEF_PREF_ONLY_GAME = false;
+
     int REQUEST_CUT_IMG = 0x1000 + 0x10;
     int REQUEST_CHOOSE_FILE = 0x1000 + 0x20;
     int REQUEST_CHOOSE_IMG = 0x1000 + 0x21;
