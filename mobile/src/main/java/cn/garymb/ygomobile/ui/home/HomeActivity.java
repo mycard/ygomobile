@@ -296,5 +296,5 @@ abstract class HomeActivity extends BaseActivity implements NavigationView.OnNav
 
     protected abstract void openGame();
 
-    protected abstract void updateImages();
+    public abstract void updateImages();
 }

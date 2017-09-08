@@ -124,7 +124,7 @@ public class MainActivity extends HomeActivity {
     }
 
     @Override
-    protected void updateImages() {
+    public void updateImages() {
         if (!mImageUpdater.isRunning()) {
             mImageUpdater.start();
         } else {

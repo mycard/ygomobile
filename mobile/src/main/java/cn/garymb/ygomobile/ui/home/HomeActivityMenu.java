@@ -3,7 +3,6 @@ package cn.garymb.ygomobile.ui.home;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
-import android.widget.Toast;
 
 import com.nightonke.boommenu.BoomButtons.BoomButton;
 import com.nightonke.boommenu.BoomButtons.TextOutsideCircleButton;
@@ -19,9 +18,6 @@ import cn.garymb.ygomobile.ui.cards.DeckManagerActivity;
 import cn.garymb.ygomobile.ui.online.MyCardActivity;
 import cn.garymb.ygomobile.ui.plus.DefaultOnBoomListener;
 import cn.garymb.ygomobile.ui.preference.SettingsActivity;
-import cn.garymb.ygomobile.utils.AlipayPayUtils;
-
-import static cn.garymb.ygomobile.Constants.ALIPAY_URL;
 
 class HomeActivityMenu {
     public interface CallBack {
@@ -39,7 +35,7 @@ class HomeActivityMenu {
     private final static int MENU_MYCARD = 4;
     private final static int MENU_HELP = 5;
 
-    private final static int MENU_DONAE = 6;
+    private final static int MENU_UPDATE_IAMGES = 6;
     private final static int MENU_SETTINGS = 7;
     private final static int MENU_ABOUT = 8;
 
@@ -55,7 +51,7 @@ class HomeActivityMenu {
         addMenuButton("在线平台", R.drawable.unknown);
         addMenuButton("游戏教程", R.drawable.unknown);
 
-        addMenuButton("捐助", R.drawable.unknown);
+        addMenuButton("更新卡图", R.drawable.unknown);
         addMenuButton("游戏设置", R.drawable.unknown);
         addMenuButton("关于", R.drawable.unknown);
 
@@ -85,8 +81,8 @@ class HomeActivityMenu {
                 case MENU_HELP:
                     WebActivity.open(getActivity(), getActivity().getString(R.string.help), Constants.URL_HELP);
                     break;
-                case MENU_DONAE:
-                    AlipayPayUtils.openAlipayPayPage(getActivity(), ALIPAY_URL);
+                case MENU_UPDATE_IAMGES:
+                    getActivity().updateImages();
                     break;
                 case MENU_ABOUT:
                     startActivity(new Intent(getActivity(), AboutActivity.class));
