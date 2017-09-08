@@ -13,6 +13,7 @@ import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.ui.plus.DialogPlus;
 import cn.garymb.ygomobile.ui.preference.PreferenceFragmentPlus;
+import cn.garymb.ygomobile.utils.AlipayPayUtils;
 import cn.garymb.ygomobile.utils.SystemUtils;
 
 public class AboutFragment extends PreferenceFragmentPlus {
@@ -78,9 +79,7 @@ public class AboutFragment extends PreferenceFragmentPlus {
                     .loadUrl("file:///android_asset/changelog.html", Color.TRANSPARENT)
                     .show();
         } else if ("pref_key_open_alipay".equals(key)) {
-            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.ALIPAY_URL));
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
+            AlipayPayUtils.openAlipayPayPage(getContext(), Constants.ALIPAY_URL);
         } else if ("pref_key_about_check_update".equals(key)) {
             Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(Constants.DOWNLOAD_HOME));
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
