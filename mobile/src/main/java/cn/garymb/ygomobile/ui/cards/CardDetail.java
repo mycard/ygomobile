@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import cn.garymb.ygomobile.ui.activities.BaseActivity;
 import cn.garymb.ygomobile.ui.activities.PhotoViewActivity;
 import cn.garymb.ygomobile.bean.CardInfo;
 import cn.garymb.ygomobile.loader.ImageLoader;
@@ -43,7 +44,7 @@ public class CardDetail extends BaseAdapterPlus.BaseViewHolder {
     private ImageLoader imageLoader;
     private View mImageOpen,atkdefView;
 
-    private Context mContext;
+    private BaseActivity mContext;
     private StringManager mStringManager;
     private int curPosition;
     private CardInfo mCardInfo;
@@ -60,7 +61,7 @@ public class CardDetail extends BaseAdapterPlus.BaseViewHolder {
         void onClose();
     }
 
-    public CardDetail(Context context, ImageLoader imageLoader, StringManager stringManager) {
+    public CardDetail(BaseActivity context, ImageLoader imageLoader, StringManager stringManager) {
         super(LayoutInflater.from(context).inflate(R.layout.dialog_cardinfo, null));
         mContext = context;
         cardImage = bind(R.id.card_image);
@@ -145,7 +146,7 @@ public class CardDetail extends BaseAdapterPlus.BaseViewHolder {
         return view;
     }
 
-    public Context getContext() {
+    public BaseActivity getContext() {
         return mContext;
     }
 
@@ -244,12 +245,12 @@ public class CardDetail extends BaseAdapterPlus.BaseViewHolder {
         int position = getCurPosition();
         CardListProvider provider = getProvider();
         if (position == 0) {
-            Toast.makeText(getContext(), "已经是第一张啦", Toast.LENGTH_SHORT).show();
+            getContext().showToast( "已经是第一张啦", Toast.LENGTH_SHORT);
         } else {
 			int index = position ;
             do{
 				if(index==0){
-                    Toast.makeText(getContext(), "已经是第一张啦", Toast.LENGTH_SHORT).show();
+                    getContext().showToast( "已经是第一张啦", Toast.LENGTH_SHORT);
                     return;
 				}else{
                     index--;
@@ -258,7 +259,7 @@ public class CardDetail extends BaseAdapterPlus.BaseViewHolder {
 			
             bind(provider.getCard(index), index, provider);
             if(position == 1){
-                Toast.makeText(getContext(), "已经是第一张啦", Toast.LENGTH_SHORT).show();
+                getContext().showToast( "已经是第一张啦", Toast.LENGTH_SHORT);
             }
         }
     }
@@ -270,7 +271,7 @@ public class CardDetail extends BaseAdapterPlus.BaseViewHolder {
 			int index = position ;
             do{			
 				if(index==provider.getCardsCount() - 1){
-                    Toast.makeText(getContext(), "已经是最后一张啦", Toast.LENGTH_SHORT).show();
+                    getContext().showToast("已经是最后一张啦", Toast.LENGTH_SHORT);
 					return;
 				}else{
                     index++;
@@ -279,10 +280,10 @@ public class CardDetail extends BaseAdapterPlus.BaseViewHolder {
 			
             bind(provider.getCard(index), index, provider);
             if(position == provider.getCardsCount() - 1){
-                Toast.makeText(getContext(), "已经是最后一张啦", Toast.LENGTH_SHORT).show();
+                getContext().showToast( "已经是最后一张啦", Toast.LENGTH_SHORT);
             }
         } else {
-            Toast.makeText(getContext(), "已经是最后一张啦", Toast.LENGTH_SHORT).show();
+            getContext().showToast( "已经是最后一张啦", Toast.LENGTH_SHORT);
         }
     }
 

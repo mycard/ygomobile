@@ -128,7 +128,7 @@ public class MainActivity extends HomeActivity {
         if (!mImageUpdater.isRunning()) {
             mImageUpdater.start();
         } else {
-            Toast.makeText(this, R.string.downloading_images, Toast.LENGTH_SHORT).show();
+            showToast(R.string.downloading_images, Toast.LENGTH_SHORT);
         }
     }
 }

@@ -1,5 +1,6 @@
 package cn.garymb.ygomobile.ui.home;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.widget.Toast;
@@ -23,6 +24,7 @@ import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.bean.CardInfo;
 import cn.garymb.ygomobile.loader.CardLoader;
 import cn.garymb.ygomobile.lite.R;
+import cn.garymb.ygomobile.ui.activities.BaseActivity;
 import cn.garymb.ygomobile.ui.plus.DialogPlus;
 import cn.garymb.ygomobile.ui.plus.VUiKit;
 import cn.garymb.ygomobile.utils.IOUtils;
@@ -33,7 +35,7 @@ import ocgcore.enums.CardType;
  */
 
 public class ImageUpdater implements DialogInterface.OnCancelListener {
-    private Context mContext;
+    private BaseActivity mContext;
     private CardLoader mCardLoader;
     private final static int SubThreads = 4;
     private int mDownloading = 0;
@@ -50,7 +52,7 @@ public class ImageUpdater implements DialogInterface.OnCancelListener {
 
     File mPicsPath;
 
-    public ImageUpdater(Context context) {
+    public ImageUpdater(BaseActivity context) {
         mContext = context;
         mCardLoader = new CardLoader(context);
         mPicsPath = new File(AppsSettings.get().getResourcePath(), Constants.CORE_IMAGE_PATH);
@@ -304,9 +306,9 @@ public class ImageUpdater implements DialogInterface.OnCancelListener {
         }
         VUiKit.post(() -> {
             if (mError == 0) {
-                Toast.makeText(mContext, R.string.downloading_images_ok, Toast.LENGTH_SHORT).show();
+                mContext.showToast(R.string.downloading_images_ok, Toast.LENGTH_SHORT);
             } else {
-                Toast.makeText(mContext, mContext.getString(R.string.download_image_error, mError), Toast.LENGTH_SHORT).show();
+               mContext.showToast(mContext.getString(R.string.download_image_error, mError), Toast.LENGTH_SHORT);
             }
         });
     }

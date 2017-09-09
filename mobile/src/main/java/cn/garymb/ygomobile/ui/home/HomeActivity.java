@@ -201,7 +201,7 @@ abstract class HomeActivity extends BaseActivity implements NavigationView.OnNav
         if (System.currentTimeMillis() - exitLasttime <= 3000) {
             super.onBackPressed();
         } else {
-            Toast.makeText(this, R.string.back_tip, Toast.LENGTH_SHORT).show();
+            showToast(R.string.back_tip, Toast.LENGTH_SHORT);
             exitLasttime = System.currentTimeMillis();
         }
     }

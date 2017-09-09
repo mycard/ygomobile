@@ -1,11 +1,13 @@
 package cn.garymb.ygomobile.ui.activities;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.ActionBar;
@@ -16,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.ui.activities.PermissionsActivity;
@@ -24,6 +27,8 @@ public class BaseActivity extends AppCompatActivity {
     private final static int REQUEST_PERMISSIONS = 0x1000 + 1;
     private boolean mExitAnim = true;
     private boolean mEnterAnim = true;
+
+    private Toast mToast;
 
     protected String[] getPermissions() {
         return null;
@@ -38,9 +43,9 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 
-    protected void setupActionBar(){
+    protected void setupActionBar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        if(toolbar != null) {
+        if (toolbar != null) {
             setSupportActionBar(toolbar);
         }
     }
@@ -204,5 +209,48 @@ public class BaseActivity extends AppCompatActivity {
         if (requestCode == REQUEST_PERMISSIONS && resultCode == PermissionsActivity.PERMISSIONS_DENIED) {
             finish();
         }
+    }
+
+    @SuppressLint("ShowToast")
+    private Toast makeToast() {
+        if (mToast == null) {
+            mToast = Toast.makeText(this, "", Toast.LENGTH_SHORT);
+        }
+        return mToast;
+    }
+
+    /**
+     * Set how long to show the view for.
+     *
+     * @see android.widget.Toast#LENGTH_SHORT
+     * @see android.widget.Toast#LENGTH_LONG
+     */
+    public void showToast(int id, int duration) {
+        showToast(getString(id), duration);
+    }
+
+    public void showToast(CharSequence text) {
+        showToast(text, Toast.LENGTH_SHORT);
+    }
+
+    public void showToast(int id) {
+        showToast(getString(id));
+    }
+
+    /**
+     * Set how long to show the view for.
+     *
+     * @see android.widget.Toast#LENGTH_SHORT
+     * @see android.widget.Toast#LENGTH_LONG
+     */
+    public void showToast(CharSequence text, int duration) {
+        if (Looper.myLooper() != Looper.getMainLooper()) {
+            runOnUiThread(() -> showToast(text, duration));
+            return;
+        }
+        Toast toast = makeToast();
+        toast.setText(text);
+        toast.setDuration(duration);
+        toast.show();
     }
 }

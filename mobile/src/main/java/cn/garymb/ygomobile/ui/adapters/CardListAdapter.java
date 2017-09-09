@@ -61,6 +61,9 @@ public class CardListAdapter extends BaseRecyclerAdapterPlus<CardInfo, ViewHolde
     }
 
     public void hideMenu(View view) {
+        if(view == null){
+            view = mShowMenuView;
+        }
         if (view != null) {
             Object tag = view.getTag(view.getId());
             if (tag != null && tag instanceof ViewHolder) {
@@ -178,17 +181,20 @@ public class CardListAdapter extends BaseRecyclerAdapterPlus<CardInfo, ViewHolde
     public void bindMenu(ViewHolder holder, int position) {
         if (holder.btnMain != null) {
             holder.btnMain.setOnClickListener((v) -> {
+                mShowMenuView = holder.itemView;
                 EventBus.getDefault().post(new CardInfoEvent(position, true));
-                holder.mMenuLayout.smoothCloseMenu();
+//                holder.mMenuLayout.smoothCloseMenu();
             });
         }
         if (holder.btnSide != null) {
             holder.btnSide.setOnClickListener((v) -> {
+                mShowMenuView = holder.itemView;
                 EventBus.getDefault().post(new CardInfoEvent(position, false));
-                holder.mMenuLayout.smoothCloseMenu();
+//                holder.mMenuLayout.smoothCloseMenu();
             });
         }
     }
+    private View mShowMenuView;
 }
 
 class ViewHolder extends BaseRecyclerAdapterPlus.BaseViewHolder {

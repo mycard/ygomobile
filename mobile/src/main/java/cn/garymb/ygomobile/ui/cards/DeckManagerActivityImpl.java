@@ -274,7 +274,7 @@ class DeckManagerActivityImpl extends BaseCardsAcitivity implements RecyclerView
 
     @Override
     protected void onCardLongClick(View view, CardInfo cardInfo, int pos) {
-      //  mCardListAdapater.showMenu(view);
+        //  mCardListAdapater.showMenu(view);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -282,11 +282,15 @@ class DeckManagerActivityImpl extends BaseCardsAcitivity implements RecyclerView
         int pos = event.position;
         CardInfo cardInfo = mCardListAdapater.getItem(pos);
         if (cardInfo == null) {
-            return;
+            mCardListAdapater.hideMenu(null);
         } else if (event.toMain) {
-            addMainCard(cardInfo);
+            if (!addMainCard(cardInfo)){// || !checkLimit(cardInfo, false)) {
+                mCardListAdapater.hideMenu(null);
+            }
         } else {
-            addSideCard(cardInfo);
+            if (!addSideCard(cardInfo)){// || !checkLimit(cardInfo, false)) {
+                mCardListAdapater.hideMenu(null);
+            }
         }
     }
 
@@ -388,13 +392,13 @@ class DeckManagerActivityImpl extends BaseCardsAcitivity implements RecyclerView
                 mDialog.setView(mCardDetail.getView());
                 mDialog.hideButton();
                 mDialog.hideTitleBar();
-                mDialog.setOnGestureListener(new AOnGestureListener(){
+                mDialog.setOnGestureListener(new AOnGestureListener() {
                     @Override
                     public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-                        if(isLeftFling(e1, e2, velocityX, velocityY)){
+                        if (isLeftFling(e1, e2, velocityX, velocityY)) {
                             mCardDetail.onNextCard();
                             return true;
-                        }else if(isRightFling(e1, e2, velocityX, velocityY)){
+                        } else if (isRightFling(e1, e2, velocityX, velocityY)) {
                             mCardDetail.onPreCard();
                             return true;
                         }
@@ -402,26 +406,28 @@ class DeckManagerActivityImpl extends BaseCardsAcitivity implements RecyclerView
                     }
                 });
             }
-            if(!mDialog.isShowing()) {
+            if (!mDialog.isShowing()) {
                 mDialog.show();
             }
             mCardDetail.bind(cardInfo, pos, provider);
         }
     }
 
-    private void addSideCard(CardInfo cardInfo) {
-        if (checkLimit(cardInfo)) {
+    private boolean addSideCard(CardInfo cardInfo) {
+        if (checkLimit(cardInfo, true)) {
             boolean rs = mDeckAdapater.AddCard(cardInfo, DeckItemType.SideCard);
             if (rs) {
-                Toast.makeText(getContext(), R.string.add_card_tip_ok, Toast.LENGTH_SHORT).show();
+                showToast(R.string.add_card_tip_ok, Toast.LENGTH_SHORT);
             } else {
-                Toast.makeText(getContext(), R.string.add_card_tip_fail, Toast.LENGTH_SHORT).show();
+                showToast(R.string.add_card_tip_fail, Toast.LENGTH_SHORT);
             }
+            return rs;
         }
+        return false;
     }
 
-    private void addMainCard(CardInfo cardInfo) {
-        if (checkLimit(cardInfo)) {
+    private boolean addMainCard(CardInfo cardInfo) {
+        if (checkLimit(cardInfo, true)) {
             boolean rs;
             if (cardInfo.isExtraCard()) {
                 rs = mDeckAdapater.AddCard(cardInfo, DeckItemType.ExtraCard);
@@ -429,11 +435,13 @@ class DeckManagerActivityImpl extends BaseCardsAcitivity implements RecyclerView
                 rs = mDeckAdapater.AddCard(cardInfo, DeckItemType.MainCard);
             }
             if (rs) {
-                Toast.makeText(getContext(), R.string.add_card_tip_ok, Toast.LENGTH_SHORT).show();
+                showToast(R.string.add_card_tip_ok, Toast.LENGTH_SHORT);
             } else {
-                Toast.makeText(getContext(), R.string.add_card_tip_fail, Toast.LENGTH_SHORT).show();
+                showToast(R.string.add_card_tip_fail, Toast.LENGTH_SHORT);
             }
+            return rs;
         }
+        return false;
     }
 
     private boolean isExit = false;
@@ -505,10 +513,12 @@ class DeckManagerActivityImpl extends BaseCardsAcitivity implements RecyclerView
         }
     }
 
-    private boolean checkLimit(CardInfo cardInfo) {
+    private boolean checkLimit(CardInfo cardInfo, boolean tip) {
         Map<Long, Integer> mCount = mDeckAdapater.getCardCount();
         if (mLimitList != null && mLimitList.check(cardInfo, LimitType.Forbidden)) {
-            Toast.makeText(getContext(), getString(R.string.tip_card_max, 0), Toast.LENGTH_SHORT).show();
+            if (tip) {
+                showToast(getString(R.string.tip_card_max, 0), Toast.LENGTH_SHORT);
+            }
             return false;
         }
         Long id = cardInfo.Alias > 0 ? cardInfo.Alias : cardInfo.Code;
@@ -516,16 +526,22 @@ class DeckManagerActivityImpl extends BaseCardsAcitivity implements RecyclerView
         if (count != null) {
             if (mLimitList != null && mLimitList.check(cardInfo, LimitType.Limit)) {
                 if (count >= 1) {
-                    Toast.makeText(getContext(), getString(R.string.tip_card_max, 1), Toast.LENGTH_SHORT).show();
+                    if (tip) {
+                        showToast(getString(R.string.tip_card_max, 1), Toast.LENGTH_SHORT);
+                    }
                     return false;
                 }
             } else if (mLimitList != null && mLimitList.check(cardInfo, LimitType.SemiLimit)) {
                 if (count >= 2) {
-                    Toast.makeText(getContext(), getString(R.string.tip_card_max, 2), Toast.LENGTH_SHORT).show();
+                    if (tip) {
+                        showToast(getString(R.string.tip_card_max, 2), Toast.LENGTH_SHORT);
+                    }
                     return false;
                 }
             } else if (count >= Constants.CARD_MAX_COUNT) {
-                Toast.makeText(getContext(), getString(R.string.tip_card_max, 3), Toast.LENGTH_SHORT).show();
+                if (tip) {
+                    showToast(getString(R.string.tip_card_max, 3), Toast.LENGTH_SHORT);
+                }
                 return false;
             }
         }
@@ -698,7 +714,7 @@ class DeckManagerActivityImpl extends BaseCardsAcitivity implements RecyclerView
         } else {
             clipboardManager.setText(uri);
         }
-        Toast.makeText(this, R.string.copy_to_clipbroad, Toast.LENGTH_SHORT).show();
+        showToast(R.string.copy_to_clipbroad, Toast.LENGTH_SHORT);
     }
 
     private File getSelectDeck(Spinner spinner) {
@@ -853,7 +869,7 @@ class DeckManagerActivityImpl extends BaseCardsAcitivity implements RecyclerView
                 }
                 File ydk = new File(mSettings.getResourcePath(), Constants.CORE_DECK_PATH + "/" + filename);
                 if (ydk.exists()) {
-                    Toast.makeText(this, R.string.file_exist, Toast.LENGTH_SHORT).show();
+                    showToast(R.string.file_exist, Toast.LENGTH_SHORT);
                     return;
                 }
                 if (mYdkFile != null && mYdkFile.exists()) {
@@ -883,9 +899,9 @@ class DeckManagerActivityImpl extends BaseCardsAcitivity implements RecyclerView
 
     private void save() {
         if (mDeckAdapater.save(mYdkFile)) {
-            Toast.makeText(this, R.string.save_tip_ok, Toast.LENGTH_SHORT).show();
+            showToast(R.string.save_tip_ok, Toast.LENGTH_SHORT);
         } else {
-            Toast.makeText(this, R.string.save_tip_fail, Toast.LENGTH_SHORT).show();
+            showToast(R.string.save_tip_fail, Toast.LENGTH_SHORT);
         }
     }
 }
