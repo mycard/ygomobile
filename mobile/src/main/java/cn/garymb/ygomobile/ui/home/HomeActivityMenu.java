@@ -43,17 +43,17 @@ class HomeActivityMenu {
     private CallBack mCallBack;
 
     private void initMenus() {
-        addMenuButton("进入游戏", R.drawable.unknown);
-        addMenuButton("卡片查询", R.drawable.unknown);
-        addMenuButton("卡组管理", R.drawable.unknown);
+        addMenuButton(getActivity().getString(R.string.action_game), R.drawable.start);
+        addMenuButton(getActivity().getString(R.string.tab_search), R.drawable.search);
+        addMenuButton(getActivity().getString(R.string.deck_manager), R.drawable.deck);
 
-        addMenuButton("添加服务器", R.drawable.unknown);
-        addMenuButton("在线平台", R.drawable.unknown);
-        addMenuButton("游戏教程", R.drawable.unknown);
+        addMenuButton(getActivity().getString(R.string.action_add_server), R.drawable.addsever);
+        addMenuButton(getActivity().getString(R.string.mycard), R.drawable.mycard);
+        addMenuButton(getActivity().getString(R.string.help), R.drawable.help);
 
-        addMenuButton("更新卡图", R.drawable.unknown);
-        addMenuButton("游戏设置", R.drawable.unknown);
-        addMenuButton("关于", R.drawable.unknown);
+        addMenuButton(getActivity().getString(R.string.download_images), R.drawable.downloadimages);
+        addMenuButton(getActivity().getString(R.string.action_settings), R.drawable.setting);
+        addMenuButton(getActivity().getString(R.string.action_about), R.drawable.about);
 
     }
 

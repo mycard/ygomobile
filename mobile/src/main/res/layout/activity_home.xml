@@ -21,17 +21,17 @@
         android:layout_gravity="bottom|left"
         android:layout_marginBottom="10dp"
         android:layout_marginLeft="10dp"
+        android:background="@drawable/buttonfunction"
         app:bmb_buttonEnum="textOutsideCircle"
         app:bmb_buttonPlaceEnum="buttonPlace_sc_9_1"
         app:bmb_dimColor="#90000000"
-        app:bmb_normalColor="@color/colorPrimary"
-        app:bmb_piecePlaceEnum="piecePlace_dot_9_1"
-        >
+        app:bmb_normalColor="@android:color/transparent"
+        app:bmb_piecePlaceEnum="piecePlace_dot_9_1">
 
         <ImageView
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_gravity="center"
-            app:srcCompat="@drawable/ic_live_help_white"/>
+            app:srcCompat="@drawable/bottom_1" />
     </com.nightonke.boommenu.BoomMenuButton>
 </FrameLayout>
