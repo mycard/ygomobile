@@ -1,4 +1,4 @@
-package ocgcore.bean;
+package ocgcore.data;
 
 
 import android.os.Parcel;
@@ -12,6 +12,23 @@ public class Card extends CardData implements Parcelable {
     public String Desc;
 
     public Card() {
+    }
+
+    public Card(Card card) {
+        this((CardData) card);
+        if (card != null) {
+            this.Name = card.Name;
+            this.Desc = card.Desc;
+        }
+    }
+
+    public Card(long code) {
+        super(code);
+    }
+
+    public Card type(long type) {
+        this.Type = type;
+        return this;
     }
 
     public Card(CardData cardData) {
@@ -30,6 +47,10 @@ public class Card extends CardData implements Parcelable {
             this.RScale = cardData.RScale;
             this.Category = cardData.Category;
         }
+    }
+
+    public int getStar() {
+        return Level & 0xff;
     }
 
     public static boolean isType(long Type, CardType type) {
@@ -57,7 +78,7 @@ public class Card extends CardData implements Parcelable {
     }
 
     public boolean isExtraCard() {
-        return (isType(CardType.Fusion) || isType(CardType.Synchro) || isType(CardType.Xyz)|| isType(Type, CardType.Link));
+        return (isType(CardType.Fusion) || isType(CardType.Synchro) || isType(CardType.Xyz) || isType(Type, CardType.Link));
     }
 
     public long[] getSetCode() {
@@ -107,6 +128,7 @@ public class Card extends CardData implements Parcelable {
                 ", Desc='" + Desc + '\'' +
                 '}';
     }
+
 
     @Override
     public int describeContents() {

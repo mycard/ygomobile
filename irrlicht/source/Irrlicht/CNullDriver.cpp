@@ -483,7 +483,7 @@ ITexture* CNullDriver::getTexture(const io::path& filename)
 	}
 	else
 	{
-		os::Printer::log("Could not open file of texture", filename, ELL_WARNING);
+		//os::Printer::log("Could not open file of texture", filename, ELL_WARNING);
 		return 0;
 	}
 }
@@ -532,8 +532,8 @@ video::ITexture* CNullDriver::loadTextureFromFile(io::IReadFile* file, const io:
 		// create texture from surface
 		texture = createDeviceDependentTexture(image, hashName.size() ? hashName : file->getFileName() );
 
-		if (texture)
-			os::Printer::log("Loaded texture", file->getFileName());
+		//if (texture)
+		//	os::Printer::log("Loaded texture", file->getFileName());
 
 		image->drop();
 	}

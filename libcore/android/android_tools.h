@@ -18,20 +18,20 @@ namespace android {
 class InitOptions {
 public:
 	InitOptions(void* data);
-	inline irr::io::path getCacheDir() {
-		return m_cache_dir;
+	inline irr::io::path getWorkDir() {
+		return m_work_dir;
 	}
-	inline irr::io::path getDBDir() {
-		return m_db_dir;
+	inline irr::io::path* getDBFiles() {
+		return m_db_files;
 	}
-	inline irr::io::path getCoreConfigVerDir() {
-		return m_core_config_version;
+	inline irr::io::path* getArchiveFiles() {
+		return m_archive_files;
 	}
-	inline irr::io::path getResPathDir() {
-		return m_res_path;
+	inline int getDbCount() {
+		return cdb_count;
 	}
-	inline irr::io::path getExternalPathDir() {
-		return m_external_path;
+	inline int getArchiveCount() {
+		return zip_count;
 	}
 	inline int getOpenglVersion() {
 		return m_opengles_version;
@@ -48,14 +48,21 @@ public:
 	inline bool isPendulumScaleEnabled() {
 		return m_ps_enabled;
 	}
+	~InitOptions()
+    {
+		if(m_db_files != NULL)
+          delete m_db_files;
+	    if(m_archive_files != NULL)
+		  delete m_archive_files;
+    }
 private:
-	irr::io::path m_cache_dir;
-    irr::io::path m_db_dir;
-    irr::io::path m_core_config_version;
-    irr::io::path m_res_path;
-    irr::io::path m_external_path;
+	irr::io::path m_work_dir;
+    irr::io::path* m_db_files;
+    irr::io::path* m_archive_files;
     int m_opengles_version;
     int m_card_quality;
+	int cdb_count;
+	int zip_count;
     bool m_font_aa_enabled;
     bool m_se_enabled;
     bool m_ps_enabled;

@@ -17,7 +17,7 @@ import cn.garymb.ygomobile.AppsSettings;
 import cn.garymb.ygomobile.utils.IOUtils;
 import cn.garymb.ygomobile.utils.MD5Util;
 import cn.garymb.ygomobile.utils.StringUtils;
-import ocgcore.bean.CardSet;
+import ocgcore.data.CardSet;
 import ocgcore.enums.CardOt;
 
 public class StringManager {
@@ -43,8 +43,7 @@ public class StringManager {
     }
 
     public boolean load() {
-        File stringfile = new File(AppsSettings.get().getResourcePath(),
-                String.format(Constants.CORE_STRING_PATH, AppsSettings.get().getCoreConfigVersion()));
+        File stringfile = new File(AppsSettings.get().getResourcePath(), Constants.CORE_STRING_PATH);
         String md5 = MD5Util.getFileMD5(stringfile.getAbsolutePath());
         if (TextUtils.equals(md5, lastMd5)) {
             return true;

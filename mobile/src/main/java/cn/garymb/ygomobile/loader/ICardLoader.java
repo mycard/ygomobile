@@ -1,6 +1,6 @@
 package cn.garymb.ygomobile.loader;
 
-import ocgcore.bean.LimitList;
+import ocgcore.data.LimitList;
 
 public interface ICardLoader{
     void search(String prefixWord, String suffixWord,

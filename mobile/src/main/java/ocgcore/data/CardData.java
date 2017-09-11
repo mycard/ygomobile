@@ -1,4 +1,4 @@
-package ocgcore.bean;
+package ocgcore.data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -6,6 +6,10 @@ import android.os.Parcelable;
 public class CardData implements Parcelable{
 
     public CardData() {
+    }
+
+    public CardData(long code) {
+        Code = code;
     }
 
     public long Code;

@@ -10,8 +10,13 @@ import android.util.Log;
 import org.json.JSONArray;
 
 import java.io.File;
+import java.io.FileFilter;
+import java.io.FilenameFilter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
+import java.util.StringTokenizer;
 
 import cn.garymb.ygomobile.ui.preference.PreferenceFragmentPlus;
 import cn.garymb.ygomobile.utils.SystemUtils;
@@ -45,7 +50,7 @@ public class AppsSettings {
     }
 
     public File getSystemConfig() {
-        return new File(getResourcePath(), String.format(CORE_SYSTEM_PATH, getCoreConfigVersion()));
+        return new File(getResourcePath(), CORE_SYSTEM_PATH);
     }
 
     private AppsSettings(Context context) {
@@ -101,7 +106,7 @@ public class AppsSettings {
         return mSharedPreferences.getInt(PREF_FONT_SIZE, DEF_PREF_FONT_SIZE);
     }
 
-    public boolean isOnlyGame(){
+    public boolean isOnlyGame() {
         return mSharedPreferences.getBoolean(PREF_ONLY_GAME, DEF_PREF_ONLY_GAME);
     }
 
@@ -122,11 +127,9 @@ public class AppsSettings {
      */
     public NativeInitOptions getNativeInitOptions() {
         NativeInitOptions options = new NativeInitOptions();
-        options.mCacheDir = getResourcePath();
-        options.mDBDir = getDataBasePath();
-        options.mCoreConfigVersion = getCoreConfigVersion();
-        options.mResourcePath = getResourcePath();
-        options.mExternalFilePath = getResourcePath();
+        options.mWorkPath = getResourcePath();
+        makeCdbList(options.mDbList);
+        makeZipList(options.mArchiveList);
         options.mCardQuality = getCardQuality();
         options.mIsFontAntiAliasEnabled = isFontAntiAlias();
         options.mIsPendulumScaleEnabled = isPendulumScale();
@@ -136,6 +139,50 @@ public class AppsSettings {
             Log.i("Irrlicht", "option=" + options);
         }
         return options;
+    }
+
+    private void makeCdbList(List<String> pathList) {
+        pathList.add(new File(getDataBasePath(), "cards.cdb").getAbsolutePath());
+        if (Constants.READ_EX_CDB) {
+            File expansionsDir = getExpansionsPath();
+            if(expansionsDir.exists()) {
+                File[] cdbs = expansionsDir.listFiles(new FileFilter() {
+                    @Override
+                    public boolean accept(File file) {
+                        return file.isFile() && file.getName().toLowerCase(Locale.US).endsWith(".cdb");
+                    }
+                });
+                if (cdbs != null) {
+                    for (File file : cdbs) {
+                        pathList.add(file.getAbsolutePath());
+                    }
+                }
+            }
+        }
+    }
+
+    public File getExpansionsPath() {
+        return new File(getResourcePath(), "expansions");
+    }
+
+    private void makeZipList(List<String> pathList) {
+        pathList.add(new File(getResourcePath(), Constants.CORE_PICS_ZIP).getAbsolutePath());
+        pathList.add(new File(getResourcePath(), Constants.CORE_SCRIPTS_ZIP).getAbsolutePath());
+        //
+        File expansionsDir = getExpansionsPath();
+        if(expansionsDir.exists()) {
+            File[] zips = expansionsDir.listFiles(new FileFilter() {
+                @Override
+                public boolean accept(File file) {
+                    return file.isFile() && file.getName().toLowerCase(Locale.US).endsWith(".zip");
+                }
+            });
+            if (zips != null) {
+                for (File file : zips) {
+                    pathList.add(file.getAbsolutePath());
+                }
+            }
+        }
     }
 
     /***
@@ -196,20 +243,6 @@ public class AppsSettings {
      */
     public void setFontAntiAlias(boolean fontAntiAlias) {
         mSharedPreferences.putBoolean(Constants.PREF_FONT_ANTIALIAS, fontAntiAlias);
-    }
-
-    /***
-     * 游戏版本
-     */
-    public String getCoreConfigVersion() {
-        return mSharedPreferences.getString(Constants.PREF_GAME_VERSION, Constants.PREF_DEF_GAME_VERSION);
-    }
-
-    /***
-     * 游戏版本
-     */
-    public void setCoreConfigVersion(String configVersion) {
-        mSharedPreferences.putString(Constants.PREF_GAME_VERSION, configVersion);
     }
 
     /***
@@ -367,7 +400,7 @@ public class AppsSettings {
     public List<String> getLastRoomList() {
         List<String> names = new ArrayList<>();
         String json = mSharedPreferences.getString(Constants.PREF_LAST_ROOM_LIST, null);
-        if(!TextUtils.isEmpty(json)) {
+        if (!TextUtils.isEmpty(json)) {
             try {
                 JSONArray array = new JSONArray(json);
                 int count = array.length();

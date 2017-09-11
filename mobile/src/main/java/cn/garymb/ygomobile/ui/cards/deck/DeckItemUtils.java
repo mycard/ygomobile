@@ -14,15 +14,16 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import cn.garymb.ygomobile.Constants;
-import cn.garymb.ygomobile.bean.CardInfo;
 import cn.garymb.ygomobile.bean.Deck;
 import cn.garymb.ygomobile.bean.DeckInfo;
 import cn.garymb.ygomobile.loader.CardLoader;
 import cn.garymb.ygomobile.utils.IOUtils;
 import cn.garymb.ygomobile.utils.MD5Util;
-import ocgcore.bean.LimitList;
+import ocgcore.data.Card;
+import ocgcore.data.LimitList;
 
 class DeckItemUtils {
 
@@ -34,7 +35,7 @@ class DeckItemUtils {
             if (deckItem.getType() == DeckItemType.Space) {
                 break;
             }
-            CardInfo cardInfo = deckItem.getCardInfo();
+            Card cardInfo = deckItem.getCardInfo();
             if (cardInfo != null) {
                 stringBuilder.append("\n");
 //                if(!cardInfo.isExtraCard()) {
@@ -48,7 +49,7 @@ class DeckItemUtils {
             if (deckItem.getType() == DeckItemType.Space) {
                 break;
             }
-            CardInfo cardInfo = deckItem.getCardInfo();
+            Card cardInfo = deckItem.getCardInfo();
             if (cardInfo != null) {
                 stringBuilder.append("\n");
 //                if(cardInfo.isExtraCard()) {
@@ -62,7 +63,7 @@ class DeckItemUtils {
             if (deckItem.getType() == DeckItemType.Space) {
                 break;
             }
-            CardInfo cardInfo = deckItem.getCardInfo();
+            Card cardInfo = deckItem.getCardInfo();
             if (cardInfo != null) {
                 stringBuilder.append("\n");
                 stringBuilder.append(cardInfo.Code);
@@ -84,7 +85,7 @@ class DeckItemUtils {
                 if (deckItem.getType() == DeckItemType.Space) {
                     break;
                 }
-                CardInfo cardInfo = deckItem.getCardInfo();
+                Card cardInfo = deckItem.getCardInfo();
                 if (cardInfo != null) {
 //                    if(!cardInfo.isExtraCard()) {
                     deck.addMain(cardInfo.Code);
@@ -96,7 +97,7 @@ class DeckItemUtils {
                 if (deckItem.getType() == DeckItemType.Space) {
                     break;
                 }
-                CardInfo cardInfo = deckItem.getCardInfo();
+                Card cardInfo = deckItem.getCardInfo();
                 if (cardInfo != null) {
 //                    if(cardInfo.isExtraCard()) {
                     deck.addExtra(cardInfo.Code);
@@ -108,7 +109,7 @@ class DeckItemUtils {
                 if (deckItem.getType() == DeckItemType.Space) {
                     break;
                 }
-                CardInfo cardInfo = deckItem.getCardInfo();
+                Card cardInfo = deckItem.getCardInfo();
                 if (cardInfo != null) {
                     deck.addSide(cardInfo.Code);
                 }
@@ -139,7 +140,7 @@ class DeckItemUtils {
                 if (deckItem.getType() == DeckItemType.Space) {
                     break;
                 }
-                CardInfo cardInfo = deckItem.getCardInfo();
+                Card cardInfo = deckItem.getCardInfo();
                 if (cardInfo != null) {
                     writer.write(("\n" + cardInfo.Code).toCharArray());
                 }
@@ -150,7 +151,7 @@ class DeckItemUtils {
                 if (deckItem.getType() == DeckItemType.Space) {
                     break;
                 }
-                CardInfo cardInfo = deckItem.getCardInfo();
+                Card cardInfo = deckItem.getCardInfo();
                 if (cardInfo != null) {
                     writer.write(("\n" + cardInfo.Code).toCharArray());
                 }
@@ -161,7 +162,7 @@ class DeckItemUtils {
                 if (deckItem.getType() == DeckItemType.Space) {
                     break;
                 }
-                CardInfo cardInfo = deckItem.getCardInfo();
+                Card cardInfo = deckItem.getCardInfo();
                 if (cardInfo != null) {
                     writer.write(("\n" + cardInfo.Code).toCharArray());
                 }
@@ -258,7 +259,7 @@ class DeckItemUtils {
             IOUtils.close(in);
         }
         DeckInfo deckInfo = new DeckInfo();
-        HashMap<Long, CardInfo> tmp = cardLoader.readCards(main, limitList);
+        Map<Long, Card> tmp = cardLoader.readCards(main, limitList);
         for (Long id : main) {
             deckInfo.addMainCards(tmp.get(id));
         }
@@ -278,41 +279,41 @@ class DeckItemUtils {
         if (mDeck != null) {
             adapater.addItem(new DeckItem(DeckItemType.HeadView));
             adapater.addItem(new DeckItem(DeckItemType.MainLabel));
-            List<CardInfo> main = mDeck.getMainCards();
+            List<Card> main = mDeck.getMainCards();
             if (main == null) {
                 for (int i = 0; i < Constants.DECK_MAIN_MAX; i++) {
                     adapater.addItem(new DeckItem());
                 }
             } else {
-                for (CardInfo card : main) {
+                for (Card card : main) {
                     adapater.addItem(new DeckItem(card, DeckItemType.MainCard));
                 }
                 for (int i = main.size(); i < Constants.DECK_MAIN_MAX; i++) {
                     adapater.addItem(new DeckItem());
                 }
             }
-            List<CardInfo> extra = mDeck.getExtraCards();
+            List<Card> extra = mDeck.getExtraCards();
             adapater.addItem(new DeckItem(DeckItemType.ExtraLabel));
             if (extra == null) {
                 for (int i = 0; i < Constants.DECK_EXTRA_COUNT; i++) {
                     adapater.addItem(new DeckItem());
                 }
             } else {
-                for (CardInfo card : extra) {
+                for (Card card : extra) {
                     adapater.addItem(new DeckItem(card, DeckItemType.ExtraCard));
                 }
                 for (int i = extra.size(); i < Constants.DECK_EXTRA_COUNT; i++) {
                     adapater.addItem(new DeckItem());
                 }
             }
-            List<CardInfo> side = mDeck.getSideCards();
+            List<Card> side = mDeck.getSideCards();
             adapater.addItem(new DeckItem(DeckItemType.SideLabel));
             if (side == null) {
                 for (int i = 0; i < Constants.DECK_SIDE_COUNT; i++) {
                     adapater.addItem(new DeckItem());
                 }
             } else {
-                for (CardInfo card : side) {
+                for (Card card : side) {
                     adapater.addItem(new DeckItem(card, DeckItemType.SideCard));
                 }
                 for (int i = side.size(); i < Constants.DECK_SIDE_COUNT; i++) {

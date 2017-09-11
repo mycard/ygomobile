@@ -1,6 +1,5 @@
 package cn.garymb.ygomobile.ui.cards;
 
-import android.content.Context;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,13 +7,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import cn.garymb.ygomobile.lite.R;
+import cn.garymb.ygomobile.loader.ImageLoader;
 import cn.garymb.ygomobile.ui.activities.BaseActivity;
 import cn.garymb.ygomobile.ui.activities.PhotoViewActivity;
-import cn.garymb.ygomobile.bean.CardInfo;
-import cn.garymb.ygomobile.loader.ImageLoader;
-import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.ui.adapters.BaseAdapterPlus;
+import cn.garymb.ygomobile.utils.CardUtils;
 import ocgcore.StringManager;
+import ocgcore.data.Card;
 import ocgcore.enums.CardType;
 
 /***
@@ -47,16 +47,16 @@ public class CardDetail extends BaseAdapterPlus.BaseViewHolder {
     private BaseActivity mContext;
     private StringManager mStringManager;
     private int curPosition;
-    private CardInfo mCardInfo;
+    private Card mCardInfo;
     private CardListProvider mProvider;
     private OnCardClickListener mListener;
 
     public interface OnCardClickListener {
-        void onOpenUrl(CardInfo cardInfo);
+        void onOpenUrl(Card cardInfo);
 
-        void onAddMainCard(CardInfo cardInfo);
+        void onAddMainCard(Card cardInfo);
 
-        void onAddSideCard(CardInfo cardInfo);
+        void onAddSideCard(Card cardInfo);
 
         void onClose();
     }
@@ -96,7 +96,7 @@ public class CardDetail extends BaseAdapterPlus.BaseViewHolder {
         });
         addMain.setOnClickListener((v) -> {
             if (mListener != null) {
-                CardInfo cardInfo = getCardInfo();
+                Card cardInfo = getCardInfo();
                 if (cardInfo == null) {
                     return;
                 }
@@ -105,7 +105,7 @@ public class CardDetail extends BaseAdapterPlus.BaseViewHolder {
         });
         addSide.setOnClickListener((v) -> {
             if (mListener != null) {
-                CardInfo cardInfo = getCardInfo();
+                Card cardInfo = getCardInfo();
                 if (cardInfo == null) {
                     return;
                 }
@@ -114,7 +114,7 @@ public class CardDetail extends BaseAdapterPlus.BaseViewHolder {
         });
         faq.setOnClickListener((v) -> {
             if (mListener != null) {
-                CardInfo cardInfo = getCardInfo();
+                Card cardInfo = getCardInfo();
                 if (cardInfo == null) {
                     return;
                 }
@@ -154,7 +154,7 @@ public class CardDetail extends BaseAdapterPlus.BaseViewHolder {
         mListener = listener;
     }
 
-    private void setCardInfo(CardInfo cardInfo) {
+    private void setCardInfo(Card cardInfo) {
         if (cardInfo == null) return;
         mCardInfo = cardInfo;
         imageLoader.bindImage(cardImage, cardInfo.Code, null, true);
@@ -164,7 +164,7 @@ public class CardDetail extends BaseAdapterPlus.BaseViewHolder {
         name.setText(cardInfo.Name);
         desc.setText(cardInfo.Desc);
         cardcode.setText(String.format("%08d", cardInfo.Code));
-        type.setText(cardInfo.getAllTypeString(mStringManager).replace("/", "|"));
+        type.setText(CardUtils.getAllTypeString(cardInfo, mStringManager).replace("/", "|"));
         attrView.setText(mStringManager.getAttributeString(cardInfo.Attribute));
         otView.setText(mStringManager.getOtString(cardInfo.Ot, "" + cardInfo.Ot));
         long[] sets = cardInfo.getSetCode();
@@ -221,7 +221,7 @@ public class CardDetail extends BaseAdapterPlus.BaseViewHolder {
         }
     }
 
-    public void bind(CardInfo cardInfo, final int position, final CardListProvider provider) {
+    public void bind(Card cardInfo, final int position, final CardListProvider provider) {
         curPosition = position;
         mProvider = provider;
         if (cardInfo != null) {
@@ -237,7 +237,7 @@ public class CardDetail extends BaseAdapterPlus.BaseViewHolder {
         return mProvider;
     }
 
-    public CardInfo getCardInfo() {
+    public Card getCardInfo() {
         return mCardInfo;
     }
 
@@ -296,7 +296,7 @@ public class CardDetail extends BaseAdapterPlus.BaseViewHolder {
         }
 
         @Override
-        public void onOpenUrl(CardInfo cardInfo) {
+        public void onOpenUrl(Card cardInfo) {
 
         }
 
@@ -305,12 +305,12 @@ public class CardDetail extends BaseAdapterPlus.BaseViewHolder {
         }
 
         @Override
-        public void onAddSideCard(CardInfo cardInfo) {
+        public void onAddSideCard(Card cardInfo) {
 
         }
 
         @Override
-        public void onAddMainCard(CardInfo cardInfo) {
+        public void onAddMainCard(Card cardInfo) {
 
         }
     }

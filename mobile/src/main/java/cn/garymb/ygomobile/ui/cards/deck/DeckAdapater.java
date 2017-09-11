@@ -18,15 +18,15 @@ import java.util.Map;
 import java.util.Random;
 
 import cn.garymb.ygomobile.Constants;
-import cn.garymb.ygomobile.bean.CardInfo;
 import cn.garymb.ygomobile.bean.Deck;
 import cn.garymb.ygomobile.bean.DeckInfo;
+import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.loader.CardLoader;
 import cn.garymb.ygomobile.loader.ImageLoader;
-import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.ui.cards.CardListProvider;
 import cn.garymb.ygomobile.utils.CardSort;
-import ocgcore.bean.LimitList;
+import ocgcore.data.Card;
+import ocgcore.data.LimitList;
 import ocgcore.enums.CardType;
 import ocgcore.enums.LimitType;
 
@@ -93,7 +93,7 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> implement
         return mCount;
     }
 
-    public boolean AddCard(CardInfo cardInfo, DeckItemType type) {
+    public boolean AddCard(Card cardInfo, DeckItemType type) {
         if (cardInfo == null) return false;
         if (cardInfo.isType(CardType.Token)) {
             return false;
@@ -159,8 +159,8 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> implement
 
     private boolean comp(DeckItem d1, DeckItem d2) {
         if (d1.getType() == d2.getType()) {
-            CardInfo c1 = d1.getCardInfo();
-            CardInfo c2 = d2.getCardInfo();
+            Card c1 = d1.getCardInfo();
+            Card c2 = d2.getCardInfo();
             return CardSort.ASC.compare(c1, c2) < 0;
         }
         return (d1.getType().ordinal() - d2.getType().ordinal()) > 0;
@@ -188,7 +188,7 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> implement
     }
 
     @Override
-    public CardInfo getCard(int posotion) {
+    public Card getCard(int posotion) {
         int count = mMainCount;
         int index = 0;
         if (posotion < count) {
@@ -268,7 +268,7 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> implement
         notifyItemRangeChanged(DeckItem.SideStart, DeckItem.SideStart + side);
     }
 
-    private void addCount(CardInfo cardInfo, DeckItemType type) {
+    private void addCount(Card cardInfo, DeckItemType type) {
         if (cardInfo == null) return;
         Long code = cardInfo.Alias > 0 ? cardInfo.Alias : cardInfo.Code;
         Integer i = mCount.get(code);
@@ -313,7 +313,7 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> implement
         }
     }
 
-    private void removeCount(CardInfo cardInfo, DeckItemType type) {
+    private void removeCount(Card cardInfo, DeckItemType type) {
         if (cardInfo == null) return;
         Long code = cardInfo.Alias > 0 ? cardInfo.Alias : cardInfo.Code;
         Integer i = mCount.get(code);
@@ -568,7 +568,7 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> implement
 //                holder.useDefault();
                 holder.rightImage.setVisibility(View.GONE);
             } else {
-                CardInfo cardInfo = item.getCardInfo();
+                Card cardInfo = item.getCardInfo();
                 if (cardInfo != null) {
                     holder.setCardType(cardInfo.Type);
                     if (mImageTop == null) {

@@ -1,9 +1,8 @@
-package ocgcore.bean;
+package ocgcore.data;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.garymb.ygomobile.bean.CardInfo;
 import ocgcore.enums.LimitType;
 
 public class LimitList {
@@ -68,7 +67,7 @@ public class LimitList {
         return allList;
     }
 
-    public boolean check(CardInfo cardInfo, LimitType type) {
+    public boolean check(Card cardInfo, LimitType type) {
         return check(cardInfo.Code, cardInfo.Alias, type);
     }
 

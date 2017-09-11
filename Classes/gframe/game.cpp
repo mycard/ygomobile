@@ -83,22 +83,13 @@ bool Game::Initialize() {
 	char log_scale[256] = {0};
 	sprintf(log_scale, "xScale = %f, yScale = %f", xScale, yScale);
 	Printer::log(log_scale);
-	io::path cacheDir = options->getCacheDir();
-	io::path databaseDir = options->getDBDir();
-	io::path configVersion = options->getCoreConfigVerDir();
-	io::path workingDir = options->getResPathDir();
+	//io::path databaseDir = options->getDBDir();
+	io::path workingDir = options->getWorkDir();
 	char log_working[256] = {0};
 	sprintf(log_working, "workingDir= %s", workingDir.c_str());
 	Printer::log(log_working);
 	fs->changeWorkingDirectoryTo(workingDir);
-	io::path mainScriptPath = options->getExternalPathDir() + "/scripts.zip";
-	if(fs->addFileArchive(mainScriptPath, false, false, EFAT_ZIP)) {
-		os::Printer::log("add script arrchive");
-	}
-	io::path mainImagePath = options->getExternalPathDir() + "/pics.zip";
- 	if(fs->addFileArchive(mainImagePath, true, false, EFAT_ZIP)) {
- 		os::Printer::log("add image arrchive");
- 	}
+
 	/* Your media must be somewhere inside the assets folder. The assets folder is the root for the file system.
 	 This example copies the media in the Android.mk makefile. */
 	stringc mediaPath = "media/";
@@ -115,6 +106,18 @@ bool Game::Initialize() {
 			break;
 		}
 	}
+	//pics.zip, scripts.zip, ...zip
+	io::path* zips = options->getArchiveFiles();
+	int len = options->getArchiveCount();
+	for(int i=0;i<len;i++){
+		io::path zip_path = zips[i];
+		if(fs->addFileArchive(zip_path.c_str(), false, false, EFAT_ZIP)) {
+		    os::Printer::log("add arrchive ok ", zip_path.c_str());
+	    }else{
+			os::Printer::log("add arrchive fail ", zip_path.c_str());
+		}
+	}
+	
 #else
 	xScale = 1.0;
 	yScale = 1.0;
@@ -133,7 +136,7 @@ bool Game::Initialize() {
 	is_building = false;
 	memset(&dInfo, 0, sizeof(DuelInfo));
 	memset(chatTiming, 0, sizeof(chatTiming));
-	deckManager.LoadLFList((cacheDir + path("/core/") + configVersion + path("/config/lflist.conf")).c_str());
+	deckManager.LoadLFList((workingDir + path("/lflist.conf")).c_str());
 	driver = device->getVideoDriver();
 #ifdef _IRR_ANDROID_PLATFORM_
 	int quality = options->getCardQualityOp();
@@ -161,11 +164,25 @@ bool Game::Initialize() {
 	driver->setTextureCreationFlag(irr::video::ETCF_OPTIMIZED_FOR_QUALITY, true);
 
 	imageManager.SetDevice(device);
-	if(!imageManager.Initial(cacheDir))
+	if(!imageManager.Initial(workingDir))
 		return false;
-	if(!dataManager.LoadDB(databaseDir.append("/cards.cdb").c_str()))
-		return false;
-	if(!dataManager.LoadStrings((cacheDir + path("/core/") + configVersion + path("/config/strings.conf")).c_str()))
+	io::path* cdbs = options->getDBFiles();
+	len = options->getDbCount();
+	//os::Printer::log("load cdbs count %d", len);
+	for(int i=0;i<len;i++){
+		io::path cdb_path = cdbs[i];
+		if(dataManager.LoadDB(cdb_path.c_str())) {
+		    os::Printer::log("add cdb ok ", cdb_path.c_str());
+	    }else{
+			os::Printer::log("add cdb fail ", cdb_path.c_str());
+		}
+	}
+	//if(!dataManager.LoadDB(workingDir.append("/cards.cdb").c_str()))
+	//	return false;
+	if(dataManager.LoadStrings((workingDir + path("/expansions/strings.conf")).c_str())){
+		os::Printer::log("loadStrings expansions/strings.conf");
+	}
+	if(!dataManager.LoadStrings((workingDir + path("/strings.conf")).c_str()))
 		return false;
 	env = device->getGUIEnvironment();
 	bool isAntialias = options->isFontAntiAliasEnabled();

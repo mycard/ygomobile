@@ -10,11 +10,12 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.AppsSettings;
 import cn.garymb.ygomobile.utils.IOUtils;
 import cn.garymb.ygomobile.utils.MD5Util;
-import ocgcore.bean.LimitList;
+import ocgcore.data.LimitList;
+
+import static cn.garymb.ygomobile.Constants.CORE_LIMIT_PATH;
 
 public class LimitManager {
     private static LimitManager sManager = new LimitManager();
@@ -50,8 +51,7 @@ public class LimitManager {
     }
 
     public boolean load() {
-        File stringfile = new File(AppsSettings.get().getResourcePath(),
-                String.format(Constants.CORE_LIMIT_PATH, AppsSettings.get().getCoreConfigVersion()));
+        File stringfile = new File(AppsSettings.get().getResourcePath(), CORE_LIMIT_PATH);
         String md5 = MD5Util.getFileMD5(stringfile.getAbsolutePath());
         if (TextUtils.equals(md5, lastMd5)) {
             return true;

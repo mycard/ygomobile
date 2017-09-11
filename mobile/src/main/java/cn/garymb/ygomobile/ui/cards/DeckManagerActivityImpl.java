@@ -38,7 +38,6 @@ import java.util.Map;
 
 import cn.garymb.ygomobile.AppsSettings;
 import cn.garymb.ygomobile.Constants;
-import cn.garymb.ygomobile.bean.CardInfo;
 import cn.garymb.ygomobile.bean.Deck;
 import cn.garymb.ygomobile.bean.DeckInfo;
 import cn.garymb.ygomobile.lite.R;
@@ -58,7 +57,8 @@ import cn.garymb.ygomobile.utils.IOUtils;
 import cn.garymb.ygomobile.utils.ShareUtil;
 import ocgcore.LimitManager;
 import ocgcore.StringManager;
-import ocgcore.bean.LimitList;
+import ocgcore.data.Card;
+import ocgcore.data.LimitList;
 import ocgcore.enums.LimitType;
 
 import static cn.garymb.ygomobile.Constants.YDK_FILE_EX;
@@ -263,7 +263,7 @@ class DeckManagerActivityImpl extends BaseCardsAcitivity implements RecyclerView
     }
 
     @Override
-    protected void onCardClick(View view, CardInfo cardInfo, int pos) {
+    protected void onCardClick(View view, Card cardInfo, int pos) {
         if (mCardListAdapater.isShowMenu(view)) {
             return;
         }
@@ -273,14 +273,14 @@ class DeckManagerActivityImpl extends BaseCardsAcitivity implements RecyclerView
     }
 
     @Override
-    protected void onCardLongClick(View view, CardInfo cardInfo, int pos) {
+    protected void onCardLongClick(View view, Card cardInfo, int pos) {
         //  mCardListAdapater.showMenu(view);
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onCardInfoEvent(CardInfoEvent event) {
         int pos = event.position;
-        CardInfo cardInfo = mCardListAdapater.getItem(pos);
+        Card cardInfo = mCardListAdapater.getItem(pos);
         if (cardInfo == null) {
             mCardListAdapater.hideMenu(null);
         } else if (event.toMain) {
@@ -300,7 +300,7 @@ class DeckManagerActivityImpl extends BaseCardsAcitivity implements RecyclerView
     }
 
     @Override
-    public void onSearchResult(List<CardInfo> cardInfos) {
+    public void onSearchResult(List<Card> cardInfos) {
         super.onSearchResult(cardInfos);
         showResult(false);
     }
@@ -358,14 +358,14 @@ class DeckManagerActivityImpl extends BaseCardsAcitivity implements RecyclerView
         return mDialog != null && mDialog.isShowing();
     }
 
-    protected void showCardDialog(CardListProvider provider, CardInfo cardInfo, int pos) {
+    protected void showCardDialog(CardListProvider provider, Card cardInfo, int pos) {
         if (cardInfo != null) {
             if (isShowCard()) return;
             if (mCardDetail == null) {
                 mCardDetail = new CardDetail(this, getImageLoader(), mStringManager);
                 mCardDetail.setOnCardClickListener(new CardDetail.OnCardClickListener() {
                     @Override
-                    public void onOpenUrl(CardInfo cardInfo) {
+                    public void onOpenUrl(Card cardInfo) {
                         String uri = Constants.WIKI_SEARCH_URL + String.format("%08d", cardInfo.Code);
                         WebActivity.open(getContext(), cardInfo.Name, uri);
                     }
@@ -376,12 +376,12 @@ class DeckManagerActivityImpl extends BaseCardsAcitivity implements RecyclerView
                     }
 
                     @Override
-                    public void onAddSideCard(CardInfo cardInfo) {
+                    public void onAddSideCard(Card cardInfo) {
                         addSideCard(cardInfo);
                     }
 
                     @Override
-                    public void onAddMainCard(CardInfo cardInfo) {
+                    public void onAddMainCard(Card cardInfo) {
                         addMainCard(cardInfo);
                     }
                 });
@@ -413,7 +413,7 @@ class DeckManagerActivityImpl extends BaseCardsAcitivity implements RecyclerView
         }
     }
 
-    private boolean addSideCard(CardInfo cardInfo) {
+    private boolean addSideCard(Card cardInfo) {
         if (checkLimit(cardInfo, true)) {
             boolean rs = mDeckAdapater.AddCard(cardInfo, DeckItemType.SideCard);
             if (rs) {
@@ -426,7 +426,7 @@ class DeckManagerActivityImpl extends BaseCardsAcitivity implements RecyclerView
         return false;
     }
 
-    private boolean addMainCard(CardInfo cardInfo) {
+    private boolean addMainCard(Card cardInfo) {
         if (checkLimit(cardInfo, true)) {
             boolean rs;
             if (cardInfo.isExtraCard()) {
@@ -513,7 +513,7 @@ class DeckManagerActivityImpl extends BaseCardsAcitivity implements RecyclerView
         }
     }
 
-    private boolean checkLimit(CardInfo cardInfo, boolean tip) {
+    private boolean checkLimit(Card cardInfo, boolean tip) {
         Map<Long, Integer> mCount = mDeckAdapater.getCardCount();
         if (mLimitList != null && mLimitList.check(cardInfo, LimitType.Forbidden)) {
             if (tip) {

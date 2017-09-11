@@ -2,11 +2,11 @@ package cn.garymb.ygomobile.utils;
 
 import java.util.Comparator;
 
-import cn.garymb.ygomobile.bean.CardInfo;
+import ocgcore.data.Card;
 import ocgcore.enums.CardType;
 
 
-public class CardSort implements Comparator<CardInfo> {
+public class CardSort implements Comparator<Card> {
     public static final CardSort ASC = new CardSort();
 
     public CardSort() {
@@ -19,7 +19,7 @@ public class CardSort implements Comparator<CardInfo> {
     }
 
     @Override
-    public int compare(CardInfo c1, CardInfo c2) {
+    public int compare(Card c1, Card c2) {
         if (c1 == null) {
             return c2 != null ? 1 : 0;
         }

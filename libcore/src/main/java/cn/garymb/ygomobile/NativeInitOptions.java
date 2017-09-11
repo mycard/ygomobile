@@ -3,6 +3,8 @@ package cn.garymb.ygomobile;
 import android.text.TextUtils;
 
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.List;
 
 public final class NativeInitOptions {
 
@@ -11,17 +13,14 @@ public final class NativeInitOptions {
     public int mOpenglVersion;
     public boolean mIsSoundEffectEnabled;
 
-    public String mCacheDir;
+    //工作目录
+    public String mWorkPath;
 
-    /** 数据库 ${gamapath}/cards.cdb*/
-    public String mDBDir;
+    // /data/data/cards.cdb;a.cdb;b.cdb
+    public final List<String> mDbList;
 
-    /** 核心版本 ${gamapath}/${coreversion}/config/*.conf*/
-    public String mCoreConfigVersion;
-
-    public String mResourcePath;
-
-    public String mExternalFilePath;
+    //pics.zip;scripts.zip;a.zip;b.zip
+    public final List<String> mArchiveList;
 
     public int mCardQuality;
 
@@ -30,21 +29,27 @@ public final class NativeInitOptions {
     public boolean mIsPendulumScaleEnabled;
 
     public NativeInitOptions() {
-
+        mDbList = new ArrayList<>();
+        mArchiveList = new ArrayList<>();
     }
 
     public ByteBuffer toNativeBuffer() {
         ByteBuffer buffer = ByteBuffer.allocateDirect(BUFFER_MAX_SIZE);
         putInt(buffer, mOpenglVersion);
         putInt(buffer, mIsSoundEffectEnabled ? 1 : 0);
-        putString(buffer, mCacheDir);
-        putString(buffer, mDBDir);
-        putString(buffer, mCoreConfigVersion);
-        putString(buffer, mResourcePath);
-        putString(buffer, mExternalFilePath);
         putInt(buffer, mCardQuality);
         putInt(buffer, mIsFontAntiAliasEnabled ? 1 : 0);
         putInt(buffer, mIsPendulumScaleEnabled ? 1 : 0);
+
+        putString(buffer, mWorkPath);
+        putInt(buffer, mDbList.size());
+        for(String str:mDbList){
+            putString(buffer, str);
+        }
+        putInt(buffer, mArchiveList.size());
+        for (String str : mArchiveList) {
+            putString(buffer, str);
+        }
         return buffer;
     }
 
@@ -53,11 +58,9 @@ public final class NativeInitOptions {
         return "NativeInitOptions{" +
                 "mOpenglVersion=" + mOpenglVersion +
                 ", mIsSoundEffectEnabled=" + mIsSoundEffectEnabled +
-                ", mCacheDir='" + mCacheDir + '\'' +
-                ", mDBDir='" + mDBDir + '\'' +
-                ", mCoreConfigVersion='" + mCoreConfigVersion + '\'' +
-                ", mResourcePath='" + mResourcePath + '\'' +
-                ", mExternalFilePath='" + mExternalFilePath + '\'' +
+                ", mWorkPath='" + mWorkPath + '\'' +
+                ", mDbList='" + mDbList + '\'' +
+                ", mArchiveList='" + mArchiveList + '\'' +
                 ", mCardQuality=" + mCardQuality +
                 ", mIsFontAntiAliasEnabled=" + mIsFontAntiAliasEnabled +
                 ", mIsPendulumScaleEnabled=" + mIsPendulumScaleEnabled +

@@ -21,13 +21,13 @@ import java.util.zip.ZipFile;
 
 import cn.garymb.ygomobile.AppsSettings;
 import cn.garymb.ygomobile.Constants;
-import cn.garymb.ygomobile.bean.CardInfo;
 import cn.garymb.ygomobile.loader.CardLoader;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.ui.activities.BaseActivity;
 import cn.garymb.ygomobile.ui.plus.DialogPlus;
 import cn.garymb.ygomobile.ui.plus.VUiKit;
 import cn.garymb.ygomobile.utils.IOUtils;
+import ocgcore.data.Card;
 import ocgcore.enums.CardType;
 
 /**
@@ -317,15 +317,15 @@ public class ImageUpdater implements DialogInterface.OnCancelListener {
         if (!mCardLoader.isOpen()) {
             mCardLoader.openDb();
         }
-        Map<Long, Long> cards = mCardLoader.readAllCardCodes();
+        Map<Long, Card> cards = mCardLoader.readAllCardCodes();
         mCardStatus.clear();
         mPicsPath = new File(AppsSettings.get().getResourcePath(), Constants.CORE_IMAGE_PATH);
         File picsPath = mPicsPath;
         File fieldPath = new File(mPicsPath, Constants.CORE_IMAGE_FIELD_PATH);
         IOUtils.createNoMedia(picsPath.getAbsolutePath());
         IOUtils.createNoMedia(fieldPath.getAbsolutePath());
-        for (Map.Entry<Long, Long> e : cards.entrySet()) {
-            if (CardInfo.isType(e.getValue(), CardType.Field)) {
+        for (Map.Entry<Long, Card> e : cards.entrySet()) {
+            if (Card.isType(e.getValue().Type, CardType.Field)) {
                 String png = new File(fieldPath, e.getKey() + Constants.IMAGE_FIELD_URL_EX).getAbsolutePath();
                 String pngUrl = String.format(Constants.IMAGE_FIELD_URL, e.getKey() + "");
                 mCardStatus.add(new Item(pngUrl, png, e.getKey(), true));

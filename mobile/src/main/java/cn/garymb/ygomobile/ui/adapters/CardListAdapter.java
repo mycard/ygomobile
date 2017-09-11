@@ -10,18 +10,19 @@ import com.tubb.smrv.SwipeHorizontalMenuLayout;
 
 import org.greenrobot.eventbus.EventBus;
 
-import cn.garymb.ygomobile.bean.CardInfo;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.loader.ImageLoader;
 import cn.garymb.ygomobile.ui.cards.CardListProvider;
 import cn.garymb.ygomobile.ui.cards.deck.ImageTop;
 import cn.garymb.ygomobile.bean.events.CardInfoEvent;
+import cn.garymb.ygomobile.utils.CardUtils;
 import ocgcore.StringManager;
-import ocgcore.bean.LimitList;
+import ocgcore.data.Card;
+import ocgcore.data.LimitList;
 import ocgcore.enums.CardType;
 import ocgcore.enums.LimitType;
 
-public class CardListAdapter extends BaseRecyclerAdapterPlus<CardInfo, ViewHolder> implements CardListProvider {
+public class CardListAdapter extends BaseRecyclerAdapterPlus<Card, ViewHolder> implements CardListProvider {
     private StringManager mStringManager;
     private ImageTop mImageTop;
     private LimitList mLimitList;
@@ -41,7 +42,7 @@ public class CardListAdapter extends BaseRecyclerAdapterPlus<CardInfo, ViewHolde
     }
 
     @Override
-    public CardInfo getCard(int posotion) {
+    public Card getCard(int posotion) {
         return getItem(posotion);
     }
 
@@ -61,7 +62,7 @@ public class CardListAdapter extends BaseRecyclerAdapterPlus<CardInfo, ViewHolde
     }
 
     public void hideMenu(View view) {
-        if(view == null){
+        if (view == null) {
             view = mShowMenuView;
         }
         if (view != null) {
@@ -98,7 +99,7 @@ public class CardListAdapter extends BaseRecyclerAdapterPlus<CardInfo, ViewHolde
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        CardInfo item = getItem(position);
+        Card item = getItem(position);
         imageLoader.bindImage(holder.cardImage, item.Code);
         holder.cardName.setText(item.Name);
         if (item.isType(CardType.Monster)) {
@@ -158,7 +159,7 @@ public class CardListAdapter extends BaseRecyclerAdapterPlus<CardInfo, ViewHolde
             holder.rightImage.setVisibility(View.GONE);
         }
         //卡片类型
-        holder.cardType.setText(item.getAllTypeString(mStringManager));
+        holder.cardType.setText(CardUtils.getAllTypeString(item, mStringManager));
         if (holder.codeView != null) {
             holder.codeView.setText(String.format("%08d", item.Code));
         }
@@ -194,6 +195,7 @@ public class CardListAdapter extends BaseRecyclerAdapterPlus<CardInfo, ViewHolde
             });
         }
     }
+
     private View mShowMenuView;
 }
 

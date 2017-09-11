@@ -42,14 +42,14 @@ android {
             assets.srcDirs = ['assets']
         }
     }
-    splits {
-        abi {
-            enable true
-            reset()
-            include 'x86', 'armeabi-v7a'
-            universalApk false
-        }
-    }
+//    splits {
+//        abi {
+//            enable true
+//            reset()
+//            include 'x86', 'armeabi-v7a'
+//            universalApk false
+//        }
+//    }
     lintOptions {
         ignoreWarnings true
     }

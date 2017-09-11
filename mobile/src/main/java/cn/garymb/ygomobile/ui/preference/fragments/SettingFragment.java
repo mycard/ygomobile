@@ -41,7 +41,6 @@ import static cn.garymb.ygomobile.Constants.PREF_FONT_ANTIALIAS;
 import static cn.garymb.ygomobile.Constants.PREF_FONT_SIZE;
 import static cn.garymb.ygomobile.Constants.PREF_GAME_FONT;
 import static cn.garymb.ygomobile.Constants.PREF_GAME_PATH;
-import static cn.garymb.ygomobile.Constants.PREF_GAME_VERSION;
 import static cn.garymb.ygomobile.Constants.PREF_IMAGE_QUALITY;
 import static cn.garymb.ygomobile.Constants.PREF_IMMERSIVE_MODE;
 import static cn.garymb.ygomobile.Constants.PREF_LOCK_SCREEN;
@@ -77,7 +76,6 @@ public class SettingFragment extends PreferenceFragmentPlus {
 
         addPreferencesFromResource(R.xml.preference_game);
         bind(PREF_GAME_PATH, mSettings.getResourcePath());
-        bind(PREF_GAME_VERSION, mSettings.getCoreConfigVersion());
 
         bind(PREF_SOUND_EFFECT, mSettings.isSoundEffect());
         bind(PREF_LOCK_SCREEN, mSettings.isLockSreenOrientation());
@@ -247,7 +245,7 @@ public class SettingFragment extends PreferenceFragmentPlus {
                     IOUtils.copyToFile(in, db.getAbsolutePath());
                 }
                 //处理数据
-                ResCheckTask.doSomeTrickOnDatabase(db.getAbsolutePath());
+//                ResCheckTask.doSomeTrickOnDatabase(db.getAbsolutePath());
                 return true;
             } catch (Exception e) {
 

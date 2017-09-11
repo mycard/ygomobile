@@ -19,7 +19,6 @@ import java.io.IOException;
 import java.util.List;
 
 import cn.garymb.ygomobile.Constants;
-import cn.garymb.ygomobile.bean.CardInfo;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.loader.CardLoader;
 import cn.garymb.ygomobile.loader.ImageLoader;
@@ -27,6 +26,7 @@ import cn.garymb.ygomobile.ui.activities.BaseActivity;
 import cn.garymb.ygomobile.ui.adapters.CardListAdapter;
 import ocgcore.LimitManager;
 import ocgcore.StringManager;
+import ocgcore.data.Card;
 
 public abstract class BaseCardsAcitivity extends BaseActivity implements CardLoader.CallBack {
     protected DrawerLayout mDrawerlayout;
@@ -85,7 +85,7 @@ public abstract class BaseCardsAcitivity extends BaseActivity implements CardLoa
 
             @Override
             public void onItemLongClick(View view, int pos) {
-                onCardLongClick(view, mCardListAdapater.getItem(pos),  pos);
+                onCardLongClick(view, mCardListAdapater.getItem(pos), pos);
             }
 
             @Override
@@ -133,7 +133,7 @@ public abstract class BaseCardsAcitivity extends BaseActivity implements CardLoa
     protected abstract View getMainView();
 
     @Override
-    public void onSearchResult(List<CardInfo> cardInfos) {
+    public void onSearchResult(List<Card> cardInfos) {
 //        Log.d("kk", "find " + (cardInfos == null ? -1 : cardInfos.size()));
         mCardListAdapater.set(cardInfos);
         mCardListAdapater.notifyDataSetChanged();
@@ -166,9 +166,9 @@ public abstract class BaseCardsAcitivity extends BaseActivity implements CardLoa
         }
     }
 
-    protected abstract void onCardClick(View view,CardInfo cardInfo, int pos);
+    protected abstract void onCardClick(View view, Card cardInfo, int pos);
 
-    protected abstract void onCardLongClick(View view, CardInfo cardInfo, int pos);
+    protected abstract void onCardLongClick(View view, Card cardInfo, int pos);
 
     protected void showSearch(boolean autoclose) {
         if (mDrawerlayout.isDrawerOpen(Gravity.LEFT)) {

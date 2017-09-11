@@ -3,7 +3,7 @@ package cn.garymb.ygomobile.ui.cards.deck;
 import android.util.Log;
 
 import cn.garymb.ygomobile.Constants;
-import ocgcore.bean.Card;
+import ocgcore.data.Card;
 
 class DeckDrager {
     private DeckAdapater deckAdapater;

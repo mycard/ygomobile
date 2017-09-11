@@ -2,51 +2,53 @@ package cn.garymb.ygomobile.loader;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 import android.util.Log;
 
-import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import cn.garymb.ygomobile.Constants;
-import cn.garymb.ygomobile.bean.CardInfo;
 import cn.garymb.ygomobile.AppsSettings;
+import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.ui.plus.VUiKit;
-import ocgcore.bean.LimitList;
 import ocgcore.LimitManager;
-import ocgcore.enums.CardType;
+import ocgcore.data.Card;
+import ocgcore.data.LimitList;
 import ocgcore.enums.LimitType;
+import ocgcore.handler.CardManager;
 
 public class CardLoader implements ICardLoader {
     //    private StringManager mStringManager = StringManager.get();
     private LimitManager mLimitManager = LimitManager.get();
-    private AppsSettings mSettings = AppsSettings.get();
     private Context context;
-    private volatile SQLiteDatabase db;
     private CallBack mCallBack;
-    private String defSQL = CardInfo.SQL_BASE + " limit " + Constants.DEFAULT_CARD_COUNT + ";";
+    private boolean mLoad;
     private LimitList mLimitList;
     private static final String TAG = CardLoader.class.getSimpleName();
     private final static boolean DEBUG = false;
+    private final CardManager mCardManager;
 
     public interface CallBack {
         void onSearchStart();
 
         void onLimitListChanged(LimitList limitList);
 
-        void onSearchResult(List<CardInfo> cardInfos);
+        void onSearchResult(List<Card> Cards);
 
         void onResetSearch();
     }
 
     public CardLoader(Context context) {
         this.context = context;
+        mCardManager = new CardManager(
+                AppsSettings.get().getDataBasePath(),
+                AppsSettings.get().getResourcePath());
     }
 
     @Override
@@ -57,70 +59,30 @@ public class CardLoader implements ICardLoader {
         }
     }
 
-    public HashMap<Long, CardInfo> readCards(List<Long> ids, LimitList limitList) {
+    public Map<Long, Card> readCards(List<Long> ids, LimitList limitList) {
         if (!isOpen()) {
             return null;
         }
-        StringBuilder stringBuilder = new StringBuilder(CardInfo.SQL_BASE);
-        stringBuilder.append(" and " + CardInfo.COL_ID + " in (");
+        Map<Long, Card> map = new HashMap<>();
         int i = 0;
         for (Long id : ids) {
             if (i != 0) {
-                stringBuilder.append(",");
+                map.put(id, mCardManager.getCard(id));
             }
-            stringBuilder.append(id);
             i++;
-        }
-        stringBuilder.append(")");
-        String sql = stringBuilder.toString();
-        Cursor reader = null;
-        try {
-            reader = db.rawQuery(sql, null);
-        } catch (Exception e) {
-            Log.e(TAG, "read " + sql, e);
-        }
-        HashMap<Long, CardInfo> map = new HashMap<>();
-        if (reader != null) {
-            if (reader.moveToFirst()) {
-//                Log.i("kk", "find card count=" + reader.getCount());
-                do {
-                    CardInfo cardInfo = new CardInfo(reader);
-//                    Log.i("kk", "read card " + cardInfo);
-                    map.put(cardInfo.Code, cardInfo);
-
-                } while (reader.moveToNext());
-//            }else{
-//                Log.i("kk", "find card count 0");
-            }
-            reader.close();
-//        }else{
-//            Log.w("kk", "find no card ");
         }
         return map;
     }
 
     public boolean openDb() {
-        if (db != null) {
-            try {
-                db.close();
-            } catch (Exception e) {
-
-            }
-        }
-        File file = new File(mSettings.getDataBasePath(), Constants.DATABASE_NAME);
-        if (file.exists()) {
-            try {
-                db = SQLiteDatabase.openOrCreateDatabase(file, null);
-                return true;
-            } catch (Exception e) {
-                Log.e("kk", "open db", e);
-            }
-        }
-        return false;
+        if (mLoad) return true;
+        mLoad = true;
+        mCardManager.loadCards();
+        return true;
     }
 
     public boolean isOpen() {
-        return db != null;
+        return mLoad;
     }
 
     public void setCallBack(CallBack callBack) {
@@ -128,7 +90,7 @@ public class CardLoader implements ICardLoader {
     }
 
     public void loadData() {
-        loadData(defSQL, 0);
+        loadData(null, 0);
     }
 
     @Override
@@ -136,72 +98,41 @@ public class CardLoader implements ICardLoader {
         return mLimitList;
     }
 
-    public Map<Long, Long> readAllCardCodes() {
-        Cursor reader = null;
-        try {
-            reader = db.rawQuery(CardInfo.SQL_CODE_BASE, null);
-        } catch (Exception e) {
-            Log.e(TAG, "query", e);
-        }
-        Map<Long, Long> tmp = new HashMap<>();
+    public Map<Long, Card> readAllCardCodes() {
         if (DEBUG) {
-            tmp.put(269012L, 524290L);
-            tmp.put(27551L, 131076L);
-            tmp.put(32864L, 131076L);
-            tmp.put(62121L, 131076L);
-            tmp.put(135598L, 131076L);
+            Map<Long, Card> tmp = new HashMap<>();
+            tmp.put(269012L, new Card(269012L).type(524290L));
+            tmp.put(27551L, new Card(27551L).type(131076L));
+            tmp.put(32864L, new Card(32864L).type(131076L));
+            tmp.put(62121L, new Card(62121L).type(131076L));
+            tmp.put(135598L, new Card(135598L).type(131076L));
+            return tmp;
         } else {
-            if (reader != null) {
-                if (reader.moveToFirst()) {
-                    int index = reader.getColumnIndex(CardInfo._ID);
-                    int typeIndex = reader.getColumnIndex(CardInfo.COL_TYPE);
-                    do {
-                        long id = reader.getLong(index);
-                        long type = typeIndex >= 0 ? reader.getLong(typeIndex) : 0;
-                        tmp.put(id, type);
-
-                    } while (reader.moveToNext());
-                }
-                reader.close();
-            }
+            return mCardManager.getAllCards();
         }
-        return tmp;
     }
 
-    private void loadData(String sql, long setcode) {
+    private void loadData(CardSearchInfo searchInfo, long setcode) {
         if (!isOpen()) {
             return;
         }
         if (Constants.DEBUG)
-            Log.i(TAG, sql);
+            Log.i(TAG, "searchInfo=" + searchInfo);
         if (mCallBack != null) {
             mCallBack.onSearchStart();
         }
         ProgressDialog wait = ProgressDialog.show(context, null, context.getString(R.string.searching));
         VUiKit.defer().when(() -> {
-            Cursor reader = null;
-            try {
-                Log.d(TAG, "query:"+sql);
-                reader = db.rawQuery(sql, null);
-            } catch (Exception e) {
-                Log.e(TAG, "query", e);
-            }
-            List<CardInfo> tmp = new ArrayList<CardInfo>();
-            if (reader != null) {
-                if (reader.moveToFirst()) {
-                    do {
-                        CardInfo cardInfo = new CardInfo(reader);
-                        if (setcode > 0) {
-                            if (!cardInfo.isSetCode(setcode)) {
-                                continue;
-                            }
-                        }
-                        tmp.add(cardInfo);
-
-                    } while (reader.moveToNext());
+            List<Card> tmp = new ArrayList<Card>();
+            Map<Long, Card> cards = mCardManager.getAllCards();
+            Iterator<Card> cardIterator = cards.values().iterator();
+            while (cardIterator.hasNext()) {
+                Card card = cardIterator.next();
+                if (searchInfo == null || searchInfo.check(card)) {
+                    tmp.add(card);
                 }
-                reader.close();
             }
+            Collections.sort(tmp, ASC);
             return tmp;
         }).fail((e) -> {
             if (mCallBack != null) {
@@ -215,6 +146,21 @@ public class CardLoader implements ICardLoader {
             wait.dismiss();
         });
     }
+
+    private Comparator<Card> ASC = new Comparator<Card>() {
+        @Override
+        public int compare(Card o1, Card o2) {
+            if (o1.getStar() == o2.getStar()) {
+                if (o1.Attack == o2.Attack) {
+                    return (int) (o2.Code - o1.Code);
+                } else {
+                    return o2.Attack - o1.Attack;
+                }
+            } else {
+                return o2.getStar() - o1.getStar();
+            }
+        }
+    };
 
     @Override
     public void onReset() {
@@ -230,89 +176,26 @@ public class CardLoader implements ICardLoader {
                        long limitlist, long limit,
                        String atk, String def, long pscale,
                        long setcode, long category, long ot, boolean islink, long... types) {
-        StringBuilder stringBuilder = new StringBuilder(CardInfo.SQL_BASE);
-        String w = null;
+        CardSearchInfo searchInfo = new CardSearchInfo();
         if (!TextUtils.isEmpty(prefixWord) && !TextUtils.isEmpty(suffixWord)) {
-            w = "'%" + prefixWord + "%" + suffixWord + "%'";
+            searchInfo.prefixWord = prefixWord;
+            searchInfo.suffixWord = suffixWord;
         } else if (!TextUtils.isEmpty(prefixWord)) {
-            w = "'%" + prefixWord + "%'";
+            searchInfo.word = prefixWord;
         } else if (!TextUtils.isEmpty(suffixWord)) {
-            w = "'%" + suffixWord + "%'";
+            searchInfo.word = suffixWord;
         }
-        if (!TextUtils.isEmpty(w)) {
-            stringBuilder.append(" and (name like ");
-            stringBuilder.append(w);
-            stringBuilder.append(" or desc like ");
-            stringBuilder.append(w);
-            stringBuilder.append(")");
-        }
-        if (attribute != 0) {
-            stringBuilder.append(" and attribute=" + attribute);
-        }
-        if (level != 0) {
-            stringBuilder.append(" and (level & 255) =" + level);
-        }
-        if (!TextUtils.isEmpty(atk)) {
-            if(atk.contains("-")){
-                String[]atks = atk.split("-");
-                stringBuilder.append(" and atk>=" + atks[0] + " and atk <=" + atks[1]);
-            }else {
-                stringBuilder.append(" and atk=" + (TextUtils.isDigitsOnly(atk) ? atk : -2));
-            }
-        }
-        if (!TextUtils.isEmpty(def)) {
-            if(islink){
-                int link = Integer.parseInt(def,2);
-                stringBuilder.append(" and (def & " + link+") = "+link);
-                stringBuilder.append(" and (type & " + CardType.Link.value() + ") =" + CardType.Link.value());
-            }else {
-                if (def.contains("-")) {
-                    String[] defs = def.split("-");
-                    stringBuilder.append(" and def>=" + defs[0] + " and def <=" + defs[1]);
-                } else {
-                    stringBuilder.append(" and def=" + (TextUtils.isDigitsOnly(def) ? def : -2));
-                }
-            }
-        }
-        if (ot > 0) {
-            stringBuilder.append(" and ot=" + ot);
-        }
-        if (types.length > 0) {
-            //通常魔法
-            boolean st = false;
-//            Log.i("kk", "type1:" + types[0] + ",type2:" + types[1]);
-            if (types[0] == CardType.Spell.value() || types[0] == CardType.Trap.value()
-                    || types[0] == CardType.Normal.value()) {
-                if (types.length > 2) {
-                    if (types[2] == CardType.Normal.value()) {
-                        stringBuilder.append(" and type = " + types[0]);
-                        st = true;
-                    }
-                } else if (types.length > 1) {
-                    if (types[1] == CardType.Normal.value()) {
-                        stringBuilder.append(" and type = " + types[0]);
-                        st = true;
-                    }
-                }
-            }
-            if (!st) {
-                for (long type : types) {
-                    if (type > 0) {
-                        stringBuilder.append(" and (type & " + type + ") =" + type);
-                    }
-                }
-            }
-        }
-        if (category != 0) {
-            stringBuilder.append(" and (category &" + category + ") =" + category);
-        }
-        if (race != 0) {
-            stringBuilder.append(" and race=" + race);
-        }
-        if (pscale > 0) {
-            stringBuilder.append(" and ((level >>16 & 255)=" + pscale);
-            stringBuilder.append(" or (level >>24 & 255)=" + pscale + ")");
-        }
+        searchInfo.attribute = (int) attribute;
+        searchInfo.level = (int) level;
+        searchInfo.atk = atk;
+        searchInfo.def = def;
+        searchInfo.ot = (int) ot;
+        searchInfo.islink = islink;
+        searchInfo.types = types;
+
+        searchInfo.category = category;
+        searchInfo.race = race;
+        searchInfo.pscale = (int) pscale;
 
         LimitList limitList = mLimitManager.getLimit((int) limitlist);
         LimitType cardLimitType = LimitType.valueOf(limit);
@@ -330,20 +213,10 @@ public class CardLoader implements ICardLoader {
                 ids = null;
             }
             if (ids != null) {
-                stringBuilder.append(" and " + CardInfo.COL_ID + " in (");
-                int i = 0;
-                for (Long id : ids) {
-                    if (i != 0) {
-                        stringBuilder.append(",");
-                    }
-                    stringBuilder.append(id);
-                    i++;
-                }
-                stringBuilder.append(")");
+                searchInfo.inCards.addAll(ids);
             }
         }
-        stringBuilder.append(" order by " + CardInfo.COL_STAR + " desc,atk desc," + CardInfo.COL_ID);
         setLimitList((limitList == null ? mLimitList : limitList));
-        loadData(stringBuilder.toString(), setcode);
+        loadData(searchInfo, setcode);
     }
 }

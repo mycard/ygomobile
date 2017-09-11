@@ -21,7 +21,6 @@ import java.io.IOException;
 import java.util.List;
 
 import cn.garymb.ygomobile.Constants;
-import cn.garymb.ygomobile.bean.CardInfo;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.loader.CardLoader;
 import cn.garymb.ygomobile.loader.ImageLoader;
@@ -33,7 +32,8 @@ import cn.garymb.ygomobile.ui.plus.DialogPlus;
 import cn.garymb.ygomobile.ui.plus.VUiKit;
 import ocgcore.LimitManager;
 import ocgcore.StringManager;
-import ocgcore.bean.LimitList;
+import ocgcore.data.Card;
+import ocgcore.data.LimitList;
 
 class CardSearchActivityImpl extends BaseActivity implements CardLoader.CallBack {
     protected DrawerLayout mDrawerlayout;
@@ -150,7 +150,7 @@ class CardSearchActivityImpl extends BaseActivity implements CardLoader.CallBack
     }
 
     @Override
-    public void onSearchResult(List<CardInfo> cardInfos) {
+    public void onSearchResult(List<Card> cardInfos) {
 //        Log.d("kk", "find " + (cardInfos == null ? -1 : cardInfos.size()));
         mCardListAdapater.set(cardInfos);
         mCardListAdapater.notifyDataSetChanged();
@@ -231,13 +231,13 @@ class CardSearchActivityImpl extends BaseActivity implements CardLoader.CallBack
         return mDialog != null && mDialog.isShowing();
     }
 
-    protected void showCard(CardListProvider provider, CardInfo cardInfo, final int position) {
+    protected void showCard(CardListProvider provider, Card cardInfo, final int position) {
         if (cardInfo != null) {
             if (mCardDetail == null) {
                 mCardDetail = new CardDetail(this, mImageLoader, mStringManager);
                 mCardDetail.setOnCardClickListener(new CardDetail.DefaultOnCardClickListener() {
                     @Override
-                    public void onOpenUrl(CardInfo cardInfo) {
+                    public void onOpenUrl(Card cardInfo) {
                         String uri = Constants.WIKI_SEARCH_URL + String.format("%08d", cardInfo.Code);
                         WebActivity.open(getContext(), cardInfo.Name, uri);
                     }

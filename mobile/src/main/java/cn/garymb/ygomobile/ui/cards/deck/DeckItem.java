@@ -1,7 +1,7 @@
 package cn.garymb.ygomobile.ui.cards.deck;
 
 import cn.garymb.ygomobile.Constants;
-import cn.garymb.ygomobile.bean.CardInfo;
+import ocgcore.data.Card;
 
 public class DeckItem {
     public final static int HeadView = 0;
@@ -18,13 +18,13 @@ public class DeckItem {
 
 
     private DeckItemType mType;
-    private CardInfo mCardInfo;
+    private Card mCardInfo;
 
     public DeckItem() {
         mType = DeckItemType.Space;
     }
 
-    public DeckItem(CardInfo cardInfo, DeckItemType type) {
+    public DeckItem(Card cardInfo, DeckItemType type) {
         mType = type;
         mCardInfo = cardInfo;
     }
@@ -46,7 +46,7 @@ public class DeckItem {
         this.mType = type;
     }
 
-    public CardInfo getCardInfo() {
+    public Card getCardInfo() {
         return mCardInfo;
     }
 

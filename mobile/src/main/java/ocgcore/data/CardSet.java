@@ -1,4 +1,4 @@
-package ocgcore.bean;
+package ocgcore.data;
 
 
 import android.text.TextUtils;

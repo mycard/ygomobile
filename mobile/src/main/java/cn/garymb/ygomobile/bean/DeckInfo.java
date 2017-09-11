@@ -1,24 +1,15 @@
 package cn.garymb.ygomobile.bean;
 
-import android.net.Uri;
-import android.os.Parcel;
-import android.os.Parcelable;
-import android.text.TextUtils;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import cn.garymb.ygomobile.bean.CardInfo;
-
-import static cn.garymb.ygomobile.Constants.QUERY_EXTRA;
-import static cn.garymb.ygomobile.Constants.QUERY_MAIN;
-import static cn.garymb.ygomobile.Constants.QUERY_SIDE;
+import ocgcore.data.Card;
 
 public class DeckInfo {
-    private final List<CardInfo> mainCards;
-    private final List<CardInfo> extraCards;
-    private final List<CardInfo> sideCards;
+    private final List<Card> mainCards;
+    private final List<Card> extraCards;
+    private final List<Card> sideCards;
 
     public DeckInfo() {
         mainCards = new ArrayList<>();
@@ -26,34 +17,37 @@ public class DeckInfo {
         sideCards = new ArrayList<>();
     }
 
-    public void addMainCards(CardInfo card) {
+    public void addMainCards(Card card) {
         if (card != null) {
             this.mainCards.add(card);
         }
     }
-    public void addExtraCards(CardInfo card) {
+
+    public void addExtraCards(Card card) {
         if (card != null) {
             this.extraCards.add(card);
         }
     }
-    public void addSideCards(CardInfo card) {
+
+    public void addSideCards(Card card) {
         if (card != null) {
             this.sideCards.add(card);
         }
     }
-    public void setMainCards(Collection<CardInfo> mainCards) {
+
+    public void setMainCards(Collection<Card> mainCards) {
         if (mainCards != null) {
             this.mainCards.addAll(mainCards);
         }
     }
 
-    public void setExtraCards(Collection<CardInfo> extraCards) {
+    public void setExtraCards(Collection<Card> extraCards) {
         if (extraCards != null) {
             this.extraCards.addAll(extraCards);
         }
     }
 
-    public void setSideCards(Collection<CardInfo> sideCards) {
+    public void setSideCards(Collection<Card> sideCards) {
         if (sideCards != null) {
             this.sideCards.addAll(sideCards);
         }
@@ -68,7 +62,7 @@ public class DeckInfo {
                 '}';
     }
 
-    public String toLongString(){
+    public String toLongString() {
         return "DeckInfo{" +
                 "mainCards=" + mainCards +
                 ", extraCards=" + extraCards +
@@ -76,15 +70,15 @@ public class DeckInfo {
                 '}';
     }
 
-    public List<CardInfo> getMainCards() {
+    public List<Card> getMainCards() {
         return mainCards;
     }
 
-    public List<CardInfo> getExtraCards() {
+    public List<Card> getExtraCards() {
         return extraCards;
     }
 
-    public List<CardInfo> getSideCards() {
+    public List<Card> getSideCards() {
         return sideCards;
     }
 }

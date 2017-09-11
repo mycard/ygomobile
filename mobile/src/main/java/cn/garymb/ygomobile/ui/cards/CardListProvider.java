@@ -1,9 +1,9 @@
 package cn.garymb.ygomobile.ui.cards;
 
-import cn.garymb.ygomobile.bean.CardInfo;
+import ocgcore.data.Card;
 
 public interface CardListProvider {
     int getCardsCount();
 
-    CardInfo getCard(int posotion);
+    Card getCard(int posotion);
 }

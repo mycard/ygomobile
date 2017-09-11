@@ -12,8 +12,6 @@ public interface Constants {
     String PREF_DEF_GAME_DIR = "ygocore";
 
 
-    String PREF_GAME_VERSION = "pref_key_core_version";
-    String PREF_DEF_GAME_VERSION = "3.5";
     String PREF_IMAGE_QUALITY = "pref_key_game_image_quality";
     int PREF_DEF_IMAGE_QUALITY = 1;
     String PREF_GAME_FONT = "pref_key_game_font_name";
@@ -50,10 +48,9 @@ public interface Constants {
     String DEFAULT_FONT_NAME = "ygo.ttf";
     String DATABASE_NAME = "cards.cdb";
     String FONT_DIRECTORY = "fonts";
-    String CORE_CONFIG_PATH = "core";
-    String CORE_STRING_PATH = "core/%s/config/strings.conf";
-    String CORE_LIMIT_PATH = "core/%s/config/lflist.conf";
-    String CORE_SYSTEM_PATH = "core/%s/config/system.conf";
+    String CORE_STRING_PATH = "strings.conf";
+    String CORE_LIMIT_PATH = "lflist.conf";
+    String CORE_SYSTEM_PATH = "system.conf";
     String CORE_SKIN_PATH = "textures";
     String CORE_SKIN_PENDULUM_PATH = CORE_SKIN_PATH + "/extra";
     String CORE_DECK_PATH = "deck";
@@ -169,6 +166,8 @@ public interface Constants {
     String QUERY_USER = "user";
     String QUERY_ROOM = "room";
 
+    //额外的cdb
+    boolean READ_EX_CDB = true;
     boolean NETWORK_IMAGE = false;
     boolean SHOW_MYCARD = !"core".equals(BuildConfig.FLAVOR);
 }
