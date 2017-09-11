@@ -143,8 +143,12 @@ extern irr::io::path getFontPath(ANDROID_APP app);
 //Retrive last deck name.
 extern irr::io::path getLastDeck(ANDROID_APP app);
 
+extern irr::io::path getSetting(ANDROID_APP app, const char* key);
+
 //save last deck name.
 extern void setLastDeck(ANDROID_APP app, const char* deckname);
+
+extern void saveSetting(ANDROID_APP app, const char* key, const char* value);
 
 //Retrive font antialias options
 extern bool getFontAntiAlias(ANDROID_APP app);
