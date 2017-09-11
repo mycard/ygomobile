@@ -16,11 +16,11 @@
         <port>23333</port>
         <keep>true</keep>
     </server>
-    <server>
+    <!--<server>
         <player-name>泰迪熊</player-name>
         <name>777服务器</name>
         <ip>119.23.146.219</ip>
         <port>7210</port>
         <keep>true</keep>
-    </server>
+    </server>-->
 </servers>
