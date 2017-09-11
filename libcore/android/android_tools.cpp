@@ -402,6 +402,24 @@ void setLastDeck(ANDROID_APP app, const char* deckname) {
 	saveSetting(app, "lastdeck", deckname);
 }
 
+int getIntSetting(ANDROID_APP app, const char* key,int defvalue){
+	irr::io::path rs = getSetting(app, key);
+	if(rs != NULL){
+		const char* cs = rs.c_str();
+		if(strlen(cs) > 0){
+			return (int)cs[0];
+		}
+	}
+	return defvalue;
+}
+
+void saveIntSetting(ANDROID_APP app, const char* key, int value) {
+	char val[]={(char)value};
+	const char* p = val;
+	saveSetting(app, key, p);
+	delete p;
+}
+
 void saveSetting(ANDROID_APP app, const char* key, const char* value) {
 	if (!app || !app->activity || !app->activity->vm)
 		return;
