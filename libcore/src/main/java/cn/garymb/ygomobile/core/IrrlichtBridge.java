@@ -164,6 +164,10 @@ public final class IrrlichtBridge {
 
         String getSetting(String key);
 
+        int getIntSetting(String key,int def);
+
+        void saveIntSetting(String key,int value);
+
         float getScreenWidth();
 
         float getScreenHeight();

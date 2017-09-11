@@ -100,8 +100,12 @@ void DeckBuilder::Terminate() {
 	mainGame->ClearTextures();
 	mainGame->scrFilter->setVisible(false);
 	int sel = mainGame->cbDBDecks->getSelected();
-	if(sel >= 0)
+	if(sel >= 0){
 		BufferIO::CopyWStr(mainGame->cbDBDecks->getItem(sel), mainGame->gameConf.lastdeck, 64);
+		char linebuf[256];	
+		BufferIO::EncodeUTF8(mainGame->gameConf.lastdeck, linebuf);
+		android::setLastDeck(mainGame->appMain, linebuf);
+	}
 	if(exit_on_return)
 		mainGame->device->closeDevice();
 }

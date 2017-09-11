@@ -394,17 +394,32 @@ public class AppsSettings {
         return mSharedPreferences.getString(Constants.PREF_LAST_YDK, null);
     }
 
+    public void saveIntSettings(String key, int value) {
+        mSharedPreferences.putInt(Constants.PREF_START + key, value);
+        Log.i("kk", "saveIntSettings:" + key + "=" + value);
+    }
+
+    public int getIntSettings(String key, int def) {
+        int val = mSharedPreferences.getInt(Constants.PREF_START + key, def);
+        Log.i("kk", "getIntSettings:" + key + "=" + val);
+        return val;
+    }
+
     public void saveSettings(String key, String value) {
-        if("lastdeck".equals(key)){
+        if ("lastdeck".equals(key)) {
+            Log.i("kk", "setLastDeck:" + key + "=" + value);
             setLastDeck(value);
-        }else {
+        } else {
             mSharedPreferences.putString(Constants.PREF_START + key, value);
         }
     }
 
     public String getSettings(String key) {
-        if("lastdeck".equals(key)){
-            return getLastDeck();
+        if ("lastdeck".equals(key)) {
+            String val = getLastDeck();
+            ;
+            Log.i("kk", "getSettings:" + key + "=" + val);
+            return val;
         }
         return mSharedPreferences.getString(Constants.PREF_START + key, null);
     }

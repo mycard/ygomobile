@@ -13,6 +13,11 @@ namespace ygo {
 void UpdateDeck() {
 	BufferIO::CopyWStr(mainGame->cbDeckSelect->getItem(mainGame->cbDeckSelect->getSelected()),
 		mainGame->gameConf.lastdeck, 64);
+		
+	char linebuf[256];	
+	BufferIO::EncodeUTF8(mainGame->gameConf.lastdeck, linebuf);
+	android::setLastDeck(mainGame->appMain, linebuf);
+		
 	char deckbuf[1024];
 	char* pdeck = deckbuf;
 	BufferIO::WriteInt32(pdeck, deckManager.current_deck.main.size() + deckManager.current_deck.extra.size());

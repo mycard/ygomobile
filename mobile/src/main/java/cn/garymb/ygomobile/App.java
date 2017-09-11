@@ -64,6 +64,16 @@ public class App extends GameApplication {
     }
 
     @Override
+    public int getIntSetting(String key, int def) {
+        return AppsSettings.get().getIntSettings(key, def);
+    }
+
+    @Override
+    public void saveIntSetting(String key, int value) {
+        AppsSettings.get().saveIntSettings(key, value);
+    }
+
+    @Override
     public float getScreenWidth() {
         return AppsSettings.get().getScreenWidth();
     }
