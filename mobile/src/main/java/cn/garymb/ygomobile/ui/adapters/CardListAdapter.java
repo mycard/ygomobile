@@ -111,7 +111,7 @@ public class CardListAdapter extends BaseRecyclerAdapterPlus<Card, ViewHolder> i
             }
 //            holder.view_bar.setVisibility(View.VISIBLE);
             String star = "";
-            for (int i = 0; i < item.Level; i++) {
+            for (int i = 0; i < item.getStar(); i++) {
                 star += "★";
             }
             holder.cardLevel.setText(star);
@@ -122,7 +122,7 @@ public class CardListAdapter extends BaseRecyclerAdapterPlus<Card, ViewHolder> i
             }
             holder.cardAtk.setText((item.Attack < 0 ? "?" : String.valueOf(item.Attack)));
             if (item.isType(CardType.Link)) {
-                holder.cardDef.setText(item.Level < 0 ? "?" : "LINK-" + String.valueOf(item.Level));
+                holder.cardDef.setText(item.getStar() < 0 ? "?" : "LINK-" + String.valueOf(item.getStar()));
                 holder.TextDef.setText("");
             } else {
                 holder.cardDef.setText((item.Defense < 0 ? "?" : String.valueOf(item.Defense)));

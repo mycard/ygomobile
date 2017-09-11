@@ -28,7 +28,6 @@ public class CardLoader implements ICardLoader {
     private LimitManager mLimitManager = LimitManager.get();
     private Context context;
     private CallBack mCallBack;
-    private boolean mLoad;
     private LimitList mLimitList;
     private static final String TAG = CardLoader.class.getSimpleName();
     private final static boolean DEBUG = false;
@@ -48,7 +47,7 @@ public class CardLoader implements ICardLoader {
         this.context = context;
         mCardManager = new CardManager(
                 AppsSettings.get().getDataBasePath(),
-                AppsSettings.get().getResourcePath());
+                AppsSettings.get().getExpansionsPath().getAbsolutePath());
     }
 
     @Override
@@ -75,14 +74,12 @@ public class CardLoader implements ICardLoader {
     }
 
     public boolean openDb() {
-        if (mLoad) return true;
-        mLoad = true;
         mCardManager.loadCards();
         return true;
     }
 
     public boolean isOpen() {
-        return mLoad;
+        return mCardManager.getCount() > 0;
     }
 
     public void setCallBack(CallBack callBack) {

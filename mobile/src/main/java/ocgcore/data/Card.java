@@ -50,7 +50,7 @@ public class Card extends CardData implements Parcelable {
     }
 
     public int getStar() {
-        return Level & 0xff;
+        return (Level & 0xff);
     }
 
     public static boolean isType(long Type, CardType type) {

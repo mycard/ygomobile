@@ -197,7 +197,7 @@ public class CardDetail extends BaseAdapterPlus.BaseViewHolder {
             monsterlayout.setVisibility(View.VISIBLE);
             race.setVisibility(View.VISIBLE);
             String star = "";
-            for (int i = 0; i < cardInfo.Level; i++) {
+            for (int i = 0; i < cardInfo.getStar(); i++) {
                 star += "★";
             }
             level.setText(star);
@@ -208,7 +208,7 @@ public class CardDetail extends BaseAdapterPlus.BaseViewHolder {
             }
             cardAtk.setText((cardInfo.Attack < 0 ? "?" : String.valueOf(cardInfo.Attack)));
             if (cardInfo.isType(CardType.Link)) {
-                cardDef.setText((cardInfo.Level < 0 ? "?" : "LINK-" + String.valueOf(cardInfo.Level)));
+                cardDef.setText((cardInfo.getStar() < 0 ? "?" : "LINK-" + String.valueOf(cardInfo.getStar())));
             } else {
                 cardDef.setText((cardInfo.Defense < 0 ? "?" : String.valueOf(cardInfo.Defense)));
             }

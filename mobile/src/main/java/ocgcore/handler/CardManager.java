@@ -68,10 +68,10 @@ public class CardManager {
             SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(file, null);
             if (db.isOpen()) {
                 try {
-                    reader = db.rawQuery("select * from datas,texts where datas.id = texts.id;", null);
+                    reader = db.rawQuery("select datas.id, ot, alias, setcode, type, level, race, attribute, atk, def,category,name,desc from datas,texts where datas.id = texts.id;", null);
                 } catch (Throwable e) {
                     //ignore
-                    reader = db.rawQuery("select datas.*,texts.* from datas,texts where datas._id = texts._id;", null);
+                    reader = db.rawQuery("select datas._id, ot, alias, setcode, type, level, race, attribute, atk, def,category,name,desc from datas,texts where datas._id = texts._id;", null);
                 }
                 if (reader != null && reader.moveToFirst()) {
                     do {
@@ -89,8 +89,9 @@ public class CardManager {
                         cardData.Attribute = reader.getInt(7);
                         cardData.Attack = reader.getInt(8);
                         cardData.Defense = reader.getInt(9);
-                        cardData.Name = reader.getString(12);
-                        cardData.Desc = reader.getString(13);
+                        cardData.Category = reader.getLong(10);
+                        cardData.Name = reader.getString(11);
+                        cardData.Desc = reader.getString(12);
                         //put
                         i++;
                         cardMap.put(cardData.Code, cardData);
@@ -99,6 +100,7 @@ public class CardManager {
             }
         } catch (Throwable e) {
             e.printStackTrace();
+            Log.e("Irrlicht", "read cards " + file, e);
         } finally {
             if (reader != null) {
                 reader.close();

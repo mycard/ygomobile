@@ -24,13 +24,40 @@ class CardSearchInfo {
     }
 
     public boolean check(Card card) {
+        if (!TextUtils.isEmpty(word)) {
+            if (!((card.Name != null && card.Name.contains(word))
+                    || (card.Desc != null && card.Desc.contains(word)))) {
+                return false;
+            }
+        } else if(!TextUtils.isEmpty(prefixWord)  && !TextUtils.isEmpty(suffixWord)){
+            boolean has = false;
+            if (card.Name != null) {
+                int i1 = card.Name.indexOf(prefixWord);
+                int i2 = card.Name.indexOf(suffixWord);
+                if (i1 >= 0 && i2 >= 0 && i1 < i2) {
+                    has = true;
+                }
+            }
+            if (!has) {
+                if (card.Desc != null) {
+                    int i1 = card.Desc.indexOf(prefixWord);
+                    int i2 = card.Desc.indexOf(suffixWord);
+                    if (i1 >= 0 && i2 >= 0 && i1 < i2) {
+                        has = true;
+                    }
+                }
+            }
+            if (!has) {
+                return false;
+            }
+        }
         if (attribute != 0) {
             if (card.Attribute != attribute) {
                 return false;
             }
         }
         if (level != 0) {
-            if ((card.Level & 0xff) != level) {
+            if (card.getStar() != level) {
                 return false;
             }
         }

@@ -92,7 +92,7 @@ public class CardSort implements Comparator<Card> {
                     return 1;
                 }
             }
-            int rs = comp(c1.Level, c2.Level);
+            int rs = comp(c1.getStar(), c2.getStar());
             if (rs != 0) {
                 return rs;
             }
