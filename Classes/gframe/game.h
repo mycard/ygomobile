@@ -138,6 +138,7 @@ public:
 	Signal closeSignal;
 	Signal closeDoneSignal;
 	Config gameConf;
+	Config defGameConf;
 	DuelInfo dInfo;
 
 	std::list<FadingUnit> fadingList;

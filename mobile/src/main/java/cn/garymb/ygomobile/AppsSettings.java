@@ -11,12 +11,9 @@ import org.json.JSONArray;
 
 import java.io.File;
 import java.io.FileFilter;
-import java.io.FilenameFilter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
-import java.util.StringTokenizer;
 
 import cn.garymb.ygomobile.ui.preference.PreferenceFragmentPlus;
 import cn.garymb.ygomobile.utils.SystemUtils;
@@ -145,7 +142,7 @@ public class AppsSettings {
         pathList.add(new File(getDataBasePath(), "cards.cdb").getAbsolutePath());
         if (Constants.READ_EX_CDB) {
             File expansionsDir = getExpansionsPath();
-            if(expansionsDir.exists()) {
+            if (expansionsDir.exists()) {
                 File[] cdbs = expansionsDir.listFiles(new FileFilter() {
                     @Override
                     public boolean accept(File file) {
@@ -170,7 +167,7 @@ public class AppsSettings {
         pathList.add(new File(getResourcePath(), Constants.CORE_SCRIPTS_ZIP).getAbsolutePath());
         //
         File expansionsDir = getExpansionsPath();
-        if(expansionsDir.exists()) {
+        if (expansionsDir.exists()) {
             File[] zips = expansionsDir.listFiles(new FileFilter() {
                 @Override
                 public boolean accept(File file) {
@@ -395,6 +392,21 @@ public class AppsSettings {
 
     public String getCurLastDeck() {
         return mSharedPreferences.getString(Constants.PREF_LAST_YDK, null);
+    }
+
+    public void saveSettings(String key, String value) {
+        if("lastdeck".equals(key)){
+            setLastDeck(value);
+        }else {
+            mSharedPreferences.putString(Constants.PREF_START + key, value);
+        }
+    }
+
+    public String getSettings(String key) {
+        if("lastdeck".equals(key)){
+            return getLastDeck();
+        }
+        return mSharedPreferences.getString(Constants.PREF_START + key, null);
     }
 
     public List<String> getLastRoomList() {

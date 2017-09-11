@@ -1500,25 +1500,62 @@ void Game::LoadConfig() {
 	gameConf.lastport[0] = 0;
 	gameConf.roompass[0] = 0;
 	//settings
-	gameConf.chkMAutoPos = 0;
-	gameConf.chkSTAutoPos = 0;
-	gameConf.chkRandomPos = 0;
-	gameConf.chkAutoChain = 0;
-	gameConf.chkWaitChain = 0;
-	gameConf.chkIgnore1 = 0;
-	gameConf.chkIgnore2 = 0;
-	gameConf.chkHideSetname = 0;
-	gameConf.control_mode = 0;
-	gameConf.draw_field_spell = 1;
-	gameConf.separate_clear_button = 1;
-	gameConf.auto_search_limit = -1;
-	gameConf.chkIgnoreDeckChanges = 0;
+	gameConf.chkMAutoPos = android::getIntSetting(appMain, "chkMAutoPos", 0);
+	gameConf.chkSTAutoPos = android::getIntSetting(appMain, "chkSTAutoPos", 0);
+	gameConf.chkRandomPos = android::getIntSetting(appMain, "chkRandomPos", 0);
+	gameConf.chkAutoChain = android::getIntSetting(appMain, "chkAutoChain", 0);
+	gameConf.chkWaitChain = android::getIntSetting(appMain, "chkWaitChain", 0);
+	gameConf.chkIgnore1 = android::getIntSetting(appMain, "chkIgnore1", 0);
+	gameConf.chkIgnore2 = android::getIntSetting(appMain, "chkIgnore2", 0);
+	gameConf.chkHideSetname = android::getIntSetting(appMain, "chkHideSetname", 0);
+	gameConf.control_mode = android::getIntSetting(appMain, "control_mode", 0);
+	gameConf.draw_field_spell = android::getIntSetting(appMain, "draw_field_spell", 0);
+	gameConf.separate_clear_button = android::getIntSetting(appMain, "separate_clear_button", 0);
+	gameConf.auto_search_limit = -1;//android::getIntSetting(appMain, "auto_search_limit", -1);
+	gameConf.chkIgnoreDeckChanges = android::getIntSetting(appMain, "chkIgnoreDeckChanges", 0);
+	
+	defGameConf.chkMAutoPos = gameConf.chkMAutoPos;
+	defGameConf.chkSTAutoPos = gameConf.chkSTAutoPos;
+	defGameConf.chkRandomPos = gameConf.chkRandomPos;
+	defGameConf.chkAutoChain = gameConf.chkAutoChain;
+	defGameConf.chkWaitChain = gameConf.chkWaitChain;
+	defGameConf.chkIgnore1 = gameConf.chkIgnore1;
+	defGameConf.chkIgnore2 = gameConf.chkIgnore2;
+	defGameConf.chkHideSetname = gameConf.chkHideSetname;
+	defGameConf.control_mode = gameConf.control_mode;
+	defGameConf.draw_field_spell = gameConf.draw_field_spell;
+	defGameConf.separate_clear_button = gameConf.separate_clear_button;
+	defGameConf.chkIgnoreDeckChanges = gameConf.chkIgnoreDeckChanges;
 }
 
 void Game::SaveConfig() {
 	char linebuf[256];	
 	BufferIO::EncodeUTF8(gameConf.lastdeck, linebuf);
 	android::setLastDeck(appMain, linebuf);
+	
+	if(defGameConf.chkMAutoPos != gameConf.chkMAutoPos)
+	  android::saveIntSetting(appMain, "chkMAutoPos", gameConf.chkMAutoPos);
+	if(defGameConf.chkSTAutoPos != gameConf.chkSTAutoPos)
+	  android::saveIntSetting(appMain, "chkSTAutoPos", gameConf.chkSTAutoPos);
+	if(defGameConf.chkRandomPos != gameConf.chkRandomPos)
+	  android::saveIntSetting(appMain, "chkRandomPos", gameConf.chkRandomPos);
+	if(defGameConf.chkAutoChain != gameConf.chkAutoChain)
+	  android::saveIntSetting(appMain, "chkAutoChain", gameConf.chkAutoChain);
+	if(defGameConf.chkIgnore1 != gameConf.chkIgnore1)
+	  android::saveIntSetting(appMain, "chkIgnore1", gameConf.chkIgnore1);
+	if(defGameConf.chkIgnore2 != gameConf.chkIgnore2)
+	  android::saveIntSetting(appMain, "chkIgnore2", gameConf.chkIgnore2);
+	if(defGameConf.chkHideSetname != gameConf.chkHideSetname)
+	  android::saveIntSetting(appMain, "chkHideSetname", gameConf.chkHideSetname);
+	if(defGameConf.control_mode != gameConf.control_mode)
+	  android::saveIntSetting(appMain, "control_mode", gameConf.control_mode);
+	if(defGameConf.draw_field_spell != gameConf.draw_field_spell)
+	  android::saveIntSetting(appMain, "draw_field_spell", gameConf.draw_field_spell);
+	if(defGameConf.separate_clear_button != gameConf.separate_clear_button)
+	  android::saveIntSetting(appMain, "separate_clear_button", gameConf.separate_clear_button);
+	//android::saveIntSetting(appMain, "auto_search_limit", gameConf.auto_search_limit);
+	if(defGameConf.chkIgnoreDeckChanges != gameConf.chkIgnoreDeckChanges)
+	  android::saveIntSetting(appMain, "chkIgnoreDeckChanges", gameConf.chkIgnoreDeckChanges);
 }
 void Game::ShowCardInfo(int code) {
 	CardData cd;
