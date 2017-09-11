@@ -106,6 +106,7 @@ void DeckBuilder::Terminate() {
 		BufferIO::EncodeUTF8(mainGame->gameConf.lastdeck, linebuf);
 		android::setLastDeck(mainGame->appMain, linebuf);
 	}
+	mainGame->SaveConfig();
 	if(exit_on_return)
 		mainGame->device->closeDevice();
 }

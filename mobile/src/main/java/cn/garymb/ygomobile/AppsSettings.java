@@ -395,13 +395,13 @@ public class AppsSettings {
     }
 
     public void saveIntSettings(String key, int value) {
-        mSharedPreferences.putInt(Constants.PREF_START + key, value);
         Log.i("kk", "saveIntSettings:" + key + "=" + value);
+        mSharedPreferences.putInt(Constants.PREF_START + key, value);
     }
 
     public int getIntSettings(String key, int def) {
         int val = mSharedPreferences.getInt(Constants.PREF_START + key, def);
-        Log.i("kk", "getIntSettings:" + key + "=" + val);
+        Log.d("kk", "getIntSettings:" + key + "=" + val);
         return val;
     }
 
@@ -417,8 +417,7 @@ public class AppsSettings {
     public String getSettings(String key) {
         if ("lastdeck".equals(key)) {
             String val = getLastDeck();
-            ;
-            Log.i("kk", "getSettings:" + key + "=" + val);
+            Log.d("kk", "getSettings:" + key + "=" + val);
             return val;
         }
         return mSharedPreferences.getString(Constants.PREF_START + key, null);

@@ -1521,29 +1521,29 @@ void Game::SaveConfig() {
 	//char linebuf[256];	
 	//BufferIO::EncodeUTF8(gameConf.lastdeck, linebuf);
 	//android::setLastDeck(appMain, linebuf);
-	
+	gameConf.chkMAutoPos = chkMAutoPos->isChecked()?1:0;
 	  android::saveIntSetting(appMain, "chkMAutoPos", gameConf.chkMAutoPos);
-	  
+	  gameConf.chkSTAutoPos = chkSTAutoPos->isChecked()?1:0;
 	  android::saveIntSetting(appMain, "chkSTAutoPos", gameConf.chkSTAutoPos);
-
+gameConf.chkRandomPos = chkRandomPos->isChecked()?1:0;
 	  android::saveIntSetting(appMain, "chkRandomPos", gameConf.chkRandomPos);
-
+gameConf.chkAutoChain = chkAutoChain->isChecked()?1:0;
 	  android::saveIntSetting(appMain, "chkAutoChain", gameConf.chkAutoChain);
-
+gameConf.chkIgnore1 = chkIgnore1->isChecked()?1:0;
 	  android::saveIntSetting(appMain, "chkIgnore1", gameConf.chkIgnore1);
-
+gameConf.chkIgnore2 = chkIgnore2->isChecked()?1:0;
 	  android::saveIntSetting(appMain, "chkIgnore2", gameConf.chkIgnore2);
-
+gameConf.chkHideSetname = chkHideSetname->isChecked()?1:0;
 	  android::saveIntSetting(appMain, "chkHideSetname", gameConf.chkHideSetname);
-
-	  android::saveIntSetting(appMain, "control_mode", gameConf.control_mode);
-
-	  android::saveIntSetting(appMain, "draw_field_spell", gameConf.draw_field_spell);
-
-	  android::saveIntSetting(appMain, "separate_clear_button", gameConf.separate_clear_button);
-
-	  android::saveIntSetting(appMain, "auto_search_limit", gameConf.auto_search_limit);
-
+//gameConf.control_mode = control_mode->isChecked()?1:0;
+//	  android::saveIntSetting(appMain, "control_mode", gameConf.control_mode);
+//gameConf.draw_field_spell = draw_field_spell->isChecked()?1:0;
+//	  android::saveIntSetting(appMain, "draw_field_spell", gameConf.draw_field_spell);
+//gameConf.separate_clear_button = separate_clear_button->isChecked()?1:0;
+//	  android::saveIntSetting(appMain, "separate_clear_button", gameConf.separate_clear_button);
+//gameConf.auto_search_limit = auto_search_limit->isChecked()?0:-1;
+//	  android::saveIntSetting(appMain, "auto_search_limit", gameConf.auto_search_limit);
+gameConf.chkIgnoreDeckChanges = chkIgnoreDeckChanges->isChecked();
 	  android::saveIntSetting(appMain, "chkIgnoreDeckChanges", gameConf.chkIgnoreDeckChanges);
 }
 
