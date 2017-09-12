@@ -1969,6 +1969,9 @@ bool ClientField::OnEvent(const irr::SEvent& event) {
 							}
 						}
 						break;
+					case irr::KEY_BACK:
+						
+						break;
 				}
 				if(display_cards.size()) {
 					wchar_t formatBuffer[2048];

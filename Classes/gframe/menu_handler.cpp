@@ -377,6 +377,9 @@ bool MenuHandler::OnEvent(const irr::SEvent& event) {
 			}
 			break;
 		}
+		case irr::gui::EGET_TAB_CHANGED:{
+			mainGame->SaveConfig();
+		}break;
 		default: break;
 		}
 		break;
