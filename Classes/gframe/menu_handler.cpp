@@ -46,6 +46,7 @@ bool MenuHandler::OnEvent(const irr::SEvent& event) {
 			switch(id) {
 			case BUTTON_MODE_EXIT: {
 				mainGame->soundEffectPlayer->doPressButton();
+				mainGame->SaveConfig();
 				mainGame->device->closeDevice();
 				break;
 			}
@@ -195,6 +196,7 @@ bool MenuHandler::OnEvent(const irr::SEvent& event) {
 				mainGame->HideElement(mainGame->wHostPrepare);
 				mainGame->ShowElement(mainGame->wLanWindow);
 				mainGame->wChat->setVisible(false);
+				mainGame->SaveConfig();
 				if(exit_on_return)
 					mainGame->device->closeDevice();
 				break;
@@ -377,9 +379,6 @@ bool MenuHandler::OnEvent(const irr::SEvent& event) {
 			}
 			break;
 		}
-		case irr::gui::EGET_TAB_CHANGED:{
-			mainGame->SaveConfig();
-		}break;
 		default: break;
 		}
 		break;

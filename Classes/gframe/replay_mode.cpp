@@ -190,6 +190,7 @@ int ReplayMode::ReplayThread(void* param) {
 		mainGame->stTip->setVisible(false);
 		mainGame->device->setEventReceiver(&mainGame->menuHandler);
 		mainGame->gMutex.Unlock();
+		mainGame->SaveConfig();
 		if(exit_on_return)
 			mainGame->device->closeDevice();
 	}

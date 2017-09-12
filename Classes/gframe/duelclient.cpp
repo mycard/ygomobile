@@ -572,6 +572,7 @@ void DuelClient::HandleSTOCPacketLan(char* data, unsigned int len) {
 		mainGame->device->setEventReceiver(&mainGame->menuHandler);
 		mainGame->ShowElement(mainGame->wLanWindow);
 		mainGame->gMutex.Unlock();
+		mainGame->SaveConfig();
 		event_base_loopbreak(client_base);
 		if(exit_on_return)
 			mainGame->device->closeDevice();
