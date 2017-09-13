@@ -286,6 +286,7 @@ public class CardSearcher implements View.OnClickListener {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 long value = getSelect(limitListSpinner);
                 if (value <= 0) {
+                    reset(limitSpinner);
                     limitSpinner.setVisibility(View.INVISIBLE);
                 } else {
                     limitSpinner.setVisibility(View.VISIBLE);
