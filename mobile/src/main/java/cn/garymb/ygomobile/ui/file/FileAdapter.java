@@ -50,13 +50,7 @@ class FileAdapter extends BaseAdapterPlus<File> {
     }
 
     private String getRootPath() {
-        String path = null;
-        try {
-            path = Environment.getExternalStorageDirectory().getAbsolutePath();
-        } catch (Exception e) {
-            path = "/mnt/sdcard/";
-        }
-        return path;
+        return "/";
     }
 
     public File getCurPath() {
