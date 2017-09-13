@@ -87,7 +87,7 @@ public class CardLoader implements ICardLoader {
     }
 
     public void loadData() {
-        loadData(null, 0);
+        loadData(null);
     }
 
     @Override
@@ -109,7 +109,7 @@ public class CardLoader implements ICardLoader {
         }
     }
 
-    private void loadData(CardSearchInfo searchInfo, long setcode) {
+    private void loadData(CardSearchInfo searchInfo) {
         if (!isOpen()) {
             return;
         }
@@ -193,8 +193,10 @@ public class CardLoader implements ICardLoader {
         searchInfo.category = category;
         searchInfo.race = race;
         searchInfo.pscale = (int) pscale;
+        searchInfo.setcode = setcode;
 
         LimitList limitList = mLimitManager.getLimit((int) limitlist);
+        searchInfo.limitList = limitList;
         LimitType cardLimitType = LimitType.valueOf(limit);
         if (limitList != null) {
             List<Long> ids;
@@ -210,10 +212,10 @@ public class CardLoader implements ICardLoader {
                 ids = null;
             }
             if (ids != null) {
-                searchInfo.inCards.addAll(ids);
+                searchInfo.inCards  =ids;
             }
         }
         setLimitList((limitList == null ? mLimitList : limitList));
-        loadData(searchInfo, setcode);
+        loadData(searchInfo);
     }
 }

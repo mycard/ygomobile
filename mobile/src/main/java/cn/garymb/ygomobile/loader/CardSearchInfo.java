@@ -2,10 +2,10 @@ package cn.garymb.ygomobile.loader;
 
 import android.text.TextUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import ocgcore.data.Card;
+import ocgcore.data.LimitList;
 import ocgcore.enums.CardType;
 
 class CardSearchInfo {
@@ -16,20 +16,24 @@ class CardSearchInfo {
     long race, category;
     String atk, def;
     boolean islink;
-    final List<Long> inCards;
+    List<Long> inCards;
     long[] types;
+    LimitList limitList;
+    long setcode;
 
     CardSearchInfo() {
-        inCards = new ArrayList<>();
     }
 
     public boolean check(Card card) {
+        if(inCards != null && !inCards.contains(card.Code)){
+            return false;
+        }
         if (!TextUtils.isEmpty(word)) {
             if (!((card.Name != null && card.Name.contains(word))
                     || (card.Desc != null && card.Desc.contains(word)))) {
                 return false;
             }
-        } else if(!TextUtils.isEmpty(prefixWord)  && !TextUtils.isEmpty(suffixWord)){
+        } else if (!TextUtils.isEmpty(prefixWord) && !TextUtils.isEmpty(suffixWord)) {
             boolean has = false;
             if (card.Name != null) {
                 int i1 = card.Name.indexOf(prefixWord);
@@ -143,6 +147,12 @@ class CardSearchInfo {
                         }
                     }
                 }
+            }
+        }
+        //TODO setcode
+        if (setcode > 0) {
+            if (!card.isSetCode(setcode)) {
+                return false;
             }
         }
         return true;
