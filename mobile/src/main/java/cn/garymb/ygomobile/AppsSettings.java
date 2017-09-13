@@ -110,7 +110,7 @@ public class AppsSettings {
         return mSharedPreferences.getBoolean(PREF_ONLY_GAME, DEF_PREF_ONLY_GAME);
     }
 
-    public boolean isReadExpansions(){
+    public boolean isReadExpansions() {
         return mSharedPreferences.getBoolean(PREF_READ_EX, DEF_PREF_READ_EX);
     }
 
@@ -158,7 +158,7 @@ public class AppsSettings {
                 });
                 if (cdbs != null) {
                     for (File file : cdbs) {
-                        if(ResCheckTask.checkDataBase(file.getAbsolutePath())) {
+                        if (ResCheckTask.checkDataBase(file.getAbsolutePath())) {
                             //合法数据库才会加载
                             pathList.add(file.getAbsolutePath());
                         }
@@ -176,7 +176,7 @@ public class AppsSettings {
         pathList.add(new File(getResourcePath(), Constants.CORE_PICS_ZIP).getAbsolutePath());
         pathList.add(new File(getResourcePath(), Constants.CORE_SCRIPTS_ZIP).getAbsolutePath());
         //
-        if(isReadExpansions()) {
+        if (isReadExpansions()) {
             File expansionsDir = getExpansionsPath();
             if (expansionsDir.exists()) {
                 File[] zips = expansionsDir.listFiles(new FileFilter() {
@@ -407,19 +407,51 @@ public class AppsSettings {
     }
 
     public void saveIntSettings(String key, int value) {
-        Log.i("kk", "saveIntSettings:" + key + "=" + value);
+        if (Constants.PREF_GAME_VERSION.equals(key)) {
+            mSharedPreferences.putString(key, String.format("0x%X", value));
+        }
         mSharedPreferences.putInt(Constants.PREF_START + key, value);
     }
 
     public int getIntSettings(String key, int def) {
-        int val = mSharedPreferences.getInt(Constants.PREF_START + key, def);
-        Log.d("kk", "getIntSettings:" + key + "=" + val);
-        return val;
+        if (Constants.PREF_GAME_VERSION.equals(key)) {
+            int val = mSharedPreferences.getInt(Constants.PREF_START + key, 0);
+            if (def > val) {
+                Log.i("kk", String.format("reset game_version=0x%X", def));
+                saveIntSettings(key, def);
+                return def;
+            }
+            Log.i("kk", String.format("game_version=0x%X", val));
+            return val;
+        } else {
+            int val = mSharedPreferences.getInt(Constants.PREF_START + key, def);
+            return val;
+        }
+    }
+
+    public String getVersionString(int value) {
+        int last = (value & 0xf);
+        int m = ((value >> 4) & 0xff);
+        int b = ((value >> 12) & 0xff);
+        return String.format("%X.%03X.%X", b, m, last);
+    }
+
+    public int getVersionValue(String str) {
+        String ver = str.trim().replace(".0", "").replace(".", "");
+        int v;
+        if (ver.startsWith("0x") || ver.startsWith("0X")) {
+            ver = ver.substring(2);
+        }
+        try {
+            v = Integer.parseInt(ver, 16);
+        } catch (Exception e) {
+            return -1;
+        }
+        return v;
     }
 
     public void saveSettings(String key, String value) {
         if ("lastdeck".equals(key)) {
-            Log.i("kk", "setLastDeck:" + key + "=" + value);
             setLastDeck(value);
         } else {
             mSharedPreferences.putString(Constants.PREF_START + key, value);
@@ -429,7 +461,6 @@ public class AppsSettings {
     public String getSettings(String key) {
         if ("lastdeck".equals(key)) {
             String val = getLastDeck();
-            Log.d("kk", "getSettings:" + key + "=" + val);
             return val;
         }
         return mSharedPreferences.getString(Constants.PREF_START + key, null);

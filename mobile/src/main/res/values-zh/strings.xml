@@ -182,4 +182,6 @@
     <string name="only_game_tip">取消设置，只能清空应用的数据，或者重装</string>
     <string name="title_use_ex">使用额外卡库</string>
     <string name="tip_network_image">服务器爆炸了</string>
+    <string name="game_version">游戏版本</string>
+    <string name="error_game_ver">版本格式不对应该是X.0XX.X，小于F.099.F</string>
 </resources>

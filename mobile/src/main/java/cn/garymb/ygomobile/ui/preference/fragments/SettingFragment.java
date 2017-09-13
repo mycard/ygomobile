@@ -24,23 +24,24 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import cn.garymb.ygomobile.Constants;
-import cn.garymb.ygomobile.ui.home.MainActivity;
 import cn.garymb.ygomobile.AppsSettings;
-import cn.garymb.ygomobile.ui.home.ResCheckTask;
+import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.lite.R;
+import cn.garymb.ygomobile.ui.home.MainActivity;
 import cn.garymb.ygomobile.ui.plus.DialogPlus;
-import cn.garymb.ygomobile.ui.preference.PreferenceFragmentPlus;
 import cn.garymb.ygomobile.ui.plus.VUiKit;
+import cn.garymb.ygomobile.ui.preference.PreferenceFragmentPlus;
 import cn.garymb.ygomobile.utils.IOUtils;
 import ocgcore.ConfigManager;
 
 import static cn.garymb.ygomobile.Constants.ACTION_RELOAD;
+import static cn.garymb.ygomobile.Constants.DEF_PREF_GAME_VERSION;
 import static cn.garymb.ygomobile.Constants.PREF_DECK_DELETE_DILAOG;
 import static cn.garymb.ygomobile.Constants.PREF_FONT_ANTIALIAS;
 import static cn.garymb.ygomobile.Constants.PREF_FONT_SIZE;
 import static cn.garymb.ygomobile.Constants.PREF_GAME_FONT;
 import static cn.garymb.ygomobile.Constants.PREF_GAME_PATH;
+import static cn.garymb.ygomobile.Constants.PREF_GAME_VERSION;
 import static cn.garymb.ygomobile.Constants.PREF_IMAGE_QUALITY;
 import static cn.garymb.ygomobile.Constants.PREF_IMMERSIVE_MODE;
 import static cn.garymb.ygomobile.Constants.PREF_LOCK_SCREEN;
@@ -77,7 +78,7 @@ public class SettingFragment extends PreferenceFragmentPlus {
 
         addPreferencesFromResource(R.xml.preference_game);
         bind(PREF_GAME_PATH, mSettings.getResourcePath());
-
+        bind(PREF_GAME_VERSION, String.format("0x%X", mSettings.getIntSettings(PREF_GAME_VERSION, DEF_PREF_GAME_VERSION)));
         bind(PREF_SOUND_EFFECT, mSettings.isSoundEffect());
         bind(PREF_LOCK_SCREEN, mSettings.isLockSreenOrientation());
         bind(PREF_FONT_ANTIALIAS, mSettings.isFontAntiAlias());
@@ -89,7 +90,7 @@ public class SettingFragment extends PreferenceFragmentPlus {
         bind(PREF_GAME_FONT, mSettings.getFontPath());
         bind(PREF_READ_EX, mSettings.isReadExpansions());
         Preference preference = findPreference(PREF_READ_EX);
-        if(preference != null) {
+        if (preference != null) {
             preference.setSummary(mSettings.getExpansionsPath().getAbsolutePath());
         }
         bind(PREF_DECK_DELETE_DILAOG, mSettings.isDialogDelete());
@@ -104,6 +105,17 @@ public class SettingFragment extends PreferenceFragmentPlus {
 
     @Override
     public boolean onPreferenceChange(Preference preference, Object value) {
+        if (PREF_GAME_VERSION.equals(preference.getKey())) {
+            int v = AppsSettings.get().getVersionValue(value.toString());
+            if (v > 0 && v <= AppsSettings.get().getVersionValue("0xF99F")) {
+                mSettings.saveIntSettings(preference.getKey(), v);
+                super.onPreferenceChange(preference, AppsSettings.get().getVersionString(v));
+                return true;
+            } else {
+                Toast.makeText(getContext(), R.string.error_game_ver, Toast.LENGTH_SHORT).show();
+                return false;
+            }
+        }
         super.onPreferenceChange(preference, value);
         if (PREF_FONT_SIZE.equals(preference.getKey())) {
             int size = Constants.DEF_PREF_FONT_SIZE;
@@ -124,8 +136,8 @@ public class SettingFragment extends PreferenceFragmentPlus {
             if (preference instanceof ListPreference) {
                 ListPreference listPreference = (ListPreference) preference;
                 mSharedPreferences.edit().putString(preference.getKey(), listPreference.getValue()).apply();
-            }else {
-                mSharedPreferences.edit().putString(preference.getKey(), ""+value).apply();
+            } else {
+                mSharedPreferences.edit().putString(preference.getKey(), "" + value).apply();
             }
             return rs;
         }

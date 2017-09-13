@@ -12,7 +12,6 @@ import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.RingtonePreference;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.MenuItem;
 
 abstract class BasePreferenceFragment extends PreferenceFragment implements Preference.OnPreferenceClickListener
@@ -94,11 +93,15 @@ abstract class BasePreferenceFragment extends PreferenceFragment implements Pref
             return null;
         }
         Object value = null;
-        if (isbool) {
-            boolean def = defValue == null ? false : (Boolean) defValue;
-            value = mSharedPreferences.getBoolean(key, def);
-        } else {
-            value = mSharedPreferences.getString(key, "" + defValue);
+        try {
+            if (isbool) {
+                boolean def = defValue == null ? false : (Boolean) defValue;
+                value = mSharedPreferences.getBoolean(key, def);
+            } else {
+                value = mSharedPreferences.getString(key, "" + defValue);
+            }
+        }catch (Exception e){
+            return defValue;
         }
         return value;
     }

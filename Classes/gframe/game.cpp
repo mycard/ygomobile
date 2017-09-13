@@ -25,7 +25,7 @@
 #include <COGLESDriver.h>
 #endif
 
-const unsigned short PRO_VERSION = 0x233E;
+unsigned short PRO_VERSION = 0x233E;
 
 namespace ygo {
 
@@ -40,6 +40,7 @@ bool Game::Initialize() {
 	srand(time(0));
 	irr::SIrrlichtCreationParameters params = irr::SIrrlichtCreationParameters();
 #ifdef _IRR_ANDROID_PLATFORM_
+    PRO_VERSION = android::getIntSetting(app, "game_version", PRO_VERSION);
 	android::InitOptions *options = android::getInitOptions(app);
 	glversion = options->getOpenglVersion();
 	if (glversion == 0) {
@@ -1486,6 +1487,7 @@ void Game::RefreshSingleplay() {
 void Game::LoadConfig() {
 	wchar_t wstr[256];
 	if(gameConf._init)return;
+	PRO_VERSION = android::getIntSetting(appMain, "game_version", PRO_VERSION);
 	gameConf._init = TRUE;
 	gameConf.antialias = 1;
 	gameConf.serverport = 7911;

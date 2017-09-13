@@ -12,6 +12,9 @@ public interface Constants {
     String PREF_GAME_PATH = "pref_key_game_res_path";
     String PREF_DEF_GAME_DIR = "ygocore";
 
+    String PREF_GAME_VERSION = "game_version";
+    int DEF_PREF_GAME_VERSION = 0x233E;
+
 
     String PREF_IMAGE_QUALITY = "pref_key_game_image_quality";
     int PREF_DEF_IMAGE_QUALITY = 1;

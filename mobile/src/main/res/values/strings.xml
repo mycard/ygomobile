@@ -185,4 +185,6 @@
     <string name="only_game_tip">reset this setting, need clean data of app</string>
     <string name="title_use_ex">Use Expansions</string>
     <string name="tip_network_image">image server is close</string>
+    <string name="game_version">Game Version</string>
+    <string name="error_game_ver">版本格式不对应该是X.0XX.X，小于F.099.F</string>
 </resources>
