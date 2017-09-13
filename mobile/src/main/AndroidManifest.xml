@@ -32,6 +32,7 @@
         <activity
             android:name="cn.garymb.ygomobile.ui.activities.LogoActivity"
             android:excludeFromRecents="true"
+            android:taskAffinity="cn.garymb.logo"
             android:theme="@style/TranslucentTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -41,6 +42,7 @@
 
         <activity
             android:name="cn.garymb.ygomobile.ui.home.MainActivity"
+            android:excludeFromRecents="false"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:exported="true"
             android:launchMode="singleTask"
