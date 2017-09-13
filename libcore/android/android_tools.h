@@ -50,10 +50,14 @@ public:
 	}
 	~InitOptions()
     {
-		if(m_db_files != NULL)
-          delete m_db_files;
-	    if(m_archive_files != NULL)
-		  delete m_archive_files;
+		if(m_db_files != NULL){
+			delete[] m_db_files;
+		}
+		m_db_files = NULL;
+		if(m_archive_files != NULL){
+			delete[] m_archive_files;
+		}
+		m_archive_files = NULL;
     }
 private:
 	irr::io::path m_work_dir;

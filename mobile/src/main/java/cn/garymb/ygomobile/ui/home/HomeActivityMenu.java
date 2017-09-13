@@ -3,6 +3,7 @@ package cn.garymb.ygomobile.ui.home;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.widget.Toast;
 
 import com.nightonke.boommenu.BoomButtons.BoomButton;
 import com.nightonke.boommenu.BoomButtons.TextOutsideCircleButton;

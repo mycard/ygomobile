@@ -63,12 +63,10 @@ public class CardLoader implements ICardLoader {
             return null;
         }
         Map<Long, Card> map = new HashMap<>();
-        int i = 0;
         for (Long id : ids) {
-            if (i != 0) {
+            if (id != 0) {
                 map.put(id, mCardManager.getCard(id));
             }
-            i++;
         }
         return map;
     }

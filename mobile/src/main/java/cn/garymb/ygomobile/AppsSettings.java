@@ -15,18 +15,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import cn.garymb.ygomobile.ui.home.ResCheckTask;
 import cn.garymb.ygomobile.ui.preference.PreferenceFragmentPlus;
 import cn.garymb.ygomobile.utils.SystemUtils;
 
 import static cn.garymb.ygomobile.Constants.CORE_SYSTEM_PATH;
 import static cn.garymb.ygomobile.Constants.DEF_PREF_FONT_SIZE;
 import static cn.garymb.ygomobile.Constants.DEF_PREF_ONLY_GAME;
+import static cn.garymb.ygomobile.Constants.DEF_PREF_READ_EX;
 import static cn.garymb.ygomobile.Constants.PREF_DEF_IMMERSIVE_MODE;
 import static cn.garymb.ygomobile.Constants.PREF_DEF_SENSOR_REFRESH;
 import static cn.garymb.ygomobile.Constants.PREF_FONT_SIZE;
 import static cn.garymb.ygomobile.Constants.PREF_IMMERSIVE_MODE;
 import static cn.garymb.ygomobile.Constants.PREF_LOCK_SCREEN;
 import static cn.garymb.ygomobile.Constants.PREF_ONLY_GAME;
+import static cn.garymb.ygomobile.Constants.PREF_READ_EX;
 import static cn.garymb.ygomobile.Constants.PREF_SENSOR_REFRESH;
 
 public class AppsSettings {
@@ -107,6 +110,10 @@ public class AppsSettings {
         return mSharedPreferences.getBoolean(PREF_ONLY_GAME, DEF_PREF_ONLY_GAME);
     }
 
+    public boolean isReadExpansions(){
+        return mSharedPreferences.getBoolean(PREF_READ_EX, DEF_PREF_READ_EX);
+    }
+
     public float getXScale() {
         return getScreenHeight() / (float) Constants.CORE_SKIN_BG_SIZE[0];
     }
@@ -140,7 +147,7 @@ public class AppsSettings {
 
     private void makeCdbList(List<String> pathList) {
         pathList.add(new File(getDataBasePath(), "cards.cdb").getAbsolutePath());
-        if (Constants.READ_EX_CDB) {
+        if (isReadExpansions()) {
             File expansionsDir = getExpansionsPath();
             if (expansionsDir.exists()) {
                 File[] cdbs = expansionsDir.listFiles(new FileFilter() {
@@ -151,7 +158,10 @@ public class AppsSettings {
                 });
                 if (cdbs != null) {
                     for (File file : cdbs) {
-                        pathList.add(file.getAbsolutePath());
+                        if(ResCheckTask.checkDataBase(file.getAbsolutePath())) {
+                            //合法数据库才会加载
+                            pathList.add(file.getAbsolutePath());
+                        }
                     }
                 }
             }
@@ -166,17 +176,19 @@ public class AppsSettings {
         pathList.add(new File(getResourcePath(), Constants.CORE_PICS_ZIP).getAbsolutePath());
         pathList.add(new File(getResourcePath(), Constants.CORE_SCRIPTS_ZIP).getAbsolutePath());
         //
-        File expansionsDir = getExpansionsPath();
-        if (expansionsDir.exists()) {
-            File[] zips = expansionsDir.listFiles(new FileFilter() {
-                @Override
-                public boolean accept(File file) {
-                    return file.isFile() && file.getName().toLowerCase(Locale.US).endsWith(".zip");
-                }
-            });
-            if (zips != null) {
-                for (File file : zips) {
-                    pathList.add(file.getAbsolutePath());
+        if(isReadExpansions()) {
+            File expansionsDir = getExpansionsPath();
+            if (expansionsDir.exists()) {
+                File[] zips = expansionsDir.listFiles(new FileFilter() {
+                    @Override
+                    public boolean accept(File file) {
+                        return file.isFile() && file.getName().toLowerCase(Locale.US).endsWith(".zip");
+                    }
+                });
+                if (zips != null) {
+                    for (File file : zips) {
+                        pathList.add(file.getAbsolutePath());
+                    }
                 }
             }
         }
