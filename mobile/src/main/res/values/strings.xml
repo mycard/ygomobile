@@ -184,4 +184,5 @@
     <string name="settings_pref_settings_only_game">Only game</string>
     <string name="only_game_tip">reset this setting, need clean data of app</string>
     <string name="title_use_ex">Use Expansions</string>
+    <string name="tip_network_image">image server is close</string>
 </resources>

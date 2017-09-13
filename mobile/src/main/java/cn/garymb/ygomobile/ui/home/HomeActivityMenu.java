@@ -3,6 +3,7 @@ package cn.garymb.ygomobile.ui.home;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.widget.Toast;
 
 import com.nightonke.boommenu.BoomButtons.BoomButton;
 import com.nightonke.boommenu.BoomButtons.TextOutsideCircleButton;
@@ -82,7 +83,11 @@ class HomeActivityMenu {
                     WebActivity.open(getActivity(), getActivity().getString(R.string.help), Constants.URL_HELP);
                     break;
                 case MENU_UPDATE_IAMGES:
-                    getActivity().updateImages();
+                    if(Constants.NETWORK_IMAGE) {
+                        getActivity().updateImages();
+                    }else{
+                        getActivity().showToast(getActivity().getString(R.string.tip_network_image));
+                    }
                     break;
                 case MENU_ABOUT:
                     startActivity(new Intent(getActivity(), AboutActivity.class));
