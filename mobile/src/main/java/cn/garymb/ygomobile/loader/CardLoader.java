@@ -192,25 +192,25 @@ public class CardLoader implements ICardLoader {
         searchInfo.race = race;
         searchInfo.pscale = (int) pscale;
         searchInfo.setcode = setcode;
-
         LimitList limitList = mLimitManager.getLimit((int) limitlist);
-        searchInfo.limitList = limitList;
-        LimitType cardLimitType = LimitType.valueOf(limit);
-        if (limitList != null) {
-            List<Long> ids;
-            if (cardLimitType == LimitType.Forbidden) {
-                ids = limitList.forbidden;
-            } else if (cardLimitType == LimitType.Limit) {
-                ids = limitList.limit;
-            } else if (cardLimitType == LimitType.SemiLimit) {
-                ids = limitList.semiLimit;
-            } else if (cardLimitType == LimitType.All) {
-                ids = limitList.getCodeList();
-            } else {
-                ids = null;
-            }
-            if (ids != null) {
-                searchInfo.inCards  =ids;
+        if (limitlist > 0) {
+            LimitType cardLimitType = LimitType.valueOf(limit);
+            if (limitList != null) {
+                List<Long> ids;
+                if (cardLimitType == LimitType.Forbidden) {
+                    ids = limitList.forbidden;
+                } else if (cardLimitType == LimitType.Limit) {
+                    ids = limitList.limit;
+                } else if (cardLimitType == LimitType.SemiLimit) {
+                    ids = limitList.semiLimit;
+                } else if (cardLimitType == LimitType.All) {
+                    ids = limitList.getCodeList();
+                } else {
+                    ids = null;
+                }
+                if (ids != null) {
+                    searchInfo.inCards = ids;
+                }
             }
         }
         setLimitList((limitList == null ? mLimitList : limitList));

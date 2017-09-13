@@ -5,7 +5,6 @@ import android.text.TextUtils;
 import java.util.List;
 
 import ocgcore.data.Card;
-import ocgcore.data.LimitList;
 import ocgcore.enums.CardType;
 
 class CardSearchInfo {
@@ -18,7 +17,6 @@ class CardSearchInfo {
     boolean islink;
     List<Long> inCards;
     long[] types;
-    LimitList limitList;
     long setcode;
 
     CardSearchInfo() {

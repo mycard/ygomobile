@@ -314,6 +314,4 @@ public class CardDetail extends BaseAdapterPlus.BaseViewHolder {
 
         }
     }
-
-    ;
 }
