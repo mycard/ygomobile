@@ -88,6 +88,10 @@ public class SettingFragment extends PreferenceFragmentPlus {
         bind(PREF_IMAGE_QUALITY, mSettings.getCardQuality());
         bind(PREF_GAME_FONT, mSettings.getFontPath());
         bind(PREF_READ_EX, mSettings.isReadExpansions());
+        Preference preference = findPreference(PREF_READ_EX);
+        if(preference != null) {
+            preference.setSummary(mSettings.getExpansionsPath().getAbsolutePath());
+        }
         bind(PREF_DECK_DELETE_DILAOG, mSettings.isDialogDelete());
         bind(PREF_USE_EXTRA_CARD_CARDS, mSettings.isUseExtraCards());
         bind(SETTINGS_COVER, new File(mSettings.getCoreSkinPath(), Constants.CORE_SKIN_COVER).getAbsolutePath());
