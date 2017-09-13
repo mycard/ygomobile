@@ -83,11 +83,7 @@ class HomeActivityMenu {
                     WebActivity.open(getActivity(), getActivity().getString(R.string.help), Constants.URL_HELP);
                     break;
                 case MENU_UPDATE_IAMGES:
-                    if(Constants.NETWORK_IMAGE) {
-                        getActivity().updateImages();
-                    }else{
-                        getActivity().showToast(getActivity().getString(R.string.tip_network_image));
-                    }
+                    getActivity().updateImages();
                     break;
                 case MENU_ABOUT:
                     startActivity(new Intent(getActivity(), AboutActivity.class));

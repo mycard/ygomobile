@@ -1,5 +1,6 @@
 package cn.garymb.ygomobile.ui.home;
 
+import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -10,8 +11,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.net.URLEncoder;
 
+import cn.garymb.ygomobile.AppsSettings;
 import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.GameUriManager;
 import cn.garymb.ygomobile.YGOMobileActivity;
@@ -22,6 +25,7 @@ import cn.garymb.ygomobile.ui.plus.DialogPlus;
 import cn.garymb.ygomobile.ui.plus.VUiKit;
 import cn.garymb.ygomobile.utils.AlipayPayUtils;
 import cn.garymb.ygomobile.utils.ComponentUtils;
+import cn.garymb.ygomobile.utils.IOUtils;
 import cn.garymb.ygomobile.utils.NetUtils;
 
 import static cn.garymb.ygomobile.Constants.ACTION_RELOAD;
@@ -125,10 +129,26 @@ public class MainActivity extends HomeActivity {
 
     @Override
     public void updateImages() {
-        if (!mImageUpdater.isRunning()) {
-            mImageUpdater.start();
-        } else {
-            showToast(R.string.downloading_images, Toast.LENGTH_SHORT);
+        if(Constants.NETWORK_IMAGE) {
+            if (!mImageUpdater.isRunning()) {
+                mImageUpdater.start();
+            } else {
+                showToast(R.string.downloading_images, Toast.LENGTH_SHORT);
+            }
+        }else {
+            ProgressDialog dialog = ProgressDialog.show(this, getString(R.string.check_things), getString(R.string.images));
+            VUiKit.defer().when(()->{
+                if (IOUtils.hasAssets(this, ResCheckTask.getDatapath(Constants.CORE_PICS_ZIP))) {
+                    try {
+                        IOUtils.copyFilesFromAssets(this, ResCheckTask.getDatapath(Constants.CORE_PICS_ZIP),
+                                AppsSettings.get().getResourcePath(), true);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).done((rs)->{
+                dialog.dismiss();
+            });
         }
     }
 }
