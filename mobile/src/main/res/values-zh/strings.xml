@@ -179,4 +179,6 @@
     <string name="mc_home">大厅</string>
     <string name="bbs">社区</string>
     <string name="settings_pref_settings_only_game">直接进入游戏</string>
+    <string name="only_game_tip">取消设置，只能清空应用的数据，或者重装</string>
+    <string name="title_use_ex">使用额外卡库</string>
 </resources>

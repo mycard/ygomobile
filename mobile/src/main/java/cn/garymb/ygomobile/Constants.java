@@ -83,6 +83,9 @@ public interface Constants {
     String PREF_ONLY_GAME = "pref_settings_only_game";
     boolean DEF_PREF_ONLY_GAME = false;
 
+    String PREF_READ_EX = "pref_settings_read_ex";
+    boolean DEF_PREF_READ_EX = false;
+
     int REQUEST_CUT_IMG = 0x1000 + 0x10;
     int REQUEST_CHOOSE_FILE = 0x1000 + 0x20;
     int REQUEST_CHOOSE_IMG = 0x1000 + 0x21;
@@ -168,7 +171,6 @@ public interface Constants {
     String QUERY_ROOM = "room";
 
     //额外的cdb
-    boolean READ_EX_CDB = true;
     boolean NETWORK_IMAGE = false;
     boolean SHOW_MYCARD = !"core".equals(BuildConfig.FLAVOR);
 }

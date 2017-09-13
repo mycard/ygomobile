@@ -182,4 +182,6 @@
     <string name="mc_home">Home</string>
     <string name="bbs">Community</string>
     <string name="settings_pref_settings_only_game">Only game</string>
+    <string name="only_game_tip">reset this setting, need clean data of app</string>
+    <string name="title_use_ex">Use Expansions</string>
 </resources>

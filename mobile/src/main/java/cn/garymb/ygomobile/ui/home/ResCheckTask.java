@@ -2,6 +2,7 @@ package cn.garymb.ygomobile.ui.home;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.os.AsyncTask;
@@ -163,6 +164,24 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
             IOUtils.copyFilesFromAssets(mContext, getDatapath(Constants.DATABASE_NAME), mSettings.getDataBasePath(), needsUpdate);
 //            doSomeTrickOnDatabase(dbFile.getAbsolutePath());
         }
+    }
+
+    public static boolean checkDataBase(String path) {
+        SQLiteDatabase db = null;
+        try {
+            db = SQLiteDatabase.openDatabase(path, null,
+                    SQLiteDatabase.OPEN_READWRITE);
+            Cursor cursor = db.rawQuery("select * from datas,texts where datas.id=texts.id limit 1;", null);
+            if (cursor == null) {
+                return false;
+            }
+            cursor.close();
+        } catch (Exception e) {
+            return false;
+        } finally {
+            IOUtils.close(db);
+        }
+        return true;
     }
 
     public static void doSomeTrickOnDatabase(String myPath)
