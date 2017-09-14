@@ -2,12 +2,14 @@ package cn.garymb.ygomobile.ui.home;
 
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.widget.Toast;
 
 import java.net.URLEncoder;
@@ -26,6 +28,7 @@ import cn.garymb.ygomobile.utils.NetUtils;
 
 import static cn.garymb.ygomobile.Constants.ACTION_RELOAD;
 import static cn.garymb.ygomobile.Constants.ALIPAY_URL;
+import static cn.garymb.ygomobile.Constants.NETWORK_IMAGE;
 
 public class MainActivity extends HomeActivity {
     private GameUriManager mGameUriManager;
@@ -52,7 +55,7 @@ public class MainActivity extends HomeActivity {
                         .setOnCloseLinster((dlg) -> {
                             dlg.dismiss();
                             //mImageUpdater
-                            if (Constants.NETWORK_IMAGE && NetUtils.isConnected(getContext())) {
+                            if (NETWORK_IMAGE && NetUtils.isConnected(getContext())) {
                                 if (!mImageUpdater.isRunning()) {
                                     mImageUpdater.start();
                                 }
@@ -125,10 +128,24 @@ public class MainActivity extends HomeActivity {
 
     @Override
     public void updateImages() {
-        if (!mImageUpdater.isRunning()) {
-            mImageUpdater.start();
-        } else {
-            showToast(R.string.downloading_images, Toast.LENGTH_SHORT);
+        if(!NETWORK_IMAGE){
+            DialogPlus dialog  = new DialogPlus(this);
+            dialog.setTitle("公告");
+            dialog.setMessage("由于版权关系，github不提供卡图下载。\n" +
+                    "如果需要下载卡图，则需要钱搭服务，作者没啥钱，收大家钱搞会被骂。\n" +
+                    "所以以后不提供卡图下载，大家将就用集成卡图。\n" +
+                    "如果集成卡图也被举报，那么以后不内置卡图。");
+            dialog.show();
+            return;
+        }
+        if(NetUtils.isConnected(this)) {
+            if (!mImageUpdater.isRunning()) {
+                mImageUpdater.start();
+            } else {
+                showToast(R.string.downloading_images, Toast.LENGTH_SHORT);
+            }
+        }else{
+            showToast(getString(R.string.tip_no_netwrok));
         }
     }
 }

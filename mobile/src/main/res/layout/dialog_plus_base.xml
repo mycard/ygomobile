@@ -98,6 +98,7 @@
                     android:layout_gravity="center"
                     android:background="@drawable/button_bg"
                     android:text="@android:string/ok"
+                    android:visibility="gone"
                     android:textColor="@android:color/white"
                     tools:visibility="visible"/>
             </FrameLayout>

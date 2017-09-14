@@ -184,4 +184,5 @@
     <string name="tip_network_image">服务器爆炸了</string>
     <string name="game_version">游戏版本</string>
     <string name="error_game_ver">版本格式不对应该是X.0XX.X，小于F.099.F</string>
+    <string name="tip_no_netwrok">请确认已经连接网络</string>
 </resources>

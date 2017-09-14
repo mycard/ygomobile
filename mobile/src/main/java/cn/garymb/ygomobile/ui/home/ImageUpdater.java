@@ -3,6 +3,7 @@ package cn.garymb.ygomobile.ui.home;
 import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.io.File;
@@ -26,6 +27,7 @@ import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.ui.activities.BaseActivity;
 import cn.garymb.ygomobile.ui.plus.DialogPlus;
 import cn.garymb.ygomobile.ui.plus.VUiKit;
+import cn.garymb.ygomobile.utils.FileUtils;
 import cn.garymb.ygomobile.utils.IOUtils;
 import ocgcore.data.Card;
 import ocgcore.enums.CardType;
@@ -189,16 +191,21 @@ public class ImageUpdater implements DialogInterface.OnCancelListener {
             }
             if (needNext) {
                 if (existImage()) {
+
                 } else {
-                    if (download(item.url, tmpFile) && tmpFile.exists()) {
+                    if (download(item.url, tmpFile)) {
                         File file = new File(item.file);
-                        if (!file.exists()) {
+                        if (tmpFile.exists() && !file.exists()) {
                             tmpFile.renameTo(file);
+                            Log.d("kk", "download ok:" + item.url + " ->" + item.file);
+                        } else {
+                            Log.e("kk", "download fail:" + item.url + " ->" + item.file);
                         }
                     } else {
                         synchronized (mCardStatus) {
                             mError++;
                         }
+                        Log.e("kk", "download error:" + item.url + " ->" + item.file);
                     }
                 }
                 synchronized (mCardStatus) {
@@ -250,10 +257,20 @@ public class ImageUpdater implements DialogInterface.OnCancelListener {
         HttpURLConnection mConnection = null;
         boolean ok = false;
         try {
+            if (file.exists()) {
+                file.delete();
+            } else {
+                File dir = file.getParentFile();
+                if (!dir.exists()) {
+                    dir.mkdirs();
+                }
+            }
+            file.createNewFile();
             mConnection = (HttpURLConnection) new URL(url).openConnection();
             mConnection.setConnectTimeout(30 * 1000);
             mConnection.setReadTimeout(15 * 1000);
-            mConnection.setUseCaches(false);
+            mConnection.setRequestProperty("User-Agent",
+                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/52.0.2743.116 Safari/537.36 Edge/15.15063");
             mConnection.connect();
             if (mConnection.getResponseCode() == 200) {
                 inputStream = mConnection.getInputStream();
@@ -265,9 +282,14 @@ public class ImageUpdater implements DialogInterface.OnCancelListener {
                 }
                 outputStream.flush();
                 ok = true;
+            } else {
+                Log.w("kk", "download:" + mConnection.getResponseCode() + ":url=" + url);
             }
         } catch (IOException e) {
-
+            Log.w("kk", "download:" + url, e);
+            if (file.exists()) {
+                file.delete();
+            }
         } finally {
             IOUtils.close(inputStream);
             IOUtils.close(outputStream);
@@ -308,7 +330,7 @@ public class ImageUpdater implements DialogInterface.OnCancelListener {
             if (mError == 0) {
                 mContext.showToast(R.string.downloading_images_ok, Toast.LENGTH_SHORT);
             } else {
-               mContext.showToast(mContext.getString(R.string.download_image_error, mError), Toast.LENGTH_SHORT);
+                mContext.showToast(mContext.getString(R.string.download_image_error, mError), Toast.LENGTH_SHORT);
             }
         });
     }
