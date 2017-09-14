@@ -11,6 +11,7 @@
     <dimen name="label_height">32dp</dimen>
     <dimen name="title_height_small">38dp</dimen>
     <dimen name="title_height">55dp</dimen>
+    <dimen name="item_height2">70dp</dimen>
     <dimen name="item_height">48dp</dimen>
     <dimen name="button_width_small">40dp</dimen>
     <dimen name="button_width">80dp</dimen>
