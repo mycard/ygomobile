@@ -1,5 +1,6 @@
 package cn.garymb.ygomobile.ui.home;
 
+import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -12,8 +13,10 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.net.URLEncoder;
 
+import cn.garymb.ygomobile.AppsSettings;
 import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.GameUriManager;
 import cn.garymb.ygomobile.YGOMobileActivity;
@@ -24,6 +27,7 @@ import cn.garymb.ygomobile.ui.plus.DialogPlus;
 import cn.garymb.ygomobile.ui.plus.VUiKit;
 import cn.garymb.ygomobile.utils.AlipayPayUtils;
 import cn.garymb.ygomobile.utils.ComponentUtils;
+import cn.garymb.ygomobile.utils.IOUtils;
 import cn.garymb.ygomobile.utils.NetUtils;
 
 import static cn.garymb.ygomobile.Constants.ACTION_RELOAD;
@@ -128,24 +132,23 @@ public class MainActivity extends HomeActivity {
 
     @Override
     public void updateImages() {
-        if(!NETWORK_IMAGE){
-            DialogPlus dialog  = new DialogPlus(this);
-            dialog.setTitle("公告");
-            dialog.setMessage("由于版权关系，github不提供卡图下载。\n" +
-                    "如果需要下载卡图，则需要钱搭服务，作者没啥钱，收大家钱搞会被骂。\n" +
-                    "所以以后不提供卡图下载，大家将就用集成卡图。\n" +
-                    "如果集成卡图也被举报，那么以后不内置卡图。");
-            dialog.show();
-            return;
-        }
-        if(NetUtils.isConnected(this)) {
-            if (!mImageUpdater.isRunning()) {
-                mImageUpdater.start();
-            } else {
-                showToast(R.string.downloading_images, Toast.LENGTH_SHORT);
+        DialogPlus dialog  = new DialogPlus(this);
+        dialog.setTitle("公告");
+        dialog.setMessage("由于版权关系，github禁止卡图库下载。\n" +
+                    "使用此功能仅用于复制被误清理的卡图包。\n" +
+                    "如果内置卡图也被举报，那么以后不内置卡图。");
+        dialog.show();
+        VUiKit.defer().when(()->{
+            if (IOUtils.hasAssets(this, ResCheckTask.getDatapath(Constants.CORE_PICS_ZIP))) {
+                try {
+                    IOUtils.copyFilesFromAssets(this, ResCheckTask.getDatapath(Constants.CORE_PICS_ZIP),
+                            AppsSettings.get().getResourcePath(), true);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
-        }else{
-            showToast(getString(R.string.tip_no_netwrok));
-        }
+        }).done((rs)->{
+            dialog.dismiss();
+        });
     }
 }

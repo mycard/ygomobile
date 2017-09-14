@@ -1514,7 +1514,7 @@ void Game::LoadConfig() {
 	gameConf.chkHideSetname = android::getIntSetting(appMain, "chkHideSetname", 0);
 	gameConf.control_mode = android::getIntSetting(appMain, "control_mode", 0);
 	gameConf.draw_field_spell = android::getIntSetting(appMain, "draw_field_spell", 0);
-	gameConf.separate_clear_button = android::getIntSetting(appMain, "separate_clear_button", 0);
+	gameConf.separate_clear_button = android::getIntSetting(appMain, "separate_clear_button", 1);
 	gameConf.auto_search_limit = android::getIntSetting(appMain, "auto_search_limit", 1);
 	gameConf.chkIgnoreDeckChanges = android::getIntSetting(appMain, "chkIgnoreDeckChanges", 0);
 }
