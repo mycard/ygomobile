@@ -111,7 +111,7 @@ class DeckManagerActivityImpl extends BaseCardsAcitivity implements RecyclerView
             }
         }
         //
-        ProgressDialog dlg = ProgressDialog.show(this, null, getString(R.string.loading));
+        DialogPlus dlg = DialogPlus.show(this, null, getString(R.string.loading));
         VUiKit.defer().when(() -> {
             StringManager.get().load();//loadFile(stringfile.getAbsolutePath());
             LimitManager.get().load();//loadFile(stringfile.getAbsolutePath());
@@ -214,7 +214,7 @@ class DeckManagerActivityImpl extends BaseCardsAcitivity implements RecyclerView
     }
 
     private void loadDeck(File file, boolean noSaveLast) {
-        ProgressDialog dlg = ProgressDialog.show(this, null, getString(R.string.loading));
+        DialogPlus dlg = DialogPlus.show(this, null, getString(R.string.loading));
         VUiKit.defer().when(() -> {
             if (file == null) {
                 return new DeckInfo();
@@ -284,11 +284,11 @@ class DeckManagerActivityImpl extends BaseCardsAcitivity implements RecyclerView
         if (cardInfo == null) {
             mCardListAdapater.hideMenu(null);
         } else if (event.toMain) {
-            if (!addMainCard(cardInfo)){// || !checkLimit(cardInfo, false)) {
+            if (!addMainCard(cardInfo)) {// || !checkLimit(cardInfo, false)) {
                 mCardListAdapater.hideMenu(null);
             }
         } else {
-            if (!addSideCard(cardInfo)){// || !checkLimit(cardInfo, false)) {
+            if (!addSideCard(cardInfo)) {// || !checkLimit(cardInfo, false)) {
                 mCardListAdapater.hideMenu(null);
             }
         }

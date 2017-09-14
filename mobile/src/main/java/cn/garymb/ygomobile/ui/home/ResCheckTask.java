@@ -1,5 +1,6 @@
 package cn.garymb.ygomobile.ui.home;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.database.Cursor;
@@ -18,6 +19,7 @@ import cn.garymb.ygomobile.App;
 import cn.garymb.ygomobile.AppsSettings;
 import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.lite.R;
+import cn.garymb.ygomobile.ui.plus.DialogPlus;
 import cn.garymb.ygomobile.utils.FileUtils;
 import cn.garymb.ygomobile.utils.IOUtils;
 import cn.garymb.ygomobile.utils.SystemUtils;
@@ -36,7 +38,7 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
     private AppsSettings mSettings;
     private Context mContext;
     private ResCheckListener mListener;
-    private ProgressDialog dialog = null;
+    private DialogPlus dialog = null;
     private Handler handler;
     private boolean isNewVersion;
 
@@ -51,7 +53,7 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-        dialog = ProgressDialog.show(mContext, null, mContext.getString(R.string.check_res));
+        dialog = DialogPlus.show(mContext, null, mContext.getString(R.string.check_res));
         int vercode = SystemUtils.getVersion(mContext);
         if (mSettings.getAppVersion() < vercode) {
             mSettings.setAppVersion(vercode);

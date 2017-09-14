@@ -186,6 +186,7 @@
     <string name="title_use_ex">Use Expansions</string>
     <string name="tip_network_image">image server is close</string>
     <string name="game_version">Game Version</string>
+    <string name="tip">Info</string>
     <string name="error_game_ver">版本格式不对应该是X.0XX.X，小于F.099.F</string>
     <string name="tip_no_netwrok">请确认已经连接网络</string>
 </resources>
