@@ -18,6 +18,7 @@ import java.util.Locale;
 import cn.garymb.ygomobile.ui.home.ResCheckTask;
 import cn.garymb.ygomobile.ui.preference.PreferenceFragmentPlus;
 import cn.garymb.ygomobile.utils.SystemUtils;
+import ocgcore.handler.CardManager;
 
 import static cn.garymb.ygomobile.Constants.CORE_SYSTEM_PATH;
 import static cn.garymb.ygomobile.Constants.DEF_PREF_FONT_SIZE;
@@ -145,8 +146,12 @@ public class AppsSettings {
         return options;
     }
 
+    public File getDataBaseFile() {
+        return new File(getDataBasePath(), Constants.DATABASE_NAME);
+    }
+
     private void makeCdbList(List<String> pathList) {
-        pathList.add(new File(getDataBasePath(), "cards.cdb").getAbsolutePath());
+        pathList.add(getDataBaseFile().getAbsolutePath());
         if (isReadExpansions()) {
             File expansionsDir = getExpansionsPath();
             if (expansionsDir.exists()) {
@@ -158,7 +163,7 @@ public class AppsSettings {
                 });
                 if (cdbs != null) {
                     for (File file : cdbs) {
-                        if (ResCheckTask.checkDataBase(file.getAbsolutePath())) {
+                        if (CardManager.checkDataBase(file)) {
                             //合法数据库才会加载
                             pathList.add(file.getAbsolutePath());
                         }

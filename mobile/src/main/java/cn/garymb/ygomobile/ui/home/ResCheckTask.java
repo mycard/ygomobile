@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import cn.garymb.ygomobile.App;
 import cn.garymb.ygomobile.AppsSettings;
 import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.lite.R;
@@ -21,6 +22,7 @@ import cn.garymb.ygomobile.utils.FileUtils;
 import cn.garymb.ygomobile.utils.IOUtils;
 import cn.garymb.ygomobile.utils.SystemUtils;
 import ocgcore.ConfigManager;
+import ocgcore.handler.CardManager;
 
 import static cn.garymb.ygomobile.Constants.ASSETS_PATH;
 
@@ -107,6 +109,12 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
             IOUtils.createNoMedia(resPath);
             checkDirs();
             copyCoreConfig(resPath, needsUpdate);
+            if(AppsSettings.get().isUseExtraCards()){
+                //自定义数据库无效，则用默认的
+                if(!CardManager.checkDataBase(AppsSettings.get().getDataBaseFile())){
+                    AppsSettings.get().setUseExtraCards(false);
+                }
+            }
             //设置字体
             new ConfigManager(mSettings.getSystemConfig()).setFontSize(mSettings.getFontSize());
 //            copyCoreConfig(new File(mSettings.getResourcePath(), GameSettings.CORE_CONFIG_PATH).getAbsolutePath());
@@ -167,6 +175,9 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
     }
 
     public static boolean checkDataBase(String path) {
+        if(!new File(path).exists()){
+            return false;
+        }
         SQLiteDatabase db = null;
         try {
             db = SQLiteDatabase.openDatabase(path, null,
