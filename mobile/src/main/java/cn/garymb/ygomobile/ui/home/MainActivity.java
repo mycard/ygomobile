@@ -132,11 +132,7 @@ public class MainActivity extends HomeActivity {
 
     @Override
     public void updateImages() {
-        DialogPlus dialog  = new DialogPlus(this);
-        dialog.setTitle("公告");
-        dialog.setMessage("由于版权关系，github禁止卡图库下载。\n" +
-                    "使用此功能仅用于复制被误清理的卡图包。\n" +
-                    "如果内置卡图也被举报，那么以后不内置卡图。");
+        DialogPlus dialog  = DialogPlus.show(this, null, getString(R.string.message));
         dialog.show();
         VUiKit.defer().when(()->{
             if (IOUtils.hasAssets(this, ResCheckTask.getDatapath(Constants.CORE_PICS_ZIP))) {
