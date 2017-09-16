@@ -29,6 +29,7 @@ public class StringManager {
     private static StringManager sStringManager = new StringManager();
     private volatile boolean isLoad = false;
     private String lastMd5;
+    private String lastExMd5;
 
     private StringManager() {
 
@@ -45,11 +46,18 @@ public class StringManager {
     public boolean load() {
         File stringfile = new File(AppsSettings.get().getResourcePath(), Constants.CORE_STRING_PATH);
         String md5 = MD5Util.getFileMD5(stringfile.getAbsolutePath());
+        boolean rs = true;
         if (TextUtils.equals(md5, lastMd5)) {
-            return true;
+            lastMd5 = md5;
+            rs = loadFile(stringfile.getAbsolutePath());
         }
-        lastMd5 = md5;
-        return loadFile(stringfile.getAbsolutePath());
+        stringfile = new File(AppsSettings.get().getExpansionsPath(), Constants.CORE_STRING_PATH);
+        md5 = MD5Util.getFileMD5(stringfile.getAbsolutePath());
+        if(!TextUtils.equals(md5,lastExMd5)){
+            lastExMd5 = md5;
+            rs = loadFile(stringfile.getAbsolutePath());
+        }
+        return rs;
     }
 
     public boolean loadFile(String path) {
