@@ -60,10 +60,6 @@ public final class IrrlichtBridge {
 
     private static native void nativeJoinGame(int handle, ByteBuffer buffer, int length);
 
-    public static native String getAccessKey();
-
-    public static native String getSecretKey();
-
     private static final boolean DEBUG = false;
     private static final String TAG = IrrlichtBridge.class.getSimpleName();
 

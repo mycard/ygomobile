@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import cn.garymb.ygomobile.core.GameConfig;
 import cn.garymb.ygomobile.ui.preference.PreferenceFragmentPlus;
 import cn.garymb.ygomobile.utils.SystemUtils;
 import ocgcore.handler.CardManager;
@@ -417,6 +418,18 @@ public class AppsSettings {
 
     public int getIntSettings(String key, int def) {
         return mSharedPreferences.getInt(Constants.PREF_START + key, def);
+    }
+
+    public void resetGameVersion() {
+        saveIntSettings(Constants.PREF_GAME_VERSION, GameConfig.getVersion());
+    }
+
+    public int getGameVersion() {
+        return getIntSettings(Constants.PREF_GAME_VERSION, GameConfig.getVersion());
+    }
+
+    public void setGameVersion(int v) {
+        saveIntSettings(Constants.PREF_GAME_VERSION, v);
     }
 
     public String getVersionString(int value) {

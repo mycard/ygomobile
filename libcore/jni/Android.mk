@@ -7,6 +7,12 @@ IRRLICHT_PROJECT_PATH := $(LOCAL_PATH)
 #include $(PREBUILT_STATIC_LIBRARY)
 
 include $(CLEAR_VARS)
+LOCAL_MODULE := game_version
+LOCAL_SRC_FILES := $(LOCAL_PATH)/jni/version.cpp
+include $(BUILD_SHARED_LIBRARY)
+
+
+include $(CLEAR_VARS)
 
 LOCAL_MODULE := YGOMobile
 
@@ -33,8 +39,6 @@ LOCAL_C_INCLUDES += $(LOCAL_PATH)/../irrlicht/source/Irrlicht/Android
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../Classes/freetype/include
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../Classes/sqlite3
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../Classes/libevent/include
-LOCAL_C_INCLUDES += $(LOCAL_PATH)/../Classes/google-breakpad/src/client/linux
-LOCAL_C_INCLUDES += $(LOCAL_PATH)/android/tremolo/Tremolo
 
 LOCAL_SRC_FILES := $(LOCAL_PATH)/android/android_tools.cpp \
 				$(LOCAL_PATH)/android/xstring.cpp \

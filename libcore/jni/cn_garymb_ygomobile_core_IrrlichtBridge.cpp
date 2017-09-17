@@ -347,24 +347,6 @@ static void* cancel_chain_thread(void* param) {
 	pthread_detach(joinGameThread);
 }
 
-/*
- * Class:     cn_garymb_ygomobile_core_IrrlichtBridge
- * Method:    getAccessKey
- * Signature: (V)Ljvava/lang/String
- */JNIEXPORT jstring JNICALL Java_cn_garymb_ygomobile_core_IrrlichtBridge_getAccessKey(
-		JNIEnv* env, jclass clazz) {
-	return env->NewStringUTF(access_key);
-}
-
-/*
- * Class:     cn_garymb_ygomobile_core_IrrlichtBridge
- * Method:    getSecretKey
- * Signature: (V)Ljvava/lang/String
- */JNIEXPORT jstring JNICALL Java_cn_garymb_ygomobile_core_IrrlichtBridge_getSecretKey(
-		JNIEnv* env, jclass clazz) {
-	return env->NewStringUTF(secret_key);
-}
-
 jint JNI_OnLoad(JavaVM* vm, void* reserved) {
 	void *venv;
 	if (vm->GetEnv((void**) &venv, JNI_VERSION_1_6) != JNI_OK) {

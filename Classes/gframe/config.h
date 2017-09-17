@@ -3,6 +3,9 @@
 
 #pragma once
 
+#define DEF_PRO_VERSION 0x233E
+
+#ifndef __GAME_CONFIG
 #define _IRR_STATIC_LIB_
 #define IRR_COMPILE_WITH_DX9_DEV_PACK
 #define _IRR_ANDROID_PLATFORM_
@@ -107,5 +110,5 @@ using namespace os;
 extern unsigned short PRO_VERSION;
 extern int enable_log;
 extern bool exit_on_return;
-
+#endif
 #endif
