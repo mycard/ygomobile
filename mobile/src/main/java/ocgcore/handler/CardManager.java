@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.WorkerThread;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.SparseArray;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -18,7 +19,7 @@ import ocgcore.data.Card;
 
 public class CardManager {
     private String dbDir, exDbPath;
-    private final HashMap<Long, Card> cardDataHashMap = new HashMap<>();
+    private final SparseArray<Card> cardDataHashMap = new SparseArray<>();
     private final Map<String, String> mCardCache = new HashMap<>();
 
     public CardManager(String dbDir, String exPath) {
@@ -26,15 +27,15 @@ public class CardManager {
         this.exDbPath = exPath;
     }
 
-    public Card getCard(long code) {
-        return cardDataHashMap.get(Long.valueOf(code));
+    public Card getCard(int code) {
+        return cardDataHashMap.get(Integer.valueOf(code));
     }
 
     public int getCount() {
         return cardDataHashMap.size();
     }
 
-    public HashMap<Long, Card> getAllCards() {
+    public SparseArray<Card> getAllCards() {
         return cardDataHashMap;
     }
 
@@ -98,7 +99,7 @@ public class CardManager {
     }
 
     @WorkerThread
-    protected int readAllCards(File file, Map<Long, Card> cardMap) {
+    protected int readAllCards(File file, SparseArray<Card> cardMap) {
         if (!file.exists()) {
             return 0;
         }
@@ -117,7 +118,7 @@ public class CardManager {
                 if (reader != null && reader.moveToFirst()) {
                     do {
                         Card cardData = new Card();
-                        cardData.Code = reader.getLong(0);
+                        cardData.Code = reader.getInt(0);
                         cardData.Ot = reader.getInt(1);
                         cardData.Alias = reader.getInt(2);
                         cardData.Setcode = reader.getLong(3);

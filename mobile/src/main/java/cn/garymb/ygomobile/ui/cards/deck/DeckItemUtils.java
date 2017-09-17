@@ -2,6 +2,7 @@ package cn.garymb.ygomobile.ui.cards.deck;
 
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.SparseArray;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -11,10 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.bean.Deck;
@@ -194,10 +192,8 @@ class DeckItemUtils {
     }
 
     public static DeckInfo readDeck(CardLoader cardLoader, InputStream inputStream, LimitList limitList) {
-        List<Long> main = new ArrayList<>();
-        List<Long> extra = new ArrayList<>();
-        List<Long> side = new ArrayList<>();
-        HashMap<Long, Integer> mIds = new HashMap<>();
+        Deck deck = new Deck();
+        SparseArray<Integer> mIds = new SparseArray<>();
         InputStreamReader in = null;
         try {
             in = new InputStreamReader(inputStream, "utf-8");
@@ -223,33 +219,33 @@ class DeckItemUtils {
                         Log.w("kk", "read not number " + line);
                     continue;
                 }
-                long id = Long.parseLong(line);
-                if (type == DeckItemType.MainCard && main.size() < Constants.DECK_MAIN_MAX) {
+                Integer id = Integer.parseInt(line);
+                if (type == DeckItemType.MainCard && deck.getMainCount() < Constants.DECK_MAIN_MAX) {
                     Integer i = mIds.get(id);
                     if (i == null) {
                         mIds.put(id, 1);
-                        main.add(id);
+                        deck.addMain(id);
                     } else if (i < Constants.CARD_MAX_COUNT) {
                         mIds.put(id, i + 1);
-                        main.add(id);
+                        deck.addMain(id);
                     }
-                } else if (type == DeckItemType.ExtraCard && extra.size() < Constants.DECK_EXTRA_MAX) {
+                } else if (type == DeckItemType.ExtraCard && deck.getExtraCount() < Constants.DECK_EXTRA_MAX) {
                     Integer i = mIds.get(id);
                     if (i == null) {
                         mIds.put(id, 1);
-                        extra.add(id);
+                        deck.addExtra(id);
                     } else if (i < Constants.CARD_MAX_COUNT) {
                         mIds.put(id, i + 1);
-                        extra.add(id);
+                        deck.addExtra(id);
                     }
-                } else if (type == DeckItemType.SideCard && side.size() < Constants.DECK_SIDE_MAX) {
+                } else if (type == DeckItemType.SideCard && deck.getSideCount() < Constants.DECK_SIDE_MAX) {
                     Integer i = mIds.get(id);
                     if (i == null) {
                         mIds.put(id, 1);
-                        side.add(id);
+                        deck.addSide(id);
                     } else if (i < Constants.CARD_MAX_COUNT) {
                         mIds.put(id, i + 1);
-                        side.add(id);
+                        deck.addSide(id);
                     }
                 }
             }
@@ -259,17 +255,17 @@ class DeckItemUtils {
             IOUtils.close(in);
         }
         DeckInfo deckInfo = new DeckInfo();
-        Map<Long, Card> tmp = cardLoader.readCards(main, limitList);
-        for (Long id : main) {
+        SparseArray<Card> tmp = cardLoader.readCards(deck.getMainlist(), limitList);
+        for (Integer id : deck.getMainlist()) {
             deckInfo.addMainCards(tmp.get(id));
         }
-        tmp = cardLoader.readCards(extra, limitList);
-        for (Long id : extra) {
+        tmp = cardLoader.readCards(deck.getExtraList(), limitList);
+        for (Integer id : deck.getExtraList()) {
             deckInfo.addExtraCards(tmp.get(id));
         }
-        tmp = cardLoader.readCards(side, limitList);
+        tmp = cardLoader.readCards(deck.getSideList(), limitList);
 //        Log.i("kk", "desk:" + tmp.size()+"/"+side.size());
-        for (Long id : side) {
+        for (Integer id : deck.getSideList()) {
             deckInfo.addSideCards(tmp.get(id));
         }
         return deckInfo;

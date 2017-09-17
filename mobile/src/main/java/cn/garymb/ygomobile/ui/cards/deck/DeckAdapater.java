@@ -5,6 +5,7 @@ import android.os.SystemClock;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,9 +13,7 @@ import android.view.ViewGroup;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 import cn.garymb.ygomobile.Constants;
@@ -33,7 +32,7 @@ import ocgcore.enums.LimitType;
 
 public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> implements CardListProvider {
     private final List<DeckItem> mItems = new ArrayList<>();
-    private Map<Long, Integer> mCount = new HashMap<>();
+    private SparseArray<Integer> mCount = new SparseArray<>();
     private Context context;
     private LayoutInflater mLayoutInflater;
     private ImageTop mImageTop;
@@ -89,7 +88,7 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> implement
         return Math.round((float) width * ((float) Constants.CORE_SKIN_CARD_COVER_SIZE[1] / (float) Constants.CORE_SKIN_CARD_COVER_SIZE[0]));
     }
 
-    public Map<Long, Integer> getCardCount() {
+    public SparseArray<Integer> getCardCount() {
         return mCount;
     }
 
@@ -270,7 +269,7 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> implement
 
     private void addCount(Card cardInfo, DeckItemType type) {
         if (cardInfo == null) return;
-        Long code = cardInfo.Alias > 0 ? cardInfo.Alias : cardInfo.Code;
+        Integer code = cardInfo.Alias > 0 ? cardInfo.Alias : cardInfo.Code;
         Integer i = mCount.get(code);
         if (i == null) {
             mCount.put(code, 1);
@@ -315,7 +314,7 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> implement
 
     private void removeCount(Card cardInfo, DeckItemType type) {
         if (cardInfo == null) return;
-        Long code = cardInfo.Alias > 0 ? cardInfo.Alias : cardInfo.Code;
+        Integer code = cardInfo.Alias > 0 ? cardInfo.Alias : cardInfo.Code;
         Integer i = mCount.get(code);
         if (i == null) {
             mCount.put(code, 0);

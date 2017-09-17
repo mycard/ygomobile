@@ -71,7 +71,7 @@ public class LimitList {
         return check(cardInfo.Code, cardInfo.Alias, type);
     }
 
-    public boolean check(Long code, Long alias, LimitType type) {
+    public boolean check(Integer code, Integer alias, LimitType type) {
         if (type == LimitType.All) {
             return allList.contains(code) || allList.contains(alias);
         } else if (type == LimitType.Limit) {

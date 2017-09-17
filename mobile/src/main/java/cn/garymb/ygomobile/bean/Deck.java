@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cn.garymb.ygomobile.Constants;
-import cn.garymb.ygomobile.ui.cards.deck.DeckItem;
 import cn.garymb.ygomobile.ui.cards.deck.DeckUtils;
 
 import static cn.garymb.ygomobile.Constants.QUERY_EXTRA;
@@ -21,9 +20,9 @@ import static cn.garymb.ygomobile.Constants.YDK_FILE_EX;
 
 public class Deck implements Parcelable {
     private String name;
-    private final ArrayList<Long> mainlist;
-    private final ArrayList<Long> extraList;
-    private final ArrayList<Long> sideList;
+    private final ArrayList<Integer> mainlist;
+    private final ArrayList<Integer> extraList;
+    private final ArrayList<Integer> sideList;
 
     public Deck() {
         mainlist = new ArrayList<>();
@@ -39,7 +38,7 @@ public class Deck implements Parcelable {
         if (!TextUtils.isEmpty(main)) {
             String[] mains = main.split(",");
             for (String m : mains) {
-                long id = toId(m);
+                int id = toId(m);
                 if (id > 0) {
                     mainlist.add(id);
                 }
@@ -48,7 +47,7 @@ public class Deck implements Parcelable {
         if (!TextUtils.isEmpty(extra)) {
             String[] extras = extra.split(",");
             for (String m : extras) {
-                long id = toId(m);
+                int id = toId(m);
                 if (id > 0) {
                     extraList.add(id);
                 }
@@ -57,7 +56,7 @@ public class Deck implements Parcelable {
         if (!TextUtils.isEmpty(side)) {
             String[] sides = side.split(",");
             for (String m : sides) {
-                long id = toId(m);
+                int id = toId(m);
                 if (id > 0) {
                     sideList.add(id);
                 }
@@ -87,10 +86,10 @@ public class Deck implements Parcelable {
         return uri.build();
     }
 
-    private String toString(List<Long> ids) {
+    private String toString(List<Integer> ids) {
         StringBuilder builder = new StringBuilder();
         int i = 0;
-        for (Long id : ids) {
+        for (Integer id : ids) {
             if (i > 0) {
                 builder.append(",");
             }
@@ -107,6 +106,21 @@ public class Deck implements Parcelable {
         return name;
     }
 
+    public int getMainCount() {
+        return mainlist.size();
+    }
+
+    public int getExtraCount() {
+        return extraList.size();
+    }
+
+    public int getSideCount() {
+        return sideList.size();
+    }
+
+    public int getDeckCount() {
+        return getMainCount() + getExtraCount();
+    }
 
     public File saveTemp(String dir) {
         if (TextUtils.isEmpty(name)) {
@@ -120,10 +134,10 @@ public class Deck implements Parcelable {
         return file;
     }
 
-    private long toId(String str) {
+    private int toId(String str) {
         if (TextUtils.isEmpty(str)) return 0;
         try {
-            return Long.parseLong(str);
+            return Integer.parseInt(str);
         } catch (Exception e) {
             return 0;
         }
@@ -134,27 +148,27 @@ public class Deck implements Parcelable {
         this.name = name;
     }
 
-    public List<Long> getSideList() {
+    public List<Integer> getSideList() {
         return sideList;
     }
 
-    public List<Long> getMainlist() {
+    public List<Integer> getMainlist() {
         return mainlist;
     }
 
-    public List<Long> getExtraList() {
+    public List<Integer> getExtraList() {
         return extraList;
     }
 
-    public void addMain(Long id) {
+    public void addMain(Integer id) {
         mainlist.add(id);
     }
 
-    public void addExtra(Long id) {
+    public void addExtra(Integer id) {
         extraList.add(id);
     }
 
-    public void addSide(Long id) {
+    public void addSide(Integer id) {
         sideList.add(id);
     }
 
@@ -173,15 +187,15 @@ public class Deck implements Parcelable {
 
     protected Deck(Parcel in) {
         this.name = in.readString();
-        this.mainlist = new ArrayList<Long>();
-        in.readList(this.mainlist, Long.class.getClassLoader());
-        this.extraList = new ArrayList<Long>();
-        in.readList(this.extraList, Long.class.getClassLoader());
-        this.sideList = new ArrayList<Long>();
-        in.readList(this.sideList, Long.class.getClassLoader());
+        this.mainlist = new ArrayList<Integer>();
+        in.readList(this.mainlist, Integer.class.getClassLoader());
+        this.extraList = new ArrayList<Integer>();
+        in.readList(this.extraList, Integer.class.getClassLoader());
+        this.sideList = new ArrayList<Integer>();
+        in.readList(this.sideList, Integer.class.getClassLoader());
     }
 
-    public static final Parcelable.Creator<Deck> CREATOR = new Parcelable.Creator<Deck>() {
+    public static final Creator<Deck> CREATOR = new Creator<Deck>() {
         @Override
         public Deck createFromParcel(Parcel source) {
             return new Deck(source);

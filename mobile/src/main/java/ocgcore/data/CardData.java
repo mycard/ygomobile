@@ -8,13 +8,13 @@ public class CardData implements Parcelable{
     public CardData() {
     }
 
-    public CardData(long code) {
+    public CardData(int code) {
         Code = code;
     }
 
-    public long Code;
+    public int Code;
     public int Ot;
-    public long Alias;
+    public int Alias;
     public long Setcode;
     public long Type;
     public int Level;
@@ -52,9 +52,9 @@ public class CardData implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(this.Code);
+        dest.writeInt(this.Code);
         dest.writeInt(this.Ot);
-        dest.writeLong(this.Alias);
+        dest.writeInt(this.Alias);
         dest.writeLong(this.Setcode);
         dest.writeLong(this.Type);
         dest.writeInt(this.Level);
@@ -68,9 +68,9 @@ public class CardData implements Parcelable{
     }
 
     protected CardData(Parcel in) {
-        this.Code = in.readLong();
+        this.Code = in.readInt();
         this.Ot = in.readInt();
-        this.Alias = in.readLong();
+        this.Alias = in.readInt();
         this.Setcode = in.readLong();
         this.Type = in.readLong();
         this.Level = in.readInt();

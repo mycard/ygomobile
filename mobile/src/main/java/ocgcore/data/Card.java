@@ -22,7 +22,7 @@ public class Card extends CardData implements Parcelable {
         }
     }
 
-    public Card(long code) {
+    public Card(int code) {
         super(code);
     }
 

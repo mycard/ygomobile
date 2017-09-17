@@ -1,9 +1,8 @@
 package cn.garymb.ygomobile.ui.home;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.util.Log;
+import android.util.SparseArray;
 import android.widget.Toast;
 
 import java.io.File;
@@ -14,7 +13,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.zip.ZipEntry;
@@ -22,12 +20,11 @@ import java.util.zip.ZipFile;
 
 import cn.garymb.ygomobile.AppsSettings;
 import cn.garymb.ygomobile.Constants;
-import cn.garymb.ygomobile.loader.CardLoader;
 import cn.garymb.ygomobile.lite.R;
+import cn.garymb.ygomobile.loader.CardLoader;
 import cn.garymb.ygomobile.ui.activities.BaseActivity;
 import cn.garymb.ygomobile.ui.plus.DialogPlus;
 import cn.garymb.ygomobile.ui.plus.VUiKit;
-import cn.garymb.ygomobile.utils.FileUtils;
 import cn.garymb.ygomobile.utils.IOUtils;
 import ocgcore.data.Card;
 import ocgcore.enums.CardType;
@@ -339,22 +336,25 @@ public class ImageUpdater implements DialogInterface.OnCancelListener {
         if (!mCardLoader.isOpen()) {
             mCardLoader.openDb();
         }
-        Map<Long, Card> cards = mCardLoader.readAllCardCodes();
+        SparseArray<Card> cards = mCardLoader.readAllCardCodes();
         mCardStatus.clear();
         mPicsPath = new File(AppsSettings.get().getResourcePath(), Constants.CORE_IMAGE_PATH);
         File picsPath = mPicsPath;
         File fieldPath = new File(mPicsPath, Constants.CORE_IMAGE_FIELD_PATH);
         IOUtils.createNoMedia(picsPath.getAbsolutePath());
         IOUtils.createNoMedia(fieldPath.getAbsolutePath());
-        for (Map.Entry<Long, Card> e : cards.entrySet()) {
-            if (Card.isType(e.getValue().Type, CardType.Field)) {
-                String png = new File(fieldPath, e.getKey() + Constants.IMAGE_FIELD_URL_EX).getAbsolutePath();
-                String pngUrl = String.format(Constants.IMAGE_FIELD_URL, e.getKey() + "");
-                mCardStatus.add(new Item(pngUrl, png, e.getKey(), true));
+        int count = cards.size();
+        for (int i = 0; i < count; i++) {
+            int code = cards.keyAt(i);
+            Card card = cards.valueAt(i);
+            if (Card.isType(card.Type, CardType.Field)) {
+                String png = new File(fieldPath, code + Constants.IMAGE_FIELD_URL_EX).getAbsolutePath();
+                String pngUrl = String.format(Constants.IMAGE_FIELD_URL, code + "");
+                mCardStatus.add(new Item(pngUrl, png, code, true));
             }
-            String jpg = new File(picsPath, e.getKey() + Constants.IMAGE_URL_EX).getAbsolutePath();
-            String jpgUrl = String.format(Constants.IMAGE_URL, e.getKey() + "");
-            mCardStatus.add(new Item(jpgUrl, jpg, e.getKey(), false));
+            String jpg = new File(picsPath, code + Constants.IMAGE_URL_EX).getAbsolutePath();
+            String jpgUrl = String.format(Constants.IMAGE_URL, code + "");
+            mCardStatus.add(new Item(jpgUrl, jpg,code, false));
         }
         mCount = mCardStatus.size();
     }

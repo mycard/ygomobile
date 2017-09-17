@@ -23,7 +23,7 @@ class CardSearchInfo {
     }
 
     public boolean check(Card card) {
-        if(inCards != null && !inCards.contains(card.Code)){
+        if (inCards != null && !inCards.contains(card.Code)) {
             return false;
         }
         if (!TextUtils.isEmpty(word)) {
@@ -117,32 +117,26 @@ class CardSearchInfo {
             }
         }
         if (types.length > 0) {
-            //通常魔法
             boolean st = false;
-            if (types[0] == CardType.Spell.value() || types[0] == CardType.Trap.value()
-                    || types[0] == CardType.Normal.value()) {
-                if (types.length > 2) {
-                    if (types[2] == CardType.Normal.value()) {
-                        if (!card.isType(CardType.Normal)) {
-                            return false;
-                        }
-                        st = true;
-                    }
-                } else if (types.length > 1) {
-                    if (types[1] == CardType.Normal.value()) {
-                        if (!card.isType(CardType.Normal)) {
-                            return false;
-                        }
-                        st = true;
-                    }
+            for (long cardType : types) {
+                if (cardType == CardType.Spell.value() || cardType == CardType.Trap.value()) {
+                    st = true;
+                    break;
                 }
             }
-            if (!st) {
-                for (long type : types) {
-                    if (type > 0) {
-                        if ((card.Type & type) != type) {
-                            return false;
+
+            for (long type : types) {
+                if (type > 0) {
+                    if (st) {
+                        //通常魔法
+                        if (type == CardType.Normal.value()) {
+                            if (card.Type != CardType.Spell.value() || card.Type != CardType.Trap.value()) {
+                                return false;
+                            }
                         }
+                    }
+                    if ((card.Type & type) != type) {
+                        return false;
                     }
                 }
             }
