@@ -15,11 +15,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import cn.garymb.ygomobile.ui.home.ResCheckTask;
 import cn.garymb.ygomobile.ui.preference.PreferenceFragmentPlus;
 import cn.garymb.ygomobile.utils.SystemUtils;
 import ocgcore.handler.CardManager;
 
+import static cn.garymb.ygomobile.Constants.CORE_EXPANSIONS;
 import static cn.garymb.ygomobile.Constants.CORE_SYSTEM_PATH;
 import static cn.garymb.ygomobile.Constants.DEF_PREF_FONT_SIZE;
 import static cn.garymb.ygomobile.Constants.DEF_PREF_ONLY_GAME;
@@ -174,7 +174,7 @@ public class AppsSettings {
     }
 
     public File getExpansionsPath() {
-        return new File(getResourcePath(), "expansions");
+        return new File(getResourcePath(), CORE_EXPANSIONS);
     }
 
     private void makeZipList(List<String> pathList) {

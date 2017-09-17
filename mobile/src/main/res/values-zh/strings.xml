@@ -187,4 +187,5 @@
     <string name="error_game_ver">版本格式不对应该是X.0XX.X，小于F.099.F</string>
     <string name="tip_no_netwrok">请确认已经连接网络</string>
     <string name="message">"由于版权关系，github禁止卡图库下载。\n使用此功能仅用于复制被误清理的卡图包。\n如果内置卡图也被举报，那么以后不内置卡图。"</string>
+    <string name="ex_pack">扩展卡包</string>
 </resources>

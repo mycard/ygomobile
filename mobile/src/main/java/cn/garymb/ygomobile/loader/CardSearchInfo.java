@@ -142,26 +142,23 @@ class CardSearchInfo {
                                 if (card.Type != CardType.Spell.value() && card.Type != CardType.Trap.value())
                                     return false;
                             }
+                            continue;
                         }
-                        continue;
                     }
-                }
-                if ((card.Type & type) != type) {
-                    return false;
+                    if ((card.Type & type) != type) {
+                        return false;
+                    }
                 }
             }
         }
-    }
-    //TODO setcode
-        if(setcode >0)
-
-    {
-        if (!card.isSetCode(setcode)) {
-            return false;
+        //TODO setcode
+        if (setcode > 0) {
+            if (!card.isSetCode(setcode)) {
+                return false;
+            }
         }
-    }
         return true;
-}
+    }
 
     private int i(String str) {
         try {
