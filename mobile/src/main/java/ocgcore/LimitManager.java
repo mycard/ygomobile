@@ -20,16 +20,11 @@ import static cn.garymb.ygomobile.Constants.CORE_LIMIT_PATH;
 public class LimitManager {
     private static LimitManager sManager = new LimitManager();
     private final List<LimitList> mLimitLists = new ArrayList<>();
-    private volatile boolean isLoad = false;
     private String lastMd5;
     private int mCount;
 
     private LimitManager() {
 
-    }
-
-    public boolean isLoad() {
-        return isLoad;
     }
 
     public static LimitManager get() {
@@ -70,7 +65,6 @@ public class LimitManager {
         }
         mLimitLists.clear();
         mLimitLists.add(new LimitList(null));
-        isLoad = false;
         InputStreamReader in = null;
         FileInputStream inputStream = null;
         try {
@@ -117,7 +111,6 @@ public class LimitManager {
             IOUtils.close(in);
         }
         mCount = mLimitLists.size();
-        isLoad = true;
         return true;
     }
 

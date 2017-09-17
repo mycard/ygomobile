@@ -1,6 +1,7 @@
 package ocgcore;
 
 import android.text.TextUtils;
+import android.util.SparseArray;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -8,12 +9,10 @@ import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.AppsSettings;
+import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.utils.IOUtils;
 import cn.garymb.ygomobile.utils.MD5Util;
 import cn.garymb.ygomobile.utils.StringUtils;
@@ -23,12 +22,11 @@ import ocgcore.enums.CardOt;
 public class StringManager {
     private String PRE_SYSTEM = "!system";
     private String PRE_SETNAME = "!setname";
-    private final Map<Integer, String> mSystem = new HashMap<>();
+    private final SparseArray<String> mSystem = new SparseArray<>();
     private final List<CardSet> mCardSets = new ArrayList<>();
     //    private final Map<Long, String> mSetname = new HashMap<>();
     private static StringManager sStringManager = new StringManager();
-    private volatile boolean isLoad = false;
-    private String lastMd5;
+    private String lastMd5, lastMd52;
 
     private StringManager() {
 
@@ -38,18 +36,22 @@ public class StringManager {
         return sStringManager;
     }
 
-    public boolean isLoad() {
-        return isLoad;
-    }
-
     public boolean load() {
+        boolean rs = false;
         File stringfile = new File(AppsSettings.get().getResourcePath(), Constants.CORE_STRING_PATH);
         String md5 = MD5Util.getFileMD5(stringfile.getAbsolutePath());
-        if (TextUtils.equals(md5, lastMd5)) {
-            return true;
+        if (!TextUtils.equals(md5, lastMd5)) {
+            lastMd5 = md5;
+            rs = loadFile(stringfile.getAbsolutePath());
         }
-        lastMd5 = md5;
-        return loadFile(stringfile.getAbsolutePath());
+
+        stringfile = new File(AppsSettings.get().getExpansionsPath(), Constants.CORE_STRING_PATH);
+        md5 = MD5Util.getFileMD5(stringfile.getAbsolutePath());
+        if (!TextUtils.equals(md5, lastMd5)) {
+            lastMd52 = md5;
+            rs = loadFile(stringfile.getAbsolutePath());
+        }
+        return rs;
     }
 
     public boolean loadFile(String path) {
@@ -60,9 +62,6 @@ public class StringManager {
         if (file.isDirectory() || !file.exists()) {
             return false;
         }
-        mSystem.clear();
-        mCardSets.clear();
-        isLoad = false;
         InputStreamReader in = null;
         FileInputStream inputStream = null;
         try {
@@ -101,11 +100,10 @@ public class StringManager {
             IOUtils.close(in);
         }
         Collections.sort(mCardSets, CardSet.NAME_ASC);
-        isLoad = true;
         return true;
     }
 
-    public Map<Integer, String> getSystem() {
+    public SparseArray<String> getSystem() {
         return mSystem;
     }
 
