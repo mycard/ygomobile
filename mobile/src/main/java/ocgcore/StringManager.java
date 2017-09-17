@@ -44,12 +44,13 @@ public class StringManager {
             lastMd5 = md5;
             rs = loadFile(stringfile.getAbsolutePath());
         }
-
-        stringfile = new File(AppsSettings.get().getExpansionsPath(), Constants.CORE_STRING_PATH);
-        md5 = MD5Util.getFileMD5(stringfile.getAbsolutePath());
-        if (!TextUtils.equals(md5, lastMd5)) {
-            lastMd52 = md5;
-            rs = loadFile(stringfile.getAbsolutePath());
+        if (AppsSettings.get().isReadExpansions()) {
+            stringfile = new File(AppsSettings.get().getExpansionsPath(), Constants.CORE_STRING_PATH);
+            md5 = MD5Util.getFileMD5(stringfile.getAbsolutePath());
+            if (!TextUtils.equals(md5, lastMd5)) {
+                lastMd52 = md5;
+                rs = loadFile(stringfile.getAbsolutePath());
+            }
         }
         return rs;
     }

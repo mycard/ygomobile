@@ -12,6 +12,7 @@ import java.io.FilenameFilter;
 import java.util.HashMap;
 import java.util.Map;
 
+import cn.garymb.ygomobile.AppsSettings;
 import cn.garymb.ygomobile.utils.IOUtils;
 import cn.garymb.ygomobile.utils.MD5Util;
 import ocgcore.data.Card;
@@ -41,8 +42,10 @@ public class CardManager {
 
     @WorkerThread
     public void loadCards() {
-        File[] dirs = {new File(dbDir), new File(exDbPath)};
-        for (File dir : dirs) {
+        int count = readAllCards(AppsSettings.get().getDataBaseFile(), cardDataHashMap);
+        Log.i("Irrlicht", "load defualt cdb:" + count);
+        if (AppsSettings.get().isReadExpansions()) {
+            File dir = new File(exDbPath);
             if (dir.exists()) {
                 File[] files = dir.listFiles(new FilenameFilter() {
                     @Override
@@ -59,7 +62,7 @@ public class CardManager {
                         String last = mCardCache.get(path);
                         if (!TextUtils.equals(md5, last)) {
                             mCardCache.put(path, md5);
-                            int count = readAllCards(file, cardDataHashMap);
+                            count = readAllCards(file, cardDataHashMap);
                             Log.i("Irrlicht", "load " + count + " cdb:" + file);
                         }
                     }
