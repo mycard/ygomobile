@@ -412,26 +412,11 @@ public class AppsSettings {
     }
 
     public void saveIntSettings(String key, int value) {
-        if (Constants.PREF_GAME_VERSION.equals(key)) {
-            mSharedPreferences.putString(key, String.format("0x%X", value));
-        }
         mSharedPreferences.putInt(Constants.PREF_START + key, value);
     }
 
     public int getIntSettings(String key, int def) {
-        if (Constants.PREF_GAME_VERSION.equals(key)) {
-            int val = mSharedPreferences.getInt(Constants.PREF_START + key, 0);
-            if (def > val) {
-                Log.i("kk", String.format("reset game_version=0x%X", def));
-                saveIntSettings(key, def);
-                return def;
-            }
-            Log.i("kk", String.format("game_version=0x%X", val));
-            return val;
-        } else {
-            int val = mSharedPreferences.getInt(Constants.PREF_START + key, def);
-            return val;
-        }
+        return mSharedPreferences.getInt(Constants.PREF_START + key, def);
     }
 
     public String getVersionString(int value) {
