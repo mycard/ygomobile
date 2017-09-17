@@ -114,6 +114,9 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
                     AppsSettings.get().setUseExtraCards(false);
                 }
             }
+            if(needsUpdate){
+                AppsSettings.get().saveIntSettings(Constants.PREF_GAME_VERSION, Constants.DEF_PREF_GAME_VERSION);
+            }
             //设置字体
             new ConfigManager(mSettings.getSystemConfig()).setFontSize(mSettings.getFontSize());
 //            copyCoreConfig(new File(mSettings.getResourcePath(), GameSettings.CORE_CONFIG_PATH).getAbsolutePath());
