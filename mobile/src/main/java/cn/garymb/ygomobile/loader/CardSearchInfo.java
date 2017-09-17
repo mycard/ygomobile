@@ -128,30 +128,40 @@ class CardSearchInfo {
             for (long type : types) {
                 if (type > 0) {
                     if (st) {
-                        //通常魔法
+                        //魔法
                         if (type == CardType.Normal.value()) {
-                            if (!card.isType(CardType.Normal)
-                                    && card.Type != CardType.Spell.value()
-                                    && card.Type != CardType.Trap.value()) {
-                                return false;
+                            //通常
+                            if (card.isType(CardType.Normal)) {
+                                //带通常的魔法陷阱
+                                if (card.Type != (CardType.Spell.value() | CardType.Normal.value())
+                                        && card.Type != (CardType.Trap.value() | CardType.Normal.value())) {
+                                    return false;
+                                }
+                            } else {
+                                //只有魔法/陷阱
+                                if (card.Type != CardType.Spell.value() && card.Type != CardType.Trap.value())
+                                    return false;
                             }
-                            continue;
                         }
+                        continue;
                     }
-                    if ((card.Type & type) != type) {
-                        return false;
-                    }
+                }
+                if ((card.Type & type) != type) {
+                    return false;
                 }
             }
         }
-        //TODO setcode
-        if (setcode > 0) {
-            if (!card.isSetCode(setcode)) {
-                return false;
-            }
-        }
-        return true;
     }
+    //TODO setcode
+        if(setcode >0)
+
+    {
+        if (!card.isSetCode(setcode)) {
+            return false;
+        }
+    }
+        return true;
+}
 
     private int i(String str) {
         try {
