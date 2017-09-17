@@ -84,10 +84,10 @@
             android:key="settings_game_diy_card_bg"
             android:persistent="true"
             android:title="@string/settings_game_diy_cover"/>
-        <CheckBoxPreference
+        <!--<CheckBoxPreference
             android:key="settings_game_diy_card_db"
             android:persistent="true"
-            android:title="@string/settings_game_diy_card_db"/>
+            android:title="@string/settings_game_diy_card_db"/>-->
     </PreferenceCategory>
 
 </PreferenceScreen>

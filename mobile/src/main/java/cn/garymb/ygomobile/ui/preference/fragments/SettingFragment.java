@@ -95,7 +95,7 @@ public class SettingFragment extends PreferenceFragmentPlus {
             preference.setSummary(mSettings.getExpansionsPath().getAbsolutePath());
         }
         bind(PREF_DECK_DELETE_DILAOG, mSettings.isDialogDelete());
-        bind(PREF_USE_EXTRA_CARD_CARDS, mSettings.isUseExtraCards());
+        //bind(PREF_USE_EXTRA_CARD_CARDS, mSettings.isUseExtraCards());
         bind(SETTINGS_COVER, new File(mSettings.getCoreSkinPath(), Constants.CORE_SKIN_COVER).getAbsolutePath());
         bind(SETTINGS_CARD_BG, new File(mSettings.getCoreSkinPath(), Constants.CORE_SKIN_BG).getAbsolutePath());
         bind(PREF_FONT_SIZE, mSettings.getFontSize());
