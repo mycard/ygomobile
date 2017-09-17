@@ -21,7 +21,7 @@ class DeckViewHolder extends RecyclerView.ViewHolder {
         rightImage = findViewById(R.id.right_top);
         labelText = findViewById(R.id.label);
         textlayout = findViewById(R.id.layout_label);
-        headView = null;//findViewById(R.id.head);
+        headView = findViewById(R.id.head);
     }
 
     public DeckItemType getItemType() {

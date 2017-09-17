@@ -3,6 +3,7 @@ package ocgcore.handler;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.WorkerThread;
+import android.text.TextUtils;
 import android.util.Log;
 
 import java.io.File;
@@ -10,12 +11,15 @@ import java.io.FilenameFilter;
 import java.util.HashMap;
 import java.util.Map;
 
+import cn.garymb.ygomobile.utils.IOUtils;
+import cn.garymb.ygomobile.utils.MD5Util;
 import ocgcore.data.Card;
 
 
 public class CardManager {
     private String dbDir, exDbPath;
     private final HashMap<Long, Card> cardDataHashMap = new HashMap<>();
+    private final Map<String, String> mCardCache = new HashMap<>();
 
     public CardManager(String dbDir, String exPath) {
         this.dbDir = dbDir;
@@ -49,12 +53,48 @@ public class CardManager {
                 //读取全部卡片
                 if (files != null) {
                     for (File file : files) {
-                        int count = readAllCards(file, cardDataHashMap);
-                        Log.i("Irrlicht", "load " + count + " cdb:" + file);
+                        final String path = file.getAbsolutePath();
+                        String md5 = MD5Util.getFileMD5(path);
+                        String last = mCardCache.get(path);
+                        if (!TextUtils.equals(md5, last)) {
+                            mCardCache.put(path, md5);
+                            int count = readAllCards(file, cardDataHashMap);
+                            Log.i("Irrlicht", "load " + count + " cdb:" + file);
+                        }
                     }
                 }
             }
         }
+    }
+
+    public static boolean checkDataBase(File file) {
+        if (!file.exists()) {
+            return false;
+        }
+        Cursor reader = null;
+        SQLiteDatabase db = null;
+        boolean rs = false;
+        try {
+            db = SQLiteDatabase.openOrCreateDatabase(file, null);
+            reader = db.rawQuery("select datas.id, ot, alias, setcode, type, level, race, attribute, atk, def,category,name,desc from datas,texts  where datas.id = texts.id limit 1;", null);
+            rs = reader != null;
+        } catch (Throwable e) {
+            //ignore
+        } finally {
+            IOUtils.close(reader);
+        }
+        if (!rs) {
+            try {
+                reader = db.rawQuery("select datas._id, ot, alias, setcode, type, level, race, attribute, atk, def,category,name,desc from datas,texts where datas._id = texts._id  limit 1;", null);
+                rs = reader != null;
+            } catch (Throwable e) {
+                //ignore
+            } finally {
+                IOUtils.close(reader);
+            }
+        }
+        IOUtils.close(db);
+        return rs;
     }
 
     @WorkerThread
@@ -64,8 +104,9 @@ public class CardManager {
         }
         int i = 0;
         Cursor reader = null;
+        SQLiteDatabase db = null;
         try {
-            SQLiteDatabase db = SQLiteDatabase.openOrCreateDatabase(file, null);
+            db = SQLiteDatabase.openOrCreateDatabase(file, null);
             if (db.isOpen()) {
                 try {
                     reader = db.rawQuery("select datas.id, ot, alias, setcode, type, level, race, attribute, atk, def,category,name,desc from datas,texts where datas.id = texts.id;", null);
@@ -102,9 +143,8 @@ public class CardManager {
             e.printStackTrace();
             Log.e("Irrlicht", "read cards " + file, e);
         } finally {
-            if (reader != null) {
-                reader.close();
-            }
+            IOUtils.close(reader);
+            IOUtils.close(db);
         }
         return i;
     }

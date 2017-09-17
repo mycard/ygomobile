@@ -1,5 +1,6 @@
 package cn.garymb.ygomobile.ui.preference.fragments;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -249,7 +250,7 @@ public class SettingFragment extends PreferenceFragmentPlus {
 
     private void copyDataBase(Preference preference, String file) {
         CheckBoxPreference checkBoxPreference = (CheckBoxPreference) preference;
-        ProgressDialog dlg = ProgressDialog.show(getActivity(), null, getString(R.string.copy_databse));
+        Dialog dlg = DialogPlus.show(getActivity(), null, getString(R.string.copy_databse));
         VUiKit.defer().when(() -> {
             File db = new File(mSettings.getResourcePath(), Constants.DATABASE_NAME);
             InputStream in = null;
@@ -290,7 +291,7 @@ public class SettingFragment extends PreferenceFragmentPlus {
         File file = new File(mSettings.getResourcePath(), Constants.CORE_SKIN_PENDULUM_PATH);
         if (ok) {
             //rename
-            ProgressDialog dlg = ProgressDialog.show(getActivity(), null, getString(R.string.coping_pendulum_image));
+            Dialog dlg = DialogPlus.show(getActivity(), null, getString(R.string.coping_pendulum_image));
             VUiKit.defer().when(() -> {
                 try {
                     IOUtils.createFolder(file);

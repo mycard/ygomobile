@@ -74,7 +74,7 @@ class CardSearchActivityImpl extends BaseActivity implements CardLoader.CallBack
         mCardLoader.setCallBack(this);
         mCardSelector = new CardSearcher($(R.id.nav_view_list), mCardLoader);
         setListeners();
-        ProgressDialog dlg = ProgressDialog.show(this, null, getString(R.string.loading));
+        DialogPlus dlg = DialogPlus.show(this, null, getString(R.string.loading));
         VUiKit.defer().when(() -> {
             StringManager.get().load();//loadFile(stringfile.getAbsolutePath());
             LimitManager.get().load();//loadFile(stringfile.getAbsolutePath());

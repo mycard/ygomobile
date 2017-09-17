@@ -1,5 +1,6 @@
 package cn.garymb.ygomobile.loader;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.text.TextUtils;
@@ -16,6 +17,7 @@ import java.util.Map;
 import cn.garymb.ygomobile.AppsSettings;
 import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.lite.R;
+import cn.garymb.ygomobile.ui.plus.DialogPlus;
 import cn.garymb.ygomobile.ui.plus.VUiKit;
 import ocgcore.LimitManager;
 import ocgcore.data.Card;
@@ -116,7 +118,7 @@ public class CardLoader implements ICardLoader {
         if (mCallBack != null) {
             mCallBack.onSearchStart();
         }
-        ProgressDialog wait = ProgressDialog.show(context, null, context.getString(R.string.searching));
+        Dialog wait = DialogPlus.show(context, null, context.getString(R.string.searching));
         VUiKit.defer().when(() -> {
             List<Card> tmp = new ArrayList<Card>();
             Map<Long, Card> cards = mCardManager.getAllCards();

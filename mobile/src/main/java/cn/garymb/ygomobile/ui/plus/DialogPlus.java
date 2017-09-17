@@ -20,7 +20,10 @@ import android.widget.TextView;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.ui.widget.WebViewPlus;
 
+import static android.view.WindowManager.LayoutParams.FIRST_SYSTEM_WINDOW;
+
 public class DialogPlus extends Dialog {
+    public static final int TYPE_KEYGUARD           = FIRST_SYSTEM_WINDOW+4;
     private Context context;
     private LayoutInflater mLayoutInflater;
     private View mView;
@@ -131,6 +134,10 @@ public class DialogPlus extends Dialog {
         return this;
     }
 
+    public static DialogPlus show(Context context, CharSequence title, CharSequence message) {
+        return show(context, title, message, false);
+    }
+
     public static DialogPlus show(Context context, CharSequence title,
                                   CharSequence message,
                                   boolean cancelable) {
@@ -144,11 +151,21 @@ public class DialogPlus extends Dialog {
         dialog.setTitle(title);
         dialog.setMessage(message);
         dialog.setCancelable(cancelable);
+        dialog.setCanceledOnTouchOutside(cancelable);
         dialog.setOnCancelListener(cancelListener);
         dialog.hideButton();
         dialog.showProgressBar();
+//        dialog.getWindow().setType(TYPE_KEYGUARD);
         dialog.show();
         return dialog;
+    }
+
+    @Override
+    public void setCancelable(boolean flag) {
+        super.setCancelable(flag);
+        if(!flag){
+            closeView.setVisibility(View.INVISIBLE);
+        }
     }
 
     @Override
@@ -156,8 +173,8 @@ public class DialogPlus extends Dialog {
         setTitle(context.getString(id));
     }
 
-    public DialogPlus showProgressBar(){
-        if(mProgressBar != null){
+    public DialogPlus showProgressBar() {
+        if (mProgressBar != null) {
             mProgressBar.setVisibility(View.VISIBLE);
         }
         return this;
@@ -166,6 +183,9 @@ public class DialogPlus extends Dialog {
     @Override
     public void setTitle(@Nullable CharSequence title) {
         setTitleText(title == null ? null : title.toString());
+        if(TextUtils.isEmpty(title)){
+            hideTitleBar();
+        }
     }
 
     public DialogPlus setMessage(int id) {
@@ -248,7 +268,7 @@ public class DialogPlus extends Dialog {
         this.mContentView = view;
         if (mFrameLayout != null) {
             mFrameLayout.removeAllViews();
-            mFrameLayout.addView(view,new ViewGroup.LayoutParams(
+            mFrameLayout.addView(view, new ViewGroup.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT));
         }

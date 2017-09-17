@@ -12,9 +12,13 @@ bool DataManager::LoadDB(const char* file) {
 	if(sqlite3_open_v2(file, &pDB, SQLITE_OPEN_READONLY, 0) != SQLITE_OK)
 		return Error(pDB);
 	sqlite3_stmt* pStmt;
-	const char* sql = "select * from datas,texts where datas.id=texts.id";
-	if(sqlite3_prepare_v2(pDB, sql, -1, &pStmt, 0) != SQLITE_OK)
-		return Error(pDB);
+	const char* sql_2 = "select datas._id, ot, alias, setcode, type, atk, def, level, race, attribute, category, texts.* from datas,texts where datas._id = texts._id;";
+	const char* sql = "select datas.id, ot, alias, setcode, type, atk, def, level, race, attribute, category, texts.* from datas,texts where datas.id = texts.id;";
+	if(sqlite3_prepare_v2(pDB, sql, -1, &pStmt, 0) != SQLITE_OK){
+		if(sqlite3_prepare_v2(pDB,sql_2, -1, &pStmt, 0) != SQLITE_OK){
+		    return Error(pDB);
+		}
+	}
 	CardDataC cd;
 	CardString cs;
 	for(int i = 0; i < 16; ++i) cs.desc[i] = 0;
