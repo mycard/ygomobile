@@ -130,9 +130,12 @@ class CardSearchInfo {
                     if (st) {
                         //通常魔法
                         if (type == CardType.Normal.value()) {
-                            if (card.Type != CardType.Spell.value() || card.Type != CardType.Trap.value()) {
+                            if (!card.isType(CardType.Normal)
+                                    && card.Type != CardType.Spell.value()
+                                    && card.Type != CardType.Trap.value()) {
                                 return false;
                             }
+                            continue;
                         }
                     }
                     if ((card.Type & type) != type) {
