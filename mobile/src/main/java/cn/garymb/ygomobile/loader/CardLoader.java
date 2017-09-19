@@ -197,9 +197,10 @@ public class CardLoader implements ICardLoader {
         searchInfo.setcode = setcode;
         LimitList limitList = mLimitManager.getLimit((int) limitlist);
         if (limitlist > 0) {
+            Log.d("kk", "seacrh by limit " + limitList);
             LimitType cardLimitType = LimitType.valueOf(limit);
             if (limitList != null) {
-                List<Long> ids;
+                List<Integer> ids;
                 if (cardLimitType == LimitType.Forbidden) {
                     ids = limitList.forbidden;
                 } else if (cardLimitType == LimitType.Limit) {
@@ -211,6 +212,7 @@ public class CardLoader implements ICardLoader {
                 } else {
                     ids = null;
                 }
+                Log.d("kk", "seacrh ids= " + ids);
                 if (ids != null) {
                     searchInfo.inCards = ids;
                 }

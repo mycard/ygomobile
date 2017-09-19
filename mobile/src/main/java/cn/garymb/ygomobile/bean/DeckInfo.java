@@ -7,7 +7,9 @@ import java.util.List;
 import java.util.Random;
 
 import cn.garymb.ygomobile.Constants;
+import cn.garymb.ygomobile.ui.cards.deck.DeckUtils;
 import cn.garymb.ygomobile.utils.CardSort;
+import cn.garymb.ygomobile.utils.MD5Util;
 import ocgcore.data.Card;
 
 public class DeckInfo {
@@ -23,25 +25,31 @@ public class DeckInfo {
         sideCards = new ArrayList<>();
     }
 
-    public void addMainCards(Card card) {
-        if (card != null) {
+    public boolean addMainCards(Card card) {
+        if (card != null && mainCount < Constants.DECK_MAIN_MAX) {
             this.mainCards.add(card);
             mainCount++;
+            return true;
         }
+        return false;
     }
 
-    public void addExtraCards(Card card) {
-        if (card != null) {
+    public boolean addExtraCards(Card card) {
+        if (card != null && extraCount < Constants.DECK_EXTRA_MAX) {
             this.extraCards.add(card);
             extraCount++;
+            return true;
         }
+        return false;
     }
 
-    public void addSideCards(Card card) {
-        if (card != null) {
+    public boolean addSideCards(Card card) {
+        if (card != null && sideCount < Constants.DECK_SIDE_MAX) {
             this.sideCards.add(card);
             sideCount++;
+            return true;
         }
+        return false;
     }
 
     public void setMainCards(Collection<Card> mainCards) {
@@ -99,6 +107,30 @@ public class DeckInfo {
             return extraCards.get(index);
         }
         return null;
+    }
+
+    public int getCardUseCount(int code) {
+        int count = 0;
+        for (Card card : mainCards) {
+            if (code == card.Code) {
+                count++;
+            }
+        }
+        for (Card card : extraCards) {
+            if (code == card.Code) {
+                count++;
+            }
+        }
+        for (Card card : sideCards) {
+            if (code == card.Code) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public String makeMd5() {
+        return MD5Util.getStringMD5(DeckUtils.getDeckString(this));
     }
 
     public Card getSideCard(int index) {

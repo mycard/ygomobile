@@ -27,6 +27,10 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -35,8 +39,8 @@ import java.util.Locale;
 
 import cn.garymb.ygomobile.AppsSettings;
 import cn.garymb.ygomobile.Constants;
-import cn.garymb.ygomobile.bean.Deck;
 import cn.garymb.ygomobile.bean.DeckInfo;
+import cn.garymb.ygomobile.bean.events.CardInfoEvent;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.loader.CardLoader;
 import cn.garymb.ygomobile.loader.DeckLoader;
@@ -55,6 +59,7 @@ import ocgcore.LimitManager;
 import ocgcore.StringManager;
 import ocgcore.data.Card;
 import ocgcore.data.LimitList;
+import ocgcore.enums.LimitType;
 
 import static cn.garymb.ygomobile.Constants.YDK_FILE_EX;
 
@@ -76,6 +81,7 @@ class DeckManagerActivityImpl2 extends BaseActivity implements CardLoader.CallBa
     protected DrawerLayout mDrawerlayout;
     private RecyclerView mListView;
     protected CardListAdapter mCardListAdapater;
+    private String mDeckMd5;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -129,7 +135,7 @@ class DeckManagerActivityImpl2 extends BaseActivity implements CardLoader.CallBa
                 mPreLoad = path;
             }
         }
-
+        EventBus.getDefault().register(this);
         DialogPlus dlg = DialogPlus.show(this, null, getString(R.string.loading));
         VUiKit.defer().when(() -> {
             StringManager.get().load();//loadFile(stringfile.getAbsolutePath());
@@ -170,6 +176,7 @@ class DeckManagerActivityImpl2 extends BaseActivity implements CardLoader.CallBa
             initLimitListSpinners(mLimitSpinner);
             initDecksListSpinners(mDeckSpinner);
             mDeckView.updateAll(rs);
+            mDeckMd5 = rs.makeMd5();
             mDeckView.notifyDataSetChanged();
         });
     }
@@ -177,7 +184,25 @@ class DeckManagerActivityImpl2 extends BaseActivity implements CardLoader.CallBa
     @Override
     protected void onDestroy() {
         ImageLoader.onDestory(this);
+        EventBus.getDefault().unregister(this);
         super.onDestroy();
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onCardInfoEvent(CardInfoEvent event) {
+        int pos = event.position;
+        Card cardInfo = mCardListAdapater.getItem(pos);
+        if (cardInfo == null) {
+            mCardListAdapater.hideMenu(null);
+        } else if (event.toMain) {
+            if (!addMainCard(cardInfo)) {// || !checkLimit(cardInfo, false)) {
+                mCardListAdapater.hideMenu(null);
+            }
+        } else {
+            if (!addSideCard(cardInfo)) {// || !checkLimit(cardInfo, false)) {
+                mCardListAdapater.hideMenu(null);
+            }
+        }
     }
 
     private File getSelectDeck(Spinner spinner) {
@@ -207,6 +232,7 @@ class DeckManagerActivityImpl2 extends BaseActivity implements CardLoader.CallBa
             dlg.dismiss();
             setCurYdkFile(file, noSaveLast);
             mDeckView.updateAll(rs);
+            mDeckMd5 = rs.makeMd5();
             mDeckView.notifyDataSetChanged();
         });
     }
@@ -312,7 +338,7 @@ class DeckManagerActivityImpl2 extends BaseActivity implements CardLoader.CallBa
 
     @Override
     public void onSearchStart() {
-
+        hideDrawers();
     }
 
     @Override
@@ -321,8 +347,13 @@ class DeckManagerActivityImpl2 extends BaseActivity implements CardLoader.CallBa
     }
 
     @Override
-    public void onSearchResult(List<Card> Cards) {
-
+    public void onSearchResult(List<Card> cardInfos) {
+        mCardListAdapater.set(cardInfos);
+        mCardListAdapater.notifyDataSetChanged();
+        if (cardInfos != null && cardInfos.size() > 0) {
+            mListView.smoothScrollToPosition(0);
+        }
+        showResult(false);
     }
 
     @Override
@@ -390,6 +421,7 @@ class DeckManagerActivityImpl2 extends BaseActivity implements CardLoader.CallBa
                 builder.setMessageGravity(Gravity.CENTER_HORIZONTAL);
                 builder.setLeftButtonListener((dlg, rs) -> {
                     mDeckView.updateAll(new DeckInfo());
+                    mDeckMd5 = mDeckView.getDeckInfo().makeMd5();
                     mDeckView.notifyDataSetChanged();
                     dlg.dismiss();
                 });
@@ -426,12 +458,11 @@ class DeckManagerActivityImpl2 extends BaseActivity implements CardLoader.CallBa
     }
 
     private void shareDeck() {
-        Deck deck = mDeckView.getDeckInfo().toDeck();
-        DeckUtils.save(deck, mYdkFile);
-        String label = TextUtils.isEmpty(deck.getName()) ? getString(R.string.share_deck) : deck.getName();
-        final String uriString = deck.toAppUri().toString();
-        final String httpUri = deck.toHttpUri().toString();
-        shareUrl(uriString, label);
+//        DeckUtils.save(mDeckView.getDeckInfo(), mYdkFile);
+//        String label = TextUtils.isEmpty(deck.getName()) ? getString(R.string.share_deck) : deck.getName();
+//        final String uriString = deck.toAppUri().toString();
+//        final String httpUri = deck.toHttpUri().toString();
+//        shareUrl(uriString, label);
     }
 
     private void shareUrl(String uri, String label) {
@@ -502,12 +533,13 @@ class DeckManagerActivityImpl2 extends BaseActivity implements CardLoader.CallBa
     }
 
     private void save() {
-        //TODO
-//        if (mDeckAdapater.save(mYdkFile)) {
-//            showToast(R.string.save_tip_ok, Toast.LENGTH_SHORT);
-//        } else {
-//            showToast(R.string.save_tip_fail, Toast.LENGTH_SHORT);
-//        }
+        mDeckMd5 = mDeckView.getDeckInfo().makeMd5();
+        //保存了，记录状态
+        if (DeckUtils.save(mDeckView.getDeckInfo(), mYdkFile)) {
+            showToast(R.string.save_tip_ok, Toast.LENGTH_SHORT);
+        } else {
+            showToast(R.string.save_tip_fail, Toast.LENGTH_SHORT);
+        }
     }
 
     protected void showSearch(boolean autoclose) {
@@ -537,12 +569,21 @@ class DeckManagerActivityImpl2 extends BaseActivity implements CardLoader.CallBa
             return;
         }
         if (cardInfo != null) {
-            //TODO 详情
+            //TODO 显示详情
         }
     }
 
     protected void onCardLongClick(View view, Card cardInfo, int pos) {
         //  mCardListAdapater.showMenu(view);
+    }
+
+    protected void hideDrawers() {
+        if (mDrawerlayout.isDrawerOpen(Gravity.RIGHT)) {
+            mDrawerlayout.closeDrawer(Gravity.RIGHT);
+        }
+        if (mDrawerlayout.isDrawerOpen(Gravity.LEFT)) {
+            mDrawerlayout.closeDrawer(Gravity.LEFT);
+        }
     }
 
     protected void setListeners() {
@@ -579,5 +620,70 @@ class DeckManagerActivityImpl2 extends BaseActivity implements CardLoader.CallBa
                 }
             }
         });
+    }
+
+    private boolean checkLimit(Card cardInfo, boolean tip) {
+        int count = mDeckView.getDeckInfo().getCardUseCount(cardInfo.Code);
+        if (mLimitList != null && mLimitList.check(cardInfo, LimitType.Forbidden)) {
+            if (tip) {
+                showToast(getString(R.string.tip_card_max, 0), Toast.LENGTH_SHORT);
+            }
+            return false;
+        }
+        if (mLimitList != null && mLimitList.check(cardInfo, LimitType.Limit)) {
+            if (count >= 1) {
+                if (tip) {
+                    showToast(getString(R.string.tip_card_max, 1), Toast.LENGTH_SHORT);
+                }
+                return false;
+            }
+        } else if (mLimitList != null && mLimitList.check(cardInfo, LimitType.SemiLimit)) {
+            if (count >= 2) {
+                if (tip) {
+                    showToast(getString(R.string.tip_card_max, 2), Toast.LENGTH_SHORT);
+                }
+                return false;
+            }
+        } else if (count >= Constants.CARD_MAX_COUNT) {
+            if (tip) {
+                showToast(getString(R.string.tip_card_max, 3), Toast.LENGTH_SHORT);
+            }
+            return false;
+        }
+        return true;
+    }
+
+    private boolean addSideCard(Card cardInfo) {
+        if (checkLimit(cardInfo, true)) {
+            boolean rs = mDeckView.getDeckInfo().addSideCards(cardInfo);
+            if (rs) {
+                mDeckView.updateLastCard(DeckGroupView.Type.Side);
+                showToast(R.string.add_card_tip_ok, Toast.LENGTH_SHORT);
+            } else {
+                showToast(R.string.add_card_tip_fail, Toast.LENGTH_SHORT);
+            }
+            return rs;
+        }
+        return false;
+    }
+
+    private boolean addMainCard(Card cardInfo) {
+        if (checkLimit(cardInfo, true)) {
+            boolean rs;
+            if (cardInfo.isExtraCard()) {
+                rs = mDeckView.getDeckInfo().addExtraCards(cardInfo);
+                mDeckView.updateLastCard(DeckGroupView.Type.Extra);
+            } else {
+                rs = mDeckView.getDeckInfo().addMainCards(cardInfo);
+                mDeckView.updateLastCard(DeckGroupView.Type.Main);
+            }
+            if (rs) {
+                showToast(R.string.add_card_tip_ok, Toast.LENGTH_SHORT);
+            } else {
+                showToast(R.string.add_card_tip_fail, Toast.LENGTH_SHORT);
+            }
+            return rs;
+        }
+        return false;
     }
 }

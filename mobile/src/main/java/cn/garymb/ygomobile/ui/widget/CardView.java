@@ -28,21 +28,31 @@ public class CardView extends FrameLayout {
         this(context, attrs, 0);
     }
 
+    public CardView(Context context, int width) {
+        super(context);
+        mCardView = new ImageView(context);
+        mCountView = new ImageView(context);
+        initCountView(Math.round(width / 5.0f * 3.0f));
+    }
+
     public CardView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         mCardView = new ImageView(context);
+        mCountView = new ImageView(context);
+        initCountView((int) getResources().getDimension(R.dimen.right_size2));
+    }
+
+    private void initCountView(int w) {
         mCardView.setScaleType(ImageView.ScaleType.FIT_CENTER);
         LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
         lp.gravity = Gravity.CENTER;
         int p = (int) getResources().getDimension(R.dimen.card_padding);
         lp.setMargins(p, p, p, p);
         addView(mCardView, lp);
-
-        LayoutParams lp2 = new LayoutParams((int) getResources().getDimension(R.dimen.right_size2), (int) getResources().getDimension(R.dimen.right_size2));
-        lp2.gravity = Gravity.RIGHT;
-        mCountView = new ImageView(context);
+        LayoutParams lp2 = new LayoutParams(w, w);
+        lp2.gravity = Gravity.RIGHT | Gravity.TOP;
         mCountView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        addView(mCountView, lp);
+        addView(mCountView, lp2);
     }
 
     @Override
@@ -84,7 +94,7 @@ public class CardView extends FrameLayout {
         mCard = cardInfo;
         if (cardInfo != null) {
             ImageLoader.get(getContext()).bindImage(mCardView, cardInfo.Code);
-        }else{
+        } else {
             mCardView.setImageBitmap(null);
         }
     }

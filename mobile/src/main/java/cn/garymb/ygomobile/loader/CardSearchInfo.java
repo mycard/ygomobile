@@ -15,7 +15,7 @@ class CardSearchInfo {
     long race, category;
     String atk, def;
     boolean islink;
-    List<Long> inCards;
+    List<Integer> inCards;
     long[] types;
     long setcode;
 

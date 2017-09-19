@@ -79,17 +79,17 @@ public class DeckGroupView extends FrameLayout {
         for (int i = 0; i < Constants.DECK_MAIN_MAX; i++) {
             line = i / Constants.DECK_WIDTH_MAX_COUNT;
             pos = i % Constants.DECK_WIDTH_MAX_COUNT;
-            CardView cardView = new CardView(context);
+            CardView cardView = new CardView(context,mCardWidth);
             addView(cardView, makeLayoutParams(mCardWidth, mCardHeight, mainTop + line * mCardHeight, pos * mCardWidth));
             mMainViews.put(i, cardView);
         }
         for (int i = 0; i < Constants.DECK_EXTRA_MAX; i++) {
-            CardView cardView = new CardView(context);
+            CardView cardView = new CardView(context,mCardWidth);
             addView(cardView, makeLayoutParams(mCardWidth, mCardHeight, extraTop, i * mCardWidth));
             mExtraViews.put(i, cardView);
         }
         for (int i = 0; i < Constants.DECK_SIDE_MAX; i++) {
-            CardView cardView = new CardView(context);
+            CardView cardView = new CardView(context,mCardWidth);
             addView(cardView, makeLayoutParams(mCardWidth, mCardHeight, sideTop, i * mCardWidth));
             mSideViews.put(i, cardView);
         }
@@ -148,6 +148,24 @@ public class DeckGroupView extends FrameLayout {
         return mDeckInfo;
     }
 
+    public void updateLastCard(Type type) {
+        updateAll(mDeckInfo);
+        if (type == Type.Main) {
+            mMainLabel.setText(mLabelInfo.getMainString());
+        } else if (type == Type.Extra) {
+            mExtraLabel.setText(mLabelInfo.getExtraString());
+        } else {
+            mSideLabel.setText(mLabelInfo.getSideString());
+        }
+        if (type == Type.Extra) {
+            updateCard(type, getDeckInfo().getExtraCount() - 1, 1);
+        } else if (type == Type.Main) {
+            updateCard(type, getDeckInfo().getMainCount() - 1, 1);
+        } else {
+            updateCard(type, getDeckInfo().getSideCount() - 1, 1);
+        }
+    }
+
     public void updateCard(Type type, int index, int count) {
         if (type == Type.Extra) {
             int all = mExtraViews.size();
@@ -159,7 +177,7 @@ public class DeckGroupView extends FrameLayout {
                         count--;
                     }
                     if (mLimitChanged) {
-                        mExtraViews.get(i).updateLimit(mImageTop, mLimitList);
+                        mExtraViews.get(i).updateLimit(getImageTop(), mLimitList);
                     }
                 } else {
                     mExtraViews.get(i).showCard(null);
@@ -177,7 +195,6 @@ public class DeckGroupView extends FrameLayout {
                 } else {
                     if (index < mDeckInfo.getMainCount()) {
                         if (targetIndex == i && count > 0) {
-                            mMainViews.get(i).updateLimit(mImageTop, mLimitList);
                             mMainViews.get(i).showCard(mDeckInfo.getMainCard(index));
                             index++;
                             targetIndex = (index / mMainLimit) * Constants.DECK_WIDTH_MAX_COUNT + (index % mMainLimit);
@@ -188,7 +205,7 @@ public class DeckGroupView extends FrameLayout {
 
                         }
                         if (mLimitChanged) {
-                            mMainViews.get(i).updateLimit(mImageTop, mLimitList);
+                            mMainViews.get(i).updateLimit(getImageTop(), mLimitList);
                         }
                     } else {
                         mMainViews.get(i).showCard(null);
@@ -206,7 +223,7 @@ public class DeckGroupView extends FrameLayout {
                         count--;
                     }
                     if (mLimitChanged) {
-                        mSideViews.get(i).updateLimit(mImageTop, mLimitList);
+                        mSideViews.get(i).updateLimit(getImageTop(), mLimitList);
                     }
                 } else {
                     mSideViews.get(i).showCard(null);
