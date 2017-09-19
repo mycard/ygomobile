@@ -104,6 +104,7 @@ public interface Constants {
     int STRING_LIMIT_START = 1315;
     int STRING_CATEGORY_START = 1100;
     int DEFAULT_CARD_COUNT = 500;
+    int DECK_WIDTH_MAX_COUNT = 15;
     int DECK_WIDTH_COUNT = 10;
     int DECK_MAIN_MAX = 60;
     int DECK_EXTRA_MAX = 15;

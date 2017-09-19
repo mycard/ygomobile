@@ -57,6 +57,10 @@ public class CardLoader implements ICardLoader {
         }
     }
 
+    public SparseArray<Card> readCards(List<Integer> ids) {
+        return readCards(ids, mLimitList);
+    }
+
     public SparseArray<Card> readCards(List<Integer> ids, LimitList limitList) {
         if (!isOpen()) {
             return null;

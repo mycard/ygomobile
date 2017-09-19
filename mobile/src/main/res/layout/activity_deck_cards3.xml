@@ -30,8 +30,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"/>
 
-                <cn.garymb.ygomobile.ui.widget.DeckGroupView
-                    android:id="@+id/deck_group"
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/grid_cards"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:padding="2dp"/>

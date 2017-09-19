@@ -174,6 +174,7 @@ public class ImageLoader implements Closeable {
         bindImage(imageview, code, pre, false);
     }
 
+
     public void bindImage(ImageView imageview, long code, Drawable pre, boolean isBig) {
         String name = Constants.CORE_IMAGE_PATH + "/" + code;
         String path = AppsSettings.get().getResourcePath();

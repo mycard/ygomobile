@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public abstract class BaseRecyclerAdapterPlus<T, V extends BaseRecyclerAdapterPlus.BaseViewHolder> extends RecyclerView.Adapter<V> {
+public abstract class BaseRecyclerAdapterPlus<T, V extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<V> {
     protected Context context;
     private LayoutInflater mLayoutInflater;
     protected final List<T> mItems = new ArrayList<T>();
