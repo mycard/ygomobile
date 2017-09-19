@@ -18,13 +18,17 @@ import java.util.List;
 import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.bean.DeckInfo;
 import cn.garymb.ygomobile.lite.R;
+import cn.garymb.ygomobile.ui.cards.deck.ImageTop;
 import cn.garymb.ygomobile.ui.cards.deck.LabelInfo;
 import ocgcore.data.Card;
+import ocgcore.data.LimitList;
 
 public class DeckGroupView extends FrameLayout {
     private final DeckLabel mMainLabel, mExtraLabel, mSideLabel;
     private final LabelInfo mLabelInfo;
     private final DeckInfo mDeckInfo;
+    private ImageTop mImageTop;
+    private LimitList mLimitList;
     private int mainTop, extraTop, sideTop;
     int mCardWidth = 0;
     int mCardHeight = 0;
@@ -113,6 +117,13 @@ public class DeckGroupView extends FrameLayout {
                 ViewGroup.LayoutParams.WRAP_CONTENT, top);
     }
 
+    public ImageTop getImageTop() {
+        if (mImageTop == null) {
+            mImageTop = new ImageTop(getContext());
+        }
+        return mImageTop;
+    }
+
     public void updateAll(DeckInfo deckInfo) {
         mDeckInfo.update(deckInfo);
         mLabelInfo.update(deckInfo);
@@ -120,36 +131,70 @@ public class DeckGroupView extends FrameLayout {
         mMainLimit = Math.max(10, mDeckInfo.getMainCount() / 4);
         mExtraLimit = Math.max(10, mDeckInfo.getExtraCount());
         mSideLimit = Math.max(10, mDeckInfo.getSideCount());
-        Log.i("kk", "limit:m=" + mMainLimit + ",e=" + mExtraLimit + ",s=" + mSideLimit);
-        notifyDataSetChanged();
     }
 
     public void updateCard(Type type, int index, int count) {
         if (type == Type.Extra) {
-            for (int i = index; i < mDeckInfo.getExtraCount() && count > 0; i++, count--) {
-                Card card = mDeckInfo.getExtraCard(i);
-                if (card == null) {
-                    Log.w("kk", i + " extra=null");
+            int all = mExtraViews.size();
+            for (int i = 0; i < all; i++) {
+                if (i < mDeckInfo.getExtraCount()) {
+                    if (i == index && count > 0) {
+                        mExtraViews.get(i).showCard(mDeckInfo.getExtraCard(i));
+                        index++;
+                        count--;
+                    }
+                    if (mLimitChanged) {
+                        mExtraViews.get(i).updateLimit(mImageTop, mLimitList);
+                    }
+                } else {
+                    mSideViews.get(i).setVisibility(INVISIBLE);
                 }
-                mExtraViews.get(i).showCard(card);
             }
             resizePadding(Type.Extra, mExtraViews);
         } else if (type == Type.Main) {
-            int main = mDeckInfo.getMainCount();
-            int line, pos, all = mMainViews.size();
+            int targetIndex, orgPos, all = mMainViews.size();
             //59
-            for (int i = index; i < main && count > 0; i++, count--) {
-                line = i / mMainLimit;
-                pos = i - line * mMainLimit;
-                int vindex = line * Constants.DECK_WIDTH_MAX_COUNT + pos;
-                if (vindex < all) {
-                    mMainViews.get(vindex).showCard(mDeckInfo.getMainCard(i));
+            targetIndex = (index / mMainLimit) * Constants.DECK_WIDTH_MAX_COUNT + (index % mMainLimit);
+            for (int i = 0; i < all; i++) {
+                orgPos = i % Constants.DECK_WIDTH_MAX_COUNT;
+                if (orgPos >= mMainLimit) {
+                    mMainViews.get(i).setVisibility(INVISIBLE);
+                } else {
+//                    if (i < mDeckInfo.getMainCount()) {
+//                        if (targetIndex == i && count > 0) {
+//                            index++;
+//                            mMainViews.get(i).updateLimit(mImageTop, mLimitList);
+//                            targetIndex = (index / mMainLimit) * Constants.DECK_WIDTH_MAX_COUNT + (index % mMainLimit);
+//                            count--;
+////                            line = i / mMainLimit;
+////                            pos = i - line * mMainLimit;
+////                            int vindex = line * Constants.DECK_WIDTH_MAX_COUNT + pos;
+//
+//                        }
+//                        if (mLimitChanged) {
+//                            mMainViews.get(i).updateLimit(mImageTop, mLimitList);
+//                        }
+//                    } else {
+//                        mMainViews.get(i).showCard(null);
+//                    }
                 }
             }
             resizePadding(Type.Main, mMainViews);
         } else if (type == Type.Side) {
-            for (int i = index; i < mDeckInfo.getSideCount() && count > 0; i++, count--) {
-                mSideViews.get(i).showCard(mDeckInfo.getSideCard(i));
+            int all = mSideViews.size();
+            for (int i = 0; i < all; i++) {
+                if (i < mDeckInfo.getExtraCount()) {
+                    if (i == index && count > 0) {
+                        mSideViews.get(i).showCard(mDeckInfo.getSideCard(i));
+                        index++;
+                        count--;
+                    }
+                    if (mLimitChanged) {
+                        mSideViews.get(i).updateLimit(mImageTop, mLimitList);
+                    }
+                } else {
+                    mSideViews.get(i).setVisibility(INVISIBLE);
+                }
             }
             resizePadding(Type.Side, mSideViews);
         }
@@ -211,10 +256,17 @@ public class DeckGroupView extends FrameLayout {
         mMainLabel.setText(mLabelInfo.getMainString());
         mExtraLabel.setText(mLabelInfo.getExtraString());
         mSideLabel.setText(mLabelInfo.getSideString());
+        mLimitChanged = false;
     }
 
     public enum Type {
         Main, Extra, Side
     }
 
+    private boolean mLimitChanged = false;
+
+    public void setLimitList(LimitList limitList) {
+        mLimitList = limitList;
+        mLimitChanged = true;
+    }
 }

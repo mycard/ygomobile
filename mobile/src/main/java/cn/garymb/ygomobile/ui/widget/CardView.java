@@ -34,7 +34,7 @@ public class CardView extends FrameLayout {
         mCardView.setScaleType(ImageView.ScaleType.FIT_CENTER);
         LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
         lp.gravity = Gravity.CENTER;
-        int p = (int)getResources().getDimension(R.dimen.card_padding);
+        int p = (int) getResources().getDimension(R.dimen.card_padding);
         lp.setMargins(p, p, p, p);
         addView(mCardView, lp);
 
@@ -59,8 +59,8 @@ public class CardView extends FrameLayout {
         }
     }
 
-    public void updateLimit(ImageTop imageTop, LimitList limitList){
-        if (mCard != null) {
+    public void updateLimit(ImageTop imageTop, LimitList limitList) {
+        if (mCard != null && imageTop != null) {
             mCountView.setVisibility(View.VISIBLE);
             if (limitList != null) {
                 if (limitList.check(mCard, LimitType.Forbidden)) {
@@ -79,6 +79,8 @@ public class CardView extends FrameLayout {
     }
 
     public void showCard(Card cardInfo) {
+        setVisibility(VISIBLE);
+        if (mCard != null && mCard.equals(cardInfo)) return;
         mCard = cardInfo;
         if (cardInfo != null) {
             ImageLoader.get(getContext()).bindImage(mCardView, cardInfo.Code);
