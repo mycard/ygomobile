@@ -7,10 +7,7 @@ import android.util.AttributeSet;
 import android.view.Gravity;
 import android.widget.TextView;
 
-import java.util.List;
-
 import cn.garymb.ygomobile.lite.R;
-import ocgcore.data.Card;
 
 @SuppressLint("AppCompatCustomView")
 public class DeckLabel extends TextView {
@@ -28,6 +25,7 @@ public class DeckLabel extends TextView {
         setGravity(Gravity.CENTER_VERTICAL);
         int labelLeft = (int) getResources().getDimension(R.dimen.deck_label_left);
         setPadding(labelLeft, 0, 0, 0);
+        setTextSize(getResources().getDimension(R.dimen.deck_label_text));
         setMinLines(1);
         setSingleLine();
     }

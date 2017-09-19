@@ -32,7 +32,7 @@ public class CardView extends FrameLayout {
         super(context);
         mCardView = new ImageView(context);
         mCountView = new ImageView(context);
-        initCountView(Math.round(width / 5.0f * 3.0f));
+        initCountView(Math.round(width / 9.0f * 4.0f));
     }
 
     public CardView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
@@ -50,7 +50,7 @@ public class CardView extends FrameLayout {
         lp.setMargins(p, p, p, p);
         addView(mCardView, lp);
         LayoutParams lp2 = new LayoutParams(w, w);
-        lp2.gravity = Gravity.RIGHT | Gravity.TOP;
+        lp2.gravity = Gravity.LEFT | Gravity.TOP;
         mCountView.setScaleType(ImageView.ScaleType.FIT_CENTER);
         addView(mCountView, lp2);
     }
