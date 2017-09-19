@@ -27,7 +27,7 @@ public class PhotoViewActivity extends BaseActivity {
         final Toolbar toolbar = $(R.id.toolbar);
         setSupportActionBar(toolbar);
         enableBackHome();
-        mImageLoader = new ImageLoader(this);
+        mImageLoader = ImageLoader.get(this);
         mPhotoView = $(R.id.photoview);
         if (loadItem(getIntent())) {
             loadImage();
@@ -36,6 +36,7 @@ public class PhotoViewActivity extends BaseActivity {
 
     @Override
     protected void onDestroy() {
+        ImageLoader.onDestory(this);
         try {
             mImageLoader.close();
         } catch (IOException e) {

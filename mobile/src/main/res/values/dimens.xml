@@ -28,7 +28,10 @@
     <dimen name="right_size2">14dp</dimen>
     <dimen name="card_def_width">44dp</dimen>
     <dimen name="card_def_height">64dp</dimen>
-
+    <dimen name="deck_label_left">4dp</dimen>
+    <dimen name="deck_label_height">24dp</dimen>
+    <dimen name="deck_label_text">6sp</dimen>
+    <dimen name="card_padding">1dp</dimen>
     <dimen name="padding">4dp</dimen>
     <dimen name="padding2">8dp</dimen>
     <dimen name="list_height">240dp</dimen>

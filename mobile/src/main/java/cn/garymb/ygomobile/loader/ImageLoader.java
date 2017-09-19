@@ -23,6 +23,8 @@ import java.io.Closeable;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.zip.ZipEntry;
@@ -44,11 +46,32 @@ public class ImageLoader implements Closeable {
     private static final String TAG = ImageLoader.class.getSimpleName();
     private ZipFile mZipFile;
     private LruBitmapPool mLruBitmapPool;
-    private ExecutorService mExecutorService = Executors.newSingleThreadExecutor();
+    //    private ExecutorService mExecutorService = Executors.newSingleThreadExecutor();
     private boolean isClose = false;
     private Context mContext;
+    private static final Map<Context, ImageLoader> IMAGE_LOADER_MAP = new ConcurrentHashMap<>();
 
-    public ImageLoader(Context context) {
+    public static ImageLoader get(Context context) {
+        ImageLoader imageLoader = IMAGE_LOADER_MAP.get(context);
+        if (imageLoader == null) {
+            synchronized (IMAGE_LOADER_MAP) {
+                imageLoader = IMAGE_LOADER_MAP.get(context);
+                if (imageLoader == null) {
+                    imageLoader = new ImageLoader(context);
+                    IMAGE_LOADER_MAP.put(context, imageLoader);
+                }
+            }
+        }
+        return imageLoader;
+    }
+
+    public static void onDestory(Context context) {
+        synchronized (IMAGE_LOADER_MAP) {
+            IMAGE_LOADER_MAP.remove(context);
+        }
+    }
+
+    private ImageLoader(Context context) {
         mContext = context;
         mLruBitmapPool = new LruBitmapPool(100);
     }
@@ -139,7 +162,7 @@ public class ImageLoader implements Closeable {
         }
         resource.error(R.drawable.unknown);
         resource.override(Constants.CORE_SKIN_CARD_COVER_SIZE[0], Constants.CORE_SKIN_CARD_COVER_SIZE[1]);
-        resource.signature(new StringSignature(""+code));
+        resource.signature(new StringSignature("" + code));
         resource.into(new GlideDrawableImageViewTarget(imageview));
     }
 
@@ -150,6 +173,7 @@ public class ImageLoader implements Closeable {
     public void bindImage(ImageView imageview, long code, Drawable pre) {
         bindImage(imageview, code, pre, false);
     }
+
 
     public void bindImage(ImageView imageview, long code, Drawable pre, boolean isBig) {
         String name = Constants.CORE_IMAGE_PATH + "/" + code;
@@ -192,7 +216,7 @@ public class ImageLoader implements Closeable {
         if (!bind) {
             if (Constants.NETWORK_IMAGE && NetUtils.isWifiConnected(imageview.getContext())) {
                 bind(String.format(Constants.IMAGE_URL, "" + code), imageview, code, pre, isBig);
-            }else{
+            } else {
                 imageview.setImageResource(R.drawable.unknown);
             }
         }

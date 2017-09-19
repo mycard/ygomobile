@@ -11,11 +11,13 @@ import com.nightonke.boommenu.BoomMenuButton;
 
 import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.YGOStarter;
+import cn.garymb.ygomobile.lite.BuildConfig;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.ui.activities.AboutActivity;
 import cn.garymb.ygomobile.ui.activities.WebActivity;
 import cn.garymb.ygomobile.ui.cards.CardSearchAcitivity;
 import cn.garymb.ygomobile.ui.cards.DeckManagerActivity;
+import cn.garymb.ygomobile.ui.cards.DeckManagerActivity2;
 import cn.garymb.ygomobile.ui.online.MyCardActivity;
 import cn.garymb.ygomobile.ui.plus.DefaultOnBoomListener;
 import cn.garymb.ygomobile.ui.preference.SettingsActivity;
@@ -90,7 +92,11 @@ class HomeActivityMenu {
                     WebActivity.open(getActivity(), getActivity().getString(R.string.help), Constants.URL_HELP);
                     break;
                 case MENU_UPDATE_IAMGES:
-                    getActivity().updateImages();
+                    if (BuildConfig.DEBUG) {
+                        startActivity(new Intent(getActivity(), DeckManagerActivity2.class));
+                    } else {
+                        getActivity().updateImages();
+                    }
                     break;
               /* case MENU_ABOUT:
                     startActivity(new Intent(getActivity(), AboutActivity.class));

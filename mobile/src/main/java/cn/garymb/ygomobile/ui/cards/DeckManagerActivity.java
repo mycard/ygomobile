@@ -1,4 +1,4 @@
 package cn.garymb.ygomobile.ui.cards;
 
-public class DeckManagerActivity extends DeckManagerActivityImpl{
+public class DeckManagerActivity extends DeckManagerActivityImpl {
 }

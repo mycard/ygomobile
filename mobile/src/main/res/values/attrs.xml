@@ -4,4 +4,10 @@
         <attr name="hintText" format="string"/>
         <attr name="searchTitle" format="string"/>
     </declare-styleable>
+    <declare-styleable name="CardGroupView">
+        <attr name="lines" format="integer"/>
+    </declare-styleable>
+    <declare-styleable name="DeckView">
+        <attr name="card_width" format="dimension"/>
+    </declare-styleable>
 </resources>

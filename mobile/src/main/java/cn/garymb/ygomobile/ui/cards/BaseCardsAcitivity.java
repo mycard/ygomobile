@@ -30,7 +30,7 @@ import ocgcore.data.Card;
 
 public abstract class BaseCardsAcitivity extends BaseActivity implements CardLoader.CallBack {
     protected DrawerLayout mDrawerlayout;
-    private SwipeMenuRecyclerView mListView;
+    private RecyclerView mListView;
     protected CardSearcher mCardSelector;
     protected CardListAdapter mCardListAdapater;
     protected CardLoader mCardLoader;
@@ -46,7 +46,7 @@ public abstract class BaseCardsAcitivity extends BaseActivity implements CardLoa
         Toolbar toolbar = $(R.id.toolbar);
         setSupportActionBar(toolbar);
         enableBackHome();
-        mImageLoader = new ImageLoader(this);
+        mImageLoader = ImageLoader.get(this);
         mDrawerlayout = $(R.id.drawer_layout);
         ViewGroup group = $(R.id.layout_main);
         group.addView(getMainView(), new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
@@ -144,6 +144,7 @@ public abstract class BaseCardsAcitivity extends BaseActivity implements CardLoa
 
     @Override
     protected void onDestroy() {
+        ImageLoader.onDestory(this);
         try {
             mImageLoader.close();
         } catch (IOException e) {

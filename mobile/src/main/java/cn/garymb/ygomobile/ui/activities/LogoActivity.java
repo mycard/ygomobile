@@ -53,7 +53,7 @@ public class LogoActivity extends Activity {
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_logo);
-        ImageView image = (ImageView) findViewById(R.id.logo);
+        ImageView image = (ImageView) $(R.id.logo);
         AlphaAnimation anim = new AlphaAnimation(0.1f, 1.0f);
         anim.setDuration(Constants.LOG_TIME);
         anim.setAnimationListener(new AnimationListener() {

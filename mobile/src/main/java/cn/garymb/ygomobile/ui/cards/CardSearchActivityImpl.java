@@ -54,7 +54,7 @@ class CardSearchActivityImpl extends BaseActivity implements CardLoader.CallBack
         setSupportActionBar(toolbar);
         enableBackHome();
         mDrawerlayout = $(R.id.drawer_layout);
-        mImageLoader = new ImageLoader(this);
+        mImageLoader = ImageLoader.get(this);
         mListView = $(R.id.list_cards);
         mCardListAdapater = new CardListAdapter(this, mImageLoader);
         mCardListAdapater.setItemBg(true);
@@ -141,6 +141,7 @@ class CardSearchActivityImpl extends BaseActivity implements CardLoader.CallBack
 
     @Override
     protected void onDestroy() {
+        ImageLoader.onDestory(this);
         try {
             mImageLoader.close();
         } catch (IOException e) {

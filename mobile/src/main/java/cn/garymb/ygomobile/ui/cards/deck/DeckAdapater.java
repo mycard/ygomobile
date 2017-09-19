@@ -21,6 +21,7 @@ import cn.garymb.ygomobile.bean.Deck;
 import cn.garymb.ygomobile.bean.DeckInfo;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.loader.CardLoader;
+import cn.garymb.ygomobile.loader.DeckLoader;
 import cn.garymb.ygomobile.loader.ImageLoader;
 import cn.garymb.ygomobile.ui.cards.CardListProvider;
 import cn.garymb.ygomobile.utils.CardSort;
@@ -192,11 +193,11 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> implement
         int index = 0;
         if (posotion < count) {
             index = DeckItem.MainStart + posotion;
-        }else {
+        } else {
             count += mExtraCount;
             if (posotion < count) {
                 index = DeckItem.ExtraStart + (posotion - mMainCount);
-            }else{
+            } else {
                 count += mSideCount;
                 if (posotion < count) {
                     index = DeckItem.SideStart + (posotion - mMainCount - mExtraCount);
@@ -387,7 +388,7 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> implement
 
     public DeckInfo read(CardLoader cardLoader, File file, LimitList limitList) {
         setLimitList(limitList);
-        return DeckItemUtils.readDeck(cardLoader, file, limitList);
+        return DeckLoader.readDeck(cardLoader, file, limitList);
     }
 
     public boolean save(File file) {
@@ -425,7 +426,7 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> implement
 
     public boolean isChanged() {
         String md5 = DeckItemUtils.makeMd5(mItems);
-        Log.d("kk", mDeckMd5 + "/" + md5);
+        //Log.d("kk", mDeckMd5 + "/" + md5);
         return !TextUtils.equals(mDeckMd5, md5);
     }
 
@@ -532,18 +533,13 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> implement
         }
         if (item.getType() == DeckItemType.MainLabel || item.getType() == DeckItemType.SideLabel
                 || item.getType() == DeckItemType.ExtraLabel) {
-            holder.cardImage.setVisibility(View.GONE);
-            holder.rightImage.setVisibility(View.GONE);
-
             if (item.getType() == DeckItemType.MainLabel) {
-                holder.labelText.setText(getMainString());
+                holder.setText(getMainString());
             } else if (item.getType() == DeckItemType.SideLabel) {
-                holder.labelText.setText(getSideString());
+                holder.setText(getSideString());
             } else if (item.getType() == DeckItemType.ExtraLabel) {
-                holder.labelText.setText(getExtraString());
+                holder.setText(getExtraString());
             }
-
-            holder.textlayout.setVisibility(View.VISIBLE);
         } else {
             if (mHeight <= 0) {
                 if (holder.cardImage.getMeasuredWidth() > 0) {
@@ -558,14 +554,11 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> implement
 //                Log.i("kk", "w=" + mWidth + ",h=" + mHeight);
             }
 //            holder.cardImage.setLayoutParams(new RelativeLayout.LayoutParams(holder.cardImage.getMeasuredWidth(), mHeight));
-            holder.textlayout.setVisibility(View.GONE);
-            holder.cardImage.setVisibility(View.VISIBLE);
+            holder.showImage();
             holder.setSize(mHeight);
             if (item.getType() == DeckItemType.Space) {
                 holder.setCardType(0);
-                holder.cardImage.setVisibility(View.INVISIBLE);
-//                holder.useDefault();
-                holder.rightImage.setVisibility(View.GONE);
+                holder.showEmpty();
             } else {
                 Card cardInfo = item.getCardInfo();
                 if (cardInfo != null) {
@@ -573,25 +566,24 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> implement
                     if (mImageTop == null) {
                         mImageTop = new ImageTop(context);
                     }
-                    holder.rightImage.setVisibility(View.VISIBLE);
                     if (mLimitList != null) {
                         if (mLimitList.check(cardInfo, LimitType.Forbidden)) {
-                            holder.rightImage.setImageBitmap(mImageTop.forbidden);
+                            holder.setRightImage(mImageTop.forbidden);
                         } else if (mLimitList.check(cardInfo, LimitType.Limit)) {
-                            holder.rightImage.setImageBitmap(mImageTop.limit);
+                            holder.setRightImage(mImageTop.limit);
                         } else if (mLimitList.check(cardInfo, LimitType.SemiLimit)) {
-                            holder.rightImage.setImageBitmap(mImageTop.semiLimit);
+                            holder.setRightImage(mImageTop.semiLimit);
                         } else {
-                            holder.rightImage.setVisibility(View.GONE);
+                            holder.setRightImage(null);
                         }
                     } else {
-                        holder.rightImage.setVisibility(View.GONE);
+                        holder.setRightImage(null);
                     }
 //                    holder.useDefault();
                     imageLoader.bindImage(holder.cardImage, cardInfo.Code);
                 } else {
                     holder.setCardType(0);
-                    holder.rightImage.setVisibility(View.GONE);
+                    holder.setRightImage(null);
                     holder.useDefault(imageLoader, mWidth, mHeight);
                 }
             }

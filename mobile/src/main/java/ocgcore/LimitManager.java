@@ -87,7 +87,7 @@ public class LimitManager {
                 } else if (tmp != null) {
                     String[] words = line.trim().split("[\t| ]+");
                     if (words.length >= 2) {
-                        long id = toNumber(words[0]);
+                        int id = toNumber(words[0]);
                         int count = (int) toNumber(words[1]);
                         switch (count) {
                             case 0:
@@ -114,13 +114,13 @@ public class LimitManager {
         return true;
     }
 
-    private long toNumber(String str) {
-        long i = 0;
+    private int toNumber(String str) {
+        int i = 0;
         try {
             if (str.startsWith("0x")) {
-                i = Long.parseLong(str.replace("0x", ""), 0x10);
+                i = Integer.parseInt(str.replace("0x", ""), 0x10);
             } else {
-                i = Long.parseLong(str);
+                i = Integer.parseInt(str);
             }
         } catch (Exception e) {
 

@@ -1,5 +1,6 @@
 package cn.garymb.ygomobile.ui.cards.deck;
 
+import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,11 +18,11 @@ class DeckViewHolder extends RecyclerView.ViewHolder {
         super(view);
         this.view = view;
         view.setTag(view.getId(), this);
-        cardImage = findViewById(R.id.card_image);
-        rightImage = findViewById(R.id.right_top);
-        labelText = findViewById(R.id.label);
-        textlayout = findViewById(R.id.layout_label);
-        headView = findViewById(R.id.head);
+        cardImage = $(R.id.card_image);
+        rightImage = $(R.id.right_top);
+        labelText = $(R.id.label);
+        textlayout = $(R.id.layout_label);
+        headView = $(R.id.head);
     }
 
     public DeckItemType getItemType() {
@@ -41,6 +42,19 @@ class DeckViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void setSize(int height) {
+        setSize(-1, height);
+    }
+
+    public void setSize(int width, int height) {
+        if (width > 0) {
+            cardImage.setMinimumWidth(width);
+            cardImage.setMaxWidth(width);
+            ViewGroup.LayoutParams layoutParams = cardImage.getLayoutParams();
+            if (layoutParams != null) {
+                layoutParams.width = width;
+            }
+            cardImage.setLayoutParams(layoutParams);
+        }
         if (height > 0) {
             cardImage.setMinimumHeight(height);
             cardImage.setMaxHeight(height);
@@ -50,11 +64,13 @@ class DeckViewHolder extends RecyclerView.ViewHolder {
             if (layoutParams != null) {
                 layoutParams.height = height;
             }
+            cardImage.setLayoutParams(layoutParams);
         }
     }
 
     public void useDefault(ImageLoader imageLoader, int w, int h) {
         cardImage.setImageResource(R.drawable.unknown);
+        //TODO sdcard的卡背
 //        File outFile = new File(AppsSettings.get().getCoreSkinPath(), Constants.UNKNOWN_IMAGE);
 //        ViewGroup.LayoutParams layoutParams = cardImage.getLayoutParams();
 //        if (layoutParams != null) {
@@ -63,27 +79,42 @@ class DeckViewHolder extends RecyclerView.ViewHolder {
 //        imageLoader.$(outFile, cardImage, outFile.getName().endsWith(Constants.BPG), 0, null);
     }
 
-    protected <T extends View> T findViewById(int id) {
+    public void setText(String text) {
+        labelText.setText(text);
+        textlayout.setVisibility(View.VISIBLE);
+        cardImage.setVisibility(View.GONE);
+        rightImage.setVisibility(View.GONE);
+    }
+
+    public void showImage() {
+        textlayout.setVisibility(View.GONE);
+        cardImage.setVisibility(View.VISIBLE);
+        rightImage.setVisibility(View.VISIBLE);
+    }
+
+    public void showEmpty() {
+        textlayout.setVisibility(View.GONE);
+        cardImage.setVisibility(View.INVISIBLE);
+        rightImage.setVisibility(View.GONE);
+    }
+
+    public void setRightImage(Bitmap bitmap) {
+        rightImage.setImageBitmap(bitmap);
+    }
+
+    protected <T extends View> T $(int id) {
         return (T) view.findViewById(id);
-    }
-
-    public void show() {
-        view.setVisibility(View.VISIBLE);
-    }
-
-    public void hide() {
-        view.setVisibility(View.GONE);
     }
 
     public void setHeadVisibility(int visibility) {
         if (headView != null)
-        headView.setVisibility(visibility);
+            headView.setVisibility(visibility);
     }
 
     private final View view;
     private final View headView;
-    public final View textlayout;
-    public final TextView labelText;
+    private final View textlayout;
+    private final TextView labelText;
     public final ImageView cardImage;
-    public final ImageView rightImage;
+    private final ImageView rightImage;
 }

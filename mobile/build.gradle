@@ -23,6 +23,9 @@ android {
     productFlavors {
         core {
             applicationIdSuffix ".lite"
+            ndk {
+                abiFilters "armeabi-v7a","x86"
+            }
         }
         mycard {
 
