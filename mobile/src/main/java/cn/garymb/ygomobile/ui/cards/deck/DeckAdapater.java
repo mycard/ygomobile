@@ -21,6 +21,7 @@ import cn.garymb.ygomobile.bean.Deck;
 import cn.garymb.ygomobile.bean.DeckInfo;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.loader.CardLoader;
+import cn.garymb.ygomobile.loader.DeckLoader;
 import cn.garymb.ygomobile.loader.ImageLoader;
 import cn.garymb.ygomobile.ui.cards.CardListProvider;
 import cn.garymb.ygomobile.utils.CardSort;
@@ -387,7 +388,7 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> implement
 
     public DeckInfo read(CardLoader cardLoader, File file, LimitList limitList) {
         setLimitList(limitList);
-        return DeckItemUtils.readDeck(cardLoader, file, limitList);
+        return DeckLoader.readDeck(cardLoader, file, limitList);
     }
 
     public boolean save(File file) {
