@@ -6,7 +6,10 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
+import java.util.List;
+
 import cn.garymb.ygomobile.lite.R;
+import ocgcore.data.Card;
 
 @SuppressLint("AppCompatCustomView")
 public class DeckLabel extends TextView {

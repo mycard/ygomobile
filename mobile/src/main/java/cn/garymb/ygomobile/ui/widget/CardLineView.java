@@ -7,7 +7,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 
 import java.util.List;
 
@@ -58,13 +57,15 @@ public class CardLineView extends FrameLayout {
     }
 
     private boolean addCard(Card card, int index, boolean padding) {
-        if (getMaxCardCount() > 0 && getCardCount() >= getMaxCardCount()) {
+        if (getLineMaxCount() > 0 && getCardCount() >= getLineMaxCount()) {
             return false;
         }
         CardView cardImage = new CardView(getContext());
         cardImage.showCard(card);
         addCard(cardImage, index);
-        resizePadding();
+        if (padding) {
+            resizePadding();
+        }
         return true;
     }
 
@@ -109,7 +110,7 @@ public class CardLineView extends FrameLayout {
         resizePadding();
     }
 
-    public int getMaxCardCount() {
+    public int getLineMaxCount() {
         return mMaxCount;
     }
 
@@ -159,6 +160,11 @@ public class CardLineView extends FrameLayout {
     }
 
     @Override
+    public void addView(View child, ViewGroup.LayoutParams params) {
+        super.addView(child, params);
+    }
+
+    @Override
     public void addView(View child, final int index, ViewGroup.LayoutParams params) {
         super.addView(child, index, params);
         if (child instanceof CardView) {
@@ -193,7 +199,6 @@ public class CardLineView extends FrameLayout {
             if (layoutParams == null) {
                 layoutParams = new LayoutParams(mCardWidth, mCardHeight);
             }
-//            int top = (v.isSelected() ? 0 : (mCardWidth / 3 * 2));
             layoutParams.setMargins(i * (mCardWidth + p), 0, 0, 0);
             v.setLayoutParams(layoutParams);
         }

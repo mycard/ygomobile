@@ -122,11 +122,11 @@ public class CardGroupView extends LinearLayout {
         CardLineView next;
         for (int i = 0; i < mLine; i++) {
             CardLineView cardLineView = mCardLineViews[i];
-            if (i + 1 < mLine && cardLineView.getCardCount() < cardLineView.getMaxCardCount()) {
+            if (i + 1 < mLine && cardLineView.getCardCount() < cardLineView.getLineMaxCount()) {
                 next = mCardLineViews[i + 1];
                 if (next.getCardCount() > 0) {
                     //补齐max
-                    int t = Math.min(cardLineView.getMaxCardCount() - cardLineView.getCardCount(),
+                    int t = Math.min(cardLineView.getLineMaxCount() - cardLineView.getCardCount(),
                             next.getCardCount());
                     for (int j = t - 1; j >= 0; j--) {
                         CardView cardView = next.removeCardAt(j);

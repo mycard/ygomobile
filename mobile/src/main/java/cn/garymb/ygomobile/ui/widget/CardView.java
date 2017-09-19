@@ -5,12 +5,16 @@ import android.os.Build;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.loader.ImageLoader;
+import cn.garymb.ygomobile.ui.cards.deck.ImageTop;
 import ocgcore.data.Card;
+import ocgcore.data.LimitList;
+import ocgcore.enums.LimitType;
 
 public class CardView extends FrameLayout {
     private final ImageView mCardView, mCountView;
@@ -30,7 +34,8 @@ public class CardView extends FrameLayout {
         mCardView.setScaleType(ImageView.ScaleType.FIT_CENTER);
         LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
         lp.gravity = Gravity.CENTER;
-        lp.setMargins(1, 1, 1, 1);
+        int p = (int)getResources().getDimension(R.dimen.card_padding);
+        lp.setMargins(p, p, p, p);
         addView(mCardView, lp);
 
         LayoutParams lp2 = new LayoutParams((int) getResources().getDimension(R.dimen.right_size2), (int) getResources().getDimension(R.dimen.right_size2));
@@ -54,10 +59,29 @@ public class CardView extends FrameLayout {
         }
     }
 
-    public void showCard(Card card) {
-        mCard = card;
-        if (card != null) {
-            ImageLoader.get(getContext()).bindImage(mCardView, card.Code);
+    public void updateLimit(ImageTop imageTop, LimitList limitList){
+        if (mCard != null) {
+            mCountView.setVisibility(View.VISIBLE);
+            if (limitList != null) {
+                if (limitList.check(mCard, LimitType.Forbidden)) {
+                    mCountView.setImageBitmap(imageTop.forbidden);
+                } else if (limitList.check(mCard, LimitType.Limit)) {
+                    mCountView.setImageBitmap(imageTop.limit);
+                } else if (limitList.check(mCard, LimitType.SemiLimit)) {
+                    mCountView.setImageBitmap(imageTop.semiLimit);
+                } else {
+                    mCountView.setVisibility(View.GONE);
+                }
+            } else {
+                mCountView.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    public void showCard(Card cardInfo) {
+        mCard = cardInfo;
+        if (cardInfo != null) {
+            ImageLoader.get(getContext()).bindImage(mCardView, cardInfo.Code);
         }
     }
 
