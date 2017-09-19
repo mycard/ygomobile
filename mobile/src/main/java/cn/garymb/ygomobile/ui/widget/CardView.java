@@ -84,6 +84,8 @@ public class CardView extends FrameLayout {
         mCard = cardInfo;
         if (cardInfo != null) {
             ImageLoader.get(getContext()).bindImage(mCardView, cardInfo.Code);
+        }else{
+            mCardView.setImageBitmap(null);
         }
     }
 

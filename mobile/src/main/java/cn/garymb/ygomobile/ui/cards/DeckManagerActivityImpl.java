@@ -623,31 +623,6 @@ class DeckManagerActivityImpl extends BaseCardsAcitivity implements RecyclerView
                 builder.show();
             }
             break;
-          /*  case R.id.action_manager: {
-                //显示对话框:
-                //选择禁卡表
-                //卡组列表
-                DialogPlus dialogPlus = new DialogPlus(this);
-//                View view = LayoutInflater.from(this).inflate(R.layout.dialog_deck, null);
-//                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                dialogPlus.setTitle(R.string.deck_manager);
-                dialogPlus.setView(R.layout.dialog_deck);
-                Spinner ydks = (Spinner) dialogPlus.$(R.id.sp_ydk_list);
-                initDecksListSpinners(ydks);
-                Spinner limits = (Spinner) dialogPlus.$(R.id.sp_limit_list);
-                initLimitListSpinners(limits);
-                dialogPlus.setLeftButtonListener((dlg, rs) -> {
-                    LimitList limitList = getSelectLimitList(limits);
-                    setLimitList(limitList);
-                    File file = getSelectDeck(ydks);
-                    if (file != null) {
-                        dlg.dismiss();
-                        loadDeck(file);
-                    }
-                });
-                dialogPlus.show();
-            }
-            break;*/
             case R.id.action_unsort:
                 //打乱
                 mDeckAdapater.unSort();
@@ -668,40 +643,6 @@ class DeckManagerActivityImpl extends BaseCardsAcitivity implements RecyclerView
         final String uriString = deck.toAppUri().toString();
         final String httpUri = deck.toHttpUri().toString();
         shareUrl(uriString, label);
-        /*
-        RequestQueue mQueue = Volley.newRequestQueue(this);
-        final String url = "http://dwz.wailian.work/api.php?url="
-                + Base64.encodeToString(uriString.getBytes(), Base64.NO_WRAP)+"&site=sina";
-        Log.i("kk", "url=" + url);
-        StringRequest stringRequest = new StringRequest(url,
-                (response) -> {
-                    Log.i("kk", "json=" + response);
-                    JSONObject jsonObject = null;
-                    try {
-                        jsonObject = new JSONObject(response);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    if (null != jsonObject) {
-                        if("error".equals(jsonObject.optString("result"))){
-                            Log.e("kk", "json=" + jsonObject.optString("data"));
-                        }else {
-                            JSONObject data = jsonObject.optJSONObject("data");
-                            if (data != null) {
-                                shareUrl(data.optString("short_url"), label);
-                                return;
-                            }
-                        }
-                    }
-                    shareUrl(httpUri, label);
-                },
-                (error) -> {
-                    Log.e("kk", "error=" + error);
-                    shareUrl(httpUri, label);
-                }
-        );
-        mQueue.add(stringRequest);
-        */
     }
 
     private void shareUrl(String uri, String label) {

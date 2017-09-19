@@ -1,42 +1,62 @@
 package cn.garymb.ygomobile.ui.cards;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.AppCompatSpinner;
+import android.support.v7.widget.FastScrollLinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.RecyclerViewItemListener;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 import cn.garymb.ygomobile.AppsSettings;
 import cn.garymb.ygomobile.Constants;
+import cn.garymb.ygomobile.bean.Deck;
 import cn.garymb.ygomobile.bean.DeckInfo;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.loader.CardLoader;
 import cn.garymb.ygomobile.loader.DeckLoader;
 import cn.garymb.ygomobile.loader.ImageLoader;
 import cn.garymb.ygomobile.ui.activities.BaseActivity;
+import cn.garymb.ygomobile.ui.adapters.CardListAdapter;
 import cn.garymb.ygomobile.ui.adapters.SimpleSpinnerAdapter;
 import cn.garymb.ygomobile.ui.adapters.SimpleSpinnerItem;
-import cn.garymb.ygomobile.ui.cards.deck.DeckItem;
+import cn.garymb.ygomobile.ui.cards.deck.DeckUtils;
 import cn.garymb.ygomobile.ui.plus.DialogPlus;
 import cn.garymb.ygomobile.ui.plus.VUiKit;
 import cn.garymb.ygomobile.ui.widget.DeckGroupView;
-import cn.garymb.ygomobile.ui.widget.DeckView;
 import cn.garymb.ygomobile.utils.IOUtils;
+import cn.garymb.ygomobile.utils.ShareUtil;
 import ocgcore.LimitManager;
 import ocgcore.StringManager;
 import ocgcore.data.Card;
 import ocgcore.data.LimitList;
+
+import static cn.garymb.ygomobile.Constants.YDK_FILE_EX;
 
 class DeckManagerActivityImpl2 extends BaseActivity implements CardLoader.CallBack {
     private DeckGroupView mDeckView;
@@ -53,6 +73,10 @@ class DeckManagerActivityImpl2 extends BaseActivity implements CardLoader.CallBa
     private AppCompatSpinner mLimitSpinner;
     private AppCompatSpinner mDeckSpinner;
     private SimpleSpinnerAdapter mSimpleSpinnerAdapter;
+    protected DrawerLayout mDrawerlayout;
+    private RecyclerView mListView;
+    protected CardListAdapter mCardListAdapater;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,6 +87,7 @@ class DeckManagerActivityImpl2 extends BaseActivity implements CardLoader.CallBa
         mLimitSpinner = $(R.id.sp_limit_list);
         mDeckSpinner = $(R.id.toolbar_list);
         mDeckView = $(R.id.deck_group);
+        mDrawerlayout = $(R.id.drawer_layout);
         if (mDeckView == null) {
             throw new RuntimeException("no find DeckView");
         }
@@ -70,13 +95,21 @@ class DeckManagerActivityImpl2 extends BaseActivity implements CardLoader.CallBa
         mCardLoader = new CardLoader(this);
         mCardLoader.setCallBack(this);
         mCardSelector = new CardSearcher($(R.id.nav_view_list), mCardLoader);
-        if (getIntent().hasExtra(Intent.EXTRA_TEXT)) {
-            String path = getIntent().getStringExtra(Intent.EXTRA_TEXT);
-            if (!TextUtils.isEmpty(path)) {
-                mPreLoad = path;
-            }
-        }
-
+        mListView = $(R.id.list_cards);
+        mCardListAdapater = new CardListAdapter(this, mImageLoader);
+        mCardListAdapater.setEnableSwipe(true);
+        mListView.setLayoutManager(new FastScrollLinearLayoutManager(this));
+        mListView.setAdapter(mCardListAdapater);
+        setListeners();
+        //
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, mDrawerlayout, toolbar, R.string.search_open, R.string.search_close);
+        toggle.setDrawerIndicatorEnabled(false);
+        mDrawerlayout.addDrawerListener(toggle);
+        toggle.setToolbarNavigationClickListener((v) -> {
+            onBackHome();
+        });
+        toggle.syncState();
         mDeckSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -90,6 +123,12 @@ class DeckManagerActivityImpl2 extends BaseActivity implements CardLoader.CallBa
             public void onNothingSelected(AdapterView<?> adapterView) {
             }
         });
+        if (getIntent().hasExtra(Intent.EXTRA_TEXT)) {
+            String path = getIntent().getStringExtra(Intent.EXTRA_TEXT);
+            if (!TextUtils.isEmpty(path)) {
+                mPreLoad = path;
+            }
+        }
 
         DialogPlus dlg = DialogPlus.show(this, null, getString(R.string.loading));
         VUiKit.defer().when(() -> {
@@ -99,7 +138,7 @@ class DeckManagerActivityImpl2 extends BaseActivity implements CardLoader.CallBa
                 mCardLoader.setLimitList(mLimitManager.getLimit(1));
             }
             mCardLoader.openDb();
-            File file = new File(mSettings.getResourcePath(), Constants.CORE_DECK_PATH + "/" + mSettings.getLastDeck() + Constants.YDK_FILE_EX);
+            File file = new File(mSettings.getResourcePath(), Constants.CORE_DECK_PATH + "/" + mSettings.getLastDeck() + YDK_FILE_EX);
             if (!TextUtils.isEmpty(mPreLoad)) {
                 file = new File(mPreLoad);
                 mPreLoad = null;
@@ -140,6 +179,7 @@ class DeckManagerActivityImpl2 extends BaseActivity implements CardLoader.CallBa
         ImageLoader.onDestory(this);
         super.onDestroy();
     }
+
     private File getSelectDeck(Spinner spinner) {
         Object o = SimpleSpinnerAdapter.getSelectTag(spinner);
         if (o != null && o instanceof File) {
@@ -182,7 +222,7 @@ class DeckManagerActivityImpl2 extends BaseActivity implements CardLoader.CallBa
                 if (name != null && TextUtils.equals(name, file.getName())) {
                     index = i;
                 }
-                String filename = IOUtils.tirmName(file.getName(), Constants.YDK_FILE_EX);
+                String filename = IOUtils.tirmName(file.getName(), YDK_FILE_EX);
                 items.add(new SimpleSpinnerItem(i++, filename).setTag(file));
             }
         }
@@ -195,6 +235,7 @@ class DeckManagerActivityImpl2 extends BaseActivity implements CardLoader.CallBa
             spinner.setSelection(index);
         }
     }
+
     private void initLimitListSpinners(Spinner spinner) {
         List<SimpleSpinnerItem> items = new ArrayList<>();
         List<LimitList> limitLists = mLimitManager.getLimitLists();
@@ -233,6 +274,7 @@ class DeckManagerActivityImpl2 extends BaseActivity implements CardLoader.CallBa
             }
         });
     }
+
     private void setLimitList(LimitList limitList) {
         if (limitList == null) return;
         boolean nochanged = mLimitList != null && TextUtils.equals(mLimitList.getName(), limitList.getName());
@@ -250,7 +292,7 @@ class DeckManagerActivityImpl2 extends BaseActivity implements CardLoader.CallBa
     private void setCurYdkFile(File file, boolean noSaveLast) {
         mYdkFile = file;
         if (file != null && file.exists()) {
-            String name = IOUtils.tirmName(file.getName(), Constants.YDK_FILE_EX);
+            String name = IOUtils.tirmName(file.getName(), YDK_FILE_EX);
             setActionBarSubTitle(name);
             if (!noSaveLast) {
                 mSettings.setLastDeck(name);
@@ -263,7 +305,7 @@ class DeckManagerActivityImpl2 extends BaseActivity implements CardLoader.CallBa
     private File[] getYdkFiles() {
         File dir = new File(mSettings.getResourcePath(), Constants.CORE_DECK_PATH);
         File[] files = dir.listFiles((file, s) -> {
-            return s.toLowerCase(Locale.US).endsWith(Constants.YDK_FILE_EX);
+            return s.toLowerCase(Locale.US).endsWith(YDK_FILE_EX);
         });
         return files;
     }
@@ -294,4 +336,248 @@ class DeckManagerActivityImpl2 extends BaseActivity implements CardLoader.CallBa
         return true;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+//            case R.id.action_refresh:
+//                mDeckAdapater.notifyDataSetChanged();
+//                break;
+            case R.id.action_search:
+                //弹条件对话框
+                showSearch(true);
+                break;
+            case R.id.action_card_list:
+                showResult(true);
+                break;
+            case R.id.action_save:
+                if (mYdkFile == null) {
+                    inputDeckName(null);
+                } else {
+                    save();
+                }
+                break;
+            case R.id.action_rename:
+                inputDeckName(null);
+                break;
+            case R.id.action_deck_new: {
+                final String old = mYdkFile == null ? null : mYdkFile.getAbsolutePath();
+                setCurYdkFile(null);
+                DialogPlus builder = new DialogPlus(this);
+                builder.setTitle(R.string.question);
+                builder.setMessage(R.string.question_keep_cur_deck);
+                builder.setMessageGravity(Gravity.CENTER_HORIZONTAL);
+                builder.setLeftButtonListener((dlg, rs) -> {
+                    dlg.dismiss();
+                    inputDeckName(old);
+                });
+                builder.setRightButtonListener((dlg, rs) -> {
+                    dlg.dismiss();
+                    loadDeck(null);
+                    inputDeckName(old);
+                });
+                builder.setOnCloseLinster((dlg) -> {
+                    dlg.dismiss();
+                    loadDeck(null);
+                    inputDeckName(old);
+                });
+                builder.show();
+            }
+            break;
+            case R.id.action_clear_deck: {
+                DialogPlus builder = new DialogPlus(this);
+                builder.setTitle(R.string.question);
+                builder.setMessage(R.string.question_clear_deck);
+                builder.setMessageGravity(Gravity.CENTER_HORIZONTAL);
+                builder.setLeftButtonListener((dlg, rs) -> {
+                    mDeckView.updateAll(new DeckInfo());
+                    mDeckView.notifyDataSetChanged();
+                    dlg.dismiss();
+                });
+                builder.show();
+            }
+            break;
+            case R.id.action_delete_deck: {
+                DialogPlus builder = new DialogPlus(this);
+                builder.setTitle(R.string.question);
+                builder.setMessage(R.string.question_delete_deck);
+                builder.setMessageGravity(Gravity.CENTER_HORIZONTAL);
+                builder.setLeftButtonListener((dlg, rs) -> {
+                    if (mYdkFile != null && mYdkFile.exists()) {
+                        mYdkFile.delete();
+                    }
+                    dlg.dismiss();
+                    initDecksListSpinners(mDeckSpinner);
+                    loadDeck(null);
+                });
+                builder.show();
+            }
+            break;
+            case R.id.action_unsort:
+                //打乱
+                mDeckView.unSort();
+                mDeckView.notifyDataSetChanged();
+                break;
+            case R.id.action_sort:
+                mDeckView.sort();
+                mDeckView.notifyDataSetChanged();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void shareDeck() {
+        Deck deck = mDeckView.getDeckInfo().toDeck();
+        DeckUtils.save(deck, mYdkFile);
+        String label = TextUtils.isEmpty(deck.getName()) ? getString(R.string.share_deck) : deck.getName();
+        final String uriString = deck.toAppUri().toString();
+        final String httpUri = deck.toHttpUri().toString();
+        shareUrl(uriString, label);
+    }
+
+    private void shareUrl(String uri, String label) {
+        String url = getString(R.string.deck_share_head) + "  " + uri;
+        ShareUtil.shareText(this, getString(R.string.share_deck), url, null);
+        ClipboardManager clipboardManager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+        if (Build.VERSION.SDK_INT > 19) {
+            clipboardManager.setPrimaryClip(ClipData.newPlainText(label, uri));
+        } else {
+            clipboardManager.setText(uri);
+        }
+        showToast(R.string.copy_to_clipbroad, Toast.LENGTH_SHORT);
+    }
+
+    private void inputDeckName(String old) {
+        DialogPlus builder = new DialogPlus(this);
+//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.intpu_name);
+        EditText editText = new EditText(this);
+        editText.setGravity(Gravity.TOP | Gravity.LEFT);
+        editText.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+        editText.setSingleLine();
+        if (mYdkFile != null) {
+            editText.setText(mYdkFile.getName());
+        }
+        builder.setContentView(editText);
+        builder.setOnCloseLinster((dlg) -> {
+            dlg.dismiss();
+            if (old != null) {
+                loadDeck(new File(old));
+            }
+        });
+        builder.setLeftButtonListener((dlg, s) -> {
+            CharSequence name = editText.getText();
+            if (!TextUtils.isEmpty(name)) {
+                String filename = String.valueOf(name);
+                if (!filename.endsWith(YDK_FILE_EX)) {
+                    filename += YDK_FILE_EX;
+                }
+                File ydk = new File(mSettings.getResourcePath(), Constants.CORE_DECK_PATH + "/" + filename);
+                if (ydk.exists()) {
+                    showToast(R.string.file_exist, Toast.LENGTH_SHORT);
+                    return;
+                }
+                if (mYdkFile != null && mYdkFile.exists()) {
+                    if (mYdkFile.renameTo(ydk)) {
+                        mYdkFile = ydk;
+                        initDecksListSpinners(mDeckSpinner);
+                        dlg.dismiss();
+                        loadDeck(ydk);
+                    }
+                } else {
+                    dlg.dismiss();
+                    try {
+                        ydk.createNewFile();
+                    } catch (IOException e) {
+                    }
+                    mYdkFile = ydk;
+                    initDecksListSpinners(mDeckSpinner);
+                    save();
+                    setCurYdkFile(mYdkFile);
+                }
+            } else {
+                dlg.dismiss();
+            }
+        });
+        builder.show();
+    }
+
+    private void save() {
+        //TODO
+//        if (mDeckAdapater.save(mYdkFile)) {
+//            showToast(R.string.save_tip_ok, Toast.LENGTH_SHORT);
+//        } else {
+//            showToast(R.string.save_tip_fail, Toast.LENGTH_SHORT);
+//        }
+    }
+
+    protected void showSearch(boolean autoclose) {
+        if (mDrawerlayout.isDrawerOpen(Gravity.LEFT)) {
+            mDrawerlayout.closeDrawer(Gravity.LEFT);
+        }
+        if (autoclose && mDrawerlayout.isDrawerOpen(Constants.CARD_SEARCH_GRAVITY)) {
+            mDrawerlayout.closeDrawer(Constants.CARD_SEARCH_GRAVITY);
+        } else if (isLoad) {
+            mDrawerlayout.openDrawer(Constants.CARD_SEARCH_GRAVITY);
+        }
+    }
+
+    protected void showResult(boolean autoclose) {
+        if (mDrawerlayout.isDrawerOpen(Constants.CARD_SEARCH_GRAVITY)) {
+            mDrawerlayout.closeDrawer(Constants.CARD_SEARCH_GRAVITY);
+        }
+        if (autoclose && mDrawerlayout.isDrawerOpen(Gravity.LEFT)) {
+            mDrawerlayout.closeDrawer(Gravity.LEFT);
+        } else if (isLoad) {
+            mDrawerlayout.openDrawer(Gravity.LEFT);
+        }
+    }
+
+    protected void onCardClick(View view, Card cardInfo, int pos) {
+        if (mCardListAdapater.isShowMenu(view)) {
+            return;
+        }
+        if (cardInfo != null) {
+            //TODO 详情
+        }
+    }
+
+    protected void onCardLongClick(View view, Card cardInfo, int pos) {
+        //  mCardListAdapater.showMenu(view);
+    }
+
+    protected void setListeners() {
+        mListView.addOnItemTouchListener(new RecyclerViewItemListener(mListView, new RecyclerViewItemListener.OnItemListener() {
+            @Override
+            public void onItemClick(View view, int pos) {
+                onCardClick(view, mCardListAdapater.getItem(pos), pos);
+            }
+
+            @Override
+            public void onItemLongClick(View view, int pos) {
+                onCardLongClick(view, mCardListAdapater.getItem(pos), pos);
+            }
+
+            @Override
+            public void onItemDoubleClick(View view, int pos) {
+
+            }
+        }));
+        mListView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                switch (newState) {
+                    case RecyclerView.SCROLL_STATE_IDLE:
+                        Glide.with(getContext()).resumeRequests();
+                        break;
+                    case RecyclerView.SCROLL_STATE_DRAGGING:
+                        Glide.with(getContext()).pauseRequests();
+                        break;
+                    case RecyclerView.SCROLL_STATE_SETTLING:
+                        Glide.with(getContext()).resumeRequests();
+                        break;
+                }
+            }
+        });
+    }
 }

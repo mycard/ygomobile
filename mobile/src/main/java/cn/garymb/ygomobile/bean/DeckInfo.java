@@ -2,9 +2,12 @@ package cn.garymb.ygomobile.bean;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 import cn.garymb.ygomobile.Constants;
+import cn.garymb.ygomobile.utils.CardSort;
 import ocgcore.data.Card;
 
 public class DeckInfo {
@@ -57,7 +60,7 @@ public class DeckInfo {
         extraCount = Math.min(extraCards.size(), Constants.DECK_EXTRA_MAX);
     }
 
-    public void update(DeckInfo deck){
+    public void update(DeckInfo deck) {
         setMainCards(deck.mainCards);
         setExtraCards(deck.extraCards);
         setSideCards(deck.sideCards);
@@ -105,6 +108,46 @@ public class DeckInfo {
         return null;
     }
 
+    public void unSort() {
+        Random random = new Random(System.currentTimeMillis());
+        int count = mainCount;
+        for (int i = 0; i < Constants.UNSORT_TIMES; i++) {
+            int index1 = random.nextInt(count);
+            int index2 = random.nextInt(count);
+            if (index1 != index2) {
+                int sp = (count - Math.max(index1, index2));
+                int c = sp > 1 ? random.nextInt(sp - 1) : 1;
+                for (int j = 0; j < c; j++) {
+                    Collections.swap(mainCards, index1 + j, index2 + j);
+                }
+            }
+        }
+    }
+
+    private boolean comp(Card c1, Card c2) {
+        return CardSort.ASC.compare(c1, c2) < 0;
+    }
+
+    public void sort() {
+        sort(mainCards);
+        sort(extraCards);
+        sort(sideCards);
+    }
+
+    private int sort(List<Card> cards) {
+        int len = cards.size();
+        for (int i = 0; i < len - 1; i++) {
+            for (int j = 0; j < len - 1 - i; j++) {
+                Card d1 = cards.get(j);
+                Card d2 = cards.get(j + 1);
+                if (comp(d1, d2)) {
+                    Collections.swap(cards, j, j + 1);
+                }
+            }
+        }
+        return len;
+    }
+
     @Override
     public String toString() {
         return "DeckInfo{" +
@@ -120,6 +163,20 @@ public class DeckInfo {
                 ", extraCards=" + extraCards +
                 ", sideCards=" + sideCards +
                 '}';
+    }
+
+    public Deck toDeck() {
+        Deck deck = new Deck();
+        for (Card card : mainCards) {
+            deck.addMain(card.Code);
+        }
+        for (Card card : extraCards) {
+            deck.addExtra(card.Code);
+        }
+        for (Card card : sideCards) {
+            deck.addSide(card.Code);
+        }
+        return deck;
     }
 
     public List<Card> getMainCards() {
