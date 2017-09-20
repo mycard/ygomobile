@@ -188,4 +188,5 @@
     <string name="tip_no_netwrok">请确认已经连接网络</string>
     <string name="message">"由于版权关系，github禁止卡图库下载。\n使用此功能仅用于复制被误清理的卡图包。\n如果内置卡图也被举报，那么以后不内置卡图。"</string>
     <string name="ex_pack">扩展卡包</string>
+    <string name="deck_manager_v2">组卡器V2</string>
 </resources>

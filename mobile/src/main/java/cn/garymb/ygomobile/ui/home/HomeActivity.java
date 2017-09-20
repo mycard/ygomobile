@@ -174,7 +174,7 @@ abstract class HomeActivity extends BaseActivity implements NavigationView.OnNav
                 startActivity(new Intent(this, CardSearchAcitivity.class));
                 break;
             case R.id.action_deck_manager:
-                startActivity(new Intent(this, DeckManagerActivity.class));
+                startActivity(new Intent(this, DeckManagerActivity.getDeckManager()));
                 break;
             case R.id.action_mycard:
                 if (Constants.SHOW_MYCARD) {
