@@ -12,7 +12,9 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.bean.DeckInfo;
@@ -145,6 +147,7 @@ public class DeckGroupView extends FrameLayout implements View.OnClickListener, 
     }
 
     public void setDeck(DeckInfo deck) {
+        setEditMode(false);
         updateAll(deck);
     }
 
@@ -195,17 +198,19 @@ public class DeckGroupView extends FrameLayout implements View.OnClickListener, 
         if (type == Type.Extra) {
             int all = mExtraViews.size();
             for (int i = 0; i < all; i++) {
+                CardView cardView = mExtraViews.get(i);
+                cardView.setSelected(false);
                 if (i < mDeckInfo.getExtraCount()) {
                     if (i == index && count > 0) {
-                        mExtraViews.get(i).showCard(mDeckInfo.getExtraCard(i));
+                        cardView.showCard(mDeckInfo.getExtraCard(i));
                         index++;
                         count--;
                     }
                     if (mLimitChanged) {
-                        mExtraViews.get(i).updateLimit(getImageTop(), mLimitList);
+                        cardView.updateLimit(getImageTop(), mLimitList);
                     }
                 } else {
-                    mExtraViews.get(i).showCard(null);
+                    cardView.showCard(null);
                 }
             }
             resizePadding(Type.Extra, mExtraViews);
@@ -214,13 +219,15 @@ public class DeckGroupView extends FrameLayout implements View.OnClickListener, 
             //59
             targetIndex = (index / mMainLimit) * Constants.DECK_WIDTH_MAX_COUNT + (index % mMainLimit);
             for (int i = 0; i < all; i++) {
+                CardView cardView = mMainViews.get(i);
+                cardView.setSelected(false);
                 orgPos = i % Constants.DECK_WIDTH_MAX_COUNT;
                 if (orgPos >= mMainLimit) {
-                    mMainViews.get(i).showCard(null);
+                    cardView.showCard(null);
                 } else {
                     if (index < mDeckInfo.getMainCount()) {
                         if (targetIndex == i && count > 0) {
-                            mMainViews.get(i).showCard(mDeckInfo.getMainCard(index));
+                            cardView.showCard(mDeckInfo.getMainCard(index));
                             index++;
                             targetIndex = (index / mMainLimit) * Constants.DECK_WIDTH_MAX_COUNT + (index % mMainLimit);
                             count--;
@@ -233,7 +240,7 @@ public class DeckGroupView extends FrameLayout implements View.OnClickListener, 
                             mMainViews.get(i).updateLimit(getImageTop(), mLimitList);
                         }
                     } else {
-                        mMainViews.get(i).showCard(null);
+                        cardView.showCard(null);
                     }
                 }
             }
@@ -241,17 +248,19 @@ public class DeckGroupView extends FrameLayout implements View.OnClickListener, 
         } else if (type == Type.Side) {
             int all = mSideViews.size();
             for (int i = 0; i < all; i++) {
+                CardView cardView = mSideViews.get(i);
+                cardView.setSelected(false);
                 if (i < mDeckInfo.getSideCount()) {
                     if (i == index && count > 0) {
-                        mSideViews.get(i).showCard(mDeckInfo.getSideCard(i));
+                        cardView.showCard(mDeckInfo.getSideCard(i));
                         index++;
                         count--;
                     }
                     if (mLimitChanged) {
-                        mSideViews.get(i).updateLimit(getImageTop(), mLimitList);
+                        cardView.updateLimit(getImageTop(), mLimitList);
                     }
                 } else {
-                    mSideViews.get(i).showCard(null);
+                    cardView.showCard(null);
                 }
             }
             resizePadding(Type.Side, mSideViews);
@@ -322,7 +331,7 @@ public class DeckGroupView extends FrameLayout implements View.OnClickListener, 
     }
 
     private boolean mLimitChanged = false;
-    private final List<Card> mChooseList = new ArrayList<>();
+    private final Map<Type, List<Card>> mChooseList = new HashMap<>();
 
     public void setLimitList(LimitList limitList) {
         mLimitList = limitList;
@@ -335,28 +344,58 @@ public class DeckGroupView extends FrameLayout implements View.OnClickListener, 
 
     public void setEditMode(boolean editMode) {
         mEditMode = editMode;
-        if(mEditMode){
+        if (mEditMode) {
             mChooseList.clear();
         }
     }
 
-    public List<Card> getChooseList() {
-        return mChooseList;
+    public void deleteChoose() {
+        mLimitChanged = true;
+        List<Card> cards = mChooseList.get(Type.Main);
+        if (cards != null) {
+            for (Card c : cards) {
+                mDeckInfo.removeMain(c);
+            }
+            cards.clear();
+        }
+        cards = mChooseList.get(Type.Extra);
+        if (cards != null) {
+            for (Card c : cards) {
+                mDeckInfo.removeExtra(c);
+            }
+            cards.clear();
+        }
+        cards = mChooseList.get(Type.Side);
+        if (cards != null) {
+            for (Card c : cards) {
+                mDeckInfo.removeSide(c);
+            }
+            cards.clear();
+        }
+        updateAll(mDeckInfo);
     }
 
     @Override
     public void onClick(View v) {
-        CardView cardView = (CardView)v;
+        CardView cardView = (CardView) v;
+        Type type = (Type) v.getTag();
         if (isEditMode()) {
-            v.setSelected(!v.isSelected());
-            if(v.isSelected()){
-                mChooseList.add(cardView.getCard());
-            }else{
-                mChooseList.remove(cardView.getCard());
+            if (cardView.getCard() != null) {
+                v.setSelected(!v.isSelected());
+                List<Card> cards = mChooseList.get(type);
+                if (cards == null) {
+                    cards = new ArrayList<>();
+                    mChooseList.put(type, cards);
+                }
+                if (v.isSelected()) {
+                    cards.add(cardView.getCard());
+                } else {
+                    cards.remove(cardView.getCard());
+                }
             }
         }
         if (mOnCardClickListener != null) {
-            mOnCardClickListener.onClick((Type) v.getTag(), cardView);
+            mOnCardClickListener.onClick(type, cardView);
         }
     }
 

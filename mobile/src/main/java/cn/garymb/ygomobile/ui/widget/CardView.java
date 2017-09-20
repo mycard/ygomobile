@@ -85,16 +85,18 @@ public class CardView extends FrameLayout {
             } else {
                 mCountView.setVisibility(View.GONE);
             }
+        }else{
+            mCountView.setVisibility(View.GONE);
         }
     }
 
     public void showCard(Card cardInfo) {
-        setVisibility(VISIBLE);
         if (mCard != null && mCard.equals(cardInfo)) return;
         mCard = cardInfo;
         if (cardInfo != null) {
             ImageLoader.get(getContext()).bindImage(mCardView, cardInfo.Code);
         } else {
+            mCountView.setVisibility(View.GONE);
             mCardView.setImageBitmap(null);
         }
     }

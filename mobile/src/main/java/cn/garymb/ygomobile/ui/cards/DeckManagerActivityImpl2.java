@@ -135,6 +135,22 @@ class DeckManagerActivityImpl2 extends BaseActivity implements CardLoader.CallBa
                 mPreLoad = path;
             }
         }
+        View btnDel = $(R.id.btn_delete);
+        $(R.id.btn_edit).setOnClickListener(v -> {
+            if(mDeckView.isEditMode()){
+                mDeckView.setEditMode(false);
+                btnDel.setEnabled(false);
+            }else{
+                mDeckView.setEditMode(true);
+                btnDel.setEnabled(true);
+            }
+        });
+        btnDel.setOnClickListener((v)->{
+            if(mDeckView.isEditMode()){
+                mDeckView.deleteChoose();
+                mDeckView.notifyDataSetChanged();
+            }
+        });
         EventBus.getDefault().register(this);
         DialogPlus dlg = DialogPlus.show(this, null, getString(R.string.loading));
         VUiKit.defer().when(() -> {
@@ -175,7 +191,7 @@ class DeckManagerActivityImpl2 extends BaseActivity implements CardLoader.CallBa
             setCurYdkFile(mYdkFile, false);
             initLimitListSpinners(mLimitSpinner);
             initDecksListSpinners(mDeckSpinner);
-            mDeckView.updateAll(rs);
+            mDeckView.setDeck(rs);
             mDeckMd5 = rs.makeMd5();
             mDeckView.notifyDataSetChanged();
         });
@@ -231,7 +247,7 @@ class DeckManagerActivityImpl2 extends BaseActivity implements CardLoader.CallBa
         }).done((rs) -> {
             dlg.dismiss();
             setCurYdkFile(file, noSaveLast);
-            mDeckView.updateAll(rs);
+            mDeckView.setDeck(rs);
             mDeckMd5 = rs.makeMd5();
             mDeckView.notifyDataSetChanged();
         });
@@ -420,7 +436,7 @@ class DeckManagerActivityImpl2 extends BaseActivity implements CardLoader.CallBa
                 builder.setMessage(R.string.question_clear_deck);
                 builder.setMessageGravity(Gravity.CENTER_HORIZONTAL);
                 builder.setLeftButtonListener((dlg, rs) -> {
-                    mDeckView.updateAll(new DeckInfo());
+                    mDeckView.setDeck(new DeckInfo());
                     mDeckMd5 = mDeckView.getDeckInfo().makeMd5();
                     mDeckView.notifyDataSetChanged();
                     dlg.dismiss();
