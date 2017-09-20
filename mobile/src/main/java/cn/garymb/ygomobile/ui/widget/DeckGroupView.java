@@ -5,8 +5,10 @@ import android.content.res.TypedArray;
 import android.support.annotation.AttrRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.ViewDragHelper;
 import android.util.AttributeSet;
 import android.util.SparseArray;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -24,7 +26,7 @@ import cn.garymb.ygomobile.ui.cards.deck.LabelInfo;
 import ocgcore.data.Card;
 import ocgcore.data.LimitList;
 
-public class DeckGroupView extends FrameLayout implements View.OnClickListener, View.OnLongClickListener {
+public class DeckGroupView extends FrameLayout implements View.OnClickListener{
     private final DeckLabel mMainLabel, mExtraLabel, mSideLabel;
     private final LabelInfo mLabelInfo;
     private final DeckInfo mDeckInfo;
@@ -94,8 +96,6 @@ public class DeckGroupView extends FrameLayout implements View.OnClickListener, 
             pos = i % Constants.DECK_WIDTH_MAX_COUNT;
             CardView cardView = new CardView(context, mCardWidth);
             cardView.setOnClickListener(this);
-            cardView.setOnLongClickListener(this);
-            cardView.setLongClickable(true);
             cardView.setTag(Type.Main);
             addView(cardView, makeLayoutParams(mCardWidth, mCardHeight, mainTop + line * mCardHeight, pos * mCardWidth));
             mMainViews.put(i, cardView);
@@ -103,8 +103,6 @@ public class DeckGroupView extends FrameLayout implements View.OnClickListener, 
         for (int i = 0; i < Constants.DECK_EXTRA_MAX; i++) {
             CardView cardView = new CardView(context, mCardWidth);
             cardView.setOnClickListener(this);
-            cardView.setOnLongClickListener(this);
-            cardView.setLongClickable(true);
             cardView.setTag(Type.Extra);
             addView(cardView, makeLayoutParams(mCardWidth, mCardHeight, extraTop, i * mCardWidth));
             mExtraViews.put(i, cardView);
@@ -112,8 +110,6 @@ public class DeckGroupView extends FrameLayout implements View.OnClickListener, 
         for (int i = 0; i < Constants.DECK_SIDE_MAX; i++) {
             CardView cardView = new CardView(context, mCardWidth);
             cardView.setOnClickListener(this);
-            cardView.setOnLongClickListener(this);
-            cardView.setLongClickable(true);
             cardView.setTag(Type.Side);
             addView(cardView, makeLayoutParams(mCardWidth, mCardHeight, sideTop, i * mCardWidth));
             mSideViews.put(i, cardView);
@@ -441,9 +437,9 @@ public class DeckGroupView extends FrameLayout implements View.OnClickListener, 
     @Override
     public void onClick(View v) {
         CardView cardView = (CardView) v;
-        Type type = (Type) v.getTag();
-        if (isEditMode()) {
-            if (cardView.getCard() != null) {
+        if (cardView.getCard() != null) {
+            Type type = (Type) v.getTag();
+            if (isEditMode()) {
                 v.setSelected(!v.isSelected());
                 List<Card> cards = mChooseList.get(type);
                 if (cards == null) {
@@ -455,14 +451,14 @@ public class DeckGroupView extends FrameLayout implements View.OnClickListener, 
                 } else {
                     cards.remove(cardView.getCard());
                 }
+            } else {
+                resetLastChoose();
+                mLastView = cardView;
+                mLastView.setSelected(true);
             }
-        } else {
-            resetLastChoose();
-            mLastView = cardView;
-            mLastView.setSelected(true);
-        }
-        if (mOnCardClickListener != null) {
-            mOnCardClickListener.onClick(type, cardView);
+            if (mOnCardClickListener != null) {
+                mOnCardClickListener.onClick(type, cardView);
+            }
         }
     }
 
@@ -471,10 +467,5 @@ public class DeckGroupView extends FrameLayout implements View.OnClickListener, 
             mLastView.setSelected(false);
         }
         mLastView = null;
-    }
-
-    @Override
-    public boolean onLongClick(View v) {
-        return false;
     }
 }
