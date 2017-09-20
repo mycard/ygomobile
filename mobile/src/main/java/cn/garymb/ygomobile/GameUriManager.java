@@ -64,7 +64,7 @@ public class GameUriManager {
     private void doUri(Uri uri) {
         if ("file".equalsIgnoreCase(uri.getScheme())) {
             File file = new File(uri.getPath());
-            Intent startdeck = new Intent(getActivity(), DeckManagerActivity.class);
+            Intent startdeck = new Intent(getActivity(), DeckManagerActivity.getDeckManager());
             startdeck.putExtra(Intent.EXTRA_TEXT, file.getAbsolutePath());
             activity.startActivity(startdeck);
         } else {
@@ -80,7 +80,7 @@ public class GameUriManager {
                 } else {
                     Deck deckInfo = new Deck(uri);
                     File file = deckInfo.saveTemp(AppsSettings.get().getDeckDir());
-                    Intent startdeck = new Intent(getActivity(), DeckManagerActivity.class);
+                    Intent startdeck = new Intent(getActivity(), DeckManagerActivity.getDeckManager());
                     startdeck.putExtra(Intent.EXTRA_TEXT, file.getAbsolutePath());
                     activity.startActivity(startdeck);
                 }
@@ -109,7 +109,7 @@ public class GameUriManager {
             }
         }
         if (deck != null && deck.exists()) {
-            Intent startdeck = new Intent(getActivity(), DeckManagerActivity.class);
+            Intent startdeck = new Intent(getActivity(), DeckManagerActivity.getDeckManager());
             startdeck.putExtra(Intent.EXTRA_TEXT, deck.getAbsolutePath());
             activity.startActivity(startdeck);
         } else {

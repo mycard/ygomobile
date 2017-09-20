@@ -78,7 +78,7 @@ class HomeActivityMenu {
                     startActivity(new Intent(getActivity(), CardSearchAcitivity.class));
                     break;
                 case MENU_DECK_MANAGER:
-                    startActivity(new Intent(getActivity(), DeckManagerActivity.class));
+                    startActivity(new Intent(getActivity(), DeckManagerActivity.getDeckManager()));
                     break;
                 case MENU_MYCARD:
                     if (Constants.SHOW_MYCARD) {
@@ -92,11 +92,7 @@ class HomeActivityMenu {
                     WebActivity.open(getActivity(), getActivity().getString(R.string.help), Constants.URL_HELP);
                     break;
                 case MENU_UPDATE_IAMGES:
-                    if (BuildConfig.DEBUG) {
-                        startActivity(new Intent(getActivity(), DeckManagerActivity2.class));
-                    } else {
-                        getActivity().updateImages();
-                    }
+                    getActivity().updateImages();
                     break;
               /* case MENU_ABOUT:
                     startActivity(new Intent(getActivity(), AboutActivity.class));

@@ -41,14 +41,12 @@ public class LimitList {
     public void addSemiLimit(Integer id) {
         if (!semiLimit.contains(id)) {
             semiLimit.add(id);
-            allList.add(id);
         }
     }
 
     public void addLimit(Integer id) {
         if (!limit.contains(id)) {
             limit.add(id);
-            allList.add(id);
         }
     }
 
@@ -59,11 +57,15 @@ public class LimitList {
     public void addForbidden(Integer id) {
         if (!forbidden.contains(id)) {
             forbidden.add(id);
-            allList.add(id);
         }
     }
 
     public List<Integer> getCodeList() {
+        if (allList.size() == 0) {
+            allList.addAll(forbidden);
+            allList.addAll(limit);
+            allList.addAll(semiLimit);
+        }
         return allList;
     }
 
@@ -73,6 +75,7 @@ public class LimitList {
 
     public boolean check(Integer code, Integer alias, LimitType type) {
         if (type == LimitType.All) {
+            getCodeList();
             return allList.contains(code) || allList.contains(alias);
         } else if (type == LimitType.Limit) {
             return limit.contains(code) || limit.contains(alias);
@@ -97,9 +100,9 @@ public class LimitList {
     public String toString() {
         return "LimitList{" +
                 "name='" + name + '\'' +
-                ", forbidden=" + forbidden.size() +
-                ", limit=" + limit.size() +
-                ", semiLimit=" + semiLimit.size() +
+                ", forbidden=" + forbidden +
+                ", limit=" + limit +
+                ", semiLimit=" + semiLimit +
                 '}';
     }
 }

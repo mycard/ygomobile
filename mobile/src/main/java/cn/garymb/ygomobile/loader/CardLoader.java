@@ -130,12 +130,25 @@ public class CardLoader implements ICardLoader {
                     tmp.add(card);
                 }
             }
-            Collections.sort(tmp, ASC);
+            if (searchInfo != null && searchInfo.getInCards() != null) {
+                final List<Integer> ids = searchInfo.getInCards();
+                Collections.sort(tmp, new Comparator<Card>() {
+                    @Override
+                    public int compare(Card o1, Card o2) {
+                        int index1 = ids.indexOf(Integer.valueOf(o1.Code));
+                        int index2 = ids.indexOf(Integer.valueOf(o2.Code));
+                        return index1 - index2;
+                    }
+                });
+            } else {
+                Collections.sort(tmp, ASC);
+            }
             return tmp;
         }).fail((e) -> {
             if (mCallBack != null) {
                 mCallBack.onSearchResult(null);
             }
+            Log.e("kk", "search", e);
             wait.dismiss();
         }).done((tmp) -> {
             if (mCallBack != null) {
@@ -197,7 +210,6 @@ public class CardLoader implements ICardLoader {
         searchInfo.setcode = setcode;
         LimitList limitList = mLimitManager.getLimit((int) limitlist);
         if (limitlist > 0) {
-            Log.d("kk", "seacrh by limit " + limitList);
             LimitType cardLimitType = LimitType.valueOf(limit);
             if (limitList != null) {
                 List<Integer> ids;
@@ -212,7 +224,6 @@ public class CardLoader implements ICardLoader {
                 } else {
                     ids = null;
                 }
-                Log.d("kk", "seacrh ids= " + ids);
                 if (ids != null) {
                     searchInfo.inCards = ids;
                 }

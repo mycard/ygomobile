@@ -1,25 +1,26 @@
 package cn.garymb.ygomobile.ui.widget;
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutCompat;
 import android.util.AttributeSet;
-import android.view.View;
-import android.view.ViewGroup;
+import android.util.Log;
 import android.widget.LinearLayout;
 
 import cn.garymb.ygomobile.bean.DeckInfo;
-import cn.garymb.ygomobile.lite.R;
+import cn.garymb.ygomobile.ui.cards.deck.ImageTop;
 import cn.garymb.ygomobile.ui.cards.deck.LabelInfo;
 import ocgcore.data.Card;
+import ocgcore.data.LimitList;
 
 public class DeckView extends LinearLayout {
     private final DeckLabel mMainLabel, mExtraLabel, mSideLabel;
     private final CardGroupView mMainGroup, mExtraGroup, mSideGroup;
-    private View mLastView;
-    private CardGroupView.OnCardLinstener mOnCardLinstener;
     private final LabelInfo mLabelInfo;
+    private LimitList mLimitList;
+    private final ImageTop mImageTop;
+    private boolean mAutoSort, mEditMode, mLimitChanged;
+
+    //region init
     public DeckView(Context context) {
         this(context, null);
     }
@@ -31,113 +32,146 @@ public class DeckView extends LinearLayout {
     public DeckView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         setOrientation(VERTICAL);
+        mImageTop = new ImageTop(getContext());
         mLabelInfo = new LabelInfo(context);
-        int card_width = 0;
-        if (attrs != null) {
-            TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.DeckView);
-            if (array != null) {
-                card_width = array.getInteger(R.styleable.DeckView_card_width, 0);
-            }
-        }
-        if (card_width <= 0) {
-            int width = (getMeasuredWidth() - getPaddingLeft() - getPaddingRight());
-            card_width = width / 10;
-        }
-        if (card_width <= 0) {
-            card_width = (getResources().getDisplayMetrics().widthPixels - getPaddingLeft() - getPaddingRight()) / 10;
-        }
-        int card_height = Math.round((255.0f / 177.0f) * card_width);
         mMainLabel = new DeckLabel(context);
-        mSideLabel = new DeckLabel(context);
         mExtraLabel = new DeckLabel(context);
-        mMainGroup = new CardGroupView(context, 4, card_width, card_height);
-        mExtraGroup = new CardGroupView(context, 1, card_width, card_height);
-        mSideGroup = new CardGroupView(context, 1, card_width, card_height);
-        addView(mMainLabel);
-        addView(mMainGroup, new LinearLayoutCompat.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, card_height * 4));
-        addView(mExtraLabel);
-        addView(mExtraGroup, new LinearLayoutCompat.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, card_height));
-        addView(mSideLabel);
-        addView(mSideGroup, new LinearLayoutCompat.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, card_height));
-        mMainGroup.setOnCardLinstener(mCardLinstenerProxy);
-        mExtraGroup.setOnCardLinstener(mCardLinstenerProxy);
-        mSideGroup.setOnCardLinstener(mCardLinstenerProxy);
+        mSideLabel = new DeckLabel(context);
+        mMainGroup = new CardGroupView(context);
+        mExtraGroup = new CardGroupView(context);
+        mSideGroup = new CardGroupView(context);
+        int cardWidth = 0;
+        int cardHeight = 0;
+        if (cardWidth <= 0) {
+            int width = (getMeasuredWidth() - getPaddingLeft() - getPaddingRight());
+            cardWidth = width / 10;
+        }
+        if (cardWidth <= 0) {
+            cardWidth = (getResources().getDisplayMetrics().widthPixels - getPaddingLeft() - getPaddingRight()) / 10;
+        }
+        cardHeight = Math.round((255.0f / 177.0f) * cardWidth);
+        mMainGroup.setCardSize(cardWidth, cardHeight);
+        mMainGroup.setLineLimit(4, 10, 15);
+
+        mExtraGroup.setCardSize(cardWidth, cardHeight);
+        mExtraGroup.setLineLimit(1, 10, 15);
+
+        mSideGroup.setCardSize(cardWidth, cardHeight);
+        mSideGroup.setLineLimit(1, 10, 15);
+
+        addView(mMainLabel, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+        addView(mMainGroup, new LayoutParams(LayoutParams.MATCH_PARENT, cardHeight * 4));
+        addView(mExtraLabel, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+        addView(mExtraGroup, new LayoutParams(LayoutParams.MATCH_PARENT, cardHeight));
+        addView(mSideLabel, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+        addView(mSideGroup, new LayoutParams(LayoutParams.MATCH_PARENT, cardHeight));
     }
 
-    public void setOnCardClickLinstener(CardGroupView.OnCardLinstener onCardLinstener) {
-        mOnCardLinstener = onCardLinstener;
+    public ImageTop getImageTop() {
+        return mImageTop;
     }
 
-    protected void updateLabel(CardGroupView cardGroupView, Card card, boolean remove) {
-        if (cardGroupView == mExtraGroup) {
-            mLabelInfo.updateExtra(card, remove);
-            mExtraLabel.setText(mLabelInfo.getExtraString());
-        } else if (cardGroupView == mSideGroup) {
-            mLabelInfo.updateSide(card, remove);
-            mSideLabel.setText(mLabelInfo.getSideString());
-        } else {
-            mLabelInfo.updateMain(card, remove);
+    public boolean isAutoSort() {
+        return mAutoSort;
+    }
+
+    public void setAutoSort(boolean autoSort) {
+        mAutoSort = autoSort;
+    }
+
+    public boolean isEditMode() {
+        return mEditMode;
+    }
+
+    public void setEditMode(boolean editMode) {
+        mEditMode = editMode;
+    }
+
+    public LimitList getLimitList() {
+        return mLimitList;
+    }
+
+    public void setLimitList(LimitList limitList) {
+        mLimitList = limitList;
+        mLimitChanged = true;
+    }
+    //endregion
+
+    //region refresh
+    public void setDeck(DeckInfo deck) {
+        mMainGroup.removeAllCards();
+        mMainGroup.addCards(deck.getMainCards());
+        mExtraGroup.removeAllCards();
+        mExtraGroup.addCards(deck.getExtraCards());
+        mSideGroup.removeAllCards();
+        mSideGroup.addCards(deck.getSideCards());
+        mLabelInfo.update(deck);
+    }
+
+    public boolean addMainCards(Card card) {
+        if (mMainGroup.addCard(card)) {
+            mLabelInfo.updateMain(card, false);
             mMainLabel.setText(mLabelInfo.getMainString());
+            return true;
         }
+        return false;
     }
 
-    public void clearAll() {
-        mMainGroup.clear();
-        mExtraGroup.clear();
-        mSideGroup.clear();
-        if (mLastView != null) {
-            mLastView.setSelected(false);
-            mLastView = null;
+    public boolean addExtraCards(Card card) {
+        if (mExtraGroup.addCard(card)) {
+            mLabelInfo.updateExtra(card, false);
+            mExtraLabel.setText(mLabelInfo.getExtraString());
+            return true;
         }
-        mLabelInfo.reset();
+        return false;
+    }
+
+    public boolean addSideCards(Card card) {
+        if (mSideGroup.addCard(card)) {
+            mLabelInfo.updateSide(card, false);
+            mSideLabel.setText(mLabelInfo.getSideString());
+            return true;
+        }
+        return false;
+    }
+
+    public void notifyDataSetChanged() {
+        resetLastChoose();
+        mMainGroup.refreshLayout();
+        mExtraGroup.refreshLayout();
+        mSideGroup.refreshLayout();
         mMainLabel.setText(mLabelInfo.getMainString());
         mExtraLabel.setText(mLabelInfo.getExtraString());
         mSideLabel.setText(mLabelInfo.getSideString());
+        if (mLimitChanged) {
+            mMainGroup.updateTopImage(getImageTop(), mLimitList);
+            mExtraGroup.updateTopImage(getImageTop(), mLimitList);
+            mSideGroup.updateTopImage(getImageTop(), mLimitList);
+        }
+        mLimitChanged = false;
+    }
+    //endregion
+
+    public void deleteChoose() {
+        //TODO
     }
 
-    public void updateAll(DeckInfo deckInfo) {
-        if (mLastView != null) {
-            mLastView.setSelected(false);
-            mLastView = null;
-        }
-        mMainGroup.updateAll(deckInfo.getMainCards());
-        mExtraGroup.updateAll(deckInfo.getExtraCards());
-        mSideGroup.updateAll(deckInfo.getSideCards());
-        mLabelInfo.update(deckInfo);
-        mMainLabel.setText(mLabelInfo.getMainString());
-        mExtraLabel.setText(mLabelInfo.getExtraString());
-        mSideLabel.setText(mLabelInfo.getSideString());
+    public void resetLastChoose() {
+        //TODO
     }
 
-    private CardGroupView.OnCardLinstener mCardLinstenerProxy = new CardGroupView.OnCardLinstener() {
-        @Override
-        public void onClick(CardGroupView cardGroupView, CardView cardView) {
-            if (mLastView != null) {
-                mLastView.setSelected(false);
-                mLastView = null;
-            }
-            mLastView = cardView;
-            mLastView.setSelected(true);
-            if (mOnCardLinstener != null) {
-                mOnCardLinstener.onClick(cardGroupView, cardView);
-            }
-        }
+    public DeckInfo getDeckInfo() {
+        //TODO
+        return new DeckInfo();
+    }
 
-        @Override
-        public void onAdd(CardGroupView cardGroupView, Card card, int index) {
-            updateLabel(cardGroupView, card, false);
-            if (mOnCardLinstener != null) {
-                mOnCardLinstener.onAdd(cardGroupView, card, index);
-            }
-        }
+    public void unSort() {
+        //TODO
+    }
 
-        @Override
-        public void onRemove(CardGroupView cardGroupView, CardView cardView, int index) {
-            updateLabel(cardGroupView, cardView.getCard(), true);
-            if (mOnCardLinstener != null) {
-                mOnCardLinstener.onRemove(cardGroupView, cardView, index);
-            }
-        }
-    };
+    public void sort() {
+        //TODO
+    }
+
 
 }

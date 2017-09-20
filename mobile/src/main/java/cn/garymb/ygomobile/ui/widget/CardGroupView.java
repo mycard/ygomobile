@@ -2,85 +2,204 @@ package cn.garymb.ygomobile.ui.widget;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.support.annotation.AttrRes;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.widget.LinearLayout;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import cn.garymb.ygomobile.lite.R;
+import cn.garymb.ygomobile.ui.cards.deck.ImageTop;
 import ocgcore.data.Card;
+import ocgcore.data.LimitList;
 
-public class CardGroupView extends LinearLayout {
+public class CardGroupView extends FrameLayout {
+    private int mMaxLines = 1;
+    private int mLineLimit = 10;
+    private int mOrgLineLimit = 10;
+    private int mLineMaxCount = 15;
+    private int mCardWidth = 177, mCardHeight = 255;
+    private boolean mPausePadding;
 
-    public interface OnCardLinstener {
-        void onClick(CardGroupView cardGroupView, CardView cardView);
-
-        void onAdd(CardGroupView cardGroupView, Card card, int index);
-
-        void onRemove(CardGroupView cardGroupView, CardView cardView, int index);
-    }
-
-    private int mLine = 1;
-    private CardLineView[] mCardLineViews;
-    private OnCardLinstener mOnCardLinstener;
-
-    public CardGroupView(Context context) {
+    //region init
+    public CardGroupView(@NonNull Context context) {
         this(context, null);
     }
 
-    public CardGroupView(Context context, @Nullable AttributeSet attrs) {
+    public CardGroupView(@NonNull Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public CardGroupView(Context context, int line, int widht, int height) {
-        super(context);
-        init(line, null, widht, height);
-    }
-
-    public CardGroupView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public CardGroupView(@NonNull Context context, @Nullable AttributeSet attrs, @AttrRes int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         if (attrs != null) {
             TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.CardGroupView);
             if (array != null) {
-                mLine = array.getInteger(R.styleable.CardGroupView_lines, mLine);
+                mMaxLines = array.getInteger(R.styleable.CardGroupView_lines, mMaxLines);
+                mCardWidth = array.getInteger(R.styleable.CardGroupView_card_width, mCardWidth);
+                mCardHeight = array.getInteger(R.styleable.CardGroupView_card_height, mCardHeight);
+                mLineLimit = array.getInteger(R.styleable.CardGroupView_line_limit, mLineLimit);
+                mLineMaxCount = array.getInteger(R.styleable.CardGroupView_line_max_count, mLineMaxCount);
+                mOrgLineLimit = mLineLimit;
             }
         }
-        init(mLine, attrs);
     }
 
-    private void init(int lines, AttributeSet attrs) {
-        init(lines, attrs, -1, -1);
+    public int getLineByIndex(int index) {
+        return index / mLineLimit;
     }
 
-    private void init(int lines, AttributeSet attrs, int w, int h) {
-        setOrientation(VERTICAL);
-        mLine = lines;
-        mCardLineViews = new CardLineView[mLine];
-        if (w <= 0) {
-            w = (getMeasuredWidth() - getPaddingLeft() - getPaddingRight()) / 10;
+    //
+    public int getLineStartByIndex(int index) {
+        return index % mLineLimit;
+    }
+
+    public int getMaxCardCount() {
+        return mMaxLines * mLineMaxCount;
+    }
+
+    public void setCardSize(int cardWidth, int cardHeight) {
+        mCardWidth = cardWidth;
+        mCardHeight = cardHeight;
+    }
+
+    public int getMaxLines() {
+        return mMaxLines;
+    }
+
+    public int getLineLimit() {
+        return mLineLimit;
+    }
+
+    public void setLineLimit(int lines, int lineLimit, int lineMaxCount) {
+        mMaxLines = lines;
+        mLineLimit = lineLimit;
+        mLineMaxCount = lineMaxCount;
+    }
+
+    public int getLineMaxCount() {
+        return mLineMaxCount;
+    }
+
+    private void init(int line) {
+        mMaxLines = line;
+    }
+    //endregion
+
+    //region add/remove
+    @Override
+    public void addView(View child) {
+        addView(child, getChildCount());
+    }
+
+    @Override
+    public void addView(View child, int index) {
+        if (index < 0) {
+            index = getChildCount();
         }
-        if (h <= 0) {
-            h = getMeasuredHeight();
-        }
-        for (int i = 0; i < mLine; i++) {
-            mCardLineViews[i] = new CardLineView(getContext(), attrs, w, h);
-            addView(mCardLineViews[i]);
+        addView(child, index, getLayoutParamsAt(index));
+    }
+
+    @Override
+    public void addView(View child, ViewGroup.LayoutParams params) {
+        addView(child, getChildCount(), params);
+    }
+
+    @Override
+    public void removeView(View view) {
+        removeViewAt(indexOfChild(view));
+    }
+
+    @Override
+    public void removeViewAt(int index) {
+        View view = getChildAt(index);
+        if (view != null) {
+            super.removeViewAt(index);
+            onCardRemoved((CardView) view, index);
         }
     }
 
-    public int getCardCount() {
-        int count = 0;
-        for (int i = 0; i < mLine; i++) {
-            CardLineView cardLineView = mCardLineViews[i];
-            count += cardLineView.getCardCount();
+    @Override
+    public void addView(View child, int index, ViewGroup.LayoutParams params) {
+        super.addView(child, index, params);
+        onCardAdd((CardView) child, index);
+    }
+    //endregion
+
+    //region params
+    public void refreshLayout() {
+        refreshLayoutParams(0, getChildCount());
+    }
+
+    public void refreshLayout(int index, int count) {
+        refreshLayoutParams(index, count);
+    }
+
+    private void refreshLayoutParams(int count) {
+        refreshLayoutParams(0, count);
+    }
+
+    private void refreshLayoutParams(int index, int count) {
+        mLineLimit = (int) Math.max(mOrgLineLimit, Math.ceil((float) count / (float) mMaxLines));
+        if (mPausePadding) return;
+        int p = 0;
+        if (mLineLimit > mOrgLineLimit) {
+            p = -(int) Math.ceil((double) ((mLineLimit - mOrgLineLimit) * mCardWidth) / (float) (mLineLimit - 1));
         }
+        int childcount = getChildCount();
+        for (int i = index; i < childcount && count > 0; i++, count--) {
+            View view = getChildAt(i);
+            LayoutParams lp = (LayoutParams) view.getLayoutParams();
+            if (lp == null) {
+                lp = getLayoutParamsAt(i, 0);
+            } else {
+                fillLayoutParams(i, lp, p);
+            }
+            view.setLayoutParams(lp);
+        }
+    }
+
+    private void fillLayoutParams(int index, LayoutParams layoutParams, int p) {
+        int line = getLineByIndex(index);
+        int x = getLineStartByIndex(index);
+        layoutParams.topMargin = line * mCardHeight;
+        layoutParams.leftMargin = x * (mCardWidth + p);
+    }
+
+    private LayoutParams getLayoutParamsAt(int index) {
+        return getLayoutParamsAt(index, 0);
+    }
+
+    private LayoutParams getLayoutParamsAt(int index, int p) {
+        LayoutParams layoutParams = new LayoutParams(mCardWidth, mCardHeight);
+        fillLayoutParams(index, layoutParams, p);
+        return layoutParams;
+    }
+    //endregion
+
+    private void onCardAdd(CardView cardView, int index) {
+        refreshLayoutParams(getChildCount());
+    }
+
+    private void onCardRemoved(CardView cardView, int index) {
+        refreshLayoutParams(getChildCount());
+    }
+
+    public int addCards(List<Card> cards) {
+        int max = Math.min(getChildCount() + cards.size(), getMaxCardCount());
+        mPausePadding = true;
+        refreshLayoutParams(max);
+        int count = max - getChildCount();
+        for (int i = 0; i < count; i++) {
+            Card card = cards.get(i);
+            addCard(card);
+        }
+        mPausePadding = false;
         return count;
-    }
-
-    public int getMaxCount() {
-        return mLine * 15;
     }
 
     public boolean addCard(Card card) {
@@ -88,138 +207,66 @@ public class CardGroupView extends LinearLayout {
     }
 
     public boolean addCard(Card card, int index) {
-        //40 10
-        //44 11
-        //48 12
-        //52 13
-        //56 14
-        //60 15
-        //判断是第几行
-        int count = getCardCount();
-        if (index < 0) {
-            index = count;
-        }
-        if (count + 1 > getMaxCount()) {
+        int count = getChildCount();
+        if (count >= getMaxCardCount()) {
             return false;
         }
-        int max = Math.max(10, (count + 1) / mLine);
-        int targetLine = index / max;
-        int targetIndex = index % max;
-        if (index % max > 0) {
-            targetLine++;
+        if (index < 0) {
+            index = getChildCount();
         }
+        if (!mPausePadding) {
+            refreshLayoutParams(count + 1);
+        }
+        CardView cardView = new CardView(getContext());
+        cardView.showCard(card);
+        addView(cardView, index);
+        return true;
+    }
 
-        for (int i = 0; i < mLine; i++) {
-            CardLineView cardLineView = mCardLineViews[i];
-            cardLineView.setMaxCardCount(max);
-            if (i == targetLine) {
-                mCardLineViews[targetLine].addCard(card, targetIndex);
-                if (mOnCardLinstener != null) {
-                    mOnCardLinstener.onAdd(this, card, index);
+    public void removeAllCards() {
+        removeAllViews();
+    }
+
+    public int removeCards(List<Card> cards) {
+        if (cards == null) return 0;
+        int r = 0;
+        int count = getChildCount();
+        for (int i = 0; i < count; i++) {
+            CardView cardView = (CardView) getChildAt(i);
+            if (cardView != null) {
+                int index = cards.indexOf(cardView.getCard());
+                if (index >= 0) {
+                    removeViewAt(i);
+                    cards.remove(index);
+                    r++;
+                    if (cards.size() == 0) {
+                        break;
+                    }
                 }
             }
         }
-        CardLineView next;
-        for (int i = 0; i < mLine; i++) {
-            CardLineView cardLineView = mCardLineViews[i];
-            if (i + 1 < mLine && cardLineView.getCardCount() < cardLineView.getLineMaxCount()) {
-                next = mCardLineViews[i + 1];
-                if (next.getCardCount() > 0) {
-                    //补齐max
-                    int t = Math.min(cardLineView.getLineMaxCount() - cardLineView.getCardCount(),
-                            next.getCardCount());
-                    for (int j = t - 1; j >= 0; j--) {
-                        CardView cardView = next.removeCardAt(j);
-                        cardLineView.addCard(cardView);
-                    }
-                } else {
-                    break;
-                }
+        return r;
+    }
+
+    public boolean removeCard(Card card) {
+        if (card == null) return false;
+        int count = getChildCount();
+        for (int i = 0; i < count; i++) {
+            CardView cardView = (CardView) getChildAt(i);
+            if (cardView != null && card.equals(cardView.getCard())) {
+                removeViewAt(i);
+                return true;
             }
         }
         return false;
     }
 
-    public void updateAll(List<Card> cardList) {
-        int count = cardList.size();
-        int max = Math.max(10, (count) / mLine);
 
-        List<Card> target = new ArrayList<>(max);
-        for (int i = 0; i < mLine; i++) {
-            CardLineView cardLineView = mCardLineViews[i];
-            cardLineView.setMaxCardCount(max);
-            target.clear();
-            for (int j = 0; j < max; j++) {
-                int index = i * max + j;
-                if (index < count) {
-                    target.add(cardList.get(index));
-                }
-            }
-            cardLineView.onUpdateAll(target);
-        }
-    }
-
-    public void clear() {
-        for (int i = 0; i < mLine; i++) {
-            CardLineView cardLineView = mCardLineViews[i];
-            cardLineView.removeAllViews();
-        }
-    }
-
-    public void removeCardAt(int index) {
-        int max = Math.max(10, (getCardCount() + index) / 4);
-        int targetLine = index / max;
-        int targetIndex = index % max;
-        if (index % max > 0) {
-            targetLine++;
-        }
-
-        for (int i = 0; i < mLine; i++) {
-            CardLineView cardLineView = mCardLineViews[i];
-            cardLineView.setMaxCardCount(-1);
-            if (i == targetLine) {
-                CardView cardView = mCardLineViews[targetLine].removeCardAt(targetIndex);
-                if (mOnCardLinstener != null) {
-                    mOnCardLinstener.onRemove(this, cardView, index);
-                }
-            }
-        }
-        CardLineView next;
-        for (int i = 0; i < mLine; i++) {
-            CardLineView cardLineView = mCardLineViews[i];
-            if (i + 1 < mLine && cardLineView.getCardCount() > max) {
-                next = mCardLineViews[i + 1];
-                //超出max的移动到下一行
-                int t = cardLineView.getCardCount() - max;
-                for (int j = 0; j < t; j++) {
-                    CardView cardView = cardLineView.removeCardAt(max + j);
-                    next.addCard(cardView);
-                }
-            }
-            cardLineView.setMaxCardCount(max);
-        }
-    }
-
-    public void setOnCardLinstener(OnCardLinstener onCardLinstener) {
-        mOnCardLinstener = onCardLinstener;
-        CardLineClickProxyListener cardClickLinstener = new CardLineClickProxyListener(onCardLinstener);
-        for (int i = 0; i < mLine; i++) {
-            mCardLineViews[i].setOnCardLineClickLinstener(cardClickLinstener);
-        }
-    }
-
-    private class CardLineClickProxyListener implements CardLineView.OnCardLineClickLinstener {
-        private OnCardLinstener mOnCardLinstener;
-
-        private CardLineClickProxyListener(OnCardLinstener onCardLinstener) {
-            this.mOnCardLinstener = onCardLinstener;
-        }
-
-        @Override
-        public void onClick(CardView cardView) {
-            if (mOnCardLinstener != null) {
-                mOnCardLinstener.onClick(CardGroupView.this, cardView);
-            }
+    public void updateTopImage(ImageTop imageTop, LimitList limitList) {
+        int count = getChildCount();
+        for (int i = 0; i < count; i++) {
+            CardView cardView = (CardView) getChildAt(i);
+            cardView.updateLimit(imageTop, limitList);
         }
     }
 }

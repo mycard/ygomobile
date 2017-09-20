@@ -25,6 +25,30 @@ public class DeckInfo {
         sideCards = new ArrayList<>();
     }
 
+    public boolean removeMain(Card c) {
+        if (mainCards.remove(c)) {
+            mainCount--;
+            return true;
+        }
+        return false;
+    }
+
+    public boolean removeExtra(Card c) {
+        if (extraCards.remove(c)) {
+            extraCount--;
+            return true;
+        }
+        return false;
+    }
+
+    public boolean removeSide(Card c) {
+        if (sideCards.remove(c)) {
+            sideCount--;
+            return true;
+        }
+        return false;
+    }
+
     public boolean addMainCards(Card card) {
         if (card != null && mainCount < Constants.DECK_MAIN_MAX) {
             this.mainCards.add(card);
@@ -160,9 +184,21 @@ public class DeckInfo {
         return CardSort.ASC.compare(c1, c2) < 0;
     }
 
-    public void sort() {
+    public void sortAll() {
+        sortMain();
+        sortExtra();
+        sortSide();
+    }
+
+    public void sortMain() {
         sort(mainCards);
+    }
+
+    public void sortExtra() {
         sort(extraCards);
+    }
+
+    public void sortSide() {
         sort(sideCards);
     }
 

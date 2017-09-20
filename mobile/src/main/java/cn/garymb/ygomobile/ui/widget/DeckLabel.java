@@ -25,7 +25,7 @@ public class DeckLabel extends TextView {
         setGravity(Gravity.CENTER_VERTICAL);
         int labelLeft = (int) getResources().getDimension(R.dimen.deck_label_left);
         setPadding(labelLeft, 0, 0, 0);
-        setTextSize(getResources().getDimension(R.dimen.deck_label_text));
+//        setTextSize(getResources().getDimension(R.dimen.deck_label_text));
         setMinLines(1);
         setSingleLine();
     }

@@ -17,7 +17,7 @@ import ocgcore.data.LimitList;
 import ocgcore.enums.LimitType;
 
 public class CardView extends FrameLayout {
-    private final ImageView mCardView, mCountView;
+    private final ImageView mCardView, mTopImage;
     private Card mCard;
 
     public CardView(Context context) {
@@ -31,14 +31,14 @@ public class CardView extends FrameLayout {
     public CardView(Context context, int width) {
         super(context);
         mCardView = new ImageView(context);
-        mCountView = new ImageView(context);
+        mTopImage = new ImageView(context);
         initCountView(Math.round(width / 9.0f * 4.0f));
     }
 
     public CardView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         mCardView = new ImageView(context);
-        mCountView = new ImageView(context);
+        mTopImage = new ImageView(context);
         initCountView((int) getResources().getDimension(R.dimen.right_size2));
     }
 
@@ -51,8 +51,8 @@ public class CardView extends FrameLayout {
         addView(mCardView, lp);
         LayoutParams lp2 = new LayoutParams(w, w);
         lp2.gravity = Gravity.LEFT | Gravity.TOP;
-        mCountView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-        addView(mCountView, lp2);
+        mTopImage.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        addView(mTopImage, lp2);
     }
 
     @Override
@@ -71,30 +71,32 @@ public class CardView extends FrameLayout {
 
     public void updateLimit(ImageTop imageTop, LimitList limitList) {
         if (mCard != null && imageTop != null) {
-            mCountView.setVisibility(View.VISIBLE);
+            mTopImage.setVisibility(View.VISIBLE);
             if (limitList != null) {
                 if (limitList.check(mCard, LimitType.Forbidden)) {
-                    mCountView.setImageBitmap(imageTop.forbidden);
+                    mTopImage.setImageBitmap(imageTop.forbidden);
                 } else if (limitList.check(mCard, LimitType.Limit)) {
-                    mCountView.setImageBitmap(imageTop.limit);
+                    mTopImage.setImageBitmap(imageTop.limit);
                 } else if (limitList.check(mCard, LimitType.SemiLimit)) {
-                    mCountView.setImageBitmap(imageTop.semiLimit);
+                    mTopImage.setImageBitmap(imageTop.semiLimit);
                 } else {
-                    mCountView.setVisibility(View.GONE);
+                    mTopImage.setVisibility(View.GONE);
                 }
             } else {
-                mCountView.setVisibility(View.GONE);
+                mTopImage.setVisibility(View.GONE);
             }
+        } else {
+            mTopImage.setVisibility(View.GONE);
         }
     }
 
     public void showCard(Card cardInfo) {
-        setVisibility(VISIBLE);
         if (mCard != null && mCard.equals(cardInfo)) return;
         mCard = cardInfo;
         if (cardInfo != null) {
             ImageLoader.get(getContext()).bindImage(mCardView, cardInfo.Code);
         } else {
+            mTopImage.setVisibility(View.GONE);
             mCardView.setImageBitmap(null);
         }
     }
