@@ -210,7 +210,6 @@ public class CardLoader implements ICardLoader {
         searchInfo.setcode = setcode;
         LimitList limitList = mLimitManager.getLimit((int) limitlist);
         if (limitlist > 0) {
-            Log.d("kk", "seacrh by limit " + limitList);
             LimitType cardLimitType = LimitType.valueOf(limit);
             if (limitList != null) {
                 List<Integer> ids;

@@ -26,11 +26,11 @@ import cn.garymb.ygomobile.ui.cards.deck.LabelInfo;
 import ocgcore.data.Card;
 import ocgcore.data.LimitList;
 
-public class DeckGroupView extends FrameLayout implements View.OnClickListener{
+public class DeckGroupView extends FrameLayout implements View.OnClickListener {
     private final DeckLabel mMainLabel, mExtraLabel, mSideLabel;
     private final LabelInfo mLabelInfo;
     private final DeckInfo mDeckInfo;
-    private ImageTop mImageTop;
+    private final ImageTop mImageTop;
     private LimitList mLimitList;
     private int mainTop, extraTop, sideTop;
     int mCardWidth = 0;
@@ -39,6 +39,7 @@ public class DeckGroupView extends FrameLayout implements View.OnClickListener{
     private final SparseArray<CardView> mExtraViews = new SparseArray<>();
     private final SparseArray<CardView> mSideViews = new SparseArray<>();
     private boolean mEditMode;
+    private int mOrgLimit = 10;
     private int mMainLimit = 15, mExtraLimit = 15, mSideLimit = 15;
     private OnCardClickListener mOnCardClickListener;
     private CardView mLastView;
@@ -60,6 +61,7 @@ public class DeckGroupView extends FrameLayout implements View.OnClickListener{
         super(context, attrs, defStyleAttr);
         mLabelInfo = new LabelInfo(context);
         mDeckInfo = new DeckInfo();
+        mImageTop = new ImageTop(getContext());
         if (mCardWidth <= 0) {
             int width = (getMeasuredWidth() - getPaddingLeft() - getPaddingRight());
             mCardWidth = width / 10;
@@ -178,9 +180,6 @@ public class DeckGroupView extends FrameLayout implements View.OnClickListener{
     }
 
     public ImageTop getImageTop() {
-        if (mImageTop == null) {
-            mImageTop = new ImageTop(getContext());
-        }
         return mImageTop;
     }
 
@@ -324,7 +323,7 @@ public class DeckGroupView extends FrameLayout implements View.OnClickListener{
     private void resizePadding(Type type, SparseArray<CardView> list) {
         int count = list.size();
         if (count <= 1) return;
-        int needWidth, limit;
+        int limit;
         if (type == Type.Main) {
             limit = mMainLimit;
         } else if (type == Type.Extra) {
@@ -332,9 +331,12 @@ public class DeckGroupView extends FrameLayout implements View.OnClickListener{
         } else {
             limit = mSideLimit;
         }
-        needWidth = limit * mCardWidth;
+        float p = 0;
         int maxWidth = getMaxWidth();
-        int p = (needWidth > maxWidth) ? (maxWidth - needWidth) / (limit - 1) : 0;
+        int needWidth = limit * mCardWidth;
+        if (needWidth > maxWidth) {
+            p = -(float) Math.ceil((double) (needWidth - maxWidth) / (limit - 1.0f));
+        }
         int top;
         if (type == Type.Side) {
             top = sideTop;
@@ -360,10 +362,10 @@ public class DeckGroupView extends FrameLayout implements View.OnClickListener{
                 layoutParams = new LayoutParams(mCardWidth, mCardHeight);
                 layoutParams.topMargin = top + orgLine * mCardHeight;
             }
-            layoutParams.setMargins(orgPos * (mCardWidth + p), layoutParams.topMargin, 0, 0);
+            layoutParams.setMargins(Math.round(orgPos * (mCardWidth + p)), layoutParams.topMargin, 0, 0);
             v.setLayoutParams(layoutParams);
         }
-        postInvalidate();
+//        postInvalidate();
     }
 
     public void notifyDataSetChanged() {

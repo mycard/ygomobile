@@ -75,6 +75,7 @@ public class LimitList {
 
     public boolean check(Integer code, Integer alias, LimitType type) {
         if (type == LimitType.All) {
+            getCodeList();
             return allList.contains(code) || allList.contains(alias);
         } else if (type == LimitType.Limit) {
             return limit.contains(code) || limit.contains(alias);
@@ -99,9 +100,9 @@ public class LimitList {
     public String toString() {
         return "LimitList{" +
                 "name='" + name + '\'' +
-                ", forbidden=" + forbidden.size() +
-                ", limit=" + limit.size() +
-                ", semiLimit=" + semiLimit.size() +
+                ", forbidden=" + forbidden +
+                ", limit=" + limit +
+                ", semiLimit=" + semiLimit +
                 '}';
     }
 }
