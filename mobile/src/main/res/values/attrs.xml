@@ -6,8 +6,9 @@
     </declare-styleable>
     <declare-styleable name="CardGroupView">
         <attr name="lines" format="integer"/>
-    </declare-styleable>
-    <declare-styleable name="DeckView">
-        <attr name="card_width" format="dimension"/>
+        <attr name="card_width" format="integer"/>
+        <attr name="card_height" format="integer"/>
+        <attr name="line_limit" format="integer"/>
+        <attr name="line_max_count" format="integer"/>
     </declare-styleable>
 </resources>

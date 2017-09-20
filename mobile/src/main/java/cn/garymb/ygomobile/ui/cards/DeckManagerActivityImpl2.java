@@ -96,9 +96,6 @@ class DeckManagerActivityImpl2 extends BaseActivity implements CardLoader.CallBa
         mDeckSpinner = $(R.id.toolbar_list);
         mDeckView = $(R.id.deck_group);
         mDrawerlayout = $(R.id.drawer_layout);
-        if (mDeckView == null) {
-            throw new RuntimeException("no find DeckView");
-        }
         mImageLoader = ImageLoader.get(this);
         mCardLoader = new CardLoader(this);
         mCardLoader.setCallBack(this);

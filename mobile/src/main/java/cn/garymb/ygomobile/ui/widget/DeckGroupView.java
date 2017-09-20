@@ -60,13 +60,6 @@ public class DeckGroupView extends FrameLayout implements View.OnClickListener{
         super(context, attrs, defStyleAttr);
         mLabelInfo = new LabelInfo(context);
         mDeckInfo = new DeckInfo();
-
-        if (attrs != null) {
-            TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.DeckView);
-            if (array != null) {
-                mCardWidth = array.getInteger(R.styleable.DeckView_card_width, 0);
-            }
-        }
         if (mCardWidth <= 0) {
             int width = (getMeasuredWidth() - getPaddingLeft() - getPaddingRight());
             mCardWidth = width / 10;
