@@ -41,14 +41,12 @@ public class LimitList {
     public void addSemiLimit(Integer id) {
         if (!semiLimit.contains(id)) {
             semiLimit.add(id);
-            allList.add(id);
         }
     }
 
     public void addLimit(Integer id) {
         if (!limit.contains(id)) {
             limit.add(id);
-            allList.add(id);
         }
     }
 
@@ -59,11 +57,15 @@ public class LimitList {
     public void addForbidden(Integer id) {
         if (!forbidden.contains(id)) {
             forbidden.add(id);
-            allList.add(id);
         }
     }
 
     public List<Integer> getCodeList() {
+        if (allList.size() == 0) {
+            allList.addAll(forbidden);
+            allList.addAll(limit);
+            allList.addAll(semiLimit);
+        }
         return allList;
     }
 

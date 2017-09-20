@@ -11,14 +11,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.bean.DeckInfo;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.ui.cards.deck.ImageTop;
 import cn.garymb.ygomobile.ui.cards.deck.LabelInfo;
+import ocgcore.data.Card;
 import ocgcore.data.LimitList;
 
-public class DeckGroupView extends FrameLayout {
+public class DeckGroupView extends FrameLayout implements View.OnClickListener, View.OnLongClickListener {
     private final DeckLabel mMainLabel, mExtraLabel, mSideLabel;
     private final LabelInfo mLabelInfo;
     private final DeckInfo mDeckInfo;
@@ -30,8 +34,13 @@ public class DeckGroupView extends FrameLayout {
     private final SparseArray<CardView> mMainViews = new SparseArray<>();
     private final SparseArray<CardView> mExtraViews = new SparseArray<>();
     private final SparseArray<CardView> mSideViews = new SparseArray<>();
-
+    private boolean mEditMode;
     private int mMainLimit = 15, mExtraLimit = 15, mSideLimit = 15;
+    private OnCardClickListener mOnCardClickListener;
+
+    public interface OnCardClickListener {
+        void onClick(Type type, CardView cardView);
+    }
 
     public DeckGroupView(@NonNull Context context) {
         this(context, null);
@@ -79,17 +88,29 @@ public class DeckGroupView extends FrameLayout {
         for (int i = 0; i < Constants.DECK_MAIN_MAX; i++) {
             line = i / Constants.DECK_WIDTH_MAX_COUNT;
             pos = i % Constants.DECK_WIDTH_MAX_COUNT;
-            CardView cardView = new CardView(context,mCardWidth);
+            CardView cardView = new CardView(context, mCardWidth);
+            cardView.setOnClickListener(this);
+            cardView.setOnLongClickListener(this);
+            cardView.setLongClickable(true);
+            cardView.setTag(Type.Main);
             addView(cardView, makeLayoutParams(mCardWidth, mCardHeight, mainTop + line * mCardHeight, pos * mCardWidth));
             mMainViews.put(i, cardView);
         }
         for (int i = 0; i < Constants.DECK_EXTRA_MAX; i++) {
-            CardView cardView = new CardView(context,mCardWidth);
+            CardView cardView = new CardView(context, mCardWidth);
+            cardView.setOnClickListener(this);
+            cardView.setOnLongClickListener(this);
+            cardView.setLongClickable(true);
+            cardView.setTag(Type.Extra);
             addView(cardView, makeLayoutParams(mCardWidth, mCardHeight, extraTop, i * mCardWidth));
             mExtraViews.put(i, cardView);
         }
         for (int i = 0; i < Constants.DECK_SIDE_MAX; i++) {
-            CardView cardView = new CardView(context,mCardWidth);
+            CardView cardView = new CardView(context, mCardWidth);
+            cardView.setOnClickListener(this);
+            cardView.setOnLongClickListener(this);
+            cardView.setLongClickable(true);
+            cardView.setTag(Type.Side);
             addView(cardView, makeLayoutParams(mCardWidth, mCardHeight, sideTop, i * mCardWidth));
             mSideViews.put(i, cardView);
         }
@@ -110,6 +131,10 @@ public class DeckGroupView extends FrameLayout {
         return makeLayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT, top);
+    }
+
+    public void setOnCardClickListener(OnCardClickListener onCardClickListener) {
+        mOnCardClickListener = onCardClickListener;
     }
 
     public ImageTop getImageTop() {
@@ -297,9 +322,46 @@ public class DeckGroupView extends FrameLayout {
     }
 
     private boolean mLimitChanged = false;
+    private final List<Card> mChooseList = new ArrayList<>();
 
     public void setLimitList(LimitList limitList) {
         mLimitList = limitList;
         mLimitChanged = true;
+    }
+
+    public boolean isEditMode() {
+        return mEditMode;
+    }
+
+    public void setEditMode(boolean editMode) {
+        mEditMode = editMode;
+        if(mEditMode){
+            mChooseList.clear();
+        }
+    }
+
+    public List<Card> getChooseList() {
+        return mChooseList;
+    }
+
+    @Override
+    public void onClick(View v) {
+        CardView cardView = (CardView)v;
+        if (isEditMode()) {
+            v.setSelected(!v.isSelected());
+            if(v.isSelected()){
+                mChooseList.add(cardView.getCard());
+            }else{
+                mChooseList.remove(cardView.getCard());
+            }
+        }
+        if (mOnCardClickListener != null) {
+            mOnCardClickListener.onClick((Type) v.getTag(), cardView);
+        }
+    }
+
+    @Override
+    public boolean onLongClick(View v) {
+        return false;
     }
 }

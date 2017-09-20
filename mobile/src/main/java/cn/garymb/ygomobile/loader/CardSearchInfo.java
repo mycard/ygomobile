@@ -22,8 +22,12 @@ class CardSearchInfo {
     CardSearchInfo() {
     }
 
+    List<Integer> getInCards() {
+        return inCards;
+    }
+
     public boolean check(Card card) {
-        if (inCards != null && !inCards.contains(card.Code)) {
+        if (inCards != null && !inCards.contains(Integer.valueOf(card.Code))) {
             return false;
         }
         if (!TextUtils.isEmpty(word)) {
