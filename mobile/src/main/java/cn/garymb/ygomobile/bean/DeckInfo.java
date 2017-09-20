@@ -184,9 +184,21 @@ public class DeckInfo {
         return CardSort.ASC.compare(c1, c2) < 0;
     }
 
-    public void sort() {
+    public void sortAll() {
+        sortMain();
+        sortExtra();
+        sortSide();
+    }
+
+    public void sortMain() {
         sort(mainCards);
+    }
+
+    public void sortExtra() {
         sort(extraCards);
+    }
+
+    public void sortSide() {
         sort(sideCards);
     }
 

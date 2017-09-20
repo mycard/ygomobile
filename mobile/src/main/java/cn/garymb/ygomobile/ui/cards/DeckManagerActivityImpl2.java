@@ -21,6 +21,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -136,17 +138,25 @@ class DeckManagerActivityImpl2 extends BaseActivity implements CardLoader.CallBa
             }
         }
         View btnDel = $(R.id.btn_delete);
+        CheckBox checkBox = $(R.id.chk_autosort);
+        mDeckView.setAutoSort(checkBox.isChecked());
+        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                mDeckView.setAutoSort(isChecked);
+            }
+        });
         $(R.id.btn_edit).setOnClickListener(v -> {
-            if(mDeckView.isEditMode()){
+            if (mDeckView.isEditMode()) {
                 mDeckView.setEditMode(false);
                 btnDel.setEnabled(false);
-            }else{
+            } else {
                 mDeckView.setEditMode(true);
                 btnDel.setEnabled(true);
             }
         });
-        btnDel.setOnClickListener((v)->{
-            if(mDeckView.isEditMode()){
+        btnDel.setOnClickListener((v) -> {
+            if (mDeckView.isEditMode()) {
                 mDeckView.deleteChoose();
                 mDeckView.notifyDataSetChanged();
             }
@@ -671,9 +681,8 @@ class DeckManagerActivityImpl2 extends BaseActivity implements CardLoader.CallBa
 
     private boolean addSideCard(Card cardInfo) {
         if (checkLimit(cardInfo, true)) {
-            boolean rs = mDeckView.getDeckInfo().addSideCards(cardInfo);
+            boolean rs = mDeckView.addSideCards(cardInfo);
             if (rs) {
-                mDeckView.updateLastCard(DeckGroupView.Type.Side);
                 showToast(R.string.add_card_tip_ok, Toast.LENGTH_SHORT);
             } else {
                 showToast(R.string.add_card_tip_fail, Toast.LENGTH_SHORT);
@@ -687,11 +696,9 @@ class DeckManagerActivityImpl2 extends BaseActivity implements CardLoader.CallBa
         if (checkLimit(cardInfo, true)) {
             boolean rs;
             if (cardInfo.isExtraCard()) {
-                rs = mDeckView.getDeckInfo().addExtraCards(cardInfo);
-                mDeckView.updateLastCard(DeckGroupView.Type.Extra);
+                rs = mDeckView.addExtraCards(cardInfo);
             } else {
-                rs = mDeckView.getDeckInfo().addMainCards(cardInfo);
-                mDeckView.updateLastCard(DeckGroupView.Type.Main);
+                rs = mDeckView.addMainCards(cardInfo);
             }
             if (rs) {
                 showToast(R.string.add_card_tip_ok, Toast.LENGTH_SHORT);

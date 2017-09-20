@@ -39,6 +39,8 @@ public class DeckGroupView extends FrameLayout implements View.OnClickListener, 
     private boolean mEditMode;
     private int mMainLimit = 15, mExtraLimit = 15, mSideLimit = 15;
     private OnCardClickListener mOnCardClickListener;
+    private CardView mLastView;
+    private boolean mAutoSort;
 
     public interface OnCardClickListener {
         void onClick(Type type, CardView cardView);
@@ -139,6 +141,53 @@ public class DeckGroupView extends FrameLayout implements View.OnClickListener, 
         mOnCardClickListener = onCardClickListener;
     }
 
+    public void setAutoSort(boolean autoSort) {
+        mAutoSort = autoSort;
+    }
+
+    public boolean isAutoSort() {
+        return mAutoSort;
+    }
+
+    public boolean addMainCards(Card c) {
+        if (getDeckInfo().addMainCards(c)) {
+            if (isAutoSort()) {
+                getDeckInfo().sortMain();
+                updateCard(Type.Main, false);
+            } else {
+                updateCard(Type.Main, true);
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public boolean addExtraCards(Card c) {
+        if (getDeckInfo().addExtraCards(c)) {
+            if (isAutoSort()) {
+                getDeckInfo().sortExtra();
+                updateCard(Type.Extra, false);
+            } else {
+                updateCard(Type.Extra, true);
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public boolean addSideCards(Card c) {
+        if (getDeckInfo().addSideCards(c)) {
+            if (isAutoSort()) {
+                getDeckInfo().sortSide();
+                updateCard(Type.Side, false);
+            } else {
+                updateCard(Type.Side, true);
+            }
+            return true;
+        }
+        return false;
+    }
+
     public ImageTop getImageTop() {
         if (mImageTop == null) {
             mImageTop = new ImageTop(getContext());
@@ -157,7 +206,7 @@ public class DeckGroupView extends FrameLayout implements View.OnClickListener, 
     }
 
     public void sort() {
-        mDeckInfo.sort();
+        mDeckInfo.sortAll();
         updateAll(mDeckInfo);
     }
 
@@ -176,7 +225,7 @@ public class DeckGroupView extends FrameLayout implements View.OnClickListener, 
         return mDeckInfo;
     }
 
-    public void updateLastCard(Type type) {
+    public void updateCard(Type type, boolean last) {
         updateAll(mDeckInfo);
         if (type == Type.Main) {
             mMainLabel.setText(mLabelInfo.getMainString());
@@ -186,11 +235,23 @@ public class DeckGroupView extends FrameLayout implements View.OnClickListener, 
             mSideLabel.setText(mLabelInfo.getSideString());
         }
         if (type == Type.Extra) {
-            updateCard(type, getDeckInfo().getExtraCount() - 1, 1);
+            if (last) {
+                updateCard(type, getDeckInfo().getExtraCount() - 1, 1);
+            } else {
+                updateCard(Type.Extra, 0, Constants.DECK_EXTRA_MAX);
+            }
         } else if (type == Type.Main) {
-            updateCard(type, getDeckInfo().getMainCount() - 1, 1);
+            if (last) {
+                updateCard(type, getDeckInfo().getMainCount() - 1, 1);
+            } else {
+                updateCard(Type.Main, 0, Constants.DECK_MAIN_MAX);
+            }
         } else {
-            updateCard(type, getDeckInfo().getSideCount() - 1, 1);
+            if (last) {
+                updateCard(type, getDeckInfo().getSideCount() - 1, 1);
+            } else {
+                updateCard(Type.Side, 0, Constants.DECK_SIDE_MAX);
+            }
         }
     }
 
@@ -317,6 +378,7 @@ public class DeckGroupView extends FrameLayout implements View.OnClickListener, 
     }
 
     public void notifyDataSetChanged() {
+        resetLastChoose();
         updateCard(Type.Main, 0, Constants.DECK_MAIN_MAX);
         updateCard(Type.Extra, 0, Constants.DECK_EXTRA_MAX);
         updateCard(Type.Side, 0, Constants.DECK_SIDE_MAX);
@@ -347,6 +409,7 @@ public class DeckGroupView extends FrameLayout implements View.OnClickListener, 
         if (mEditMode) {
             mChooseList.clear();
         }
+        resetLastChoose();
     }
 
     public void deleteChoose() {
@@ -393,10 +456,21 @@ public class DeckGroupView extends FrameLayout implements View.OnClickListener, 
                     cards.remove(cardView.getCard());
                 }
             }
+        } else {
+            resetLastChoose();
+            mLastView = cardView;
+            mLastView.setSelected(true);
         }
         if (mOnCardClickListener != null) {
             mOnCardClickListener.onClick(type, cardView);
         }
+    }
+
+    private void resetLastChoose() {
+        if (mLastView != null) {
+            mLastView.setSelected(false);
+        }
+        mLastView = null;
     }
 
     @Override
