@@ -77,12 +77,13 @@
             android:orientation="vertical"
             >
 
-            <TextView
+            <cn.garymb.ygomobile.ui.widget.AlwaysMarqueeTextView
                 android:id="@+id/card_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
                 android:shadowColor="@color/black"
+                android:marqueeRepeatLimit="marquee_forever"
                 android:shadowDx="1"
                 android:shadowDy="2"
                 android:shadowRadius="2"
