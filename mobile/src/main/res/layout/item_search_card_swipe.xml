@@ -77,7 +77,7 @@
             android:orientation="vertical"
             >
 
-            <TextView
+            <cn.garymb.ygomobile.ui.widget.AlwaysMarqueeTextView
                 android:id="@+id/card_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

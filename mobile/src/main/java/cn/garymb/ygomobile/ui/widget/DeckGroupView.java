@@ -12,6 +12,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,12 +39,19 @@ public class DeckGroupView extends FrameLayout implements View.OnClickListener {
     private final SparseArray<CardView> mMainViews = new SparseArray<>();
     private final SparseArray<CardView> mExtraViews = new SparseArray<>();
     private final SparseArray<CardView> mSideViews = new SparseArray<>();
-    private boolean mEditMode;
     private int mOrgLimit = 10;
     private int mMainLimit = 15, mExtraLimit = 15, mSideLimit = 15;
     private OnCardClickListener mOnCardClickListener;
     private CardView mLastView;
     private boolean mAutoSort;
+    private EditMode mEditMode;
+
+    public enum EditMode {
+        None,
+        Delete,
+        Main2Side,
+        Side2Main,
+    }
 
     public interface OnCardClickListener {
         void onClick(Type type, CardView cardView);
@@ -184,7 +192,7 @@ public class DeckGroupView extends FrameLayout implements View.OnClickListener {
     }
 
     public void setDeck(DeckInfo deck) {
-        setEditMode(false);
+        setEditMode(EditMode.None);
         updateAll(deck);
     }
 
@@ -391,19 +399,69 @@ public class DeckGroupView extends FrameLayout implements View.OnClickListener {
         mLimitChanged = true;
     }
 
-    public boolean isEditMode() {
+
+    public EditMode getEditMode() {
         return mEditMode;
     }
 
-    public void setEditMode(boolean editMode) {
+    public void setEditMode(EditMode editMode) {
         mEditMode = editMode;
-        if (mEditMode) {
-            mChooseList.clear();
-        }
+        mChooseList.clear();
         resetLastChoose();
     }
 
-    public void deleteChoose() {
+    public void completedEdit() {
+        if (getEditMode() == EditMode.Delete) {
+            deleteChoose();
+        } else if (getEditMode() == EditMode.Main2Side) {
+            List<Card> cards = mChooseList.get(Type.Main);
+            if (cards != null) {
+                for (Card c : cards) {
+                    if (mDeckInfo.addSideCards(c)) {
+                        mDeckInfo.removeMain(c);
+                    } else {
+                        break;
+                    }
+                }
+                cards.clear();
+            }
+            cards = mChooseList.get(Type.Extra);
+            if (cards != null) {
+                for (Card c : cards) {
+                    if (mDeckInfo.addSideCards(c)) {
+                        mDeckInfo.removeExtra(c);
+                    } else {
+                        break;
+                    }
+                }
+                cards.clear();
+            }
+            updateAll(mDeckInfo);
+        } else if (getEditMode() == EditMode.Side2Main) {
+            List<Card> cards = mChooseList.get(Type.Side);
+            if (cards != null) {
+                for (Card c : cards) {
+                    if (c.isExtraCard()) {
+                        if (mDeckInfo.addExtraCards(c)) {
+                            mDeckInfo.removeSide(c);
+                        } else {
+                            break;
+                        }
+                    } else {
+                        if (mDeckInfo.addMainCards(c)) {
+                            mDeckInfo.removeSide(c);
+                        } else {
+                            break;
+                        }
+                    }
+                }
+                cards.clear();
+            }
+            updateAll(mDeckInfo);
+        }
+    }
+
+    private void deleteChoose() {
         mLimitChanged = true;
         List<Card> cards = mChooseList.get(Type.Main);
         if (cards != null) {
@@ -434,7 +492,19 @@ public class DeckGroupView extends FrameLayout implements View.OnClickListener {
         CardView cardView = (CardView) v;
         if (cardView.getCard() != null) {
             Type type = (Type) v.getTag();
-            if (isEditMode()) {
+            if (EditMode.None != getEditMode()) {
+                if (getEditMode() == EditMode.Main2Side) {
+                    if (type == Type.Side) {
+                        Toast.makeText(getContext(), "不能选择side的", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                }
+                if (getEditMode() == EditMode.Side2Main) {
+                    if (type == Type.Main || type == Type.Extra) {
+                        Toast.makeText(getContext(), "只能选择side的", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                }
                 v.setSelected(!v.isSelected());
                 List<Card> cards = mChooseList.get(type);
                 if (cards == null) {

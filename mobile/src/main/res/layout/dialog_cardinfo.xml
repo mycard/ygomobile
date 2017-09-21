@@ -94,13 +94,14 @@
                 app:srcCompat="@drawable/ic_close_black_24dp"/>
         </LinearLayout>
 
-        <TextView
+        <cn.garymb.ygomobile.ui.widget.AlwaysMarqueeTextView
             android:id="@+id/text_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:gravity="center_vertical"
             android:maxLines="1"
+            android:textIsSelectable="true"
             android:minHeight="@dimen/label_height"
             android:paddingLeft="4dp"
             android:shadowColor="@color/black"
@@ -110,7 +111,6 @@
             android:singleLine="true"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
             android:textColor="@color/item_title"
-            android:textIsSelectable="true"
             tools:text="name"/>
 
         <TextView

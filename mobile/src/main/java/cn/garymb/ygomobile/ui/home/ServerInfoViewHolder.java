@@ -4,7 +4,6 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.tubb.smrv.SwipeHorizontalMenuLayout;
-import com.tubb.smrv.SwipeMenuLayout;
 
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.ui.adapters.BaseRecyclerAdapterPlus;
@@ -16,7 +15,7 @@ public class ServerInfoViewHolder extends BaseRecyclerAdapterPlus.BaseViewHolder
         serverIp = $(R.id.text_ip);
         serverPort = $(R.id.text_port);
         userName = $(R.id.text_player);
-        btnEdit = $(R.id.btn_edit);
+        btnEdit = $(R.id.btn_edit_delete);
         btnDelete = $(R.id.btn_delete);
         mMenuLayout = $(R.id.swipe_layout);
         contentView = $(R.id.smContentView);

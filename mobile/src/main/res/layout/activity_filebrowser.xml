@@ -32,17 +32,14 @@
                  app:srcCompat="@drawable/ic_back"
                  />-->
 
-            <TextView
+            <cn.garymb.ygomobile.ui.widget.AlwaysMarqueeTextView
                 android:id="@+id/path"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/item_height"
                 android:layout_weight="1"
                 android:ellipsize="marquee"
                 android:fadingEdge="horizontal"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
                 android:gravity="center_vertical"
-                android:marqueeRepeatLimit="marquee_forever"
                 android:singleLine="true"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 android:textColor="@color/gold"

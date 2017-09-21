@@ -41,33 +41,43 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
 
+                <CheckBox
+                    android:id="@+id/chk_autosort"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="自动排序"/>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal">
 
-                    <CheckBox
-                        android:id="@+id/chk_autosort"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:checked="true"
-                        android:text="自动排序"/>
-
                     <Button
-                        android:id="@+id/btn_edit"
+                        android:id="@+id/btn_edit_delete"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="编辑/取消"/>
-
+                        android:text="删除模式"/>
+                    <Button
+                        android:id="@+id/btn_edit_main2side"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="主卡组到副卡组"/>
+                    <Button
+                        android:id="@+id/btn_edit_side2main"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="副卡组到主卡组"/>
                     <Button
                         android:id="@+id/btn_delete"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:enabled="false"
-                        android:text="删除"/>
+                        android:text="完成"/>
                 </LinearLayout>
             </LinearLayout>
         </FrameLayout>
