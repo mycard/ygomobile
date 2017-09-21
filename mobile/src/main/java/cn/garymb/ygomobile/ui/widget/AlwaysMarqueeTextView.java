@@ -19,6 +19,7 @@ public class AlwaysMarqueeTextView extends AppCompatTextView {
         setSingleLine();
         setFocusable(true);
         setFocusableInTouchMode(true);
+        setMarqueeRepeatLimit(-1);
         setEllipsize(TextUtils.TruncateAt.MARQUEE);
     }
 
