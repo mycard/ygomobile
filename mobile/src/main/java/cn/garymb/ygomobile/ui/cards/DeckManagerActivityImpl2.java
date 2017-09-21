@@ -54,9 +54,7 @@ import cn.garymb.ygomobile.ui.adapters.SimpleSpinnerItem;
 import cn.garymb.ygomobile.ui.cards.deck.DeckUtils;
 import cn.garymb.ygomobile.ui.plus.DialogPlus;
 import cn.garymb.ygomobile.ui.plus.VUiKit;
-import cn.garymb.ygomobile.ui.widget.CardGroupView;
 import cn.garymb.ygomobile.ui.widget.DeckGroupView;
-import cn.garymb.ygomobile.ui.widget.DeckView;
 import cn.garymb.ygomobile.utils.IOUtils;
 import cn.garymb.ygomobile.utils.ShareUtil;
 import ocgcore.LimitManager;
@@ -145,18 +143,40 @@ class DeckManagerActivityImpl2 extends BaseActivity implements CardLoader.CallBa
                 mDeckView.setAutoSort(isChecked);
             }
         });
-        $(R.id.btn_edit).setOnClickListener(v -> {
-            if (mDeckView.isEditMode()) {
-                mDeckView.setEditMode(false);
+        $(R.id.btn_edit_delete).setOnClickListener(v -> {
+            if (mDeckView.getEditMode() != DeckGroupView.EditMode.None) {
+                mDeckView.setEditMode(DeckGroupView.EditMode.None);
                 btnDel.setEnabled(false);
             } else {
-                mDeckView.setEditMode(true);
+                mDeckView.setEditMode(DeckGroupView.EditMode.Delete);
                 btnDel.setEnabled(true);
             }
         });
+
+        $(R.id.btn_edit_main2side).setOnClickListener(v -> {
+            if (mDeckView.getEditMode() != DeckGroupView.EditMode.None) {
+                mDeckView.setEditMode(DeckGroupView.EditMode.None);
+                btnDel.setEnabled(false);
+            } else {
+                mDeckView.setEditMode(DeckGroupView.EditMode.Main2Side);
+                btnDel.setEnabled(true);
+            }
+        });
+
+
+        $(R.id.btn_edit_side2main).setOnClickListener(v -> {
+            if (mDeckView.getEditMode() != DeckGroupView.EditMode.None) {
+                mDeckView.setEditMode(DeckGroupView.EditMode.None);
+                btnDel.setEnabled(false);
+            } else {
+                mDeckView.setEditMode(DeckGroupView.EditMode.Side2Main);
+                btnDel.setEnabled(true);
+            }
+        });
+
         btnDel.setOnClickListener((v) -> {
-            if (mDeckView.isEditMode()) {
-                mDeckView.deleteChoose();
+            if (mDeckView.getEditMode() != DeckGroupView.EditMode.None) {
+                mDeckView.completedEdit();
                 mDeckView.notifyDataSetChanged();
             }
         });
