@@ -137,6 +137,14 @@
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateAlwaysHidden|adjustPan"/>
         <activity
+            android:name="cn.garymb.ygomobile.ui.cards.DeckManagerActivity3"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize"
+            android:label="@string/deck_manager"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustPan"/>
+        <activity
             android:name="cn.garymb.ygomobile.ui.file.FileActivity"
             android:configChanges="orientation|keyboardHidden|navigation|screenSize"
             android:launchMode="singleTop"

@@ -8,7 +8,7 @@ public class DeckManagerActivity extends DeckManagerActivityImpl {
 
     public static Class<? extends Activity> getDeckManager() {
         if (AppsSettings.get().isUseDeckManagerV2()) {
-            return DeckManagerActivity2.class;
+            return DeckManagerActivity3.class;
         }
         return DeckManagerActivity.class;
     }

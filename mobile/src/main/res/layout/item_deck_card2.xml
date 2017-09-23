@@ -40,6 +40,6 @@
         android:layout_height="@dimen/right_size2"
         android:layout_alignParentRight="true"
         android:visibility="visible"
-        app:srcCompat="@drawable/ic_close_black_24dp"/>
+        tools:srcCompat="@drawable/ic_close_black_24dp"/>
 
 </RelativeLayout>

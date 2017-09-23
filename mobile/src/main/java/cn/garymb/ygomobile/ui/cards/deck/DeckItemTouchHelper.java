@@ -2,8 +2,9 @@ package cn.garymb.ygomobile.ui.cards.deck;
 
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.Callback;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.support.v7.widget.helper.ItemTouchHelper2;
+import android.support.v7.widget.helper.ItemTouchHelperPlus;
 import android.util.Log;
 
 import java.util.List;
@@ -14,7 +15,7 @@ import cn.garymb.ygomobile.lite.R;
 import static android.support.v7.widget.helper.ItemTouchHelper.ACTION_STATE_DRAG;
 import static android.support.v7.widget.helper.ItemTouchHelper.ACTION_STATE_IDLE;
 
-public class DeckItemTouchHelper extends Callback {
+public class DeckItemTouchHelper extends ItemTouchHelper2.Callback {
     private DeckDrager mDeckDrager;
     private static final String TAG = "drag";
     private static final boolean DEBUG = false;
@@ -131,6 +132,7 @@ public class DeckItemTouchHelper extends Callback {
         mDeckDrager.delete(id);
     }
 
+    // 忘记是做啥的了
     @Override
     public boolean canAnimation(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
         if (viewHolder != null && viewHolder.getAdapterPosition() < 0) {
