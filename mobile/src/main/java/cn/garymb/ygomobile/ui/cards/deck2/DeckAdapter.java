@@ -4,10 +4,12 @@ import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelperPlus;
 import android.support.v7.widget.helper.OnItemDragListener;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.lite.R;
 
 
@@ -295,7 +297,19 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckViewHolder> implements
             }
             if (isSide(to)) {
                 //TODO check side
-                return false;
+                if (getSideRealCount() >= Constants.DECK_SIDE_MAX) {
+                    return false;
+                }
+                boolean resize = getMainRealCount() % 4 == 1;
+                Log.d("kk", getMainRealCount() + ",resize=" + resize);
+                setMainCount(getMainRealCount() - 1);
+                setSideCount(getSideRealCount() + 1);
+                notifyItemRemoved(from);
+                notifyItemInserted(to);
+                if (resize) {
+                    notifyItemRangeChanged(getMainStart(), getMainStart() + getMainEnd());
+                }
+                return true;
             }
         } else if (isExtra(from)) {
             if (isExtra(to)) {
@@ -304,7 +318,14 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckViewHolder> implements
             }
             if (isSide(to)) {
                 //TODO check side
-                return false;
+                if (getSideRealCount() >= Constants.DECK_SIDE_MAX) {
+                    return false;
+                }
+                setExtraCount(getExtraRealCount() - 1);
+                setSideCount(getSideRealCount() + 1);
+                notifyItemRemoved(from);
+                notifyItemInserted(to);
+                return true;
             }
         } else if (isSide(from)) {
             if (isSide(to)) {
@@ -313,15 +334,34 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckViewHolder> implements
             }
             if (isExtra(to)) {
                 //TODO check extra
-                return false;
+                if (getExtraRealCount() >= Constants.DECK_EXTRA_MAX) {
+                    return false;
+                }
+                setSideCount(getSideRealCount() - 1);
+                setExtraCount(getExtraRealCount() + 1);
+                notifyItemRemoved(from);
+                notifyItemInserted(to);
+                return true;
             }
             if (isMain(to)) {
                 //TODO check main
+                if (getMainRealCount() >= Constants.DECK_MAIN_MAX) {
+                    return false;
+                }
                 int pos = getMainIndex(to);
                 if (pos >= getMainRealCount()) {
                     to = getMainRealCount() - 1 + getMainStart();
                 }
-                return false;
+                boolean resize = getMainRealCount() % 4 == 0;
+                Log.d("kk", getMainRealCount() + ",resize=" + resize);
+                setSideCount(getSideRealCount() - 1);
+                setMainCount(getMainRealCount() + 1);
+                notifyItemRemoved(from);
+                notifyItemInserted(to);
+                if (resize) {
+                    notifyItemRangeChanged(getMainStart(), getMainStart() + getMainEnd());
+                }
+                return true;
             }
         }
         return false;

@@ -1,5 +1,6 @@
 package cn.garymb.ygomobile.ui.cards;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
@@ -90,7 +91,7 @@ public class DeckManagerActivity3 extends BaseActivity implements OnItemDragList
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
-        if(getRequestedOrientation()!=newConfig.orientation){
+        if (getRequestedOrientation() != newConfig.orientation) {
             mDeckAdapter.notifyDataSetChanged();
         }
         super.onConfigurationChanged(newConfig);
