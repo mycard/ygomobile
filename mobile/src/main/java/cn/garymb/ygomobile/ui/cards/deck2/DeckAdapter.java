@@ -248,20 +248,16 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckViewHolder> implements
     @Override
     public void onBindViewHolder(DeckViewHolder holder, int position) {
         if (isLabel(position)) {
-            holder.textLayout.setVisibility(View.VISIBLE);
-            holder.cardImage.setVisibility(View.GONE);
             if (position == getMainLabel()) {
-                holder.labelText.setText("main");
+                holder.setText("main");
             } else if (position == getExtraLabel()) {
-                holder.labelText.setText("extra");
+                holder.setText("extra");
             } else if (position == getSideLabel()) {
-                holder.labelText.setText("side");
+                holder.setText("side");
             }
             holder.setSize(-1, -1);
         } else {
-            holder.textLayout.setVisibility(View.GONE);
-            holder.cardImage.setVisibility(View.VISIBLE);
-            holder.cardImage.setImageResource(R.drawable.unknown);
+            holder.showImage();
             if (mHeight <= 0) {
                 makeHeight();
             }

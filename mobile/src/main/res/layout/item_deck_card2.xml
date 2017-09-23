@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:app="http://schemas.android.com/apk/res-auto"
                 xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
     <LinearLayout
@@ -27,7 +27,7 @@
     <ImageView
         android:id="@+id/card_image"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="1px"
         android:layout_marginLeft="1px"
         android:layout_marginRight="1px"
@@ -38,8 +38,9 @@
         android:id="@+id/right_top"
         android:layout_width="@dimen/right_size2"
         android:layout_height="@dimen/right_size2"
-        android:layout_alignParentRight="true"
-        android:visibility="visible"
+        android:layout_alignParentLeft="true"
+        android:visibility="gone"
+        tools:visibility="visible"
         tools:srcCompat="@drawable/ic_close_black_24dp"/>
 
 </RelativeLayout>

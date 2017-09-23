@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.loader.ImageLoader;
+import ocgcore.data.Card;
 
 
 class DeckViewHolder extends GridLayoutManagerPlus.GridViewHolder {
@@ -46,9 +47,8 @@ class DeckViewHolder extends GridLayoutManagerPlus.GridViewHolder {
         view.setLayoutParams(layoutParams);
     }
 
-    public void empty(){
-        cardImage.setVisibility(View.INVISIBLE);
-        rightImage.setVisibility(View.GONE);
+    public void empty() {
+        showEmpty();
     }
 
     public void useDefault(ImageLoader imageLoader, int w, int h) {
@@ -73,6 +73,8 @@ class DeckViewHolder extends GridLayoutManagerPlus.GridViewHolder {
         textLayout.setVisibility(View.GONE);
         cardImage.setVisibility(View.VISIBLE);
         rightImage.setVisibility(View.VISIBLE);
+        //
+        cardImage.setImageResource(R.drawable.unknown);
     }
 
     public void showEmpty() {
@@ -81,6 +83,10 @@ class DeckViewHolder extends GridLayoutManagerPlus.GridViewHolder {
         rightImage.setVisibility(View.GONE);
     }
 
+    /**
+     * 左上角图标
+     * @param bitmap
+     */
     public void setRightImage(Bitmap bitmap) {
         rightImage.setImageBitmap(bitmap);
     }
@@ -89,8 +95,33 @@ class DeckViewHolder extends GridLayoutManagerPlus.GridViewHolder {
     }
 
     private final View view;
-    final View textLayout;
-    final TextView labelText;
-    final ImageView cardImage;
+    private final View textLayout;
+    private final TextView labelText;
+    private final ImageView cardImage;
     private final ImageView rightImage;
+    private Card mCard;
+    private Type mType;
+
+    public Card getCard() {
+        return mCard;
+    }
+
+    public void setCard(Card card) {
+        mCard = card;
+    }
+
+    public Type getType() {
+        return mType;
+    }
+
+    public void setType(Type type) {
+        mType = type;
+    }
+
+    public enum Type {
+        None,
+        Main,
+        Extra,
+        Side
+    }
 }
