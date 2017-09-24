@@ -98,7 +98,7 @@
     <string name="label_limitlist">禁卡表</string>
     <string name="label_type">卡片类型</string>
     <string name="label_set">字段</string>
-    <string name="label_level">星数</string>
+    <string name="label_level">星/标数</string>
     <string name="label_attr">属性</string>
     <string name="label_category">效果分类</string>
     <string name="linkmarker">连接标记</string>>
