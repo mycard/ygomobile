@@ -436,8 +436,8 @@ public class CardSearcher implements View.OnClickListener {
 
     private void initPscaleSpinners(Spinner spinner) {
         List<SimpleSpinnerItem> items = new ArrayList<>();
-        for (int i = 0; i <= 13; i++) {
-            if (i == 0) {
+        for (int i = -1; i <= 13; i++) {
+            if (i == -1) {
                 items.add(new SimpleSpinnerItem(i, getString(R.string.label_pendulum)));
             } else {
                 items.add(new SimpleSpinnerItem(i, "" + i));
