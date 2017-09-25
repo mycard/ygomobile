@@ -14,7 +14,7 @@ class CardSearchInfo {
     int level, ot, pscale;
     long race, category;
     String atk, def;
-    boolean islink;
+    int linkKey;
     List<Integer> inCards;
     long[] types;
     long setcode;
@@ -79,13 +79,13 @@ class CardSearchInfo {
                 }
             }
         }
-        if (!TextUtils.isEmpty(def)) {
-            if (islink) {
-                int link = Integer.parseInt(def, 2);
-                if (!((card.Defense & link) == link && (card.isType(CardType.Link)))) {
-                    return false;
-                }
-            } else {
+
+        if (linkKey > 0) {
+            if (!((card.Defense & linkKey) == linkKey && (card.isType(CardType.Link)))) {
+                return false;
+            }
+        } else {
+            if (!TextUtils.isEmpty(def)) {
                 if (def.contains("-")) {
                     String[] defs = def.split("-");
                     if (!(i(defs[0]) <= card.Defense && card.Defense <= i(defs[1]))) {

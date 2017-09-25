@@ -186,7 +186,7 @@ public class CardLoader implements ICardLoader {
                        long attribute, long level, long race,
                        long limitlist, long limit,
                        String atk, String def, long pscale,
-                       long setcode, long category, long ot, boolean islink, long... types) {
+                       long setcode, long category, long ot, int linkKey, long... types) {
         CardSearchInfo searchInfo = new CardSearchInfo();
         if (!TextUtils.isEmpty(prefixWord) && !TextUtils.isEmpty(suffixWord)) {
             searchInfo.prefixWord = prefixWord;
@@ -201,7 +201,7 @@ public class CardLoader implements ICardLoader {
         searchInfo.atk = atk;
         searchInfo.def = def;
         searchInfo.ot = (int) ot;
-        searchInfo.islink = islink;
+        searchInfo.linkKey = linkKey;
         searchInfo.types = types;
 
         searchInfo.category = category;

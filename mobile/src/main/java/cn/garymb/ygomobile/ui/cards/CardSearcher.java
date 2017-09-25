@@ -88,8 +88,7 @@ public class CardSearcher implements View.OnClickListener {
     String Btn_7;
     String Btn_8;
     String Btn_9;
-    boolean isLink = false;
-    String mLinkStr = null;
+    int lineKey;
 
     public CardSearcher(View view, ICardLoader dataLoader) {
         this.view = view;
@@ -126,7 +125,7 @@ public class CardSearcher implements View.OnClickListener {
         OnEditorActionListener searchListener = new OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if(actionId == EditorInfo.IME_ACTION_SEARCH){
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                     InputMethodManager imm = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                     search();
@@ -267,9 +266,8 @@ public class CardSearcher implements View.OnClickListener {
                     @Override
                     public void onClick(View v) {
                         if (Btn_5.equals("0")) {
-                            mLinkStr = Btn_9 + Btn_8 + Btn_7 + Btn_6 + "0" + Btn_4 + Btn_3 + Btn_2 + Btn_1;
-                            int link = Integer.parseInt(mLinkStr, 2);
-                            isLink = link > 0;
+                            String mLinkStr = Btn_9 + Btn_8 + Btn_7 + Btn_6 + "0" + Btn_4 + Btn_3 + Btn_2 + Btn_1;
+                            lineKey = Integer.parseInt(mLinkStr, 2);
                             builder.dismiss();
                         }
                     }
@@ -344,13 +342,13 @@ public class CardSearcher implements View.OnClickListener {
         initLimitListSpinners(limitListSpinner);
         initTypeSpinners(typeSpinner, new CardType[]{CardType.None, CardType.Monster, CardType.Spell, CardType.Trap});
         initTypeSpinners(typeMonsterSpinner, new CardType[]{CardType.None, CardType.Normal, CardType.Effect, CardType.Fusion, CardType.Ritual,
-                                                            CardType.Synchro, CardType.Pendulum, CardType.Xyz, CardType.Link, CardType.Spirit, CardType.Union,
-                                                            CardType.Dual, CardType.Tuner, CardType.Flip, CardType.Toon, CardType.Token
+                CardType.Synchro, CardType.Pendulum, CardType.Xyz, CardType.Link, CardType.Spirit, CardType.Union,
+                CardType.Dual, CardType.Tuner, CardType.Flip, CardType.Toon, CardType.Token
         });
         initTypeSpinners(typeMonsterSpinner2, new CardType[]{CardType.None, CardType.Pendulum, CardType.Tuner, CardType.Effect, CardType.Normal
         });
         initTypeSpinners(typeSTSpinner, new CardType[]{CardType.None, CardType.Normal, CardType.QuickPlay, CardType.Ritual,
-                                                       CardType.Continuous, CardType.Equip, CardType.Field, CardType.Counter
+                CardType.Continuous, CardType.Equip, CardType.Field, CardType.Counter
         });
         initLevelSpinners(levelSpinner);
         initPscaleSpinners(pScale);
@@ -580,13 +578,12 @@ public class CardSearcher implements View.OnClickListener {
         if (dataLoader != null) {
             dataLoader.search(text(prefixWord), text(suffixWord), getSelect(attributeSpinner)
                     , getSelect(levelSpinner), getSelect(raceSpinner), getSelect(limitListSpinner), getSelect(limitSpinner),
-                    text(atkText), isLink ? mLinkStr : text(defText),
+                    text(atkText), text(defText),
                     getSelect(pScale),
                     getSelect(setcodeSpinner)
-                    , getSelect(categorySpinner), getSelect(otSpinner), isLink, getSelect(typeSpinner), getSelect(typeMonsterSpinner), getSelect(typeSTSpinner)
+                    , getSelect(categorySpinner), getSelect(otSpinner), lineKey, getSelect(typeSpinner), getSelect(typeMonsterSpinner), getSelect(typeSTSpinner)
                     , getSelect(typeMonsterSpinner2));
-            isLink = false;
-            mLinkStr = null;
+            lineKey = 0;
         }
     }
 
@@ -617,7 +614,6 @@ public class CardSearcher implements View.OnClickListener {
         reset(raceSpinner);
         reset(levelSpinner);
         reset(attributeSpinner);
-        isLink = false;
         atkText.setText(null);
         defText.setText(null);
     }

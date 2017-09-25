@@ -122,7 +122,17 @@ public class IOUtils {
                 if (Constants.DEBUG)
                     Log.i(TAG, "copy1:" + assets + "-->" + tofile);
                 createFolderByFile(tofile);
-                copyToFile(am.open(assets), tofile.getAbsolutePath());
+                InputStream inputStream = null;
+                try {
+                    inputStream = am.open(assets);
+                }catch (Exception e){
+
+                }
+                if(inputStream != null) {
+                    copyToFile(inputStream, tofile.getAbsolutePath());
+                }else{
+                    return 0;
+                }
             }
             return 1;
         } else {

@@ -130,11 +130,6 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
                 IOUtils.copyFilesFromAssets(mContext, getDatapath(Constants.CORE_SKIN_PATH),
                         mSettings.getCoreSkinPath(), false, mSettings.isPendulumScale());
             }
-            if (needsUpdate) {
-                setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.ex_pack)));
-                IOUtils.copyFilesFromAssets(mContext, getDatapath(Constants.CORE_EXPANSIONS),
-                        mSettings.getExpansionsPath().getAbsolutePath(), true, needsUpdate);
-            }
             setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.font_files)));
             IOUtils.copyFilesFromAssets(mContext, getDatapath(Constants.FONT_DIRECTORY),
                     mSettings.getFontDirPath(), false);
@@ -156,6 +151,11 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
                     IOUtils.copyFilesFromAssets(mContext, getDatapath(Constants.CORE_PICS_ZIP),
                             resPath, needsUpdate);
                 }
+            }
+            if (needsUpdate) {
+                setMessage(mContext.getString(R.string.check_things, mContext.getString(R.string.ex_pack)));
+                IOUtils.copyFilesFromAssets(mContext, getDatapath(Constants.CORE_EXPANSIONS),
+                        mSettings.getExpansionsPath().getAbsolutePath(), true, needsUpdate);
             }
         } catch (Exception e) {
             if (Constants.DEBUG)
