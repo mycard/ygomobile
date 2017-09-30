@@ -51,7 +51,7 @@ class DeckViewHolder extends GridLayoutManagerPlus.GridViewHolder {
         showEmpty();
     }
 
-    public void useDefault(ImageLoader imageLoader, int w, int h) {
+    public void useDefault() {
         cardImage.setImageResource(R.drawable.unknown);
         //TODO sdcard的卡背
 //        File outFile = new File(AppsSettings.get().getCoreSkinPath(), Constants.UNKNOWN_IMAGE);
@@ -81,6 +81,10 @@ class DeckViewHolder extends GridLayoutManagerPlus.GridViewHolder {
         textLayout.setVisibility(View.GONE);
         cardImage.setVisibility(View.INVISIBLE);
         rightImage.setVisibility(View.GONE);
+    }
+
+    public ImageView getCardImage() {
+        return cardImage;
     }
 
     /**

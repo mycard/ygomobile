@@ -13,6 +13,12 @@ import cn.garymb.ygomobile.utils.MD5Util;
 import ocgcore.data.Card;
 
 public class DeckInfo {
+    public enum Type {
+        Main,
+        Extra,
+        Side,
+    }
+
     private final List<Card> mainCards;
     private final List<Card> extraCards;
     private final List<Card> sideCards;
@@ -25,8 +31,50 @@ public class DeckInfo {
         sideCards = new ArrayList<>();
     }
 
+    public void move(Type type, int from, int to) {
+        if (from == to) return;
+        List<Card> list;
+        if (type == Type.Main) {
+            list = mainCards;
+        } else if (type == Type.Extra) {
+            list = extraCards;
+        } else {
+            list = sideCards;
+        }
+        Card c = list.remove(from);
+        if (from > to) {
+            list.add(to, c);
+        } else {
+            list.add(to, c);
+        }
+    }
+
+    public Card removeMain(int index) {
+        Card card = getMainCard(index);
+        if (removeMain(card)) {
+            return card;
+        }
+        return null;
+    }
+
+    public Card removeExtra(int index) {
+        Card card = getExtraCard(index);
+        if (removeExtra(card)) {
+            return card;
+        }
+        return null;
+    }
+
+    public Card removeSide(int index) {
+        Card card = getSideCard(index);
+        if (removeSide(card)) {
+            return card;
+        }
+        return null;
+    }
+
     public boolean removeMain(Card c) {
-        if (mainCards.remove(c)) {
+        if (c != null && mainCards.remove(c)) {
             mainCount--;
             return true;
         }
@@ -34,7 +82,7 @@ public class DeckInfo {
     }
 
     public boolean removeExtra(Card c) {
-        if (extraCards.remove(c)) {
+        if (c != null && extraCards.remove(c)) {
             extraCount--;
             return true;
         }
@@ -42,7 +90,7 @@ public class DeckInfo {
     }
 
     public boolean removeSide(Card c) {
-        if (sideCards.remove(c)) {
+        if (c != null && sideCards.remove(c)) {
             sideCount--;
             return true;
         }
@@ -50,8 +98,16 @@ public class DeckInfo {
     }
 
     public boolean addMainCards(Card card) {
+        return addMainCards(-1, card);
+    }
+
+    public boolean addMainCards(int index, Card card) {
         if (card != null && mainCount < Constants.DECK_MAIN_MAX) {
-            this.mainCards.add(card);
+            if (index >= 0 && index <= mainCards.size()) {
+                this.mainCards.add(index, card);
+            } else {
+                this.mainCards.add(card);
+            }
             mainCount++;
             return true;
         }
@@ -59,8 +115,16 @@ public class DeckInfo {
     }
 
     public boolean addExtraCards(Card card) {
+        return addExtraCards(-1, card);
+    }
+
+    public boolean addExtraCards(int index, Card card) {
         if (card != null && extraCount < Constants.DECK_EXTRA_MAX) {
-            this.extraCards.add(card);
+            if (index >= 0 && index <= extraCards.size()) {
+                this.extraCards.add(index, card);
+            } else {
+                this.extraCards.add(card);
+            }
             extraCount++;
             return true;
         }
@@ -68,8 +132,16 @@ public class DeckInfo {
     }
 
     public boolean addSideCards(Card card) {
+        return addSideCards(-1, card);
+    }
+
+    public boolean addSideCards(int index, Card card) {
         if (card != null && sideCount < Constants.DECK_SIDE_MAX) {
-            this.sideCards.add(card);
+            if (index >= 0 && index <= sideCards.size()) {
+                this.sideCards.add(index, card);
+            } else {
+                this.sideCards.add(card);
+            }
             sideCount++;
             return true;
         }

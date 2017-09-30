@@ -119,7 +119,7 @@ public class AppsSettings {
     }
 
     public boolean isUseDeckManagerV2() {
-        return mSharedPreferences.getBoolean(PREF_DECK_MANAGER_V2, DEF_PREF_DECK_MANAGER_V2);
+        return false;//mSharedPreferences.getBoolean(PREF_DECK_MANAGER_V2, DEF_PREF_DECK_MANAGER_V2);
     }
 
     public float getXScale() {

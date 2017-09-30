@@ -10,7 +10,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import cn.garymb.ygomobile.Constants;
+import cn.garymb.ygomobile.bean.DeckInfo;
 import cn.garymb.ygomobile.lite.R;
+import cn.garymb.ygomobile.loader.ImageLoader;
+import ocgcore.data.Card;
+
+import static cn.garymb.ygomobile.bean.DeckInfo.Type.Extra;
+import static cn.garymb.ygomobile.bean.DeckInfo.Type.Main;
+import static cn.garymb.ygomobile.bean.DeckInfo.Type.Side;
 
 
 public class DeckAdapter extends RecyclerView.Adapter<DeckViewHolder> implements IDeckLayout {
@@ -20,10 +27,13 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckViewHolder> implements
     private final DeckLayoutManager mDeckLayoutManager;
     private int mWidth;
     private int mHeight;
-    private int mMainCount = 60, mExtraCount = 15, mSideCount = 15;
     private int mPWidth;
+    private final DeckInfo mDeckInfo;
+    private ImageLoader mImageLoader;
 
     public DeckAdapter(Context context, RecyclerView recyclerView, OnItemDragListener listener) {
+        mDeckInfo = new DeckInfo();
+        mImageLoader = ImageLoader.get(context);
         mContext = context;
         mRecyclerView = recyclerView;
         mLayoutInflater = LayoutInflater.from(context);
@@ -61,6 +71,10 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckViewHolder> implements
         mHeight = scaleHeight(mWidth);
     }
 
+    public void setDeckInfo(DeckInfo deckInfo) {
+        mDeckInfo.update(deckInfo);
+    }
+
     @Override
     public int getMaxWidth() {
         if (mPWidth == 0) {
@@ -90,56 +104,29 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckViewHolder> implements
     //region count/limit
     @Override
     public int getMainCount() {
-        return Math.max(31, mMainCount);
+        return Math.max(31, getMainRealCount());
     }
 
     public int getMainRealCount() {
-        return mMainCount;
-    }
-
-    public void setMainCount(int mainCount) {
-        if (mainCount >= 60) {
-            mainCount = 60;
-        } else if (mainCount < 0) {
-            mainCount = 0;
-        }
-        mMainCount = mainCount;
+        return mDeckInfo.getMainCount();
     }
 
     @Override
     public int getExtraCount() {
-        return Math.max(1, mExtraCount);
+        return Math.max(1, getExtraRealCount());
     }
 
     public int getExtraRealCount() {
-        return mExtraCount;
-    }
-
-    public void setExtraCount(int extraCount) {
-        if (extraCount >= 15) {
-            extraCount = 15;
-        } else if (extraCount < 0) {
-            extraCount = 0;
-        }
-        mExtraCount = extraCount;
+        return mDeckInfo.getExtraCount();
     }
 
     @Override
     public int getSideCount() {
-        return Math.max(1, mSideCount);
+        return Math.max(1, getSideRealCount());
     }
 
     public int getSideRealCount() {
-        return mSideCount;
-    }
-
-    public void setSideCount(int sideCount) {
-        if (sideCount >= 15) {
-            sideCount = 15;
-        } else if (sideCount < 0) {
-            sideCount = 0;
-        }
-        mSideCount = sideCount;
+        return mDeckInfo.getSideCount();
     }
 
     @Override
@@ -268,16 +255,37 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckViewHolder> implements
                 position = getMainIndex(position);
                 if (position >= getMainRealCount()) {
                     holder.empty();
+                } else {
+                    Card card = mDeckInfo.getMainCard(position);
+                    if (card == null) {
+                        holder.useDefault();
+                    } else {
+                        mImageLoader.bindImage(holder.getCardImage(), card.Code);
+                    }
                 }
             } else if (isExtra(position)) {
                 position = getExtraIndex(position);
                 if (position >= getExtraRealCount()) {
                     holder.empty();
+                } else {
+                    Card card = mDeckInfo.getExtraCard(position);
+                    if (card == null) {
+                        holder.useDefault();
+                    } else {
+                        mImageLoader.bindImage(holder.getCardImage(), card.Code);
+                    }
                 }
             } else if (isSide(position)) {
                 position = getSideIndex(position);
                 if (position >= getSideRealCount()) {
                     holder.empty();
+                } else {
+                    Card card = mDeckInfo.getSideCard(position);
+                    if (card == null) {
+                        holder.useDefault();
+                    } else {
+                        mImageLoader.bindImage(holder.getCardImage(), card.Code);
+                    }
                 }
             }
         }
@@ -292,6 +300,7 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckViewHolder> implements
                 if (pos >= getMainRealCount()) {
                     to = getMainRealCount() - 1 + getMainStart();
                 }
+                mDeckInfo.move(Main, getMainIndex(from), getMainIndex(to));
                 notifyItemMoved(from, to);
                 return true;
             }
@@ -301,11 +310,19 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckViewHolder> implements
                     return false;
                 }
                 boolean resize = getMainRealCount() % 4 == 1;
-                Log.d("kk", getMainRealCount() + ",resize=" + resize);
-                setMainCount(getMainRealCount() - 1);
-                setSideCount(getSideRealCount() + 1);
-                notifyItemRemoved(from);
-                notifyItemInserted(to);
+
+                Card card = mDeckInfo.removeMain(getMainIndex(from));
+                mDeckInfo.addSideCards(getSideIndex(to), card);
+
+                Log.d("kk", "move main -> side " + getMainIndex(from) + "->" + getSideIndex(to));
+
+                notifyItemMoved(from, to);
+                notifyItemRemoved(getSideEnd());
+                notifyItemInserted(getMainEnd());
+
+                notifyItemChanged(getMainLabel());
+                notifyItemChanged(getSideLabel());
+
                 if (resize) {
                     notifyItemRangeChanged(getMainStart(), getMainStart() + getMainEnd());
                 }
@@ -313,6 +330,7 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckViewHolder> implements
             }
         } else if (isExtra(from)) {
             if (isExtra(to)) {
+                mDeckInfo.move(Extra, getExtraIndex(from), getExtraIndex(to));
                 notifyItemMoved(from, to);
                 return true;
             }
@@ -321,14 +339,22 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckViewHolder> implements
                 if (getSideRealCount() >= Constants.DECK_SIDE_MAX) {
                     return false;
                 }
-                setExtraCount(getExtraRealCount() - 1);
-                setSideCount(getSideRealCount() + 1);
-                notifyItemRemoved(from);
-                notifyItemInserted(to);
+                Card card = mDeckInfo.removeExtra(getExtraIndex(from));
+                mDeckInfo.addSideCards(getSideIndex(to), card);
+
+                Log.d("kk", "move extra -> side " + getExtraIndex(from) + "->" + getSideIndex(to));
+
+                notifyItemMoved(from, to);
+                notifyItemRemoved(getSideEnd());
+                notifyItemInserted(getExtraEnd());
+
+                notifyItemChanged(getExtraLabel());
+                notifyItemChanged(getSideLabel());
                 return true;
             }
         } else if (isSide(from)) {
             if (isSide(to)) {
+                mDeckInfo.move(Side, getSideIndex(from), getSideIndex(to));
                 notifyItemMoved(from, to);
                 return true;
             }
@@ -337,10 +363,17 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckViewHolder> implements
                 if (getExtraRealCount() >= Constants.DECK_EXTRA_MAX) {
                     return false;
                 }
-                setSideCount(getSideRealCount() - 1);
-                setExtraCount(getExtraRealCount() + 1);
-                notifyItemRemoved(from);
-                notifyItemInserted(to);
+                Card card = mDeckInfo.removeSide(getSideIndex(from));
+                mDeckInfo.addExtraCards(getExtraIndex(to), card);
+
+                Log.d("kk", "move side -> extra " + getSideIndex(from) + "->" + getExtraIndex(to));
+
+                notifyItemMoved(from, to);
+                notifyItemRemoved(getExtraEnd());
+                notifyItemInserted(getSideEnd());
+
+                notifyItemChanged(getExtraLabel());
+                notifyItemChanged(getSideLabel());
                 return true;
             }
             if (isMain(to)) {
@@ -353,11 +386,18 @@ public class DeckAdapter extends RecyclerView.Adapter<DeckViewHolder> implements
                     to = getMainRealCount() - 1 + getMainStart();
                 }
                 boolean resize = getMainRealCount() % 4 == 0;
-                Log.d("kk", getMainRealCount() + ",resize=" + resize);
-                setSideCount(getSideRealCount() - 1);
-                setMainCount(getMainRealCount() + 1);
-                notifyItemRemoved(from);
-                notifyItemInserted(to);
+                Card card = mDeckInfo.removeSide(getSideIndex(from));
+                mDeckInfo.addMainCards(getMainIndex(to), card);
+
+                Log.d("kk", "move side -> main " + getSideIndex(from) + "->" + getMainIndex(to));
+
+                notifyItemMoved(from, to);
+                notifyItemRemoved(getMainEnd());
+                notifyItemInserted(getSideEnd());
+
+                notifyItemChanged(getMainLabel());
+                notifyItemChanged(getSideLabel());
+
                 if (resize) {
                     notifyItemRangeChanged(getMainStart(), getMainStart() + getMainEnd());
                 }
