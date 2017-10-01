@@ -22,7 +22,7 @@ class DeckViewHolder extends RecyclerView.ViewHolder {
         rightImage = $(R.id.right_top);
         labelText = $(R.id.label);
         textlayout = $(R.id.layout_label);
-        headView = $(R.id.head);
+        headView = null;// $(R.id.head);
     }
 
     public DeckItemType getItemType() {

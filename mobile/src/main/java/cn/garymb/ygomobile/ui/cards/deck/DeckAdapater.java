@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.SystemClock;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -503,34 +502,18 @@ public class DeckAdapater extends RecyclerView.Adapter<DeckViewHolder> implement
 
     public void showHeadView() {
         showHead = true;
-        notifyItemChanged(DeckItem.HeadView);
+//        notifyItemChanged(DeckItem.HeadView);
     }
 
     public void hideHeadView() {
         showHead = false;
-        notifyItemChanged(DeckItem.HeadView);
+//        notifyItemChanged(DeckItem.HeadView);
     }
 
     @Override
     public void onBindViewHolder(DeckViewHolder holder, int position) {
-        if (position == DeckItem.HeadView) {
-            if (mHeadHolder == null) {
-                mHeadHolder = holder;
-            }
-        }
         DeckItem item = mItems.get(position);
         holder.setItemType(item.getType());
-        if (position == DeckItem.HeadView) {
-            if (showHead) {
-                holder.setHeadVisibility(View.VISIBLE);
-            } else {
-                holder.setHeadVisibility(View.INVISIBLE);
-            }
-            holder.cardImage.setVisibility(View.GONE);
-            return;
-        } else {
-            holder.setHeadVisibility(View.GONE);
-        }
         if (item.getType() == DeckItemType.MainLabel || item.getType() == DeckItemType.SideLabel
                 || item.getType() == DeckItemType.ExtraLabel) {
             if (item.getType() == DeckItemType.MainLabel) {

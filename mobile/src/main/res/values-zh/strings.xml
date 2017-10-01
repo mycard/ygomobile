@@ -191,4 +191,5 @@
     <string name="deck_manager_v2">组卡器V2</string>
     <string name="reset_game_ver_fail">重置游戏版本失败</string>
     <string name="deck_name">卡组</string>
+    <string name="save_quit">保存并退出</string>
 </resources>

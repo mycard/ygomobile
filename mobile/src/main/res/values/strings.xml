@@ -194,4 +194,5 @@
     <string name="deck_manager_v2">Deck Manager V2</string>
     <string name="reset_game_ver_fail">reset game version fail</string>
     <string name="deck_name">卡组</string>
+    <string name="save_quit">Save and quit</string>
 </resources>

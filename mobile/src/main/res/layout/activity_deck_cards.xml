@@ -10,37 +10,59 @@
         android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@drawable/bg3"
         tools:openDrawer="left">
 
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <include
-                layout="@layout/content_toolbar"/>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/grid_cards"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
 
             <LinearLayout
-                android:id="@+id/layout_main"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@drawable/bg3"
-                android:orientation="vertical">
-            </LinearLayout>
-            <com.nightonke.boommenu.BoomMenuButton
-                android:id="@+id/bmb"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom|right"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="2dp"
                 android:layout_marginLeft="10dp"
-                android:background="@drawable/buttonfunction"
-                app:bmb_buttonEnum="ham"
-                app:bmb_buttonPlaceEnum="buttonPlace_ham_6"
-                app:bmb_piecePlaceEnum="piecePlace_ham_6"
-                app:bmb_dimColor="#90000000"
-                app:bmb_normalColor="@android:color/transparent">
+                android:orientation="horizontal">
 
-            </com.nightonke.boommenu.BoomMenuButton>
+                <ImageView
+                    android:id="@+id/btn_nav_search"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/search"/>
+
+                <ImageView
+                    android:id="@+id/btn_nav_list"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/listicon"/>
+
+                <com.nightonke.boommenu.BoomMenuButton
+                    android:id="@+id/bmb"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/buttonfunction"
+                    app:bmb_buttonEnum="textOutsideCircle"
+                    app:bmb_buttonPlaceEnum="buttonPlace_sc_9_1"
+                    app:bmb_dimColor="#90000000"
+                    app:bmb_normalColor="@android:color/transparent"
+                    app:bmb_piecePlaceEnum="piecePlace_dot_9_1">
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_gravity="center"
+                        app:srcCompat="@drawable/bottom_1"/>
+                </com.nightonke.boommenu.BoomMenuButton>
+            </LinearLayout>
         </FrameLayout>
 
         <LinearLayout
@@ -57,10 +79,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="4dp"
-                android:paddingLeft="20dp"
                 android:layout_marginRight="30dp"
                 android:layout_marginTop="10dp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:paddingLeft="20dp">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -89,10 +111,12 @@
                     android:layout_height="@dimen/item_height"
                     app:popupTheme="@style/AppTheme.PopupOverlay.Bule"/>
             </LinearLayout>
+
             <View
                 android:layout_width="match_parent"
-                android:background="@color/holo_blue_light"
-                android:layout_height="1dp"/>
+                android:layout_height="1dp"
+                android:background="@color/holo_blue_light"/>
+
             <com.tubb.smrv.SwipeMenuRecyclerView
                 android:id="@+id/list_cards"
                 android:layout_width="match_parent"

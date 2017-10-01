@@ -53,9 +53,6 @@ class DeckDrager {
         if (left < 0 || DeckItemUtils.isLabel(right)) {
             return false;
         }
-        if (right == DeckItem.HeadView) {
-            return true;
-        }
         if (DeckItemUtils.isMain(left)) {
             if (DeckItemUtils.isMain(right)) {
                 return moveMain(left, right);

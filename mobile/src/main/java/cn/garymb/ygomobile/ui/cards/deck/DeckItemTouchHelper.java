@@ -4,7 +4,6 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.support.v7.widget.helper.ItemTouchHelper2;
-import android.support.v7.widget.helper.ItemTouchHelperPlus;
 import android.util.Log;
 
 import java.util.List;
@@ -39,9 +38,9 @@ public class DeckItemTouchHelper extends ItemTouchHelper2.Callback {
                                RecyclerView.ViewHolder target) {
         int id = target.getAdapterPosition();
         if (isLongPressMode()) {
-            return id == DeckItem.HeadView;
+            return false;
         }
-        return id != DeckItem.HeadView;
+        return !DeckItemUtils.isLabel(id);
     }
 
     /**
@@ -50,7 +49,7 @@ public class DeckItemTouchHelper extends ItemTouchHelper2.Callback {
     @Override
     public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
         int id = viewHolder.getAdapterPosition();
-        if (DeckItemUtils.isLabel(id) || id == DeckItem.HeadView) {
+        if (DeckItemUtils.isLabel(id)) {
             return makeMovementFlags(0, 0);
         }
         if (DeckItemUtils.isMain(id)) {
@@ -83,12 +82,6 @@ public class DeckItemTouchHelper extends ItemTouchHelper2.Callback {
             int id = viewHolder.getAdapterPosition();
             if (viewHolder instanceof DeckViewHolder) {
                 DeckViewHolder deckholder = (DeckViewHolder) viewHolder;
-                if (deckholder.getItemType() == DeckItemType.HeadView) {
-                    if (isLongPressMode()) {
-                        return viewHolder;
-                    }
-                    return null;
-                }
                 if (deckholder.getItemType() == DeckItemType.MainLabel
                         || deckholder.getItemType() == DeckItemType.SideLabel
                         || deckholder.getItemType() == DeckItemType.ExtraLabel) {
@@ -96,7 +89,7 @@ public class DeckItemTouchHelper extends ItemTouchHelper2.Callback {
                     return null;
                 }
             } else {
-                if (DeckItemUtils.isLabel(id) || id == DeckItem.HeadView) {
+                if (DeckItemUtils.isLabel(id)) {
 //                Log.d("kk", "move is label " + id);
                     if (isLongPressMode()) {
                         return viewHolder;
@@ -143,20 +136,6 @@ public class DeckItemTouchHelper extends ItemTouchHelper2.Callback {
 
     @Override
     public void onMoved(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, int fromPos, RecyclerView.ViewHolder target, int toPos, int x, int y) {
-        if (toPos == DeckItem.HeadView) {
-            if (isLongPressMode()) {
-                //防止删除后，弹回来
-                if (y > Min_Pos) {
-                    endLongPressMode();
-                    if (DEBUG)
-                        Log.i(TAG, "delete " + fromPos + " x=" + x + ",y=" + y);
-                    mDeckDrager.delete(fromPos);
-                } else {
-                    if (DEBUG)
-                        Log.d(TAG, "cancel delete " + fromPos + " x=" + x + ",y=" + y);
-                }
-            }
-        }
         super.onMoved(recyclerView, viewHolder, fromPos, target, toPos, x, y);
     }
 

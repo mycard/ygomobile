@@ -16,7 +16,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.util.SparseArray;
 import android.view.Gravity;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -25,7 +24,8 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.nightonke.boommenu.BoomButtons.HamButton;
+import com.nightonke.boommenu.BoomButtons.BoomButton;
+import com.nightonke.boommenu.BoomButtons.TextOutsideCircleButton;
 import com.nightonke.boommenu.BoomMenuButton;
 
 import org.greenrobot.eventbus.EventBus;
@@ -53,6 +53,7 @@ import cn.garymb.ygomobile.ui.cards.deck.DeckItemTouchHelper;
 import cn.garymb.ygomobile.ui.cards.deck.DeckItemType;
 import cn.garymb.ygomobile.ui.cards.deck.DeckLayoutManager;
 import cn.garymb.ygomobile.ui.plus.AOnGestureListener;
+import cn.garymb.ygomobile.ui.plus.DefaultOnBoomListener;
 import cn.garymb.ygomobile.ui.plus.DialogPlus;
 import cn.garymb.ygomobile.ui.plus.VUiKit;
 import cn.garymb.ygomobile.utils.IOUtils;
@@ -84,6 +85,7 @@ class DeckManagerActivityImpl extends BaseCardsAcitivity implements RecyclerView
         super.onCreate(savedInstanceState);
         mDeckSpinner = $(R.id.toolbar_list);
         mLimitSpinner = $(R.id.sp_limit_list);
+        mRecyclerView = $(R.id.grid_cards);
         mRecyclerView.setPadding(mRecyclerView.getPaddingLeft(), 0, mRecyclerView.getPaddingRight(), mRecyclerView.getPaddingBottom());
         mRecyclerView.setAdapter((mDeckAdapater = new DeckAdapater(this, mRecyclerView, getImageLoader())));
         mRecyclerView.setLayoutManager(new DeckLayoutManager(this, Constants.DECK_WIDTH_COUNT));
@@ -112,13 +114,14 @@ class DeckManagerActivityImpl extends BaseCardsAcitivity implements RecyclerView
                 mPreLoad = path;
             }
         }
-        BoomMenuButton boomMenuButton = $(R.id.bmb);
-        for (int i = 0; i < 6; i++) {
-            HamButton.Builder builder = new HamButton.Builder()
-                    .normalText("卡组编辑")
-                    .normalImageRes(R.drawable.mycard);
-            boomMenuButton.addBuilder(builder);
-        }
+        initBoomMenuButton($(R.id.bmb));
+
+        $(R.id.btn_nav_search).setOnClickListener((v) -> {
+            doMenu(R.id.action_search);
+        });
+        $(R.id.btn_nav_list).setOnClickListener((v) -> {
+            doMenu(R.id.action_card_list);
+        });
         //
         DialogPlus dlg = DialogPlus.show(this, null, getString(R.string.loading));
         VUiKit.defer().when(() -> {
@@ -264,14 +267,6 @@ class DeckManagerActivityImpl extends BaseCardsAcitivity implements RecyclerView
     }
 
     @Override
-    protected View getMainView() {
-        if (mRecyclerView == null) {
-            mRecyclerView = new RecyclerView(this);
-        }
-        return mRecyclerView;
-    }
-
-    @Override
     protected void onCardClick(View view, Card cardInfo, int pos) {
         if (mCardListAdapater.isShowMenu(view)) {
             return;
@@ -312,12 +307,6 @@ class DeckManagerActivityImpl extends BaseCardsAcitivity implements RecyclerView
     public void onSearchResult(List<Card> cardInfos) {
         super.onSearchResult(cardInfos);
         showResult(false);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.deck_menu, menu);
-        return true;
     }
 
     @Override
@@ -482,6 +471,14 @@ class DeckManagerActivityImpl extends BaseCardsAcitivity implements RecyclerView
                 builder.setTitle(R.string.question);
                 builder.setMessage(R.string.quit_deck_tip);
                 builder.setMessageGravity(Gravity.CENTER_HORIZONTAL);
+                builder.setRightButtonText(getString(R.string.save_quit));
+                builder.setLeftButtonText(getString(R.string.quit));
+                builder.setRightButtonListener((dlg, s) -> {
+                    doMenu(R.id.action_save);
+                    dlg.dismiss();
+                    isExit = true;
+                    finish();
+                });
                 builder.setLeftButtonListener((dlg, s) -> {
                     dlg.dismiss();
                     isExit = true;
@@ -559,7 +556,18 @@ class DeckManagerActivityImpl extends BaseCardsAcitivity implements RecyclerView
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
+        if (doMenu(item.getItemId())) {
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+
+    }
+
+    public boolean doMenu(int menuId) {
+        switch (menuId) {
+            case R.id.action_quit:
+                onBackHome();
+                break;
 //            case R.id.action_refresh:
 //                mDeckAdapater.notifyDataSetChanged();
 //                break;
@@ -643,8 +651,10 @@ class DeckManagerActivityImpl extends BaseCardsAcitivity implements RecyclerView
 //            case R.id.action_share_deck:
 //                shareDeck();
 //                break;
+            default:
+                return false;
         }
-        return super.onOptionsItemSelected(item);
+        return true;
     }
 
     private void shareDeck() {
@@ -853,5 +863,53 @@ class DeckManagerActivityImpl extends BaseCardsAcitivity implements RecyclerView
         } else {
             showToast(R.string.save_tip_fail, Toast.LENGTH_SHORT);
         }
+    }
+
+    private SparseArray<Integer> mMenuIds = new SparseArray<>();
+    private int mCurMenuIndex = 0;
+
+    private void initBoomMenuButton(BoomMenuButton menu) {
+        mCurMenuIndex = 0;
+        addMenuButton(menu, R.id.action_card_list, R.string.deck_list);
+        addMenuButton(menu, R.id.action_save, R.string.save_deck);
+        addMenuButton(menu, R.id.action_clear_deck, R.string.clear_deck);
+
+        addMenuButton(menu, R.id.action_deck_new, R.string.new_deck);
+        addMenuButton(menu, R.id.action_rename, R.string.rename_deck);
+        addMenuButton(menu, R.id.action_delete_deck, R.string.delete_deck);
+
+        addMenuButton(menu, R.id.action_unsort, R.string.unsort);
+        addMenuButton(menu, R.id.action_sort, R.string.sort);
+        addMenuButton(menu, R.id.action_quit, R.string.quit);
+
+        menu.setOnBoomListener(new DefaultOnBoomListener() {
+            @Override
+            public void onClicked(int index, BoomButton boomButton) {
+                doMenu(mMenuIds.get(index));
+            }
+        });
+    }
+
+    private void addMenuButton(BoomMenuButton menuButton, int menuId, int stringId) {
+        addMenuButton(menuButton, menuId, getString(stringId));
+    }
+
+    private void addMenuButton(BoomMenuButton menuButton, int menuId, String str) {
+        TextOutsideCircleButton.Builder builder = new TextOutsideCircleButton.Builder()
+                .shadowColor(Color.TRANSPARENT)
+                .normalColor(Color.TRANSPARENT)
+                .normalText(str);
+        switch (menuId) {
+            case R.id.action_search:
+                //icon
+                builder.normalImageRes(R.drawable.unknown);
+                break;
+            default:
+                builder.normalImageRes(R.drawable.unknown);
+                break;
+        }
+        menuButton.addBuilder(builder);
+        mMenuIds.put(mCurMenuIndex, menuId);
+        mCurMenuIndex++;
     }
 }

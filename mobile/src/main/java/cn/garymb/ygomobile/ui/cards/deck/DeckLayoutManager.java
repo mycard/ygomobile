@@ -13,7 +13,7 @@ public class DeckLayoutManager extends GridLayoutManager {
         setSpanSizeLookup(new SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
-                if (DeckItemUtils.isLabel(position)||position==DeckItem.HeadView) {
+                if (DeckItemUtils.isLabel(position)) {
                     return span;
                 }
                 return 1;

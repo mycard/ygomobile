@@ -3,17 +3,13 @@ package cn.garymb.ygomobile.ui.cards;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.FastScrollLinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerViewItemListener;
-import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 
 import com.bumptech.glide.Glide;
-import com.tubb.smrv.SwipeMenuRecyclerView;
 
 import java.io.IOException;
 import java.util.List;
@@ -43,13 +39,8 @@ public abstract class BaseCardsAcitivity extends BaseActivity implements CardLoa
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_deck_cards);
-        Toolbar toolbar = $(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        enableBackHome();
         mImageLoader = ImageLoader.get(this);
         mDrawerlayout = $(R.id.drawer_layout);
-        ViewGroup group = $(R.id.layout_main);
-        group.addView(getMainView(), new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
         mListView = $(R.id.list_cards);
         mCardListAdapater = new CardListAdapter(this, mImageLoader);
@@ -61,15 +52,6 @@ public abstract class BaseCardsAcitivity extends BaseActivity implements CardLoa
         mCardLoader = new CardLoader(this);
         mCardLoader.setCallBack(this);
         mCardSelector = new CardSearcher($(R.id.nav_view_list), mCardLoader);
-        //
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, mDrawerlayout, toolbar, R.string.search_open, R.string.search_close);
-        toggle.setDrawerIndicatorEnabled(false);
-        mDrawerlayout.addDrawerListener(toggle);
-        toggle.setToolbarNavigationClickListener((v) -> {
-            onBackHome();
-        });
-        toggle.syncState();
     }
 
     protected int getDimen(int id) {
@@ -128,9 +110,6 @@ public abstract class BaseCardsAcitivity extends BaseActivity implements CardLoa
         }
         finish();
     }
-
-
-    protected abstract View getMainView();
 
     @Override
     public void onSearchResult(List<Card> cardInfos) {

@@ -421,12 +421,16 @@ public class AppsSettings {
     }
 
     public int getIntSettings(String key, int def) {
-        return mSharedPreferences.getInt(Constants.PREF_START + key, def);
+        int v = mSharedPreferences.getInt(Constants.PREF_START + key, def);
+        if (v == def) {
+            Log.d("kk", "default " + key + "=" + getVersionString(v));
+        }
+        return v;
     }
 
     public int resetGameVersion() {
         int version = GameConfig.getVersion();
-        if(getIntSettings(Constants.PREF_GAME_VERSION, 0) == 0){
+        if (getIntSettings(Constants.PREF_GAME_VERSION, 0) == 0) {
             //用户没设置过版本号
             return version;
         }

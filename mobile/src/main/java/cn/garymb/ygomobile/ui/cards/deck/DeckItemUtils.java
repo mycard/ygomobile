@@ -1,27 +1,17 @@
 package cn.garymb.ygomobile.ui.cards.deck;
 
-import android.text.TextUtils;
-import android.util.Log;
-import android.util.SparseArray;
-
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.List;
 
 import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.bean.Deck;
 import cn.garymb.ygomobile.bean.DeckInfo;
-import cn.garymb.ygomobile.loader.CardLoader;
 import cn.garymb.ygomobile.utils.IOUtils;
 import cn.garymb.ygomobile.utils.MD5Util;
 import ocgcore.data.Card;
-import ocgcore.data.LimitList;
 
 class DeckItemUtils {
 
@@ -179,7 +169,6 @@ class DeckItemUtils {
 
     public static void makeItems(DeckInfo mDeck, DeckAdapater adapater) {
         if (mDeck != null) {
-            adapater.addItem(new DeckItem(DeckItemType.HeadView));
             adapater.addItem(new DeckItem(DeckItemType.MainLabel));
             List<Card> main = mDeck.getMainCards();
             if (main == null) {

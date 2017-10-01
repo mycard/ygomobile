@@ -4,11 +4,6 @@
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-
-    <include
-        android:id="@+id/head"
-        layout="@layout/head_view"/>
-
     <LinearLayout
         android:id="@+id/layout_label"
         android:layout_width="match_parent"

@@ -7,6 +7,5 @@ public enum DeckItemType {
     ExtraCard,
     SideLabel,
     SideCard,
-    HeadView,
     Space,
 }
