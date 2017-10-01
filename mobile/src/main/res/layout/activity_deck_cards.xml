@@ -34,6 +34,8 @@
                     android:id="@+id/btn_nav_search"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="4dp"
                     android:layout_gravity="center_vertical"
                     android:src="@drawable/search"/>
 
@@ -41,6 +43,8 @@
                     android:id="@+id/btn_nav_list"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="4dp"
                     android:layout_gravity="center_vertical"
                     android:src="@drawable/listicon"/>
 
@@ -81,35 +85,21 @@
                 android:layout_marginBottom="4dp"
                 android:layout_marginRight="30dp"
                 android:layout_marginTop="10dp"
-                android:orientation="vertical"
+                android:orientation="horizontal"
                 android:paddingLeft="20dp">
 
                 <TextView
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/label_limit"
-                    android:textColor="@color/holo_blue_light"
-                    />
-
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/label_limitlist"
+                    android:textColor="@color/holo_blue_light"/>
                 <android.support.v7.widget.AppCompatSpinner
                     android:id="@+id/sp_limit_list"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/item_height"
                     app:popupTheme="@style/AppTheme.PopupOverlay.Bule"
                     />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/deck_name"
-                    android:textColor="@color/holo_blue_light"
-                    />
-
-                <android.support.v7.widget.AppCompatSpinner
-                    android:id="@+id/toolbar_list"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/item_height"
-                    app:popupTheme="@style/AppTheme.PopupOverlay.Bule"/>
             </LinearLayout>
 
             <View

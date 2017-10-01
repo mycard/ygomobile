@@ -83,7 +83,8 @@ class DeckManagerActivityImpl extends BaseCardsAcitivity implements RecyclerView
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mDeckSpinner = $(R.id.toolbar_list);
+        mDeckSpinner = mCardSelector.findViewById(R.id.toolbar_list);
+        mCardSelector.showDeckList();
         mLimitSpinner = $(R.id.sp_limit_list);
         mRecyclerView = $(R.id.grid_cards);
         mRecyclerView.setPadding(mRecyclerView.getPaddingLeft(), 0, mRecyclerView.getPaddingRight(), mRecyclerView.getPaddingBottom());
@@ -227,6 +228,7 @@ class DeckManagerActivityImpl extends BaseCardsAcitivity implements RecyclerView
 
     private void loadDeck(File file, boolean noSaveLast) {
         DialogPlus dlg = DialogPlus.show(this, null, getString(R.string.loading));
+        hideDrawers();
         VUiKit.defer().when(() -> {
             if (file == null) {
                 return new DeckInfo();
