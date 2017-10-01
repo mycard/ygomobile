@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -8,14 +9,15 @@
     <android.support.v4.widget.DrawerLayout
         android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        tools:openDrawer="left">
 
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <include
-                layout="@layout/content_toolbar_list"/>
+                layout="@layout/content_toolbar"/>
 
             <LinearLayout
                 android:id="@+id/layout_main"
@@ -24,48 +26,81 @@
                 android:background="@drawable/bg3"
                 android:orientation="vertical">
             </LinearLayout>
+            <com.nightonke.boommenu.BoomMenuButton
+                android:id="@+id/bmb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|right"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/buttonfunction"
+                app:bmb_buttonEnum="ham"
+                app:bmb_buttonPlaceEnum="buttonPlace_ham_6"
+                app:bmb_piecePlaceEnum="piecePlace_ham_6"
+                app:bmb_dimColor="#90000000"
+                app:bmb_normalColor="@android:color/transparent">
+
+            </com.nightonke.boommenu.BoomMenuButton>
         </FrameLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="left"
-            android:background="@android:color/transparent"
-            android:orientation="vertical">
+            android:background="@drawable/left"
+            android:orientation="vertical"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            android:paddingTop="2dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/left"
-                android:orientation="vertical"
-                android:paddingLeft="4dp"
-                android:paddingRight="4dp"
-                android:paddingTop="2dp">
+                android:layout_marginBottom="4dp"
+                android:paddingLeft="20dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical">
 
-                <LinearLayout
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/label_limit"
+                    android:textColor="@color/holo_blue_light"
+                    />
+
+                <android.support.v7.widget.AppCompatSpinner
+                    android:id="@+id/sp_limit_list"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/item_height"
-                    android:layout_marginBottom="4dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="30dp"
-                    android:layout_marginTop="10dp">
+                    app:popupTheme="@style/AppTheme.PopupOverlay.Bule"
+                    />
 
-                    <android.support.v7.widget.AppCompatSpinner
-                        android:id="@+id/sp_limit_list"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        />
-                </LinearLayout>
-
-                <com.tubb.smrv.SwipeMenuRecyclerView
-                    android:id="@+id/list_cards"
+                <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:divider="@android:color/transparent"
-                    android:dividerHeight="4dp"
-                    android:padding="2dp"
-                    android:scrollbars="none"/>
+                    android:layout_height="wrap_content"
+                    android:text="@string/deck_name"
+                    android:textColor="@color/holo_blue_light"
+                    />
+
+                <android.support.v7.widget.AppCompatSpinner
+                    android:id="@+id/toolbar_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/item_height"
+                    app:popupTheme="@style/AppTheme.PopupOverlay.Bule"/>
             </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:background="@color/holo_blue_light"
+                android:layout_height="1dp"/>
+            <com.tubb.smrv.SwipeMenuRecyclerView
+                android:id="@+id/list_cards"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:divider="@android:color/transparent"
+                android:dividerHeight="4dp"
+                android:padding="2dp"
+                android:scrollbars="none"/>
         </LinearLayout>
 
         <LinearLayout

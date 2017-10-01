@@ -106,32 +106,32 @@ public class SettingFragment extends PreferenceFragmentPlus {
 
     @Override
     public boolean onPreferenceChange(Preference preference, Object value) {
-        if (PREF_GAME_VERSION.equals(preference.getKey())) {
-            int v = AppsSettings.get().getVersionValue(value.toString());
-            if (v > 0 && v <= AppsSettings.get().getVersionValue("0xF99F")) {
-                mSettings.setGameVersion(v);
-                super.onPreferenceChange(preference, AppsSettings.get().getVersionString(v));
-                return true;
-            } else {
-                if (BuildConfig.DEBUG) {
-                    Toast.makeText(getContext(), getString(R.string.error_game_ver) + " " + value.toString(), Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getContext(), R.string.error_game_ver, Toast.LENGTH_SHORT).show();
-                }
-                return false;
-            }
-        }
         super.onPreferenceChange(preference, value);
-        if (PREF_FONT_SIZE.equals(preference.getKey())) {
-            int size = Constants.DEF_PREF_FONT_SIZE;
-            try {
-                size = Integer.parseInt(String.valueOf(value));
-            } catch (Exception e) {
-
-            }
-            new ConfigManager(mSettings.getSystemConfig()).setFontSize(size);
-        }
         if (!isInit) {
+            if (PREF_GAME_VERSION.equals(preference.getKey())) {
+                int v = AppsSettings.get().getVersionValue(value.toString());
+                if (v > 0 && v <= AppsSettings.get().getVersionValue("0xF99F")) {
+                    mSettings.setGameVersion(v);
+                    super.onPreferenceChange(preference, AppsSettings.get().getVersionString(v));
+                    return true;
+                } else {
+                    if (BuildConfig.DEBUG) {
+                        Toast.makeText(getContext(), getString(R.string.error_game_ver) + " " + value.toString(), Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getContext(), R.string.error_game_ver, Toast.LENGTH_SHORT).show();
+                    }
+                    return false;
+                }
+            }
+            if (PREF_FONT_SIZE.equals(preference.getKey())) {
+                int size = Constants.DEF_PREF_FONT_SIZE;
+                try {
+                    size = Integer.parseInt(String.valueOf(value));
+                } catch (Exception e) {
+
+                }
+                new ConfigManager(mSettings.getSystemConfig()).setFontSize(size);
+            }
             if (preference instanceof CheckBoxPreference) {
                 CheckBoxPreference checkBoxPreference = (CheckBoxPreference) preference;
                 mSharedPreferences.edit().putBoolean(preference.getKey(), checkBoxPreference.isChecked()).apply();

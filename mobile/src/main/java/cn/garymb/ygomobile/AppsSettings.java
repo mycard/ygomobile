@@ -426,6 +426,10 @@ public class AppsSettings {
 
     public int resetGameVersion() {
         int version = GameConfig.getVersion();
+        if(getIntSettings(Constants.PREF_GAME_VERSION, 0) == 0){
+            //用户没设置过版本号
+            return version;
+        }
         saveIntSettings(Constants.PREF_GAME_VERSION, GameConfig.getVersion());
         return version;
     }

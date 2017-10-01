@@ -27,8 +27,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/hit_keyword1"
-                android:inputType="textNoSuggestions"
                 android:imeOptions="actionSearch"
+                android:inputType="textNoSuggestions"
                 android:maxLines="1"
                 android:singleLine="true"
                 android:textColorHint="@color/gold"/>
@@ -44,8 +44,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/hit_keyword2"
-                android:inputType="textNoSuggestions"
                 android:imeOptions="actionSearch"
+                android:inputType="textNoSuggestions"
                 android:maxLines="1"
                 android:singleLine="true"
                 android:textColorHint="@color/gold"/>
@@ -65,7 +65,8 @@
                     android:id="@+id/sp_ot"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/label_width_small"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    app:popupTheme="@style/AppTheme.PopupOverlay.Bule"/>
 
 
                 <android.support.v7.widget.AppCompatSpinner
@@ -73,7 +74,8 @@
                     android:layout_width="0dp"
                     android:layout_height="@dimen/label_width_small"
                     android:layout_weight="1"
-                    android:visibility="invisible"/>
+                    android:visibility="invisible"
+                    app:popupTheme="@style/AppTheme.PopupOverlay.Bule"/>
             </LinearLayout>
 
             <LinearLayout
@@ -85,14 +87,16 @@
                     android:id="@+id/sp_limit_list"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    app:popupTheme="@style/AppTheme.PopupOverlay.Bule"/>
 
                 <android.support.v7.widget.AppCompatSpinner
                     android:id="@+id/sp_limit"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:visibility="invisible" />
+                    android:visibility="invisible"
+                    app:popupTheme="@style/AppTheme.PopupOverlay.Bule"/>
             </LinearLayout>
 
             <LinearLayout
@@ -104,7 +108,8 @@
                     android:id="@+id/sp_category"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    app:popupTheme="@style/AppTheme.PopupOverlay.Bule"/>
 
                 <Button
                     android:id="@+id/btn_linkmarker"
@@ -113,7 +118,7 @@
                     android:layout_weight="1"
                     android:background="@drawable/button_bg"
                     android:text="@string/linkmarker"
-                    android:visibility="visible" />
+                    android:visibility="visible"/>
 
             </LinearLayout>
 
@@ -133,21 +138,24 @@
                     android:id="@+id/sp_type_card"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/label_width_small"
-                    android:layout_weight="1"/>
+                    android:layout_weight="1"
+                    app:popupTheme="@style/AppTheme.PopupOverlay.Bule"/>
 
                 <android.support.v7.widget.AppCompatSpinner
                     android:id="@+id/sp_race"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/label_width_small"
                     android:layout_weight="1"
-                    android:visibility="gone"/>
+                    android:visibility="gone"
+                    app:popupTheme="@style/AppTheme.PopupOverlay.Bule"/>
 
                 <android.support.v7.widget.AppCompatSpinner
                     android:id="@+id/sp_type_st"
                     android:layout_width="0dp"
                     android:layout_height="@dimen/label_width_small"
                     android:layout_weight="1"
-                    android:visibility="invisible"/>
+                    android:visibility="invisible"
+                    app:popupTheme="@style/AppTheme.PopupOverlay.Bule"/>
             </LinearLayout>
 
             <LinearLayout
@@ -165,13 +173,15 @@
                         android:id="@+id/sp_level"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"/>
+                        android:layout_weight="1"
+                        app:popupTheme="@style/AppTheme.PopupOverlay.Bule"/>
 
                     <android.support.v7.widget.AppCompatSpinner
                         android:id="@+id/sp_attribute"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"/>
+                        android:layout_weight="1"
+                        app:popupTheme="@style/AppTheme.PopupOverlay.Bule"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -183,13 +193,15 @@
                         android:id="@+id/sp_type_monster"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"/>
+                        android:layout_weight="1"
+                        app:popupTheme="@style/AppTheme.PopupOverlay.Bule"/>
 
                     <android.support.v7.widget.AppCompatSpinner
                         android:id="@+id/sp_type_monster2"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
-                        android:layout_weight="1"/>
+                        android:layout_weight="1"
+                        app:popupTheme="@style/AppTheme.PopupOverlay.Bule"/>
                 </LinearLayout>
 
 

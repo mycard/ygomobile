@@ -14,10 +14,5 @@
         app:popupTheme="@style/AppTheme.PopupOverlay"
         app:theme="@style/AppTheme.AppBarOverlay">
 
-        <android.support.v7.widget.AppCompatSpinner
-            android:id="@+id/toolbar_list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:popupTheme="@style/AppTheme.PopupOverlay.Bule"/>
     </android.support.v7.widget.Toolbar>
 </android.support.design.widget.AppBarLayout>

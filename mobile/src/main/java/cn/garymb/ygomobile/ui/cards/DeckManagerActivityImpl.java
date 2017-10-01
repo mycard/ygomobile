@@ -25,6 +25,9 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.nightonke.boommenu.BoomButtons.HamButton;
+import com.nightonke.boommenu.BoomMenuButton;
+
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
@@ -108,6 +111,13 @@ class DeckManagerActivityImpl extends BaseCardsAcitivity implements RecyclerView
             if (!TextUtils.isEmpty(path)) {
                 mPreLoad = path;
             }
+        }
+        BoomMenuButton boomMenuButton = $(R.id.bmb);
+        for (int i = 0; i < 6; i++) {
+            HamButton.Builder builder = new HamButton.Builder()
+                    .normalText("卡组编辑")
+                    .normalImageRes(R.drawable.mycard);
+            boomMenuButton.addBuilder(builder);
         }
         //
         DialogPlus dlg = DialogPlus.show(this, null, getString(R.string.loading));
