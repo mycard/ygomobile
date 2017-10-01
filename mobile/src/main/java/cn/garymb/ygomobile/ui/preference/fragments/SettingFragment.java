@@ -104,7 +104,6 @@ public class SettingFragment extends PreferenceFragmentPlus {
         isInit = false;
     }
 
-
     @Override
     public boolean onPreferenceChange(Preference preference, Object value) {
         if (PREF_GAME_VERSION.equals(preference.getKey())) {
@@ -114,7 +113,11 @@ public class SettingFragment extends PreferenceFragmentPlus {
                 super.onPreferenceChange(preference, AppsSettings.get().getVersionString(v));
                 return true;
             } else {
-                Toast.makeText(getContext(), R.string.error_game_ver, Toast.LENGTH_SHORT).show();
+                if (BuildConfig.DEBUG) {
+                    Toast.makeText(getContext(), getString(R.string.error_game_ver) + " " + value.toString(), Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getContext(), R.string.error_game_ver, Toast.LENGTH_SHORT).show();
+                }
                 return false;
             }
         }

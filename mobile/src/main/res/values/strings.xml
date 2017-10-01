@@ -190,6 +190,7 @@
     <string name="error_game_ver">it should be X.0XX.X，less of F.099.F</string>
     <string name="tip_no_netwrok">please confirm net works</string>
     <string name="message">"because of the copyright,\n github forbade downloading hi-quality card pics.\n using this function to replace the pics if deleted."</string>
-    <string name="ex_pack">扩展卡包</string>
-    <string name="deck_manager_v2">组卡器V2</string>
+    <string name="ex_pack">Extend cards</string>
+    <string name="deck_manager_v2">Deck Manager V2</string>
+    <string name="reset_game_ver_fail">reset game version fail</string>
 </resources>

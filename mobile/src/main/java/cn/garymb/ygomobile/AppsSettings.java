@@ -22,11 +22,9 @@ import ocgcore.handler.CardManager;
 
 import static cn.garymb.ygomobile.Constants.CORE_EXPANSIONS;
 import static cn.garymb.ygomobile.Constants.CORE_SYSTEM_PATH;
-import static cn.garymb.ygomobile.Constants.DEF_PREF_DECK_MANAGER_V2;
 import static cn.garymb.ygomobile.Constants.DEF_PREF_FONT_SIZE;
 import static cn.garymb.ygomobile.Constants.DEF_PREF_ONLY_GAME;
 import static cn.garymb.ygomobile.Constants.DEF_PREF_READ_EX;
-import static cn.garymb.ygomobile.Constants.PREF_DECK_MANAGER_V2;
 import static cn.garymb.ygomobile.Constants.PREF_DEF_IMMERSIVE_MODE;
 import static cn.garymb.ygomobile.Constants.PREF_DEF_SENSOR_REFRESH;
 import static cn.garymb.ygomobile.Constants.PREF_FONT_SIZE;
@@ -426,8 +424,10 @@ public class AppsSettings {
         return mSharedPreferences.getInt(Constants.PREF_START + key, def);
     }
 
-    public void resetGameVersion() {
+    public int resetGameVersion() {
+        int version = GameConfig.getVersion();
         saveIntSettings(Constants.PREF_GAME_VERSION, GameConfig.getVersion());
+        return version;
     }
 
     public int getGameVersion() {

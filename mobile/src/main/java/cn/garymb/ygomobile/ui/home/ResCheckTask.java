@@ -17,6 +17,7 @@ import cn.garymb.ygomobile.AppsSettings;
 import cn.garymb.ygomobile.Constants;
 import cn.garymb.ygomobile.lite.R;
 import cn.garymb.ygomobile.ui.plus.DialogPlus;
+import cn.garymb.ygomobile.ui.plus.VUiKit;
 import cn.garymb.ygomobile.utils.FileUtils;
 import cn.garymb.ygomobile.utils.IOUtils;
 import cn.garymb.ygomobile.utils.SystemUtils;
@@ -108,14 +109,16 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
             IOUtils.createNoMedia(resPath);
             checkDirs();
             copyCoreConfig(resPath, needsUpdate);
-            if(AppsSettings.get().isUseExtraCards()){
+            if (AppsSettings.get().isUseExtraCards()) {
                 //自定义数据库无效，则用默认的
-                if(!CardManager.checkDataBase(AppsSettings.get().getDataBaseFile())){
+                if (!CardManager.checkDataBase(AppsSettings.get().getDataBaseFile())) {
                     AppsSettings.get().setUseExtraCards(false);
                 }
             }
-            if(needsUpdate){
-                AppsSettings.get().resetGameVersion();
+            if (needsUpdate) {
+                if(AppsSettings.get().resetGameVersion() == 0){
+                    VUiKit.show(mContext, mContext.getString(R.string.reset_game_ver_fail));
+                }
             }
             //设置字体
             new ConfigManager(mSettings.getSystemConfig()).setFontSize(mSettings.getFontSize());
@@ -182,7 +185,7 @@ public class ResCheckTask extends AsyncTask<Void, Integer, Integer> {
     }
 
     public static boolean checkDataBase(String path) {
-        if(!new File(path).exists()){
+        if (!new File(path).exists()) {
             return false;
         }
         SQLiteDatabase db = null;

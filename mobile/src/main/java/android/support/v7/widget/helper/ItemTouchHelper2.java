@@ -16,6 +16,8 @@
 
 package android.support.v7.widget.helper;
 
+import android.animation.Animator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Canvas;
@@ -23,10 +25,6 @@ import android.graphics.Rect;
 import android.os.Build;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.support.v4.animation.AnimatorCompatHelper;
-import android.support.v4.animation.AnimatorListenerCompat;
-import android.support.v4.animation.AnimatorUpdateListenerCompat;
-import android.support.v4.animation.ValueAnimatorCompat;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v4.view.VelocityTrackerCompat;
@@ -312,6 +310,7 @@ public class ItemTouchHelper2 extends RecyclerView.ItemDecoration
      */
     GestureDetectorCompat mGestureDetector;
     private boolean enableClickDrag = false;
+
     /***
      * 单击拖拽
      */
@@ -639,7 +638,7 @@ public class ItemTouchHelper2 extends RecyclerView.ItemDecoration
                         prevActionState, currentTranslateX, currentTranslateY,
                         targetTranslateX, targetTranslateY) {
                     @Override
-                    public void onAnimationEnd(ValueAnimatorCompat animation) {
+                    public void onAnimationEnd(Animator animation) {
                         if (animation != null) {
                             super.onAnimationEnd(animation);
                         }
@@ -1504,7 +1503,7 @@ public class ItemTouchHelper2 extends RecyclerView.ItemDecoration
             mOnDragListner = onDragListner;
         }
 
-        public void setDragSize(int dx,int dy) {
+        public void setDragSize(int dx, int dy) {
             mDx = dx;
             mDy = dy;
         }
@@ -1695,7 +1694,7 @@ public class ItemTouchHelper2 extends RecyclerView.ItemDecoration
         public abstract boolean onMove(RecyclerView recyclerView,
                                        ViewHolder viewHolder, ViewHolder target);
 
-        public void cancelLongPress(){
+        public void cancelLongPress() {
             if (!isLongPressMode() && !isLongPressCancel) {
                 isLongPressCancel = true;
                 endLongPressMode();
@@ -1703,6 +1702,7 @@ public class ItemTouchHelper2 extends RecyclerView.ItemDecoration
                     Log.w("kk", "cancel enter long press");
             }
         }
+
         /**
          * Returns whether ItemTouchHelper should start a drag and drop operation if an item is
          * long pressed.
@@ -1828,7 +1828,7 @@ public class ItemTouchHelper2 extends RecyclerView.ItemDecoration
                     if (DEBUG)
                         Log.i(TAG, "enter delete");
                     mLongPressMode = true;
-                    if(!isLongPressCancel) {
+                    if (!isLongPressCancel) {
                         if (mOnDragListner != null && mSelectId >= 0) {
                             mOnDragListner.onDragLongPress(mSelectId);
                         }
@@ -1843,7 +1843,7 @@ public class ItemTouchHelper2 extends RecyclerView.ItemDecoration
         protected void endLongPressMode() {
             longPressTime = System.currentTimeMillis();
             mHandler.removeCallbacks(enterLongPress);
-            if(mLongPressMode) {
+            if (mLongPressMode) {
                 if (mOnDragListner != null) {
                     mOnDragListner.onDragLongPressEnd();
                 }
@@ -1985,7 +1985,7 @@ public class ItemTouchHelper2 extends RecyclerView.ItemDecoration
                 mSelectId = viewHolder.getAdapterPosition();
                 longPressTime = System.currentTimeMillis();
                 mHandler.removeCallbacks(enterLongPress);
-                if(mItemTouchHelper.enableClickDrag) {
+                if (mItemTouchHelper.enableClickDrag) {
                     mHandler.postDelayed(enterLongPress, mLongTime);
                 }
             } else if (actionState == ACTION_STATE_IDLE) {
@@ -2411,6 +2411,7 @@ public class ItemTouchHelper2 extends RecyclerView.ItemDecoration
 
         ItemTouchHelperGestureListener() {
         }
+
         @Override
         public void onShowPress(MotionEvent e) {
             if (enableClickDrag) {
@@ -2462,7 +2463,7 @@ public class ItemTouchHelper2 extends RecyclerView.ItemDecoration
         }
     }
 
-    public class RecoverAnimation implements AnimatorListenerCompat {
+    private class RecoverAnimation implements Animator.AnimatorListener {
 
         final float mStartDx;
 
@@ -2476,7 +2477,7 @@ public class ItemTouchHelper2 extends RecyclerView.ItemDecoration
 
         final int mActionState;
 
-        private final ValueAnimatorCompat mValueAnimator;
+        private final ValueAnimator mValueAnimator;
 
         final int mAnimationType;
 
@@ -2494,8 +2495,8 @@ public class ItemTouchHelper2 extends RecyclerView.ItemDecoration
 
         private float mFraction;
 
-        public RecoverAnimation(ViewHolder viewHolder, int animationType,
-                                int actionState, float startDx, float startDy, float targetX, float targetY) {
+        RecoverAnimation(ViewHolder viewHolder, int animationType,
+                         int actionState, float startDx, float startDy, float targetX, float targetY) {
             mActionState = actionState;
             mAnimationType = animationType;
             mViewHolder = viewHolder;
@@ -2503,11 +2504,11 @@ public class ItemTouchHelper2 extends RecyclerView.ItemDecoration
             mStartDy = startDy;
             mTargetX = targetX;
             mTargetY = targetY;
-            mValueAnimator = AnimatorCompatHelper.emptyValueAnimator();
+            mValueAnimator = ValueAnimator.ofFloat(0f, 1f);
             mValueAnimator.addUpdateListener(
-                    new AnimatorUpdateListenerCompat() {
+                    new ValueAnimator.AnimatorUpdateListener() {
                         @Override
-                        public void onAnimationUpdate(ValueAnimatorCompat animation) {
+                        public void onAnimationUpdate(ValueAnimator animation) {
                             setFraction(animation.getAnimatedFraction());
                         }
                     });
@@ -2539,24 +2540,24 @@ public class ItemTouchHelper2 extends RecyclerView.ItemDecoration
          */
         public void update() {
             if (mStartDx == mTargetX) {
-                mX = ViewCompat.getTranslationX(mViewHolder.itemView);
+                mX = mViewHolder.itemView.getTranslationX();
             } else {
                 mX = mStartDx + mFraction * (mTargetX - mStartDx);
             }
             if (mStartDy == mTargetY) {
-                mY = ViewCompat.getTranslationY(mViewHolder.itemView);
+                mY = mViewHolder.itemView.getTranslationY();
             } else {
                 mY = mStartDy + mFraction * (mTargetY - mStartDy);
             }
         }
 
         @Override
-        public void onAnimationStart(ValueAnimatorCompat animation) {
+        public void onAnimationStart(Animator animation) {
 
         }
 
         @Override
-        public void onAnimationEnd(ValueAnimatorCompat animation) {
+        public void onAnimationEnd(Animator animation) {
             if (!mEnded) {
                 mViewHolder.setIsRecyclable(true);
             }
@@ -2564,12 +2565,12 @@ public class ItemTouchHelper2 extends RecyclerView.ItemDecoration
         }
 
         @Override
-        public void onAnimationCancel(ValueAnimatorCompat animation) {
+        public void onAnimationCancel(Animator animation) {
             setFraction(1f); //make sure we recover the view's state.
         }
 
         @Override
-        public void onAnimationRepeat(ValueAnimatorCompat animation) {
+        public void onAnimationRepeat(Animator animation) {
 
         }
     }
