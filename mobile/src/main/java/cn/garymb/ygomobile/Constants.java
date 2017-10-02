@@ -114,7 +114,7 @@ public interface Constants {
     int DECK_SIDE_MAX = 15;
     int DECK_EXTRA_COUNT = (DECK_SIDE_MAX / DECK_WIDTH_COUNT * DECK_WIDTH_COUNT < DECK_SIDE_MAX) ? DECK_WIDTH_COUNT * 2 : DECK_WIDTH_COUNT;
     int DECK_SIDE_COUNT = DECK_EXTRA_COUNT;
-    String ALIPAY_URL = "HTTPS://QR.ALIPAY.COM/FKX06491UAXJMGIDTYVC0C";
+    String ALIPAY_URL = "https://qr.alipay.com/FKX06538E7ARJS06E2F886";
     String DOWNLOAD_HOME = "http://pan.baidu.com/s/1o7RMcMA";
     String URL_HELP = "http://www.jianshu.com/p/a43f5d951a25";
     String WIKI_SEARCH_URL = "http://www.ourocg.cn/S.aspx?key=";
