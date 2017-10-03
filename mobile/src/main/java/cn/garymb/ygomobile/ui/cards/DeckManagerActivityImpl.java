@@ -900,9 +900,33 @@ class DeckManagerActivityImpl extends BaseCardsAcitivity implements RecyclerView
                 .normalColor(Color.TRANSPARENT)
                 .normalText(str);
         switch (menuId) {
-            case R.id.action_search:
+            case R.id.action_card_list:
+                builder.normalImageRes(R.drawable.listicon);
+                break;
+            case R.id.action_save:
                 //icon
-                builder.normalImageRes(R.drawable.unknown);
+                builder.normalImageRes(R.drawable.save);
+                break;
+            case R.id.action_clear_deck:
+                builder.normalImageRes(R.drawable.clear_deck);
+                break;
+            case R.id.action_deck_new:
+                builder.normalImageRes(R.drawable.addsever);
+                break;
+            case R.id.action_rename:
+                builder.normalImageRes(R.drawable.rename);
+                break;
+            case R.id.action_delete_deck:
+                builder.normalImageRes(R.drawable.delete);
+                break;
+            case R.id.action_unsort:
+                builder.normalImageRes(R.drawable.unsort);
+                break;
+            case R.id.action_sort:
+                builder.normalImageRes(R.drawable.sort);
+                break;
+            case R.id.action_quit:
+                builder.normalImageRes(R.drawable.quit);
                 break;
             default:
                 builder.normalImageRes(R.drawable.unknown);
