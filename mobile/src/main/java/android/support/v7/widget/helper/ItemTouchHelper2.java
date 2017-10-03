@@ -26,8 +26,6 @@ import android.os.Build;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.view.GestureDetectorCompat;
-import android.support.v4.view.MotionEventCompat;
-import android.support.v4.view.VelocityTrackerCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.recyclerview.R;
 import android.support.v7.widget.LinearLayoutManager;
@@ -312,7 +310,7 @@ public class ItemTouchHelper2 extends RecyclerView.ItemDecoration
     private boolean enableClickDrag = false;
 
     /***
-     * 单击拖拽
+     * ������ק
      */
     public void setEnableClickDrag(boolean enableClickDrag) {
         this.enableClickDrag = enableClickDrag;
@@ -327,7 +325,7 @@ public class ItemTouchHelper2 extends RecyclerView.ItemDecoration
             if (DEBUG) {
                 Log.d(TAG, "intercept: x:" + event.getX() + ",y:" + event.getY() + ", " + event);
             }
-            final int action = MotionEventCompat.getActionMasked(event);
+            final int action = event.getActionMasked();
             if (action == MotionEvent.ACTION_DOWN) {
                 mActivePointerId = event.getPointerId(0);
                 mInitialTouchX = event.getX();
@@ -379,7 +377,7 @@ public class ItemTouchHelper2 extends RecyclerView.ItemDecoration
             if (mActivePointerId == ACTIVE_POINTER_ID_NONE) {
                 return;
             }
-            final int action = MotionEventCompat.getActionMasked(event);
+            final int action = event.getActionMasked();
             final int activePointerIndex = event.findPointerIndex(mActivePointerId);
             if (activePointerIndex >= 0) {
                 checkSelectForSwipe(action, event, activePointerIndex);
@@ -410,7 +408,7 @@ public class ItemTouchHelper2 extends RecyclerView.ItemDecoration
                     mActivePointerId = ACTIVE_POINTER_ID_NONE;
                     break;
                 case MotionEvent.ACTION_POINTER_UP: {
-                    final int pointerIndex = MotionEventCompat.getActionIndex(event);
+                    final int pointerIndex = event.getActionIndex();
                     final int pointerId = event.getPointerId(pointerIndex);
                     if (pointerId == mActivePointerId) {
                         // This was our active pointer going up. Choose a new
@@ -536,12 +534,12 @@ public class ItemTouchHelper2 extends RecyclerView.ItemDecoration
         if ((mSelectedFlags & (LEFT | RIGHT)) != 0) {
             outPosition[0] = mSelectedStartX + mDx - mSelected.itemView.getLeft();
         } else {
-            outPosition[0] = ViewCompat.getTranslationX(mSelected.itemView);
+            outPosition[0] = mSelected.itemView.getTranslationX();
         }
         if ((mSelectedFlags & (UP | DOWN)) != 0) {
             outPosition[1] = mSelectedStartY + mDy - mSelected.itemView.getTop();
         } else {
-            outPosition[1] = ViewCompat.getTranslationY(mSelected.itemView);
+            outPosition[1] = mSelected.itemView.getTranslationY();
         }
     }
 
@@ -669,8 +667,8 @@ public class ItemTouchHelper2 extends RecyclerView.ItemDecoration
                         targetTranslateX - currentTranslateX, targetTranslateY - currentTranslateY);
                 rv.setDuration(duration);
                 if (mCallback.canAnimation(mRecyclerView, prevSelected)) {
-                    mRecoverAnimations.add(rv);
-                    rv.start();
+                mRecoverAnimations.add(rv);
+                rv.start();
                 } else {
                     rv.onAnimationEnd(null);
                 }
@@ -1074,13 +1072,13 @@ public class ItemTouchHelper2 extends RecyclerView.ItemDecoration
      * through RecyclerView's ItemTouchListener mechanism. As long as no other ItemTouchListener
      * grabs previous events, this should work as expected.</li>
      * </ul>
-     * <p>
+     *
      * For example, if you would like to let your user to be able to drag an Item by touching one
      * of its descendants, you may implement it as follows:
      * <pre>
      *     viewHolder.dragButton.setOnTouchListener(new View.OnTouchListener() {
      *         public boolean onTouch(View v, MotionEvent event) {
-     *             if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
+     *             if (MotionEvent.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
      *                 mItemTouchHelper.startDrag(viewHolder);
      *             }
      *             return false;
@@ -1095,7 +1093,7 @@ public class ItemTouchHelper2 extends RecyclerView.ItemDecoration
      */
     public void startDrag(ViewHolder viewHolder) {
         if (!mCallback.hasDragFlag(mRecyclerView, viewHolder)) {
-            Log.e(TAG, "Start drag has been called but swiping is not enabled");
+            Log.e(TAG, "Start drag has been called but dragging is not enabled");
             return;
         }
         if (viewHolder.itemView.getParent() != mRecyclerView) {
@@ -1123,13 +1121,13 @@ public class ItemTouchHelper2 extends RecyclerView.ItemDecoration
      * through RecyclerView's ItemTouchListener mechanism. As long as no other ItemTouchListener
      * grabs previous events, this should work as expected.</li>
      * </ul>
-     * <p>
+     *
      * For example, if you would like to let your user to be able to swipe an Item by touching one
      * of its descendants, you may implement it as follows:
      * <pre>
      *     viewHolder.dragButton.setOnTouchListener(new View.OnTouchListener() {
      *         public boolean onTouch(View v, MotionEvent event) {
-     *             if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
+     *             if (MotionEvent.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
      *                 mItemTouchHelper.startSwipe(viewHolder);
      *             }
      *             return false;
@@ -1142,7 +1140,7 @@ public class ItemTouchHelper2 extends RecyclerView.ItemDecoration
      */
     public void startSwipe(ViewHolder viewHolder) {
         if (!mCallback.hasSwipeFlag(mRecyclerView, viewHolder)) {
-            Log.e(TAG, "Start swipe has been called but dragging is not enabled");
+            Log.e(TAG, "Start swipe has been called but swiping is not enabled");
             return;
         }
         if (viewHolder.itemView.getParent() != mRecyclerView) {
@@ -1242,10 +1240,8 @@ public class ItemTouchHelper2 extends RecyclerView.ItemDecoration
             if (mVelocityTracker != null && mActivePointerId > -1) {
                 mVelocityTracker.computeCurrentVelocity(PIXELS_PER_SECOND,
                         mCallback.getSwipeVelocityThreshold(mMaxSwipeVelocity));
-                final float xVelocity = VelocityTrackerCompat
-                        .getXVelocity(mVelocityTracker, mActivePointerId);
-                final float yVelocity = VelocityTrackerCompat
-                        .getYVelocity(mVelocityTracker, mActivePointerId);
+                final float xVelocity = mVelocityTracker.getXVelocity(mActivePointerId);
+                final float yVelocity = mVelocityTracker.getYVelocity(mActivePointerId);
                 final int velDirFlag = xVelocity > 0f ? RIGHT : LEFT;
                 final float absXVelocity = Math.abs(xVelocity);
                 if ((velDirFlag & flags) != 0 && dirFlag == velDirFlag &&
@@ -1271,10 +1267,8 @@ public class ItemTouchHelper2 extends RecyclerView.ItemDecoration
             if (mVelocityTracker != null && mActivePointerId > -1) {
                 mVelocityTracker.computeCurrentVelocity(PIXELS_PER_SECOND,
                         mCallback.getSwipeVelocityThreshold(mMaxSwipeVelocity));
-                final float xVelocity = VelocityTrackerCompat
-                        .getXVelocity(mVelocityTracker, mActivePointerId);
-                final float yVelocity = VelocityTrackerCompat
-                        .getYVelocity(mVelocityTracker, mActivePointerId);
+                final float xVelocity = mVelocityTracker.getXVelocity(mActivePointerId);
+                final float yVelocity = mVelocityTracker.getYVelocity(mActivePointerId);
                 final int velDirFlag = yVelocity > 0f ? DOWN : UP;
                 final float absYVelocity = Math.abs(yVelocity);
                 if ((velDirFlag & flags) != 0 && velDirFlag == dirFlag &&
@@ -1333,7 +1327,7 @@ public class ItemTouchHelper2 extends RecyclerView.ItemDecoration
      * An interface which can be implemented by LayoutManager for better integration with
      * {@link ItemTouchHelper2}.
      */
-    public static interface ViewDropHandler {
+    public interface ViewDropHandler {
 
         /**
          * Called by the {@link ItemTouchHelper2} after a View is dropped over another View.
@@ -2434,7 +2428,7 @@ public class ItemTouchHelper2 extends RecyclerView.ItemDecoration
         private void startDrag(MotionEvent e) {
             View child = findChildView(e);
             if (child != null) {
-                RecyclerView.ViewHolder vh = mRecyclerView.getChildViewHolder(child);
+                ViewHolder vh = mRecyclerView.getChildViewHolder(child);
                 if (vh != null) {
                     if (!mCallback.hasDragFlag(mRecyclerView, vh)) {
                         return;

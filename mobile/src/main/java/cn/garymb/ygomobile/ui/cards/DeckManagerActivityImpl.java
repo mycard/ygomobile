@@ -206,14 +206,12 @@ class DeckManagerActivityImpl extends BaseCardsAcitivity implements RecyclerView
             });
             dialogPlus.show();
         } else {
-            getSupportActionBar().hide();
             mDeckAdapater.showHeadView();
         }
     }
 
     @Override
     public void onDragLongPressEnd() {
-        getSupportActionBar().show();
         mDeckAdapater.hideHeadView();
     }
 
