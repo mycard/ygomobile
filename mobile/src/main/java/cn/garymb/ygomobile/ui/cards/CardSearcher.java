@@ -358,13 +358,13 @@ public class CardSearcher implements View.OnClickListener {
         initCategorySpinners(categorySpinner);
     }
 
-    public <T extends View> T findViewById(int id) {
+    protected <T extends View> T findViewById(int id) {
         return (T) view.findViewById(id);
     }
 
-    public void showDeckList() {
+    /*public void showDeckList() {
         findViewById(R.id.layout_deck_list).setVisibility(View.VISIBLE);
-    }
+    }*/
 
     private void initOtSpinners(Spinner spinner) {
         CardOt[] ots = CardOt.values();

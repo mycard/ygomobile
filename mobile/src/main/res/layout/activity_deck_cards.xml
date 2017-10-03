@@ -25,28 +25,42 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom|right"
+                android:layout_gravity="bottom|left"
                 android:layout_marginBottom="2dp"
                 android:layout_marginLeft="10dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:weightSum="1">
 
-                <ImageView
-                    android:id="@+id/btn_nav_search"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_marginLeft="4dp"
-                    android:layout_marginRight="4dp"
-                    android:layout_gravity="center_vertical"
-                    android:src="@drawable/search"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/deck_name"
+                    android:textColor="@color/holo_blue_light" />
+
+                <android.support.v7.widget.AppCompatSpinner
+                    android:id="@+id/toolbar_list"
+                    android:layout_width="150dp"
+                    android:layout_height="@dimen/item_height"
+                    app:popupTheme="@style/AppTheme.PopupOverlay.Bule"
+                    android:layout_weight="3.56" />
 
                 <ImageView
                     android:id="@+id/btn_nav_list"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_marginLeft="4dp"
-                    android:layout_marginRight="4dp"
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginRight="2dp"
                     android:layout_gravity="center_vertical"
                     android:src="@drawable/listicon"/>
+
+                <ImageView
+                    android:id="@+id/btn_nav_search"
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginRight="2dp"
+                    android:layout_gravity="center_vertical"
+                    android:src="@drawable/search"/>
 
                 <com.nightonke.boommenu.BoomMenuButton
                     android:id="@+id/bmb"
@@ -101,11 +115,6 @@
                     app:popupTheme="@style/AppTheme.PopupOverlay.Bule"
                     />
             </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/holo_blue_light"/>
 
             <com.tubb.smrv.SwipeMenuRecyclerView
                 android:id="@+id/list_cards"

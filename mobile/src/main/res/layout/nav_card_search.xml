@@ -17,27 +17,10 @@
         android:layout_marginTop="6dp"
         android:orientation="vertical">
 
-        <LinearLayout
-            android:id="@+id/layout_deck_list"
+        <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:orientation="vertical"
-            android:visibility="gone">
-
-            <android.support.v7.widget.AppCompatSpinner
-                android:id="@+id/toolbar_list"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/item_height"
-                app:popupTheme="@style/AppTheme.PopupOverlay.Bule"/>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginBottom="2dp"
-                android:background="@color/holo_blue_light"/>
-
-        </LinearLayout>
+            android:layout_marginLeft="18dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
