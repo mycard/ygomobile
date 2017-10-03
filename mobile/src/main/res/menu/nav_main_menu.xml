@@ -19,9 +19,9 @@
         android:icon="@drawable/ic_home_black"
         android:title="@string/mycard"/>
     <item
-        android:id="@+id/action_update_images"
+        android:id="@+id/action_reset_game_res"
         android:icon="@drawable/ic_file_download_black_24dp"
-        android:title="@string/download_images"/>
+        android:title="@string/reset_game_res"/>
 
     <item android:title="@string/menu">
         <menu>

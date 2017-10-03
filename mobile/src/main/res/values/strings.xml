@@ -68,7 +68,7 @@
     <string name="settings_game_diy_card_db">Use your own card database</string>
     <string name="settings_game_immersive_mode">Immersive Mode</string>
     <string name="settings_game_opengl">OpenGL</string>
-    <string name="settings_author" translatable="false">菜菜\n暗星</string>
+    <string name="settings_author" translatable="false">菜菜、暗星</string>
     <string name="restart_app">"Please restart app！"</string>
     <string-array name="opengl_version">
         <item>OpenGL ES 1.X</item>
@@ -169,7 +169,7 @@
     <string name="deck_share_fail">share deck fail</string>
     <string name="choose_game_path">choose game folder</string>
     <string name="download_home">NetDisk Page</string>
-    <string name="download_images">Check Images</string>
+    <string name="reset_game_res">Reset Resources</string>
     <string name="downloading_images">Downloading images</string>
     <string name="download_image_progress" formatted="false">Downloading card image %d/%d</string>
     <string name="download_image_error" formatted="false">Download fail %d</string>
@@ -195,4 +195,5 @@
     <string name="reset_game_ver_fail">reset game version fail</string>
     <string name="deck_name">卡组</string>
     <string name="save_quit">Save and quit</string>
+    <string name="tip_reset_game_res">Reset game resources completed</string>
 </resources>

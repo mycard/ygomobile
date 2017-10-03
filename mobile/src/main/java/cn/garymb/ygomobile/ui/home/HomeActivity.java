@@ -1,6 +1,7 @@
 package cn.garymb.ygomobile.ui.home;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -8,6 +9,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
+import android.util.SparseArray;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,6 +18,9 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.nightonke.boommenu.BoomButtons.BoomButton;
+import com.nightonke.boommenu.BoomButtons.TextOutsideCircleButton;
+import com.nightonke.boommenu.BoomMenuButton;
 import com.tubb.smrv.SwipeMenuRecyclerView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -39,14 +44,14 @@ import cn.garymb.ygomobile.ui.adapters.SimpleListAdapter;
 import cn.garymb.ygomobile.ui.cards.CardSearchAcitivity;
 import cn.garymb.ygomobile.ui.cards.DeckManagerActivity;
 import cn.garymb.ygomobile.ui.online.MyCardActivity;
+import cn.garymb.ygomobile.ui.plus.DefaultOnBoomListener;
 import cn.garymb.ygomobile.ui.plus.DialogPlus;
 import cn.garymb.ygomobile.ui.preference.SettingsActivity;
 
-abstract class HomeActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener,HomeActivityMenu.CallBack {
+abstract class HomeActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener{
     protected SwipeMenuRecyclerView mServerList;
     private ServerListAdapter mServerListAdapter;
     private ServerListManager mServerListManager;
-    private HomeActivityMenu mHomeActivityMenu;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -65,14 +70,9 @@ abstract class HomeActivity extends BaseActivity implements NavigationView.OnNav
         mServerListManager = new ServerListManager(this, mServerListAdapter);
         mServerListManager.bind(mServerList);
         mServerListManager.syncLoadData();
-
-        //nav
         //event
         EventBus.getDefault().register(this);
-//        $(R.id.help).setOnClickListener((v) -> {
-//            WebActivity.open(this, getString(R.string.help), Constants.URL_HELP);
-//        });
-        mHomeActivityMenu = new HomeActivityMenu(this, $(R.id.bmb));
+        initBoomMenuButton($(R.id.bmb));
     }
 
     @Override
@@ -122,11 +122,6 @@ abstract class HomeActivity extends BaseActivity implements NavigationView.OnNav
             return true;
         }
         return false;
-    }
-
-    @Override
-    public void addServerInfo() {
-        mServerListManager.addServer();
     }
 
     @Override
@@ -185,7 +180,7 @@ abstract class HomeActivity extends BaseActivity implements NavigationView.OnNav
                 WebActivity.open(this, getString(R.string.help), Constants.URL_HELP);
             }
             break;
-            case R.id.action_update_images:
+            case R.id.action_reset_game_res:
                 updateImages();
                 break;
             default:
@@ -294,7 +289,45 @@ abstract class HomeActivity extends BaseActivity implements NavigationView.OnNav
         YGOStarter.startGame(this, options);
     }
 
+    protected abstract void checkResourceDownload(ResCheckTask.ResCheckListener listener);
+
     protected abstract void openGame();
 
     public abstract void updateImages();
+
+    private void initBoomMenuButton(BoomMenuButton menu) {
+        final SparseArray<Integer> mMenuIds = new SparseArray<>();
+        addMenuButton(mMenuIds, menu, R.id.action_game, R.string.action_game, R.drawable.start);
+        addMenuButton(mMenuIds, menu, R.id.action_card_search, R.string.tab_search, R.drawable.search);
+        addMenuButton(mMenuIds, menu, R.id.action_deck_manager, R.string.deck_manager, R.drawable.deck);
+
+        addMenuButton(mMenuIds, menu, R.id.action_add_server, R.string.action_add_server, R.drawable.addsever);
+        addMenuButton(mMenuIds, menu, R.id.action_mycard, R.string.mycard, R.drawable.mycard);
+        addMenuButton(mMenuIds, menu, R.id.action_help, R.string.help, R.drawable.help);
+
+        addMenuButton(mMenuIds, menu, R.id.action_reset_game_res, R.string.reset_game_res, R.drawable.downloadimages);
+        addMenuButton(mMenuIds, menu, R.id.action_settings, R.string.settings, R.drawable.setting);
+        addMenuButton(mMenuIds, menu, R.id.action_about, R.string.action_about, R.drawable.about);
+
+        menu.setOnBoomListener(new DefaultOnBoomListener() {
+            @Override
+            public void onClicked(int index, BoomButton boomButton) {
+                doMenu(mMenuIds.get(index));
+            }
+        });
+    }
+
+    private void addMenuButton(SparseArray<Integer> mMenuIds, BoomMenuButton menuButton, int menuId, int stringId, int image) {
+        addMenuButton(mMenuIds, menuButton, menuId, getString(stringId), image);
+    }
+
+    private void addMenuButton(SparseArray<Integer> mMenuIds, BoomMenuButton menuButton, int menuId, String str, int image) {
+        TextOutsideCircleButton.Builder builder = new TextOutsideCircleButton.Builder()
+                .shadowColor(Color.TRANSPARENT)
+                .normalColor(Color.TRANSPARENT)
+                .normalImageRes(image)
+                .normalText(str);
+        menuButton.addBuilder(builder);
+        mMenuIds.put(mMenuIds.size(), menuId);
+    }
 }

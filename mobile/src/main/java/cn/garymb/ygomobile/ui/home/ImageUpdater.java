@@ -84,7 +84,7 @@ public class ImageUpdater implements DialogInterface.OnCancelListener {
                 mDialog.show();
             }
         } else {
-            mDialog = DialogPlus.show(mContext, mContext.getString(R.string.download_images), mContext.getString(R.string.download_image_progress, mCompleted, mCount), true);
+            mDialog = DialogPlus.show(mContext, mContext.getString(R.string.reset_game_res), mContext.getString(R.string.download_image_progress, mCompleted, mCount), true);
             mDialog.setOnCloseLinster(this);
             mDialog.show();
         }

@@ -865,22 +865,20 @@ class DeckManagerActivityImpl extends BaseCardsAcitivity implements RecyclerView
         }
     }
 
-    private SparseArray<Integer> mMenuIds = new SparseArray<>();
-    private int mCurMenuIndex = 0;
 
     private void initBoomMenuButton(BoomMenuButton menu) {
-        mCurMenuIndex = 0;
-        addMenuButton(menu, R.id.action_card_list, R.string.deck_list);
-        addMenuButton(menu, R.id.action_save, R.string.save_deck);
-        addMenuButton(menu, R.id.action_clear_deck, R.string.clear_deck);
+        final SparseArray<Integer> mMenuIds = new SparseArray<>();
+        addMenuButton(mMenuIds, menu, R.id.action_card_search, R.string.deck_list, R.drawable.listicon);
+        addMenuButton(mMenuIds, menu, R.id.action_save, R.string.save_deck, R.drawable.save);
+        addMenuButton(mMenuIds, menu, R.id.action_clear_deck, R.string.clear_deck, R.drawable.clear_deck);
 
-        addMenuButton(menu, R.id.action_deck_new, R.string.new_deck);
-        addMenuButton(menu, R.id.action_rename, R.string.rename_deck);
-        addMenuButton(menu, R.id.action_delete_deck, R.string.delete_deck);
+        addMenuButton(mMenuIds, menu, R.id.action_deck_new, R.string.new_deck, R.drawable.addsever);
+        addMenuButton(mMenuIds, menu, R.id.action_rename, R.string.rename_deck, R.drawable.rename);
+        addMenuButton(mMenuIds, menu, R.id.action_delete_deck, R.string.delete_deck, R.drawable.delete);
 
-        addMenuButton(menu, R.id.action_unsort, R.string.unsort);
-        addMenuButton(menu, R.id.action_sort, R.string.sort);
-        addMenuButton(menu, R.id.action_quit, R.string.quit);
+        addMenuButton(mMenuIds, menu, R.id.action_unsort, R.string.unsort, R.drawable.unsort);
+        addMenuButton(mMenuIds, menu, R.id.action_sort, R.string.sort, R.drawable.sort);
+        addMenuButton(mMenuIds, menu, R.id.action_quit, R.string.quit, R.drawable.quit);
 
         menu.setOnBoomListener(new DefaultOnBoomListener() {
             @Override
@@ -890,50 +888,17 @@ class DeckManagerActivityImpl extends BaseCardsAcitivity implements RecyclerView
         });
     }
 
-    private void addMenuButton(BoomMenuButton menuButton, int menuId, int stringId) {
-        addMenuButton(menuButton, menuId, getString(stringId));
+    private void addMenuButton(SparseArray<Integer> mMenuIds, BoomMenuButton menuButton, int menuId, int stringId, int image) {
+        addMenuButton(mMenuIds, menuButton, menuId, getString(stringId), image);
     }
 
-    private void addMenuButton(BoomMenuButton menuButton, int menuId, String str) {
+    private void addMenuButton(SparseArray<Integer> mMenuIds, BoomMenuButton menuButton, int menuId, String str, int image) {
         TextOutsideCircleButton.Builder builder = new TextOutsideCircleButton.Builder()
                 .shadowColor(Color.TRANSPARENT)
                 .normalColor(Color.TRANSPARENT)
+                .normalImageRes(image)
                 .normalText(str);
-        switch (menuId) {
-            case R.id.action_card_list:
-                builder.normalImageRes(R.drawable.listicon);
-                break;
-            case R.id.action_save:
-                //icon
-                builder.normalImageRes(R.drawable.save);
-                break;
-            case R.id.action_clear_deck:
-                builder.normalImageRes(R.drawable.clear_deck);
-                break;
-            case R.id.action_deck_new:
-                builder.normalImageRes(R.drawable.addsever);
-                break;
-            case R.id.action_rename:
-                builder.normalImageRes(R.drawable.rename);
-                break;
-            case R.id.action_delete_deck:
-                builder.normalImageRes(R.drawable.delete);
-                break;
-            case R.id.action_unsort:
-                builder.normalImageRes(R.drawable.unsort);
-                break;
-            case R.id.action_sort:
-                builder.normalImageRes(R.drawable.sort);
-                break;
-            case R.id.action_quit:
-                builder.normalImageRes(R.drawable.quit);
-                break;
-            default:
-                builder.normalImageRes(R.drawable.unknown);
-                break;
-        }
         menuButton.addBuilder(builder);
-        mMenuIds.put(mCurMenuIndex, menuId);
-        mCurMenuIndex++;
+        mMenuIds.put(mMenuIds.size(), menuId);
     }
 }
