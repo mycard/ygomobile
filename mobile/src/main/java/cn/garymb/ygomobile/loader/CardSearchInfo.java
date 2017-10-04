@@ -11,7 +11,7 @@ class CardSearchInfo {
     //名字或者描述
     String word, prefixWord, suffixWord;
     int attribute;
-    int level, ot, pscale;
+    int level, ot, pscale=-1;
     long race, category;
     String atk, def;
     int linkKey;
@@ -104,7 +104,7 @@ class CardSearchInfo {
             }
         }
 
-        if (pscale > 0) {
+        if (pscale != -1) {
             if (!((card.Level >> 16 & 255) == pscale || (card.Level >> 24 & 255) == pscale)) {
                 return false;
             }
