@@ -70,7 +70,7 @@ class CardSearchInfo {
         if (!TextUtils.isEmpty(atk)) {
             if (atk.contains("-")) {
                 String[] atks = atk.split("-");
-                if (!(i(atks[0]) <= card.Attack) && card.Attack <= i(atks[1])) {
+                if (!(i(atks[0]) <= card.Attack && card.Attack <= i(atks[1]))) {
                     return false;
                 }
             } else {
