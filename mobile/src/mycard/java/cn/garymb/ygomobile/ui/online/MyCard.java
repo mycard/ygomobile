@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
 import android.webkit.WebView;
@@ -39,7 +40,7 @@ public class MyCard {
     private final User mUser = new User();
     private MyCardListener mMyCardListener;
     private Activity mContext;
-    private SharedPreferences lastModified;
+    private final SharedPreferences lastModified;
 
     public interface MyCardListener {
         void onLogin(String name, String icon, String statu);
@@ -138,6 +139,13 @@ public class MyCard {
         mMyCardListener = myCardListener;
         webView.setWebViewClient(getWebViewClient());
         webView.addJavascriptInterface(new MyCard.Ygopro(mContext, myCardListener), "ygopro");
+        String name = lastModified.getString("user_name", null);
+        String headurl = lastModified.getString("user_avatar_url", null);
+        if (mMyCardListener != null) {
+            if (!TextUtils.isEmpty(name)) {
+                mMyCardListener.onLogin(name, headurl, null);
+            }
+        }
     }
 
     public static class User {
@@ -314,11 +322,15 @@ public class MyCard {
         }
 
         @org.xwalk.core.JavascriptInterface
-        public void updateUser(String name, String headurl,String status) {
+        public void updateUser(String name, String headurl, String status) {
             if (mListener != null) {
                 mUser.name = name;
                 mUser.avatar_url = headurl;
                 mUser.login = true;
+                lastModified.edit()
+                        .putString("user_name", name)
+                        .putString("user_avatar_url", headurl)
+                        .apply();
                 mListener.onLogin(name, headurl, status);
             }
         }
