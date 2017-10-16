@@ -1490,6 +1490,7 @@ int DuelClient::ClientAnalyze(char * msg, unsigned int len) {
 		int count = BufferIO::ReadInt8(pbuf);
 		mainGame->dField.selectable_cards.clear();
 		mainGame->dField.selected_cards.clear();
+		mainGame->dField.select_panalmode = false;
 		int c, l, s, t;
 		unsigned int code;
 		ClientCard* pcard;
