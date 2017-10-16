@@ -3,24 +3,31 @@
     <version>2</version>
 
     <server>
-        <player-name>YGOMobile User</player-name>
-        <name>娱乐决斗与宇宙首发群452384460</name>
-        <ip>s1.ygo233.com</ip>
-        <port>2333</port>
-        <keep>true</keep>
-    </server>
-    <server>
         <player-name>Knight of Hanoi</player-name>
-        <name>23333测试服务器</name>
+        <name>娱乐决斗与宇宙首发群452384460</name>
         <ip>s1.ygo233.com</ip>
         <port>23333</port>
         <keep>true</keep>
     </server>
-    <!--<server>
-        <player-name>泰迪熊</player-name>
-        <name>777服务器</name>
-        <ip>119.23.146.219</ip>
-        <port>7210</port>
+    <server>
+        <player-name>Knight of Hanoi</player-name>
+        <name>233正式服务器</name>
+        <ip>s1.ygo233.com</ip>
+        <port>233</port>
         <keep>true</keep>
-    </server>-->
+    </server>
+    <server>
+        <player-name>fresh chicken</player-name>
+        <name>233人机练习</name>
+        <ip>s1.ygo233.com</ip>
+        <port>9999</port>
+        <keep>true</keep>
+    </server>
+    <server>
+        <player-name>YGOMobile User</player-name>
+        <name>C萌约战</name>
+        <ip>120.24.169.252</ip>
+        <port>233</port>
+        <keep>true</keep>
+    </server>
 </servers>
