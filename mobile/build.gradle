@@ -9,8 +9,8 @@ android {
         applicationId "cn.garymb.ygomobile"
         minSdkVersion 16
         targetSdkVersion 22
-        versionCode 310163
-        versionName "TEST VERSION"
+        versionCode 310200
+        versionName "3.1.2"
         vectorDrawables.useSupportLibrary = true
         ndk {
             abiFilters "armeabi-v7a", "x86"
