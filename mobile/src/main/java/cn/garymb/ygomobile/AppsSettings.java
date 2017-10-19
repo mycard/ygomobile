@@ -454,15 +454,29 @@ public class AppsSettings {
     }
 
     public int getVersionValue(String str) {
-        String ver = str.trim().replace(".0", "").replace(".", "");
-        int v;
-        if (ver.startsWith("0x") || ver.startsWith("0X")) {
-            ver = ver.substring(2);
-        }
-        try {
-            v = Integer.parseInt(ver, 16);
-        } catch (Exception e) {
-            return -1;
+        str = str.trim().toLowerCase(Locale.US);
+        int v = -1;
+        if(str.contains(".")){
+            String[] vas = str.split("\\.");
+            if(vas.length<3){
+                return -1;
+            }
+            try {
+                int last = Integer.parseInt(vas[2]);
+                int m = Integer.parseInt(vas[1])<<4;
+                int b = Integer.parseInt(vas[0])<<12;
+                v = last+m+b;
+            }catch (Exception e){
+
+            }
+        }else{
+            try {
+                if (str.startsWith("0x")) {
+                    str = str.substring(2);
+                }
+                v = Integer.parseInt(str, 16);
+            } catch (Exception e) {
+            }
         }
         return v;
     }
