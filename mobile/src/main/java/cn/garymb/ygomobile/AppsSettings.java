@@ -12,6 +12,8 @@ import org.json.JSONArray;
 import java.io.File;
 import java.io.FileFilter;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
@@ -160,13 +162,17 @@ public class AppsSettings {
         if (isReadExpansions()) {
             File expansionsDir = getExpansionsPath();
             if (expansionsDir.exists()) {
-                File[] cdbs = expansionsDir.listFiles(new FileFilter() {
-                    @Override
-                    public boolean accept(File file) {
-                        return file.isFile() && file.getName().toLowerCase(Locale.US).endsWith(".cdb");
-                    }
+                File[] cdbs = expansionsDir.listFiles(file -> {
+                    return file.isFile() && file.getName().toLowerCase(Locale.US).endsWith(".cdb");
                 });
                 if (cdbs != null) {
+                    try {
+                        Arrays.sort(cdbs, (file, t1) -> {
+                            return file.getName().compareTo(t1.getName());
+                        });
+                    }catch (Exception e){
+                        //
+                    }
                     for (File file : cdbs) {
                         if (CardManager.checkDataBase(file)) {
                             //合法数据库才会加载
